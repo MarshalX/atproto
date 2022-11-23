@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "atproto"
+version = "0.0.1"
+description = "atproto SDK"
+authors = ["Ilya (Marshal) <ilya@marshal.dev>"]
+license = "MIT"
+repository = "https://github.com/MarshalX/atproto"
+readme = "README.md"
+keywords = ["library", "atproto", "parser", "python", "schema", "tdlib", "bluesky", "bluesky-api", "at", "atp", "xrpc", "nsid", "did"]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Pre-processors",
+]
+
+[tool.poetry.urls]
+"Author" = "https://github.com/MarshalX"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+skip-string-normalization=true
+target-version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
