@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "atproto"
 version = "0.0.1"
-description = "atproto SDK"
+description = "ATProtocol SDK"
 authors = ["Ilya (Marshal) <ilya@marshal.dev>"]
 license = "MIT"
 repository = "https://github.com/MarshalX/atproto"
 readme = "README.md"
-keywords = ["library", "atproto", "parser", "python", "schema", "tdlib", "bluesky", "bluesky-api", "at", "atp", "xrpc", "nsid", "did"]
+keywords = ["library", "atproto", "parser", "python", "schema", "bluesky", "bluesky-api", "at", "atp", "xrpc", "nsid", "did"]
 classifiers = [
     "Development Status :: 1 - Planning",
     "Intended Audience :: Developers",
@@ -15,6 +15,12 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+#    "Programming Language :: Python :: 3.12",
     "Topic :: Software Development",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Pre-processors",
@@ -25,12 +31,21 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
+httpx = "^0.24.0"
+dacite = "1.8.0"
 
 [tool.poetry.dev-dependencies]
+
+[tool.poetry.group.dev.dependencies]
+black = "23.3.0"
+isort = "5.11.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
 
 [tool.black]
 line-length = 120
