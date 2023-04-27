@@ -1,9 +1,13 @@
 import json
+import os
 from enum import Enum
+from pathlib import Path
 
 import dacite
 import models
 from exceptions import UnknownDefinitionTypeError, UnknownPrimitiveTypeError
+
+_PATH_TO_LEXICONS = Path(__file__).parent.parent.parent.joinpath('lexicons').absolute()
 
 _LEX_DEFINITION_TYPE_TO_CLASS = {
     models.LexDefinitionType.PROCEDURE: models.LexXrpcProcedure,
@@ -50,20 +54,15 @@ def lexicon_parse(data: dict, data_class=None):
     return dacite.from_dict(data_class=data_class, data=data, config=_DEFAULT_DACITE_CONFIG)
 
 
-def main(schema_name: str):
-    from pathlib import Path
+def main(lexicon_path: Path):
+    with open(lexicon_path, 'r', encoding='UTF-8') as f:
+        plain_lexicon = json.loads(f.read())
 
-    path = Path(__file__).parent.parent.parent.absolute()
-    schema = path.joinpath('test_data', f'{schema_name}.json')
-
-    with open(schema, 'r', encoding='UTF-8') as f:
-        schema = json.loads(f.read())
-
-    return lexicon_parse(schema)
+    return lexicon_parse(plain_lexicon)
 
 
 if __name__ == '__main__':
-    scheme_filenames = ['createAccount', 'actor', 'getAuthorFeed', 'resolveHandle']
-    for schema_filename in scheme_filenames:
-        lexicon = main(schema_filename)
-        print(lexicon)
+    for _, _, lexicons in os.walk(_PATH_TO_LEXICONS):
+        for lexicon in lexicons:
+            lexicon_doc = main(_PATH_TO_LEXICONS.joinpath(lexicon))
+            print(lexicon_doc)
