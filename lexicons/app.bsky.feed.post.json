@@ -1,0 +1,67 @@
+{
+  "lexicon": 1,
+  "id": "app.bsky.feed.post",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["text", "createdAt"],
+        "properties": {
+          "text": {"type": "string", "maxLength": 3000, "maxGraphemes": 300},
+          "entities": {
+            "type": "array",
+            "description": "Deprecated: replaced by app.bsky.richtext.facet.",
+            "items": {"type": "ref", "ref": "#entity"}
+          },
+          "facets": {
+            "type": "array",
+            "items": {"type": "ref", "ref": "app.bsky.richtext.facet"}
+          },
+          "reply": {"type": "ref", "ref": "#replyRef"},
+          "embed": {
+            "type": "union",
+            "refs": [
+              "app.bsky.embed.images",
+              "app.bsky.embed.external",
+              "app.bsky.embed.record",
+              "app.bsky.embed.recordWithMedia"
+            ]
+          },
+          "createdAt": {"type": "string", "format": "datetime"}
+        }
+      }
+    },
+    "replyRef":{
+      "type": "object",
+      "required": ["root", "parent"],
+      "properties": {
+        "root": {"type": "ref", "ref": "com.atproto.repo.strongRef"},
+        "parent": {"type": "ref", "ref": "com.atproto.repo.strongRef"}
+      }
+    },
+    "entity": {
+      "type": "object",
+      "description": "Deprecated: use facets instead.",
+      "required": ["index", "type", "value"],
+      "properties": {
+        "index": {"type": "ref", "ref": "#textSlice"},
+        "type": {
+          "type": "string",
+          "description": "Expected values are 'mention' and 'link'."
+        },
+        "value": {"type": "string"}
+      }
+    },
+    "textSlice": {
+      "type": "object",
+      "description": "Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings.",
+      "required": ["start", "end"],
+      "properties": {
+        "start": {"type": "integer", "minimum": 0},
+        "end": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

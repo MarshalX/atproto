@@ -1,0 +1,88 @@
+{
+  "lexicon": 1,
+  "id": "app.bsky.actor.defs",
+  "description": "A reference to an actor in the network.",
+  "defs": {
+    "profileViewBasic": {
+      "type": "object",
+      "required": ["did", "handle"],
+      "properties": {
+        "did": {"type": "string", "format": "did"},
+        "handle": {"type": "string", "format": "handle"},
+        "displayName": {
+          "type": "string",
+          "maxGraphemes": 64,
+          "maxLength": 640
+        },
+        "avatar": { "type": "string" },
+        "viewer": {"type": "ref", "ref": "#viewerState"},
+        "labels": {
+          "type": "array",
+          "items": {"type": "ref", "ref": "com.atproto.label.defs#label"}
+        }
+      }
+    },
+    "profileView": {
+      "type": "object",
+      "required": ["did", "handle"],
+      "properties": {
+        "did": {"type": "string", "format":"did"},
+        "handle": {"type": "string", "format":"handle"},
+        "displayName": {
+          "type": "string",
+          "maxGraphemes": 64,
+          "maxLength": 640
+        },
+        "description": {
+          "type": "string",
+          "maxGraphemes": 256,
+          "maxLength": 2560
+        },
+        "avatar": { "type": "string" },
+        "indexedAt": {"type": "string", "format": "datetime"},
+        "viewer": {"type": "ref", "ref": "#viewerState"},
+        "labels": {
+          "type": "array",
+          "items": {"type": "ref", "ref": "com.atproto.label.defs#label"}
+        }
+      }
+    },
+    "profileViewDetailed": {
+      "type": "object",
+      "required": ["did", "handle"],
+      "properties": {
+        "did": {"type": "string", "format": "did"},
+        "handle": {"type": "string", "format": "handle"},
+        "displayName": {
+          "type": "string",
+          "maxGraphemes": 64,
+          "maxLength": 640
+        },
+        "description": {
+          "type": "string",
+          "maxGraphemes": 256,
+          "maxLength": 2560
+        },
+        "avatar": { "type": "string" },
+        "banner": { "type": "string" },
+        "followersCount": {"type": "integer"},
+        "followsCount": {"type": "integer"},
+        "postsCount": {"type": "integer"},
+        "indexedAt": {"type": "string", "format": "datetime"},
+        "viewer": {"type": "ref", "ref": "#viewerState"},
+        "labels": {
+          "type": "array",
+          "items": {"type": "ref", "ref": "com.atproto.label.defs#label"}
+        }
+      }
+    },
+    "viewerState": {
+      "type": "object",
+      "properties": {
+        "muted": {"type": "boolean"},
+        "following": {"type": "string", "format": "at-uri"},
+        "followedBy": {"type": "string", "format": "at-uri"}
+      }
+    }
+  }
+}
