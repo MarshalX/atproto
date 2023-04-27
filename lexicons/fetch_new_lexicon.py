@@ -2,7 +2,7 @@
 import zipfile
 from io import BytesIO
 from pathlib import Path
-from typing import Tuple, Dict
+from typing import Dict, Tuple
 
 import requests
 
@@ -15,9 +15,7 @@ _DEFAULT_BRANCH_NAME = 'main'
 
 _LEXICONS_FOLDER_NAME = 'lexicons'
 
-_MANDATORY_REQUEST_HEADERS = {
-    'Content-Type-': 'application/json'
-}
+_MANDATORY_REQUEST_HEADERS = {'Content-Type-': 'application/json'}
 
 _FOLDER_TO_WRITE_LEXICONS = Path(__file__).parent.absolute()
 
@@ -35,7 +33,7 @@ def _get_last_commit_info() -> Tuple[str, str, str]:
         url=_build_last_commit_api_url(),
         params={'path': _LEXICONS_FOLDER_NAME, 'sha': _DEFAULT_BRANCH_NAME, 'per_page': 1},
         headers=_MANDATORY_REQUEST_HEADERS,
-        timeout=5
+        timeout=5,
     )
     response.raise_for_status()
 
