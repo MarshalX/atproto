@@ -9,6 +9,7 @@ Number = Union[int, float, complex]
 class LexDefinitionType(Enum):
     QUERY = 'query'
     PROCEDURE = 'procedure'
+    PARAMS = 'params'  # TODO(MarshalX): is not a kind of definitions? rich type like array?
     RECORD = 'record'
     TOKEN = 'token'
     OBJECT = 'object'
@@ -117,6 +118,14 @@ class LexObject(LexDefinition):
 
 
 @dataclass
+class LexXrpcParameters(LexDefinition):
+    type = LexDefinitionType.PARAMS
+    description: Optional[str]
+    required: Optional[List[str]]
+    properties: Dict[str, Union[LexArray, LexPrimitive]]
+
+
+@dataclass
 class LexXrpcBody:
     description: Optional[str]
     encoding: Union[str, List[str]]
@@ -132,7 +141,7 @@ class LexXrpcError:
 @dataclass
 class LexXrpcQuery(LexDefinition):
     type = LexDefinitionType.QUERY
-    parameters: Optional[Dict[str, LexPrimitive]]
+    parameters: Optional[LexXrpcParameters]
     output: Optional[LexXrpcBody]
     errors: Optional[List[LexXrpcError]]
 
