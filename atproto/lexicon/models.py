@@ -129,7 +129,7 @@ class LexXrpcParameters(LexDefinition):
 class LexXrpcBody:
     description: Optional[str]
     encoding: Union[str, List[str]]
-    schema: LexObject
+    schema: Optional[LexObject]     # TODO(MarshalX): add LexRefVariant
 
 
 @dataclass
