@@ -16,6 +16,11 @@ _LEX_DEFINITION_TYPE_TO_CLASS = {
     models.LexDefinitionType.QUERY: models.LexXrpcQuery,
     models.LexDefinitionType.TOKEN: models.LexToken,
     models.LexDefinitionType.OBJECT: models.LexObject,
+    models.LexDefinitionType.RECORD: models.LexRecord,
+    models.LexDefinitionType.SUBSCRIPTION: models.LexSubscription,
+    # TODO(MarshalX): definitions could be primitives? it only happens with string in
+    #  com.atproto.admin.defs.json and com.atproto.moderation.defs.json
+    models.LexDefinitionType.STRING: models.LexString,
 }
 
 _LEX_PRIMITIVE_TYPE_TO_CLASS = {
@@ -23,7 +28,8 @@ _LEX_PRIMITIVE_TYPE_TO_CLASS = {
     models.LexPrimitiveType.NUMBER: models.LexNumber,
     models.LexPrimitiveType.INTEGER: models.LexInteger,
     models.LexPrimitiveType.STRING: models.LexString,
-    models.LexPrimitiveType.REF: models.LexRef,  # not 100% sure cuz not documented
+    models.LexPrimitiveType.REF: models.LexRef,
+    models.LexPrimitiveType.UNION: models.LexRefUnion,
 }
 
 
@@ -66,6 +72,7 @@ def main(lexicon_path: Path):
 if __name__ == '__main__':
     lexicons_to_test = None
 
+    parsed_lexicons = []
     parsing_errors_count = 0
     for _, _, lexicons in os.walk(_PATH_TO_LEXICONS):
         for lexicon in lexicons:
@@ -77,10 +84,11 @@ if __name__ == '__main__':
 
             try:
                 lexicon_doc = main(_PATH_TO_LEXICONS.joinpath(lexicon))
-                # print(lexicon_doc)
+                parsed_lexicons.append(lexicon_doc)
             except Exception as e:
                 parsing_errors_count += 1
                 print(lexicon, str(e))
 
     print('Errors count:', parsing_errors_count)
     assert parsing_errors_count == 0
+    breakpoint()

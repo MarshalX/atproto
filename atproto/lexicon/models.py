@@ -9,7 +9,7 @@ Number = Union[int, float, complex]
 class LexDefinitionType(Enum):
     QUERY = 'query'
     PROCEDURE = 'procedure'
-    PARAMS = 'params'  # TODO(MarshalX): is not a kind of definitions? rich type like array?
+    PARAMS = 'params'
     RECORD = 'record'
     TOKEN = 'token'
     OBJECT = 'object'
@@ -17,6 +17,8 @@ class LexDefinitionType(Enum):
     IMAGE = 'image'
     VIDEO = 'video'
     AUDIO = 'audio'
+    SUBSCRIPTION = 'subscription'
+    STRING = 'string'  # TODO(MarshalX): definitions could be primitives?
 
 
 class LexPrimitiveType(Enum):
@@ -24,8 +26,8 @@ class LexPrimitiveType(Enum):
     NUMBER = 'number'
     INTEGER = 'integer'
     STRING = 'string'
-    # FIXME(MarshalX): more undocumented types?
     REF = 'ref'
+    UNION = 'union'
 
 
 @dataclass
@@ -69,12 +71,13 @@ class LexInteger(LexPrimitive):
 
 @dataclass
 class LexString(LexPrimitive):
-    # TODO(MarshalX): "format" is missing in docs? could be "handle", "did", etc
-    format: Optional[str]
     type = LexPrimitiveType.STRING
+    format: Optional[str]
     default: Optional[str]
     minLength: Optional[int]
     maxLength: Optional[int]
+    minGraphemes: Optional[int]
+    maxGraphemes: Optional[int]
     enum: Optional[List[str]]
     const: Optional[str]
     knownValues: Optional[List[str]]
@@ -82,13 +85,21 @@ class LexString(LexPrimitive):
 
 @dataclass
 class LexRef(LexPrimitive):
-    # TODO(MarshalX): not documented. mb not full model
     type = LexPrimitiveType.REF
     ref: str
 
 
+class LexRefUnion(LexPrimitive):
+    type = LexPrimitiveType.UNION
+    refs: List[str]
+    closed: Optional[bool]
+
+
+LexRefVariant = Union[LexRef, LexRefUnion]
+
+
 @dataclass
-class LexArray:
+class LexArray:  # TODO(MarshalX): add to primitives or definitions?
     type = 'array'
     description: Optional[str]
     items: Union[LexRef, LexPrimitive, List[LexRef]]
@@ -118,6 +129,13 @@ class LexObject(LexDefinition):
 
 
 @dataclass
+class LexRecord(LexDefinition):
+    type = LexDefinitionType.RECORD
+    key: Optional[str]
+    record: LexObject
+
+
+@dataclass
 class LexXrpcParameters(LexDefinition):
     type = LexDefinitionType.PARAMS
     description: Optional[str]
@@ -126,16 +144,31 @@ class LexXrpcParameters(LexDefinition):
 
 
 @dataclass
+class LexXrpcSubscriptionMessage:
+    description: Optional[str]
+    schema: Optional[Union[LexObject, LexRefVariant]]
+
+
+@dataclass
 class LexXrpcBody:
     description: Optional[str]
     encoding: Union[str, List[str]]
-    schema: Optional[LexObject]     # TODO(MarshalX): add LexRefVariant
+    schema: Optional[Union[LexObject, LexRefVariant]]
 
 
 @dataclass
 class LexXrpcError:
     name: str
     description: Optional[str]
+
+
+@dataclass
+class LexSubscription(LexDefinition):
+    type = LexDefinitionType.SUBSCRIPTION
+    parameters: Optional[LexXrpcParameters]
+    message: Optional[LexXrpcSubscriptionMessage]
+    infos: Optional[List[LexXrpcError]]
+    errors: Optional[List[LexXrpcError]]
 
 
 @dataclass
