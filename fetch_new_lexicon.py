@@ -1,10 +1,9 @@
-#  pip install requests
 import zipfile
 from io import BytesIO
 from pathlib import Path
 from typing import Dict, Tuple
 
-import requests
+import httpx
 
 _GITHUB_BASE_URL = 'https://github.com'
 _GITHUB_API_BASE_URL = 'https://api.github.com'
@@ -17,7 +16,7 @@ _LEXICONS_FOLDER_NAME = 'lexicons'
 
 _MANDATORY_REQUEST_HEADERS = {'Content-Type-': 'application/json'}
 
-_FOLDER_TO_WRITE_LEXICONS = Path(__file__).parent.absolute()
+_FOLDER_TO_WRITE_LEXICONS = Path(__file__).parent.joinpath('lexicons').absolute()
 
 
 def _build_last_commit_api_url() -> str:
@@ -29,7 +28,7 @@ def _build_src_download_url() -> str:
 
 
 def _get_last_commit_info() -> Tuple[str, str, str]:
-    response = requests.get(
+    response = httpx.get(
         url=_build_last_commit_api_url(),
         params={'path': _LEXICONS_FOLDER_NAME, 'sha': _DEFAULT_BRANCH_NAME, 'per_page': 1},
         headers=_MANDATORY_REQUEST_HEADERS,
@@ -48,7 +47,7 @@ def _get_last_commit_info() -> Tuple[str, str, str]:
 
 
 def _download_zip_with_code() -> BytesIO:
-    response = requests.get(_build_src_download_url())
+    response = httpx.get(_build_src_download_url(), follow_redirects=True)
     response.raise_for_status()
 
     zip_file_bytes = BytesIO()
