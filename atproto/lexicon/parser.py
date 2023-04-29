@@ -2,14 +2,20 @@ import json
 import os
 from enum import Enum
 from pathlib import Path
+from typing import List, Optional, Union
 
 import dacite
-import models
-from exceptions import UnknownDefinitionTypeError, UnknownPrimitiveTypeError
+from exceptions import (
+    LexiconParsingError,
+    UnknownDefinitionTypeError,
+    UnknownPrimitiveTypeError,
+)
+from lexicon import models
 
 _DEBUG = os.environ.get('DEBUG', '0') == '1'
 
 _PATH_TO_LEXICONS = Path(__file__).parent.parent.parent.joinpath('lexicons').absolute()
+_LEXICON_FILE_EXT = '.json'
 
 _LEX_DEFINITION_TYPE_TO_CLASS = {
     models.LexDefinitionType.PROCEDURE: models.LexXrpcProcedure,
@@ -62,33 +68,38 @@ def lexicon_parse(data: dict, data_class=None):
     return dacite.from_dict(data_class=data_class, data=data, config=_DEFAULT_DACITE_CONFIG)
 
 
-def main(lexicon_path: Path):
-    with open(lexicon_path, 'r', encoding='UTF-8') as f:
-        plain_lexicon = json.loads(f.read())
+def lexicon_parse_file(lexicon_path: Union[Path, str], *, soft_fail: bool = False) -> Optional[models.LexiconDoc]:
+    try:
+        with open(lexicon_path, 'r', encoding='UTF-8') as f:
+            plain_lexicon = json.loads(f.read())
+            return lexicon_parse(plain_lexicon)
+    except Exception as e:
+        if soft_fail:
+            return None
 
-    return lexicon_parse(plain_lexicon)
+        raise LexiconParsingError("Can't parse lexicon") from e
+
+
+def lexicon_parse_dir(path: Union[Path, str] = None, *, soft_fail: bool = False) -> List[models.LexiconDoc]:
+    if path is None:
+        path = _PATH_TO_LEXICONS
+
+    parsed_lexicons = []
+
+    for _, _, lexicons in os.walk(path):
+        for lexicon in lexicons:
+            if not lexicon.endswith(_LEXICON_FILE_EXT):
+                continue
+
+            lexicon_path = path.joinpath(lexicon)
+            parsed_lexicon = lexicon_parse_file(lexicon_path, soft_fail=soft_fail)
+            if parsed_lexicon:
+                parsed_lexicons.append(parsed_lexicon)
+
+    return parsed_lexicons
 
 
 if __name__ == '__main__':
-    lexicons_to_test = None
-
-    parsed_lexicons = []
-    parsing_errors_count = 0
-    for _, _, lexicons in os.walk(_PATH_TO_LEXICONS):
-        for lexicon in lexicons:
-            if not lexicon.endswith('.json'):
-                continue
-
-            if lexicons_to_test and lexicon not in lexicons_to_test:
-                continue
-
-            try:
-                lexicon_doc = main(_PATH_TO_LEXICONS.joinpath(lexicon))
-                parsed_lexicons.append(lexicon_doc)
-            except Exception as e:
-                parsing_errors_count += 1
-                print(lexicon, str(e))
-
-    print('Errors count:', parsing_errors_count)
-    assert parsing_errors_count == 0
-    breakpoint()
+    lex = lexicon_parse_file(_PATH_TO_LEXICONS.joinpath('app.bsky.actor.profile.json'))
+    lexicon_parse_dir(_PATH_TO_LEXICONS)
+    print('Done')

@@ -13,12 +13,15 @@ class LexDefinitionType(Enum):
     RECORD = 'record'
     TOKEN = 'token'
     OBJECT = 'object'
+    SUBSCRIPTION = 'subscription'
+
+    STRING = 'string'  # TODO(MarshalX): definitions could be primitives?
+
+    # TODO(MarshalX): implement types below
     BLOB = 'blob'
     IMAGE = 'image'
     VIDEO = 'video'
     AUDIO = 'audio'
-    SUBSCRIPTION = 'subscription'
-    STRING = 'string'  # TODO(MarshalX): definitions could be primitives?
 
 
 class LexPrimitiveType(Enum):
