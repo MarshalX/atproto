@@ -51,6 +51,9 @@ class NSID:
     def __str__(self):
         return _NSID_DELIM.join(self.segments)
 
+    def __hash__(self):
+        return hash(str(self))
+
 
 def get_nsid_segments(nsid: str) -> Segments:
     return nsid.split('.')
