@@ -48,6 +48,9 @@ class NSID:
     def name(self) -> str:
         return self.segments[-1]
 
+    def __str__(self):
+        return _NSID_DELIM.join(self.segments)
+
 
 def get_nsid_segments(nsid: str) -> Segments:
     return nsid.split('.')

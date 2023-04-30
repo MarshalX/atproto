@@ -101,5 +101,5 @@ def lexicon_parse_dir(path: Union[Path, str] = None, *, soft_fail: bool = False)
 
 if __name__ == '__main__':
     lex = lexicon_parse_file(_PATH_TO_LEXICONS.joinpath('app.bsky.actor.profile.json'))
-    lexicon_parse_dir(_PATH_TO_LEXICONS)
+    all_lex = lexicon_parse_dir(_PATH_TO_LEXICONS)
     print('Done')
