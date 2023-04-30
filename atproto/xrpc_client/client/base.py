@@ -14,8 +14,8 @@ class ClientBase:
     def request(self):
         return self.request
 
-    def invoke(self, nsid: str):
-        print('invoke', nsid)
+    def invoke(self, nsid: str, params=None, data=None, options=None):
+        print(f'Invoke "{nsid}" with params: {params}; data: {data}; options: {options}')
         # should be something like this:
 
         # but it requires work with parsed lexicon. I don't want to parse all lexicon each script run

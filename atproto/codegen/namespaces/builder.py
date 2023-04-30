@@ -1,15 +1,25 @@
-from typing import Dict, List, NamedTuple
+from typing import Dict, List, NamedTuple, Union
 
-from lexicon.models import LexDefinition, LexDefinitionType, LexiconDoc
+from lexicon.models import (
+    LexDefinition,
+    LexDefinitionType,
+    LexiconDoc,
+    LexRecord,
+    LexXrpcProcedure,
+    LexXrpcQuery,
+)
 from lexicon.parser import lexicon_parse_dir
 from nsid import NSID
+
+_VALID_LEX_DEF_TYPES = (LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, LexDefinitionType.RECORD)
+_VALID_LEX_DEF_TYPE = Union[LexXrpcProcedure, LexXrpcQuery, LexRecord]
 
 
 def _filter_namespace_valid_definitions(definitions: Dict[str, LexDefinition]) -> Dict[str, LexDefinition]:
     result = {}
 
     for def_name, def_content in definitions.items():
-        if def_content.type in (LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, LexDefinitionType.RECORD):
+        if def_content.type in _VALID_LEX_DEF_TYPES:
             result[def_name] = def_content
 
     return result
@@ -22,14 +32,18 @@ def get_definition_by_name(name: str, defs: Dict[str, LexDefinition]) -> LexDefi
     return defs['main']
 
 
-class MethodInfo(NamedTuple):
+class ObjectInfo(NamedTuple):
     name: str
-    definition: LexDefinition
+    nsid: NSID
+    definition: _VALID_LEX_DEF_TYPE
 
 
-class RecordInfo(NamedTuple):
-    name: str
-    definition: LexDefinition
+class MethodInfo(ObjectInfo):
+    pass
+
+
+class RecordInfo(ObjectInfo):
+    pass
 
 
 def _enrich_namespace_tree(root: dict, nsid: NSID, defs: Dict[str, LexDefinition]) -> None:
@@ -45,7 +59,7 @@ def _enrich_namespace_tree(root: dict, nsid: NSID, defs: Dict[str, LexDefinition
 
             # TODO(MarshalX): fake records as namespaces with methods to be able to reuse code of generator?
 
-            root.append(model_class(name=segment, definition=definition))
+            root.append(model_class(name=segment, nsid=nsid, definition=definition))
             continue
 
         if segment not in root:

@@ -33,9 +33,6 @@ class ClientRaw(ClientBase):
 class Client(ClientRaw):
     """High level methods are here"""
 
-    def test(self):
-        return self.com.atproto.identity.resolve_handle()
-
     def send_post(self, msg: str, img: bytes):
         """User-friendly method to call batch of methods like:
 
@@ -43,17 +40,18 @@ class Client(ClientRaw):
         post_id = self.app.app.bsky.feed.post.create(msg, img) # TODO(MarshalX): design records
         return post_id
         """
+        client.com.atproto.repo.create_record({'...'})
 
 
 # EXAMPLE OF USAGE
 
 client = Client()
 # using high lvl methods
-client.test()
 client.send_post('hi', b'png')
 # raw api calling
-client.com.atproto.identity.resolve_handle()
 client.bsky.actor.search_actors()
+client.com.atproto.identity.resolve_handle({'handle': 'test'})
+# client.com.atproto.identity.resolve_handle(ResolveHandleParams(handle='test'))
 
 exit(0)
 
