@@ -1,19 +1,8 @@
-from typing import Dict, List, NamedTuple, Union
+from typing import Dict, List, NamedTuple
 
 from lexicon.models import LexDefinition, LexDefinitionType, LexiconDoc
 from lexicon.parser import lexicon_parse_dir
 from nsid import NSID
-
-_NAMESPACE_SUFFIX = 'Namespace'
-_RECORD_SUFFIX = 'Record'
-
-
-def _get_namespace_name(path_part: str) -> str:
-    return f'{path_part.capitalize()}{_NAMESPACE_SUFFIX}'
-
-
-def _get_record_name(path_part: str) -> str:
-    return f'{path_part.capitalize()}{_RECORD_SUFFIX}'
 
 
 def _filter_namespace_valid_definitions(definitions: Dict[str, LexDefinition]) -> Dict[str, LexDefinition]:
@@ -54,6 +43,8 @@ def _enrich_namespace_tree(root: dict, nsid: NSID, defs: Dict[str, LexDefinition
             if definition.type is LexDefinitionType.RECORD:
                 model_class = RecordInfo
 
+            # TODO(MarshalX): fake records as namespaces with methods to be able to reuse code of generator?
+
             root.append(model_class(name=segment, definition=definition))
             continue
 
@@ -79,38 +70,12 @@ def build_namespace_tree(lexicons: List[LexiconDoc]) -> dict:
     return namespace_tree
 
 
-def _generate_namespace(namespace_tree: Union[dict, list]):
-    for node_name, sub_node in namespace_tree.items():
-        if isinstance(sub_node, dict):
-            print(f'{_get_namespace_name(node_name)}:')
-            print('    Sub-namespaces:')
-            for sub_namespace in sub_node.keys():
-                print(f'        - {sub_namespace}: {_get_namespace_name(sub_namespace)}')
-
-            _generate_namespace(sub_node)
-
-        if isinstance(sub_node, list):
-            print(f'{_get_namespace_name(node_name)}:')
-            records = [info for info in sub_node if isinstance(info, RecordInfo)]
-            if records:
-                print('    Records:')
-            for record in records:
-                print(f'        - {record.name}: {_get_record_name(record.name)}')
-
-            methods = [info for info in sub_node if isinstance(info, MethodInfo)]
-            if methods:
-                print('    Methods:')
-            for method in methods:
-                print(f'        - {method.name}(...)')
-
-
-def generate_namespaces() -> None:
+def build_namespaces() -> dict:
     lexicons = lexicon_parse_dir()
     namespace_tree = build_namespace_tree(lexicons)
 
-    print(namespace_tree)
-    _generate_namespace(namespace_tree)
+    return namespace_tree
 
 
 if __name__ == '__main__':
-    generate_namespaces()
+    build_namespaces()
