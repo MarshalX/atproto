@@ -3,10 +3,9 @@ import os
 from typing import Tuple
 
 import httpx
-
 from xrpc_client.client.base import ClientBase
-from xrpc_client.namespaces.sync import ComNamespace, BskyNamespace
-
+from xrpc_client.models import ResolveHandleParams
+from xrpc_client.namespaces.sync import BskyNamespace, ComNamespace
 
 # TODO(MarshalX): add support of records? namespaces with 5 const methods? CRUDL
 # TODO(MarshalX): design data models (input, output, query params, request params (encoding + headers))
@@ -50,8 +49,15 @@ client = Client()
 client.send_post('hi', b'png')
 # raw api calling
 client.bsky.actor.search_actors()
+
 client.com.atproto.identity.resolve_handle({'handle': 'test'})
-# client.com.atproto.identity.resolve_handle(ResolveHandleParams(handle='test'))
+client.com.atproto.identity.resolve_handle(ResolveHandleParams(handle='test'))
+# client.com.atproto.identity.resolve_handle({'handle': 123})     # expect WrongTypeError
+
+# TODO(MarshalX): think about exception but the field is optional so... idk
+client.com.atproto.identity.resolve_handle({'aaa': 1})
+
+client.com.atproto.repo.upload_blob('binary')
 
 exit(0)
 
@@ -78,6 +84,7 @@ async def resolve_handle(handle: str, token: str) -> str:
         res = await client.get(url, params={'handle': handle}, headers={'Authorization': f'Bearer {token}'})
         if res.status_code == 200:
             content = res.json()
+            print(content)
             return content['did']
 
     raise ValueError('Can\'t get resolve handle')

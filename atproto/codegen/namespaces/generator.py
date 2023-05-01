@@ -1,10 +1,9 @@
-import subprocess
 from pathlib import Path
 from typing import Callable, List, Set, Union
 
-from codegen import convert_camel_case_to_snake_case
+from codegen import convert_camel_case_to_snake_case, format_code
 from codegen import get_code_intent as _
-from codegen import get_sync_async_keywords, join_code, sort_dict_by_key
+from codegen import get_sync_async_keywords, join_code, sort_dict_by_key, write_code
 from codegen.models.generator import (
     get_data_model_name,
     get_options_model_name,
@@ -38,6 +37,7 @@ def _get_namespace_imports() -> str:
         'from dataclasses import dataclass',
         'from typing import Optional, Union',
         '',
+        'from xrpc_client import models',
         'from xrpc_client.models import get_or_create_model',
         'from xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase',
     ]
@@ -68,6 +68,8 @@ def _get_post_init_method(sub_namespaces: dict) -> str:
     for sub_namespace in sub_namespaces.keys():
         lines.append(f'{_(2)}self.{sub_namespace} = {get_namespace_name(sub_namespace)}(self._client)')
 
+    # TODO(MarshalX): add support for records
+
     return join_code(lines)
 
 
@@ -80,31 +82,38 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
     presented_args.remove('self')
 
     def _override_arg_line(name: str, model_name: str) -> str:
-        # TODO(Marshal): temp. return real type when model will be generated
-        return f'{_(2)}{name} = get_or_create_model({name}, \'models.{model_name}\')'
-        # return f'{_(2)}{name} = get_or_create_model({name}, models.{model_name})'
+        return f'{_(2)}{name} = get_or_create_model({name}, models.{model_name})'
+
+    invoke_args = [f"'{method_info.nsid}'"]
 
     if 'params' in presented_args:
+        invoke_args.append('params=params')
         lines.append(_override_arg_line('params', get_params_model_name(method_info.name)))
-    elif 'data' in presented_args:
+    elif 'data_schema' in presented_args:
+        invoke_args.append('data=data')
         lines.append(_override_arg_line('data', get_data_model_name(method_info.name)))
+    elif 'data_alias' in presented_args:
+        invoke_args.append('data=data')
     elif 'options' in presented_args:
+        invoke_args.append('options=options')
         lines.append(_override_arg_line('options', get_options_model_name(method_info.name)))
 
-    invoke_args = [f'{k}={k}' for k in presented_args]
-    invoke_args.insert(0, f"'{method_info.nsid}'")
-    invoke_args = ', '.join(invoke_args)
-
-    lines.append(f"{_(2)}{c}self._client.invoke({invoke_args})")
+    invoke_args_str = ', '.join(invoke_args)
+    lines.append(f"{_(2)}{c}self._client.invoke({invoke_args_str})")
 
     return join_code(lines)
 
 
 def _get_namespace_method_signature_arg(
-    name: str, method_name: str, get_model_name: Callable, *, optional: bool
+    name: str, method_name: str, get_model_name: Callable, *, optional: bool, alias: bool = False
 ) -> str:
+    model_name = get_model_name(method_name)
+
+    if alias:
+        return f"{name}: 'models.{model_name}'"
+
     default_value = ''
-    type_hint = f"Union[dict, 'models.{get_model_name(method_name)}']"
+    type_hint = f"Union[dict, 'models.{model_name}']"
     if optional:
         type_hint = f'Optional[{type_hint}]'
         default_value = ' = None'
@@ -117,9 +126,11 @@ def _get_namespace_method_signature_args_names(method_info: MethodInfo) -> Set[s
     if method_info.definition.parameters:
         args.add('params')
     if method_info.definition.type is LexDefinitionType.PROCEDURE and method_info.definition.input:
-        schema = method_info.definition.input.schema
-        if schema:
-            args.add('data')
+        if method_info.definition.input.schema:
+            args.add('data_schema')
+        else:
+            args.add('data_alias')
+
         # TODO(MarshalX): when be ready
         # args.append('options')
 
@@ -148,6 +159,10 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
             # TODO(MarshalX): could LexRefVariant? For records?
             if schema and isinstance(schema, LexObject):
                 args.append(_get_namespace_method_signature_arg('data', name, get_data_model_name, optional=optional))
+        else:
+            args.append(
+                _get_namespace_method_signature_arg('data', name, get_data_model_name, optional=False, alias=True)
+            )
 
         # TODO Options
         #   encoding? + custom like timeout
@@ -209,15 +224,6 @@ def _generate_namespace_in_output(namespace_tree: Union[dict, list], output: Lis
             output.append(_get_namespace_methods_block(methods, sync=sync))
 
 
-def _format_code(filepath: Path) -> None:
-    subprocess.run(['black', '--quiet', filepath])
-
-
-def _write_code(filepath: Path, code: str) -> None:
-    with open(filepath, 'w', encoding='UTF-8') as f:
-        f.write(code)
-
-
 def generate_namespaces() -> None:
     namespace_tree = build_namespaces()
 
@@ -230,8 +236,8 @@ def generate_namespaces() -> None:
         filename = _NAMESPACES_SYNC_FILENAME if sync else _NAMESPACES_ASYNC_FILENAME
         filepath = _NAMESPACES_OUTPUT_DIR.joinpath(filename)
 
-        _write_code(filepath, code)
-        _format_code(filepath)
+        write_code(filepath, code)
+        format_code(filepath)
 
         # TODO(MarshalX): generate ClientRaw as root of namespaces
 

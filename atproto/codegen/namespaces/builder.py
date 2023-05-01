@@ -11,7 +11,7 @@ from lexicon.models import (
 from lexicon.parser import lexicon_parse_dir
 from nsid import NSID
 
-_VALID_LEX_DEF_TYPES = (LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, LexDefinitionType.RECORD)
+_VALID_LEX_DEF_TYPES = {LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, LexDefinitionType.RECORD}
 _VALID_LEX_DEF_TYPE = Union[LexXrpcProcedure, LexXrpcQuery, LexRecord]
 
 

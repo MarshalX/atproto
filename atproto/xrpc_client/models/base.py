@@ -26,5 +26,7 @@ class OptionsModelBase(ModelBase):
 
 @dataclass
 class ResponseModelBase(ModelBase):
-    success: bool
-    headers: dict
+    pass
+    # TODO
+    # success: bool
+    # headers: dict

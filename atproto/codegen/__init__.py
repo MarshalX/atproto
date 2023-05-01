@@ -1,5 +1,16 @@
 import re
+import subprocess
+from pathlib import Path
 from typing import List, Tuple
+
+
+def format_code(filepath: Path) -> None:
+    subprocess.run(['black', '--quiet', filepath])
+
+
+def write_code(filepath: Path, code: str) -> None:
+    with open(filepath, 'w', encoding='UTF-8') as f:
+        f.write(code)
 
 
 def convert_camel_case_to_snake_case(string: str) -> str:
