@@ -11,7 +11,7 @@ from codegen.models.generator import (
     get_response_model_name,
 )
 from codegen.namespaces.builder import MethodInfo, RecordInfo, build_namespaces
-from lexicon.models import LexDefinitionType, LexObject
+from lexicon.models import LexDefinitionType, LexObject, LexRef
 
 _NAMESPACES_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('xrpc_client', 'namespaces')
 _NAMESPACES_CLIENT_FILE_PATH = _NAMESPACES_OUTPUT_DIR.joinpath('client', 'raw.py')
@@ -132,13 +132,20 @@ def _get_namespace_method_signature_args_names(method_info: MethodInfo) -> Set[s
             args.add('data_alias')
 
         # TODO(MarshalX): when be ready
-        # args.append('options')
+        # args.append('options') # or **kwargs
 
     return args
 
 
 def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
     args = ['self']
+    optional_args = []
+
+    def _add_arg(arg_def: str, *, optional: bool) -> None:
+        if optional:
+            optional_args.append(arg_def)
+        else:
+            args.append(arg_def)
 
     def is_optional_arg(lex_obj) -> bool:
         return lex_obj.required is None or len(lex_obj.required) == 0
@@ -147,28 +154,28 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
 
     if method_info.definition.parameters:
         params = method_info.definition.parameters
-        optional = is_optional_arg(params)
+        is_optional = is_optional_arg(params)
 
-        args.append(_get_namespace_method_signature_arg('params', name, get_params_model_name, optional=optional))
+        arg = _get_namespace_method_signature_arg('params', name, get_params_model_name, optional=is_optional)
+        _add_arg(arg, optional=is_optional)
 
     if method_info.definition.type is LexDefinitionType.PROCEDURE and method_info.definition.input:
         schema = method_info.definition.input.schema
         if schema:
-            optional = is_optional_arg(schema)
+            is_optional = is_optional_arg(schema)
 
-            # TODO(MarshalX): could LexRefVariant? For records?
             if schema and isinstance(schema, LexObject):
-                args.append(_get_namespace_method_signature_arg('data', name, get_data_model_name, optional=optional))
+                arg = _get_namespace_method_signature_arg('data', name, get_data_model_name, optional=is_optional)
+                _add_arg(arg, optional=is_optional)
+            else:
+                raise ValueError(f'Bad type {type(schema)}')  # LexRefVariant
         else:
-            args.append(
-                _get_namespace_method_signature_arg('data', name, get_data_model_name, optional=False, alias=True)
-            )
+            arg = _get_namespace_method_signature_arg('data', name, get_data_model_name, optional=False, alias=True)
+            _add_arg(arg, optional=False)
 
-        # TODO Options. Maybe without model? Simple kwargs for .invoke()
-        #   encoding? + custom like timeout
+        # TODO(MarshalX): Options like encoding. Maybe without model? Simple kwargs for .invoke()
 
-    # TODO(MarshalX): sort args by existing of default value
-    #   there are no cases where PROCEDURE has parameters for now
+    args.extend(optional_args)
     return ', '.join(args)
 
 
@@ -177,13 +184,20 @@ def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> s
     name = convert_camel_case_to_snake_case(method_info.name)
 
     args = _get_namespace_method_signature_args(method_info)
-    # FIXME(MarshalX): some methods doesn't contain response model. Only response status code I guess. For example:
-    #  app.bsky.graph.muteActor
-    #  app.bsky.graph.unmuteActor
 
-    return_type_hint = f"'models.{get_response_model_name(method_info.name)}'"
+    model_name_suffix = ''
+    if method_info.definition.output and isinstance(method_info.definition.output.schema, LexRef):
+        # fix collisions with type aliases
+        # example of collisions: com.atproto.admin.getRepo, com.atproto.sync.getRepo
+        # could be solved by separating models into different folders using segments of NSID
+        model_name_suffix = 'Ref'
 
-    return f'{_(1)}{d}def {name}({args}) -> {return_type_hint}:'
+    return_type_hint = '-> int'  # return status code of response
+    if method_info.definition.output:
+        # example of methods without response: app.bsky.graph.muteActor, app.bsky.graph.muteActor
+        return_type_hint = f" -> 'models.{get_response_model_name(method_info.name)}{model_name_suffix}'"
+
+    return f'{_(1)}{d}def {name}({args}){return_type_hint}:'
 
 
 def _get_namespace_methods_block(methods_info: List[MethodInfo], sync: bool) -> str:

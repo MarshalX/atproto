@@ -102,7 +102,7 @@ def _get_model_field_typehint(field_name: str, field_type_def, *, optional: bool
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
-        # TODO(MarshalX): it's record. think about it
+        # TODO(MarshalX): it's record. think about could we add useful typehint
         return True, _get_optional_typehint('Any', optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
@@ -113,7 +113,7 @@ def _get_model_field_typehint(field_name: str, field_type_def, *, optional: bool
         failed_type_name, items_type_hint = _get_model_field_typehint(field_name, field_type_def.items, optional=False)
         return failed_type_name, _get_optional_typehint(f'List[{items_type_hint}]', optional=optional)
 
-    # TODO(MarshalX): implement not implemented types
+    # TODO(MarshalX): implement more types
     #  models.LexRef
     #  models.LexRefUnion
     #  models.LexBlob. Note: HERE IS SHOULD BE STRANGE TYPE CALLED BlobRef instead of LexBlob...
@@ -148,7 +148,8 @@ def _get_model(properties: dict, required_fields: set) -> str:
         else:
             fields.append(field_def)
 
-    # TODO(MarshalX): sort each group of fields by alphabet?
+    optional_fields.sort()
+    fields.sort()
 
     fields.extend(optional_fields)
     return join_code(fields)
@@ -165,11 +166,7 @@ def _get_model_schema(schema: models.LexObject) -> str:
 def _get_model_ref(name: str, ref: models.LexRef) -> str:
     # TODO(MarshalX): impl proper type
 
-    # FIXME(MarshalX): there is class name collision with type alias.
-    #  we need generate returning type hint with respect this moment
-    #  collision occurs here:
-    #  - com.atproto.admin.getRepo
-    #  - com.atproto.sync.getRepo
+    # "Ref" suffix required to fix name collisions from different namespaces
     return f'{get_response_model_name(name)}Ref: Any = None    # FIXME LexRef'
 
 
