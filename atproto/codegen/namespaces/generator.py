@@ -164,11 +164,11 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
                 _get_namespace_method_signature_arg('data', name, get_data_model_name, optional=False, alias=True)
             )
 
-        # TODO Options
+        # TODO Options. Maybe without model? Simple kwargs for .invoke()
         #   encoding? + custom like timeout
 
     # TODO(MarshalX): sort args by existing of default value
-    #   for now there is no cases where PROCEDURE has parameters
+    #   there are no cases where PROCEDURE has parameters for now
     return ', '.join(args)
 
 
@@ -177,6 +177,10 @@ def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> s
     name = convert_camel_case_to_snake_case(method_info.name)
 
     args = _get_namespace_method_signature_args(method_info)
+    # FIXME(MarshalX): some methods doesn't contain response model. Only response status code I guess. For example:
+    #  app.bsky.graph.muteActor
+    #  app.bsky.graph.unmuteActor
+
     return_type_hint = f"'models.{get_response_model_name(method_info.name)}'"
 
     return f'{_(1)}{d}def {name}({args}) -> {return_type_hint}:'

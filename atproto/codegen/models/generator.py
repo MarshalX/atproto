@@ -1,17 +1,23 @@
 from enum import Enum
 from pathlib import Path
-from typing import Union
+from typing import Tuple, Union
 
 from codegen import capitalize_first_symbol, format_code
 from codegen import get_code_intent as _
 from codegen import join_code, write_code
-from codegen.models.builder import LexDB, build_data_models, build_params_models
+from codegen.models.builder import (
+    LexDB,
+    build_data_models,
+    build_params_models,
+    build_response_models,
+)
 from lexicon import models
 from nsid import NSID
 
 _MODELS_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('xrpc_client', 'models')
 _PARAMS_MODELS_FILENAME = 'params.py'
 _DATA_MODELS_FILENAME = 'data.py'
+_RESPONSE_MODELS_FILENAME = 'responses.py'
 
 
 _PARAMS_SUFFIX = 'Params'
@@ -71,9 +77,9 @@ def _get_model_class_def(name: str, model_type: ModelType) -> str:
     elif model_type is ModelType.DATA:
         lines.append(f'class {get_data_model_name(name)}(DataModelBase):')
     elif model_type is ModelType.OPTIONS:
-        lines.append(f'class {get_params_model_name(name)}(OptionsModelBase):')
+        lines.append(f'class {get_options_model_name(name)}(OptionsModelBase):')
     elif model_type is ModelType.RESPONSE:
-        lines.append(f'class {get_params_model_name(name)}(ResponseModelBase):')
+        lines.append(f'class {get_response_model_name(name)}(ResponseModelBase):')
 
     return join_code(lines)
 
@@ -92,27 +98,28 @@ def _get_optional_typehint(type_hint, *, optional: bool) -> str:
         return type_hint
 
 
-def _get_model_field_typehint(field_name: str, field_type_def, *, optional: bool) -> str:
+def _get_model_field_typehint(field_name: str, field_type_def, *, optional: bool) -> Tuple[bool, str]:
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
         # TODO(MarshalX): it's record. think about it
-        return 'Any'
+        return True, _get_optional_typehint('Any', optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
     if type_hint:
-        return _get_optional_typehint(type_hint, optional=optional)
+        return True, _get_optional_typehint(type_hint, optional=optional)
 
     if field_type is models.LexArray:
-        items_type_hint = _get_model_field_typehint(field_name, field_type_def.items, optional=False)
-        return _get_optional_typehint(f'List[{items_type_hint}]', optional=optional)
+        failed_type_name, items_type_hint = _get_model_field_typehint(field_name, field_type_def.items, optional=False)
+        return failed_type_name, _get_optional_typehint(f'List[{items_type_hint}]', optional=optional)
 
-    # TODO(MarshalX): implement not implemented types:
+    # TODO(MarshalX): implement not implemented types
     #  models.LexRef
     #  models.LexRefUnion
-    #  more...
+    #  models.LexBlob. Note: HERE IS SHOULD BE STRANGE TYPE CALLED BlobRef instead of LexBlob...
+    print('IMPLEMENT', field_type)
 
-    return 'Any'
+    return field_type.__name__, _get_optional_typehint('Any', optional=optional)
 
 
 def _get_req_fields_set(lex_obj) -> set:
@@ -129,9 +136,13 @@ def _get_model(properties: dict, required_fields: set) -> str:
 
     for field_name, field_type in properties.items():
         is_optional = field_name not in required_fields
-        type_hint = _get_model_field_typehint(field_name, field_type, optional=is_optional)
+        failed_type_name, type_hint = _get_model_field_typehint(field_name, field_type, optional=is_optional)
 
-        field_def = f'{_(1)}{field_name}: {type_hint}'
+        comment = ''
+        if failed_type_name is not True:
+            comment = f'{_(1)}# FIXME {failed_type_name} instead of Any'
+
+        field_def = f'{_(1)}{field_name}: {type_hint}{comment}'
         if is_optional:
             optional_fields.append(field_def)
         else:
@@ -151,6 +162,17 @@ def _get_model_schema(schema: models.LexObject) -> str:
     return _get_model(schema.properties, _get_req_fields_set(schema))
 
 
+def _get_model_ref(name: str, ref: models.LexRef) -> str:
+    # TODO(MarshalX): impl proper type
+
+    # FIXME(MarshalX): there is class name collision with type alias.
+    #  we need generate returning type hint with respect this moment
+    #  collision occurs here:
+    #  - com.atproto.admin.getRepo
+    #  - com.atproto.sync.getRepo
+    return f'{get_response_model_name(name)}Ref: Any = None    # FIXME LexRef'
+
+
 def _get_model_raw_data(name: str) -> str:
     return f'{name}: Union[str, bytes]'
 
@@ -164,15 +186,33 @@ def _generate_params_model(nsid: NSID, definition: Union[models.LexXrpcProcedure
     return join_code(lines)
 
 
-def _generate_data_model(nsid: NSID, input_body: models.LexXrpcBody) -> str:
+def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: ModelType) -> str:
     lines = []
-    if input_body.schema:
-        lines.append(_get_model_class_def(nsid.name, ModelType.DATA))
-        lines.append(_get_model_schema(input_body.schema))
+    if body.schema:
+        if isinstance(body.schema, models.LexObject):
+            lines.append(_get_model_class_def(nsid.name, model_type))
+            lines.append(_get_model_schema(body.schema))
+        elif isinstance(body.schema, models.LexRef):
+            lines.append(_get_model_ref(nsid.name, body.schema))
     else:
-        lines.append(_get_model_raw_data(get_data_model_name(nsid.name)))
+        if model_type is ModelType.DATA:
+            model_name = get_data_model_name(nsid.name)
+        elif model_type is ModelType.RESPONSE:
+            model_name = get_response_model_name(nsid.name)
+        else:
+            raise ValueError('Wrong type or not implemented')
+
+        lines.append(_get_model_raw_data(model_name))
 
     return join_code(lines)
+
+
+def _generate_data_model(nsid: NSID, input_body: models.LexXrpcBody) -> str:
+    return _generate_xrpc_body_model(nsid, input_body, ModelType.DATA)
+
+
+def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str:
+    return _generate_xrpc_body_model(nsid, output_body, ModelType.RESPONSE)
 
 
 def _generate_params_models(lex_db: LexDB) -> None:
@@ -199,9 +239,22 @@ def _generate_data_models(lex_db: LexDB) -> None:
     format_code(_MODELS_OUTPUT_DIR.joinpath(_DATA_MODELS_FILENAME))
 
 
+def _generate_response_models(lex_db: LexDB) -> None:
+    lines = [_get_model_imports(ModelType.RESPONSE)]
+
+    for nsid, defs in lex_db.items():
+        definition = defs['main']
+        if definition.output:
+            lines.append(_generate_response_model(nsid, definition.output))
+
+    write_code(_MODELS_OUTPUT_DIR.joinpath(_RESPONSE_MODELS_FILENAME), join_code(lines))
+    format_code(_MODELS_OUTPUT_DIR.joinpath(_RESPONSE_MODELS_FILENAME))
+
+
 def generate_models():
     _generate_params_models(build_params_models())
     _generate_data_models(build_data_models())
+    _generate_response_models(build_response_models())
 
 
 if __name__ == '__main__':

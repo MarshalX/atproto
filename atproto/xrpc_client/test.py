@@ -50,17 +50,19 @@ client = Client()
 # using high lvl methods
 client.send_post('hi', b'png')
 # raw api calling
-client.bsky.actor.search_actors()
+sr = client.bsky.actor.search_actors()
+# a = sr.actors[0]
 
 client.com.atproto.identity.resolve_handle({'handle': 'test'})
-client.com.atproto.identity.resolve_handle(ResolveHandleParams(handle='test'))
+r = client.com.atproto.identity.resolve_handle(ResolveHandleParams(handle='test'))
+# r.did.join('typehints test')
 client.com.atproto.repo.upload_blob('binary')
 # client.com.atproto.identity.resolve_handle({'handle': 123})     # expect WrongTypeError
 # client.com.atproto.moderation.create_report({'reasonType1': 'test', 'subject': 1})     # expect MissingValueError
 # client.com.atproto.identity.resolve_handle({'aaa': 1})     # expect UnexpectedFieldError
 
 m = get_or_create_model({'handle': None}, ResolveHandleParams)
-print(json.dumps(dataclasses.asdict(m)))    # TODO(MarshalX): exclude null values?
+print(json.dumps(dataclasses.asdict(m)))  # TODO(MarshalX): exclude null values?
 
 exit(0)
 
