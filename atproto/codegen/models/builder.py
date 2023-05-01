@@ -7,6 +7,7 @@ from nsid import NSID
 _LEX_DEF_TYPES_FOR_PARAMS = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
 _LEX_DEF_TYPES_FOR_RESPONSES = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
 _LEX_DEF_TYPES_FOR_DATA = {models.LexDefinitionType.PROCEDURE}
+_LEX_DEF_TYPES_FOR_RECORDS = {models.LexDefinitionType.RECORD}
 _LEX_DEF_TYPES_FOR_DEF = {
     models.LexDefinitionType.OBJECT,
     models.LexPrimitiveType.STRING,
@@ -14,7 +15,15 @@ _LEX_DEF_TYPES_FOR_DEF = {
 }
 
 LexDefs = Dict[
-    str, Union[models.LexXrpcProcedure, models.LexXrpcQuery, models.LexObject, models.LexToken, models.LexString]
+    str,
+    Union[
+        models.LexXrpcProcedure,
+        models.LexXrpcQuery,
+        models.LexObject,
+        models.LexToken,
+        models.LexString,
+        models.LexRecord,
+    ],
 ]
 LexDB = Dict[NSID, LexDefs]
 
@@ -51,8 +60,13 @@ def build_def_models() -> LexDB:
     return _build_nsid_to_defs_map(lexicon_parse_dir(), _LEX_DEF_TYPES_FOR_DEF)
 
 
+def build_record_models() -> LexDB:
+    return _build_nsid_to_defs_map(lexicon_parse_dir(), _LEX_DEF_TYPES_FOR_RECORDS)
+
+
 if __name__ == '__main__':
     build_params_models()
     build_data_models()
     build_response_models()
     build_def_models()
+    build_record_models()

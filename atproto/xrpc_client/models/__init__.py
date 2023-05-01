@@ -11,6 +11,7 @@ from exceptions import (
 from xrpc_client.models.data import *
 from xrpc_client.models.defs import *
 from xrpc_client.models.params import *
+from xrpc_client.models.records import *
 from xrpc_client.models.responses import *
 
 M = TypeVar('M')
