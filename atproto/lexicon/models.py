@@ -31,6 +31,7 @@ class LexPrimitiveType(Enum):
     STRING = 'string'
     REF = 'ref'
     UNION = 'union'
+    UNKNOWN = 'unknown'
 
 
 @dataclass
@@ -43,6 +44,11 @@ class LexDefinition:  # original name LexUserType
 class LexPrimitive:
     type: LexPrimitiveType
     description: Optional[str]
+
+
+@dataclass
+class LexUnknown(LexPrimitive):
+    type = LexPrimitiveType.UNKNOWN
 
 
 @dataclass
@@ -92,6 +98,7 @@ class LexRef(LexPrimitive):
     ref: str
 
 
+@dataclass
 class LexRefUnion(LexPrimitive):
     type = LexPrimitiveType.UNION
     refs: List[str]

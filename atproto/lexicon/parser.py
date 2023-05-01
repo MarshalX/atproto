@@ -36,6 +36,7 @@ _LEX_PRIMITIVE_TYPE_TO_CLASS = {
     models.LexPrimitiveType.STRING: models.LexString,
     models.LexPrimitiveType.REF: models.LexRef,
     models.LexPrimitiveType.UNION: models.LexRefUnion,
+    models.LexPrimitiveType.UNKNOWN: models.LexUnknown,
 }
 
 
