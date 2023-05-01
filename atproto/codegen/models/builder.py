@@ -1,28 +1,29 @@
 from typing import Dict, List, Union
 
-from lexicon.models import (
-    LexDefinition,
-    LexDefinitionType,
-    LexiconDoc,
-    LexXrpcProcedure,
-    LexXrpcQuery,
-)
+from lexicon import models
 from lexicon.parser import lexicon_parse_dir
 from nsid import NSID
 
-_LEX_DEF_TYPES_FOR_PARAMS = {LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE}
-_LEX_DEF_TYPES_FOR_RESPONSES = {LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE}
-_LEX_DEF_TYPES_FOR_DATA = {LexDefinitionType.PROCEDURE}
+_LEX_DEF_TYPES_FOR_PARAMS = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
+_LEX_DEF_TYPES_FOR_RESPONSES = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
+_LEX_DEF_TYPES_FOR_DATA = {models.LexDefinitionType.PROCEDURE}
+_LEX_DEF_TYPES_FOR_DEF = {
+    models.LexDefinitionType.OBJECT,
+    models.LexPrimitiveType.STRING,
+    models.LexDefinitionType.TOKEN,
+}
 
-LexDefs = Dict[str, Union[LexXrpcProcedure, LexXrpcQuery]]
+LexDefs = Dict[
+    str, Union[models.LexXrpcProcedure, models.LexXrpcQuery, models.LexObject, models.LexToken, models.LexString]
+]
 LexDB = Dict[NSID, LexDefs]
 
 
-def _filter_defs_by_type(defs: Dict[str, LexDefinition], def_types: set) -> LexDefs:
+def _filter_defs_by_type(defs: Dict[str, models.LexDefinition], def_types: set) -> LexDefs:
     return {k: v for k, v in defs.items() if v.type in def_types}
 
 
-def _build_nsid_to_defs_map(lexicons: List[LexiconDoc], def_types: set) -> LexDB:
+def _build_nsid_to_defs_map(lexicons: List[models.LexiconDoc], def_types: set) -> LexDB:
     result = {}
 
     for lexicon in lexicons:
@@ -46,7 +47,12 @@ def build_response_models() -> LexDB:
     return _build_nsid_to_defs_map(lexicon_parse_dir(), _LEX_DEF_TYPES_FOR_RESPONSES)
 
 
+def build_def_models() -> LexDB:
+    return _build_nsid_to_defs_map(lexicon_parse_dir(), _LEX_DEF_TYPES_FOR_DEF)
+
+
 if __name__ == '__main__':
     build_params_models()
     build_data_models()
     build_response_models()
+    build_def_models()

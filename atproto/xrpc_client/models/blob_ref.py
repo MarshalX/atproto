@@ -1,0 +1,3 @@
+class BlobRef:
+    # TODO(MarshalX): implement
+    ...

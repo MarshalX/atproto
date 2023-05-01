@@ -6,6 +6,7 @@ from typing import List, Tuple
 
 def format_code(filepath: Path) -> None:
     subprocess.run(['black', '--quiet', filepath])
+    subprocess.run(['isort', '--quiet', filepath])
 
 
 def write_code(filepath: Path, code: str) -> None:
