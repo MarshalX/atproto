@@ -7,21 +7,20 @@ Number = Union[int, float, complex]
 
 
 class LexDefinitionType(Enum):
+    RECORD = 'record'
+
     QUERY = 'query'
     PROCEDURE = 'procedure'
-    PARAMS = 'params'
-    RECORD = 'record'
-    TOKEN = 'token'
-    OBJECT = 'object'
     SUBSCRIPTION = 'subscription'
 
-    STRING = 'string'  # TODO(MarshalX): definitions could be primitives?
+    PARAMS = 'params'
+    TOKEN = 'token'
+    OBJECT = 'object'
 
-    # TODO(MarshalX): implement types below
     BLOB = 'blob'
-    IMAGE = 'image'
-    VIDEO = 'video'
-    AUDIO = 'audio'
+    ARRAY = 'array'
+
+    STRING = 'string'  # TODO(MarshalX): definitions could be primitives?
 
 
 class LexPrimitiveType(Enum):
@@ -32,6 +31,8 @@ class LexPrimitiveType(Enum):
     REF = 'ref'
     UNION = 'union'
     UNKNOWN = 'unknown'
+    # cid-link?
+    # bytes?
 
 
 @dataclass
@@ -93,6 +94,13 @@ class LexString(LexPrimitive):
 
 
 @dataclass
+class LexBlob(LexDefinition):
+    type = LexDefinitionType.BLOB
+    accept: Optional[List[str]]
+    maxSize: Optional[Number]
+
+
+@dataclass
 class LexRef(LexPrimitive):
     type = LexPrimitiveType.REF
     ref: str
@@ -109,10 +117,10 @@ LexRefVariant = Union[LexRef, LexRefUnion]
 
 
 @dataclass
-class LexArray:  # TODO(MarshalX): add to primitives or definitions?
-    type = 'array'
+class LexArray(LexDefinition):
+    type = LexDefinitionType.ARRAY
     description: Optional[str]
-    items: Union[LexRef, LexPrimitive, List[LexRef]]
+    items: Union[LexPrimitive, LexBlob, LexRefVariant]
     minLength: Optional[int]
     maxLength: Optional[int]
 
@@ -135,7 +143,7 @@ class LexToken(LexDefinition):
 class LexObject(LexDefinition):
     type = LexDefinitionType.OBJECT
     required: Optional[List[str]]
-    properties: Dict[str, Union[LexRef, LexArray, LexPrimitive, List[LexRef]]]
+    properties: Dict[str, Union[LexRefVariant, LexArray, LexPrimitive, LexBlob]]
 
 
 @dataclass

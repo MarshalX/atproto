@@ -16,18 +16,20 @@ _DEBUG = os.environ.get('DEBUG', '0') == '1'
 
 _PATH_TO_LEXICONS = Path(__file__).parent.parent.parent.joinpath('lexicons').absolute()
 _LEXICON_FILE_EXT = '.json'
-
 _LEX_DEFINITION_TYPE_TO_CLASS = {
+    models.LexDefinitionType.RECORD: models.LexRecord,
     models.LexDefinitionType.PROCEDURE: models.LexXrpcProcedure,
     models.LexDefinitionType.QUERY: models.LexXrpcQuery,
+    models.LexDefinitionType.SUBSCRIPTION: models.LexSubscription,
     models.LexDefinitionType.TOKEN: models.LexToken,
     models.LexDefinitionType.OBJECT: models.LexObject,
-    models.LexDefinitionType.RECORD: models.LexRecord,
-    models.LexDefinitionType.SUBSCRIPTION: models.LexSubscription,
+    models.LexDefinitionType.BLOB: models.LexBlob,
+    models.LexDefinitionType.ARRAY: models.LexArray,
     # TODO(MarshalX): definitions could be primitives? it only happens with string in
     #  com.atproto.admin.defs.json and com.atproto.moderation.defs.json
     models.LexDefinitionType.STRING: models.LexString,
 }
+
 
 _LEX_PRIMITIVE_TYPE_TO_CLASS = {
     models.LexPrimitiveType.BOOLEAN: models.LexBoolean,
