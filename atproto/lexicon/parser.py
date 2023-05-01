@@ -25,11 +25,9 @@ _LEX_DEFINITION_TYPE_TO_CLASS = {
     models.LexDefinitionType.OBJECT: models.LexObject,
     models.LexDefinitionType.BLOB: models.LexBlob,
     models.LexDefinitionType.ARRAY: models.LexArray,
-    # TODO(MarshalX): definitions could be primitives? it only happens with string in
-    #  com.atproto.admin.defs.json and com.atproto.moderation.defs.json
+    # TODO(MarshalX): definitions could be primitives?
     models.LexDefinitionType.STRING: models.LexString,
 }
-
 
 _LEX_PRIMITIVE_TYPE_TO_CLASS = {
     models.LexPrimitiveType.BOOLEAN: models.LexBoolean,
@@ -39,6 +37,8 @@ _LEX_PRIMITIVE_TYPE_TO_CLASS = {
     models.LexPrimitiveType.REF: models.LexRef,
     models.LexPrimitiveType.UNION: models.LexRefUnion,
     models.LexPrimitiveType.UNKNOWN: models.LexUnknown,
+    models.LexPrimitiveType.CID_LINK: models.LexCidLink,
+    models.LexPrimitiveType.BYTES: models.LexBytes,
 }
 
 

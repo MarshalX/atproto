@@ -31,8 +31,8 @@ class LexPrimitiveType(Enum):
     REF = 'ref'
     UNION = 'union'
     UNKNOWN = 'unknown'
-    # cid-link?
-    # bytes?
+    CID_LINK = 'cid-link'
+    BYTES = 'bytes'
 
 
 @dataclass
@@ -50,6 +50,18 @@ class LexPrimitive:
 @dataclass
 class LexUnknown(LexPrimitive):
     type = LexPrimitiveType.UNKNOWN
+
+
+@dataclass
+class LexCidLink(LexPrimitive):
+    type = LexPrimitiveType.CID_LINK
+
+
+@dataclass
+class LexBytes(LexPrimitive):
+    type = LexPrimitiveType.BYTES
+    maxLength: Optional[Number]
+    minLength: Optional[Number]
 
 
 @dataclass
@@ -143,6 +155,7 @@ class LexToken(LexDefinition):
 class LexObject(LexDefinition):
     type = LexDefinitionType.OBJECT
     required: Optional[List[str]]
+    nullable: Optional[List[str]]
     properties: Dict[str, Union[LexRefVariant, LexArray, LexPrimitive, LexBlob]]
 
 
