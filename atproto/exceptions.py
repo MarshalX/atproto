@@ -36,3 +36,24 @@ class ModelFieldError(ModelError):
 
 class WrongTypeError(ModelFieldError):
     ...
+
+
+class NetworkError(AtProtocolError):
+    ...
+
+
+class InvokeTimeoutError(NetworkError):
+    ...
+
+
+class UnauthorizedError(AtProtocolError):
+    def __init__(self, response):
+        self.response = response
+
+
+class RequestException(AtProtocolError):
+    ...
+
+
+class BadRequestError(RequestException):
+    ...
