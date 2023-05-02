@@ -13,11 +13,12 @@ from xrpc_client.models.defs import *
 from xrpc_client.models.params import *
 from xrpc_client.models.records import *
 from xrpc_client.models.responses import *
+from xrpc_client.request import Response
 
 M = TypeVar('M')
 
 
-def get_or_create_model(model_data: Union[dict, M], model: Type[M]) -> Optional[M]:
+def get_or_create_model(model_data: Union[dict], model: Type[M]) -> Optional[M]:
     if model_data is None:
         return None
 
@@ -40,3 +41,10 @@ def get_or_create_model(model_data: Union[dict, M], model: Type[M]) -> Optional[
         raise ModelFieldError(str(e))
     except exceptions.DaciteError as e:
         raise ModelError(str(e))
+
+
+def get_response_model(response: Response, model: Type[M]) -> Optional[M]:
+    if model is int:
+        return response.status_code
+
+    return get_or_create_model(response.content, model)
