@@ -11,13 +11,13 @@ from codegen.models.generator import (
     get_response_model_name,
 )
 from codegen.namespaces.builder import MethodInfo, RecordInfo, build_namespaces
-from lexicon.models import LexDefinitionType, LexObject, LexRef
+from lexicon.models import LexDefinitionType, LexObject, LexRef, LexXrpcProcedure
 
 _NAMESPACES_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('xrpc_client', 'namespaces')
 _NAMESPACES_CLIENT_FILE_PATH = _NAMESPACES_OUTPUT_DIR.joinpath('client', 'raw.py')
 
-_NAMESPACES_SYNC_FILENAME = 'sync.py'
-_NAMESPACES_ASYNC_FILENAME = 'async.py'
+_NAMESPACES_SYNC_FILENAME = 'sync_ns.py'
+_NAMESPACES_ASYNC_FILENAME = 'async_ns.py'
 
 _NAMESPACE_SUFFIX = 'Namespace'
 _RECORD_SUFFIX = 'RecordNamespace'
@@ -38,7 +38,7 @@ def _get_namespace_imports() -> str:
         'from typing import Optional, Union',
         '',
         'from xrpc_client import models',
-        'from xrpc_client.models import get_or_create_model',
+        'from xrpc_client.models import get_or_create_model, get_response_model',
         'from xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase',
     ]
 
@@ -99,7 +99,15 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
         lines.append(_override_arg_line('options', get_options_model_name(method_info.name)))
 
     invoke_args_str = ', '.join(invoke_args)
-    lines.append(f"{_(2)}{c}self._client.invoke({invoke_args_str})")
+
+    method_name = 'invoke_query'
+    if isinstance(method_info.definition, LexXrpcProcedure):
+        method_name = 'invoke_procedure'
+
+    lines.append(f"{_(2)}response = {c}self._client.{method_name}({invoke_args_str})")
+
+    return_type = _get_namespace_method_return_type(method_info)
+    lines.append(f"{_(2)}return get_response_model(response, {return_type})")
 
     return join_code(lines)
 
@@ -179,12 +187,7 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
     return ', '.join(args)
 
 
-def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> str:
-    d, c = get_sync_async_keywords(sync=sync)
-    name = convert_camel_case_to_snake_case(method_info.name)
-
-    args = _get_namespace_method_signature_args(method_info)
-
+def _get_namespace_method_return_type(method_info: MethodInfo) -> str:
     model_name_suffix = ''
     if method_info.definition.output and isinstance(method_info.definition.output.schema, LexRef):
         # fix collisions with type aliases
@@ -192,12 +195,22 @@ def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> s
         # could be solved by separating models into different folders using segments of NSID
         model_name_suffix = 'Ref'
 
-    return_type_hint = '-> int'  # return status code of response
+    return_type = 'int'  # return status code of response
     if method_info.definition.output:
         # example of methods without response: app.bsky.graph.muteActor, app.bsky.graph.muteActor
-        return_type_hint = f" -> 'models.{get_response_model_name(method_info.name)}{model_name_suffix}'"
+        return_type = f'models.{get_response_model_name(method_info.name)}{model_name_suffix}'
 
-    return f'{_(1)}{d}def {name}({args}){return_type_hint}:'
+    return return_type
+
+
+def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> str:
+    d, c = get_sync_async_keywords(sync=sync)
+
+    name = convert_camel_case_to_snake_case(method_info.name)
+    args = _get_namespace_method_signature_args(method_info)
+    return_type = _get_namespace_method_return_type(method_info)
+
+    return f'{_(1)}{d}def {name}({args}) -> {return_type}:'
 
 
 def _get_namespace_methods_block(methods_info: List[MethodInfo], sync: bool) -> str:

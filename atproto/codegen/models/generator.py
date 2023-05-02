@@ -241,7 +241,7 @@ def _get_model_ref(name: str, ref: models.LexRef) -> str:
 
 
 def _get_model_raw_data(name: str) -> str:
-    return f'{name}: Union[str, bytes]'
+    return f'{name}: Union[Type[str], Type[bytes]] = bytes'
 
 
 def _generate_params_model(nsid: NSID, definition: Union[models.LexXrpcProcedure, models.LexXrpcQuery]) -> str:
