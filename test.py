@@ -2,8 +2,7 @@ import asyncio
 import logging
 import os
 
-from atproto import models
-from atproto import AsyncClient, Client
+from atproto import AsyncClient, Client, models
 
 logging.basicConfig(level=logging.DEBUG)
 

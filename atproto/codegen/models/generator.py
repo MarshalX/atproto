@@ -2,7 +2,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Union
 
-from codegen import capitalize_first_symbol, format_code, camel_case_split
+from codegen import camel_case_split, capitalize_first_symbol, format_code
 from codegen import get_code_intent as _
 from codegen import join_code, write_code
 from codegen.models import builder
@@ -213,7 +213,9 @@ def _gen_description_by_nsid_or_camel_case_name(name: Union[str, NSID]) -> str:
     return _gen_description_by_camel_case_name(name)
 
 
-def _get_model_docstring(nsid: Union[str, NSID], lex_object: Union[models.LexObject, models.LexXrpcParameters], model_type: ModelType) -> str:
+def _get_model_docstring(
+    nsid: Union[str, NSID], lex_object: Union[models.LexObject, models.LexXrpcParameters], model_type: ModelType
+) -> str:
     model_desc = lex_object.description
     if model_desc is None:
         model_desc = _gen_description_by_nsid_or_camel_case_name(nsid)
@@ -327,7 +329,7 @@ def _generate_def_model(def_name: str, def_model: models.LexObject) -> str:
     lines = [
         _get_model_class_def(def_name, ModelType.DEF),
         _get_model_docstring(def_name, def_model, ModelType.DEF),
-        _get_model_object(def_name, def_model)
+        _get_model_object(def_name, def_model),
     ]
 
     return join_code(lines)
