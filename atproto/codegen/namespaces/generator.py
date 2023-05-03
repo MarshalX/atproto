@@ -246,9 +246,9 @@ def _generate_namespace_in_output(namespace_tree: Union[dict, list], output: Lis
         if isinstance(sub_node, list):
             output.append(_get_namespace_class_def(node_name))
 
-            records = [info for info in sub_node if isinstance(info, RecordInfo)]
-            output.append(_get_namespace_records_block(records))
-
+            # TODO(MarshalX): implement later
+            # records = [info for info in sub_node if isinstance(info, RecordInfo)]
+            # output.append(_get_namespace_records_block(records))
             # TODO(MarshalX): generate namespace record classes!
 
             methods = [info for info in sub_node if isinstance(info, MethodInfo)]
