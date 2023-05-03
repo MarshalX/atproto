@@ -1,7 +1,7 @@
-import dataclasses
 from enum import Enum
 from typing import Optional
 
+from xrpc_client.models import get_model_as_dict, get_model_as_json
 from xrpc_client.request import AsyncRequest, Request, Response
 
 # TODO(MarshalX): Generate async version automatically!
@@ -14,9 +14,35 @@ class InvokeType(Enum):
 
 _BASE_API_URL = 'https://bsky.social/xrpc'
 
+_CONTENT_TYPE_JSON = 'application/json'
+_DEFAULT_CONTENT_TYPE = _CONTENT_TYPE_JSON
+
+
+def _handle_kwagrs(kwargs: dict) -> None:
+    """Mutates input data"""
+    content_type = _DEFAULT_CONTENT_TYPE
+
+    if 'headers' not in kwargs:
+        kwargs['headers'] = {}
+
+    if 'input_encoding' in kwargs:
+        content_type = kwargs['input_encoding']
+
+    kwargs['headers'].update({'Content-Type': content_type})
+
+    if content_type == _CONTENT_TYPE_JSON and 'data' in kwargs and kwargs['data']:
+        kwargs['data'] = get_model_as_json(kwargs['data'])
+
+    if 'params' in kwargs and kwargs['params']:
+        kwargs['params'] = get_model_as_dict(kwargs['params'])
+
+    # pop non-request kwargs
+    kwargs.pop('input_encoding', None)
+    kwargs.pop('output_encoding', None)
+
 
 class ClientBase:
-    """Low level methods are here"""
+    """Low-level methods are here"""
 
     def __init__(self, base_url: Optional[str] = None, request: Optional[Request] = None):
         if request is None:
@@ -43,12 +69,7 @@ class ClientBase:
         return self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
     def _invoke(self, invoke_type: InvokeType, **kwargs) -> Response:
-        # TODO(MarshalX): write proper serialization. Add support of more kwargs!
-        if 'data' in kwargs and kwargs['data']:
-            kwargs['json'] = dataclasses.asdict(kwargs['data'])
-            kwargs.pop('data')
-        if 'params' in kwargs and kwargs['params']:
-            kwargs['params'] = dataclasses.asdict(kwargs['params'])
+        _handle_kwagrs(kwargs)
 
         if invoke_type is InvokeType.QUERY:
             return self.request.get(**kwargs)
@@ -57,7 +78,7 @@ class ClientBase:
 
 
 class AsyncClientBase:
-    """Low level methods are here"""
+    """Low-level methods are here"""
 
     def __init__(self, base_url: Optional[str] = None, request: Optional[AsyncRequest] = None):
         if request is None:
@@ -86,12 +107,7 @@ class AsyncClientBase:
         return await self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
     async def _invoke(self, invoke_type: InvokeType, **kwargs) -> Response:
-        # TODO(MarshalX): write proper serialization. Add support of more kwargs!
-        if 'data' in kwargs and kwargs['data']:
-            kwargs['json'] = dataclasses.asdict(kwargs['data'])
-            kwargs.pop('data')
-        if 'params' in kwargs and kwargs['params']:
-            kwargs['params'] = dataclasses.asdict(kwargs['params'])
+        _handle_kwagrs(kwargs)
 
         if invoke_type is InvokeType.QUERY:
             return await self.request.get(**kwargs)

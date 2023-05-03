@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -18,15 +17,5 @@ class DataModelBase(ModelBase):
 
 
 @dataclass
-class OptionsModelBase(ModelBase):
-    headers: Optional[dict] = None
-    # TODO(MarshalX)
-    #  timeout: Optional[float]
-
-
-@dataclass
 class ResponseModelBase(ModelBase):
     pass
-    # TODO
-    # success: bool
-    # headers: dict

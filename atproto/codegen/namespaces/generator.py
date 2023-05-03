@@ -6,7 +6,6 @@ from codegen import get_code_intent as _
 from codegen import get_sync_async_keywords, join_code, sort_dict_by_key, write_code
 from codegen.models.generator import (
     get_data_model_name,
-    get_options_model_name,
     get_params_model_name,
     get_response_model_name,
 )
@@ -89,15 +88,19 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
     if 'params' in presented_args:
         invoke_args.append('params=params')
         lines.append(_override_arg_line('params', get_params_model_name(method_info.name)))
-    elif 'data_schema' in presented_args:
+    if 'data_schema' in presented_args:
         invoke_args.append('data=data')
         lines.append(_override_arg_line('data', get_data_model_name(method_info.name)))
-    elif 'data_alias' in presented_args:
+    if 'data_alias' in presented_args:
         invoke_args.append('data=data')
-    elif 'options' in presented_args:
-        invoke_args.append('options=options')
-        lines.append(_override_arg_line('options', get_options_model_name(method_info.name)))
+    if 'input_encoding' in presented_args:
+        input_encoding = method_info.definition.input.encoding
+        invoke_args.append(f"input_encoding='{input_encoding}'")
+    if 'output_encoding' in presented_args:
+        output_encoding = method_info.definition.output.encoding
+        invoke_args.append(f"output_encoding='{output_encoding}'")
 
+    invoke_args.append('**kwargs')
     invoke_args_str = ', '.join(invoke_args)
 
     method_name = 'invoke_query'
@@ -133,14 +136,18 @@ def _get_namespace_method_signature_args_names(method_info: MethodInfo) -> Set[s
     args = {'self'}
     if method_info.definition.parameters:
         args.add('params')
+
     if method_info.definition.type is LexDefinitionType.PROCEDURE and method_info.definition.input:
         if method_info.definition.input.schema:
             args.add('data_schema')
         else:
             args.add('data_alias')
 
-        # TODO(MarshalX): when be ready
-        # args.append('options') # or **kwargs
+        if method_info.definition.input.encoding:
+            args.add('input_encoding')
+
+    if method_info.definition.output and method_info.definition.output.encoding:
+        args.add('output_encoding')
 
     return args
 
@@ -176,14 +183,13 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
                 arg = _get_namespace_method_signature_arg('data', name, get_data_model_name, optional=is_optional)
                 _add_arg(arg, optional=is_optional)
             else:
-                raise ValueError(f'Bad type {type(schema)}')  # LexRefVariant
+                raise ValueError(f'Bad type {type(schema)}')  # probably LexRefVariant
         else:
             arg = _get_namespace_method_signature_arg('data', name, get_data_model_name, optional=False, alias=True)
             _add_arg(arg, optional=False)
 
-        # TODO(MarshalX): Options like encoding. Maybe without model? Simple kwargs for .invoke()
-
     args.extend(optional_args)
+    args.append('**kwargs')
     return ', '.join(args)
 
 

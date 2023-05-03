@@ -3,6 +3,9 @@ import subprocess
 from pathlib import Path
 from typing import List, Tuple
 
+DISCLAIMER = '# THIS IS THE AUTO-GENERATED CODE. DON\'T EDIT IT BY HANDS #'
+DISCLAIMER = f'{"#" * len(DISCLAIMER)}\n{DISCLAIMER}\n{"#" * len(DISCLAIMER)}\n\n'
+
 
 def format_code(filepath: Path) -> None:
     subprocess.run(['black', '--quiet', filepath])

@@ -20,14 +20,12 @@ _RECORDS_MODELS_FILENAME = 'records.py'
 
 _PARAMS_SUFFIX = 'Params'
 _INPUT_SUFFIX = 'Data'
-_OPTIONS_SUFFIX = 'Options'
 _OUTPUT_SUFFIX = 'Response'
 
 
 class ModelType(Enum):
     PARAMS = 'params'
     DATA = 'data'
-    OPTIONS = 'options'
     RESPONSE = 'response'
     DEF = 'def'
     RECORD = 'record'
@@ -39,10 +37,6 @@ def get_params_model_name(method_name: str) -> str:
 
 def get_data_model_name(method_name: str) -> str:
     return f'{capitalize_first_symbol(method_name)}{_INPUT_SUFFIX}'
-
-
-def get_options_model_name(method_name: str) -> str:
-    return f'{capitalize_first_symbol(method_name)}{_OPTIONS_SUFFIX}'
 
 
 def get_response_model_name(method_name: str) -> str:
@@ -57,7 +51,6 @@ def _get_model_imports(model_type: ModelType) -> str:
     model_imports = {
         model_type.PARAMS: 'ParamsModelBase',
         model_type.DATA: 'DataModelBase',
-        model_type.OPTIONS: 'OptionsModelBase',
         model_type.RESPONSE: 'ResponseModelBase',
     }
 
@@ -93,8 +86,6 @@ def _get_model_class_def(name: str, model_type: ModelType) -> str:
         lines.append(f'class {get_params_model_name(name)}(ParamsModelBase):')
     elif model_type is ModelType.DATA:
         lines.append(f'class {get_data_model_name(name)}(DataModelBase):')
-    elif model_type is ModelType.OPTIONS:
-        lines.append(f'class {get_options_model_name(name)}(OptionsModelBase):')
     elif model_type is ModelType.RESPONSE:
         lines.append(f'class {get_response_model_name(name)}(ResponseModelBase):')
     elif model_type is ModelType.DEF:
@@ -227,7 +218,7 @@ def _get_model_docstring(
         field_desc = field_type.description
         if field_desc is None:
             field_desc = _gen_description_by_camel_case_name(field_name)
-        if not field_desc.endswith('.'):
+        if field_desc[-1] not in {'.', '?', '!'}:
             field_desc += '.'
 
         doc_string.append(f'{_(2)}{field_name}: {field_desc}')
@@ -325,12 +316,19 @@ def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str
     return _generate_xrpc_body_model(nsid, output_body, ModelType.RESPONSE)
 
 
-def _generate_def_model(def_name: str, def_model: models.LexObject) -> str:
+def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject) -> str:
+    is_main = def_name == 'main'
+
+    if is_main:
+        def_name = nsid.name
+
     lines = [
         _get_model_class_def(def_name, ModelType.DEF),
         _get_model_docstring(def_name, def_model, ModelType.DEF),
         _get_model_object(def_name, def_model),
     ]
+    if is_main:
+        lines.append(f"{_(1)}_type: str = '{nsid}'")
 
     return join_code(lines)
 
@@ -399,6 +397,17 @@ def _generate_response_models(lex_db: builder.LexDB) -> None:
 
 
 def _generate_def_models(lex_db: builder.LexDB) -> None:
+    # FIXME ASAP
+    # unique_names = set()
+    # duplicated_names = set()
+    # for nsid, defs in lex_db.items():
+    #     for def_name, def_model in defs.items():
+    #         if def_name in unique_names:
+    #             duplicated_names.add(def_name)
+    #         unique_names.add(def_name)
+    #
+    # print('Duplicates:', duplicated_names)
+
     lines = [_get_model_imports(ModelType.DEF)]
 
     for nsid, defs in lex_db.items():
@@ -408,10 +417,7 @@ def _generate_def_models(lex_db: builder.LexDB) -> None:
             if isinstance(def_model, models.LexString):
                 lines.append(_generate_def_string(def_name, def_model))
             if isinstance(def_model, models.LexObject):
-                if def_name == 'main':
-                    def_name = nsid.name
-
-                lines.append(_generate_def_model(def_name, def_model))
+                lines.append(_generate_def_model(nsid, def_name, def_model))
 
     write_code(_MODELS_OUTPUT_DIR.joinpath(_DEFS_MODELS_FILENAME), join_code(lines))
     format_code(_MODELS_OUTPUT_DIR.joinpath(_DEFS_MODELS_FILENAME))
@@ -427,7 +433,7 @@ def _generate_record_models(lex_db: builder.LexDB) -> None:
                     def_name = nsid.name
 
                 # TODO(MarshalX): Process somehow def_record.key?
-                lines.append(_generate_def_model(def_name, def_record.record))
+                lines.append(_generate_def_model(nsid, def_name, def_record.record))
 
     write_code(_MODELS_OUTPUT_DIR.joinpath(_RECORDS_MODELS_FILENAME), join_code(lines))
     format_code(_MODELS_OUTPUT_DIR.joinpath(_RECORDS_MODELS_FILENAME))
