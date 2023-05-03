@@ -2,7 +2,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Union
 
-from codegen import capitalize_first_symbol, format_code
+from codegen import capitalize_first_symbol, format_code, camel_case_split
 from codegen import get_code_intent as _
 from codegen import join_code, write_code
 from codegen.models import builder
@@ -187,7 +187,7 @@ def _get_model_field_typehint(field_name: str, field_type_def, *, optional: bool
     raise ValueError(f'Unknown field type {field_name.__name__}')
 
 
-def _get_req_fields_set(lex_obj) -> set:
+def _get_req_fields_set(lex_obj: Union[models.LexObject, models.LexXrpcParameters]) -> set:
     required_fields = set()
     if lex_obj.required:
         required_fields = set(lex_obj.required)
@@ -199,11 +199,50 @@ def _get_req_fields_set(lex_obj) -> set:
     return required_fields
 
 
-def _get_model(properties: dict, required_fields: set, def_name: str = None) -> str:
+def _gen_description_by_camel_case_name(name: str):
+    words = camel_case_split(name)
+    words = [w.lower() for w in words]
+    words[0] = words[0].capitalize()
+    return ' '.join(words)
+
+
+def _gen_description_by_nsid_or_camel_case_name(name: Union[str, NSID]) -> str:
+    if isinstance(name, NSID):
+        return f"{name.name} from {name.authority}"
+
+    return _gen_description_by_camel_case_name(name)
+
+
+def _get_model_docstring(nsid: Union[str, NSID], lex_object: Union[models.LexObject, models.LexXrpcParameters], model_type: ModelType) -> str:
+    model_desc = lex_object.description
+    if model_desc is None:
+        model_desc = _gen_description_by_nsid_or_camel_case_name(nsid)
+    model_desc = f'{model_desc} for {model_type.value} type.'
+
+    doc_string = [f'{_(1)}"""{model_desc}', '', f'{_(1)}Attributes:']
+
+    for field_name, field_type in lex_object.properties.items():
+        field_desc = field_type.description
+        if field_desc is None:
+            field_desc = _gen_description_by_camel_case_name(field_name)
+        if not field_desc.endswith('.'):
+            field_desc += '.'
+
+        doc_string.append(f'{_(2)}{field_name}: {field_desc}')
+
+    doc_string.append(f'{_(1)}"""')
+    doc_string.append('')
+
+    return join_code(doc_string)
+
+
+def _get_model(
+    lex_object: Union[models.LexObject, models.LexXrpcParameters], required_fields: set, def_name: str = None
+) -> str:
     fields = []
     optional_fields = []
 
-    for field_name, field_type in properties.items():
+    for field_name, field_type in lex_object.properties.items():
         is_optional = field_name not in required_fields
         type_hint = _get_model_field_typehint(field_name, field_type, optional=is_optional, def_name=def_name)
 
@@ -221,15 +260,15 @@ def _get_model(properties: dict, required_fields: set, def_name: str = None) -> 
 
 
 def _get_model_object(def_name: str, lex_object: models.LexObject) -> str:
-    return _get_model(lex_object.properties, _get_req_fields_set(lex_object), def_name=def_name)
+    return _get_model(lex_object, _get_req_fields_set(lex_object), def_name=def_name)
 
 
 def _get_model_parameters(parameters: models.LexXrpcParameters) -> str:
-    return _get_model(parameters.properties, _get_req_fields_set(parameters))
+    return _get_model(parameters, _get_req_fields_set(parameters))
 
 
 def _get_model_schema(schema: models.LexObject) -> str:
-    return _get_model(schema.properties, _get_req_fields_set(schema))
+    return _get_model(schema, _get_req_fields_set(schema))
 
 
 def _get_model_ref(name: str, ref: models.LexRef) -> str:
@@ -248,6 +287,7 @@ def _generate_params_model(nsid: NSID, definition: Union[models.LexXrpcProcedure
     lines = [_get_model_class_def(nsid.name, ModelType.PARAMS)]
 
     if definition.parameters:
+        lines.append(_get_model_docstring(nsid, definition.parameters, ModelType.PARAMS))
         lines.append(_get_model_parameters(definition.parameters))
 
     return join_code(lines)
@@ -258,6 +298,7 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
     if body.schema:
         if isinstance(body.schema, models.LexObject):
             lines.append(_get_model_class_def(nsid.name, model_type))
+            lines.append(_get_model_docstring(nsid, body.schema, model_type))
             lines.append(_get_model_schema(body.schema))
         elif isinstance(body.schema, models.LexRef):
             lines.append(_get_model_ref(nsid.name, body.schema))
@@ -283,7 +324,11 @@ def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str
 
 
 def _generate_def_model(def_name: str, def_model: models.LexObject) -> str:
-    lines = [_get_model_class_def(def_name, ModelType.DEF), _get_model_object(def_name, def_model)]
+    lines = [
+        _get_model_class_def(def_name, ModelType.DEF),
+        _get_model_docstring(def_name, def_model, ModelType.DEF),
+        _get_model_object(def_name, def_model)
+    ]
 
     return join_code(lines)
 

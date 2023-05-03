@@ -19,6 +19,11 @@ def convert_camel_case_to_snake_case(string: str) -> str:
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s).lower()
 
 
+def camel_case_split(string: str):
+    # regex by chatgpt
+    return re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)', string)
+
+
 def sort_dict_by_key(d: dict) -> dict:
     return dict(sorted(d.items()))
 
