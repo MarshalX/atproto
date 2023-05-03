@@ -24,6 +24,7 @@ Documentation
    :caption: Development
 
    change_log
+   security
    licence
 
 .. toctree::
