@@ -106,6 +106,8 @@ def _write_extracted_lexicons(extracted_files: ExtractedFiles) -> None:
 def main():
     sha, commit_date, message = _get_last_commit_info()
     print(f'Successfully fetch lexicons from {sha} committed {commit_date} with message:\n\n {message}')
+    print('COMMIT IT WITH THE MESSAGE BELOW:')
+    print(f'Update lexicons fetched from {sha} committed {commit_date}')
     _write_extracted_lexicons(_extract_zip(_download_zip_with_code()))
 
 
