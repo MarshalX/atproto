@@ -1,10 +1,17 @@
+import os
 import re
 import subprocess
 from pathlib import Path
 from typing import List, Tuple
 
+from nsid import NSID
+
 DISCLAIMER = '# THIS IS THE AUTO-GENERATED CODE. DON\'T EDIT IT BY HANDS #'
 DISCLAIMER = f'{"#" * len(DISCLAIMER)}\n{DISCLAIMER}\n{"#" * len(DISCLAIMER)}\n\n'
+
+PARAMS_MODEL = 'Params'
+INPUT_MODEL = 'Data'
+OUTPUT_MODEL = 'Response'
 
 
 def format_code(filepath: Path) -> None:
@@ -12,9 +19,31 @@ def format_code(filepath: Path) -> None:
     subprocess.run(['isort', '--quiet', filepath])
 
 
+def append_code(filepath: Path, code: str) -> None:
+    _write_code(filepath, code, append=True)
+
+
 def write_code(filepath: Path, code: str) -> None:
-    with open(filepath, 'w', encoding='UTF-8') as f:
+    _write_code(filepath, code, append=False)
+
+
+def _write_code(filepath: Path, code: str, *, append: bool = False) -> None:
+    filepath.parent.mkdir(exist_ok=True, parents=True)
+
+    mode = 'w'
+    if append:
+        mode = 'a'
+
+    with open(filepath, mode=mode, encoding='UTF-8') as f:
         f.write(code)
+
+
+def get_file_path_parts(nsid: NSID) -> List[str]:
+    return nsid.segments[:-1] + [f'{convert_camel_case_to_snake_case(nsid.name)}.py']
+
+
+def get_import_path(nsid: NSID) -> str:
+    return '.'.join(nsid.segments[:-1] + [f'{convert_camel_case_to_snake_case(nsid.name)}'])
 
 
 def convert_camel_case_to_snake_case(string: str) -> str:

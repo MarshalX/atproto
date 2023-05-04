@@ -3,11 +3,12 @@ import logging
 import os
 
 from atproto import AsyncClient, Client, models
+from atproto.models import com
 
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
 
-# TODO(MarshalX): add support of records? namespaces with 5 const methods? CRUDL
+# TODO(MarshalX): add record namespaces with 5 const methods? CRUDL
 
 # client.com.atproto.identity.resolve_handle({'handle': 'test'})
 # client.com.atproto.identity.resolve_handle({'handle': 123})     # expect WrongTypeError

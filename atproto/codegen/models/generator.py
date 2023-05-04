@@ -1,26 +1,24 @@
 from enum import Enum
 from pathlib import Path
-from typing import Union
+from typing import Tuple, Union
 
-from codegen import camel_case_split, capitalize_first_symbol, format_code
+from codegen import (
+    INPUT_MODEL,
+    OUTPUT_MODEL,
+    PARAMS_MODEL,
+    append_code,
+    camel_case_split,
+    capitalize_first_symbol,
+    format_code,
+)
 from codegen import get_code_intent as _
-from codegen import join_code, write_code
+from codegen import get_file_path_parts, get_import_path, join_code, write_code
 from codegen.models import builder
 from exceptions import InvalidNsidError
 from lexicon import models
 from nsid import NSID
 
 _MODELS_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('xrpc_client', 'models')
-_PARAMS_MODELS_FILENAME = 'params.py'
-_DATA_MODELS_FILENAME = 'data.py'
-_RESPONSE_MODELS_FILENAME = 'responses.py'
-_DEFS_MODELS_FILENAME = 'defs.py'
-_RECORDS_MODELS_FILENAME = 'records.py'
-
-
-_PARAMS_SUFFIX = 'Params'
-_INPUT_SUFFIX = 'Data'
-_OUTPUT_SUFFIX = 'Response'
 
 
 class ModelType(Enum):
@@ -31,65 +29,62 @@ class ModelType(Enum):
     RECORD = 'record'
 
 
-def get_params_model_name(method_name: str) -> str:
-    return f'{capitalize_first_symbol(method_name)}{_PARAMS_SUFFIX}'
-
-
-def get_data_model_name(method_name: str) -> str:
-    return f'{capitalize_first_symbol(method_name)}{_INPUT_SUFFIX}'
-
-
-def get_response_model_name(method_name: str) -> str:
-    return f'{capitalize_first_symbol(method_name)}{_OUTPUT_SUFFIX}'
-
-
 def get_def_model_name(method_name: str) -> str:
     return f'{capitalize_first_symbol(method_name)}'
 
 
-def _get_model_imports(model_type: ModelType) -> str:
-    model_imports = {
-        model_type.PARAMS: 'ParamsModelBase',
-        model_type.DATA: 'DataModelBase',
-        model_type.RESPONSE: 'ResponseModelBase',
-    }
+def get_model_path(nsid: NSID, method_name: str) -> str:
+    return f'models.{get_import_path(nsid)}.{get_def_model_name(method_name)}'
 
+
+def save_code(nsid: NSID, code: str) -> None:
+    path_to_file = _MODELS_OUTPUT_DIR.joinpath(*get_file_path_parts(nsid))
+    write_code(_MODELS_OUTPUT_DIR.joinpath(path_to_file), code)
+
+
+def save_code_part(nsid: NSID, code: str) -> None:
+    path_to_file = _MODELS_OUTPUT_DIR.joinpath(*get_file_path_parts(nsid))
+    append_code(_MODELS_OUTPUT_DIR.joinpath(path_to_file), code)
+
+
+def _get_model_imports() -> str:
     lines = [
         # isort formatted
         'from dataclasses import dataclass',
         # TODO(MarshalX): track and import only used hints? isort can't delete unused imports. mb add ruff
         'from typing import Any, List, Optional, Union, Type, TYPE_CHECKING',
+        'from xrpc_client.models import base',
+        'from xrpc_client.models.blob_ref import BlobRef',
+        'from multiformats import CID',
+        'from xrpc_client import models',
+        '',
     ]
 
-    # TODO(MarshalX): Rewrite. not universal
-    if model_type not in {ModelType.DEF, ModelType.RECORD}:
-        lines.append('')
-        lines.append(f"from xrpc_client.models.base import {model_imports.get(model_type)}")
-
-    if model_type in {ModelType.DEF, ModelType.RECORD}:
-        lines.append('from xrpc_client.models.blob_ref import BlobRef')
-        lines.append('from multiformats import CID')
-    if model_type is ModelType.RESPONSE:
-        lines.append('from xrpc_client.models.defs import *')
-    elif model_type in {ModelType.DATA, ModelType.RECORD}:
-        lines.append('if TYPE_CHECKING:')
-        lines.append(f'{_(1)}from xrpc_client.models.defs import *')
-        lines.append('')
-
     return join_code(lines)
+
+
+_NSID_WITH_IMPORTS = set()
+
+
+def _save_code_import_if_not_exist(nsid) -> None:
+    if nsid not in _NSID_WITH_IMPORTS:
+        save_code(nsid, _get_model_imports())
+        _NSID_WITH_IMPORTS.add(nsid)
 
 
 def _get_model_class_def(name: str, model_type: ModelType) -> str:
     lines = ['@dataclass']
 
     if model_type is ModelType.PARAMS:
-        lines.append(f'class {get_params_model_name(name)}(ParamsModelBase):')
+        lines.append(f'class {PARAMS_MODEL}(base.ParamsModelBase):')
     elif model_type is ModelType.DATA:
-        lines.append(f'class {get_data_model_name(name)}(DataModelBase):')
+        lines.append(f'class {INPUT_MODEL}(base.DataModelBase):')
     elif model_type is ModelType.RESPONSE:
-        lines.append(f'class {get_response_model_name(name)}(ResponseModelBase):')
+        lines.append(f'class {OUTPUT_MODEL}(base.ResponseModelBase):')
     elif model_type is ModelType.DEF:
-        lines.append(f'class {get_def_model_name(name)}:')
+        lines.append(f'class {get_def_model_name(name)}(base.ModelBase):')
+
+    lines.append('')
 
     return join_code(lines)
 
@@ -108,42 +103,38 @@ def _get_optional_typehint(type_hint, *, optional: bool) -> str:
         return type_hint
 
 
-def _get_ref_class(field_type_def, main_def_name: str) -> str:
-    def_name = main_def_name
-
-    if '#' in field_type_def.ref:
-        def_name = field_type_def.ref.split('#', 1)[1]
-
-    return get_def_model_name(def_name)
+def _get_ref_typehint(nsid: NSID, field_type_def, main_def_name: str, *, optional: bool) -> str:
+    model_path, _ = _resolve_nsid_ref(nsid, field_type_def.ref)
+    return _get_optional_typehint(f"'{model_path}'", optional=optional)
 
 
-def _get_ref_typehint(field_type_def, main_def_name: str, *, optional: bool) -> str:
-    def_name = main_def_name
+def _resolve_nsid_ref(nsid: NSID, ref: str) -> Tuple[str, str]:
+    """Returns path to the model and model name"""
+    if '#' in ref:
+        ref_nsid_str, def_name = ref.split('#', 1)
+        try:
+            ref_nsid = NSID.from_str(ref_nsid_str)
+            return get_model_path(ref_nsid, def_name), def_name
+        except InvalidNsidError:
+            return get_model_path(nsid, def_name), def_name
+    else:
+        ref_nsid = NSID.from_str(ref)
+        return get_model_path(nsid, ref_nsid.name), ref_nsid.name
 
-    try:
-        def_name = NSID.from_str(field_type_def.ref).name
-    except InvalidNsidError:
-        if '#' in field_type_def.ref:
-            def_name = field_type_def.ref.split('#', 1)[1]
 
-    def_name = get_def_model_name(def_name)
-    return _get_optional_typehint(f"'{def_name}'", optional=optional)
-
-
-def _get_ref_union_typehint(field_type_def, *, optional: bool) -> str:
+def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
     def_names = []
     for ref in field_type_def.refs:
-        if '#' in ref:
-            def_name = ref.split('#', 1)[1]
-        else:
-            def_name = NSID.from_str(ref).name
-        def_names.append(get_def_model_name(def_name))
+        import_path, _ = _resolve_nsid_ref(nsid, ref)
+        def_names.append(import_path)
 
     def_names = ', '.join([f"'{name}'" for name in def_names])
     return _get_optional_typehint(f"Union[{def_names}]", optional=optional)
 
 
-def _get_model_field_typehint(field_name: str, field_type_def, *, optional: bool, def_name: str = None) -> str:
+def _get_model_field_typehint(
+    nsid: NSID, field_name: str, field_type_def, *, optional: bool, def_name: str = None
+) -> str:
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
@@ -155,14 +146,14 @@ def _get_model_field_typehint(field_name: str, field_type_def, *, optional: bool
         return _get_optional_typehint(type_hint, optional=optional)
 
     if field_type is models.LexArray:
-        items_type_hint = _get_model_field_typehint(field_name, field_type_def.items, optional=False)
+        items_type_hint = _get_model_field_typehint(nsid, field_name, field_type_def.items, optional=False)
         return _get_optional_typehint(f'List[{items_type_hint}]', optional=optional)
 
     if field_type is models.LexRef:
-        return _get_ref_typehint(field_type_def, def_name, optional=optional)
+        return _get_ref_typehint(nsid, field_type_def, def_name, optional=optional)
 
     if field_type is models.LexRefUnion:
-        return _get_ref_union_typehint(field_type_def, optional=optional)
+        return _get_ref_union_typehint(nsid, field_type_def, optional=optional)
 
     if field_type is models.LexCidLink:
         return _get_optional_typehint(f'CID', optional=optional)
@@ -229,17 +220,17 @@ def _get_model_docstring(
     return join_code(doc_string)
 
 
-def _get_model(
-    lex_object: Union[models.LexObject, models.LexXrpcParameters], required_fields: set, def_name: str = None
-) -> str:
+def _get_model(nsid: NSID, lex_object: Union[models.LexObject, models.LexXrpcParameters], def_name: str = None) -> str:
+    required_fields = _get_req_fields_set(lex_object)
+
     fields = []
     optional_fields = []
 
     for field_name, field_type in lex_object.properties.items():
         is_optional = field_name not in required_fields
-        type_hint = _get_model_field_typehint(field_name, field_type, optional=is_optional, def_name=def_name)
+        type_hint = _get_model_field_typehint(nsid, field_name, field_type, optional=is_optional, def_name=def_name)
 
-        field_def = f'{_(1)}{field_name}: {type_hint}'
+        field_def = f'{_(1)}{field_name}: {type_hint}'  # TODO(MarshalX): Add default values. for bool, etc..
         if is_optional:
             optional_fields.append(field_def)
         else:
@@ -249,31 +240,23 @@ def _get_model(
     fields.sort()
 
     fields.extend(optional_fields)
+
+    fields.append('')
+
     return join_code(fields)
 
 
-def _get_model_object(def_name: str, lex_object: models.LexObject) -> str:
-    return _get_model(lex_object, _get_req_fields_set(lex_object), def_name=def_name)
-
-
-def _get_model_parameters(parameters: models.LexXrpcParameters) -> str:
-    return _get_model(parameters, _get_req_fields_set(parameters))
-
-
-def _get_model_schema(schema: models.LexObject) -> str:
-    return _get_model(schema, _get_req_fields_set(schema))
-
-
-def _get_model_ref(name: str, ref: models.LexRef) -> str:
-    ref_class = _get_ref_class(ref, name)
+def _get_model_ref(nsid: NSID, ref: models.LexRef) -> str:
+    ref_class, _ = _resolve_nsid_ref(nsid, ref.ref)
+    # ref_class = _get_ref_class(nsid, ref, nsid.name)
     ref_typehint = f'Type[{ref_class}]'
 
     # "Ref" suffix required to fix name collisions from different namespaces
-    return f'{get_response_model_name(name)}Ref: {ref_typehint} = {ref_class}'
+    return f'{OUTPUT_MODEL}Ref: {ref_typehint} = {ref_class}\n\n'
 
 
 def _get_model_raw_data(name: str) -> str:
-    return f'{name}: Union[Type[str], Type[bytes]] = bytes'
+    return f'{name}: Union[Type[str], Type[bytes]] = bytes\n\n'
 
 
 def _generate_params_model(nsid: NSID, definition: Union[models.LexXrpcProcedure, models.LexXrpcQuery]) -> str:
@@ -281,7 +264,7 @@ def _generate_params_model(nsid: NSID, definition: Union[models.LexXrpcProcedure
 
     if definition.parameters:
         lines.append(_get_model_docstring(nsid, definition.parameters, ModelType.PARAMS))
-        lines.append(_get_model_parameters(definition.parameters))
+        lines.append(_get_model(nsid, definition.parameters))
 
     return join_code(lines)
 
@@ -292,14 +275,14 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
         if isinstance(body.schema, models.LexObject):
             lines.append(_get_model_class_def(nsid.name, model_type))
             lines.append(_get_model_docstring(nsid, body.schema, model_type))
-            lines.append(_get_model_schema(body.schema))
+            lines.append(_get_model(nsid, body.schema))
         elif isinstance(body.schema, models.LexRef):
-            lines.append(_get_model_ref(nsid.name, body.schema))
+            lines.append(_get_model_ref(nsid, body.schema))
     else:
         if model_type is ModelType.DATA:
-            model_name = get_data_model_name(nsid.name)
+            model_name = INPUT_MODEL
         elif model_type is ModelType.RESPONSE:
-            model_name = get_response_model_name(nsid.name)
+            model_name = OUTPUT_MODEL
         else:
             raise ValueError('Wrong type or not implemented')
 
@@ -317,18 +300,16 @@ def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str
 
 
 def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject) -> str:
-    is_main = def_name == 'main'
-
-    if is_main:
-        def_name = nsid.name
-
     lines = [
         _get_model_class_def(def_name, ModelType.DEF),
         _get_model_docstring(def_name, def_model, ModelType.DEF),
-        _get_model_object(def_name, def_model),
+        _get_model(nsid, def_model, def_name),
     ]
-    if is_main:
+
+    if def_name == 'main':
         lines.append(f"{_(1)}_type: str = '{nsid}'")
+
+    lines.append('')
 
     return join_code(lines)
 
@@ -337,6 +318,8 @@ def _generate_def_token(def_name: str, def_model: models.LexToken) -> str:
     lines = [
         f"{get_def_model_name(def_name)} = '{def_name}'",
         # TODO(MarshalX): doesn't properly work. typing.Literal requires drop support of Python 3.7...
+        '',
+        '',
     ]
     return join_code(lines)
 
@@ -347,6 +330,7 @@ def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
     type_hint = ''
 
     if def_model.knownValues:
+        # TODO use ref resolver
         known_values = ["'" + get_def_model_name(v.split('#', 1)[1]) + "'" for v in def_model.knownValues]
         known_values = ', '.join(known_values)
 
@@ -355,88 +339,61 @@ def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
 
     lines = [
         f"{get_def_model_name(def_name)}{type_hint} = '{def_name}'",
+        '',
+        '',
     ]
 
     return join_code(lines)
 
 
 def _generate_params_models(lex_db: builder.LexDB) -> None:
-    lines = [_get_model_imports(ModelType.PARAMS)]
-
     for nsid, defs in lex_db.items():
+        _save_code_import_if_not_exist(nsid)
+
         definition = defs['main']
         if definition.parameters:
-            lines.append(_generate_params_model(nsid, definition))
-
-    write_code(_MODELS_OUTPUT_DIR.joinpath(_PARAMS_MODELS_FILENAME), join_code(lines))
-    format_code(_MODELS_OUTPUT_DIR.joinpath(_PARAMS_MODELS_FILENAME))
+            save_code_part(nsid, _generate_params_model(nsid, definition))
 
 
 def _generate_data_models(lex_db: builder.LexDB) -> None:
-    lines = [_get_model_imports(ModelType.DATA)]
-
     for nsid, defs in lex_db.items():
+        _save_code_import_if_not_exist(nsid)
+
         definition = defs['main']
         if definition.input:
-            lines.append(_generate_data_model(nsid, definition.input))
-
-    write_code(_MODELS_OUTPUT_DIR.joinpath(_DATA_MODELS_FILENAME), join_code(lines))
-    format_code(_MODELS_OUTPUT_DIR.joinpath(_DATA_MODELS_FILENAME))
+            save_code_part(nsid, _generate_data_model(nsid, definition.input))
 
 
 def _generate_response_models(lex_db: builder.LexDB) -> None:
-    lines = [_get_model_imports(ModelType.RESPONSE)]
-
     for nsid, defs in lex_db.items():
+        _save_code_import_if_not_exist(nsid)
+
         definition = defs['main']
         if definition.output:
-            lines.append(_generate_response_model(nsid, definition.output))
-
-    write_code(_MODELS_OUTPUT_DIR.joinpath(_RESPONSE_MODELS_FILENAME), join_code(lines))
-    format_code(_MODELS_OUTPUT_DIR.joinpath(_RESPONSE_MODELS_FILENAME))
+            save_code_part(nsid, _generate_response_model(nsid, definition.output))
 
 
 def _generate_def_models(lex_db: builder.LexDB) -> None:
-    # FIXME ASAP
-    # unique_names = set()
-    # duplicated_names = set()
-    # for nsid, defs in lex_db.items():
-    #     for def_name, def_model in defs.items():
-    #         if def_name in unique_names:
-    #             duplicated_names.add(def_name)
-    #         unique_names.add(def_name)
-    #
-    # print('Duplicates:', duplicated_names)
-
-    lines = [_get_model_imports(ModelType.DEF)]
-
     for nsid, defs in lex_db.items():
+        _save_code_import_if_not_exist(nsid)
+
         for def_name, def_model in defs.items():
             if isinstance(def_model, models.LexToken):
-                lines.append(_generate_def_token(def_name, def_model))
+                save_code_part(nsid, _generate_def_token(def_name, def_model))
             if isinstance(def_model, models.LexString):
-                lines.append(_generate_def_string(def_name, def_model))
+                save_code_part(nsid, _generate_def_string(def_name, def_model))
             if isinstance(def_model, models.LexObject):
-                lines.append(_generate_def_model(nsid, def_name, def_model))
-
-    write_code(_MODELS_OUTPUT_DIR.joinpath(_DEFS_MODELS_FILENAME), join_code(lines))
-    format_code(_MODELS_OUTPUT_DIR.joinpath(_DEFS_MODELS_FILENAME))
+                save_code_part(nsid, _generate_def_model(nsid, def_name, def_model))
 
 
 def _generate_record_models(lex_db: builder.LexDB) -> None:
-    lines = [_get_model_imports(ModelType.RECORD)]
-
     for nsid, defs in lex_db.items():
+        _save_code_import_if_not_exist(nsid)
+
         for def_name, def_record in defs.items():
             if isinstance(def_record, models.LexRecord):
-                if def_name == 'main':
-                    def_name = nsid.name
-
                 # TODO(MarshalX): Process somehow def_record.key?
-                lines.append(_generate_def_model(nsid, def_name, def_record.record))
-
-    write_code(_MODELS_OUTPUT_DIR.joinpath(_RECORDS_MODELS_FILENAME), join_code(lines))
-    format_code(_MODELS_OUTPUT_DIR.joinpath(_RECORDS_MODELS_FILENAME))
+                save_code_part(nsid, _generate_def_model(nsid, def_name, def_record.record))
 
 
 def generate_models():
@@ -445,6 +402,9 @@ def generate_models():
     _generate_response_models(builder.build_response_models())
     _generate_def_models(builder.build_def_models())
     _generate_record_models(builder.build_record_models())
+
+    format_code(_MODELS_OUTPUT_DIR)
+
     print('Done')
 
 

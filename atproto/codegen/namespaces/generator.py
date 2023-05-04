@@ -1,16 +1,24 @@
 from pathlib import Path
 from typing import Callable, List, Set, Union
 
-from codegen import convert_camel_case_to_snake_case, format_code
+from codegen import (
+    INPUT_MODEL,
+    OUTPUT_MODEL,
+    PARAMS_MODEL,
+    convert_camel_case_to_snake_case,
+    format_code,
+)
 from codegen import get_code_intent as _
-from codegen import get_sync_async_keywords, join_code, sort_dict_by_key, write_code
-from codegen.models.generator import (
-    get_data_model_name,
-    get_params_model_name,
-    get_response_model_name,
+from codegen import (
+    get_import_path,
+    get_sync_async_keywords,
+    join_code,
+    sort_dict_by_key,
+    write_code,
 )
 from codegen.namespaces.builder import MethodInfo, RecordInfo, build_namespaces
 from lexicon.models import LexDefinitionType, LexObject, LexRef, LexXrpcProcedure
+from nsid import NSID
 
 _NAMESPACES_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('xrpc_client', 'namespaces')
 _NAMESPACES_CLIENT_FILE_PATH = _NAMESPACES_OUTPUT_DIR.joinpath('client', 'raw.py')
@@ -81,16 +89,17 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
     presented_args.remove('self')
 
     def _override_arg_line(name: str, model_name: str) -> str:
-        return f'{_(2)}{name} = get_or_create_model({name}, models.{model_name})'
+        model_path = f'models.{get_import_path(method_info.nsid)}.{model_name}'
+        return f'{_(2)}{name} = get_or_create_model({name}, {model_path})'
 
     invoke_args = [f"'{method_info.nsid}'"]
 
     if 'params' in presented_args:
         invoke_args.append('params=params')
-        lines.append(_override_arg_line('params', get_params_model_name(method_info.name)))
+        lines.append(_override_arg_line('params', PARAMS_MODEL))
     if 'data_schema' in presented_args:
         invoke_args.append('data=data')
-        lines.append(_override_arg_line('data', get_data_model_name(method_info.name)))
+        lines.append(_override_arg_line('data', INPUT_MODEL))
     if 'data_alias' in presented_args:
         invoke_args.append('data=data')
     if 'input_encoding' in presented_args:
@@ -116,15 +125,13 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
 
 
 def _get_namespace_method_signature_arg(
-    name: str, method_name: str, get_model_name: Callable, *, optional: bool, alias: bool = False
+    name: str, nsid: NSID, model_name: str, *, optional: bool, alias: bool = False
 ) -> str:
-    model_name = get_model_name(method_name)
-
     if alias:
-        return f"{name}: 'models.{model_name}'"
+        return f"{name}: 'models.{get_import_path(nsid)}.{model_name}'"
 
     default_value = ''
-    type_hint = f"Union[dict, 'models.{model_name}']"
+    type_hint = f"Union[dict, 'models.{get_import_path(nsid)}.{model_name}']"
     if optional:
         type_hint = f'Optional[{type_hint}]'
         default_value = ' = None'
@@ -165,13 +172,11 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
     def is_optional_arg(lex_obj) -> bool:
         return lex_obj.required is None or len(lex_obj.required) == 0
 
-    name = method_info.name
-
     if method_info.definition.parameters:
         params = method_info.definition.parameters
         is_optional = is_optional_arg(params)
 
-        arg = _get_namespace_method_signature_arg('params', name, get_params_model_name, optional=is_optional)
+        arg = _get_namespace_method_signature_arg('params', method_info.nsid, PARAMS_MODEL, optional=is_optional)
         _add_arg(arg, optional=is_optional)
 
     if method_info.definition.type is LexDefinitionType.PROCEDURE and method_info.definition.input:
@@ -180,12 +185,12 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
             is_optional = is_optional_arg(schema)
 
             if schema and isinstance(schema, LexObject):
-                arg = _get_namespace_method_signature_arg('data', name, get_data_model_name, optional=is_optional)
+                arg = _get_namespace_method_signature_arg('data', method_info.nsid, INPUT_MODEL, optional=is_optional)
                 _add_arg(arg, optional=is_optional)
             else:
                 raise ValueError(f'Bad type {type(schema)}')  # probably LexRefVariant
         else:
-            arg = _get_namespace_method_signature_arg('data', name, get_data_model_name, optional=False, alias=True)
+            arg = _get_namespace_method_signature_arg('data', method_info.nsid, INPUT_MODEL, optional=False, alias=True)
             _add_arg(arg, optional=False)
 
     args.extend(optional_args)
@@ -204,7 +209,7 @@ def _get_namespace_method_return_type(method_info: MethodInfo) -> str:
     return_type = 'int'  # return status code of response
     if method_info.definition.output:
         # example of methods without response: app.bsky.graph.muteActor, app.bsky.graph.muteActor
-        return_type = f'models.{get_response_model_name(method_info.name)}{model_name_suffix}'
+        return_type = f'models.{get_import_path(method_info.nsid)}.{OUTPUT_MODEL}{model_name_suffix}'
 
     return return_type
 
@@ -274,9 +279,11 @@ def generate_namespaces() -> None:
         filepath = _NAMESPACES_OUTPUT_DIR.joinpath(filename)
 
         write_code(filepath, code)
-        format_code(filepath)
 
-        # TODO(MarshalX): generate ClientRaw as root of namespaces
+    # TODO(MarshalX): generate ClientRaw as root of namespaces
+
+    format_code(_NAMESPACES_OUTPUT_DIR)
+    print('Done')
 
 
 if __name__ == '__main__':
