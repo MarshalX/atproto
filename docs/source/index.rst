@@ -37,4 +37,4 @@ Documentation
    PyPI <https://pypi.org/project/atproto/>
    Author <https://github.com/MarshalX>
    AT Protocol Docs <https://atproto.com/docs>
-   Discord Bluesky API <https://discord.gg/8Zpa6FKc>
+   Discord Bluesky API <https://discord.gg/ZDMSm3UGPN>
