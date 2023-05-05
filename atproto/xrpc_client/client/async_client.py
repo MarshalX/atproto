@@ -1,12 +1,14 @@
-###########################################################
-# THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS #
-###########################################################
+##################################################################
+# THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
+# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# This file is part of Python atproto SDK. Licenced under MIT.
+##################################################################
 
 from datetime import datetime
 from typing import Optional, Union
 
 from xrpc_client import models
-from xrpc_client.client.raw import AsyncClientRaw
+from xrpc_client.client.async_raw import AsyncClientRaw
 
 
 class AsyncClient(AsyncClientRaw):

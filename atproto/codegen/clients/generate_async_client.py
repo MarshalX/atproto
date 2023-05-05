@@ -9,6 +9,7 @@ def gen_client(input_filename: str, output_filename: str) -> None:
     with open(_CLIENT_DIR.joinpath(input_filename), 'r', encoding='UTF-8') as f:
         code = f.read()
 
+    code = code.replace('client.raw', 'client.async_raw')
     code = code.replace('class Client', 'class AsyncClient')
     code = code.replace('ClientRaw', 'AsyncClientRaw')
 
