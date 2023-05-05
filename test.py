@@ -12,6 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 def sync_main():
     client = Client()
+    # client = Client('http://localhost:8000')
     profile = client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
     print(profile)
@@ -31,7 +32,6 @@ def sync_main():
 
     # TODO(MarshalX): Add utils for AT URI! To be able to ezly manipulate with rkey
 
-    # TODO(MarshalX): Let's return success bool instead of status code
     print(client.unlike('1jlmwihiomm9m'))
 
     # reply = client.send_post('reply to root test', reply_to=models.AppBskyFeedPost.ReplyRef(created_post, created_post))

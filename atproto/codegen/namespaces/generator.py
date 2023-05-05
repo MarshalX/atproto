@@ -103,7 +103,14 @@ def _get_method_docstring(method_info: MethodInfo) -> str:
     doc_string.append('')
 
     doc_string.append(f'{_(2)}Returns:')
-    doc_string.append(f'{_(3)}:obj:`{_get_namespace_method_return_type(method_info)}`: Output.')
+
+    return_type = _get_namespace_method_return_type(method_info)
+
+    return_type_desc = 'Output model'
+    if return_type == 'bool':
+        return_type_desc = 'Success status'
+
+    doc_string.append(f'{_(3)}:obj:`{return_type}`: {return_type_desc}.')
     doc_string.append('')
 
     doc_string.append(f'{_(2)}Raises:')
@@ -241,7 +248,7 @@ def _get_namespace_method_return_type(method_info: MethodInfo) -> str:
         # could be solved by separating models into different folders using segments of NSID
         model_name_suffix = 'Ref'
 
-    return_type = 'int'  # return status code of response
+    return_type = 'bool'  # return success of response
     if method_info.definition.output:
         # example of methods without response: app.bsky.graph.muteActor, app.bsky.graph.muteActor
         return_type = f'models.{get_import_path(method_info.nsid)}.{OUTPUT_MODEL}{model_name_suffix}'

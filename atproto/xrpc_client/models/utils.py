@@ -49,8 +49,9 @@ def get_or_create_model(model_data: Union[dict], model: Type[M]) -> Optional[M]:
 
 
 def get_response_model(response: Response, model: Type[M]) -> Optional[M]:
-    if model is int:
-        return response.status_code
+    if model is bool:
+        # Could not be False? Because the exception with errors will be raised from the server
+        return response.success
 
     return get_or_create_model(response.content, model)
 
