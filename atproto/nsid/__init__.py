@@ -23,16 +23,27 @@ Segments = List[str]
 
 @dataclass
 class NSID:
+    """NameSpaced IDs (NSIDs).
+
+    Examples:
+        com.example.status
+
+        io.social.getFeed
+
+        net.users.bob.ping
+    """
+
     segments: Segments = field(default_factory=list)
 
     @classmethod
-    def from_str(cls, nsid: str):
+    def from_str(cls, nsid: str) -> 'NSID':
+        """Create `NSID` instance from string."""
         validate_nsid(nsid)
         return cls(segments=get_nsid_segments(nsid))
 
     @property
     def authority(self) -> str:
-        """Authority of NSID
+        """Get authority of NSID.
 
         com.example.thing
         ^^^^^^^^^^^--------> example.com
@@ -46,6 +57,7 @@ class NSID:
 
     @property
     def name(self) -> str:
+        """Get name."""
         return self.segments[-1]
 
     def __str__(self):
@@ -53,6 +65,12 @@ class NSID:
 
     def __hash__(self):
         return hash(str(self))
+
+    def __eq__(self, other):
+        if isinstance(other, NSID):
+            return hash(self) == hash(other)
+
+        return False
 
 
 def get_nsid_segments(nsid: str) -> Segments:
@@ -69,7 +87,18 @@ def _exclude_nsid_namespace_if_exists(segments: Segments) -> str:
 
 
 def _validate_nsid_segment(segment: str, is_last_segment: bool) -> bool:
-    """Validate NSID segment. Returns True if valid. Raises InvalidNsidError otherwise."""
+    """Validate NSID segment.
+
+    Args:
+        segment: Segment to validate.
+        is_last_segment: The last segment indicator.
+
+    Returns:
+        :obj:`bool`: Validation result is always True.
+
+    Raises:
+        :class:`atproto.exceptions.InvalidNsidError`: Invalid NSID exception.
+    """
 
     segment_len = len(segment)
 
@@ -93,7 +122,17 @@ def _validate_nsid_segment(segment: str, is_last_segment: bool) -> bool:
 
 
 def _validate_nsid(nsid: str) -> bool:
-    """Validate NSID. Returns True if valid. Raises InvalidNsidError otherwise."""
+    """Validate NSID.
+
+    Args:
+        nsid: NSID to validate.
+
+    Returns:
+        :obj:`bool`: Validation result is always True.
+
+    Raises:
+        :class:`atproto.exceptions.InvalidNsidError`: Invalid NSID exception.
+    """
 
     segments = get_nsid_segments(nsid)
     clean_nsid = _exclude_nsid_namespace_if_exists(segments)
@@ -117,11 +156,19 @@ def _validate_nsid(nsid: str) -> bool:
 
 
 def validate_nsid(nsid: str, *, soft_fail: bool = False) -> bool:
-    """Validate NSID. Returns True if valid. Raises InvalidNsidError otherwise.
+    """Validate NSID.
 
-    Note:
-        enable soft_fail to return False if not valid.
+    Args:
+        nsid: NSID to validate.
+        soft_fail: enable to return False on fall instead of exception
+
+    Returns:
+        :obj:`bool`: Validation result.
+
+    Raises:
+        :class:`atproto.exceptions.InvalidNsidError`: Invalid NSID exception.
     """
+
     try:
         return _validate_nsid(nsid)
     except InvalidNsidError as e:

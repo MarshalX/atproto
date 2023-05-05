@@ -2,7 +2,7 @@ import asyncio
 import logging
 import os
 
-from atproto import AsyncClient, Client, models
+from atproto import AsyncClient, AtUri, Client, models
 
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
@@ -27,12 +27,13 @@ def sync_main():
 
     # print(client.com.atproto.server.describe_server())
 
-    # created_post = client.send_post('Test likes')
-    # print(client.like(created_post))
-
-    # TODO(MarshalX): Add utils for AT URI! To be able to ezly manipulate with rkey
-
-    print(client.unlike('1jlmwihiomm9m'))
+    post_ref = client.send_post('Test like-unlike')
+    print('post ref', post_ref)
+    like_ref = client.like(post_ref)
+    print('like ref', like_ref)
+    like_rkey = AtUri.from_str(like_ref.uri).rkey
+    print('like rkey', like_rkey)
+    print(client.unlike(like_rkey))
 
     # reply = client.send_post('reply to root test', reply_to=models.AppBskyFeedPost.ReplyRef(created_post, created_post))
     # reply_to_reply = client.send_post('reply to reply test', reply_to=models.ReplyRef(reply, created_post))

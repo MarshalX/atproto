@@ -57,3 +57,7 @@ class RequestException(AtProtocolError):
 
 class BadRequestError(RequestException):
     ...
+
+
+class InvalidAtUriError(AtProtocolError):
+    ...

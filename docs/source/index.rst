@@ -17,6 +17,8 @@ Documentation
    namespace
    models
    nsid
+   cid
+   uri
    exceptions
 
 .. toctree::
