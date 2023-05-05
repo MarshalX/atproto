@@ -1,4 +1,4 @@
-atproto.xrpc\_client.models.base
+base
 ================================
 
 .. automodule:: atproto.xrpc_client.models.base

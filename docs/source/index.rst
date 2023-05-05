@@ -14,10 +14,10 @@ Documentation
    :maxdepth: 4
 
    xrpc_clients/clients
-   namespaces/namespaces
-   models/models
+   namespace
+   models
+   nsid
    exceptions
-   atproto/atproto
 
 .. toctree::
    :hidden:
@@ -34,4 +34,5 @@ Documentation
    GitHub <https://github.com/MarshalX/atproto>
    PyPI <https://pypi.org/project/atproto/>
    Author <https://github.com/MarshalX>
+   AT Protocol Docs <https://atproto.com/docs>
    Discord Bluesky API <https://discord.gg/8Zpa6FKc>

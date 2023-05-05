@@ -1,5 +1,5 @@
-Clients
-=======
+XRPC Clients
+============
 
 .. automodule:: atproto.xrpc_client.client
    :members:
@@ -13,6 +13,6 @@ Submodules
    :maxdepth: 4
 
    client
-   async_client
    raw
    base
+   http

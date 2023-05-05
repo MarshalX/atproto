@@ -1,6 +1,6 @@
 # Getting Started
 
-## ATProtocol SDK
+## The AT Protocol SDK
 
 ```{toctree}
 readme.content.md

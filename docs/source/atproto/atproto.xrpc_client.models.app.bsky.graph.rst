@@ -1,0 +1,22 @@
+app.bsky.graph
+==========================================
+
+.. automodule:: atproto.xrpc_client.models.app.bsky.graph
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   atproto.xrpc_client.models.app.bsky.graph.block
+   atproto.xrpc_client.models.app.bsky.graph.follow
+   atproto.xrpc_client.models.app.bsky.graph.get_blocks
+   atproto.xrpc_client.models.app.bsky.graph.get_followers
+   atproto.xrpc_client.models.app.bsky.graph.get_follows
+   atproto.xrpc_client.models.app.bsky.graph.get_mutes
+   atproto.xrpc_client.models.app.bsky.graph.mute_actor
+   atproto.xrpc_client.models.app.bsky.graph.unmute_actor

@@ -1,5 +1,5 @@
-High-level Client
-=================
+Client
+======
 
 .. automodule:: atproto.xrpc_client.client.client
    :members:

@@ -6,6 +6,15 @@ atproto.xrpc\_client.models
    :undoc-members:
    :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   atproto.xrpc_client.models.app
+   atproto.xrpc_client.models.com
+
 Submodules
 ----------
 
@@ -14,8 +23,4 @@ Submodules
 
    atproto.xrpc_client.models.base
    atproto.xrpc_client.models.blob_ref
-   atproto.xrpc_client.models.data
-   atproto.xrpc_client.models.defs
-   atproto.xrpc_client.models.params
-   atproto.xrpc_client.models.records
-   atproto.xrpc_client.models.responses
+   atproto.xrpc_client.models.utils

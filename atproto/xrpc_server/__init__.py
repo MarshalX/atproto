@@ -1,1 +1,1 @@
-# TODO(MarshalX): When ATProtocol will stable
+# TODO(MarshalX): When ATProto will stable

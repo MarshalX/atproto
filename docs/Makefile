@@ -15,7 +15,10 @@ help:
 .PHONY: help Makefile
 
 gen:
-	@$(SPHINXGENERATE) -f -e -M -o "$(GENDIR)" -t "$(TEMPLATEDIR)" "$(MODULEPATH)" $(O)
+	@$(SPHINXGENERATE) -f -e -M -o "$(GENDIR)" -t "$(TEMPLATEDIR)" "$(MODULEPATH)" $(O) && make fix_gen
+
+fix_gen:
+	python fix_title_of_models.py
 
 .PHONY: gen Makefile
 

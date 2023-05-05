@@ -10,7 +10,7 @@ from xrpc_client.client.raw import AsyncClientRaw
 
 
 class AsyncClient(AsyncClientRaw):
-    """High-level client for XRPC of ATProtocol."""
+    """High-level client for XRPC of ATProto."""
 
     def __init__(self):
         super().__init__()

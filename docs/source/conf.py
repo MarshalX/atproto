@@ -25,7 +25,7 @@ source_suffix = {
 
 # -- Project information -----------------------------------------------------
 
-project = 'ATProtocol SDK'
+project = 'The AT Protocol SDK'
 copyright = '2023 Ilya (Marshal) <https://github.com/MarshalX>'
 author = 'Ilya (Marshal)'
 
@@ -63,7 +63,7 @@ html_static_path = ['_static']
 
 html_search_language = 'en'
 
-html_title = 'ATProtocol SDK'
+html_title = 'The AT Protocol SDK'
 html_theme = 'furo'
 
 html_css_files = [

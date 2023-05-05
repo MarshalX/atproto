@@ -1,5 +1,5 @@
-Low-level Raw Client
-=====================
+Raw Client
+==========
 
 .. automodule:: atproto.xrpc_client.client.raw
    :members:
