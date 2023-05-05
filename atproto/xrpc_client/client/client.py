@@ -47,3 +47,20 @@ class Client(ClientRaw):
                 ),
             )
         )
+
+    def send_image(
+        self,
+        text: str,
+        image: bytes,
+        image_alt: str,
+        profile_identify: Optional[str] = None,
+        reply_to: Optional[Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
+    ) -> models.ComAtprotoRepoCreateRecord.Response:
+        upload = self.com.atproto.repo.upload_blob(image)
+        images = [models.AppBskyEmbedImages.Image(alt=image_alt, image=upload.blob)]
+        return self.send_post(
+            text,
+            profile_identify=profile_identify,
+            reply_to=reply_to,
+            embed=models.AppBskyEmbedImages.Main(images=images),
+        )

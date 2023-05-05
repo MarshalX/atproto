@@ -16,16 +16,10 @@ def sync_main():
 
     print(profile)
 
-    with open('cat.png', 'rb') as f:
+    with open('cat2.jpg', 'rb') as f:
         cat_data = f.read()
 
-        upload = client.com.atproto.repo.upload_blob(cat_data)
-        print(upload.blob.cid.version)
-    #
-    #     images = 6 * [models.AppBskyEmbedImages.Image(alt='img alt test', image=upload.blob)]
-    #     client.send_post(
-    #         'Test post from Python SDK with embed images', embed=models.AppBskyEmbedImages.Main(images=images)
-    #     )
+        client.send_image('Cat looking for a Python', cat_data, 'cat alt')
 
     resolve = client.com.atproto.identity.resolve_handle(models.ComAtprotoIdentityResolveHandle.Params(profile.handle))
     assert resolve.did == profile.did
@@ -42,6 +36,12 @@ async def main():
     async_client = AsyncClient()
     profile = await async_client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
     print(profile)
+
+    # should be async open
+    with open('cat2.png', 'rb') as f:
+        cat_data = f.read()
+
+        await async_client.send_image('Cat looking for a Async Python', cat_data, 'async cat alt')
 
     resolve = await async_client.com.atproto.identity.resolve_handle(
         models.ComAtprotoIdentityResolveHandle.Params(profile.handle)
