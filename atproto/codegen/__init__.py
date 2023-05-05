@@ -42,8 +42,14 @@ def get_file_path_parts(nsid: NSID) -> List[str]:
     return nsid.segments[:-1] + [f'{convert_camel_case_to_snake_case(nsid.name)}.py']
 
 
-def get_import_path(nsid: NSID) -> str:
+def get_import_path_old(nsid: NSID) -> str:
     return '.'.join(nsid.segments[:-1] + [f'{convert_camel_case_to_snake_case(nsid.name)}'])
+
+
+def get_import_path(nsid: NSID) -> str:
+    nsid_parts = nsid.segments[:-1] + camel_case_split(nsid.name)
+    alias_name = ''.join([p.capitalize() for p in nsid_parts])
+    return alias_name
 
 
 def convert_camel_case_to_snake_case(string: str) -> str:

@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from xrpc_client.models import get_model_as_dict, get_model_as_json
+from xrpc_client.models.utils import get_model_as_dict, get_model_as_json
 from xrpc_client.request import AsyncRequest, Request, Response
 
 # TODO(MarshalX): Generate async version automatically!

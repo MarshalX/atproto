@@ -46,7 +46,7 @@ def _handle_request_errors(exception: Exception) -> None:
 
 def _handle_response(response: httpx.Response) -> httpx.Response:
     # FIXME
-    from xrpc_client.models import get_or_create_model, is_json
+    from xrpc_client.models.utils import get_or_create_model, is_json
 
     if 200 <= response.status_code <= 299:
         return response

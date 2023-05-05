@@ -45,7 +45,7 @@ def _get_namespace_imports() -> str:
         'from typing import Optional, Union',
         '',
         'from xrpc_client import models',
-        'from xrpc_client.models import get_or_create_model, get_response_model',
+        'from xrpc_client.models.utils import get_or_create_model, get_response_model',
         'from xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase',
     ]
 

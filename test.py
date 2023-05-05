@@ -3,17 +3,11 @@ import logging
 import os
 
 from atproto import AsyncClient, Client, models
-from atproto.models import com
 
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
 
 # TODO(MarshalX): add record namespaces with 5 const methods? CRUDL
-
-# client.com.atproto.identity.resolve_handle({'handle': 'test'})
-# client.com.atproto.identity.resolve_handle({'handle': 123})     # expect WrongTypeError
-# client.com.atproto.moderation.create_report({'reasonType1': 'test', 'subject': 1})     # expect MissingValueError
-# client.com.atproto.identity.resolve_handle({'aaa': 1})     # expect UnexpectedFieldError
 
 
 def sync_main():
@@ -28,8 +22,10 @@ def sync_main():
         upload = client.com.atproto.repo.upload_blob(cat_data)
         print(upload.blob.cid.human_readable)
 
-        images = 1 * [models.Image(alt='img alt test', image=upload.blob)]
-        # client.send_post('Test post from Python SDK with embed images', embed=models.Images(images=images))
+        images = 6 * [models.AppBskyEmbedImages.Image(alt='img alt test', image=upload.blob)]
+        client.send_post(
+            'Test post from Python SDK with embed images', embed=models.AppBskyEmbedImages.Main(images=images)
+        )
 
     # resolve = client.com.atproto.identity.resolve_handle(models.ResolveHandleParams(profile.handle))
     # assert resolve.did == profile.did

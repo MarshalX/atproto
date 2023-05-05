@@ -1,8 +1,10 @@
+import os
 from enum import Enum
 from pathlib import Path
 from typing import Tuple, Union
 
 from codegen import (
+    DISCLAIMER,
     INPUT_MODEL,
     OUTPUT_MODEL,
     PARAMS_MODEL,
@@ -68,7 +70,8 @@ _NSID_WITH_IMPORTS = set()
 
 def _save_code_import_if_not_exist(nsid) -> None:
     if nsid not in _NSID_WITH_IMPORTS:
-        save_code(nsid, _get_model_imports())
+        lines = [DISCLAIMER, _get_model_imports()]
+        save_code(nsid, join_code(lines))
         _NSID_WITH_IMPORTS.add(nsid)
 
 
@@ -108,18 +111,29 @@ def _get_ref_typehint(nsid: NSID, field_type_def, main_def_name: str, *, optiona
     return _get_optional_typehint(f"'{model_path}'", optional=optional)
 
 
-def _resolve_nsid_ref(nsid: NSID, ref: str) -> Tuple[str, str]:
+def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> Tuple[str, str]:
     """Returns path to the model and model name"""
     if '#' in ref:
         ref_nsid_str, def_name = ref.split('#', 1)
+        def_name = get_def_model_name(def_name)
+
         try:
             ref_nsid = NSID.from_str(ref_nsid_str)
             return get_model_path(ref_nsid, def_name), def_name
         except InvalidNsidError:
+            if local:
+                return def_name, def_name
             return get_model_path(nsid, def_name), def_name
     else:
         ref_nsid = NSID.from_str(ref)
-        return get_model_path(nsid, ref_nsid.name), ref_nsid.name
+        def_name = get_def_model_name(nsid.name)
+
+        if local:
+            return def_name, def_name
+
+        # FIXME(MarshalX): Is it works well? ;d
+        return get_model_path(ref_nsid, 'Main'), def_name
+        # return get_model_path(ref_nsid, ref_nsid.name), def_name
 
 
 def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
@@ -247,8 +261,8 @@ def _get_model(nsid: NSID, lex_object: Union[models.LexObject, models.LexXrpcPar
 
 
 def _get_model_ref(nsid: NSID, ref: models.LexRef) -> str:
-    ref_class, _ = _resolve_nsid_ref(nsid, ref.ref)
-    # ref_class = _get_ref_class(nsid, ref, nsid.name)
+    # FIXME(MarshalX): "local=True" Is it works well? ;d
+    ref_class, _ = _resolve_nsid_ref(nsid, ref.ref, local=True)
     ref_typehint = f'Type[{ref_class}]'
 
     # "Ref" suffix required to fix name collisions from different namespaces
@@ -276,8 +290,6 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
             lines.append(_get_model_class_def(nsid.name, model_type))
             lines.append(_get_model_docstring(nsid, body.schema, model_type))
             lines.append(_get_model(nsid, body.schema))
-        elif isinstance(body.schema, models.LexRef):
-            lines.append(_get_model_ref(nsid, body.schema))
     else:
         if model_type is ModelType.DATA:
             model_name = INPUT_MODEL
@@ -396,12 +408,119 @@ def _generate_record_models(lex_db: builder.LexDB) -> None:
                 save_code_part(nsid, _generate_def_model(nsid, def_name, def_record.record))
 
 
+def _generate_ref_models(lex_db: builder.LexDB) -> None:
+    for nsid, defs in lex_db.items():
+        definition = defs['main']
+        if hasattr(definition, 'input') and definition.input and definition.input.schema:
+            if isinstance(definition.input.schema, models.LexRef):
+                save_code_part(nsid, _get_model_ref(nsid, definition.input.schema))
+
+        if hasattr(definition, 'output') and definition.output and definition.output.schema:
+            if isinstance(definition.output.schema, models.LexRef):
+                save_code_part(nsid, _get_model_ref(nsid, definition.output.schema))
+
+
+def _generate_init_files(root_package_path: Path) -> None:
+    # one of the ways that I tried. Doesn't work well due to circular imports
+    for root, dirs, files in os.walk(root_package_path):
+        root = Path(root)
+
+        import_lines = []
+        for dir_name in dirs:
+            if dir_name.startswith('__'):
+                continue
+
+            import_parts = root.parts[root.joinpath(dir_name).parts.index('xrpc_client') :]
+            from_import = '.'.join(import_parts)
+
+            if dir_name in {'app', 'com'}:
+                continue
+
+            import_lines.append(f'from {from_import} import {dir_name}')
+
+        for file_name in files:
+            if file_name.startswith('__'):
+                continue
+
+            import_parts = root.parts[root.parts.index('xrpc_client') :]
+            from_import = '.'.join(import_parts)
+
+            import_lines.append(f'from {from_import} import {file_name[:-3]}')
+
+        if root.name == 'models':
+            # FIXME skip for now. should be generated too
+            continue
+
+        if root.name == '__pycache__':
+            continue
+
+        print('write to', root.joinpath('__init__.py'), import_lines)
+        # write_code(root.joinpath('__init__.py'), join_code(import_lines))
+        write_code(root.joinpath('__init__.py'), join_code([]))
+
+
+def _generate_empty_init_files(root_package_path: Path):
+    for root, dirs, files in os.walk(root_package_path):
+        root = Path(root)
+
+        for dir_name in dirs:
+            if dir_name.startswith('__'):
+                continue
+
+            if dir_name in {'app', 'com'}:
+                continue
+
+        for file_name in files:
+            if file_name.startswith('__'):
+                continue
+
+        if root.name == 'models':
+            # FIXME skip for now. should be generated too
+            continue
+
+        if root.name == '__pycache__':
+            continue
+
+        write_code(root.joinpath('__init__.py'), DISCLAIMER)
+
+
+def _generate_import_aliases(root_package_path: Path):
+    # is generates __init__.py file if models dir with aliases like this;
+    # from xrpc_client.models.app.bsky.actor import defs as AppBskyActorDefs
+
+    import_lines = []
+    for root, dirs, files in os.walk(root_package_path):
+        root = Path(root)
+
+        if root == root_package_path:
+            continue
+
+        for file in files:
+            if file.startswith('.') or file.startswith('__') or file.endswith('.pyc'):
+                continue
+
+            import_parts = root.parts[root.parts.index('xrpc_client') :]
+            from_import = '.'.join(import_parts)
+
+            nsid_parts = list(root.parts[root.parts.index('models') + 1 :]) + file[:-3].split('_')
+            alias_name = ''.join([p.capitalize() for p in nsid_parts])
+
+            import_lines.append(f'from {from_import} import {file[:-3]} as {alias_name}')
+
+    write_code(_MODELS_OUTPUT_DIR.joinpath('__init__.py'), join_code(import_lines))
+
+
 def generate_models():
     _generate_params_models(builder.build_params_models())
     _generate_data_models(builder.build_data_models())
     _generate_response_models(builder.build_response_models())
     _generate_def_models(builder.build_def_models())
     _generate_record_models(builder.build_record_models())
+    # refs should be generated at the end!
+    _generate_ref_models(builder.build_refs_models())
+
+    _generate_empty_init_files(_MODELS_OUTPUT_DIR)
+    _generate_import_aliases(_MODELS_OUTPUT_DIR)
 
     format_code(_MODELS_OUTPUT_DIR)
 
