@@ -53,12 +53,14 @@ def _get_model_imports() -> str:
     # TODO(MarshalX): isort can't delete unused imports. mb add ruff
     lines = [
         'from dataclasses import dataclass',
-        'from typing import Any, List, Optional, Union, Type, TYPE_CHECKING',
+        'from typing import TYPE_CHECKING, Any, List, Optional, Type, Union',
+        '',
+        'from typing_extensions import Literal',
+        'from xrpc_client import models',
         'from xrpc_client.models import base',
         'from xrpc_client.models.blob_ref import BlobRef',
-        'from xrpc_client import models',
         '',
-        'from atproto.cid import CID',
+        'from atproto import CID',
         '',
     ]
 
@@ -320,8 +322,7 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
 
 def _generate_def_token(def_name: str) -> str:
     lines = [
-        f"{get_def_model_name(def_name)} = '{def_name}'",
-        # TODO(MarshalX): doesn't properly work. Must be typing.Literal. Add typing_extensions
+        f"{get_def_model_name(def_name)}: Literal['{def_name}'] = '{def_name}'",
         '',
         '',
     ]
@@ -329,20 +330,20 @@ def _generate_def_token(def_name: str) -> str:
 
 
 def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
-    # FIXME(MarshalX): Hardcoded. Doesn't support all fields
+    # FIXME(MarshalX): Doesn't support all fields
 
-    type_hint = ''
+    if not def_model.knownValues:
+        return ''
 
-    if def_model.knownValues:
-        # TODO use ref resolver
-        known_values = ["'" + get_def_model_name(v.split('#', 1)[1]) + "'" for v in def_model.knownValues]
-        known_values = ', '.join(known_values)
+    # FIXME(MarshalX): Use ref resolver
+    known_values = ["'" + get_def_model_name(v.split('#', 1)[1]) + "'" for v in def_model.knownValues]
+    known_values = ', '.join(known_values)
 
-        # TODO(MarshalX): doesn't properly work. Must be typing.Literal. Add typing_extensions
-        type_hint = f': Union[{known_values}]'
+    # idk will it work correct
+    type_ = f'Union[{known_values}]'
 
     lines = [
-        f"{get_def_model_name(def_name)}{type_hint} = '{def_name}'",
+        f"{get_def_model_name(def_name)} = {type_}",
         '',
         '',
     ]

@@ -25,15 +25,15 @@ def sync_main():
     # resolve = client.com.atproto.identity.resolve_handle(models.ComAtprotoIdentityResolveHandle.Params(profile.handle))
     # assert resolve.did == profile.did
 
-    # print(client.com.atproto.server.describe_server())
+    print(client.com.atproto.server.describe_server())
 
-    post_ref = client.send_post('Test like-unlike')
-    print('post ref', post_ref)
-    like_ref = client.like(post_ref)
-    print('like ref', like_ref)
-    like_rkey = AtUri.from_str(like_ref.uri).rkey
-    print('like rkey', like_rkey)
-    print(client.unlike(like_rkey))
+    # post_ref = client.send_post('Test like-unlike')
+    # print('post ref', post_ref)
+    # like_ref = client.like(post_ref)
+    # print('like ref', like_ref)
+    # like_rkey = AtUri.from_str(like_ref.uri).rkey
+    # print('like rkey', like_rkey)
+    # print(client.unlike(like_rkey))
 
     # reply = client.send_post('reply to root test', reply_to=models.AppBskyFeedPost.ReplyRef(created_post, created_post))
     # reply_to_reply = client.send_post('reply to reply test', reply_to=models.ReplyRef(reply, created_post))
