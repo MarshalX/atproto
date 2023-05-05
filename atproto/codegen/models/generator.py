@@ -339,8 +339,7 @@ def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
     known_values = ["'" + get_def_model_name(v.split('#', 1)[1]) + "'" for v in def_model.knownValues]
     known_values = ', '.join(known_values)
 
-    # idk will it work correct
-    type_ = f'Union[{known_values}]'
+    type_ = f'Literal[{known_values}]'
 
     lines = [
         f"{get_def_model_name(def_name)} = {type_}",
