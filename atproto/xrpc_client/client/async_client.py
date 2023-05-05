@@ -72,3 +72,25 @@ class AsyncClient(AsyncClientRaw):
             reply_to=reply_to,
             embed=models.AppBskyEmbedImages.Main(images=images),
         )
+
+    async def like(self, subject: models.ComAtprotoRepoStrongRef.Main) -> models.ComAtprotoRepoCreateRecord.Response:
+        return await self.com.atproto.repo.create_record(
+            models.ComAtprotoRepoCreateRecord.Data(
+                repo=self.me.did,
+                collection='app.bsky.feed.like',
+                record=models.AppBskyFeedLike.Main(createdAt=datetime.now().isoformat(), subject=subject),
+            )
+        )
+
+    async def unlike(self, record_key: str, profile_identify: Optional[str] = None) -> int:
+        repo = self.me.did
+        if profile_identify:
+            repo = profile_identify
+
+        return await self.com.atproto.repo.delete_record(
+            models.ComAtprotoRepoDeleteRecord.Data(
+                collection='app.bsky.feed.like',
+                repo=repo,
+                rkey=record_key,
+            )
+        )
