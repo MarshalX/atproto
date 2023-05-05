@@ -8,9 +8,10 @@
 from dataclasses import dataclass
 from typing import List, Optional, Union
 
-from atproto import CID
 from xrpc_client import models
 from xrpc_client.models import base
+
+from atproto import CID
 
 
 @dataclass
