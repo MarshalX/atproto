@@ -48,7 +48,7 @@ async def main():
     # with open('cat2.png', 'rb') as f:
     #     cat_data = f.read()
 
-        # await async_client.send_image('Cat looking for a Async Python', cat_data, 'async cat alt')
+    # await async_client.send_image('Cat looking for a Async Python', cat_data, 'async cat alt')
 
     # resolve = await async_client.com.atproto.identity.resolve_handle(
     #     models.ComAtprotoIdentityResolveHandle.Params(profile.handle)

@@ -70,9 +70,7 @@ class Client(ClientRaw):
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
                 collection='app.bsky.feed.like',
-                record=models.AppBskyFeedLike.Main(
-                    createdAt=datetime.now().isoformat(), subject=subject
-                ),
+                record=models.AppBskyFeedLike.Main(createdAt=datetime.now().isoformat(), subject=subject),
             )
         )
 
@@ -81,8 +79,10 @@ class Client(ClientRaw):
         if profile_identify:
             repo = profile_identify
 
-        return self.com.atproto.repo.delete_record(models.ComAtprotoRepoDeleteRecord.Data(
-            collection='app.bsky.feed.like',
-            repo=repo,
-            rkey=record_key,
-        ))
+        return self.com.atproto.repo.delete_record(
+            models.ComAtprotoRepoDeleteRecord.Data(
+                collection='app.bsky.feed.like',
+                repo=repo,
+                rkey=record_key,
+            )
+        )
