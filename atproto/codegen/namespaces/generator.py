@@ -2,11 +2,13 @@ from pathlib import Path
 from typing import List, Set, Union
 
 from codegen import (
+    DISCLAIMER,
     INPUT_MODEL,
     OUTPUT_MODEL,
     PARAMS_MODEL,
     convert_camel_case_to_snake_case,
     format_code,
+    gen_description_by_camel_case_name,
 )
 from codegen import get_code_intent as _
 from codegen import (
@@ -40,7 +42,7 @@ def get_record_name(path_part: str) -> str:
 
 def _get_namespace_imports() -> str:
     lines = [
-        # isort formatted
+        DISCLAIMER,
         'from dataclasses import dataclass',
         'from typing import Optional, Union',
         '',
@@ -80,10 +82,43 @@ def _get_post_init_method(sub_namespaces: dict) -> str:
     return join_code(lines)
 
 
+def _get_method_docstring(method_info: MethodInfo) -> str:
+    method_desc = f'{gen_description_by_camel_case_name(method_info.name)}.'
+    if method_info.definition.description:
+        method_desc = method_info.definition.description
+    if method_desc[-1] not in {'.', '?', '!'}:
+        method_desc += '.'
+
+    doc_string = [f'{_(2)}"""{method_desc}', '', f'{_(2)}Args:']
+
+    presented_args = _get_namespace_method_signature_args_names(method_info)
+    if 'params' in presented_args:
+        doc_string.append(f'{_(3)}params: Parameters.')
+    if 'data_schema' in presented_args:
+        doc_string.append(f'{_(3)}data: Input data.')
+    if 'data_alias' in presented_args:
+        doc_string.append(f'{_(3)}data: Input data alias.')
+
+    doc_string.append(f'{_(3)}**kwargs: Arbitrary arguments to HTTP request.')
+    doc_string.append('')
+
+    doc_string.append(f'{_(2)}Returns:')
+    doc_string.append(f'{_(3)}:obj:`{_get_namespace_method_return_type(method_info)}`: Output.')
+    doc_string.append('')
+
+    doc_string.append(f'{_(2)}Raises:')
+    doc_string.append(f'{_(3)}:class:`atproto.exceptions.AtProtocolError`: Base exception.')
+
+    doc_string.append(f'{_(2)}"""')
+    doc_string.append('')
+
+    return join_code(doc_string)
+
+
 def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
     d, c = get_sync_async_keywords(sync=sync)
 
-    lines = []
+    lines = [_get_method_docstring(method_info)]
 
     presented_args = _get_namespace_method_signature_args_names(method_info)
     presented_args.remove('self')

@@ -9,9 +9,9 @@ from codegen import (
     OUTPUT_MODEL,
     PARAMS_MODEL,
     append_code,
-    camel_case_split,
     capitalize_first_symbol,
     format_code,
+    gen_description_by_camel_case_name,
 )
 from codegen import get_code_intent as _
 from codegen import get_file_path_parts, get_import_path, join_code, write_code
@@ -50,10 +50,9 @@ def save_code_part(nsid: NSID, code: str) -> None:
 
 
 def _get_model_imports() -> str:
+    # TODO(MarshalX): isort can't delete unused imports. mb add ruff
     lines = [
-        # isort formatted
         'from dataclasses import dataclass',
-        # TODO(MarshalX): track and import only used hints? isort can't delete unused imports. mb add ruff
         'from typing import Any, List, Optional, Union, Type, TYPE_CHECKING',
         'from xrpc_client.models import base',
         'from xrpc_client.models.blob_ref import BlobRef',
@@ -195,13 +194,6 @@ def _get_req_fields_set(lex_obj: Union[models.LexObject, models.LexXrpcParameter
     return required_fields
 
 
-def _gen_description_by_camel_case_name(name: str):
-    words = camel_case_split(name)
-    words = [w.lower() for w in words]
-    words[0] = words[0].capitalize()
-    return ' '.join(words)
-
-
 def _get_model_docstring(
     nsid: Union[str, NSID], lex_object: Union[models.LexObject, models.LexXrpcParameters], model_type: ModelType
 ) -> str:
@@ -213,7 +205,7 @@ def _get_model_docstring(
     for field_name, field_type in lex_object.properties.items():
         field_desc = field_type.description
         if field_desc is None:
-            field_desc = _gen_description_by_camel_case_name(field_name)
+            field_desc = gen_description_by_camel_case_name(field_name)
         if field_desc[-1] not in {'.', '?', '!'}:
             field_desc += '.'
 

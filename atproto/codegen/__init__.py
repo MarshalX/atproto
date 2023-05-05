@@ -5,8 +5,14 @@ from typing import List, Tuple
 
 from nsid import NSID
 
-DISCLAIMER = '# THIS IS THE AUTO-GENERATED CODE. DON\'T EDIT IT BY HANDS #'
-DISCLAIMER = f'{"#" * len(DISCLAIMER)}\n{DISCLAIMER}\n{"#" * len(DISCLAIMER)}\n\n'
+DISCLAIMER = [
+    '# THIS IS THE AUTO-GENERATED CODE. DON\'T EDIT IT BY HANDS!',
+    '# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.',
+    '# This file is part of Python atproto SDK. Licenced under MIT.',
+]
+_MAX_DISCLAIMER_LEN = max([len(s) for s in DISCLAIMER])
+DISCLAIMER = '\n'.join(DISCLAIMER)
+DISCLAIMER = f'{"#" * _MAX_DISCLAIMER_LEN}\n{DISCLAIMER}\n{"#" * _MAX_DISCLAIMER_LEN}\n\n'
 
 PARAMS_MODEL = 'Params'
 INPUT_MODEL = 'Data'
@@ -59,6 +65,13 @@ def convert_camel_case_to_snake_case(string: str) -> str:
 def camel_case_split(string: str):
     # regex by chatgpt
     return re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)', string)
+
+
+def gen_description_by_camel_case_name(name: str):
+    words = camel_case_split(name)
+    words = [w.lower() for w in words]
+    words[0] = words[0].capitalize()
+    return ' '.join(words)
 
 
 def sort_dict_by_key(d: dict) -> dict:
