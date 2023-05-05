@@ -16,11 +16,11 @@ def sync_main():
 
     print(profile)
 
-    # with open('cat.png', 'rb') as f:
-    #     cat_data = f.read()
-    #
-    #     upload = client.com.atproto.repo.upload_blob(cat_data)
-    #     print(upload.blob.cid.human_readable)
+    with open('cat.png', 'rb') as f:
+        cat_data = f.read()
+
+        upload = client.com.atproto.repo.upload_blob(cat_data)
+        print(upload.blob.cid.version)
     #
     #     images = 6 * [models.AppBskyEmbedImages.Image(alt='img alt test', image=upload.blob)]
     #     client.send_post(

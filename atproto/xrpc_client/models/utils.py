@@ -2,6 +2,7 @@ import dataclasses
 import json
 from typing import Any, Optional, Type, TypeVar, Union
 
+from cid import CID
 from dacite import Config, exceptions, from_dict
 from exceptions import (
     MissingValueError,
@@ -15,7 +16,11 @@ from xrpc_client.request import Response
 
 M = TypeVar('M')
 
-_DACITE_CONFIG = Config(type_hooks={BlobRef: lambda ref: BlobRef.from_dict(ref)})
+_TYPE_HOOKS = {
+    BlobRef: lambda ref: BlobRef.from_dict(ref),
+    CID: lambda ref: CID.decode(ref),
+}
+_DACITE_CONFIG = Config(type_hooks=_TYPE_HOOKS)
 
 
 def get_or_create_model(model_data: Union[dict], model: Type[M]) -> Optional[M]:
@@ -57,10 +62,11 @@ def _handle_dict_key(key: str) -> str:
     return key
 
 
-def _handle_dict_value(ref: Any) -> dict:
-    # TODO(MarshalX): add CID?
+def _handle_dict_value(ref: Any) -> Any:
     if isinstance(ref, BlobRef):
         return ref.to_dict()
+    elif isinstance(ref, CID):
+        return ref.encode()
 
     return ref
 

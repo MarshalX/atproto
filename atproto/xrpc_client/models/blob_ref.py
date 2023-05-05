@@ -1,4 +1,4 @@
-from multiformats import CID
+from atproto.cid import CID
 
 
 class BlobRef:

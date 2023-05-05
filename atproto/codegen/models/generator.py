@@ -56,8 +56,9 @@ def _get_model_imports() -> str:
         'from typing import Any, List, Optional, Union, Type, TYPE_CHECKING',
         'from xrpc_client.models import base',
         'from xrpc_client.models.blob_ref import BlobRef',
-        'from multiformats import CID',
         'from xrpc_client import models',
+        '',
+        'from atproto.cid import CID',
         '',
     ]
 
@@ -320,7 +321,7 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
 def _generate_def_token(def_name: str) -> str:
     lines = [
         f"{get_def_model_name(def_name)} = '{def_name}'",
-        # TODO(MarshalX): doesn't properly work. typing.Literal requires drop support of Python 3.7...
+        # TODO(MarshalX): doesn't properly work. Must be typing.Literal. Add typing_extensions
         '',
         '',
     ]
@@ -337,7 +338,7 @@ def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
         known_values = ["'" + get_def_model_name(v.split('#', 1)[1]) + "'" for v in def_model.knownValues]
         known_values = ', '.join(known_values)
 
-        # TODO(MarshalX): doesn't properly work. typing.Literal requires drop support of Python 3.7...
+        # TODO(MarshalX): doesn't properly work. Must be typing.Literal. Add typing_extensions
         type_hint = f': Union[{known_values}]'
 
     lines = [
