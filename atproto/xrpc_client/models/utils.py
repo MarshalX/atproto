@@ -51,7 +51,7 @@ def get_response_model(response: Response, model: Type[M]) -> Optional[M]:
 
 
 def _handle_dict_key(key: str) -> str:
-    if key == '_type':  # special SDK's name to resolve issues with $ symbol in Python
+    if key == '_type':  # System field. Replaced to original $ symbol because is not allowed in Python.
         return '$type'
 
     return key

@@ -1,4 +1,3 @@
-import os
 import re
 import subprocess
 from pathlib import Path
@@ -24,7 +23,7 @@ def append_code(filepath: Path, code: str) -> None:
 
 
 def write_code(filepath: Path, code: str) -> None:
-    _write_code(filepath, code, append=False)
+    _write_code(filepath, code)
 
 
 def _write_code(filepath: Path, code: str, *, append: bool = False) -> None:
@@ -66,7 +65,7 @@ def sort_dict_by_key(d: dict) -> dict:
     return dict(sorted(d.items()))
 
 
-def get_code_intent(level=1):
+def get_code_intent(level: int):
     return ' ' * 4 * level
 
 

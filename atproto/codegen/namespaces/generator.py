@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Callable, List, Set, Union
+from typing import List, Set, Union
 
 from codegen import (
     INPUT_MODEL,

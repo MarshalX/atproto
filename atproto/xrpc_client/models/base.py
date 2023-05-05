@@ -19,3 +19,8 @@ class DataModelBase(ModelBase):
 @dataclass
 class ResponseModelBase(ModelBase):
     pass
+
+
+@dataclass
+class RecordModelBase(ModelBase):
+    pass

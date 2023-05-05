@@ -24,11 +24,11 @@ _MODELS_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('xrpc_client',
 
 
 class ModelType(Enum):
-    PARAMS = 'params'
-    DATA = 'data'
-    RESPONSE = 'response'
-    DEF = 'def'
-    RECORD = 'record'
+    PARAMS = 'Parameters'
+    DATA = 'Input data'
+    RESPONSE = 'Output data'
+    DEF = 'Definition'
+    RECORD = 'Record'
 
 
 def get_def_model_name(method_name: str) -> str:
@@ -84,6 +84,8 @@ def _get_model_class_def(name: str, model_type: ModelType) -> str:
         lines.append(f'class {INPUT_MODEL}(base.DataModelBase):')
     elif model_type is ModelType.RESPONSE:
         lines.append(f'class {OUTPUT_MODEL}(base.ResponseModelBase):')
+    elif model_type is ModelType.RECORD:
+        lines.append(f'class {get_def_model_name(name)}(base.RecordModelBase):')
     elif model_type is ModelType.DEF:
         lines.append(f'class {get_def_model_name(name)}(base.ModelBase):')
 
@@ -106,7 +108,7 @@ def _get_optional_typehint(type_hint, *, optional: bool) -> str:
         return type_hint
 
 
-def _get_ref_typehint(nsid: NSID, field_type_def, main_def_name: str, *, optional: bool) -> str:
+def _get_ref_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
     model_path, _ = _resolve_nsid_ref(nsid, field_type_def.ref)
     return _get_optional_typehint(f"'{model_path}'", optional=optional)
 
@@ -146,9 +148,7 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     return _get_optional_typehint(f"Union[{def_names}]", optional=optional)
 
 
-def _get_model_field_typehint(
-    nsid: NSID, field_name: str, field_type_def, *, optional: bool, def_name: str = None
-) -> str:
+def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, optional: bool) -> str:
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
@@ -164,7 +164,7 @@ def _get_model_field_typehint(
         return _get_optional_typehint(f'List[{items_type_hint}]', optional=optional)
 
     if field_type is models.LexRef:
-        return _get_ref_typehint(nsid, field_type_def, def_name, optional=optional)
+        return _get_ref_typehint(nsid, field_type_def, optional=optional)
 
     if field_type is models.LexRefUnion:
         return _get_ref_union_typehint(nsid, field_type_def, optional=optional)
@@ -202,20 +202,11 @@ def _gen_description_by_camel_case_name(name: str):
     return ' '.join(words)
 
 
-def _gen_description_by_nsid_or_camel_case_name(name: Union[str, NSID]) -> str:
-    if isinstance(name, NSID):
-        return f"{name.name} from {name.authority}"
-
-    return _gen_description_by_camel_case_name(name)
-
-
 def _get_model_docstring(
     nsid: Union[str, NSID], lex_object: Union[models.LexObject, models.LexXrpcParameters], model_type: ModelType
 ) -> str:
-    model_desc = lex_object.description
-    if model_desc is None:
-        model_desc = _gen_description_by_nsid_or_camel_case_name(nsid)
-    model_desc = f'{model_desc} for {model_type.value} type.'
+    model_desc = lex_object.description or ''
+    model_desc = f"{model_type.value} model for :obj:`{nsid}`. {model_desc}"
 
     doc_string = [f'{_(1)}"""{model_desc}', '', f'{_(1)}Attributes:']
 
@@ -234,7 +225,7 @@ def _get_model_docstring(
     return join_code(doc_string)
 
 
-def _get_model(nsid: NSID, lex_object: Union[models.LexObject, models.LexXrpcParameters], def_name: str = None) -> str:
+def _get_model(nsid: NSID, lex_object: Union[models.LexObject, models.LexXrpcParameters]) -> str:
     required_fields = _get_req_fields_set(lex_object)
 
     fields = []
@@ -242,7 +233,7 @@ def _get_model(nsid: NSID, lex_object: Union[models.LexObject, models.LexXrpcPar
 
     for field_name, field_type in lex_object.properties.items():
         is_optional = field_name not in required_fields
-        type_hint = _get_model_field_typehint(nsid, field_name, field_type, optional=is_optional, def_name=def_name)
+        type_hint = _get_model_field_typehint(nsid, field_name, field_type, optional=is_optional)
 
         field_def = f'{_(1)}{field_name}: {type_hint}'  # TODO(MarshalX): Add default values. for bool, etc..
         if is_optional:
@@ -266,11 +257,19 @@ def _get_model_ref(nsid: NSID, ref: models.LexRef) -> str:
     ref_typehint = f'Type[{ref_class}]'
 
     # "Ref" suffix required to fix name collisions from different namespaces
-    return f'{OUTPUT_MODEL}Ref: {ref_typehint} = {ref_class}\n\n'
+    lines = [
+        f'#: {OUTPUT_MODEL} reference to :obj:`{ref_class}` model.',
+        f'{OUTPUT_MODEL}Ref: {ref_typehint} = {ref_class}',
+        '',
+        '',
+    ]
+
+    return join_code(lines)
 
 
 def _get_model_raw_data(name: str) -> str:
-    return f'{name}: Union[Type[str], Type[bytes]] = bytes\n\n'
+    lines = [f'#: {name} raw data type.', f'{name}: Union[Type[str], Type[bytes]] = bytes\n\n']
+    return join_code(lines)
 
 
 def _generate_params_model(nsid: NSID, definition: Union[models.LexXrpcProcedure, models.LexXrpcQuery]) -> str:
@@ -311,11 +310,11 @@ def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str
     return _generate_xrpc_body_model(nsid, output_body, ModelType.RESPONSE)
 
 
-def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject) -> str:
+def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, model_type: ModelType) -> str:
     lines = [
-        _get_model_class_def(def_name, ModelType.DEF),
-        _get_model_docstring(def_name, def_model, ModelType.DEF),
-        _get_model(nsid, def_model, def_name),
+        _get_model_class_def(def_name, model_type),
+        _get_model_docstring(nsid, def_model, model_type),
+        _get_model(nsid, def_model),
     ]
 
     if def_name == 'main':
@@ -326,7 +325,7 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject) 
     return join_code(lines)
 
 
-def _generate_def_token(def_name: str, def_model: models.LexToken) -> str:
+def _generate_def_token(def_name: str) -> str:
     lines = [
         f"{get_def_model_name(def_name)} = '{def_name}'",
         # TODO(MarshalX): doesn't properly work. typing.Literal requires drop support of Python 3.7...
@@ -337,7 +336,7 @@ def _generate_def_token(def_name: str, def_model: models.LexToken) -> str:
 
 
 def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
-    # hardcoded. doesn't support all fields
+    # FIXME(MarshalX): Hardcoded. Doesn't support all fields
 
     type_hint = ''
 
@@ -391,11 +390,11 @@ def _generate_def_models(lex_db: builder.LexDB) -> None:
 
         for def_name, def_model in defs.items():
             if isinstance(def_model, models.LexToken):
-                save_code_part(nsid, _generate_def_token(def_name, def_model))
+                save_code_part(nsid, _generate_def_token(def_name))
             if isinstance(def_model, models.LexString):
                 save_code_part(nsid, _generate_def_string(def_name, def_model))
             if isinstance(def_model, models.LexObject):
-                save_code_part(nsid, _generate_def_model(nsid, def_name, def_model))
+                save_code_part(nsid, _generate_def_model(nsid, def_name, def_model, ModelType.DEF))
 
 
 def _generate_record_models(lex_db: builder.LexDB) -> None:
@@ -405,7 +404,7 @@ def _generate_record_models(lex_db: builder.LexDB) -> None:
         for def_name, def_record in defs.items():
             if isinstance(def_record, models.LexRecord):
                 # TODO(MarshalX): Process somehow def_record.key?
-                save_code_part(nsid, _generate_def_model(nsid, def_name, def_record.record))
+                save_code_part(nsid, _generate_def_model(nsid, def_name, def_record.record, ModelType.RECORD))
 
 
 def _generate_ref_models(lex_db: builder.LexDB) -> None:
@@ -454,9 +453,7 @@ def _generate_init_files(root_package_path: Path) -> None:
         if root.name == '__pycache__':
             continue
 
-        print('write to', root.joinpath('__init__.py'), import_lines)
-        # write_code(root.joinpath('__init__.py'), join_code(import_lines))
-        write_code(root.joinpath('__init__.py'), join_code([]))
+        write_code(root.joinpath('__init__.py'), join_code(import_lines))
 
 
 def _generate_empty_init_files(root_package_path: Path):
