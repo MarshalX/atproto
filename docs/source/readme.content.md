@@ -21,7 +21,7 @@ pip install -U git+https://github.com/MarshalX/atproto.git
 
 ### Quick start
 
-First of all, you need to create the instance of the XRPC Client. To do so you have 2 major options: asynchronous, and synchronous. The dereference only in import and how you call the methods. If you are not familiar with async use sync instead.
+First of all, you need to create the instance of the XRPC Client. To do so you have 2 major options: asynchronous, and synchronous. The difference only in import and how you call the methods. If you are not familiar with async use sync instead.
 
 For sync:
 ```python

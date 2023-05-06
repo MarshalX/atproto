@@ -113,4 +113,4 @@ favicons = [
 # OpenGraph
 ogp_site_url = 'https://atproto.rtfd.io/'
 # Social preview of GitHub Repo. I guess it's lifetime link until edit/delete action,
-ogp_image = 'https://repository-images.githubusercontent.com/TODO'
+ogp_image = 'https://repository-images.githubusercontent.com/569485568/9d743322-10a2-4290-9a05-a88348cce2b6'
