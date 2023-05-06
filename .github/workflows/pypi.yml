@@ -1,0 +1,40 @@
+name: Build and upload package to PyPI
+
+on:
+  push:
+    branches:
+      - pypi
+  release:
+    types: [created]
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository.
+        uses: actions/checkout@v2
+
+      - name: Setup Python.
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Setup Poetry.
+        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python
+
+      - name: Add Poetry to PATH.
+        run: echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies.
+        run: poetry install
+
+      - name: Publish a Python distribution to PyPI.
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          pip install twine
+          poetry build
+          # TODO publish using poetry
+          twine upload dist/*
