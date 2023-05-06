@@ -23,7 +23,7 @@
 
 ## The AT Protocol SDK
 
-> ⚠️ Under construction. The SDK was built from scratch for 40 hours. Somewhere I speedran. I have a list of things that will break backward computability. Until the 1.0.0 release, I am not going to care about it. 
+> ⚠️ Under construction. The SDK was built from scratch for 40 hours. Somewhere I speedran. I have a list of things that will break backward compatibility. Until the 1.0.0 release, I am not going to care about it. 
 
 Code snippet:
 ```python
@@ -269,7 +269,7 @@ with open('cat.jpg', 'rb') as f:
 
 I hope you are not scared. May the Force be with you. Good luck!
 
-### TODO
+### Future changes
 
 Things that a want to do soon:
 - Use came_case names of attributes in all models. Will break backward compatibility
@@ -279,7 +279,7 @@ Things that a want to do soon:
 
 ### Change log
 
-The full change log is available in [CHANGES.md](CHANGES.md).
+The full change log is available in [CHANGES.md](https://github.com/MarshalX/atproto/blob/main/CHANGES.md).
 
 ### Contributing
 
