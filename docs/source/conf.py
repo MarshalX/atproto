@@ -36,7 +36,14 @@ language = 'en'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx_copybutton', 'myst_parser']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
+    'sphinxext.opengraph',
+    'sphinx_copybutton',
+    'sphinx_favicon',
+    'myst_parser',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -65,6 +72,7 @@ html_search_language = 'en'
 
 html_title = 'The AT Protocol SDK'
 html_theme = 'furo'
+html_logo = '_static/img/logo.png'
 
 html_css_files = [
     'css/custom.css',
@@ -73,3 +81,36 @@ html_css_files = [
 html_theme_options = {
     'navigation_with_keys': True,
 }
+
+# Favicons
+favicons = [
+    {
+        'rel': 'icon',
+        'static-file': 'img/logo.png',
+        'type': 'image/png',
+    },
+    {
+        'rel': 'icon',
+        'sizes': '16x16',
+        'static-file': 'img/favicon-16x16.png',
+        'type': 'image/png',
+    },
+    {
+        'rel': 'icon',
+        'sizes': '32x32',
+        'static-file': 'img/favicon-32x32.png',
+        'type': 'image/png',
+    },
+    {
+        'rel': 'apple-touch-icon',
+        'sizes': '180x180',
+        'static-file': 'img/apple-touch-icon-180x180.png',
+        'type': 'image/png',
+    },
+]
+
+
+# OpenGraph
+ogp_site_url = 'https://atproto.rtfd.io/'
+# Social preview of GitHub Repo. I guess it's lifetime link until edit/delete action,
+ogp_image = 'https://repository-images.githubusercontent.com/TODO'
