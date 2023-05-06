@@ -2,7 +2,7 @@
     <a href="https://github.com/MarshalX/atproto">
         <picture>
             <source media="(prefers-color-scheme: dark)" srcset="https://github.com/MarshalX/atproto/raw/main/.github/images/logo_dark.png">
-            <img alt="Logo of atproto SDK for Python'" src="https://github.com/MarshalX/atproto/raw/main/.github/images/logo_white.png">
+            <img alt="Logo of atproto SDK for Python by Midjourney'" src="https://github.com/MarshalX/atproto/raw/main/.github/images/logo_white.png">
         </picture>
     </a>
     <br>
