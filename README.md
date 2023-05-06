@@ -89,6 +89,54 @@ pip3 install -U atproto
 pip install -U git+https://github.com/MarshalX/atproto.git
 ```
 
+### Quick start
+
+First of all, you need to create the instance of the XRPC Client. To do so you have 2 major options: asynchronous, and synchronous. The dereference only in import and how you call the methods. If you are not familiar with async use sync instead.
+
+For sync:
+```python
+from atproto import Client
+
+client = Client()
+# by default, it uses the server of bsky.app. To change this behaviour pass the base api URL to constructor
+# Client('https://my.awesome.server/xrpc')
+```
+
+Fro async:
+```python
+from atproto import AsyncClient
+
+client = AsyncClient()
+# by default, it uses the server of bsky.app. To change this behaviour pass the base api URL to constructor
+# AsyncClient('https://my.awesome.server/xrpc')
+```
+
+In the snippets below only the sync version will be presented.
+
+Right after the creation of the Client instance you probably want to access the full API and perform actions by profile. To achieve this you should log in to the network using your handle and password. The password could be an app-specific one.
+
+```python
+from atproto import Client
+
+client = Client()
+client.login('my-username', 'my-password')
+```
+
+You are awesome! Now you feel to pick any high-level method that you want and perform it!
+
+Code to send post:
+```python
+from atproto import Client
+
+client = Client()
+client.login('my-username', 'my-password')
+client.send_post(text='Hello World!')
+```
+
+Useful links to continue:
+- [List of all methods with documentation](https://atproto.readthedocs.io/en/latest/xrpc_clients/client.html).
+- [Examples of using the methods](https://github.com/MarshalX/atproto/tree/main/examples).
+
 ### Documentation
 
 The documentation is live at [readthedocs.io](https://atproto.rtfd.io/).
@@ -100,6 +148,9 @@ You can get help in several ways:
 - Ask questions by [starting a discussion](https://github.com/MarshalX/atproto/discussions/new).
 - Ask questions in [Discord server](https://discord.gg/ZDMSm3UGPN).
 
+### Advanced usage
+
+TODO
 
 ### Change log
 
