@@ -1,4 +1,4 @@
-from atproto import Client, AtUri
+from atproto import AtUri, Client
 
 
 def main():

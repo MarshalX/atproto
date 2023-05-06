@@ -7,7 +7,7 @@
 
 from dataclasses import dataclass
 
-from xrpc_client.models import base
+from atproto.xrpc_client.models import base
 
 
 @dataclass

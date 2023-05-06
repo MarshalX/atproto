@@ -1,6 +1,6 @@
 from typing import Dict, List, NamedTuple, Union
 
-from lexicon.models import (
+from atproto.lexicon.models import (
     LexDefinition,
     LexDefinitionType,
     LexiconDoc,
@@ -8,8 +8,8 @@ from lexicon.models import (
     LexXrpcProcedure,
     LexXrpcQuery,
 )
-from lexicon.parser import lexicon_parse_dir
-from nsid import NSID
+from atproto.lexicon.parser import lexicon_parse_dir
+from atproto.nsid import NSID
 
 _VALID_LEX_DEF_TYPES = {LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, LexDefinitionType.RECORD}
 _VALID_LEX_DEF_TYPE = Union[LexXrpcProcedure, LexXrpcQuery, LexRecord]

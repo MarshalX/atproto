@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Optional, Union
 
-from xrpc_client import models
-from xrpc_client.client.raw import ClientRaw
+from atproto.xrpc_client import models
+from atproto.xrpc_client.client.raw import ClientRaw
 
 
 class Client(ClientRaw):

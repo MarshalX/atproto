@@ -7,8 +7,8 @@
 from datetime import datetime
 from typing import Optional, Union
 
-from xrpc_client import models
-from xrpc_client.client.async_raw import AsyncClientRaw
+from atproto.xrpc_client import models
+from atproto.xrpc_client.client.async_raw import AsyncClientRaw
 
 
 class AsyncClient(AsyncClientRaw):

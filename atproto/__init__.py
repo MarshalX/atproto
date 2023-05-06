@@ -1,11 +1,11 @@
-from cid import CID
-from nsid import NSID
-from uri import AtUri
-from xrpc_client import AsyncClient, Client, models
+from .cid import CID
+from .nsid import NSID
+from .uri import AtUri
+from .xrpc_client import models
+from .xrpc_client.client.async_client import AsyncClient
+from .xrpc_client.client.client import Client
 
-__version__ = '0.0.1'
 __all__ = [
-    '__version__',
     'AsyncClient',
     'Client',
     'models',

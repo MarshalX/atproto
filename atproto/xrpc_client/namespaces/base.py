@@ -1,13 +1,14 @@
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from xrpc_client.test import ClientRaw
+    from atproto.xrpc_client.client.async_raw import AsyncClientRaw
+    from atproto.xrpc_client.client.raw import ClientRaw
 
 
 @dataclass
 class NamespaceBase:
-    _client: 'ClientRaw'
+    _client: Union['ClientRaw', 'AsyncClientRaw']
 
 
 @dataclass

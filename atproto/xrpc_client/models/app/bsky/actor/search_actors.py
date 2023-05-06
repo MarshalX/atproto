@@ -8,8 +8,8 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
-from xrpc_client import models
-from xrpc_client.models import base
+from atproto.xrpc_client import models
+from atproto.xrpc_client.models import base
 
 
 @dataclass

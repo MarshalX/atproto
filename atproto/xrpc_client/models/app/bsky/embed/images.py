@@ -8,9 +8,9 @@
 from dataclasses import dataclass
 from typing import List
 
-from xrpc_client import models
-from xrpc_client.models import base
-from xrpc_client.models.blob_ref import BlobRef
+from atproto.xrpc_client import models
+from atproto.xrpc_client.models import base
+from atproto.xrpc_client.models.blob_ref import BlobRef
 
 
 @dataclass

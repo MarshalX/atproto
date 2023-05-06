@@ -1,18 +1,21 @@
 import dataclasses
 import json
-from typing import Any, Optional, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Optional, Type, TypeVar, Union
 
-from cid import CID
 from dacite import Config, exceptions, from_dict
-from exceptions import (
+
+from atproto.cid import CID
+from atproto.exceptions import (
     MissingValueError,
     ModelError,
     ModelFieldError,
     UnexpectedFieldError,
     WrongTypeError,
 )
-from xrpc_client.models.blob_ref import BlobRef
-from xrpc_client.request import Response
+from atproto.xrpc_client.models.blob_ref import BlobRef
+
+if TYPE_CHECKING:
+    from atproto.xrpc_client.request import Response
 
 M = TypeVar('M')
 
@@ -48,7 +51,7 @@ def get_or_create_model(model_data: Union[dict], model: Type[M]) -> Optional[M]:
         raise ModelError(str(e))
 
 
-def get_response_model(response: Response, model: Type[M]) -> Optional[M]:
+def get_response_model(response: 'Response', model: Type[M]) -> Optional[M]:
     if model is bool:
         # Could not be False? Because the exception with errors will be raised from the server
         return response.success

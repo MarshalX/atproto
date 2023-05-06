@@ -9,8 +9,9 @@ from dataclasses import dataclass
 from typing import Any, List, Optional, Union
 
 from typing_extensions import Literal
-from xrpc_client import models
-from xrpc_client.models import base
+
+from atproto.xrpc_client import models
+from atproto.xrpc_client.models import base
 
 
 @dataclass

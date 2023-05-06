@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 from typing import List, Tuple
 
-from nsid import NSID
+from atproto.nsid import NSID
 
 DISCLAIMER = [
     '# THIS IS THE AUTO-GENERATED CODE. DON\'T EDIT IT BY HANDS!',

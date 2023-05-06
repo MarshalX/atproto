@@ -3,7 +3,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Tuple, Union
 
-from codegen import (
+from atproto.codegen import (
     DISCLAIMER,
     INPUT_MODEL,
     OUTPUT_MODEL,
@@ -13,12 +13,12 @@ from codegen import (
     format_code,
     gen_description_by_camel_case_name,
 )
-from codegen import get_code_intent as _
-from codegen import get_file_path_parts, get_import_path, join_code, write_code
-from codegen.models import builder
-from exceptions import InvalidNsidError
-from lexicon import models
-from nsid import NSID
+from atproto.codegen import get_code_intent as _
+from atproto.codegen import get_file_path_parts, get_import_path, join_code, write_code
+from atproto.codegen.models import builder
+from atproto.exceptions import InvalidNsidError
+from atproto.lexicon import models
+from atproto.nsid import NSID
 
 _MODELS_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('xrpc_client', 'models')
 
@@ -56,9 +56,9 @@ def _get_model_imports() -> str:
         'from typing import TYPE_CHECKING, Any, List, Optional, Type, Union',
         '',
         'from typing_extensions import Literal',
-        'from xrpc_client import models',
-        'from xrpc_client.models import base',
-        'from xrpc_client.models.blob_ref import BlobRef',
+        'from atproto.xrpc_client import models',
+        'from atproto.xrpc_client.models import base',
+        'from atproto.xrpc_client.models.blob_ref import BlobRef',
         '',
         'from atproto import CID',
         '',
@@ -437,7 +437,7 @@ def _generate_init_files(root_package_path: Path) -> None:
             import_parts = root.parts[root.parts.index('xrpc_client') :]
             from_import = '.'.join(import_parts)
 
-            import_lines.append(f'from {from_import} import {file_name[:-3]}')
+            import_lines.append(f'from atproto.{from_import} import {file_name[:-3]}')
 
         if root.name == 'models':
             # FIXME skip for now. should be generated too
@@ -495,7 +495,7 @@ def _generate_import_aliases(root_package_path: Path):
             nsid_parts = list(root.parts[root.parts.index('models') + 1 :]) + file[:-3].split('_')
             alias_name = ''.join([p.capitalize() for p in nsid_parts])
 
-            import_lines.append(f'from {from_import} import {file[:-3]} as {alias_name}')
+            import_lines.append(f'from atproto.{from_import} import {file[:-3]} as {alias_name}')
 
     write_code(_MODELS_OUTPUT_DIR.joinpath('__init__.py'), join_code(import_lines))
 

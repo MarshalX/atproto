@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from codegen import DISCLAIMER, format_code, write_code
+from atproto.codegen import DISCLAIMER, format_code, write_code
 
 _CLIENT_DIR = Path(__file__).parent.parent.parent.joinpath('xrpc_client', 'client')
 

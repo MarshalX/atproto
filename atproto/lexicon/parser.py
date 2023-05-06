@@ -5,12 +5,13 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 import dacite
-from exceptions import (
+
+from atproto.exceptions import (
     LexiconParsingError,
     UnknownDefinitionTypeError,
     UnknownPrimitiveTypeError,
 )
-from lexicon import models
+from atproto.lexicon import models
 
 _DEBUG = os.environ.get('DEBUG', '0') == '1'
 

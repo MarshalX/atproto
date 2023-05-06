@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass, field
 from typing import List
 
-from exceptions import InvalidNsidError
+from atproto.exceptions import InvalidNsidError
 
 _NSID_DELIM = '.'
 _NSID_NAMESPACE = '*'

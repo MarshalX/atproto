@@ -3,7 +3,7 @@ import urllib.parse as urlparse
 from typing import Any, List, Tuple
 from urllib.parse import urlencode
 
-from exceptions import InvalidAtUriError
+from atproto.exceptions import InvalidAtUriError
 
 # ref: https://github.com/bluesky-social/atproto/blob/8c19ce991a766fd9cff5023160853ab1cb106f21/packages/uri/src/index.ts#LL5C38-L5C38
 _ATP_URI_REGEX = r'^(at:\/\/)?((?:did:[a-z0-9:%-]+)|(?:[a-z][a-z0-9.:-]*))(\/[^?#\s]*)?(\?[^#\s]+)?(#[^\s]+)?$'

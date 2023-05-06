@@ -5,17 +5,17 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from xrpc_client import models
-from xrpc_client.models.utils import get_or_create_model, get_response_model
-from xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase
+from atproto.xrpc_client import models
+from atproto.xrpc_client.models.utils import get_or_create_model, get_response_model
+from atproto.xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase
 
 
 @dataclass
 class ComNamespace(NamespaceBase):
-    atproto: 'AtprotoNamespace' = DefaultNamespace()
+    atproto: 'AtprotoNamespace' = field(default_factory=DefaultNamespace)
 
     def __post_init__(self):
         self.atproto = AtprotoNamespace(self._client)
@@ -23,13 +23,13 @@ class ComNamespace(NamespaceBase):
 
 @dataclass
 class AtprotoNamespace(NamespaceBase):
-    admin: 'AdminNamespace' = DefaultNamespace()
-    identity: 'IdentityNamespace' = DefaultNamespace()
-    label: 'LabelNamespace' = DefaultNamespace()
-    moderation: 'ModerationNamespace' = DefaultNamespace()
-    repo: 'RepoNamespace' = DefaultNamespace()
-    server: 'ServerNamespace' = DefaultNamespace()
-    sync: 'SyncNamespace' = DefaultNamespace()
+    admin: 'AdminNamespace' = field(default_factory=DefaultNamespace)
+    identity: 'IdentityNamespace' = field(default_factory=DefaultNamespace)
+    label: 'LabelNamespace' = field(default_factory=DefaultNamespace)
+    moderation: 'ModerationNamespace' = field(default_factory=DefaultNamespace)
+    repo: 'RepoNamespace' = field(default_factory=DefaultNamespace)
+    server: 'ServerNamespace' = field(default_factory=DefaultNamespace)
+    sync: 'SyncNamespace' = field(default_factory=DefaultNamespace)
 
     def __post_init__(self):
         self.admin = AdminNamespace(self._client)
@@ -1223,7 +1223,7 @@ class LabelNamespace(NamespaceBase):
 
 @dataclass
 class AppNamespace(NamespaceBase):
-    bsky: 'BskyNamespace' = DefaultNamespace()
+    bsky: 'BskyNamespace' = field(default_factory=DefaultNamespace)
 
     def __post_init__(self):
         self.bsky = BskyNamespace(self._client)
@@ -1231,11 +1231,11 @@ class AppNamespace(NamespaceBase):
 
 @dataclass
 class BskyNamespace(NamespaceBase):
-    actor: 'ActorNamespace' = DefaultNamespace()
-    feed: 'FeedNamespace' = DefaultNamespace()
-    graph: 'GraphNamespace' = DefaultNamespace()
-    notification: 'NotificationNamespace' = DefaultNamespace()
-    unspecced: 'UnspeccedNamespace' = DefaultNamespace()
+    actor: 'ActorNamespace' = field(default_factory=DefaultNamespace)
+    feed: 'FeedNamespace' = field(default_factory=DefaultNamespace)
+    graph: 'GraphNamespace' = field(default_factory=DefaultNamespace)
+    notification: 'NotificationNamespace' = field(default_factory=DefaultNamespace)
+    unspecced: 'UnspeccedNamespace' = field(default_factory=DefaultNamespace)
 
     def __post_init__(self):
         self.actor = ActorNamespace(self._client)

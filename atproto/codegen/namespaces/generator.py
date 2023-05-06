@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List, Set, Union
 
-from codegen import (
+from atproto.codegen import (
     DISCLAIMER,
     INPUT_MODEL,
     OUTPUT_MODEL,
@@ -10,17 +10,22 @@ from codegen import (
     format_code,
     gen_description_by_camel_case_name,
 )
-from codegen import get_code_intent as _
-from codegen import (
+from atproto.codegen import get_code_intent as _
+from atproto.codegen import (
     get_import_path,
     get_sync_async_keywords,
     join_code,
     sort_dict_by_key,
     write_code,
 )
-from codegen.namespaces.builder import MethodInfo, RecordInfo, build_namespaces
-from lexicon.models import LexDefinitionType, LexObject, LexRef, LexXrpcProcedure
-from nsid import NSID
+from atproto.codegen.namespaces.builder import MethodInfo, RecordInfo, build_namespaces
+from atproto.lexicon.models import (
+    LexDefinitionType,
+    LexObject,
+    LexRef,
+    LexXrpcProcedure,
+)
+from atproto.nsid import NSID
 
 _NAMESPACES_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('xrpc_client', 'namespaces')
 _NAMESPACES_CLIENT_FILE_PATH = _NAMESPACES_OUTPUT_DIR.joinpath('client', 'raw.py')
@@ -43,12 +48,12 @@ def get_record_name(path_part: str) -> str:
 def _get_namespace_imports() -> str:
     lines = [
         DISCLAIMER,
-        'from dataclasses import dataclass',
+        'from dataclasses import dataclass, field',
         'from typing import Optional, Union',
         '',
-        'from xrpc_client import models',
-        'from xrpc_client.models.utils import get_or_create_model, get_response_model',
-        'from xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase',
+        'from atproto.xrpc_client import models',
+        'from atproto.xrpc_client.models.utils import get_or_create_model, get_response_model',
+        'from atproto.xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase',
     ]
 
     return join_code(lines)
@@ -65,7 +70,9 @@ def _get_sub_namespaces_block(sub_namespaces: dict) -> str:
 
     sub_namespaces = sort_dict_by_key(sub_namespaces)
     for sub_namespace in sub_namespaces.keys():
-        lines.append(f"{_(1)}{sub_namespace}: '{get_namespace_name(sub_namespace)}' = DefaultNamespace()")
+        lines.append(
+            f"{_(1)}{sub_namespace}: '{get_namespace_name(sub_namespace)}' = field(default_factory=DefaultNamespace)"
+        )
 
     return join_code(lines)
 
