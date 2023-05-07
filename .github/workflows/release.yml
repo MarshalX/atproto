@@ -1,19 +1,18 @@
-name: Create Release
+name: Create Release from the version tag
 
 on:
     push:
         tags:
-            - v*
+            - "v*.*.*"
 
 jobs:
     build:
-        if: github.event.base_ref == 'refs/heads/main'
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout
+            - name: Checkout repository.
               uses: actions/checkout@v3
 
-            - name: Release
+            - name: Create Release.
               uses: softprops/action-gh-release@v1
               with:
                   generate_release_notes: true
