@@ -3,7 +3,6 @@ from datetime import datetime
 
 from atproto import AsyncClient
 
-
 # how often we should check for new notifications
 FETCH_NOTIFICATIONS_DELAY_SEC = 3.0
 
