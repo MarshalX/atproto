@@ -154,8 +154,8 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
-        # TODO(MarshalX): it's record. think about could we add useful typehint
-        return _get_optional_typehint('Any', optional=optional)
+        # TODO(MarshalX): some of "unknown" types are well known...
+        return _get_optional_typehint(f"'base.RecordModelBase'", optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
     if type_hint:
@@ -400,6 +400,28 @@ def _generate_record_models(lex_db: builder.LexDB) -> None:
                 save_code_part(nsid, _generate_def_model(nsid, def_name, def_record.record, ModelType.RECORD))
 
 
+def _generate_record_type_database(lex_db: builder.LexDB) -> None:
+    lines = ['from atproto.xrpc_client import models', 'RECORD_TYPE_TO_MODEL_CLASS = {']
+
+    for nsid, defs in lex_db.items():
+        _save_code_import_if_not_exist(nsid)
+
+        for def_name, def_record in defs.items():
+            # for now there are records only in under "main" definition name.
+            # need to rework a bit if this behaviour will be changed
+            if isinstance(def_record, models.LexRecord):
+                class_name = get_def_model_name(def_name)
+                record_type = str(nsid)
+
+                path_to_class = f'models.{get_import_path(nsid)}.{class_name}'
+
+                lines.append(f"'{record_type}': {path_to_class},")
+
+    lines.append('}')
+
+    write_code(_MODELS_OUTPUT_DIR.joinpath('type_conversion.py'), join_code(lines))
+
+
 def _generate_ref_models(lex_db: builder.LexDB) -> None:
     for nsid, defs in lex_db.items():
         definition = defs['main']
@@ -505,7 +527,10 @@ def generate_models():
     _generate_data_models(builder.build_data_models())
     _generate_response_models(builder.build_response_models())
     _generate_def_models(builder.build_def_models())
+
     _generate_record_models(builder.build_record_models())
+    _generate_record_type_database(builder.build_record_models())
+
     # refs should be generated at the end!
     _generate_ref_models(builder.build_refs_models())
 

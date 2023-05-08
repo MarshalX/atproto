@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -48,7 +48,7 @@ class Create(base.ModelBase):
     """
 
     collection: str
-    value: Any
+    value: 'base.RecordModelBase'
     rkey: Optional[str] = None
 
 
@@ -65,7 +65,7 @@ class Update(base.ModelBase):
 
     collection: str
     rkey: str
-    value: Any
+    value: 'base.RecordModelBase'
 
 
 @dataclass

@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Optional
 
 from atproto.xrpc_client.models import base
 
@@ -27,7 +27,7 @@ class Data(base.DataModelBase):
     """
 
     collection: str
-    record: Any
+    record: 'base.RecordModelBase'
     repo: str
     rkey: str
     swapCommit: Optional[str] = None

@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Any, List, Optional
+from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -63,4 +63,4 @@ class Record(base.ModelBase):
 
     cid: str
     uri: str
-    value: Any
+    value: 'base.RecordModelBase'

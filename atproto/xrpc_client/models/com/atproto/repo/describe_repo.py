@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Any, List
+from typing import List
 
 from atproto.xrpc_client.models import base
 
@@ -38,6 +38,6 @@ class Response(base.ResponseModelBase):
 
     collections: List[str]
     did: str
-    didDoc: Any
+    didDoc: 'base.RecordModelBase'
     handle: str
     handleIsCorrect: bool

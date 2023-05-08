@@ -3,6 +3,7 @@ import json
 from typing import TYPE_CHECKING, Any, Optional, Type, TypeVar, Union
 
 from dacite import Config, exceptions, from_dict
+from xrpc_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
 
 from atproto.cid import CID
 from atproto.exceptions import (
@@ -12,6 +13,7 @@ from atproto.exceptions import (
     UnexpectedFieldError,
     WrongTypeError,
 )
+from atproto.xrpc_client.models.base import RecordModelBase
 from atproto.xrpc_client.models.blob_ref import BlobRef
 
 if TYPE_CHECKING:
@@ -19,9 +21,16 @@ if TYPE_CHECKING:
 
 M = TypeVar('M')
 
+
+def _record_model_type_hook(data: dict) -> RecordModelBase:
+    record_type = data.pop('$type')
+    return get_or_create_model(data, RECORD_TYPE_TO_MODEL_CLASS[record_type])
+
+
 _TYPE_HOOKS = {
     BlobRef: lambda ref: BlobRef.from_dict(ref),
     CID: lambda ref: CID.decode(ref),
+    RecordModelBase: _record_model_type_hook,
 }
 _DACITE_CONFIG = Config(type_hooks=_TYPE_HOOKS)
 

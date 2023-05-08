@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -34,7 +34,7 @@ class PostView(base.ModelBase):
     author: 'models.AppBskyActorDefs.ProfileViewBasic'
     cid: str
     indexedAt: str
-    record: Any
+    record: 'base.RecordModelBase'
     uri: str
     embed: Optional[
         Union[

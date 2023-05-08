@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Optional
 
 from atproto.xrpc_client.models import base
 
@@ -41,5 +41,5 @@ class Response(base.ResponseModelBase):
     """
 
     uri: str
-    value: Any
+    value: 'base.RecordModelBase'
     cid: Optional[str] = None

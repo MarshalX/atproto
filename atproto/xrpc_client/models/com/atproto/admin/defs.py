@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
 
 from typing_extensions import Literal
 
@@ -186,7 +186,7 @@ class RepoView(base.ModelBase):
     handle: str
     indexedAt: str
     moderation: 'models.ComAtprotoAdminDefs.Moderation'
-    relatedRecords: List[Any]
+    relatedRecords: List['base.RecordModelBase']
     email: Optional[str] = None
     invitedBy: Optional['models.ComAtprotoServerDefs.InviteCode'] = None
 
@@ -212,7 +212,7 @@ class RepoViewDetail(base.ModelBase):
     handle: str
     indexedAt: str
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'
-    relatedRecords: List[Any]
+    relatedRecords: List['base.RecordModelBase']
     email: Optional[str] = None
     invitedBy: Optional['models.ComAtprotoServerDefs.InviteCode'] = None
     invites: Optional[List['models.ComAtprotoServerDefs.InviteCode']] = None
@@ -252,7 +252,7 @@ class RecordView(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.Moderation'
     repo: 'models.ComAtprotoAdminDefs.RepoView'
     uri: str
-    value: Any
+    value: 'base.RecordModelBase'
 
 
 @dataclass
@@ -277,7 +277,7 @@ class RecordViewDetail(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'
     repo: 'models.ComAtprotoAdminDefs.RepoView'
     uri: str
-    value: Any
+    value: 'base.RecordModelBase'
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
 
 
