@@ -53,7 +53,7 @@ def _get_model_imports() -> str:
     # TODO(MarshalX): isort can't delete unused imports. mb add ruff
     lines = [
         'from dataclasses import dataclass',
-        'from typing import TYPE_CHECKING, Any, List, Optional, Type, Union',
+        'from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union',
         '',
         'from typing_extensions import Literal',
         'from atproto.xrpc_client import models',
@@ -146,6 +146,13 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
         import_path, _ = _resolve_nsid_ref(nsid, ref)
         def_names.append(import_path)
 
+    # unbelievable but it's true. If schema doesn't describe the right type in Union
+    # we should fall back to the plain data
+    # maybe it's for the records that have custom fields... idk
+    # ref: https://github.com/bluesky-social/atproto/blob/b01e47b61730d05a780f7a42667b91ccaa192e8e/packages/lex-cli/src/codegen/lex-gen.ts#L325
+    # grep by "{$type: string; [k: string]: unknown}" string
+    def_names.append('Dict[str, Any]')
+
     def_names = ', '.join([f"'{name}'" for name in def_names])
     return _get_optional_typehint(f"Union[{def_names}]", optional=optional)
 
@@ -154,8 +161,8 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
-        # TODO(MarshalX): it's record. think about could we add useful typehint
-        return _get_optional_typehint('Any', optional=optional)
+        # TODO(MarshalX): some of "unknown" types are well known...
+        return _get_optional_typehint(f"'base.RecordModelBase'", optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
     if type_hint:
@@ -400,6 +407,28 @@ def _generate_record_models(lex_db: builder.LexDB) -> None:
                 save_code_part(nsid, _generate_def_model(nsid, def_name, def_record.record, ModelType.RECORD))
 
 
+def _generate_record_type_database(lex_db: builder.LexDB) -> None:
+    lines = ['from atproto.xrpc_client import models', 'RECORD_TYPE_TO_MODEL_CLASS = {']
+
+    for nsid, defs in lex_db.items():
+        _save_code_import_if_not_exist(nsid)
+
+        for def_name, def_record in defs.items():
+            # for now there are records only in under "main" definition name.
+            # need to rework a bit if this behaviour will be changed
+            if isinstance(def_record, models.LexRecord):
+                class_name = get_def_model_name(def_name)
+                record_type = str(nsid)
+
+                path_to_class = f'models.{get_import_path(nsid)}.{class_name}'
+
+                lines.append(f"'{record_type}': {path_to_class},")
+
+    lines.append('}')
+
+    write_code(_MODELS_OUTPUT_DIR.joinpath('type_conversion.py'), join_code(lines))
+
+
 def _generate_ref_models(lex_db: builder.LexDB) -> None:
     for nsid, defs in lex_db.items():
         definition = defs['main']
@@ -505,7 +534,10 @@ def generate_models():
     _generate_data_models(builder.build_data_models())
     _generate_response_models(builder.build_response_models())
     _generate_def_models(builder.build_def_models())
+
     _generate_record_models(builder.build_record_models())
+    _generate_record_type_database(builder.build_record_models())
+
     # refs should be generated at the end!
     _generate_ref_models(builder.build_refs_models())
 

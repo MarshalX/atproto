@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Any, Dict, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -39,4 +39,5 @@ class Response(base.ResponseModelBase):
         'models.AppBskyFeedDefs.ThreadViewPost',
         'models.AppBskyFeedDefs.NotFoundPost',
         'models.AppBskyFeedDefs.BlockedPost',
+        'Dict[str, Any]',
     ]

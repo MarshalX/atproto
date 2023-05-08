@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Any, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -34,7 +34,7 @@ class PostView(base.ModelBase):
     author: 'models.AppBskyActorDefs.ProfileViewBasic'
     cid: str
     indexedAt: str
-    record: Any
+    record: 'base.RecordModelBase'
     uri: str
     embed: Optional[
         Union[
@@ -42,6 +42,7 @@ class PostView(base.ModelBase):
             'models.AppBskyEmbedExternal.View',
             'models.AppBskyEmbedRecord.View',
             'models.AppBskyEmbedRecordWithMedia.View',
+            'Dict[str, Any]',
         ]
     ] = None
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
@@ -77,7 +78,7 @@ class FeedViewPost(base.ModelBase):
     """
 
     post: 'models.AppBskyFeedDefs.PostView'
-    reason: Optional[Union['models.AppBskyFeedDefs.ReasonRepost']] = None
+    reason: Optional[Union['models.AppBskyFeedDefs.ReasonRepost', 'Dict[str, Any]']] = None
     reply: Optional['models.AppBskyFeedDefs.ReplyRef'] = None
 
 
@@ -126,6 +127,7 @@ class ThreadViewPost(base.ModelBase):
             'models.AppBskyFeedDefs.ThreadViewPost',
             'models.AppBskyFeedDefs.NotFoundPost',
             'models.AppBskyFeedDefs.BlockedPost',
+            'Dict[str, Any]',
         ]
     ] = None
     replies: Optional[
@@ -134,6 +136,7 @@ class ThreadViewPost(base.ModelBase):
                 'models.AppBskyFeedDefs.ThreadViewPost',
                 'models.AppBskyFeedDefs.NotFoundPost',
                 'models.AppBskyFeedDefs.BlockedPost',
+                'Dict[str, Any]',
             ]
         ]
     ] = None

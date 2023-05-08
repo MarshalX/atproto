@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Any, Dict, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -24,7 +24,7 @@ class Data(base.DataModelBase):
     """
 
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
-    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
+    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 'Dict[str, Any]']
     reason: Optional[str] = None
 
 
@@ -46,5 +46,5 @@ class Response(base.ResponseModelBase):
     id: int
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
     reportedBy: str
-    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
+    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 'Dict[str, Any]']
     reason: Optional[str] = None

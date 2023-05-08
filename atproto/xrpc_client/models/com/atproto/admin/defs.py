@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Any, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from typing_extensions import Literal
 
@@ -39,7 +39,7 @@ class ActionView(base.ModelBase):
     id: int
     reason: str
     resolvedReportIds: List[int]
-    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
+    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 'Dict[str, Any]']
     subjectBlobCids: List[str]
     createLabelVals: Optional[List[str]] = None
     negateLabelVals: Optional[List[str]] = None
@@ -71,7 +71,7 @@ class ActionViewDetail(base.ModelBase):
     id: int
     reason: str
     resolvedReports: List['models.ComAtprotoAdminDefs.ReportView']
-    subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView']
+    subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView', 'Dict[str, Any]']
     subjectBlobs: List['models.ComAtprotoAdminDefs.BlobView']
     createLabelVals: Optional[List[str]] = None
     negateLabelVals: Optional[List[str]] = None
@@ -139,7 +139,7 @@ class ReportView(base.ModelBase):
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
     reportedBy: str
     resolvedByActionIds: List[int]
-    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
+    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 'Dict[str, Any]']
     reason: Optional[str] = None
 
 
@@ -163,7 +163,7 @@ class ReportViewDetail(base.ModelBase):
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
     reportedBy: str
     resolvedByActions: List['models.ComAtprotoAdminDefs.ActionView']
-    subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView']
+    subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView', 'Dict[str, Any]']
     reason: Optional[str] = None
 
 
@@ -186,7 +186,7 @@ class RepoView(base.ModelBase):
     handle: str
     indexedAt: str
     moderation: 'models.ComAtprotoAdminDefs.Moderation'
-    relatedRecords: List[Any]
+    relatedRecords: List['base.RecordModelBase']
     email: Optional[str] = None
     invitedBy: Optional['models.ComAtprotoServerDefs.InviteCode'] = None
 
@@ -212,7 +212,7 @@ class RepoViewDetail(base.ModelBase):
     handle: str
     indexedAt: str
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'
-    relatedRecords: List[Any]
+    relatedRecords: List['base.RecordModelBase']
     email: Optional[str] = None
     invitedBy: Optional['models.ComAtprotoServerDefs.InviteCode'] = None
     invites: Optional[List['models.ComAtprotoServerDefs.InviteCode']] = None
@@ -252,7 +252,7 @@ class RecordView(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.Moderation'
     repo: 'models.ComAtprotoAdminDefs.RepoView'
     uri: str
-    value: Any
+    value: 'base.RecordModelBase'
 
 
 @dataclass
@@ -277,7 +277,7 @@ class RecordViewDetail(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'
     repo: 'models.ComAtprotoAdminDefs.RepoView'
     uri: str
-    value: Any
+    value: 'base.RecordModelBase'
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
 
 
@@ -328,7 +328,7 @@ class BlobView(base.ModelBase):
     mimeType: str
     size: int
     details: Optional[
-        Union['models.ComAtprotoAdminDefs.ImageDetails', 'models.ComAtprotoAdminDefs.VideoDetails']
+        Union['models.ComAtprotoAdminDefs.ImageDetails', 'models.ComAtprotoAdminDefs.VideoDetails', 'Dict[str, Any]']
     ] = None
     moderation: Optional['models.ComAtprotoAdminDefs.Moderation'] = None
 

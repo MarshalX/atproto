@@ -12,16 +12,25 @@ from atproto.exceptions import (
     UnexpectedFieldError,
     WrongTypeError,
 )
+from atproto.xrpc_client.models.base import RecordModelBase
 from atproto.xrpc_client.models.blob_ref import BlobRef
+from atproto.xrpc_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
 
 if TYPE_CHECKING:
     from atproto.xrpc_client.request import Response
 
 M = TypeVar('M')
 
+
+def _record_model_type_hook(data: dict) -> RecordModelBase:
+    record_type = data.pop('$type')
+    return get_or_create_model(data, RECORD_TYPE_TO_MODEL_CLASS[record_type])
+
+
 _TYPE_HOOKS = {
     BlobRef: lambda ref: BlobRef.from_dict(ref),
     CID: lambda ref: CID.decode(ref),
+    RecordModelBase: _record_model_type_hook,
 }
 _DACITE_CONFIG = Config(type_hooks=_TYPE_HOOKS)
 

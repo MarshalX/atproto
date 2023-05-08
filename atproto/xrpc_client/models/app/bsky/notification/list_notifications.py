@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Any, List, Optional
+from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -64,7 +64,7 @@ class Notification(base.ModelBase):
     indexedAt: str
     isRead: bool
     reason: str
-    record: Any
+    record: 'base.RecordModelBase'
     uri: str
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
     reasonSubject: Optional[str] = None
