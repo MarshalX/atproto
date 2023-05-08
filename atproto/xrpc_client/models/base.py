@@ -1,9 +1,15 @@
 from dataclasses import dataclass
 
+from atproto.exceptions import ModelFieldNotFoundError
+
 
 @dataclass
 class ModelBase:
-    pass
+    def __getitem__(self, item):
+        if hasattr(self, item):
+            return getattr(self, item)
+
+        raise ModelFieldNotFoundError(f"Can't find field '{item}' in the object of type {type(self)}.")
 
 
 @dataclass
