@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -30,6 +30,7 @@ class Data(base.DataModelBase):
             'models.ComAtprotoRepoApplyWrites.Create',
             'models.ComAtprotoRepoApplyWrites.Update',
             'models.ComAtprotoRepoApplyWrites.Delete',
+            'Dict[str, Any]',
         ]
     ]
     swapCommit: Optional[str] = None

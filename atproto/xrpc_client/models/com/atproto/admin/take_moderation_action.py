@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import List, Optional, Type, Union
+from typing import Any, Dict, List, Optional, Type, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -30,7 +30,7 @@ class Data(base.DataModelBase):
     action: str
     createdBy: str
     reason: str
-    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
+    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 'Dict[str, Any]']
     createLabelVals: Optional[List[str]] = None
     negateLabelVals: Optional[List[str]] = None
     subjectBlobCids: Optional[List[str]] = None

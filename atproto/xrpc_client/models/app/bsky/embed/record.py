@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -39,6 +39,7 @@ class View(base.ModelBase):
         'models.AppBskyEmbedRecord.ViewRecord',
         'models.AppBskyEmbedRecord.ViewNotFound',
         'models.AppBskyEmbedRecord.ViewBlocked',
+        'Dict[str, Any]',
     ]
 
 
@@ -69,6 +70,7 @@ class ViewRecord(base.ModelBase):
                 'models.AppBskyEmbedExternal.View',
                 'models.AppBskyEmbedRecord.View',
                 'models.AppBskyEmbedRecordWithMedia.View',
+                'Dict[str, Any]',
             ]
         ]
     ] = None

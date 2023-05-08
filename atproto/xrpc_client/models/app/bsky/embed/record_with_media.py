@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import Union
+from typing import Any, Dict, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -22,7 +22,7 @@ class Main(base.ModelBase):
         media: Media.
     """
 
-    media: Union['models.AppBskyEmbedImages.Main', 'models.AppBskyEmbedExternal.Main']
+    media: Union['models.AppBskyEmbedImages.Main', 'models.AppBskyEmbedExternal.Main', 'Dict[str, Any]']
     record: 'models.AppBskyEmbedRecord.Main'
 
     _type: str = 'app.bsky.embed.recordWithMedia'
@@ -38,5 +38,5 @@ class View(base.ModelBase):
         media: Media.
     """
 
-    media: Union['models.AppBskyEmbedImages.View', 'models.AppBskyEmbedExternal.View']
+    media: Union['models.AppBskyEmbedImages.View', 'models.AppBskyEmbedExternal.View', 'Dict[str, Any]']
     record: 'models.AppBskyEmbedRecord.View'

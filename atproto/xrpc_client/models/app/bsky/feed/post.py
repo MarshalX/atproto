@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -78,6 +78,7 @@ class Main(base.RecordModelBase):
             'models.AppBskyEmbedExternal.Main',
             'models.AppBskyEmbedRecord.Main',
             'models.AppBskyEmbedRecordWithMedia.Main',
+            'Dict[str, Any]',
         ]
     ] = None
     entities: Optional[List['models.AppBskyFeedPost.Entity']] = None

@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from typing_extensions import Literal
 
@@ -39,7 +39,7 @@ class ActionView(base.ModelBase):
     id: int
     reason: str
     resolvedReportIds: List[int]
-    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
+    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 'Dict[str, Any]']
     subjectBlobCids: List[str]
     createLabelVals: Optional[List[str]] = None
     negateLabelVals: Optional[List[str]] = None
@@ -71,7 +71,7 @@ class ActionViewDetail(base.ModelBase):
     id: int
     reason: str
     resolvedReports: List['models.ComAtprotoAdminDefs.ReportView']
-    subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView']
+    subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView', 'Dict[str, Any]']
     subjectBlobs: List['models.ComAtprotoAdminDefs.BlobView']
     createLabelVals: Optional[List[str]] = None
     negateLabelVals: Optional[List[str]] = None
@@ -139,7 +139,7 @@ class ReportView(base.ModelBase):
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
     reportedBy: str
     resolvedByActionIds: List[int]
-    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
+    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 'Dict[str, Any]']
     reason: Optional[str] = None
 
 
@@ -163,7 +163,7 @@ class ReportViewDetail(base.ModelBase):
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
     reportedBy: str
     resolvedByActions: List['models.ComAtprotoAdminDefs.ActionView']
-    subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView']
+    subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView', 'Dict[str, Any]']
     reason: Optional[str] = None
 
 
@@ -328,7 +328,7 @@ class BlobView(base.ModelBase):
     mimeType: str
     size: int
     details: Optional[
-        Union['models.ComAtprotoAdminDefs.ImageDetails', 'models.ComAtprotoAdminDefs.VideoDetails']
+        Union['models.ComAtprotoAdminDefs.ImageDetails', 'models.ComAtprotoAdminDefs.VideoDetails', 'Dict[str, Any]']
     ] = None
     moderation: Optional['models.ComAtprotoAdminDefs.Moderation'] = None
 

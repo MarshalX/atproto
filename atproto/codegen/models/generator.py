@@ -53,7 +53,7 @@ def _get_model_imports() -> str:
     # TODO(MarshalX): isort can't delete unused imports. mb add ruff
     lines = [
         'from dataclasses import dataclass',
-        'from typing import TYPE_CHECKING, Any, List, Optional, Type, Union',
+        'from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union',
         '',
         'from typing_extensions import Literal',
         'from atproto.xrpc_client import models',
@@ -145,6 +145,13 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     for ref in field_type_def.refs:
         import_path, _ = _resolve_nsid_ref(nsid, ref)
         def_names.append(import_path)
+
+    # unbelievable but it's true. If schema doesn't describe the right type in Union
+    # we should fall back to the plain data
+    # maybe it's for the records that have custom fields... idk
+    # ref: https://github.com/bluesky-social/atproto/blob/b01e47b61730d05a780f7a42667b91ccaa192e8e/packages/lex-cli/src/codegen/lex-gen.ts#L325
+    # grep by "{$type: string; [k: string]: unknown}" string
+    def_names.append('Dict[str, Any]')
 
     def_names = ', '.join([f"'{name}'" for name in def_names])
     return _get_optional_typehint(f"Union[{def_names}]", optional=optional)
