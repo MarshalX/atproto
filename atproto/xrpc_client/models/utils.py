@@ -3,7 +3,6 @@ import json
 from typing import TYPE_CHECKING, Any, Optional, Type, TypeVar, Union
 
 from dacite import Config, exceptions, from_dict
-from xrpc_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
 
 from atproto.cid import CID
 from atproto.exceptions import (
@@ -15,6 +14,7 @@ from atproto.exceptions import (
 )
 from atproto.xrpc_client.models.base import RecordModelBase
 from atproto.xrpc_client.models.blob_ref import BlobRef
+from atproto.xrpc_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
 
 if TYPE_CHECKING:
     from atproto.xrpc_client.request import Response
