@@ -10,6 +10,8 @@ on:
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
 
     steps:
       - name: Checkout repository.
@@ -29,12 +31,8 @@ jobs:
       - name: Install dependencies.
         run: poetry install
 
+      - name: Build package.
+        run: poetry build
+
       - name: Publish a Python distribution to PyPI.
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: |
-          pip install twine
-          poetry build
-          # TODO publish using poetry
-          twine upload dist/*
+        uses: pypa/gh-action-pypi-publish@release/v1
