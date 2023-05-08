@@ -10,12 +10,29 @@ logging.basicConfig(level=logging.INFO)
 # TODO(MarshalX): add record namespaces with 5 const methods? CRUDL
 
 
+def convert_uri_to_url():
+    client = Client()
+    client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+
+    at = AtUri.from_str('at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3juce2ym7dt2g')
+    path_type = None
+    if at.collection == 'app.bsky.feed.post':
+        path_type = 'post'
+    # add more collections here...
+
+    handle = client.bsky.actor.get_profile({'actor': at.hostname}).handle
+
+    web_app_url = f'https://staging.bsky.app/profile/{handle}/{path_type}/{at.rkey}'
+    print(web_app_url)
+    # https://staging.bsky.app/profile/test.marshal.dev/post/3juce2ym7dt2g
+
+
 def sync_main():
     client = Client()
-    # client = Client('http://localhost:8000')
-    profile = client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
-
-    print(profile)
+    client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+    search_result = client.bsky.actor.search_actors_typeahead({'term': 'marshal'})
+    for actor in search_result.actors:
+        print(actor.handle, actor.displayName)
 
     # with open('cat2.jpg', 'rb') as f:
     #     cat_data = f.read()
@@ -25,7 +42,7 @@ def sync_main():
     # resolve = client.com.atproto.identity.resolve_handle(models.ComAtprotoIdentityResolveHandle.Params(profile.handle))
     # assert resolve.did == profile.did
 
-    print(client.com.atproto.server.describe_server())
+    # print(client.com.atproto.server.describe_server())
 
     # post_ref = client.send_post('Test like-unlike')
     # print('post ref', post_ref)
@@ -57,6 +74,33 @@ async def main():
     # assert resolve.did == profile.did
 
 
+def test_strange_embed_images_type():
+    d = {
+        'text': 'Jack will save us from Elon I hope he doesn’t sell us out again @jack.bsky.social here’s to the future in the present moment #bluesky',
+        'embed': {
+            '$type': 'app.bsky.embed.images',
+            'images': [
+                {
+                    'alt': '',
+                    'image': {
+                        'cid': 'bafkreib66ejhcuiomfqusm52xriallilizk6uqppymyaz7dmz7yargpwhi',
+                        'mimeType': 'image/jpeg',
+                    },
+                }
+            ],
+        },
+        'entities': [
+            {'type': 'mention', 'index': {'end': 81, 'start': 64}, 'value': 'did:plc:6fktaamhhxdqb2ypum33kbkj'}
+        ],
+        'createdAt': '2023-03-26T15:36:13.302Z',
+    }
+    from atproto.xrpc_client.models.utils import get_or_create_model
+
+    m = get_or_create_model(d, models.AppBskyFeedPost.Main)
+    print(m)
+
+
 if __name__ == '__main__':
+    # test_strange_embed_images_type()
     sync_main()
     # asyncio.get_event_loop().run_until_complete(main())
