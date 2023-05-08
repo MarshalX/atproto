@@ -38,6 +38,10 @@ class WrongTypeError(ModelFieldError):
     ...
 
 
+class ModelFieldNotFoundError(ModelError):
+    ...
+
+
 class NetworkError(AtProtocolError):
     ...
 
