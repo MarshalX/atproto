@@ -25,6 +25,8 @@ class ReplyRef(base.ModelBase):
     parent: 'models.ComAtprotoRepoStrongRef.Main'
     root: 'models.ComAtprotoRepoStrongRef.Main'
 
+    _type: str = 'app.bsky.feed.post#replyRef'
+
 
 @dataclass
 class Entity(base.ModelBase):
@@ -41,6 +43,8 @@ class Entity(base.ModelBase):
     type: str
     value: str
 
+    _type: str = 'app.bsky.feed.post#entity'
+
 
 @dataclass
 class TextSlice(base.ModelBase):
@@ -54,6 +58,8 @@ class TextSlice(base.ModelBase):
 
     end: int
     start: int
+
+    _type: str = 'app.bsky.feed.post#textSlice'
 
 
 @dataclass

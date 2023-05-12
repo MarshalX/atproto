@@ -40,3 +40,5 @@ class Links(base.ModelBase):
 
     privacyPolicy: Optional[str] = None
     termsOfService: Optional[str] = None
+
+    _type: str = 'com.atproto.server.describeServer#links'

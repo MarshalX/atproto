@@ -52,6 +52,8 @@ class Create(base.ModelBase):
     value: 'base.RecordModelBase'
     rkey: Optional[str] = None
 
+    _type: str = 'com.atproto.repo.applyWrites#create'
+
 
 @dataclass
 class Update(base.ModelBase):
@@ -68,6 +70,8 @@ class Update(base.ModelBase):
     rkey: str
     value: 'base.RecordModelBase'
 
+    _type: str = 'com.atproto.repo.applyWrites#update'
+
 
 @dataclass
 class Delete(base.ModelBase):
@@ -81,3 +85,5 @@ class Delete(base.ModelBase):
 
     collection: str
     rkey: str
+
+    _type: str = 'com.atproto.repo.applyWrites#delete'

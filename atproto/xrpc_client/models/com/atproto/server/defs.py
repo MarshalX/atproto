@@ -35,6 +35,8 @@ class InviteCode(base.ModelBase):
     forAccount: str
     uses: List['models.ComAtprotoServerDefs.InviteCodeUse']
 
+    _type: str = 'com.atproto.server.defs#inviteCode'
+
 
 @dataclass
 class InviteCodeUse(base.ModelBase):
@@ -48,3 +50,5 @@ class InviteCodeUse(base.ModelBase):
 
     usedAt: str
     usedBy: str
+
+    _type: str = 'com.atproto.server.defs#inviteCodeUse'

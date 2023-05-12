@@ -33,6 +33,8 @@ class ProfileViewBasic(base.ModelBase):
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
     viewer: Optional['models.AppBskyActorDefs.ViewerState'] = None
 
+    _type: str = 'app.bsky.actor.defs#profileViewBasic'
+
 
 @dataclass
 class ProfileView(base.ModelBase):
@@ -58,6 +60,8 @@ class ProfileView(base.ModelBase):
     indexedAt: Optional[str] = None
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
     viewer: Optional['models.AppBskyActorDefs.ViewerState'] = None
+
+    _type: str = 'app.bsky.actor.defs#profileView'
 
 
 @dataclass
@@ -93,6 +97,8 @@ class ProfileViewDetailed(base.ModelBase):
     postsCount: Optional[int] = None
     viewer: Optional['models.AppBskyActorDefs.ViewerState'] = None
 
+    _type: str = 'app.bsky.actor.defs#profileViewDetailed'
+
 
 @dataclass
 class ViewerState(base.ModelBase):
@@ -112,3 +118,5 @@ class ViewerState(base.ModelBase):
     followedBy: Optional[str] = None
     following: Optional[str] = None
     muted: Optional[bool] = None
+
+    _type: str = 'app.bsky.actor.defs#viewerState'

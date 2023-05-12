@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "atproto"
-version = "0.0.3"
+version = "0.0.4"
 description = "The AT Protocol SDK"
 authors = ["Ilya (Marshal) <ilya@marshal.dev>"]
 license = "MIT"

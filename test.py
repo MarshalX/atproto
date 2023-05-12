@@ -30,9 +30,19 @@ def convert_uri_to_url():
 def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
-    search_result = client.bsky.actor.search_actors_typeahead({'term': 'marshal'})
-    for actor in search_result.actors:
-        print(actor.handle, actor.displayName)
+
+    # search_result = client.bsky.actor.search_actors_typeahead({'term': 'marshal'})
+    # for actor in search_result.actors:
+    #     print(actor.handle, actor.displayName)
+
+    # session = client.com.atproto.server.create_session({'identifier': 'my-handle', 'password': 'my-pass'})
+    # token = session.accessJwt
+    # refresh_token = session.refreshJwt
+    #
+    # refreshed_session = client.com.atproto.server.refresh_session(headers={'Authorization': f'Bearer {refresh_token}'})
+    # new_token = refreshed_session.accessJwt
+
+    # client.com.atproto.repo.get_record({'collection': 'app.bsky.feed.post', 'repo': 'arta.bsky.social'})
 
     # with open('cat2.jpg', 'rb') as f:
     #     cat_data = f.read()

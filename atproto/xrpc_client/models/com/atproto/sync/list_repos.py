@@ -52,3 +52,5 @@ class Repo(base.ModelBase):
 
     did: str
     head: str
+
+    _type: str = 'com.atproto.sync.listRepos#repo'

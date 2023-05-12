@@ -21,7 +21,9 @@ def main():
         post = feed_view.post.record
         author = feed_view.post.author
 
-        print(f'[{action} by {action_by}] Post author: {author.displayName}. Posted at {post.createdAt}. Post text: {post.text}')
+        print(
+            f'[{action} by {action_by}] Post author: {author.displayName}. Posted at {post.createdAt}. Post text: {post.text}'
+        )
 
 
 if __name__ == '__main__':

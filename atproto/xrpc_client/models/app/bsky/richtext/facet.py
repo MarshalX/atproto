@@ -39,6 +39,8 @@ class Mention(base.ModelBase):
 
     did: str
 
+    _type: str = 'app.bsky.richtext.facet#mention'
+
 
 @dataclass
 class Link(base.ModelBase):
@@ -50,6 +52,8 @@ class Link(base.ModelBase):
     """
 
     uri: str
+
+    _type: str = 'app.bsky.richtext.facet#link'
 
 
 @dataclass
@@ -64,3 +68,5 @@ class ByteSlice(base.ModelBase):
 
     byteEnd: int
     byteStart: int
+
+    _type: str = 'app.bsky.richtext.facet#byteSlice'
