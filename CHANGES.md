@@ -1,5 +1,14 @@
 # Change Log
 
+## Version 0.0.4
+
+**12.05.2023**
+
+* update changes for 0.0.3 by @MarshalX in https://github.com/MarshalX/atproto/pull/10
+* Update logo by @MarshalX in https://github.com/MarshalX/atproto/pull/11
+* add example with rich text; fix generation of system type field by @MarshalX in https://github.com/MarshalX/atproto/pull/13
+* fix sending of facets
+
 ## Version 0.0.3
 
 **08.05.2023**
