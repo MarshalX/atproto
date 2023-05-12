@@ -51,6 +51,8 @@ class PostView(base.ModelBase):
     repostCount: Optional[int] = None
     viewer: Optional['models.AppBskyFeedDefs.ViewerState'] = None
 
+    _type: str = 'app.bsky.feed.defs#postView'
+
 
 @dataclass
 class ViewerState(base.ModelBase):
@@ -64,6 +66,8 @@ class ViewerState(base.ModelBase):
 
     like: Optional[str] = None
     repost: Optional[str] = None
+
+    _type: str = 'app.bsky.feed.defs#viewerState'
 
 
 @dataclass
@@ -81,6 +85,8 @@ class FeedViewPost(base.ModelBase):
     reason: Optional[Union['models.AppBskyFeedDefs.ReasonRepost', 'Dict[str, Any]']] = None
     reply: Optional['models.AppBskyFeedDefs.ReplyRef'] = None
 
+    _type: str = 'app.bsky.feed.defs#feedViewPost'
+
 
 @dataclass
 class ReplyRef(base.ModelBase):
@@ -95,6 +101,8 @@ class ReplyRef(base.ModelBase):
     parent: 'models.AppBskyFeedDefs.PostView'
     root: 'models.AppBskyFeedDefs.PostView'
 
+    _type: str = 'app.bsky.feed.defs#replyRef'
+
 
 @dataclass
 class ReasonRepost(base.ModelBase):
@@ -108,6 +116,8 @@ class ReasonRepost(base.ModelBase):
 
     by: 'models.AppBskyActorDefs.ProfileViewBasic'
     indexedAt: str
+
+    _type: str = 'app.bsky.feed.defs#reasonRepost'
 
 
 @dataclass
@@ -141,6 +151,8 @@ class ThreadViewPost(base.ModelBase):
         ]
     ] = None
 
+    _type: str = 'app.bsky.feed.defs#threadViewPost'
+
 
 @dataclass
 class NotFoundPost(base.ModelBase):
@@ -155,6 +167,8 @@ class NotFoundPost(base.ModelBase):
     notFound: bool
     uri: str
 
+    _type: str = 'app.bsky.feed.defs#notFoundPost'
+
 
 @dataclass
 class BlockedPost(base.ModelBase):
@@ -168,3 +182,5 @@ class BlockedPost(base.ModelBase):
 
     blocked: bool
     uri: str
+
+    _type: str = 'app.bsky.feed.defs#blockedPost'

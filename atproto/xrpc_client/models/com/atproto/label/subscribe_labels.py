@@ -25,6 +25,8 @@ class Labels(base.ModelBase):
     labels: List['models.ComAtprotoLabelDefs.Label']
     seq: int
 
+    _type: str = 'com.atproto.label.subscribeLabels#labels'
+
 
 @dataclass
 class Info(base.ModelBase):
@@ -38,3 +40,5 @@ class Info(base.ModelBase):
 
     name: str
     message: Optional[str] = None
+
+    _type: str = 'com.atproto.label.subscribeLabels#info'

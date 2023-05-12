@@ -42,6 +42,8 @@ class View(base.ModelBase):
         'Dict[str, Any]',
     ]
 
+    _type: str = 'app.bsky.embed.record#view'
+
 
 @dataclass
 class ViewRecord(base.ModelBase):
@@ -76,6 +78,8 @@ class ViewRecord(base.ModelBase):
     ] = None
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
 
+    _type: str = 'app.bsky.embed.record#viewRecord'
+
 
 @dataclass
 class ViewNotFound(base.ModelBase):
@@ -88,6 +92,8 @@ class ViewNotFound(base.ModelBase):
 
     uri: str
 
+    _type: str = 'app.bsky.embed.record#viewNotFound'
+
 
 @dataclass
 class ViewBlocked(base.ModelBase):
@@ -99,3 +105,5 @@ class ViewBlocked(base.ModelBase):
     """
 
     uri: str
+
+    _type: str = 'app.bsky.embed.record#viewBlocked'

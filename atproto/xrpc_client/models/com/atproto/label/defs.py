@@ -31,3 +31,5 @@ class Label(base.ModelBase):
     val: str
     cid: Optional[str] = None
     neg: Optional[bool] = None
+
+    _type: str = 'com.atproto.label.defs#label'

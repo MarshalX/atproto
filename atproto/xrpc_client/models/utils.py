@@ -48,6 +48,7 @@ def get_or_create_model(model_data: Union[dict], model: Type[M]) -> Optional[M]:
 
         return from_dict(model, model_data, config=_DACITE_CONFIG)
     except TypeError as e:
+        # FIXME(MarshalX): "Params missing 1 required positional argument: 'rkey'" should raise another error
         msg = str(e).replace('__init__()', model.__name__)
         raise UnexpectedFieldError(msg)
     except exceptions.MissingValueError as e:

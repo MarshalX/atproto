@@ -38,6 +38,8 @@ class AppPassword(base.ModelBase):
     name: str
     password: str
 
+    _type: str = 'com.atproto.server.createAppPassword#appPassword'
+
 
 #: Response reference to :obj:`AppPassword` model.
 ResponseRef: Type[AppPassword] = AppPassword

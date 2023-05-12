@@ -40,3 +40,5 @@ class View(base.ModelBase):
 
     media: Union['models.AppBskyEmbedImages.View', 'models.AppBskyEmbedExternal.View', 'Dict[str, Any]']
     record: 'models.AppBskyEmbedRecord.View'
+
+    _type: str = 'app.bsky.embed.recordWithMedia#view'

@@ -42,6 +42,8 @@ class Commit(base.ModelBase):
     tooBig: bool
     prev: Optional[CID] = None
 
+    _type: str = 'com.atproto.sync.subscribeRepos#commit'
+
 
 @dataclass
 class Handle(base.ModelBase):
@@ -59,6 +61,8 @@ class Handle(base.ModelBase):
     handle: str
     seq: int
     time: str
+
+    _type: str = 'com.atproto.sync.subscribeRepos#handle'
 
 
 @dataclass
@@ -78,6 +82,8 @@ class Migrate(base.ModelBase):
     time: str
     migrateTo: Optional[str] = None
 
+    _type: str = 'com.atproto.sync.subscribeRepos#migrate'
+
 
 @dataclass
 class Tombstone(base.ModelBase):
@@ -94,6 +100,8 @@ class Tombstone(base.ModelBase):
     seq: int
     time: str
 
+    _type: str = 'com.atproto.sync.subscribeRepos#tombstone'
+
 
 @dataclass
 class Info(base.ModelBase):
@@ -107,6 +115,8 @@ class Info(base.ModelBase):
 
     name: str
     message: Optional[str] = None
+
+    _type: str = 'com.atproto.sync.subscribeRepos#info'
 
 
 @dataclass
@@ -123,3 +133,5 @@ class RepoOp(base.ModelBase):
     action: str
     path: str
     cid: Optional[CID] = None
+
+    _type: str = 'com.atproto.sync.subscribeRepos#repoOp'

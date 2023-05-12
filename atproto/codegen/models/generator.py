@@ -319,8 +319,11 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
         _get_model(nsid, def_model),
     ]
 
+    def_type = f'{nsid}#{def_name}'
     if def_name == 'main':
-        lines.append(f"{_(1)}_type: str = '{nsid}'")
+        def_type = str(nsid)
+
+    lines.append(f"{_(1)}_type: str = '{def_type}'")
 
     lines.append('')
 

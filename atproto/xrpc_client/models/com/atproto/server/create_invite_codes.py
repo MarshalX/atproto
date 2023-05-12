@@ -52,3 +52,5 @@ class AccountCodes(base.ModelBase):
 
     account: str
     codes: List[str]
+
+    _type: str = 'com.atproto.server.createInviteCodes#accountCodes'

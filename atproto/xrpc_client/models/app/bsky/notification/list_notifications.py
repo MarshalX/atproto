@@ -68,3 +68,5 @@ class Notification(base.ModelBase):
     uri: str
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
     reasonSubject: Optional[str] = None
+
+    _type: str = 'app.bsky.notification.listNotifications#notification'

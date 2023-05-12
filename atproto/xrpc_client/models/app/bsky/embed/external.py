@@ -44,6 +44,8 @@ class External(base.ModelBase):
     uri: str
     thumb: Optional[BlobRef] = None
 
+    _type: str = 'app.bsky.embed.external#external'
+
 
 @dataclass
 class View(base.ModelBase):
@@ -55,6 +57,8 @@ class View(base.ModelBase):
     """
 
     external: 'models.AppBskyEmbedExternal.ViewExternal'
+
+    _type: str = 'app.bsky.embed.external#view'
 
 
 @dataclass
@@ -73,3 +77,5 @@ class ViewExternal(base.ModelBase):
     title: str
     uri: str
     thumb: Optional[str] = None
+
+    _type: str = 'app.bsky.embed.external#viewExternal'

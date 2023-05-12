@@ -62,3 +62,5 @@ class Like(base.ModelBase):
     actor: 'models.AppBskyActorDefs.ProfileView'
     createdAt: str
     indexedAt: str
+
+    _type: str = 'app.bsky.feed.getLikes#like'

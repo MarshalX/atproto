@@ -45,6 +45,8 @@ class ActionView(base.ModelBase):
     negateLabelVals: Optional[List[str]] = None
     reversal: Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None
 
+    _type: str = 'com.atproto.admin.defs#actionView'
+
 
 @dataclass
 class ActionViewDetail(base.ModelBase):
@@ -77,6 +79,8 @@ class ActionViewDetail(base.ModelBase):
     negateLabelVals: Optional[List[str]] = None
     reversal: Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None
 
+    _type: str = 'com.atproto.admin.defs#actionViewDetail'
+
 
 @dataclass
 class ActionViewCurrent(base.ModelBase):
@@ -90,6 +94,8 @@ class ActionViewCurrent(base.ModelBase):
 
     action: 'models.ComAtprotoAdminDefs.ActionType'
     id: int
+
+    _type: str = 'com.atproto.admin.defs#actionViewCurrent'
 
 
 @dataclass
@@ -106,6 +112,8 @@ class ActionReversal(base.ModelBase):
     createdAt: str
     createdBy: str
     reason: str
+
+    _type: str = 'com.atproto.admin.defs#actionReversal'
 
 
 ActionType = Literal['Takedown', 'Flag', 'Acknowledge', 'Escalate']
@@ -142,6 +150,8 @@ class ReportView(base.ModelBase):
     subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 'Dict[str, Any]']
     reason: Optional[str] = None
 
+    _type: str = 'com.atproto.admin.defs#reportView'
+
 
 @dataclass
 class ReportViewDetail(base.ModelBase):
@@ -166,6 +176,8 @@ class ReportViewDetail(base.ModelBase):
     subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView', 'Dict[str, Any]']
     reason: Optional[str] = None
 
+    _type: str = 'com.atproto.admin.defs#reportViewDetail'
+
 
 @dataclass
 class RepoView(base.ModelBase):
@@ -189,6 +201,8 @@ class RepoView(base.ModelBase):
     relatedRecords: List['base.RecordModelBase']
     email: Optional[str] = None
     invitedBy: Optional['models.ComAtprotoServerDefs.InviteCode'] = None
+
+    _type: str = 'com.atproto.admin.defs#repoView'
 
 
 @dataclass
@@ -218,6 +232,8 @@ class RepoViewDetail(base.ModelBase):
     invites: Optional[List['models.ComAtprotoServerDefs.InviteCode']] = None
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
 
+    _type: str = 'com.atproto.admin.defs#repoViewDetail'
+
 
 @dataclass
 class RepoRef(base.ModelBase):
@@ -229,6 +245,8 @@ class RepoRef(base.ModelBase):
     """
 
     did: str
+
+    _type: str = 'com.atproto.admin.defs#repoRef'
 
 
 @dataclass
@@ -253,6 +271,8 @@ class RecordView(base.ModelBase):
     repo: 'models.ComAtprotoAdminDefs.RepoView'
     uri: str
     value: 'base.RecordModelBase'
+
+    _type: str = 'com.atproto.admin.defs#recordView'
 
 
 @dataclass
@@ -280,6 +300,8 @@ class RecordViewDetail(base.ModelBase):
     value: 'base.RecordModelBase'
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
 
+    _type: str = 'com.atproto.admin.defs#recordViewDetail'
+
 
 @dataclass
 class Moderation(base.ModelBase):
@@ -291,6 +313,8 @@ class Moderation(base.ModelBase):
     """
 
     currentAction: Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None
+
+    _type: str = 'com.atproto.admin.defs#moderation'
 
 
 @dataclass
@@ -307,6 +331,8 @@ class ModerationDetail(base.ModelBase):
     actions: List['models.ComAtprotoAdminDefs.ActionView']
     reports: List['models.ComAtprotoAdminDefs.ReportView']
     currentAction: Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None
+
+    _type: str = 'com.atproto.admin.defs#moderationDetail'
 
 
 @dataclass
@@ -332,6 +358,8 @@ class BlobView(base.ModelBase):
     ] = None
     moderation: Optional['models.ComAtprotoAdminDefs.Moderation'] = None
 
+    _type: str = 'com.atproto.admin.defs#blobView'
+
 
 @dataclass
 class ImageDetails(base.ModelBase):
@@ -345,6 +373,8 @@ class ImageDetails(base.ModelBase):
 
     height: int
     width: int
+
+    _type: str = 'com.atproto.admin.defs#imageDetails'
 
 
 @dataclass
@@ -361,3 +391,5 @@ class VideoDetails(base.ModelBase):
     height: int
     length: int
     width: int
+
+    _type: str = 'com.atproto.admin.defs#videoDetails'

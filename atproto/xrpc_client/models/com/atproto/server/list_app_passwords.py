@@ -36,3 +36,5 @@ class AppPassword(base.ModelBase):
 
     createdAt: str
     name: str
+
+    _type: str = 'com.atproto.server.listAppPasswords#appPassword'

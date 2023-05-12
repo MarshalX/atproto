@@ -64,3 +64,5 @@ class Record(base.ModelBase):
     cid: str
     uri: str
     value: 'base.RecordModelBase'
+
+    _type: str = 'com.atproto.repo.listRecords#record'

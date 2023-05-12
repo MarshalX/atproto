@@ -40,6 +40,8 @@ class Image(base.ModelBase):
     alt: str
     image: BlobRef
 
+    _type: str = 'app.bsky.embed.images#image'
+
 
 @dataclass
 class View(base.ModelBase):
@@ -51,6 +53,8 @@ class View(base.ModelBase):
     """
 
     images: List['models.AppBskyEmbedImages.ViewImage']
+
+    _type: str = 'app.bsky.embed.images#view'
 
 
 @dataclass
@@ -67,3 +71,5 @@ class ViewImage(base.ModelBase):
     alt: str
     fullsize: str
     thumb: str
+
+    _type: str = 'app.bsky.embed.images#viewImage'
