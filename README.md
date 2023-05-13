@@ -203,7 +203,7 @@ Dict-based:
 from atproto import Client
 
 
-client=Client()
+client = Client()
 client.login('my-username', 'my-password')
 # The params model will be created automatically internally for you!
 print(client.com.atproto.identity.resolve_handle({'handle': 'marshal.dev'}))
@@ -214,7 +214,7 @@ Class-based:
 from atproto import Client, models
 
 
-client=Client()
+client = Client()
 client.login('my-username', 'my-password')
 params = models.ComAtprotoIdentityResolveHandle.Params('marshal.dev')
 print(client.com.atproto.identity.resolve_handle(params))
@@ -225,7 +225,7 @@ Class-based with keywords:
 from atproto import Client, models
 
 
-client=Client()
+client = Client()
 client.login('my-username', 'my-password')
 params = models.ComAtprotoIdentityResolveHandle.Params(handle='marshal.dev')
 print(client.com.atproto.identity.resolve_handle(params))
@@ -244,7 +244,7 @@ from datetime import datetime
 from atproto import Client, models
 
 
-client=Client()
+client = Client()
 client.login('my-username', 'my-password')
 
 with open('cat.jpg', 'rb') as f:
