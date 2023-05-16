@@ -291,6 +291,23 @@ files = [
 dev = ["black", "coveralls", "mypy", "pre-commit", "pylint", "pytest (>=5)", "pytest-benchmark", "pytest-cov"]
 
 [[package]]
+name = "dag-cbor"
+version = "0.3.2"
+description = "Python implementation of the DAG-CBOR codec."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "dag-cbor-0.3.2.tar.gz", hash = "sha256:d113050d6f5cb6c1a324c911684c5daa305425702585573269bef3000aa9f106"},
+    {file = "dag_cbor-0.3.2-py3-none-any.whl", hash = "sha256:c78030379f385b90498711d7613af5bdb4155d5a7623211cea2b20441d5794b4"},
+]
+
+[package.dependencies]
+multiformats = "*"
+typing-extensions = "*"
+typing-validation = "*"
+
+[[package]]
 name = "docutils"
 version = "0.19"
 description = "Docutils -- Python Documentation Utilities"
@@ -1476,4 +1493,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "4ec051ac82f3b336c2da90c7d40c38e2cac6e3da9706b0950ec16b854e5866e2"
+content-hash = "0a6e31171943cf8c1b9d543bbf1dd4d56576e6e8ba97e619e3a92dfc84a77ad0"

@@ -19,6 +19,7 @@ Documentation
    nsid
    cid
    uri
+   car
    exceptions
 
 .. toctree::

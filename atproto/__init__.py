@@ -1,3 +1,4 @@
+from .car import CAR
 from .cid import CID
 from .nsid import NSID
 from .uri import AtUri
@@ -10,6 +11,7 @@ __all__ = [
     'Client',
     'models',
     'NSID',
+    'CAR',
     'CID',
     'AtUri',
 ]

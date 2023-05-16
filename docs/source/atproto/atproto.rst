@@ -12,9 +12,11 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   atproto.car
    atproto.cid
    atproto.cli
    atproto.codegen
+   atproto.leb128
    atproto.lexicon
    atproto.nsid
    atproto.uri
