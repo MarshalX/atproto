@@ -14,6 +14,649 @@ from atproto.xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase
 
 
 @dataclass
+class AppNamespace(NamespaceBase):
+    bsky: 'BskyNamespace' = field(default_factory=DefaultNamespace)
+
+    def __post_init__(self):
+        self.bsky = BskyNamespace(self._client)
+
+
+@dataclass
+class BskyNamespace(NamespaceBase):
+    actor: 'ActorNamespace' = field(default_factory=DefaultNamespace)
+    feed: 'FeedNamespace' = field(default_factory=DefaultNamespace)
+    graph: 'GraphNamespace' = field(default_factory=DefaultNamespace)
+    notification: 'NotificationNamespace' = field(default_factory=DefaultNamespace)
+    unspecced: 'UnspeccedNamespace' = field(default_factory=DefaultNamespace)
+
+    def __post_init__(self):
+        self.actor = ActorNamespace(self._client)
+        self.feed = FeedNamespace(self._client)
+        self.graph = GraphNamespace(self._client)
+        self.notification = NotificationNamespace(self._client)
+        self.unspecced = UnspeccedNamespace(self._client)
+
+
+@dataclass
+class ActorNamespace(NamespaceBase):
+    def get_preferences(
+        self, params: Optional[Union[dict, 'models.AppBskyActorGetPreferences.Params']] = None, **kwargs
+    ) -> models.AppBskyActorGetPreferences.Response:
+        """Get private preferences attached to the account.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorGetPreferences.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyActorGetPreferences.Params)
+        response = self._client.invoke_query(
+            'app.bsky.actor.getPreferences', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyActorGetPreferences.Response)
+
+    def get_profile(
+        self, params: Union[dict, 'models.AppBskyActorGetProfile.Params'], **kwargs
+    ) -> models.AppBskyActorGetProfile.ResponseRef:
+        """Get profile.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorGetProfile.ResponseRef`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyActorGetProfile.Params)
+        response = self._client.invoke_query(
+            'app.bsky.actor.getProfile', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyActorGetProfile.ResponseRef)
+
+    def get_profiles(
+        self, params: Union[dict, 'models.AppBskyActorGetProfiles.Params'], **kwargs
+    ) -> models.AppBskyActorGetProfiles.Response:
+        """Get profiles.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorGetProfiles.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyActorGetProfiles.Params)
+        response = self._client.invoke_query(
+            'app.bsky.actor.getProfiles', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyActorGetProfiles.Response)
+
+    def get_suggestions(
+        self, params: Optional[Union[dict, 'models.AppBskyActorGetSuggestions.Params']] = None, **kwargs
+    ) -> models.AppBskyActorGetSuggestions.Response:
+        """Get a list of actors suggested for following. Used in discovery UIs.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorGetSuggestions.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyActorGetSuggestions.Params)
+        response = self._client.invoke_query(
+            'app.bsky.actor.getSuggestions', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyActorGetSuggestions.Response)
+
+    def put_preferences(self, data: Union[dict, 'models.AppBskyActorPutPreferences.Data'], **kwargs) -> bool:
+        """Sets the private preferences attached to the account.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data = get_or_create_model(data, models.AppBskyActorPutPreferences.Data)
+        response = self._client.invoke_procedure(
+            'app.bsky.actor.putPreferences', data=data, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def search_actors(
+        self, params: Optional[Union[dict, 'models.AppBskyActorSearchActors.Params']] = None, **kwargs
+    ) -> models.AppBskyActorSearchActors.Response:
+        """Find actors matching search criteria.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorSearchActors.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyActorSearchActors.Params)
+        response = self._client.invoke_query(
+            'app.bsky.actor.searchActors', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyActorSearchActors.Response)
+
+    def search_actors_typeahead(
+        self, params: Optional[Union[dict, 'models.AppBskyActorSearchActorsTypeahead.Params']] = None, **kwargs
+    ) -> models.AppBskyActorSearchActorsTypeahead.Response:
+        """Find actor suggestions for a search term.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorSearchActorsTypeahead.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyActorSearchActorsTypeahead.Params)
+        response = self._client.invoke_query(
+            'app.bsky.actor.searchActorsTypeahead', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyActorSearchActorsTypeahead.Response)
+
+
+@dataclass
+class GraphNamespace(NamespaceBase):
+    def get_blocks(
+        self, params: Optional[Union[dict, 'models.AppBskyGraphGetBlocks.Params']] = None, **kwargs
+    ) -> models.AppBskyGraphGetBlocks.Response:
+        """Who is the requester's account blocking?
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetBlocks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyGraphGetBlocks.Params)
+        response = self._client.invoke_query(
+            'app.bsky.graph.getBlocks', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetBlocks.Response)
+
+    def get_followers(
+        self, params: Union[dict, 'models.AppBskyGraphGetFollowers.Params'], **kwargs
+    ) -> models.AppBskyGraphGetFollowers.Response:
+        """Who is following an actor?
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetFollowers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyGraphGetFollowers.Params)
+        response = self._client.invoke_query(
+            'app.bsky.graph.getFollowers', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetFollowers.Response)
+
+    def get_follows(
+        self, params: Union[dict, 'models.AppBskyGraphGetFollows.Params'], **kwargs
+    ) -> models.AppBskyGraphGetFollows.Response:
+        """Who is an actor following?
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetFollows.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyGraphGetFollows.Params)
+        response = self._client.invoke_query(
+            'app.bsky.graph.getFollows', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetFollows.Response)
+
+    def get_list(
+        self, params: Union[dict, 'models.AppBskyGraphGetList.Params'], **kwargs
+    ) -> models.AppBskyGraphGetList.Response:
+        """Fetch a list of actors.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetList.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyGraphGetList.Params)
+        response = self._client.invoke_query(
+            'app.bsky.graph.getList', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetList.Response)
+
+    def get_list_mutes(
+        self, params: Optional[Union[dict, 'models.AppBskyGraphGetListMutes.Params']] = None, **kwargs
+    ) -> models.AppBskyGraphGetListMutes.Response:
+        """Which lists is the requester's account muting?
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetListMutes.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyGraphGetListMutes.Params)
+        response = self._client.invoke_query(
+            'app.bsky.graph.getListMutes', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetListMutes.Response)
+
+    def get_lists(
+        self, params: Union[dict, 'models.AppBskyGraphGetLists.Params'], **kwargs
+    ) -> models.AppBskyGraphGetLists.Response:
+        """Fetch a list of lists that belong to an actor.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetLists.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyGraphGetLists.Params)
+        response = self._client.invoke_query(
+            'app.bsky.graph.getLists', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetLists.Response)
+
+    def get_mutes(
+        self, params: Optional[Union[dict, 'models.AppBskyGraphGetMutes.Params']] = None, **kwargs
+    ) -> models.AppBskyGraphGetMutes.Response:
+        """Who does the viewer mute?
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetMutes.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyGraphGetMutes.Params)
+        response = self._client.invoke_query(
+            'app.bsky.graph.getMutes', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetMutes.Response)
+
+    def mute_actor(self, data: Union[dict, 'models.AppBskyGraphMuteActor.Data'], **kwargs) -> bool:
+        """Mute an actor by did or handle.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data = get_or_create_model(data, models.AppBskyGraphMuteActor.Data)
+        response = self._client.invoke_procedure(
+            'app.bsky.graph.muteActor', data=data, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def mute_actor_list(self, data: Union[dict, 'models.AppBskyGraphMuteActorList.Data'], **kwargs) -> bool:
+        """Mute a list of actors.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data = get_or_create_model(data, models.AppBskyGraphMuteActorList.Data)
+        response = self._client.invoke_procedure(
+            'app.bsky.graph.muteActorList', data=data, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def unmute_actor(self, data: Union[dict, 'models.AppBskyGraphUnmuteActor.Data'], **kwargs) -> bool:
+        """Unmute an actor by did or handle.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data = get_or_create_model(data, models.AppBskyGraphUnmuteActor.Data)
+        response = self._client.invoke_procedure(
+            'app.bsky.graph.unmuteActor', data=data, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def unmute_actor_list(self, data: Union[dict, 'models.AppBskyGraphUnmuteActorList.Data'], **kwargs) -> bool:
+        """Unmute a list of actors.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data = get_or_create_model(data, models.AppBskyGraphUnmuteActorList.Data)
+        response = self._client.invoke_procedure(
+            'app.bsky.graph.unmuteActorList', data=data, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+@dataclass
+class FeedNamespace(NamespaceBase):
+    def get_author_feed(
+        self, params: Union[dict, 'models.AppBskyFeedGetAuthorFeed.Params'], **kwargs
+    ) -> models.AppBskyFeedGetAuthorFeed.Response:
+        """A view of an actor's feed.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetAuthorFeed.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetAuthorFeed.Params)
+        response = self._client.invoke_query(
+            'app.bsky.feed.getAuthorFeed', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetAuthorFeed.Response)
+
+    def get_likes(
+        self, params: Union[dict, 'models.AppBskyFeedGetLikes.Params'], **kwargs
+    ) -> models.AppBskyFeedGetLikes.Response:
+        """Get likes.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetLikes.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetLikes.Params)
+        response = self._client.invoke_query(
+            'app.bsky.feed.getLikes', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetLikes.Response)
+
+    def get_post_thread(
+        self, params: Union[dict, 'models.AppBskyFeedGetPostThread.Params'], **kwargs
+    ) -> models.AppBskyFeedGetPostThread.Response:
+        """Get post thread.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetPostThread.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetPostThread.Params)
+        response = self._client.invoke_query(
+            'app.bsky.feed.getPostThread', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetPostThread.Response)
+
+    def get_posts(
+        self, params: Union[dict, 'models.AppBskyFeedGetPosts.Params'], **kwargs
+    ) -> models.AppBskyFeedGetPosts.Response:
+        """A view of an actor's feed.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetPosts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetPosts.Params)
+        response = self._client.invoke_query(
+            'app.bsky.feed.getPosts', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetPosts.Response)
+
+    def get_reposted_by(
+        self, params: Union[dict, 'models.AppBskyFeedGetRepostedBy.Params'], **kwargs
+    ) -> models.AppBskyFeedGetRepostedBy.Response:
+        """Get reposted by.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetRepostedBy.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetRepostedBy.Params)
+        response = self._client.invoke_query(
+            'app.bsky.feed.getRepostedBy', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetRepostedBy.Response)
+
+    def get_timeline(
+        self, params: Optional[Union[dict, 'models.AppBskyFeedGetTimeline.Params']] = None, **kwargs
+    ) -> models.AppBskyFeedGetTimeline.Response:
+        """A view of the user's home timeline.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetTimeline.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetTimeline.Params)
+        response = self._client.invoke_query(
+            'app.bsky.feed.getTimeline', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetTimeline.Response)
+
+
+@dataclass
+class UnspeccedNamespace(NamespaceBase):
+    def get_popular(
+        self, params: Optional[Union[dict, 'models.AppBskyUnspeccedGetPopular.Params']] = None, **kwargs
+    ) -> models.AppBskyUnspeccedGetPopular.Response:
+        """An unspecced view of globally popular items.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetPopular.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyUnspeccedGetPopular.Params)
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getPopular', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetPopular.Response)
+
+
+@dataclass
+class NotificationNamespace(NamespaceBase):
+    def get_unread_count(
+        self, params: Optional[Union[dict, 'models.AppBskyNotificationGetUnreadCount.Params']] = None, **kwargs
+    ) -> models.AppBskyNotificationGetUnreadCount.Response:
+        """Get unread count.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationGetUnreadCount.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyNotificationGetUnreadCount.Params)
+        response = self._client.invoke_query(
+            'app.bsky.notification.getUnreadCount', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyNotificationGetUnreadCount.Response)
+
+    def list_notifications(
+        self, params: Optional[Union[dict, 'models.AppBskyNotificationListNotifications.Params']] = None, **kwargs
+    ) -> models.AppBskyNotificationListNotifications.Response:
+        """List notifications.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationListNotifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyNotificationListNotifications.Params)
+        response = self._client.invoke_query(
+            'app.bsky.notification.listNotifications', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyNotificationListNotifications.Response)
+
+    def update_seen(self, data: Union[dict, 'models.AppBskyNotificationUpdateSeen.Data'], **kwargs) -> bool:
+        """Notify server that the user has seen notifications.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data = get_or_create_model(data, models.AppBskyNotificationUpdateSeen.Data)
+        response = self._client.invoke_procedure(
+            'app.bsky.notification.updateSeen', data=data, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+@dataclass
 class ComNamespace(NamespaceBase):
     atproto: 'AtprotoNamespace' = field(default_factory=DefaultNamespace)
 
@@ -777,6 +1420,26 @@ class RepoNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoRepoPutRecord.Response)
 
+    def rebase_repo(self, data: Union[dict, 'models.ComAtprotoRepoRebaseRepo.Data'], **kwargs) -> bool:
+        """Simple rebase of repo that deletes history.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data = get_or_create_model(data, models.ComAtprotoRepoRebaseRepo.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.rebaseRepo', data=data, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     def upload_blob(
         self, data: 'models.ComAtprotoRepoUploadBlob.Data', **kwargs
     ) -> models.ComAtprotoRepoUploadBlob.Response:
@@ -801,6 +1464,28 @@ class RepoNamespace(NamespaceBase):
 
 @dataclass
 class AdminNamespace(NamespaceBase):
+    def disable_account_invites(
+        self, data: Union[dict, 'models.ComAtprotoAdminDisableAccountInvites.Data'], **kwargs
+    ) -> bool:
+        """Disable an account from receiving new invite codes, but does not invalidate existing codes.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data = get_or_create_model(data, models.ComAtprotoAdminDisableAccountInvites.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.admin.disableAccountInvites', data=data, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     def disable_invite_codes(
         self, data: Optional[Union[dict, 'models.ComAtprotoAdminDisableInviteCodes.Data']] = None, **kwargs
     ) -> bool:
@@ -820,6 +1505,28 @@ class AdminNamespace(NamespaceBase):
         data = get_or_create_model(data, models.ComAtprotoAdminDisableInviteCodes.Data)
         response = self._client.invoke_procedure(
             'com.atproto.admin.disableInviteCodes', data=data, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def enable_account_invites(
+        self, data: Union[dict, 'models.ComAtprotoAdminEnableAccountInvites.Data'], **kwargs
+    ) -> bool:
+        """Re-enable an accounts ability to receive invite codes.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data = get_or_create_model(data, models.ComAtprotoAdminEnableAccountInvites.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.admin.enableAccountInvites', data=data, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1219,498 +1926,3 @@ class LabelNamespace(NamespaceBase):
             'com.atproto.label.queryLabels', params=params, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoLabelQueryLabels.Response)
-
-
-@dataclass
-class AppNamespace(NamespaceBase):
-    bsky: 'BskyNamespace' = field(default_factory=DefaultNamespace)
-
-    def __post_init__(self):
-        self.bsky = BskyNamespace(self._client)
-
-
-@dataclass
-class BskyNamespace(NamespaceBase):
-    actor: 'ActorNamespace' = field(default_factory=DefaultNamespace)
-    feed: 'FeedNamespace' = field(default_factory=DefaultNamespace)
-    graph: 'GraphNamespace' = field(default_factory=DefaultNamespace)
-    notification: 'NotificationNamespace' = field(default_factory=DefaultNamespace)
-    unspecced: 'UnspeccedNamespace' = field(default_factory=DefaultNamespace)
-
-    def __post_init__(self):
-        self.actor = ActorNamespace(self._client)
-        self.feed = FeedNamespace(self._client)
-        self.graph = GraphNamespace(self._client)
-        self.notification = NotificationNamespace(self._client)
-        self.unspecced = UnspeccedNamespace(self._client)
-
-
-@dataclass
-class FeedNamespace(NamespaceBase):
-    def get_author_feed(
-        self, params: Union[dict, 'models.AppBskyFeedGetAuthorFeed.Params'], **kwargs
-    ) -> models.AppBskyFeedGetAuthorFeed.Response:
-        """A view of an actor's feed.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetAuthorFeed.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetAuthorFeed.Params)
-        response = self._client.invoke_query(
-            'app.bsky.feed.getAuthorFeed', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetAuthorFeed.Response)
-
-    def get_likes(
-        self, params: Union[dict, 'models.AppBskyFeedGetLikes.Params'], **kwargs
-    ) -> models.AppBskyFeedGetLikes.Response:
-        """Get likes.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetLikes.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetLikes.Params)
-        response = self._client.invoke_query(
-            'app.bsky.feed.getLikes', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetLikes.Response)
-
-    def get_post_thread(
-        self, params: Union[dict, 'models.AppBskyFeedGetPostThread.Params'], **kwargs
-    ) -> models.AppBskyFeedGetPostThread.Response:
-        """Get post thread.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetPostThread.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetPostThread.Params)
-        response = self._client.invoke_query(
-            'app.bsky.feed.getPostThread', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetPostThread.Response)
-
-    def get_posts(
-        self, params: Union[dict, 'models.AppBskyFeedGetPosts.Params'], **kwargs
-    ) -> models.AppBskyFeedGetPosts.Response:
-        """A view of an actor's feed.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetPosts.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetPosts.Params)
-        response = self._client.invoke_query(
-            'app.bsky.feed.getPosts', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetPosts.Response)
-
-    def get_reposted_by(
-        self, params: Union[dict, 'models.AppBskyFeedGetRepostedBy.Params'], **kwargs
-    ) -> models.AppBskyFeedGetRepostedBy.Response:
-        """Get reposted by.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetRepostedBy.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetRepostedBy.Params)
-        response = self._client.invoke_query(
-            'app.bsky.feed.getRepostedBy', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetRepostedBy.Response)
-
-    def get_timeline(
-        self, params: Optional[Union[dict, 'models.AppBskyFeedGetTimeline.Params']] = None, **kwargs
-    ) -> models.AppBskyFeedGetTimeline.Response:
-        """A view of the user's home timeline.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetTimeline.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetTimeline.Params)
-        response = self._client.invoke_query(
-            'app.bsky.feed.getTimeline', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetTimeline.Response)
-
-
-@dataclass
-class ActorNamespace(NamespaceBase):
-    def get_profile(
-        self, params: Union[dict, 'models.AppBskyActorGetProfile.Params'], **kwargs
-    ) -> models.AppBskyActorGetProfile.ResponseRef:
-        """Get profile.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyActorGetProfile.ResponseRef`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyActorGetProfile.Params)
-        response = self._client.invoke_query(
-            'app.bsky.actor.getProfile', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyActorGetProfile.ResponseRef)
-
-    def get_profiles(
-        self, params: Union[dict, 'models.AppBskyActorGetProfiles.Params'], **kwargs
-    ) -> models.AppBskyActorGetProfiles.Response:
-        """Get profiles.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyActorGetProfiles.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyActorGetProfiles.Params)
-        response = self._client.invoke_query(
-            'app.bsky.actor.getProfiles', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyActorGetProfiles.Response)
-
-    def get_suggestions(
-        self, params: Optional[Union[dict, 'models.AppBskyActorGetSuggestions.Params']] = None, **kwargs
-    ) -> models.AppBskyActorGetSuggestions.Response:
-        """Get a list of actors suggested for following. Used in discovery UIs.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyActorGetSuggestions.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyActorGetSuggestions.Params)
-        response = self._client.invoke_query(
-            'app.bsky.actor.getSuggestions', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyActorGetSuggestions.Response)
-
-    def search_actors(
-        self, params: Optional[Union[dict, 'models.AppBskyActorSearchActors.Params']] = None, **kwargs
-    ) -> models.AppBskyActorSearchActors.Response:
-        """Find actors matching search criteria.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyActorSearchActors.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyActorSearchActors.Params)
-        response = self._client.invoke_query(
-            'app.bsky.actor.searchActors', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyActorSearchActors.Response)
-
-    def search_actors_typeahead(
-        self, params: Optional[Union[dict, 'models.AppBskyActorSearchActorsTypeahead.Params']] = None, **kwargs
-    ) -> models.AppBskyActorSearchActorsTypeahead.Response:
-        """Find actor suggestions for a search term.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyActorSearchActorsTypeahead.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyActorSearchActorsTypeahead.Params)
-        response = self._client.invoke_query(
-            'app.bsky.actor.searchActorsTypeahead', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyActorSearchActorsTypeahead.Response)
-
-
-@dataclass
-class GraphNamespace(NamespaceBase):
-    def get_blocks(
-        self, params: Optional[Union[dict, 'models.AppBskyGraphGetBlocks.Params']] = None, **kwargs
-    ) -> models.AppBskyGraphGetBlocks.Response:
-        """Who is the requester's account blocking?
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyGraphGetBlocks.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyGraphGetBlocks.Params)
-        response = self._client.invoke_query(
-            'app.bsky.graph.getBlocks', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyGraphGetBlocks.Response)
-
-    def get_followers(
-        self, params: Union[dict, 'models.AppBskyGraphGetFollowers.Params'], **kwargs
-    ) -> models.AppBskyGraphGetFollowers.Response:
-        """Who is following an actor?
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyGraphGetFollowers.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyGraphGetFollowers.Params)
-        response = self._client.invoke_query(
-            'app.bsky.graph.getFollowers', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyGraphGetFollowers.Response)
-
-    def get_follows(
-        self, params: Union[dict, 'models.AppBskyGraphGetFollows.Params'], **kwargs
-    ) -> models.AppBskyGraphGetFollows.Response:
-        """Who is an actor following?
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyGraphGetFollows.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyGraphGetFollows.Params)
-        response = self._client.invoke_query(
-            'app.bsky.graph.getFollows', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyGraphGetFollows.Response)
-
-    def get_mutes(
-        self, params: Optional[Union[dict, 'models.AppBskyGraphGetMutes.Params']] = None, **kwargs
-    ) -> models.AppBskyGraphGetMutes.Response:
-        """Who does the viewer mute?
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyGraphGetMutes.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyGraphGetMutes.Params)
-        response = self._client.invoke_query(
-            'app.bsky.graph.getMutes', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyGraphGetMutes.Response)
-
-    def mute_actor(self, data: Union[dict, 'models.AppBskyGraphMuteActor.Data'], **kwargs) -> bool:
-        """Mute an actor by did or handle.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data = get_or_create_model(data, models.AppBskyGraphMuteActor.Data)
-        response = self._client.invoke_procedure(
-            'app.bsky.graph.muteActor', data=data, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    def unmute_actor(self, data: Union[dict, 'models.AppBskyGraphUnmuteActor.Data'], **kwargs) -> bool:
-        """Unmute an actor by did or handle.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data = get_or_create_model(data, models.AppBskyGraphUnmuteActor.Data)
-        response = self._client.invoke_procedure(
-            'app.bsky.graph.unmuteActor', data=data, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-
-@dataclass
-class UnspeccedNamespace(NamespaceBase):
-    def get_popular(
-        self, params: Optional[Union[dict, 'models.AppBskyUnspeccedGetPopular.Params']] = None, **kwargs
-    ) -> models.AppBskyUnspeccedGetPopular.Response:
-        """An unspecced view of globally popular items.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyUnspeccedGetPopular.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyUnspeccedGetPopular.Params)
-        response = self._client.invoke_query(
-            'app.bsky.unspecced.getPopular', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyUnspeccedGetPopular.Response)
-
-
-@dataclass
-class NotificationNamespace(NamespaceBase):
-    def get_unread_count(
-        self, params: Optional[Union[dict, 'models.AppBskyNotificationGetUnreadCount.Params']] = None, **kwargs
-    ) -> models.AppBskyNotificationGetUnreadCount.Response:
-        """Get unread count.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyNotificationGetUnreadCount.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyNotificationGetUnreadCount.Params)
-        response = self._client.invoke_query(
-            'app.bsky.notification.getUnreadCount', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyNotificationGetUnreadCount.Response)
-
-    def list_notifications(
-        self, params: Optional[Union[dict, 'models.AppBskyNotificationListNotifications.Params']] = None, **kwargs
-    ) -> models.AppBskyNotificationListNotifications.Response:
-        """List notifications.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyNotificationListNotifications.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyNotificationListNotifications.Params)
-        response = self._client.invoke_query(
-            'app.bsky.notification.listNotifications', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyNotificationListNotifications.Response)
-
-    def update_seen(self, data: Union[dict, 'models.AppBskyNotificationUpdateSeen.Data'], **kwargs) -> bool:
-        """Notify server that the user has seen notifications.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data = get_or_create_model(data, models.AppBskyNotificationUpdateSeen.Data)
-        response = self._client.invoke_procedure(
-            'app.bsky.notification.updateSeen', data=data, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)

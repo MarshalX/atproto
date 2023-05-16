@@ -1,5 +1,8 @@
 from atproto.xrpc_client.models.app.bsky.actor import defs as AppBskyActorDefs
 from atproto.xrpc_client.models.app.bsky.actor import (
+    get_preferences as AppBskyActorGetPreferences,
+)
+from atproto.xrpc_client.models.app.bsky.actor import (
     get_profile as AppBskyActorGetProfile,
 )
 from atproto.xrpc_client.models.app.bsky.actor import (
@@ -9,6 +12,9 @@ from atproto.xrpc_client.models.app.bsky.actor import (
     get_suggestions as AppBskyActorGetSuggestions,
 )
 from atproto.xrpc_client.models.app.bsky.actor import profile as AppBskyActorProfile
+from atproto.xrpc_client.models.app.bsky.actor import (
+    put_preferences as AppBskyActorPutPreferences,
+)
 from atproto.xrpc_client.models.app.bsky.actor import (
     search_actors as AppBskyActorSearchActors,
 )
@@ -40,6 +46,7 @@ from atproto.xrpc_client.models.app.bsky.feed import like as AppBskyFeedLike
 from atproto.xrpc_client.models.app.bsky.feed import post as AppBskyFeedPost
 from atproto.xrpc_client.models.app.bsky.feed import repost as AppBskyFeedRepost
 from atproto.xrpc_client.models.app.bsky.graph import block as AppBskyGraphBlock
+from atproto.xrpc_client.models.app.bsky.graph import defs as AppBskyGraphDefs
 from atproto.xrpc_client.models.app.bsky.graph import follow as AppBskyGraphFollow
 from atproto.xrpc_client.models.app.bsky.graph import (
     get_blocks as AppBskyGraphGetBlocks,
@@ -50,12 +57,25 @@ from atproto.xrpc_client.models.app.bsky.graph import (
 from atproto.xrpc_client.models.app.bsky.graph import (
     get_follows as AppBskyGraphGetFollows,
 )
+from atproto.xrpc_client.models.app.bsky.graph import get_list as AppBskyGraphGetList
+from atproto.xrpc_client.models.app.bsky.graph import (
+    get_list_mutes as AppBskyGraphGetListMutes,
+)
+from atproto.xrpc_client.models.app.bsky.graph import get_lists as AppBskyGraphGetLists
 from atproto.xrpc_client.models.app.bsky.graph import get_mutes as AppBskyGraphGetMutes
+from atproto.xrpc_client.models.app.bsky.graph import list as AppBskyGraphList
+from atproto.xrpc_client.models.app.bsky.graph import listitem as AppBskyGraphListitem
 from atproto.xrpc_client.models.app.bsky.graph import (
     mute_actor as AppBskyGraphMuteActor,
 )
 from atproto.xrpc_client.models.app.bsky.graph import (
+    mute_actor_list as AppBskyGraphMuteActorList,
+)
+from atproto.xrpc_client.models.app.bsky.graph import (
     unmute_actor as AppBskyGraphUnmuteActor,
+)
+from atproto.xrpc_client.models.app.bsky.graph import (
+    unmute_actor_list as AppBskyGraphUnmuteActorList,
 )
 from atproto.xrpc_client.models.app.bsky.notification import (
     get_unread_count as AppBskyNotificationGetUnreadCount,
@@ -72,7 +92,13 @@ from atproto.xrpc_client.models.app.bsky.unspecced import (
 )
 from atproto.xrpc_client.models.com.atproto.admin import defs as ComAtprotoAdminDefs
 from atproto.xrpc_client.models.com.atproto.admin import (
+    disable_account_invites as ComAtprotoAdminDisableAccountInvites,
+)
+from atproto.xrpc_client.models.com.atproto.admin import (
     disable_invite_codes as ComAtprotoAdminDisableInviteCodes,
+)
+from atproto.xrpc_client.models.com.atproto.admin import (
+    enable_account_invites as ComAtprotoAdminEnableAccountInvites,
 )
 from atproto.xrpc_client.models.com.atproto.admin import (
     get_invite_codes as ComAtprotoAdminGetInviteCodes,
@@ -152,6 +178,9 @@ from atproto.xrpc_client.models.com.atproto.repo import (
 )
 from atproto.xrpc_client.models.com.atproto.repo import (
     put_record as ComAtprotoRepoPutRecord,
+)
+from atproto.xrpc_client.models.com.atproto.repo import (
+    rebase_repo as ComAtprotoRepoRebaseRepo,
 )
 from atproto.xrpc_client.models.com.atproto.repo import (
     strong_ref as ComAtprotoRepoStrongRef,
