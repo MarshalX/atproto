@@ -1,8 +1,7 @@
-CID
+CAR
 ===
 
-.. automodule:: atproto.cid
+.. automodule:: atproto.car
    :members:
    :undoc-members:
    :show-inheritance:
-   :inherited-members:

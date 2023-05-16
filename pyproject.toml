@@ -37,6 +37,7 @@ httpx = "0.24.0"
 dacite = "1.8.0"
 multiformats = "0.2.1"
 typing-extensions = "4.5.0"
+dag-cbor = "0.3.2"
 
 [tool.poetry.dev-dependencies]
 

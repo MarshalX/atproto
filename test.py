@@ -2,7 +2,7 @@ import asyncio
 import logging
 import os
 
-from atproto import AsyncClient, AtUri, Client, models
+from atproto import CAR, AsyncClient, AtUri, Client, models
 
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
@@ -30,6 +30,14 @@ def convert_uri_to_url():
 def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+
+    repo = client.com.atproto.sync.get_repo({'did': client.me.did})
+    car_file = CAR.from_bytes(repo)
+    print(car_file.root)
+    print(car_file.nodes)
+
+    # res = client.com.atproto.repo.get_record(...)     # implement by yourself
+    # also you need to parse "res.value" as profile record using  get_or_create_model method
 
     # search_result = client.bsky.actor.search_actors_typeahead({'term': 'marshal'})
     # for actor in search_result.actors:
