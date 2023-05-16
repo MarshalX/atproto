@@ -6,7 +6,7 @@
 
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -107,6 +107,7 @@ class ViewerState(base.ModelBase):
 
     Attributes:
         muted: Muted.
+        mutedByList: Muted by list.
         blockedBy: Blocked by.
         blocking: Blocking.
         following: Following.
@@ -118,5 +119,41 @@ class ViewerState(base.ModelBase):
     followedBy: Optional[str] = None
     following: Optional[str] = None
     muted: Optional[bool] = None
+    mutedByList: Optional['models.AppBskyGraphDefs.ListViewBasic'] = None
 
     _type: str = 'app.bsky.actor.defs#viewerState'
+
+
+Preferences = List[
+    Union['models.AppBskyActorDefs.AdultContentPref', 'models.AppBskyActorDefs.ContentLabelPref', 'Dict[str, Any]']
+]
+
+
+@dataclass
+class AdultContentPref(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.actor.defs`.
+
+    Attributes:
+        enabled: Enabled.
+    """
+
+    enabled: bool
+
+    _type: str = 'app.bsky.actor.defs#adultContentPref'
+
+
+@dataclass
+class ContentLabelPref(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.actor.defs`.
+
+    Attributes:
+        label: Label.
+        visibility: Visibility.
+    """
+
+    label: str
+    visibility: str
+
+    _type: str = 'app.bsky.actor.defs#contentLabelPref'

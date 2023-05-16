@@ -19,6 +19,7 @@ class Data(base.DataModelBase):
     Attributes:
         email: Email.
         handle: Handle.
+        did: Did.
         inviteCode: Invite code.
         password: Password.
         recoveryKey: Recovery key.
@@ -27,6 +28,7 @@ class Data(base.DataModelBase):
     email: str
     handle: str
     password: str
+    did: Optional[str] = None
     inviteCode: Optional[str] = None
     recoveryKey: Optional[str] = None
 

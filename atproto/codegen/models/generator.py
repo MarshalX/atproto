@@ -339,6 +339,10 @@ def _generate_def_token(def_name: str) -> str:
     return join_code(lines)
 
 
+def _generate_def_array(nsid: NSID, def_name: str, def_model: models.LexArray) -> str:
+    return f'{get_def_model_name(def_name)} = {_get_model_field_typehint(nsid, def_name, def_model, optional=False)}\n'
+
+
 def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
     # FIXME(MarshalX): Doesn't support all fields
 
@@ -394,10 +398,14 @@ def _generate_def_models(lex_db: builder.LexDB) -> None:
         for def_name, def_model in defs.items():
             if isinstance(def_model, models.LexToken):
                 save_code_part(nsid, _generate_def_token(def_name))
-            if isinstance(def_model, models.LexString):
+            elif isinstance(def_model, models.LexString):
                 save_code_part(nsid, _generate_def_string(def_name, def_model))
-            if isinstance(def_model, models.LexObject):
+            elif isinstance(def_model, models.LexObject):
                 save_code_part(nsid, _generate_def_model(nsid, def_name, def_model, ModelType.DEF))
+            elif isinstance(def_model, models.LexArray):
+                save_code_part(nsid, _generate_def_array(nsid, def_name, def_model))
+            else:
+                raise ValueError(f'Unhandled type {type(def_model)}')
 
 
 def _generate_record_models(lex_db: builder.LexDB) -> None:

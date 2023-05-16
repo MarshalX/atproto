@@ -13,6 +13,7 @@ _LEX_DEF_TYPES_FOR_DEF = {
     models.LexDefinitionType.OBJECT,
     models.LexPrimitiveType.STRING,
     models.LexDefinitionType.TOKEN,
+    models.LexDefinitionType.ARRAY,
 }
 
 LexDefs = Dict[

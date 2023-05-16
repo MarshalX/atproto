@@ -192,6 +192,7 @@ class RepoView(base.ModelBase):
         indexedAt: Indexed at.
         moderation: Moderation.
         invitedBy: Invited by.
+        invitesDisabled: Invites disabled.
     """
 
     did: str
@@ -201,6 +202,7 @@ class RepoView(base.ModelBase):
     relatedRecords: List['base.RecordModelBase']
     email: Optional[str] = None
     invitedBy: Optional['models.ComAtprotoServerDefs.InviteCode'] = None
+    invitesDisabled: Optional[bool] = None
 
     _type: str = 'com.atproto.admin.defs#repoView'
 
@@ -220,6 +222,7 @@ class RepoViewDetail(base.ModelBase):
         labels: Labels.
         invitedBy: Invited by.
         invites: Invites.
+        invitesDisabled: Invites disabled.
     """
 
     did: str
@@ -230,6 +233,7 @@ class RepoViewDetail(base.ModelBase):
     email: Optional[str] = None
     invitedBy: Optional['models.ComAtprotoServerDefs.InviteCode'] = None
     invites: Optional[List['models.ComAtprotoServerDefs.InviteCode']] = None
+    invitesDisabled: Optional[bool] = None
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
 
     _type: str = 'com.atproto.admin.defs#repoViewDetail'
