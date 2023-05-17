@@ -69,7 +69,7 @@ Useful links to continue:
 
 ### Documentation
 
-The documentation is live at [readthedocs.io](https://atproto.rtfd.io/).
+The documentation is live at [atproto.blue](https://atproto.blue/).
 
 ### Getting help
 
