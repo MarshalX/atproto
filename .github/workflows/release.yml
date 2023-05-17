@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout repository.
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Create Release.
         uses: softprops/action-gh-release@v1
@@ -30,6 +32,9 @@ jobs:
 
       - name: Add Poetry to PATH.
         run: echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+
+      - name: Install Poetry Plugin.
+        run: poetry self add "poetry-dynamic-versioning[plugin]"
 
       - name: Build package.
         run: poetry build

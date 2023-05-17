@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "atproto"
-version = "0.0.5"
+version = "0.0.0" # placeholder. Dynamic version from Git Tag
 description = "The AT Protocol SDK"
 authors = ["Ilya (Marshal) <ilya@marshal.dev>"]
 license = "MIT"
@@ -50,6 +50,15 @@ sphinx-copybutton = "0.5.2"
 sphinx-favicon = "1.0.1"
 furo = "2023.3.27"
 sphinxext-opengraph = "0.8.2"
+
+# poetry self add "poetry-dynamic-versioning[plugin]"
+[tool.poetry-dynamic-versioning]
+enable = true
+strict = true
+bump = true
+metadata = false
+vcs = "git"
+style = "pep440"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
