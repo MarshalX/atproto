@@ -1,18 +1,38 @@
-name: Create Release from the version tag
+name: Create and Publish release from the version tag
 
 on:
-    push:
-        tags:
-            - "v*.*.*"
+  push:
+    tags:
+      - "v*.*.*"
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository.
-              uses: actions/checkout@v3
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
 
-            - name: Create Release.
-              uses: softprops/action-gh-release@v1
-              with:
-                  generate_release_notes: true
+    steps:
+      - name: Checkout repository.
+        uses: actions/checkout@v3
+
+      - name: Create Release.
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+
+      - name: Setup Python.
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Setup Poetry.
+        run: curl -sSL https://install.python-poetry.org | python - -y
+
+      - name: Add Poetry to PATH.
+        run: echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+
+      - name: Build package.
+        run: poetry build
+
+      - name: Publish a Python distribution to PyPI.
+        uses: pypa/gh-action-pypi-publish@release/v1
