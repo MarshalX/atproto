@@ -27,7 +27,7 @@ classifiers = [
 ]
 
 [tool.poetry.urls]
-"Documentation" = "https://atproto.rtfd.io"
+"Documentation" = "https://atproto.blue"
 "Author" = "https://github.com/MarshalX"
 "Tracker" = "https://github.com/MarshalX/atproto/issues"
 
