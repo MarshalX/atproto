@@ -73,7 +73,13 @@ class ActionViewDetail(base.ModelBase):
     id: int
     reason: str
     resolvedReports: List['models.ComAtprotoAdminDefs.ReportView']
-    subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView', 'Dict[str, Any]']
+    subject: Union[
+        'models.ComAtprotoAdminDefs.RepoView',
+        'models.ComAtprotoAdminDefs.RepoViewNotFound',
+        'models.ComAtprotoAdminDefs.RecordView',
+        'models.ComAtprotoAdminDefs.RecordViewNotFound',
+        'Dict[str, Any]',
+    ]
     subjectBlobs: List['models.ComAtprotoAdminDefs.BlobView']
     createLabelVals: Optional[List[str]] = None
     negateLabelVals: Optional[List[str]] = None
@@ -173,7 +179,13 @@ class ReportViewDetail(base.ModelBase):
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
     reportedBy: str
     resolvedByActions: List['models.ComAtprotoAdminDefs.ActionView']
-    subject: Union['models.ComAtprotoAdminDefs.RepoView', 'models.ComAtprotoAdminDefs.RecordView', 'Dict[str, Any]']
+    subject: Union[
+        'models.ComAtprotoAdminDefs.RepoView',
+        'models.ComAtprotoAdminDefs.RepoViewNotFound',
+        'models.ComAtprotoAdminDefs.RecordView',
+        'models.ComAtprotoAdminDefs.RecordViewNotFound',
+        'Dict[str, Any]',
+    ]
     reason: Optional[str] = None
 
     _type: str = 'com.atproto.admin.defs#reportViewDetail'
@@ -237,6 +249,20 @@ class RepoViewDetail(base.ModelBase):
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
 
     _type: str = 'com.atproto.admin.defs#repoViewDetail'
+
+
+@dataclass
+class RepoViewNotFound(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`.
+
+    Attributes:
+        did: Did.
+    """
+
+    did: str
+
+    _type: str = 'com.atproto.admin.defs#repoViewNotFound'
 
 
 @dataclass
@@ -305,6 +331,20 @@ class RecordViewDetail(base.ModelBase):
     labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
 
     _type: str = 'com.atproto.admin.defs#recordViewDetail'
+
+
+@dataclass
+class RecordViewNotFound(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`.
+
+    Attributes:
+        uri: Uri.
+    """
+
+    uri: str
+
+    _type: str = 'com.atproto.admin.defs#recordViewNotFound'
 
 
 @dataclass
