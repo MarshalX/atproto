@@ -1,16 +1,47 @@
 from datetime import datetime
-from typing import Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 from atproto.xrpc_client import models
+from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin
 from atproto.xrpc_client.client.raw import ClientRaw
 
+if TYPE_CHECKING:
+    from atproto.xrpc_client.client.auth import JwtPayload
+    from atproto.xrpc_client.client.base import InvokeType
+    from atproto.xrpc_client.request import Response
 
-class Client(ClientRaw):
+
+class Client(ClientRaw, SessionMethodsMixin):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: str = None):
         super().__init__(base_url)
-        self.me = None
+
+        self._access_jwt: Optional[str] = None
+        self._access_jwt_payload: Optional['JwtPayload'] = None
+
+        self._refresh_jwt: Optional[str] = None
+        self._refresh_jwt_payload: Optional['JwtPayload'] = None
+
+        self.me: Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
+
+    def _invoke(self, invoke_type: 'InvokeType', **kwargs) -> 'Response':
+        if self.me and self._should_refresh_session():
+            self._refresh_and_set_session()
+
+        return super()._invoke(invoke_type, **kwargs)
+
+    def _get_and_set_session(self, login: str, password: str) -> models.ComAtprotoServerCreateSession.Response:
+        session = self.com.atproto.server.create_session(models.ComAtprotoServerCreateSession.Data(login, password))
+        self._set_session(session)
+
+        return session
+
+    def _refresh_and_set_session(self) -> models.ComAtprotoServerRefreshSession.Response:
+        refresh_session = self.com.atproto.server.refresh_session(headers=self._get_auth_headers(self._refresh_jwt))
+        self._set_session(refresh_session)
+
+        return refresh_session
 
     def login(self, login: str, password: str) -> models.AppBskyActorGetProfile.ResponseRef:
         """Authorize client and get profile info.
@@ -26,9 +57,7 @@ class Client(ClientRaw):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        session = self.com.atproto.server.create_session(models.ComAtprotoServerCreateSession.Data(login, password))
-        self.request.set_additional_headers({'Authorization': f'Bearer {session.accessJwt}'})
-
+        session = self._get_and_set_session(login, password)
         self.me = self.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(session.handle))
 
         return self.me

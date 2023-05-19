@@ -5,18 +5,53 @@
 ##################################################################
 
 from datetime import datetime
-from typing import Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.client.async_raw import AsyncClientRaw
+from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin
+
+if TYPE_CHECKING:
+    from atproto.xrpc_client.client.auth import JwtPayload
+    from atproto.xrpc_client.client.base import InvokeType
+    from atproto.xrpc_client.request import Response
 
 
-class AsyncClient(AsyncClientRaw):
+class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: str = None):
         super().__init__(base_url)
-        self.me = None
+
+        self._access_jwt: Optional[str] = None
+        self._access_jwt_payload: Optional['JwtPayload'] = None
+
+        self._refresh_jwt: Optional[str] = None
+        self._refresh_jwt_payload: Optional['JwtPayload'] = None
+
+        self.me: Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
+
+    async def _invoke(self, invoke_type: 'InvokeType', **kwargs) -> 'Response':
+        if self.me and self._should_refresh_session():
+            await self._refresh_and_set_session()
+
+        return await super()._invoke(invoke_type, **kwargs)
+
+    async def _get_and_set_session(self, login: str, password: str) -> models.ComAtprotoServerCreateSession.Response:
+        session = await self.com.atproto.server.create_session(
+            models.ComAtprotoServerCreateSession.Data(login, password)
+        )
+        self._set_session(session)
+
+        return session
+
+    async def _refresh_and_set_session(self) -> models.ComAtprotoServerRefreshSession.Response:
+        refresh_session = await self.com.atproto.server.refresh_session(
+            headers=self._get_auth_headers(self._refresh_jwt)
+        )
+        self._set_session(refresh_session)
+
+        return refresh_session
 
     async def login(self, login: str, password: str) -> models.AppBskyActorGetProfile.ResponseRef:
         """Authorize client and get profile info.
@@ -32,11 +67,7 @@ class AsyncClient(AsyncClientRaw):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        session = await self.com.atproto.server.create_session(
-            models.ComAtprotoServerCreateSession.Data(login, password)
-        )
-        self.request.set_additional_headers({'Authorization': f'Bearer {session.accessJwt}'})
-
+        session = await self._get_and_set_session(login, password)
         self.me = await self.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(session.handle))
 
         return self.me

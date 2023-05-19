@@ -13,6 +13,9 @@ def gen_client(input_filename: str, output_filename: str) -> None:
     methods = [
         'send_post',
         'send_image',
+        '_get_and_set_session',
+        '_refresh_and_set_session',
+        '_invoke',
     ]
 
     code = code.replace('client.raw', 'client.async_raw')
@@ -27,6 +30,7 @@ def gen_client(input_filename: str, output_filename: str) -> None:
 
     for method in methods:
         code = code.replace(f'self.{method}', f'await self.{method}')
+        code = code.replace(f'super().{method}', f'await super().{method}')
 
     code = DISCLAIMER + code
 

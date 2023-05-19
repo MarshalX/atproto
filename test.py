@@ -31,10 +31,12 @@ def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
-    repo = client.com.atproto.sync.get_repo({'did': client.me.did})
-    car_file = CAR.from_bytes(repo)
-    print(car_file.root)
-    print(car_file.nodes)
+    # repo = client.com.atproto.sync.get_repo({'did': client.me.did})
+    did = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'}).did
+    # repo = client.com.atproto.sync.get_repo({'did': did})
+    # car_file = CAR.from_bytes(repo)
+    # print(car_file.root)
+    # print(car_file.nodes)
 
     # res = client.com.atproto.repo.get_record(...)     # implement by yourself
     # also you need to parse "res.value" as profile record using  get_or_create_model method
@@ -121,4 +123,4 @@ def test_strange_embed_images_type():
 if __name__ == '__main__':
     # test_strange_embed_images_type()
     sync_main()
-    # asyncio.get_event_loop().run_until_complete(main())
+    asyncio.get_event_loop().run_until_complete(main())
