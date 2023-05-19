@@ -14,6 +14,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('./_ext'))
 
 master_doc = 'index'
 
@@ -42,6 +43,7 @@ extensions = [
     'sphinx_copybutton',
     'sphinx_favicon',
     'myst_parser',
+    'link_issues',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -115,3 +117,7 @@ ogp_site_url = 'https://atproto.blue/'
 ogp_image = 'https://repository-images.githubusercontent.com/569485568/9d743322-10a2-4290-9a05-a88348cce2b6'
 ogp_type = 'article'
 ogp_enable_meta_description = True
+
+# issuetracker
+issuetracker = 'github'
+issuetracker_project = 'MarshalX/atproto'
