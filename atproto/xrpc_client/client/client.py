@@ -2,11 +2,11 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Optional, Union
 
 from atproto.xrpc_client import models
-from atproto.xrpc_client.client.auth import JwtPayload
 from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin
 from atproto.xrpc_client.client.raw import ClientRaw
 
 if TYPE_CHECKING:
+    from atproto.xrpc_client.client.auth import JwtPayload
     from atproto.xrpc_client.client.base import InvokeType
     from atproto.xrpc_client.request import Response
 
@@ -18,10 +18,10 @@ class Client(ClientRaw, SessionMethodsMixin):
         super().__init__(base_url)
 
         self._access_jwt: Optional[str] = None
-        self._access_jwt_payload: Optional[JwtPayload] = None
+        self._access_jwt_payload: Optional['JwtPayload'] = None
 
         self._refresh_jwt: Optional[str] = None
-        self._refresh_jwt_payload: Optional[JwtPayload] = None
+        self._refresh_jwt_payload: Optional['JwtPayload'] = None
 
         self.me: Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
