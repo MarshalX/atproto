@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 0.0.6
+
+**19.05.2023**
+
+* update changelog for v0.0.5 by @MarshalX in https://github.com/MarshalX/atproto/pull/24
+* Update docs domain; improve open graph by @MarshalX in https://github.com/MarshalX/atproto/pull/25
+* Don't lock dependencies so strictly; add pyjwt by @MarshalX in https://github.com/MarshalX/atproto/pull/26
+* Add session refreshing by @MarshalX in https://github.com/MarshalX/atproto/pull/27
+* Update lexicons fetched from cf36b36 committed 2023-05-18T22:57:59Z by @MarshalX in https://github.com/MarshalX/atproto/pull/28
+
 ## Version 0.0.5
 
 **17.05.2023**
