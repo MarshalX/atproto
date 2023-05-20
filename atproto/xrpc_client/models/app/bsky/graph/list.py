@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -30,8 +30,8 @@ class Main(base.RecordModelBase):
     createdAt: str
     name: str
     purpose: 'models.AppBskyGraphDefs.ListPurpose'
-    avatar: Optional[BlobRef] = None
-    description: Optional[str] = None
-    descriptionFacets: Optional[List['models.AppBskyRichtextFacet.Main']] = None
+    avatar: t.Optional[BlobRef] = None
+    description: t.Optional[str] = None
+    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None
 
     _type: str = 'app.bsky.graph.list'

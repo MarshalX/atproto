@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -25,9 +25,9 @@ class Params(base.ParamsModelBase):
     """
 
     uri: str
-    cid: Optional[str] = None
-    cursor: Optional[str] = None
-    limit: Optional[int] = None
+    cid: t.Optional[str] = None
+    cursor: t.Optional[str] = None
+    limit: t.Optional[int] = None
 
 
 @dataclass
@@ -42,10 +42,10 @@ class Response(base.ResponseModelBase):
         likes: Likes.
     """
 
-    likes: List['models.AppBskyFeedGetLikes.Like']
+    likes: t.List['models.AppBskyFeedGetLikes.Like']
     uri: str
-    cid: Optional[str] = None
-    cursor: Optional[str] = None
+    cid: t.Optional[str] = None
+    cursor: t.Optional[str] = None
 
 
 @dataclass

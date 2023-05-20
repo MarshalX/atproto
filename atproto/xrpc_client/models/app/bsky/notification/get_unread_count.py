@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 from atproto.xrpc_client.models import base
 
@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
         seenAt: Seen at.
     """
 
-    seenAt: Optional[str] = None
+    seenAt: t.Optional[str] = None
 
 
 @dataclass

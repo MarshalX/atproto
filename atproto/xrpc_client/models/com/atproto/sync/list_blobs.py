@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client.models import base
 
@@ -23,8 +23,8 @@ class Params(base.ParamsModelBase):
     """
 
     did: str
-    earliest: Optional[str] = None
-    latest: Optional[str] = None
+    earliest: t.Optional[str] = None
+    latest: t.Optional[str] = None
 
 
 @dataclass
@@ -36,4 +36,4 @@ class Response(base.ResponseModelBase):
         cids: Cids.
     """
 
-    cids: List[str]
+    cids: t.List[str]

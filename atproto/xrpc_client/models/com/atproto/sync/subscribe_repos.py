@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional, Union
 
 from atproto import CID
 from atproto.xrpc_client import models
@@ -31,16 +31,16 @@ class Commit(base.ModelBase):
         time: Time.
     """
 
-    blobs: List[CID]
-    blocks: Union[str, bytes]
+    blobs: t.List[CID]
+    blocks: t.Union[str, bytes]
     commit: CID
-    ops: List['models.ComAtprotoSyncSubscribeRepos.RepoOp']
+    ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp']
     rebase: bool
     repo: str
     seq: int
     time: str
     tooBig: bool
-    prev: Optional[CID] = None
+    prev: t.Optional[CID] = None
 
     _type: str = 'com.atproto.sync.subscribeRepos#commit'
 
@@ -80,7 +80,7 @@ class Migrate(base.ModelBase):
     did: str
     seq: int
     time: str
-    migrateTo: Optional[str] = None
+    migrateTo: t.Optional[str] = None
 
     _type: str = 'com.atproto.sync.subscribeRepos#migrate'
 
@@ -114,7 +114,7 @@ class Info(base.ModelBase):
     """
 
     name: str
-    message: Optional[str] = None
+    message: t.Optional[str] = None
 
     _type: str = 'com.atproto.sync.subscribeRepos#info'
 
@@ -132,6 +132,6 @@ class RepoOp(base.ModelBase):
 
     action: str
     path: str
-    cid: Optional[CID] = None
+    cid: t.Optional[CID] = None
 
     _type: str = 'com.atproto.sync.subscribeRepos#repoOp'

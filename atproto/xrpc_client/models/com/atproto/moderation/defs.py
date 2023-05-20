@@ -5,18 +5,20 @@
 ##################################################################
 
 
-from typing_extensions import Literal
+import typing_extensions as te
 
-ReasonType = Literal['ReasonSpam', 'ReasonViolation', 'ReasonMisleading', 'ReasonSexual', 'ReasonRude', 'ReasonOther']
+ReasonType = te.Literal[
+    'ReasonSpam', 'ReasonViolation', 'ReasonMisleading', 'ReasonSexual', 'ReasonRude', 'ReasonOther'
+]
 
-ReasonSpam: Literal['reasonSpam'] = 'reasonSpam'
+ReasonSpam: te.Literal['reasonSpam'] = 'reasonSpam'
 
-ReasonViolation: Literal['reasonViolation'] = 'reasonViolation'
+ReasonViolation: te.Literal['reasonViolation'] = 'reasonViolation'
 
-ReasonMisleading: Literal['reasonMisleading'] = 'reasonMisleading'
+ReasonMisleading: te.Literal['reasonMisleading'] = 'reasonMisleading'
 
-ReasonSexual: Literal['reasonSexual'] = 'reasonSexual'
+ReasonSexual: te.Literal['reasonSexual'] = 'reasonSexual'
 
-ReasonRude: Literal['reasonRude'] = 'reasonRude'
+ReasonRude: te.Literal['reasonRude'] = 'reasonRude'
 
-ReasonOther: Literal['reasonOther'] = 'reasonOther'
+ReasonOther: te.Literal['reasonOther'] = 'reasonOther'

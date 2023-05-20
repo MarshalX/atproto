@@ -1,6 +1,6 @@
 import re
+import typing as t
 import urllib.parse as urlparse
-from typing import Any, List, Tuple
 from urllib.parse import urlencode
 
 from atproto.exceptions import InvalidAtUriError
@@ -24,7 +24,7 @@ class AtUri:
         Record Field: at://alice.host.com/io.example.song/3yI5-c1z-cc2p-1a#/title
     """
 
-    def __init__(self, host: str, pathname: str, hash_: str, search_params: List[Tuple[str, Any]]):
+    def __init__(self, host: str, pathname: str, hash_: str, search_params: t.List[t.Tuple[str, t.Any]]):
         self.host = host
         self.pathname = pathname
         self.hash = hash_

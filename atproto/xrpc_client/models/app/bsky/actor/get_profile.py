@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Type
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -25,4 +25,4 @@ class Params(base.ParamsModelBase):
 
 
 #: Response reference to :obj:`models.AppBskyActorDefs.ProfileViewDetailed` model.
-ResponseRef: Type[models.AppBskyActorDefs.ProfileViewDetailed] = models.AppBskyActorDefs.ProfileViewDetailed
+ResponseRef: t.Type[models.AppBskyActorDefs.ProfileViewDetailed] = models.AppBskyActorDefs.ProfileViewDetailed

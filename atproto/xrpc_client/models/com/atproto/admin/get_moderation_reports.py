@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -25,11 +25,11 @@ class Params(base.ParamsModelBase):
         cursor: Cursor.
     """
 
-    actionType: Optional[str] = None
-    cursor: Optional[str] = None
-    limit: Optional[int] = None
-    resolved: Optional[bool] = None
-    subject: Optional[str] = None
+    actionType: t.Optional[str] = None
+    cursor: t.Optional[str] = None
+    limit: t.Optional[int] = None
+    resolved: t.Optional[bool] = None
+    subject: t.Optional[str] = None
 
 
 @dataclass
@@ -42,5 +42,5 @@ class Response(base.ResponseModelBase):
         reports: Reports.
     """
 
-    reports: List['models.ComAtprotoAdminDefs.ReportView']
-    cursor: Optional[str] = None
+    reports: t.List['models.ComAtprotoAdminDefs.ReportView']
+    cursor: t.Optional[str] = None

@@ -5,10 +5,10 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
 
-from typing_extensions import Literal
+import typing_extensions as te
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -38,12 +38,12 @@ class ActionView(base.ModelBase):
     createdBy: str
     id: int
     reason: str
-    resolvedReportIds: List[int]
-    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 'Dict[str, Any]']
-    subjectBlobCids: List[str]
-    createLabelVals: Optional[List[str]] = None
-    negateLabelVals: Optional[List[str]] = None
-    reversal: Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None
+    resolvedReportIds: t.List[int]
+    subject: t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]']
+    subjectBlobCids: t.List[str]
+    createLabelVals: t.Optional[t.List[str]] = None
+    negateLabelVals: t.Optional[t.List[str]] = None
+    reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None
 
     _type: str = 'com.atproto.admin.defs#actionView'
 
@@ -72,18 +72,18 @@ class ActionViewDetail(base.ModelBase):
     createdBy: str
     id: int
     reason: str
-    resolvedReports: List['models.ComAtprotoAdminDefs.ReportView']
-    subject: Union[
+    resolvedReports: t.List['models.ComAtprotoAdminDefs.ReportView']
+    subject: t.Union[
         'models.ComAtprotoAdminDefs.RepoView',
         'models.ComAtprotoAdminDefs.RepoViewNotFound',
         'models.ComAtprotoAdminDefs.RecordView',
         'models.ComAtprotoAdminDefs.RecordViewNotFound',
-        'Dict[str, Any]',
+        't.Dict[str, t.Any]',
     ]
-    subjectBlobs: List['models.ComAtprotoAdminDefs.BlobView']
-    createLabelVals: Optional[List[str]] = None
-    negateLabelVals: Optional[List[str]] = None
-    reversal: Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None
+    subjectBlobs: t.List['models.ComAtprotoAdminDefs.BlobView']
+    createLabelVals: t.Optional[t.List[str]] = None
+    negateLabelVals: t.Optional[t.List[str]] = None
+    reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None
 
     _type: str = 'com.atproto.admin.defs#actionViewDetail'
 
@@ -122,15 +122,15 @@ class ActionReversal(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#actionReversal'
 
 
-ActionType = Literal['Takedown', 'Flag', 'Acknowledge', 'Escalate']
+ActionType = te.Literal['Takedown', 'Flag', 'Acknowledge', 'Escalate']
 
-Takedown: Literal['takedown'] = 'takedown'
+Takedown: te.Literal['takedown'] = 'takedown'
 
-Flag: Literal['flag'] = 'flag'
+Flag: te.Literal['flag'] = 'flag'
 
-Acknowledge: Literal['acknowledge'] = 'acknowledge'
+Acknowledge: te.Literal['acknowledge'] = 'acknowledge'
 
-Escalate: Literal['escalate'] = 'escalate'
+Escalate: te.Literal['escalate'] = 'escalate'
 
 
 @dataclass
@@ -152,9 +152,9 @@ class ReportView(base.ModelBase):
     id: int
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
     reportedBy: str
-    resolvedByActionIds: List[int]
-    subject: Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 'Dict[str, Any]']
-    reason: Optional[str] = None
+    resolvedByActionIds: t.List[int]
+    subject: t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]']
+    reason: t.Optional[str] = None
 
     _type: str = 'com.atproto.admin.defs#reportView'
 
@@ -178,15 +178,15 @@ class ReportViewDetail(base.ModelBase):
     id: int
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
     reportedBy: str
-    resolvedByActions: List['models.ComAtprotoAdminDefs.ActionView']
-    subject: Union[
+    resolvedByActions: t.List['models.ComAtprotoAdminDefs.ActionView']
+    subject: t.Union[
         'models.ComAtprotoAdminDefs.RepoView',
         'models.ComAtprotoAdminDefs.RepoViewNotFound',
         'models.ComAtprotoAdminDefs.RecordView',
         'models.ComAtprotoAdminDefs.RecordViewNotFound',
-        'Dict[str, Any]',
+        't.Dict[str, t.Any]',
     ]
-    reason: Optional[str] = None
+    reason: t.Optional[str] = None
 
     _type: str = 'com.atproto.admin.defs#reportViewDetail'
 
@@ -211,10 +211,10 @@ class RepoView(base.ModelBase):
     handle: str
     indexedAt: str
     moderation: 'models.ComAtprotoAdminDefs.Moderation'
-    relatedRecords: List['base.RecordModelBase']
-    email: Optional[str] = None
-    invitedBy: Optional['models.ComAtprotoServerDefs.InviteCode'] = None
-    invitesDisabled: Optional[bool] = None
+    relatedRecords: t.List['base.RecordModelBase']
+    email: t.Optional[str] = None
+    invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None
+    invitesDisabled: t.Optional[bool] = None
 
     _type: str = 'com.atproto.admin.defs#repoView'
 
@@ -241,12 +241,12 @@ class RepoViewDetail(base.ModelBase):
     handle: str
     indexedAt: str
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'
-    relatedRecords: List['base.RecordModelBase']
-    email: Optional[str] = None
-    invitedBy: Optional['models.ComAtprotoServerDefs.InviteCode'] = None
-    invites: Optional[List['models.ComAtprotoServerDefs.InviteCode']] = None
-    invitesDisabled: Optional[bool] = None
-    labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
+    relatedRecords: t.List['base.RecordModelBase']
+    email: t.Optional[str] = None
+    invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None
+    invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None
+    invitesDisabled: t.Optional[bool] = None
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
 
     _type: str = 'com.atproto.admin.defs#repoViewDetail'
 
@@ -294,7 +294,7 @@ class RecordView(base.ModelBase):
         repo: Repo.
     """
 
-    blobCids: List[str]
+    blobCids: t.List[str]
     cid: str
     indexedAt: str
     moderation: 'models.ComAtprotoAdminDefs.Moderation'
@@ -321,14 +321,14 @@ class RecordViewDetail(base.ModelBase):
         repo: Repo.
     """
 
-    blobs: List['models.ComAtprotoAdminDefs.BlobView']
+    blobs: t.List['models.ComAtprotoAdminDefs.BlobView']
     cid: str
     indexedAt: str
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'
     repo: 'models.ComAtprotoAdminDefs.RepoView'
     uri: str
     value: 'base.RecordModelBase'
-    labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
 
     _type: str = 'com.atproto.admin.defs#recordViewDetail'
 
@@ -356,7 +356,7 @@ class Moderation(base.ModelBase):
         currentAction: Current action.
     """
 
-    currentAction: Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None
+    currentAction: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None
 
     _type: str = 'com.atproto.admin.defs#moderation'
 
@@ -372,9 +372,9 @@ class ModerationDetail(base.ModelBase):
         reports: Reports.
     """
 
-    actions: List['models.ComAtprotoAdminDefs.ActionView']
-    reports: List['models.ComAtprotoAdminDefs.ReportView']
-    currentAction: Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None
+    actions: t.List['models.ComAtprotoAdminDefs.ActionView']
+    reports: t.List['models.ComAtprotoAdminDefs.ReportView']
+    currentAction: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None
 
     _type: str = 'com.atproto.admin.defs#moderationDetail'
 
@@ -397,10 +397,12 @@ class BlobView(base.ModelBase):
     createdAt: str
     mimeType: str
     size: int
-    details: Optional[
-        Union['models.ComAtprotoAdminDefs.ImageDetails', 'models.ComAtprotoAdminDefs.VideoDetails', 'Dict[str, Any]']
+    details: t.Optional[
+        t.Union[
+            'models.ComAtprotoAdminDefs.ImageDetails', 'models.ComAtprotoAdminDefs.VideoDetails', 't.Dict[str, t.Any]'
+        ]
     ] = None
-    moderation: Optional['models.ComAtprotoAdminDefs.Moderation'] = None
+    moderation: t.Optional['models.ComAtprotoAdminDefs.Moderation'] = None
 
     _type: str = 'com.atproto.admin.defs#blobView'
 

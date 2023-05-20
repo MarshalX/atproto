@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Type
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -29,4 +29,4 @@ class Data(base.DataModelBase):
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.
-ResponseRef: Type[models.ComAtprotoAdminDefs.ActionView] = models.ComAtprotoAdminDefs.ActionView
+ResponseRef: t.Type[models.ComAtprotoAdminDefs.ActionView] = models.ComAtprotoAdminDefs.ActionView

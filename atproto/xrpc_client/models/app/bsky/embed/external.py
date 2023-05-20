@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -42,7 +42,7 @@ class External(base.ModelBase):
     description: str
     title: str
     uri: str
-    thumb: Optional[BlobRef] = None
+    thumb: t.Optional[BlobRef] = None
 
     _type: str = 'app.bsky.embed.external#external'
 
@@ -76,6 +76,6 @@ class ViewExternal(base.ModelBase):
     description: str
     title: str
     uri: str
-    thumb: Optional[str] = None
+    thumb: t.Optional[str] = None
 
     _type: str = 'app.bsky.embed.external#viewExternal'

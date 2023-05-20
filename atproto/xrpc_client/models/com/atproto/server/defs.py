@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -33,7 +33,7 @@ class InviteCode(base.ModelBase):
     createdBy: str
     disabled: bool
     forAccount: str
-    uses: List['models.ComAtprotoServerDefs.InviteCodeUse']
+    uses: t.List['models.ComAtprotoServerDefs.InviteCodeUse']
 
     _type: str = 'com.atproto.server.defs#inviteCode'
 

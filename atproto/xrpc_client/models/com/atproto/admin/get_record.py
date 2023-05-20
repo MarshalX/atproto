@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional, Type
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -23,8 +23,8 @@ class Params(base.ParamsModelBase):
     """
 
     uri: str
-    cid: Optional[str] = None
+    cid: t.Optional[str] = None
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.RecordViewDetail` model.
-ResponseRef: Type[models.ComAtprotoAdminDefs.RecordViewDetail] = models.ComAtprotoAdminDefs.RecordViewDetail
+ResponseRef: t.Type[models.ComAtprotoAdminDefs.RecordViewDetail] = models.ComAtprotoAdminDefs.RecordViewDetail

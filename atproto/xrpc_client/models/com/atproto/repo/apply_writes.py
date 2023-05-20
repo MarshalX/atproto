@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -25,16 +25,16 @@ class Data(base.DataModelBase):
     """
 
     repo: str
-    writes: List[
-        Union[
+    writes: t.List[
+        t.Union[
             'models.ComAtprotoRepoApplyWrites.Create',
             'models.ComAtprotoRepoApplyWrites.Update',
             'models.ComAtprotoRepoApplyWrites.Delete',
-            'Dict[str, Any]',
+            't.Dict[str, t.Any]',
         ]
     ]
-    swapCommit: Optional[str] = None
-    validate: Optional[bool] = None
+    swapCommit: t.Optional[str] = None
+    validate: t.Optional[bool] = None
 
 
 @dataclass
@@ -50,7 +50,7 @@ class Create(base.ModelBase):
 
     collection: str
     value: 'base.RecordModelBase'
-    rkey: Optional[str] = None
+    rkey: t.Optional[str] = None
 
     _type: str = 'com.atproto.repo.applyWrites#create'
 

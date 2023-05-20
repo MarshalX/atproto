@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client.models import base
 
@@ -21,5 +21,5 @@ class Data(base.DataModelBase):
         accounts: Accounts.
     """
 
-    accounts: Optional[List[str]] = None
-    codes: Optional[List[str]] = None
+    accounts: t.Optional[t.List[str]] = None
+    codes: t.Optional[t.List[str]] = None

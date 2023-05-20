@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -36,20 +36,20 @@ class PostView(base.ModelBase):
     indexedAt: str
     record: 'base.RecordModelBase'
     uri: str
-    embed: Optional[
-        Union[
+    embed: t.Optional[
+        t.Union[
             'models.AppBskyEmbedImages.View',
             'models.AppBskyEmbedExternal.View',
             'models.AppBskyEmbedRecord.View',
             'models.AppBskyEmbedRecordWithMedia.View',
-            'Dict[str, Any]',
+            't.Dict[str, t.Any]',
         ]
     ] = None
-    labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
-    likeCount: Optional[int] = None
-    replyCount: Optional[int] = None
-    repostCount: Optional[int] = None
-    viewer: Optional['models.AppBskyFeedDefs.ViewerState'] = None
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
+    likeCount: t.Optional[int] = None
+    replyCount: t.Optional[int] = None
+    repostCount: t.Optional[int] = None
+    viewer: t.Optional['models.AppBskyFeedDefs.ViewerState'] = None
 
     _type: str = 'app.bsky.feed.defs#postView'
 
@@ -64,8 +64,8 @@ class ViewerState(base.ModelBase):
         like: Like.
     """
 
-    like: Optional[str] = None
-    repost: Optional[str] = None
+    like: t.Optional[str] = None
+    repost: t.Optional[str] = None
 
     _type: str = 'app.bsky.feed.defs#viewerState'
 
@@ -82,8 +82,8 @@ class FeedViewPost(base.ModelBase):
     """
 
     post: 'models.AppBskyFeedDefs.PostView'
-    reason: Optional[Union['models.AppBskyFeedDefs.ReasonRepost', 'Dict[str, Any]']] = None
-    reply: Optional['models.AppBskyFeedDefs.ReplyRef'] = None
+    reason: t.Optional[t.Union['models.AppBskyFeedDefs.ReasonRepost', 't.Dict[str, t.Any]']] = None
+    reply: t.Optional['models.AppBskyFeedDefs.ReplyRef'] = None
 
     _type: str = 'app.bsky.feed.defs#feedViewPost'
 
@@ -132,21 +132,21 @@ class ThreadViewPost(base.ModelBase):
     """
 
     post: 'models.AppBskyFeedDefs.PostView'
-    parent: Optional[
-        Union[
+    parent: t.Optional[
+        t.Union[
             'models.AppBskyFeedDefs.ThreadViewPost',
             'models.AppBskyFeedDefs.NotFoundPost',
             'models.AppBskyFeedDefs.BlockedPost',
-            'Dict[str, Any]',
+            't.Dict[str, t.Any]',
         ]
     ] = None
-    replies: Optional[
-        List[
-            Union[
+    replies: t.Optional[
+        t.List[
+            t.Union[
                 'models.AppBskyFeedDefs.ThreadViewPost',
                 'models.AppBskyFeedDefs.NotFoundPost',
                 'models.AppBskyFeedDefs.BlockedPost',
-                'Dict[str, Any]',
+                't.Dict[str, t.Any]',
             ]
         ]
     ] = None

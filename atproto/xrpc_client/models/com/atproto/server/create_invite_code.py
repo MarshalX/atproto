@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 from atproto.xrpc_client.models import base
 
@@ -22,7 +22,7 @@ class Data(base.DataModelBase):
     """
 
     useCount: int
-    forAccount: Optional[str] = None
+    forAccount: t.Optional[str] = None
 
 
 @dataclass

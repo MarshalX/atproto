@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List
 
 from atproto.xrpc_client.models import base
 
@@ -36,7 +36,7 @@ class Response(base.ResponseModelBase):
         handleIsCorrect: Handle is correct.
     """
 
-    collections: List[str]
+    collections: t.List[str]
     did: str
     didDoc: 'base.RecordModelBase'
     handle: str

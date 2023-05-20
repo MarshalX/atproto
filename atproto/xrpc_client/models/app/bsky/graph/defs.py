@@ -5,10 +5,10 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
-from typing_extensions import Literal
+import typing_extensions as te
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -31,9 +31,9 @@ class ListViewBasic(base.ModelBase):
     name: str
     purpose: 'models.AppBskyGraphDefs.ListPurpose'
     uri: str
-    avatar: Optional[str] = None
-    indexedAt: Optional[str] = None
-    viewer: Optional['models.AppBskyGraphDefs.ListViewerState'] = None
+    avatar: t.Optional[str] = None
+    indexedAt: t.Optional[str] = None
+    viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None
 
     _type: str = 'app.bsky.graph.defs#listViewBasic'
 
@@ -60,10 +60,10 @@ class ListView(base.ModelBase):
     name: str
     purpose: 'models.AppBskyGraphDefs.ListPurpose'
     uri: str
-    avatar: Optional[str] = None
-    description: Optional[str] = None
-    descriptionFacets: Optional[List['models.AppBskyRichtextFacet.Main']] = None
-    viewer: Optional['models.AppBskyGraphDefs.ListViewerState'] = None
+    avatar: t.Optional[str] = None
+    description: t.Optional[str] = None
+    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None
+    viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None
 
     _type: str = 'app.bsky.graph.defs#listView'
 
@@ -82,9 +82,9 @@ class ListItemView(base.ModelBase):
     _type: str = 'app.bsky.graph.defs#listItemView'
 
 
-ListPurpose = Literal['Modlist']
+ListPurpose = te.Literal['Modlist']
 
-Modlist: Literal['modlist'] = 'modlist'
+Modlist: te.Literal['modlist'] = 'modlist'
 
 
 @dataclass
@@ -96,6 +96,6 @@ class ListViewerState(base.ModelBase):
         muted: Muted.
     """
 
-    muted: Optional[bool] = None
+    muted: t.Optional[bool] = None
 
     _type: str = 'app.bsky.graph.defs#listViewerState'

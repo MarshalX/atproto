@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 from atproto.xrpc_client.models import base
 from atproto.xrpc_client.models.blob_ref import BlobRef
@@ -24,9 +24,9 @@ class Main(base.RecordModelBase):
         banner: Banner.
     """
 
-    avatar: Optional[BlobRef] = None
-    banner: Optional[BlobRef] = None
-    description: Optional[str] = None
-    displayName: Optional[str] = None
+    avatar: t.Optional[BlobRef] = None
+    banner: t.Optional[BlobRef] = None
+    description: t.Optional[str] = None
+    displayName: t.Optional[str] = None
 
     _type: str = 'app.bsky.actor.profile'

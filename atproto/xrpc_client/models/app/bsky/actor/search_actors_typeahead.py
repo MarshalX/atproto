@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -22,8 +22,8 @@ class Params(base.ParamsModelBase):
         limit: Limit.
     """
 
-    limit: Optional[int] = None
-    term: Optional[str] = None
+    limit: t.Optional[int] = None
+    term: t.Optional[str] = None
 
 
 @dataclass
@@ -35,4 +35,4 @@ class Response(base.ResponseModelBase):
         actors: Actors.
     """
 
-    actors: List['models.AppBskyActorDefs.ProfileViewBasic']
+    actors: t.List['models.AppBskyActorDefs.ProfileViewBasic']

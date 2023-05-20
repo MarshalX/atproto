@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -24,8 +24,8 @@ class Params(base.ParamsModelBase):
     """
 
     list: str
-    cursor: Optional[str] = None
-    limit: Optional[int] = None
+    cursor: t.Optional[str] = None
+    limit: t.Optional[int] = None
 
 
 @dataclass
@@ -39,6 +39,6 @@ class Response(base.ResponseModelBase):
         items: Items.
     """
 
-    items: List['models.AppBskyGraphDefs.ListItemView']
+    items: t.List['models.AppBskyGraphDefs.ListItemView']
     list: 'models.AppBskyGraphDefs.ListView'
-    cursor: Optional[str] = None
+    cursor: t.Optional[str] = None

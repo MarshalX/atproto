@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -78,17 +78,17 @@ class Main(base.RecordModelBase):
 
     createdAt: str
     text: str
-    embed: Optional[
-        Union[
+    embed: t.Optional[
+        t.Union[
             'models.AppBskyEmbedImages.Main',
             'models.AppBskyEmbedExternal.Main',
             'models.AppBskyEmbedRecord.Main',
             'models.AppBskyEmbedRecordWithMedia.Main',
-            'Dict[str, Any]',
+            't.Dict[str, t.Any]',
         ]
     ] = None
-    entities: Optional[List['models.AppBskyFeedPost.Entity']] = None
-    facets: Optional[List['models.AppBskyRichtextFacet.Main']] = None
-    reply: Optional['models.AppBskyFeedPost.ReplyRef'] = None
+    entities: t.Optional[t.List['models.AppBskyFeedPost.Entity']] = None
+    facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None
+    reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None
 
     _type: str = 'app.bsky.feed.post'
