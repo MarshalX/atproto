@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -22,7 +22,7 @@ class Labels(base.ModelBase):
         labels: Labels.
     """
 
-    labels: List['models.ComAtprotoLabelDefs.Label']
+    labels: t.List['models.ComAtprotoLabelDefs.Label']
     seq: int
 
     _type: str = 'com.atproto.label.subscribeLabels#labels'
@@ -39,6 +39,6 @@ class Info(base.ModelBase):
     """
 
     name: str
-    message: Optional[str] = None
+    message: t.Optional[str] = None
 
     _type: str = 'com.atproto.label.subscribeLabels#info'

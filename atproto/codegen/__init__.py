@@ -1,7 +1,7 @@
 import re
 import subprocess
+import typing as t
 from pathlib import Path
-from typing import List, Tuple
 
 from atproto.nsid import NSID
 
@@ -43,7 +43,7 @@ def _write_code(filepath: Path, code: str, *, append: bool = False) -> None:
         f.write(code)
 
 
-def get_file_path_parts(nsid: NSID) -> List[str]:
+def get_file_path_parts(nsid: NSID) -> t.List[str]:
     return nsid.segments[:-1] + [f'{convert_camel_case_to_snake_case(nsid.name)}.py']
 
 
@@ -62,12 +62,12 @@ def convert_camel_case_to_snake_case(string: str) -> str:
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s).lower()
 
 
-def camel_case_split(string: str):
+def camel_case_split(string: str) -> t.List[str]:
     # regex by chatgpt
     return re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)', string)
 
 
-def gen_description_by_camel_case_name(name: str):
+def gen_description_by_camel_case_name(name: str) -> str:
     words = camel_case_split(name)
     words = [w.lower() for w in words]
     words[0] = words[0].capitalize()
@@ -78,15 +78,15 @@ def sort_dict_by_key(d: dict) -> dict:
     return dict(sorted(d.items()))
 
 
-def get_code_intent(level: int):
+def get_code_intent(level: int) -> str:
     return ' ' * 4 * level
 
 
-def join_code(lines: List[str]) -> str:
+def join_code(lines: t.List[str]) -> str:
     return '\n'.join(lines)
 
 
-def get_sync_async_keywords(*, sync: bool) -> Tuple[str, str]:
+def get_sync_async_keywords(*, sync: bool) -> t.Tuple[str, str]:
     definition, call = 'async ', 'await '
     if sync:
         definition, call = '', ''

@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Any, Dict, List, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -22,7 +22,9 @@ class Main(base.ModelBase):
         features: Features.
     """
 
-    features: List[Union['models.AppBskyRichtextFacet.Mention', 'models.AppBskyRichtextFacet.Link', 'Dict[str, Any]']]
+    features: t.List[
+        t.Union['models.AppBskyRichtextFacet.Mention', 'models.AppBskyRichtextFacet.Link', 't.Dict[str, t.Any]']
+    ]
     index: 'models.AppBskyRichtextFacet.ByteSlice'
 
     _type: str = 'app.bsky.richtext.facet'

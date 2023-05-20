@@ -1,5 +1,14 @@
 # Change Log
 
+## Version 0.0.7
+
+**20.05.2023**
+
+* update changelog for v0.0.6 by @MarshalX in https://github.com/MarshalX/atproto/pull/29
+* Update docs by @MarshalX in https://github.com/MarshalX/atproto/pull/30
+* Short typing import by @MarshalX in https://github.com/MarshalX/atproto/pull/32
+* Fix session refreshing by @MarshalX in https://github.com/MarshalX/atproto/pull/33
+
 ## Version 0.0.6
 
 **19.05.2023**

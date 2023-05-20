@@ -1,10 +1,10 @@
+import typing as t
 from io import BytesIO
-from typing import Dict
 
 from .. import cbor, leb128
 from ..cid import CID
 
-Nodes = Dict[CID, dict]
+Nodes = t.Dict[CID, dict]
 
 
 class CAR:

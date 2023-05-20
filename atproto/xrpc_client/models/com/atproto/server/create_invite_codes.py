@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -25,7 +25,7 @@ class Data(base.DataModelBase):
 
     codeCount: int
     useCount: int
-    forAccounts: Optional[List[str]] = None
+    forAccounts: t.Optional[t.List[str]] = None
 
 
 @dataclass
@@ -37,7 +37,7 @@ class Response(base.ResponseModelBase):
         codes: Codes.
     """
 
-    codes: List['models.ComAtprotoServerCreateInviteCodes.AccountCodes']
+    codes: t.List['models.ComAtprotoServerCreateInviteCodes.AccountCodes']
 
 
 @dataclass
@@ -51,6 +51,6 @@ class AccountCodes(base.ModelBase):
     """
 
     account: str
-    codes: List[str]
+    codes: t.List[str]
 
     _type: str = 'com.atproto.server.createInviteCodes#accountCodes'

@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -21,7 +21,7 @@ class Response(base.ResponseModelBase):
         passwords: Passwords.
     """
 
-    passwords: List['models.ComAtprotoServerListAppPasswords.AppPassword']
+    passwords: t.List['models.ComAtprotoServerListAppPasswords.AppPassword']
 
 
 @dataclass

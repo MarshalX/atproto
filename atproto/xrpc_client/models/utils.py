@@ -1,6 +1,6 @@
 import dataclasses
 import json
-from typing import TYPE_CHECKING, Any, Optional, Type, TypeVar, Union
+import typing as t
 
 from dacite import Config, exceptions, from_dict
 
@@ -16,10 +16,10 @@ from atproto.xrpc_client.models.base import RecordModelBase
 from atproto.xrpc_client.models.blob_ref import BlobRef
 from atproto.xrpc_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
 
-if TYPE_CHECKING:
+if t.TYPE_CHECKING:
     from atproto.xrpc_client.request import Response
 
-M = TypeVar('M')
+M = t.TypeVar('M')
 
 
 def _record_model_type_hook(data: dict) -> RecordModelBase:
@@ -42,7 +42,7 @@ _TYPE_HOOKS = {
 _DACITE_CONFIG = Config(type_hooks=_TYPE_HOOKS)
 
 
-def get_or_create_model(model_data: Union[dict], model: Type[M]) -> Optional[M]:
+def get_or_create_model(model_data: t.Union[dict], model: t.Type[M]) -> t.Optional[M]:
     if model_data is None:
         return None
 
@@ -68,7 +68,7 @@ def get_or_create_model(model_data: Union[dict], model: Type[M]) -> Optional[M]:
         raise ModelError(str(e))
 
 
-def get_response_model(response: 'Response', model: Type[M]) -> Optional[M]:
+def get_response_model(response: 'Response', model: t.Type[M]) -> t.Optional[M]:
     if model is bool:
         # Could not be False? Because the exception with errors will be raised from the server
         return response.success
@@ -83,7 +83,7 @@ def _handle_dict_key(key: str) -> str:
     return key
 
 
-def _handle_dict_value(ref: Any) -> Any:
+def _handle_dict_value(ref: t.Any) -> t.Any:
     if isinstance(ref, BlobRef):
         return ref.to_dict()
     elif isinstance(ref, CID):
@@ -111,7 +111,7 @@ def get_model_as_json(model) -> str:
     return json.dumps(get_model_as_dict(model))
 
 
-def is_json(json_data: Union[str, bytes]):
+def is_json(json_data: t.Union[str, bytes]):
     if isinstance(json_data, bytes):
         json_data.decode('UTF-8')
 

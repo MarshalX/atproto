@@ -1,9 +1,9 @@
+import typing as t
 from datetime import datetime, timedelta, timezone
-from typing import TYPE_CHECKING, Dict, Union
 
 from atproto.xrpc_client.client.auth import get_jwt_payload
 
-if TYPE_CHECKING:
+if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 
 
@@ -18,7 +18,7 @@ class SessionMethodsMixin:
 
     def _set_session(
         self,
-        session: Union[
+        session: t.Union[
             'models.ComAtprotoServerCreateSession.Response', 'models.ComAtprotoServerRefreshSession.Response'
         ],
     ) -> None:
@@ -31,7 +31,7 @@ class SessionMethodsMixin:
         self._set_auth_headers(session.accessJwt)
 
     @staticmethod
-    def _get_auth_headers(token: str) -> Dict[str, str]:
+    def _get_auth_headers(token: str) -> t.Dict[str, str]:
         return {'Authorization': f'Bearer {token}'}
 
     def _set_auth_headers(self, token: str) -> None:

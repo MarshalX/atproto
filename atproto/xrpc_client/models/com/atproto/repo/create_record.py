@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 from atproto.xrpc_client.models import base
 
@@ -28,9 +28,9 @@ class Data(base.DataModelBase):
     collection: str
     record: 'base.RecordModelBase'
     repo: str
-    rkey: Optional[str] = None
-    swapCommit: Optional[str] = None
-    validate: Optional[bool] = None
+    rkey: t.Optional[str] = None
+    swapCommit: t.Optional[str] = None
+    validate: t.Optional[bool] = None
 
 
 @dataclass

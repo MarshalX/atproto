@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Type, Union
 
 from atproto.xrpc_client.models import base
 
@@ -21,9 +21,9 @@ class Params(base.ParamsModelBase):
         cids: Cids.
     """
 
-    cids: List[str]
+    cids: t.List[str]
     did: str
 
 
 #: Response raw data type.
-Response: Union[Type[str], Type[bytes]] = bytes
+Response: t.Union[t.Type[str], t.Type[bytes]] = bytes

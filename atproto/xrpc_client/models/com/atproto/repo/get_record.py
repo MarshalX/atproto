@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 from atproto.xrpc_client.models import base
 
@@ -26,7 +26,7 @@ class Params(base.ParamsModelBase):
     collection: str
     repo: str
     rkey: str
-    cid: Optional[str] = None
+    cid: t.Optional[str] = None
 
 
 @dataclass
@@ -42,4 +42,4 @@ class Response(base.ResponseModelBase):
 
     uri: str
     value: 'base.RecordModelBase'
-    cid: Optional[str] = None
+    cid: t.Optional[str] = None

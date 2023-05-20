@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -23,7 +23,7 @@ class Params(base.ParamsModelBase):
     """
 
     uri: str
-    depth: Optional[int] = None
+    depth: t.Optional[int] = None
 
 
 @dataclass
@@ -35,9 +35,9 @@ class Response(base.ResponseModelBase):
         thread: Thread.
     """
 
-    thread: Union[
+    thread: t.Union[
         'models.AppBskyFeedDefs.ThreadViewPost',
         'models.AppBskyFeedDefs.NotFoundPost',
         'models.AppBskyFeedDefs.BlockedPost',
-        'Dict[str, Any]',
+        't.Dict[str, t.Any]',
     ]

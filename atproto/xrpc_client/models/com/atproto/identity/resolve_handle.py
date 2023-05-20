@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 from atproto.xrpc_client.models import base
 
@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
         handle: The handle to resolve. If not supplied, will resolve the host's own handle.
     """
 
-    handle: Optional[str] = None
+    handle: t.Optional[str] = None
 
 
 @dataclass

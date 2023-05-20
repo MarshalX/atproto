@@ -4,14 +4,15 @@
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
+import typing as t
+from asyncio import Lock
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.client.async_raw import AsyncClientRaw
 from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin
 
-if TYPE_CHECKING:
+if t.TYPE_CHECKING:
     from atproto.xrpc_client.client.auth import JwtPayload
     from atproto.xrpc_client.client.base import InvokeType
     from atproto.xrpc_client.request import Response
@@ -23,17 +24,24 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
     def __init__(self, base_url: str = None):
         super().__init__(base_url)
 
-        self._access_jwt: Optional[str] = None
-        self._access_jwt_payload: Optional['JwtPayload'] = None
+        self._access_jwt: t.Optional[str] = None
+        self._access_jwt_payload: t.Optional['JwtPayload'] = None
 
-        self._refresh_jwt: Optional[str] = None
-        self._refresh_jwt_payload: Optional['JwtPayload'] = None
+        self._refresh_jwt: t.Optional[str] = None
+        self._refresh_jwt_payload: t.Optional['JwtPayload'] = None
 
-        self.me: Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
+        self._refresh_lock = Lock()
+
+        self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
     async def _invoke(self, invoke_type: 'InvokeType', **kwargs) -> 'Response':
-        if self.me and self._should_refresh_session():
-            await self._refresh_and_set_session()
+        session_refreshing = kwargs.pop('session_refreshing', False)
+        if session_refreshing:
+            return await super()._invoke(invoke_type, **kwargs)
+
+        async with self._refresh_lock:
+            if self._access_jwt and self._should_refresh_session():
+                await self._refresh_and_set_session()
 
         return await super()._invoke(invoke_type, **kwargs)
 
@@ -47,7 +55,7 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
 
     async def _refresh_and_set_session(self) -> models.ComAtprotoServerRefreshSession.Response:
         refresh_session = await self.com.atproto.server.refresh_session(
-            headers=self._get_auth_headers(self._refresh_jwt)
+            headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
         )
         self._set_session(refresh_session)
 
@@ -75,10 +83,10 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
     async def send_post(
         self,
         text: str,
-        profile_identify: Optional[str] = None,
-        reply_to: Optional[Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
-        embed: Optional[
-            Union[
+        profile_identify: t.Optional[str] = None,
+        reply_to: t.Optional[t.Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
+        embed: t.Optional[
+            t.Union[
                 'models.AppBskyEmbedImages.Main',
                 'models.AppBskyEmbedExternal.Main',
                 'models.AppBskyEmbedRecord.Main',
@@ -123,8 +131,8 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
         text: str,
         image: bytes,
         image_alt: str,
-        profile_identify: Optional[str] = None,
-        reply_to: Optional[Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
+        profile_identify: t.Optional[str] = None,
+        reply_to: t.Optional[t.Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
     ) -> models.ComAtprotoRepoCreateRecord.Response:
         """Send post with attached image.
 
@@ -175,7 +183,7 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
             )
         )
 
-    async def unlike(self, record_key: str, profile_identify: Optional[str] = None) -> bool:
+    async def unlike(self, record_key: str, profile_identify: t.Optional[str] = None) -> bool:
         """Unlike the post.
 
         Args:

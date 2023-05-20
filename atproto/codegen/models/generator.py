@@ -1,7 +1,7 @@
 import os
+import typing as t
 from enum import Enum
 from pathlib import Path
-from typing import Tuple, Union
 
 from atproto.codegen import (
     DISCLAIMER,
@@ -53,9 +53,9 @@ def _get_model_imports() -> str:
     # TODO(MarshalX): isort can't delete unused imports. mb add ruff
     lines = [
         'from dataclasses import dataclass',
-        'from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union',
+        'import typing as t',
         '',
-        'from typing_extensions import Literal',
+        'import typing_extensions as te',
         'from atproto.xrpc_client import models',
         'from atproto.xrpc_client.models import base',
         'from atproto.xrpc_client.models.blob_ref import BlobRef',
@@ -105,7 +105,7 @@ _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT = {
 
 def _get_optional_typehint(type_hint, *, optional: bool) -> str:
     if optional:
-        return f'Optional[{type_hint}] = None'
+        return f't.Optional[{type_hint}] = None'
     else:
         return type_hint
 
@@ -115,7 +115,7 @@ def _get_ref_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
     return _get_optional_typehint(f"'{model_path}'", optional=optional)
 
 
-def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> Tuple[str, str]:
+def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> t.Tuple[str, str]:
     """Returns path to the model and model name"""
     if '#' in ref:
         ref_nsid_str, def_name = ref.split('#', 1)
@@ -151,10 +151,10 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     # maybe it's for the records that have custom fields... idk
     # ref: https://github.com/bluesky-social/atproto/blob/b01e47b61730d05a780f7a42667b91ccaa192e8e/packages/lex-cli/src/codegen/lex-gen.ts#L325
     # grep by "{$type: string; [k: string]: unknown}" string
-    def_names.append('Dict[str, Any]')
+    def_names.append('t.Dict[str, t.Any]')
 
     def_names = ', '.join([f"'{name}'" for name in def_names])
-    return _get_optional_typehint(f"Union[{def_names}]", optional=optional)
+    return _get_optional_typehint(f"t.Union[{def_names}]", optional=optional)
 
 
 def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, optional: bool) -> str:
@@ -170,7 +170,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
 
     if field_type is models.LexArray:
         items_type_hint = _get_model_field_typehint(nsid, field_name, field_type_def.items, optional=False)
-        return _get_optional_typehint(f'List[{items_type_hint}]', optional=optional)
+        return _get_optional_typehint(f't.List[{items_type_hint}]', optional=optional)
 
     if field_type is models.LexRef:
         return _get_ref_typehint(nsid, field_type_def, optional=optional)
@@ -183,7 +183,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
 
     if field_type is models.LexBytes:
         # CAR file containing relevant blocks
-        return _get_optional_typehint('Union[str, bytes]', optional=optional)
+        return _get_optional_typehint('t.Union[str, bytes]', optional=optional)
 
     if field_type is models.LexBlob:
         # yes, it returns blob,but actually it's blob ref here
@@ -192,7 +192,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
     raise ValueError(f'Unknown field type {field_name.__name__}')
 
 
-def _get_req_fields_set(lex_obj: Union[models.LexObject, models.LexXrpcParameters]) -> set:
+def _get_req_fields_set(lex_obj: t.Union[models.LexObject, models.LexXrpcParameters]) -> set:
     required_fields = set()
     if lex_obj.required:
         required_fields = set(lex_obj.required)
@@ -205,7 +205,7 @@ def _get_req_fields_set(lex_obj: Union[models.LexObject, models.LexXrpcParameter
 
 
 def _get_model_docstring(
-    nsid: Union[str, NSID], lex_object: Union[models.LexObject, models.LexXrpcParameters], model_type: ModelType
+    nsid: t.Union[str, NSID], lex_object: t.Union[models.LexObject, models.LexXrpcParameters], model_type: ModelType
 ) -> str:
     model_desc = lex_object.description or ''
     model_desc = f"{model_type.value} model for :obj:`{nsid}`. {model_desc}"
@@ -227,7 +227,7 @@ def _get_model_docstring(
     return join_code(doc_string)
 
 
-def _get_model(nsid: NSID, lex_object: Union[models.LexObject, models.LexXrpcParameters]) -> str:
+def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters]) -> str:
     required_fields = _get_req_fields_set(lex_object)
 
     fields = []
@@ -256,7 +256,7 @@ def _get_model(nsid: NSID, lex_object: Union[models.LexObject, models.LexXrpcPar
 def _get_model_ref(nsid: NSID, ref: models.LexRef) -> str:
     # FIXME(MarshalX): "local=True" Is it works well? ;d
     ref_class, _ = _resolve_nsid_ref(nsid, ref.ref, local=True)
-    ref_typehint = f'Type[{ref_class}]'
+    ref_typehint = f't.Type[{ref_class}]'
 
     # "Ref" suffix required to fix name collisions from different namespaces
     lines = [
@@ -270,11 +270,11 @@ def _get_model_ref(nsid: NSID, ref: models.LexRef) -> str:
 
 
 def _get_model_raw_data(name: str) -> str:
-    lines = [f'#: {name} raw data type.', f'{name}: Union[Type[str], Type[bytes]] = bytes\n\n']
+    lines = [f'#: {name} raw data type.', f'{name}: t.Union[t.Type[str], t.Type[bytes]] = bytes\n\n']
     return join_code(lines)
 
 
-def _generate_params_model(nsid: NSID, definition: Union[models.LexXrpcProcedure, models.LexXrpcQuery]) -> str:
+def _generate_params_model(nsid: NSID, definition: t.Union[models.LexXrpcProcedure, models.LexXrpcQuery]) -> str:
     lines = [_get_model_class_def(nsid.name, ModelType.PARAMS)]
 
     if definition.parameters:
@@ -332,7 +332,7 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
 
 def _generate_def_token(def_name: str) -> str:
     lines = [
-        f"{get_def_model_name(def_name)}: Literal['{def_name}'] = '{def_name}'",
+        f"{get_def_model_name(def_name)}: te.Literal['{def_name}'] = '{def_name}'",
         '',
         '',
     ]
@@ -353,7 +353,7 @@ def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
     known_values = ["'" + get_def_model_name(v.split('#', 1)[1]) + "'" for v in def_model.knownValues]
     known_values = ', '.join(known_values)
 
-    type_ = f'Literal[{known_values}]'
+    type_ = f'te.Literal[{known_values}]'
 
     lines = [
         f"{get_def_model_name(def_name)} = {type_}",

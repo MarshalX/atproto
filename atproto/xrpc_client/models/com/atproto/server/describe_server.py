@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -23,9 +23,9 @@ class Response(base.ResponseModelBase):
         links: Links.
     """
 
-    availableUserDomains: List[str]
-    inviteCodeRequired: Optional[bool] = None
-    links: Optional['models.ComAtprotoServerDescribeServer.Links'] = None
+    availableUserDomains: t.List[str]
+    inviteCodeRequired: t.Optional[bool] = None
+    links: t.Optional['models.ComAtprotoServerDescribeServer.Links'] = None
 
 
 @dataclass
@@ -38,7 +38,7 @@ class Links(base.ModelBase):
         termsOfService: Terms of service.
     """
 
-    privacyPolicy: Optional[str] = None
-    termsOfService: Optional[str] = None
+    privacyPolicy: t.Optional[str] = None
+    termsOfService: t.Optional[str] = None
 
     _type: str = 'com.atproto.server.describeServer#links'

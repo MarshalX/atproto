@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -21,7 +21,7 @@ class Params(base.ParamsModelBase):
         uris: Uris.
     """
 
-    uris: List[str]
+    uris: t.List[str]
 
 
 @dataclass
@@ -33,4 +33,4 @@ class Response(base.ResponseModelBase):
         posts: Posts.
     """
 
-    posts: List['models.AppBskyFeedDefs.PostView']
+    posts: t.List['models.AppBskyFeedDefs.PostView']

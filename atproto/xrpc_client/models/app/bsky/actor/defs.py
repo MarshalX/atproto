@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -28,10 +28,10 @@ class ProfileViewBasic(base.ModelBase):
 
     did: str
     handle: str
-    avatar: Optional[str] = None
-    displayName: Optional[str] = None
-    labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
-    viewer: Optional['models.AppBskyActorDefs.ViewerState'] = None
+    avatar: t.Optional[str] = None
+    displayName: t.Optional[str] = None
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None
 
     _type: str = 'app.bsky.actor.defs#profileViewBasic'
 
@@ -54,12 +54,12 @@ class ProfileView(base.ModelBase):
 
     did: str
     handle: str
-    avatar: Optional[str] = None
-    description: Optional[str] = None
-    displayName: Optional[str] = None
-    indexedAt: Optional[str] = None
-    labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
-    viewer: Optional['models.AppBskyActorDefs.ViewerState'] = None
+    avatar: t.Optional[str] = None
+    description: t.Optional[str] = None
+    displayName: t.Optional[str] = None
+    indexedAt: t.Optional[str] = None
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None
 
     _type: str = 'app.bsky.actor.defs#profileView'
 
@@ -86,16 +86,16 @@ class ProfileViewDetailed(base.ModelBase):
 
     did: str
     handle: str
-    avatar: Optional[str] = None
-    banner: Optional[str] = None
-    description: Optional[str] = None
-    displayName: Optional[str] = None
-    followersCount: Optional[int] = None
-    followsCount: Optional[int] = None
-    indexedAt: Optional[str] = None
-    labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
-    postsCount: Optional[int] = None
-    viewer: Optional['models.AppBskyActorDefs.ViewerState'] = None
+    avatar: t.Optional[str] = None
+    banner: t.Optional[str] = None
+    description: t.Optional[str] = None
+    displayName: t.Optional[str] = None
+    followersCount: t.Optional[int] = None
+    followsCount: t.Optional[int] = None
+    indexedAt: t.Optional[str] = None
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
+    postsCount: t.Optional[int] = None
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None
 
     _type: str = 'app.bsky.actor.defs#profileViewDetailed'
 
@@ -114,18 +114,20 @@ class ViewerState(base.ModelBase):
         followedBy: Followed by.
     """
 
-    blockedBy: Optional[bool] = None
-    blocking: Optional[str] = None
-    followedBy: Optional[str] = None
-    following: Optional[str] = None
-    muted: Optional[bool] = None
-    mutedByList: Optional['models.AppBskyGraphDefs.ListViewBasic'] = None
+    blockedBy: t.Optional[bool] = None
+    blocking: t.Optional[str] = None
+    followedBy: t.Optional[str] = None
+    following: t.Optional[str] = None
+    muted: t.Optional[bool] = None
+    mutedByList: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None
 
     _type: str = 'app.bsky.actor.defs#viewerState'
 
 
-Preferences = List[
-    Union['models.AppBskyActorDefs.AdultContentPref', 'models.AppBskyActorDefs.ContentLabelPref', 'Dict[str, Any]']
+Preferences = t.List[
+    t.Union[
+        'models.AppBskyActorDefs.AdultContentPref', 'models.AppBskyActorDefs.ContentLabelPref', 't.Dict[str, t.Any]'
+    ]
 ]
 
 

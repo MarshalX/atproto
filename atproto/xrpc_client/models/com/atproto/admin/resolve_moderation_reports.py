@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Type
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -25,8 +25,8 @@ class Data(base.DataModelBase):
 
     actionId: int
     createdBy: str
-    reportIds: List[int]
+    reportIds: t.List[int]
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.
-ResponseRef: Type[models.ComAtprotoAdminDefs.ActionView] = models.ComAtprotoAdminDefs.ActionView
+ResponseRef: t.Type[models.ComAtprotoAdminDefs.ActionView] = models.ComAtprotoAdminDefs.ActionView
