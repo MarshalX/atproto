@@ -13,7 +13,9 @@ Submodules
    :maxdepth: 4
 
    atproto.xrpc_client.models.com.atproto.admin.defs
+   atproto.xrpc_client.models.com.atproto.admin.disable_account_invites
    atproto.xrpc_client.models.com.atproto.admin.disable_invite_codes
+   atproto.xrpc_client.models.com.atproto.admin.enable_account_invites
    atproto.xrpc_client.models.com.atproto.admin.get_invite_codes
    atproto.xrpc_client.models.com.atproto.admin.get_moderation_action
    atproto.xrpc_client.models.com.atproto.admin.get_moderation_actions
