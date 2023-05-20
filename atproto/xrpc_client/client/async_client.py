@@ -5,6 +5,7 @@
 ##################################################################
 
 import typing as t
+from asyncio import Lock
 from datetime import datetime
 
 from atproto.xrpc_client import models
@@ -29,11 +30,18 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
         self._refresh_jwt: t.Optional[str] = None
         self._refresh_jwt_payload: t.Optional['JwtPayload'] = None
 
+        self._refresh_lock = Lock()
+
         self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
     async def _invoke(self, invoke_type: 'InvokeType', **kwargs) -> 'Response':
-        if self.me and self._should_refresh_session():
-            await self._refresh_and_set_session()
+        session_refreshing = kwargs.pop('session_refreshing', False)
+        if session_refreshing:
+            return await super()._invoke(invoke_type, **kwargs)
+
+        async with self._refresh_lock:
+            if self._access_jwt and self._should_refresh_session():
+                await self._refresh_and_set_session()
 
         return await super()._invoke(invoke_type, **kwargs)
 
@@ -47,7 +55,7 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
 
     async def _refresh_and_set_session(self) -> models.ComAtprotoServerRefreshSession.Response:
         refresh_session = await self.com.atproto.server.refresh_session(
-            headers=self._get_auth_headers(self._refresh_jwt)
+            headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
         )
         self._set_session(refresh_session)
 

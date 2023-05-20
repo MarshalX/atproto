@@ -1,5 +1,6 @@
 import typing as t
 from datetime import datetime
+from threading import Lock
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin
@@ -23,11 +24,18 @@ class Client(ClientRaw, SessionMethodsMixin):
         self._refresh_jwt: t.Optional[str] = None
         self._refresh_jwt_payload: t.Optional['JwtPayload'] = None
 
+        self._refresh_lock = Lock()
+
         self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
     def _invoke(self, invoke_type: 'InvokeType', **kwargs) -> 'Response':
-        if self.me and self._should_refresh_session():
-            self._refresh_and_set_session()
+        session_refreshing = kwargs.pop('session_refreshing', False)
+        if session_refreshing:
+            return super()._invoke(invoke_type, **kwargs)
+
+        with self._refresh_lock:
+            if self._access_jwt and self._should_refresh_session():
+                self._refresh_and_set_session()
 
         return super()._invoke(invoke_type, **kwargs)
 
@@ -38,7 +46,9 @@ class Client(ClientRaw, SessionMethodsMixin):
         return session
 
     def _refresh_and_set_session(self) -> models.ComAtprotoServerRefreshSession.Response:
-        refresh_session = self.com.atproto.server.refresh_session(headers=self._get_auth_headers(self._refresh_jwt))
+        refresh_session = self.com.atproto.server.refresh_session(
+            headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
+        )
         self._set_session(refresh_session)
 
         return refresh_session
