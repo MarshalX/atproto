@@ -5,6 +5,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from atproto import exceptions
+from atproto.xrpc_client.models.common import XrpcError
 from atproto.xrpc_client.models.utils import get_or_create_model, is_json
 
 
@@ -14,12 +15,6 @@ class Response:
     status_code: int
     content: Optional[Union[dict, bytes, 'XrpcError']]
     headers: Dict[str, Any]
-
-
-@dataclass
-class XrpcError:
-    error: str
-    message: Optional[str]
 
 
 def _parse_response(response: httpx.Response) -> Response:

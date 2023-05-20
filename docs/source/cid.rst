@@ -1,7 +1,7 @@
 CID
 ===
 
-.. automodule:: atproto.cid
+.. autoclass:: atproto.cid.CID
    :members:
    :undoc-members:
    :show-inheritance:

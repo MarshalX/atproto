@@ -33,10 +33,10 @@ def sync_main():
 
     # repo = client.com.atproto.sync.get_repo({'did': client.me.did})
     did = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'}).did
-    # repo = client.com.atproto.sync.get_repo({'did': did})
-    # car_file = CAR.from_bytes(repo)
-    # print(car_file.root)
-    # print(car_file.nodes)
+    repo = client.com.atproto.sync.get_repo({'did': did})
+    car_file = CAR.from_bytes(repo)
+    print(car_file.root)
+    print(car_file.nodes)
 
     # res = client.com.atproto.repo.get_record(...)     # implement by yourself
     # also you need to parse "res.value" as profile record using  get_or_create_model method

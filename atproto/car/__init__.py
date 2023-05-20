@@ -1,9 +1,7 @@
 from io import BytesIO
 from typing import Dict
 
-import dag_cbor
-
-from .. import leb128
+from .. import cbor, leb128
 from ..cid import CID
 
 Nodes = Dict[CID, dict]
@@ -54,14 +52,14 @@ class CAR:
         repo = BytesIO(data)
 
         header_len, _ = leb128.u.decode_reader(repo)
-        header = dag_cbor.decode(repo.read(header_len))
+        header = cbor.decode(repo.read(header_len))
         root = header.get('roots')[0]
 
         nodes = {}
         while repo.tell() != len(data):
             block_len, _ = leb128.u.decode_reader(repo)
             cid = CID.decode(repo.read(CAR._CID_V1_BYTES_LEN))
-            block = dag_cbor.decode(repo.read(block_len - CAR._CID_V1_BYTES_LEN))
+            block = cbor.decode(repo.read(block_len - CAR._CID_V1_BYTES_LEN))
 
             nodes[cid] = block
 
