@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple, Union
+import typing as t
 
 from atproto.lexicon.models import (
     LexDefinition,
@@ -12,10 +12,10 @@ from atproto.lexicon.parser import lexicon_parse_dir
 from atproto.nsid import NSID
 
 _VALID_LEX_DEF_TYPES = {LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, LexDefinitionType.RECORD}
-_VALID_LEX_DEF_TYPE = Union[LexXrpcProcedure, LexXrpcQuery, LexRecord]
+_VALID_LEX_DEF_TYPE = t.Union[LexXrpcProcedure, LexXrpcQuery, LexRecord]
 
 
-def _filter_namespace_valid_definitions(definitions: Dict[str, LexDefinition]) -> Dict[str, LexDefinition]:
+def _filter_namespace_valid_definitions(definitions: t.Dict[str, LexDefinition]) -> t.Dict[str, LexDefinition]:
     result = {}
 
     for def_name, def_content in definitions.items():
@@ -25,14 +25,14 @@ def _filter_namespace_valid_definitions(definitions: Dict[str, LexDefinition]) -
     return result
 
 
-def get_definition_by_name(name: str, defs: Dict[str, LexDefinition]) -> LexDefinition:
+def get_definition_by_name(name: str, defs: t.Dict[str, LexDefinition]) -> LexDefinition:
     if name in defs:
         return defs[name]
 
     return defs['main']
 
 
-class ObjectInfo(NamedTuple):
+class ObjectInfo(t.NamedTuple):
     name: str
     nsid: NSID
     definition: _VALID_LEX_DEF_TYPE
@@ -46,7 +46,7 @@ class RecordInfo(ObjectInfo):
     pass
 
 
-def _enrich_namespace_tree(root: dict, nsid: NSID, defs: Dict[str, LexDefinition]) -> None:
+def _enrich_namespace_tree(root: dict, nsid: NSID, defs: t.Dict[str, LexDefinition]) -> None:
     segments_count = len(nsid.segments)
     for path_level, segment in enumerate(nsid.segments):
         # if method
@@ -71,7 +71,7 @@ def _enrich_namespace_tree(root: dict, nsid: NSID, defs: Dict[str, LexDefinition
         root = root[segment]
 
 
-def build_namespace_tree(lexicons: List[LexiconDoc]) -> dict:
+def build_namespace_tree(lexicons: t.List[LexiconDoc]) -> dict:
     namespace_tree = {}
     for lexicon in lexicons:
         defs = _filter_namespace_valid_definitions(lexicon.defs)

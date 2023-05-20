@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 from atproto.xrpc_client.models import base
 
@@ -28,9 +28,9 @@ class Data(base.DataModelBase):
     email: str
     handle: str
     password: str
-    did: Optional[str] = None
-    inviteCode: Optional[str] = None
-    recoveryKey: Optional[str] = None
+    did: t.Optional[str] = None
+    inviteCode: t.Optional[str] = None
+    recoveryKey: t.Optional[str] = None
 
 
 @dataclass

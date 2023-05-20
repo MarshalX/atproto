@@ -1,5 +1,5 @@
+import typing as t
 from pathlib import Path
-from typing import List, Set, Union
 
 from atproto.codegen import (
     DISCLAIMER,
@@ -49,7 +49,7 @@ def _get_namespace_imports() -> str:
     lines = [
         DISCLAIMER,
         'from dataclasses import dataclass, field',
-        'from typing import Optional, Union',
+        'import typing as t',
         '',
         'from atproto.xrpc_client import models',
         'from atproto.xrpc_client.models.utils import get_or_create_model, get_response_model',
@@ -180,15 +180,15 @@ def _get_namespace_method_signature_arg(
         return f"{name}: 'models.{get_import_path(nsid)}.{model_name}'"
 
     default_value = ''
-    type_hint = f"Union[dict, 'models.{get_import_path(nsid)}.{model_name}']"
+    type_hint = f"t.Union[dict, 'models.{get_import_path(nsid)}.{model_name}']"
     if optional:
-        type_hint = f'Optional[{type_hint}]'
+        type_hint = f't.Optional[{type_hint}]'
         default_value = ' = None'
 
     return f'{name}: {type_hint}{default_value}'
 
 
-def _get_namespace_method_signature_args_names(method_info: MethodInfo) -> Set[str]:
+def _get_namespace_method_signature_args_names(method_info: MethodInfo) -> t.Set[str]:
     args = {'self'}
     if method_info.definition.parameters:
         args.add('params')
@@ -273,7 +273,7 @@ def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> s
     return f'{_(1)}{d}def {name}({args}) -> {return_type}:'
 
 
-def _get_namespace_methods_block(methods_info: List[MethodInfo], sync: bool) -> str:
+def _get_namespace_methods_block(methods_info: t.List[MethodInfo], sync: bool) -> str:
     lines = []
 
     methods_info.sort(key=lambda e: e.name)
@@ -284,7 +284,7 @@ def _get_namespace_methods_block(methods_info: List[MethodInfo], sync: bool) -> 
     return join_code(lines)
 
 
-def _get_namespace_records_block(records_info: List[RecordInfo]) -> str:
+def _get_namespace_records_block(records_info: t.List[RecordInfo]) -> str:
     lines = []
 
     records_info.sort(key=lambda e: e.name)
@@ -294,7 +294,7 @@ def _get_namespace_records_block(records_info: List[RecordInfo]) -> str:
     return join_code(lines)
 
 
-def _generate_namespace_in_output(namespace_tree: Union[dict, list], output: List[str], *, sync: bool) -> None:
+def _generate_namespace_in_output(namespace_tree: t.Union[dict, list], output: t.List[str], *, sync: bool) -> None:
     for node_name, sub_node in namespace_tree.items():
         if isinstance(sub_node, dict):
             output.append(_get_namespace_class_def(node_name))

@@ -1,7 +1,7 @@
+import typing as t
 import zipfile
 from io import BytesIO
 from pathlib import Path
-from typing import Dict, Tuple
 
 import httpx
 
@@ -27,7 +27,7 @@ def _build_src_download_url() -> str:
     return f'{_GITHUB_BASE_URL}/{_ORG_NAME}/{_REPO_NAME}/archive/refs/heads/{_DEFAULT_BRANCH_NAME}.zip'
 
 
-def _get_last_commit_info() -> Tuple[str, str, str]:
+def _get_last_commit_info() -> t.Tuple[str, str, str]:
     response = httpx.get(
         url=_build_last_commit_api_url(),
         params={'path': _LEXICONS_FOLDER_NAME, 'sha': _DEFAULT_BRANCH_NAME, 'per_page': 1},
@@ -64,7 +64,7 @@ def _validate_lexicon_path_prefix(path: str) -> bool:
     return path.startswith(_build_valid_path_to_lexicons())
 
 
-ExtractedFiles = Dict[str, bytes]
+ExtractedFiles = t.Dict[str, bytes]
 
 
 def _extract_zip(zip_file: BytesIO) -> ExtractedFiles:

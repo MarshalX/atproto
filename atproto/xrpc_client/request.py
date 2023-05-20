@@ -1,6 +1,6 @@
 import json
+import typing as t
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, Union
 
 import httpx
 
@@ -12,14 +12,14 @@ from atproto.xrpc_client.models.utils import get_or_create_model, is_json
 class Response:
     success: bool
     status_code: int
-    content: Optional[Union[dict, bytes, 'XrpcError']]
-    headers: Dict[str, Any]
+    content: t.Optional[t.Union[dict, bytes, 'XrpcError']]
+    headers: t.Dict[str, t.Any]
 
 
 @dataclass
 class XrpcError:
     error: str
-    message: Optional[str]
+    message: t.Optional[str]
 
 
 def _parse_response(response: httpx.Response) -> Response:
@@ -75,7 +75,7 @@ class RequestBase:
     def __init__(self):
         self._additional_headers: dict = {}
 
-    def get_headers(self, additional_headers: Optional[dict] = None) -> dict:
+    def get_headers(self, additional_headers: t.Optional[dict] = None) -> dict:
         headers = {**self.MANDATORY_HEADERS, **self._additional_headers}
 
         if additional_headers:

@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 from atproto.xrpc_client.models import base
 
@@ -42,4 +42,4 @@ class Response(base.ResponseModelBase):
     did: str
     handle: str
     refreshJwt: str
-    email: Optional[str] = None
+    email: t.Optional[str] = None

@@ -1,6 +1,6 @@
 import re
+import typing as t
 from dataclasses import dataclass, field
-from typing import List
 
 from atproto.exceptions import InvalidNsidError
 
@@ -18,7 +18,7 @@ _NSID_PART_VALID_CHARS_REGEX = r'^[a-zA-Z]'
 
 _NSID_PART_FORBIDDEN_END = '-'
 
-Segments = List[str]
+Segments = t.List[str]
 
 
 @dataclass

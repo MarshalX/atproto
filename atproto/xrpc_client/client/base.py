@@ -1,5 +1,5 @@
+import typing as t
 from enum import Enum
-from typing import Optional
 
 from atproto.xrpc_client.models.utils import get_model_as_dict, get_model_as_json
 from atproto.xrpc_client.request import AsyncRequest, Request, Response
@@ -44,7 +44,7 @@ def _handle_kwagrs(kwargs: dict) -> None:
 class ClientBase:
     """Low-level methods are here"""
 
-    def __init__(self, base_url: Optional[str] = None, request: Optional[Request] = None):
+    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None):
         if request is None:
             request = Request()
         if base_url is None:
@@ -60,11 +60,13 @@ class ClientBase:
     def _build_url(self, nsid: str) -> str:
         return f'{self._base_url}/{nsid}'
 
-    def invoke_query(self, nsid: str, params: Optional[dict] = None, data: Optional[dict] = None, **kwargs) -> Response:
+    def invoke_query(
+        self, nsid: str, params: t.Optional[dict] = None, data: t.Optional[dict] = None, **kwargs
+    ) -> Response:
         return self._invoke(InvokeType.QUERY, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
     def invoke_procedure(
-        self, nsid: str, params: Optional[dict] = None, data: Optional[dict] = None, **kwargs
+        self, nsid: str, params: t.Optional[dict] = None, data: t.Optional[dict] = None, **kwargs
     ) -> Response:
         return self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
@@ -80,7 +82,7 @@ class ClientBase:
 class AsyncClientBase:
     """Low-level methods are here"""
 
-    def __init__(self, base_url: Optional[str] = None, request: Optional[AsyncRequest] = None):
+    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[AsyncRequest] = None):
         if request is None:
             request = AsyncRequest()
         if base_url is None:
@@ -97,12 +99,12 @@ class AsyncClientBase:
         return f'{self._base_url}/{nsid}'
 
     async def invoke_query(
-        self, nsid: str, params: Optional[dict] = None, data: Optional[dict] = None, **kwargs
+        self, nsid: str, params: t.Optional[dict] = None, data: t.Optional[dict] = None, **kwargs
     ) -> Response:
         return await self._invoke(InvokeType.QUERY, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
     async def invoke_procedure(
-        self, nsid: str, params: Optional[dict] = None, data: Optional[dict] = None, **kwargs
+        self, nsid: str, params: t.Optional[dict] = None, data: t.Optional[dict] = None, **kwargs
     ) -> Response:
         return await self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
 

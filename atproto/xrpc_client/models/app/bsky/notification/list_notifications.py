@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List, Optional
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -23,9 +23,9 @@ class Params(base.ParamsModelBase):
         seenAt: Seen at.
     """
 
-    cursor: Optional[str] = None
-    limit: Optional[int] = None
-    seenAt: Optional[str] = None
+    cursor: t.Optional[str] = None
+    limit: t.Optional[int] = None
+    seenAt: t.Optional[str] = None
 
 
 @dataclass
@@ -38,8 +38,8 @@ class Response(base.ResponseModelBase):
         notifications: Notifications.
     """
 
-    notifications: List['models.AppBskyNotificationListNotifications.Notification']
-    cursor: Optional[str] = None
+    notifications: t.List['models.AppBskyNotificationListNotifications.Notification']
+    cursor: t.Optional[str] = None
 
 
 @dataclass
@@ -66,7 +66,7 @@ class Notification(base.ModelBase):
     reason: str
     record: 'base.RecordModelBase'
     uri: str
-    labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
-    reasonSubject: Optional[str] = None
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
+    reasonSubject: t.Optional[str] = None
 
     _type: str = 'app.bsky.notification.listNotifications#notification'

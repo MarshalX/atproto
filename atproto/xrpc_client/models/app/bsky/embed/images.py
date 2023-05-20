@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import List
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -22,7 +22,7 @@ class Main(base.ModelBase):
         images: Images.
     """
 
-    images: List['models.AppBskyEmbedImages.Image']
+    images: t.List['models.AppBskyEmbedImages.Image']
 
     _type: str = 'app.bsky.embed.images'
 
@@ -52,7 +52,7 @@ class View(base.ModelBase):
         images: Images.
     """
 
-    images: List['models.AppBskyEmbedImages.ViewImage']
+    images: t.List['models.AppBskyEmbedImages.ViewImage']
 
     _type: str = 'app.bsky.embed.images#view'
 

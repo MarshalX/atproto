@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 from atproto.xrpc_client.models import base
 
@@ -29,7 +29,7 @@ class Label(base.ModelBase):
     src: str
     uri: str
     val: str
-    cid: Optional[str] = None
-    neg: Optional[bool] = None
+    cid: t.Optional[str] = None
+    neg: t.Optional[bool] = None
 
     _type: str = 'com.atproto.label.defs#label'

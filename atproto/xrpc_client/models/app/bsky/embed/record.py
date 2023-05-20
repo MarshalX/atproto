@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -35,11 +35,11 @@ class View(base.ModelBase):
         record: Record.
     """
 
-    record: Union[
+    record: t.Union[
         'models.AppBskyEmbedRecord.ViewRecord',
         'models.AppBskyEmbedRecord.ViewNotFound',
         'models.AppBskyEmbedRecord.ViewBlocked',
-        'Dict[str, Any]',
+        't.Dict[str, t.Any]',
     ]
 
     _type: str = 'app.bsky.embed.record#view'
@@ -65,18 +65,18 @@ class ViewRecord(base.ModelBase):
     indexedAt: str
     uri: str
     value: 'base.RecordModelBase'
-    embeds: Optional[
-        List[
-            Union[
+    embeds: t.Optional[
+        t.List[
+            t.Union[
                 'models.AppBskyEmbedImages.View',
                 'models.AppBskyEmbedExternal.View',
                 'models.AppBskyEmbedRecord.View',
                 'models.AppBskyEmbedRecordWithMedia.View',
-                'Dict[str, Any]',
+                't.Dict[str, t.Any]',
             ]
         ]
     ] = None
-    labels: Optional[List['models.ComAtprotoLabelDefs.Label']] = None
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
 
     _type: str = 'app.bsky.embed.record#viewRecord'
 

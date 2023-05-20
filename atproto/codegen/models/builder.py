@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+import typing as t
 
 from atproto.lexicon import models
 from atproto.lexicon.parser import lexicon_parse_dir
@@ -16,9 +16,9 @@ _LEX_DEF_TYPES_FOR_DEF = {
     models.LexDefinitionType.ARRAY,
 }
 
-LexDefs = Dict[
+LexDefs = t.Dict[
     str,
-    Union[
+    t.Union[
         models.LexXrpcProcedure,
         models.LexXrpcQuery,
         models.LexObject,
@@ -27,14 +27,14 @@ LexDefs = Dict[
         models.LexRecord,
     ],
 ]
-LexDB = Dict[NSID, LexDefs]
+LexDB = t.Dict[NSID, LexDefs]
 
 
-def _filter_defs_by_type(defs: Dict[str, models.LexDefinition], def_types: set) -> LexDefs:
+def _filter_defs_by_type(defs: t.Dict[str, models.LexDefinition], def_types: set) -> LexDefs:
     return {k: v for k, v in defs.items() if v.type in def_types}
 
 
-def _build_nsid_to_defs_map(lexicons: List[models.LexiconDoc], def_types: set) -> LexDB:
+def _build_nsid_to_defs_map(lexicons: t.List[models.LexiconDoc], def_types: set) -> LexDB:
     result = {}
 
     for lexicon in lexicons:

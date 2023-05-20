@@ -1,9 +1,9 @@
+import typing as t
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Union
 
 LexRef = str
-Number = Union[int, float, complex]
+Number = t.Union[int, float, complex]
 
 
 class LexDefinitionType(Enum):
@@ -38,13 +38,13 @@ class LexPrimitiveType(Enum):
 @dataclass
 class LexDefinition:  # original name LexUserType
     type: LexDefinitionType
-    description: Optional[str]
+    description: t.Optional[str]
 
 
 @dataclass
 class LexPrimitive:
     type: LexPrimitiveType
-    description: Optional[str]
+    description: t.Optional[str]
 
 
 @dataclass
@@ -60,56 +60,56 @@ class LexCidLink(LexPrimitive):
 @dataclass
 class LexBytes(LexPrimitive):
     type = LexPrimitiveType.BYTES
-    maxLength: Optional[Number]
-    minLength: Optional[Number]
+    maxLength: t.Optional[Number]
+    minLength: t.Optional[Number]
 
 
 @dataclass
 class LexBoolean(LexPrimitive):
     type = LexPrimitiveType.BOOLEAN
-    default: Optional[bool]
-    const: Optional[bool]
+    default: t.Optional[bool]
+    const: t.Optional[bool]
 
 
 @dataclass
 class LexNumber(LexPrimitive):
     type = LexPrimitiveType.NUMBER
-    default: Optional[Number]
-    minimum: Optional[Number]
-    maximum: Optional[Number]
-    enum: Optional[List[Number]]
-    const: Optional[Number]
+    default: t.Optional[Number]
+    minimum: t.Optional[Number]
+    maximum: t.Optional[Number]
+    enum: t.Optional[t.List[Number]]
+    const: t.Optional[Number]
 
 
 @dataclass
 class LexInteger(LexPrimitive):
     type = LexPrimitiveType.INTEGER
-    default: Optional[int]
-    minimum: Optional[int]
-    maximum: Optional[int]
-    enum: Optional[List[int]]
-    const: Optional[int]
+    default: t.Optional[int]
+    minimum: t.Optional[int]
+    maximum: t.Optional[int]
+    enum: t.Optional[t.List[int]]
+    const: t.Optional[int]
 
 
 @dataclass
 class LexString(LexPrimitive):
     type = LexPrimitiveType.STRING
-    format: Optional[str]
-    default: Optional[str]
-    minLength: Optional[int]
-    maxLength: Optional[int]
-    minGraphemes: Optional[int]
-    maxGraphemes: Optional[int]
-    enum: Optional[List[str]]
-    const: Optional[str]
-    knownValues: Optional[List[str]]
+    format: t.Optional[str]
+    default: t.Optional[str]
+    minLength: t.Optional[int]
+    maxLength: t.Optional[int]
+    minGraphemes: t.Optional[int]
+    maxGraphemes: t.Optional[int]
+    enum: t.Optional[t.List[str]]
+    const: t.Optional[str]
+    knownValues: t.Optional[t.List[str]]
 
 
 @dataclass
 class LexBlob(LexDefinition):
     type = LexDefinitionType.BLOB
-    accept: Optional[List[str]]
-    maxSize: Optional[Number]
+    accept: t.Optional[t.List[str]]
+    maxSize: t.Optional[Number]
 
 
 @dataclass
@@ -121,29 +121,29 @@ class LexRef(LexPrimitive):
 @dataclass
 class LexRefUnion(LexPrimitive):
     type = LexPrimitiveType.UNION
-    refs: List[str]
-    closed: Optional[bool]
+    refs: t.List[str]
+    closed: t.Optional[bool]
 
 
-LexRefVariant = Union[LexRef, LexRefUnion]
+LexRefVariant = t.Union[LexRef, LexRefUnion]
 
 
 @dataclass
 class LexArray(LexDefinition):
     type = LexDefinitionType.ARRAY
-    description: Optional[str]
-    items: Union[LexPrimitive, LexBlob, LexRefVariant]
-    minLength: Optional[int]
-    maxLength: Optional[int]
+    description: t.Optional[str]
+    items: t.Union[LexPrimitive, LexBlob, LexRefVariant]
+    minLength: t.Optional[int]
+    maxLength: t.Optional[int]
 
 
 @dataclass
 class LexiconDoc:
     lexicon: int
     id: str  # an NSID
-    revision: Optional[int]
-    description: Optional[str]
-    defs: Dict[str, LexDefinition]
+    revision: t.Optional[int]
+    description: t.Optional[str]
+    defs: t.Dict[str, LexDefinition]
 
 
 @dataclass
@@ -154,66 +154,66 @@ class LexToken(LexDefinition):
 @dataclass
 class LexObject(LexDefinition):
     type = LexDefinitionType.OBJECT
-    required: Optional[List[str]]
-    nullable: Optional[List[str]]
-    properties: Dict[str, Union[LexRefVariant, LexArray, LexPrimitive, LexBlob]]
+    required: t.Optional[t.List[str]]
+    nullable: t.Optional[t.List[str]]
+    properties: t.Dict[str, t.Union[LexRefVariant, LexArray, LexPrimitive, LexBlob]]
 
 
 @dataclass
 class LexRecord(LexDefinition):
     type = LexDefinitionType.RECORD
-    key: Optional[str]
+    key: t.Optional[str]
     record: LexObject
 
 
 @dataclass
 class LexXrpcParameters(LexDefinition):
     type = LexDefinitionType.PARAMS
-    description: Optional[str]
-    required: Optional[List[str]]
-    properties: Dict[str, Union[LexArray, LexPrimitive]]
+    description: t.Optional[str]
+    required: t.Optional[t.List[str]]
+    properties: t.Dict[str, t.Union[LexArray, LexPrimitive]]
 
 
 @dataclass
 class LexXrpcSubscriptionMessage:
-    description: Optional[str]
-    schema: Optional[Union[LexObject, LexRefVariant]]
+    description: t.Optional[str]
+    schema: t.Optional[t.Union[LexObject, LexRefVariant]]
 
 
 @dataclass
 class LexXrpcBody:
-    description: Optional[str]
-    encoding: Union[str, List[str]]
-    schema: Optional[Union[LexObject, LexRefVariant]]
+    description: t.Optional[str]
+    encoding: t.Union[str, t.List[str]]
+    schema: t.Optional[t.Union[LexObject, LexRefVariant]]
 
 
 @dataclass
 class LexXrpcError:
     name: str
-    description: Optional[str]
+    description: t.Optional[str]
 
 
 @dataclass
 class LexSubscription(LexDefinition):
     type = LexDefinitionType.SUBSCRIPTION
-    parameters: Optional[LexXrpcParameters]
-    message: Optional[LexXrpcSubscriptionMessage]
-    infos: Optional[List[LexXrpcError]]
-    errors: Optional[List[LexXrpcError]]
+    parameters: t.Optional[LexXrpcParameters]
+    message: t.Optional[LexXrpcSubscriptionMessage]
+    infos: t.Optional[t.List[LexXrpcError]]
+    errors: t.Optional[t.List[LexXrpcError]]
 
 
 @dataclass
 class LexXrpcQuery(LexDefinition):
     type = LexDefinitionType.QUERY
-    parameters: Optional[LexXrpcParameters]
-    output: Optional[LexXrpcBody]
-    errors: Optional[List[LexXrpcError]]
+    parameters: t.Optional[LexXrpcParameters]
+    output: t.Optional[LexXrpcBody]
+    errors: t.Optional[t.List[LexXrpcError]]
 
 
 @dataclass
 class LexXrpcProcedure(LexDefinition):
     type = LexDefinitionType.PROCEDURE
-    parameters: Optional[Dict[str, LexPrimitive]]
-    input: Optional[LexXrpcBody]
-    output: Optional[LexXrpcBody]
-    errors: Optional[List[LexXrpcError]]
+    parameters: t.Optional[t.Dict[str, LexPrimitive]]
+    input: t.Optional[LexXrpcBody]
+    output: t.Optional[LexXrpcBody]
+    errors: t.Optional[t.List[LexXrpcError]]

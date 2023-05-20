@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Type
 
 from atproto.xrpc_client.models import base
 
@@ -42,4 +42,4 @@ class AppPassword(base.ModelBase):
 
 
 #: Response reference to :obj:`AppPassword` model.
-ResponseRef: Type[AppPassword] = AppPassword
+ResponseRef: t.Type[AppPassword] = AppPassword

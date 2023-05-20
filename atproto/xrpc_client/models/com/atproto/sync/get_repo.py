@@ -5,8 +5,8 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
-from typing import Optional, Type, Union
 
 from atproto.xrpc_client.models import base
 
@@ -23,9 +23,9 @@ class Params(base.ParamsModelBase):
     """
 
     did: str
-    earliest: Optional[str] = None
-    latest: Optional[str] = None
+    earliest: t.Optional[str] = None
+    latest: t.Optional[str] = None
 
 
 #: Response raw data type.
-Response: Union[Type[str], Type[bytes]] = bytes
+Response: t.Union[t.Type[str], t.Type[bytes]] = bytes

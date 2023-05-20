@@ -1,8 +1,8 @@
 import json
 import os
+import typing as t
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Union
 
 import dacite
 
@@ -72,7 +72,7 @@ def lexicon_parse(data: dict, data_class=None):
     return dacite.from_dict(data_class=data_class, data=data, config=_DEFAULT_DACITE_CONFIG)
 
 
-def lexicon_parse_file(lexicon_path: Union[Path, str], *, soft_fail: bool = False) -> Optional[models.LexiconDoc]:
+def lexicon_parse_file(lexicon_path: t.Union[Path, str], *, soft_fail: bool = False) -> t.Optional[models.LexiconDoc]:
     try:
         with open(lexicon_path, 'r', encoding='UTF-8') as f:
             plain_lexicon = json.loads(f.read())
@@ -84,7 +84,7 @@ def lexicon_parse_file(lexicon_path: Union[Path, str], *, soft_fail: bool = Fals
         raise LexiconParsingError("Can't parse lexicon") from e
 
 
-def lexicon_parse_dir(path: Union[Path, str] = None, *, soft_fail: bool = False) -> List[models.LexiconDoc]:
+def lexicon_parse_dir(path: t.Union[Path, str] = None, *, soft_fail: bool = False) -> t.List[models.LexiconDoc]:
     if path is None:
         path = _PATH_TO_LEXICONS
 

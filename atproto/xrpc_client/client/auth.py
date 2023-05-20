@@ -1,5 +1,5 @@
+import typing as t
 from dataclasses import dataclass
-from typing import Optional
 
 import jwt as _jwt
 
@@ -10,7 +10,7 @@ class JwtPayload:
     iat: int  # created at
     scope: str
     sub: str  # DID
-    jti: Optional[str] = None  # in refresh token only
+    jti: t.Optional[str] = None  # in refresh token only
 
 
 def get_jwt_payload(token: str) -> JwtPayload:
