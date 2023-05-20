@@ -35,7 +35,8 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
         self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
     async def _invoke(self, invoke_type: 'InvokeType', **kwargs) -> 'Response':
-        if self._refresh_lock.locked():
+        session_refreshing = kwargs.pop('session_refreshing', False)
+        if session_refreshing:
             return await super()._invoke(invoke_type, **kwargs)
 
         async with self._refresh_lock:
@@ -54,7 +55,7 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
 
     async def _refresh_and_set_session(self) -> models.ComAtprotoServerRefreshSession.Response:
         refresh_session = await self.com.atproto.server.refresh_session(
-            headers=self._get_auth_headers(self._refresh_jwt)
+            headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
         )
         self._set_session(refresh_session)
 

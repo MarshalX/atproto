@@ -29,7 +29,8 @@ class Client(ClientRaw, SessionMethodsMixin):
         self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
     def _invoke(self, invoke_type: 'InvokeType', **kwargs) -> 'Response':
-        if self._refresh_lock.locked():
+        session_refreshing = kwargs.pop('session_refreshing', False)
+        if session_refreshing:
             return super()._invoke(invoke_type, **kwargs)
 
         with self._refresh_lock:
@@ -45,7 +46,9 @@ class Client(ClientRaw, SessionMethodsMixin):
         return session
 
     def _refresh_and_set_session(self) -> models.ComAtprotoServerRefreshSession.Response:
-        refresh_session = self.com.atproto.server.refresh_session(headers=self._get_auth_headers(self._refresh_jwt))
+        refresh_session = self.com.atproto.server.refresh_session(
+            headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
+        )
         self._set_session(refresh_session)
 
         return refresh_session
