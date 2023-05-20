@@ -14,6 +14,18 @@ from atproto.xrpc_client.models import base
 
 
 @dataclass
+class Params(base.ParamsModelBase):
+
+    """Parameters model for :obj:`com.atproto.sync.subscribeRepos`.
+
+    Attributes:
+        cursor: The last known event to backfill from.
+    """
+
+    cursor: t.Optional[int] = None
+
+
+@dataclass
 class Commit(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`.

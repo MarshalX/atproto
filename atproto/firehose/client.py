@@ -1,114 +1,170 @@
-from typing import TYPE_CHECKING, Any, Awaitable, Callable, Dict, Optional
+import asyncio
+import random
+import time
+import typing as t
 
 import httpx
-from httpx_ws import aconnect_ws, connect_ws
+from httpx_ws import (
+    WebSocketDisconnect,
+    WebSocketInvalidTypeReceived,
+    WebSocketNetworkError,
+    WebSocketUpgradeError,
+    aconnect_ws,
+    connect_ws,
+)
 
 from atproto.exceptions import FirehoseError
 from atproto.firehose.models import Frame
 from atproto.xrpc_client.models.common import XrpcError
 
-if TYPE_CHECKING:
+if t.TYPE_CHECKING:
     from atproto.firehose.models import MessageFrame
 
 _BASE_WEBSOCKET_URL = 'https://bsky.social/xrpc'
 
+OnMessageCallback = t.Callable[['MessageFrame'], None]
+AsyncOnMessageCallback = t.Callable[['MessageFrame'], t.Awaitable[None]]
 
-def _build_websocket_url(method: str, base_url: Optional[str] = None) -> str:
+
+def _build_websocket_url(method: str, base_url: t.Optional[str] = None) -> str:
     if base_url is None:
         base_url = _BASE_WEBSOCKET_URL
 
     return f'{base_url}/{method}'
 
 
+def _handle_firehose_error_or_stop(exception: Exception) -> bool:
+    """Returns if the connection should be properly be closed or reraise exception."""
+
+    print(exception)
+    if isinstance(exception, WebSocketDisconnect):
+        if exception.code == 1000:
+            return True
+        elif exception.code in {1001, 1002, 1003}:
+            return False
+    elif isinstance(exception, WebSocketNetworkError):
+        return False
+    elif isinstance(exception, httpx.NetworkError):
+        return False
+    elif isinstance(exception, httpx.TimeoutException):
+        return False
+    elif isinstance(exception, WebSocketInvalidTypeReceived):
+        raise FirehoseError from exception
+    elif isinstance(exception, WebSocketUpgradeError):
+        raise FirehoseError from exception
+
+    raise exception
+
+
 class _WebsocketClientBase:
-    ...
+    def __init__(
+        self,
+        method: str,
+        base_url: t.Optional[str] = None,
+        params: t.Optional[t.Dict[str, t.Any]] = None,
+        *,
+        async_version=False,
+    ):
+        self._params = params
+        self._url = _build_websocket_url(method, base_url)
+
+        self._async_version = async_version
+
+        self._reconnect_no = 0
+        self._max_reconnect_delay_sec = 64
+
+        self._on_message_callback: t.Optional[t.Union[OnMessageCallback, AsyncOnMessageCallback]] = None
+
+    def _get_client(self):
+        if self._async_version:
+            return aconnect_ws(self._url, params=self._params)
+
+        return connect_ws(self._url, params=self._params)
+
+    def _get_reconnection_delay(self) -> int:
+        base_sec = 2**self._reconnect_no
+        rand_sec = random.uniform(-0.5, 0.5)
+
+        return min(base_sec, self._max_reconnect_delay_sec) + rand_sec
+
+    def _process_raw_frame(self, data: bytes):
+        frame = Frame.from_bytes(data)
+        if frame.is_error:
+            raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
+        elif frame.is_message:
+            self._process_message_frame(frame)
+        else:
+            raise FirehoseError('Unknown frame type')
+
+    def start(self, on_message_callback: t.Union[OnMessageCallback, AsyncOnMessageCallback]) -> None:
+        raise NotImplemented
+
+    def _process_message_frame(self, frame: 'MessageFrame') -> None:
+        raise NotImplemented
 
 
 class _WebsocketClient(_WebsocketClientBase):
-    def __init__(self, method: str, base_url: Optional[str] = None, params: Optional[Dict[str, Any]] = None):
-        self._http_client = httpx.Client()
+    def __init__(self, method: str, base_url: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None):
+        super().__init__(method, base_url, params)
 
-        url = _build_websocket_url(method, base_url)
-        self._client = connect_ws(url, self._http_client, params=params)
+    def _process_message_frame(self, frame: 'MessageFrame') -> None:
+        self._on_message_callback(frame)
 
-    def start(self, on_message: Callable[['MessageFrame'], None]):
-        with self._client as client:
-            while True:
-                raw_frame = client.receive_bytes()
+    def start(self, on_message_callback: OnMessageCallback) -> None:
+        self._on_message_callback = on_message_callback
 
-                frame = Frame.from_bytes(raw_frame)
-                if frame.is_error:
-                    raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
-                elif frame.is_message:
-                    on_message(frame)
-                else:
-                    raise FirehoseError('Unknown frame type')
+        while True:
+            try:
+                if self._reconnect_no != 0:
+                    time.sleep(self._get_reconnection_delay())
+
+                with self._get_client() as client:
+                    self._reconnect_no = 0
+
+                    while True:
+                        raw_frame = client.receive_bytes()
+                        self._process_raw_frame(raw_frame)
+            except Exception as e:
+                self._reconnect_no += 1
+
+                should_close = _handle_firehose_error_or_stop(e)
+                if should_close:
+                    break
 
 
 class _AsyncWebsocketClient(_WebsocketClientBase):
-    def __init__(self, method: str, base_url: Optional[str] = None, params: Optional[Dict[str, Any]] = None):
-        self._http_client = httpx.AsyncClient()
-
-        url = _build_websocket_url(method, base_url)
-        self._client = aconnect_ws(url, self._http_client, params=params)
+    def __init__(self, method: str, base_url: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None):
+        super().__init__(method, base_url, params, async_version=True)
 
         self._loop = asyncio.get_event_loop()
+        self._on_message_tasks = set()
 
-    async def start(self, on_message: Callable[['MessageFrame'], Awaitable[None]]):
-        on_message_tasks = set()
+    def _process_message_frame(self, frame: 'MessageFrame') -> None:
+        task = self._loop.create_task(self._on_message_callback(frame))
+        self._on_message_tasks.add(task)
+        task.add_done_callback(self._on_message_tasks.discard)
 
-        async with self._client as client:
-            while True:
-                raw_frame = await client.receive_bytes()
+    async def start(self, on_message_callback: AsyncOnMessageCallback) -> None:
+        self._on_message_callback = on_message_callback
 
-                frame = Frame.from_bytes(raw_frame)
-                if frame.is_error:
-                    raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
-                elif frame.is_message:
-                    task = self._loop.create_task(on_message(frame))
-                    on_message_tasks.add(task)
-                    task.add_done_callback(on_message_tasks.discard)
-                else:
-                    raise FirehoseError('Unknown frame type')
+        while True:
+            try:
+                if self._reconnect_no != 0:
+                    await asyncio.sleep(self._get_reconnection_delay())
+
+                async with self._get_client() as client:
+                    self._reconnect_no = 0
+
+                    while True:
+                        raw_frame = await client.receive_bytes()
+                        self._process_raw_frame(raw_frame)
+            except Exception as e:
+                self._reconnect_no += 1
+
+                should_close = _handle_firehose_error_or_stop(e)
+                if should_close:
+                    break
 
 
 FirehoseClient = _WebsocketClient
 AsyncFirehoseClient = _AsyncWebsocketClient
-
-
-def _parse_message_body(msg: 'MessageFrame'):
-    from atproto import CAR
-    from atproto import models
-    from atproto.xrpc_client.models.utils import get_or_create_model
-
-    # TODO(MarshalX): Add helper function to match types
-    if msg.type == '#commit':
-        commit = get_or_create_model(msg.body, models.ComAtprotoSyncSubscribeRepos.Commit)
-        commit.blocks = CAR.from_bytes(commit.blocks)
-        return commit
-
-
-def _main_test():
-    client = FirehoseClient('com.atproto.sync.subscribeRepos')
-
-    def on_message_handler(message: 'MessageFrame') -> None:
-        print('Message', message.header, _parse_message_body(message))
-
-    client.start(on_message_handler)
-
-
-async def _main_async_test():
-    client = AsyncFirehoseClient('com.atproto.sync.subscribeRepos')
-
-    async def on_message_handler(message: 'MessageFrame') -> None:
-        print('Message', message.header, _parse_message_body(message))
-        await asyncio.sleep(0.1)
-
-    await client.start(on_message_handler)
-
-
-if __name__ == '__main__':
-    import asyncio
-
-    _main_test()
-    # asyncio.get_event_loop().run_until_complete(_main_async_test())
