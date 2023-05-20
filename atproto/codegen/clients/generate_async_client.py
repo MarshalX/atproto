@@ -18,9 +18,12 @@ def gen_client(input_filename: str, output_filename: str) -> None:
         '_invoke',
     ]
 
+    code = code.replace('from threading', 'from asyncio')
     code = code.replace('client.raw', 'client.async_raw')
     code = code.replace('class Client', 'class AsyncClient')
     code = code.replace('ClientRaw', 'AsyncClientRaw')
+
+    code = code.replace('with self', 'async with self')
 
     code = code.replace('def', 'async def')
     code = code.replace('async def __', 'def __')

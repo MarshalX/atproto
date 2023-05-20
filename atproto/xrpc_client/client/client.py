@@ -1,5 +1,6 @@
 import typing as t
 from datetime import datetime
+from threading import Lock
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin
@@ -23,11 +24,17 @@ class Client(ClientRaw, SessionMethodsMixin):
         self._refresh_jwt: t.Optional[str] = None
         self._refresh_jwt_payload: t.Optional['JwtPayload'] = None
 
+        self._refresh_lock = Lock()
+
         self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
     def _invoke(self, invoke_type: 'InvokeType', **kwargs) -> 'Response':
-        if self.me and self._should_refresh_session():
-            self._refresh_and_set_session()
+        if self._refresh_lock.locked():
+            return super()._invoke(invoke_type, **kwargs)
+
+        with self._refresh_lock:
+            if self._access_jwt and self._should_refresh_session():
+                self._refresh_and_set_session()
 
         return super()._invoke(invoke_type, **kwargs)
 
