@@ -78,12 +78,12 @@ AsyncFirehoseClient = _AsyncWebsocketClient
 
 def _parse_message_body(msg: 'MessageFrame'):
     from atproto import CAR
-    from atproto.xrpc_client.models.com.atproto.sync.subscribe_repos import Commit
+    from atproto import models
     from atproto.xrpc_client.models.utils import get_or_create_model
 
     # TODO(MarshalX): Add helper function to match types
     if msg.type == '#commit':
-        commit = get_or_create_model(msg.body, Commit)
+        commit = get_or_create_model(msg.body, models.ComAtprotoSyncSubscribeRepos.Commit)
         commit.blocks = CAR.from_bytes(commit.blocks)
         return commit
 
