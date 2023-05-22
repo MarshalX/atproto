@@ -1,5 +1,5 @@
-CID
-===
+CID decoder
+===========
 
 .. autoclass:: atproto.cid.CID
    :members:

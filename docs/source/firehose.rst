@@ -1,5 +1,5 @@
-Firehose
-========
+Firehose (data streaming)
+=========================
 
 .. automodule:: atproto.firehose
    :members:

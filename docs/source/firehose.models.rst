@@ -1,5 +1,5 @@
-Models
-======
+Frame models
+============
 
 .. automodule:: atproto.firehose.models
    :members:

@@ -1,5 +1,7 @@
-AT URI
-======
+AT URI Scheme
+=============
+
+More info: https://atproto.com/specs/at-uri-scheme
 
 .. automodule:: atproto.uri
    :members:
