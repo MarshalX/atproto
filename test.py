@@ -1,8 +1,22 @@
 import asyncio
 import logging
 import os
+import threading
 
-from atproto import CAR, AsyncClient, AtUri, Client, models
+from atproto import (
+    CAR,
+    AsyncClient,
+    AtUri,
+    Client,
+    FirehoseSubscribeReposClient,
+    models,
+)
+from atproto.firehose import (
+    AsyncFirehoseSubscribeLabelsClient,
+    AsyncFirehoseSubscribeReposClient,
+    FirehoseSubscribeLabelsClient,
+    parse_subscribe_repos_message,
+)
 
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
@@ -33,10 +47,10 @@ def sync_main():
 
     # repo = client.com.atproto.sync.get_repo({'did': client.me.did})
     did = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'}).did
-    repo = client.com.atproto.sync.get_repo({'did': did})
-    car_file = CAR.from_bytes(repo)
-    print(car_file.root)
-    print(car_file.nodes)
+    # repo = client.com.atproto.sync.get_repo({'did': did})
+    # car_file = CAR.from_bytes(repo)
+    # print(car_file.root)
+    # print(car_file.nodes)
 
     # res = client.com.atproto.repo.get_record(...)     # implement by yourself
     # also you need to parse "res.value" as profile record using  get_or_create_model method
@@ -120,7 +134,58 @@ def test_strange_embed_images_type():
     print(m)
 
 
+def _main_firehose_test():
+    client = FirehoseSubscribeReposClient()
+    # client = FirehoseSubscribeLabelsClient()
+
+    def on_message_handler(message: 'MessageFrame') -> None:
+        print('Message', message.header, parse_subscribe_repos_message(message))
+        raise RuntimeError('kek')
+
+    def on_callback_error_handler(e: BaseException) -> None:
+        print('got error', e)
+        # raise RuntimeError('rofl')
+
+    def _stop_after_n_sec():
+        from time import sleep
+
+        sleep(3)
+        client.stop()
+
+    threading.Thread(target=_stop_after_n_sec).start()
+    client.start(on_message_handler, on_callback_error_handler)
+    print('stopped. start again')
+    # client.start(on_message_handler, on_callback_error_handler)
+
+
+async def _main_async_firehose_test():
+    client = AsyncFirehoseSubscribeReposClient()
+    # client = AsyncFirehoseSubscribeLabelsClient()
+
+    async def on_message_handler(message: 'MessageFrame') -> None:
+        print('Message', message.header, parse_subscribe_repos_message(message))
+        raise RuntimeError('kek')
+        await asyncio.sleep(0.1)
+
+    def on_callback_error_handler(e: BaseException) -> None:
+        print('got error', e)
+        # raise RuntimeError('rofl')
+
+    async def _stop_after_n_sec():
+        await asyncio.sleep(3)
+        await client.stop()
+
+    asyncio.create_task(_stop_after_n_sec())
+    await client.start(on_message_handler, on_callback_error_handler)
+    print('stopped. start again')
+    # await client.start(on_message_handler, on_callback_error_handler)
+
+
 if __name__ == '__main__':
     # test_strange_embed_images_type()
-    sync_main()
-    asyncio.get_event_loop().run_until_complete(main())
+
+    # sync_main()
+    # asyncio.get_event_loop().run_until_complete(main())
+
+    _main_firehose_test()
+    asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())

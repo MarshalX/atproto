@@ -49,17 +49,17 @@ class CAR:
         Returns:
             :obj:`atproto.CAR`: Parsed CAR file.
         """
-        repo = BytesIO(data)
+        stream = BytesIO(data)
 
-        header_len, _ = leb128.u.decode_reader(repo)
-        header = cbor.decode(repo.read(header_len))
+        header_len, _ = leb128.u.decode_reader(stream)
+        header = cbor.decode(stream.read(header_len))
         root = header.get('roots')[0]
 
         nodes = {}
-        while repo.tell() != len(data):
-            block_len, _ = leb128.u.decode_reader(repo)
-            cid = CID.decode(repo.read(CAR._CID_V1_BYTES_LEN))
-            block = cbor.decode(repo.read(block_len - CAR._CID_V1_BYTES_LEN))
+        while stream.tell() != len(data):
+            block_len, _ = leb128.u.decode_reader(stream)
+            cid = CID.decode(stream.read(CAR._CID_V1_BYTES_LEN))
+            block = cbor.decode(stream.read(block_len - CAR._CID_V1_BYTES_LEN))
 
             nodes[cid] = block
 

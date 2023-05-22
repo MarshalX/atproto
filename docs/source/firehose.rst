@@ -1,7 +1,16 @@
-Namespace
-=========
+Firehose
+========
 
-.. automodule:: atproto.xrpc_client.namespaces.sync_ns
+.. automodule:: atproto.firehose
    :members:
    :undoc-members:
    :show-inheritance:
+   :inherited-members:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   firehose.models

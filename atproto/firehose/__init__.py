@@ -1,5 +1,6 @@
 import typing as t
 
+from atproto import CAR
 from atproto.firehose.client import AsyncFirehoseClient, FirehoseClient
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models.utils import get_or_create_model
@@ -34,9 +35,14 @@ SubscribeLabelsMessage = t.Union[
 ]
 
 
-def parse_subscribe_repos_message(message: 'MessageFrame') -> SubscribeReposMessage:
+def parse_subscribe_repos_message(message: 'MessageFrame', decode_inner_cbor: bool = True) -> SubscribeReposMessage:
     model_class = _SUBSCRIBE_REPOS_MESSAGE_TYPE_TO_MODEL[message.type]
-    return get_or_create_model(message.body, model_class)
+    model_instance = get_or_create_model(message.body, model_class)
+
+    if decode_inner_cbor and isinstance(model_instance, models.ComAtprotoSyncSubscribeRepos.Commit):
+        model_instance.blocks = CAR.from_bytes(model_instance.blocks)
+
+    return model_instance
 
 
 def parse_subscribe_labels_message(message: 'MessageFrame') -> SubscribeLabelsMessage:
@@ -56,7 +62,7 @@ class AsyncFirehoseSubscribeReposClient(AsyncFirehoseClient):
         super().__init__(method='com.atproto.sync.subscribeRepos', params=params)
 
 
-# TODO(MarshalX): SubscribeLabels doesn't work yet?
+# TODO(MarshalX): SubscribeLabels doesn't work yet? HTTP 502 Error
 
 
 class FirehoseSubscribeLabelsClient(FirehoseClient):
@@ -69,42 +75,3 @@ class AsyncFirehoseSubscribeLabelsClient(AsyncFirehoseClient):
     def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels']] = None):
         params = get_or_create_model(params, models.ComAtprotoLabelSubscribeLabels.Params)
         super().__init__(method='com.atproto.label.subscribeLabels', params=params)
-
-
-def _parse_message_body(msg: 'MessageFrame'):
-    from atproto import CAR
-
-    model = parse_subscribe_repos_message(msg)
-
-    if isinstance(model, models.ComAtprotoSyncSubscribeRepos.Commit):
-        model.blocks = CAR.from_bytes(model.blocks)
-
-    return model
-
-
-def _main_test():
-    client = FirehoseSubscribeReposClient()
-    # client = FirehoseSubscribeLabelsClient()
-
-    def on_message_handler(message: 'MessageFrame') -> None:
-        print('Message', message.header, _parse_message_body(message))
-
-    client.start(on_message_handler)
-
-
-async def _main_async_test():
-    client = AsyncFirehoseSubscribeReposClient()
-    # client = AsyncFirehoseSubscribeLabelsClient()
-
-    async def on_message_handler(message: 'MessageFrame') -> None:
-        print('Message', message.header, _parse_message_body(message))
-        await asyncio.sleep(0.1)
-
-    await client.start(on_message_handler)
-
-
-if __name__ == '__main__':
-    import asyncio
-
-    _main_test()
-    # asyncio.get_event_loop().run_until_complete(_main_async_test())

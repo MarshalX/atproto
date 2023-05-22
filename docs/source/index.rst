@@ -23,7 +23,9 @@ Documentation
    nsid
    cid
    uri
+   firehose
    car
+   cbor
    exceptions
 
 .. toctree::

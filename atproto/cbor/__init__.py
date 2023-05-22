@@ -6,7 +6,7 @@ import dag_cbor as _dag_cbor
 CborData = Union[bytes, bytearray, BytesIO]
 
 
-class BytesReadCounter:
+class _BytesReadCounter:
     _num_bytes_read = 0
 
     def __call__(self, _, num_bytes_read: int):
@@ -30,7 +30,7 @@ def decode_multi(data: CborData) -> List[dict]:
     if data_size == 0:
         return data_parts
 
-    bytes_read_counter = BytesReadCounter()
+    bytes_read_counter = _BytesReadCounter()
     while int(bytes_read_counter) != data_size:
         decoded_part = decode(data, allow_concat=True, callback=bytes_read_counter)
         data_parts.append(decoded_part)
