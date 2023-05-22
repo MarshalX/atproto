@@ -181,6 +181,10 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
         self._on_message_tasks.discard(task)
 
         if task.exception():
+            if not self._on_callback_error_callback:
+                traceback.print_exc()
+                return
+
             try:
                 self._on_callback_error_callback(task.exception())
             except Exception:  # noqa

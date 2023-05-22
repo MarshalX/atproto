@@ -153,7 +153,8 @@ def _main_firehose_test():
         client.stop()
 
     threading.Thread(target=_stop_after_n_sec).start()
-    client.start(on_message_handler, on_callback_error_handler)
+    client.start(on_message_handler)
+    # client.start(on_message_handler, on_callback_error_handler)
     print('stopped. start again')
     # client.start(on_message_handler, on_callback_error_handler)
 
@@ -176,7 +177,8 @@ async def _main_async_firehose_test():
         await client.stop()
 
     asyncio.create_task(_stop_after_n_sec())
-    await client.start(on_message_handler, on_callback_error_handler)
+    await client.start(on_message_handler)
+    # await client.start(on_message_handler, on_callback_error_handler)
     print('stopped. start again')
     # await client.start(on_message_handler, on_callback_error_handler)
 
