@@ -13,14 +13,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Main(base.RecordModelBase):
 
-    """Record model for :obj:`app.bsky.graph.block`.
+    """Record model for :obj:`app.bsky.graph.block`."""
 
-    Attributes:
-        subject: Subject.
-        createdAt: Created at.
-    """
-
-    createdAt: str
-    subject: str
+    createdAt: str  #: Created at.
+    subject: str  #: Subject.
 
     _type: str = 'app.bsky.graph.block'

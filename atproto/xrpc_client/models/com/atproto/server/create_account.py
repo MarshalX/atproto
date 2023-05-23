@@ -14,38 +14,22 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.server.createAccount`.
+    """Input data model for :obj:`com.atproto.server.createAccount`."""
 
-    Attributes:
-        email: Email.
-        handle: Handle.
-        did: Did.
-        inviteCode: Invite code.
-        password: Password.
-        recoveryKey: Recovery key.
-    """
-
-    email: str
-    handle: str
-    password: str
-    did: t.Optional[str] = None
-    inviteCode: t.Optional[str] = None
-    recoveryKey: t.Optional[str] = None
+    email: str  #: Email.
+    handle: str  #: Handle.
+    password: str  #: Password.
+    did: t.Optional[str] = None  #: Did.
+    inviteCode: t.Optional[str] = None  #: Invite code.
+    recoveryKey: t.Optional[str] = None  #: Recovery key.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.server.createAccount`.
+    """Output data model for :obj:`com.atproto.server.createAccount`."""
 
-    Attributes:
-        accessJwt: Access jwt.
-        refreshJwt: Refresh jwt.
-        handle: Handle.
-        did: Did.
-    """
-
-    accessJwt: str
-    did: str
-    handle: str
-    refreshJwt: str
+    accessJwt: str  #: Access jwt.
+    did: str  #: Did.
+    handle: str  #: Handle.
+    refreshJwt: str  #: Refresh jwt.

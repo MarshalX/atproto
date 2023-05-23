@@ -15,15 +15,10 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.admin.getRecord`.
+    """Parameters model for :obj:`com.atproto.admin.getRecord`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-    """
-
-    uri: str
-    cid: t.Optional[str] = None
+    uri: str  #: Uri.
+    cid: t.Optional[str] = None  #: Cid.
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.RecordViewDetail` model.

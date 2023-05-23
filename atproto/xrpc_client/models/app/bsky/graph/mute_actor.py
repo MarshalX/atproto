@@ -13,10 +13,6 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`app.bsky.graph.muteActor`.
+    """Input data model for :obj:`app.bsky.graph.muteActor`."""
 
-    Attributes:
-        actor: Actor.
-    """
-
-    actor: str
+    actor: str  #: Actor.

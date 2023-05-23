@@ -204,25 +204,23 @@ def _get_req_fields_set(lex_obj: t.Union[models.LexObject, models.LexXrpcParamet
     return required_fields
 
 
+def _get_field_docstring(field_name: str, field_type) -> str:
+    field_desc = field_type.description
+    if field_desc is None:
+        field_desc = gen_description_by_camel_case_name(field_name)
+    if field_desc[-1] not in {'.', '?', '!'}:
+        field_desc += '.'
+
+    return field_desc
+
+
 def _get_model_docstring(
     nsid: t.Union[str, NSID], lex_object: t.Union[models.LexObject, models.LexXrpcParameters], model_type: ModelType
 ) -> str:
     model_desc = lex_object.description or ''
     model_desc = f"{model_type.value} model for :obj:`{nsid}`. {model_desc}"
 
-    doc_string = [f'{_(1)}"""{model_desc}', '', f'{_(1)}Attributes:']
-
-    for field_name, field_type in lex_object.properties.items():
-        field_desc = field_type.description
-        if field_desc is None:
-            field_desc = gen_description_by_camel_case_name(field_name)
-        if field_desc[-1] not in {'.', '?', '!'}:
-            field_desc += '.'
-
-        doc_string.append(f'{_(2)}{field_name}: {field_desc}')
-
-    doc_string.append(f'{_(1)}"""')
-    doc_string.append('')
+    doc_string = [f'{_(1)}"""{model_desc}"""', '']
 
     return join_code(doc_string)
 
@@ -236,8 +234,10 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
     for field_name, field_type in lex_object.properties.items():
         is_optional = field_name not in required_fields
         type_hint = _get_model_field_typehint(nsid, field_name, field_type, optional=is_optional)
+        description = _get_field_docstring(field_name, field_type)
 
-        field_def = f'{_(1)}{field_name}: {type_hint}'  # TODO(MarshalX): Add default values. for bool, etc..
+        # TODO(MarshalX): Add default values. for bool, etc..
+        field_def = f'{_(1)}{field_name}: {type_hint} #: {description}'
         if is_optional:
             optional_fields.append(field_def)
         else:

@@ -13,14 +13,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Main(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.repo.strongRef`.
+    """Definition model for :obj:`com.atproto.repo.strongRef`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-    """
-
-    cid: str
-    uri: str
+    cid: str  #: Cid.
+    uri: str  #: Uri.
 
     _type: str = 'com.atproto.repo.strongRef'

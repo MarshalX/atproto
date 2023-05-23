@@ -15,23 +15,14 @@ from atproto.xrpc_client.models import base
 @dataclass
 class ProfileViewBasic(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.actor.defs`.
+    """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    Attributes:
-        did: Did.
-        handle: Handle.
-        displayName: Display name.
-        avatar: Avatar.
-        viewer: Viewer.
-        labels: Labels.
-    """
-
-    did: str
-    handle: str
-    avatar: t.Optional[str] = None
-    displayName: t.Optional[str] = None
-    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
-    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None
+    did: str  #: Did.
+    handle: str  #: Handle.
+    avatar: t.Optional[str] = None  #: Avatar.
+    displayName: t.Optional[str] = None  #: Display name.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     _type: str = 'app.bsky.actor.defs#profileViewBasic'
 
@@ -39,27 +30,16 @@ class ProfileViewBasic(base.ModelBase):
 @dataclass
 class ProfileView(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.actor.defs`.
+    """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    Attributes:
-        did: Did.
-        handle: Handle.
-        displayName: Display name.
-        description: Description.
-        avatar: Avatar.
-        indexedAt: Indexed at.
-        viewer: Viewer.
-        labels: Labels.
-    """
-
-    did: str
-    handle: str
-    avatar: t.Optional[str] = None
-    description: t.Optional[str] = None
-    displayName: t.Optional[str] = None
-    indexedAt: t.Optional[str] = None
-    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
-    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None
+    did: str  #: Did.
+    handle: str  #: Handle.
+    avatar: t.Optional[str] = None  #: Avatar.
+    description: t.Optional[str] = None  #: Description.
+    displayName: t.Optional[str] = None  #: Display name.
+    indexedAt: t.Optional[str] = None  #: Indexed at.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     _type: str = 'app.bsky.actor.defs#profileView'
 
@@ -67,35 +47,20 @@ class ProfileView(base.ModelBase):
 @dataclass
 class ProfileViewDetailed(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.actor.defs`.
+    """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    Attributes:
-        did: Did.
-        handle: Handle.
-        displayName: Display name.
-        description: Description.
-        avatar: Avatar.
-        banner: Banner.
-        followersCount: Followers count.
-        followsCount: Follows count.
-        postsCount: Posts count.
-        indexedAt: Indexed at.
-        viewer: Viewer.
-        labels: Labels.
-    """
-
-    did: str
-    handle: str
-    avatar: t.Optional[str] = None
-    banner: t.Optional[str] = None
-    description: t.Optional[str] = None
-    displayName: t.Optional[str] = None
-    followersCount: t.Optional[int] = None
-    followsCount: t.Optional[int] = None
-    indexedAt: t.Optional[str] = None
-    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
-    postsCount: t.Optional[int] = None
-    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None
+    did: str  #: Did.
+    handle: str  #: Handle.
+    avatar: t.Optional[str] = None  #: Avatar.
+    banner: t.Optional[str] = None  #: Banner.
+    description: t.Optional[str] = None  #: Description.
+    displayName: t.Optional[str] = None  #: Display name.
+    followersCount: t.Optional[int] = None  #: Followers count.
+    followsCount: t.Optional[int] = None  #: Follows count.
+    indexedAt: t.Optional[str] = None  #: Indexed at.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    postsCount: t.Optional[int] = None  #: Posts count.
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     _type: str = 'app.bsky.actor.defs#profileViewDetailed'
 
@@ -103,23 +68,14 @@ class ProfileViewDetailed(base.ModelBase):
 @dataclass
 class ViewerState(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.actor.defs`.
+    """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    Attributes:
-        muted: Muted.
-        mutedByList: Muted by list.
-        blockedBy: Blocked by.
-        blocking: Blocking.
-        following: Following.
-        followedBy: Followed by.
-    """
-
-    blockedBy: t.Optional[bool] = None
-    blocking: t.Optional[str] = None
-    followedBy: t.Optional[str] = None
-    following: t.Optional[str] = None
-    muted: t.Optional[bool] = None
-    mutedByList: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None
+    blockedBy: t.Optional[bool] = None  #: Blocked by.
+    blocking: t.Optional[str] = None  #: Blocking.
+    followedBy: t.Optional[str] = None  #: Followed by.
+    following: t.Optional[str] = None  #: Following.
+    muted: t.Optional[bool] = None  #: Muted.
+    mutedByList: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Muted by list.
 
     _type: str = 'app.bsky.actor.defs#viewerState'
 
@@ -134,13 +90,9 @@ Preferences = t.List[
 @dataclass
 class AdultContentPref(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.actor.defs`.
+    """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    Attributes:
-        enabled: Enabled.
-    """
-
-    enabled: bool
+    enabled: bool  #: Enabled.
 
     _type: str = 'app.bsky.actor.defs#adultContentPref'
 
@@ -148,14 +100,9 @@ class AdultContentPref(base.ModelBase):
 @dataclass
 class ContentLabelPref(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.actor.defs`.
+    """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    Attributes:
-        label: Label.
-        visibility: Visibility.
-    """
-
-    label: str
-    visibility: str
+    label: str  #: Label.
+    visibility: str  #: Visibility.
 
     _type: str = 'app.bsky.actor.defs#contentLabelPref'

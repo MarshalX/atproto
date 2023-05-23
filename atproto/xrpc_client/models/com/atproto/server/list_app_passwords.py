@@ -15,26 +15,17 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.server.listAppPasswords`.
+    """Output data model for :obj:`com.atproto.server.listAppPasswords`."""
 
-    Attributes:
-        passwords: Passwords.
-    """
-
-    passwords: t.List['models.ComAtprotoServerListAppPasswords.AppPassword']
+    passwords: t.List['models.ComAtprotoServerListAppPasswords.AppPassword']  #: Passwords.
 
 
 @dataclass
 class AppPassword(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.server.listAppPasswords`.
+    """Definition model for :obj:`com.atproto.server.listAppPasswords`."""
 
-    Attributes:
-        name: Name.
-        createdAt: Created at.
-    """
-
-    createdAt: str
-    name: str
+    createdAt: str  #: Created at.
+    name: str  #: Name.
 
     _type: str = 'com.atproto.server.listAppPasswords#appPassword'

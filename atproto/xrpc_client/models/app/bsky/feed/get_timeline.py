@@ -15,28 +15,17 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.feed.getTimeline`.
+    """Parameters model for :obj:`app.bsky.feed.getTimeline`."""
 
-    Attributes:
-        algorithm: Algorithm.
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    algorithm: t.Optional[str] = None
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
+    algorithm: t.Optional[str] = None  #: Algorithm.
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.feed.getTimeline`.
+    """Output data model for :obj:`app.bsky.feed.getTimeline`."""
 
-    Attributes:
-        cursor: Cursor.
-        feed: Feed.
-    """
-
-    feed: t.List['models.AppBskyFeedDefs.FeedViewPost']
-    cursor: t.Optional[str] = None
+    feed: t.List['models.AppBskyFeedDefs.FeedViewPost']  #: Feed.
+    cursor: t.Optional[str] = None  #: Cursor.

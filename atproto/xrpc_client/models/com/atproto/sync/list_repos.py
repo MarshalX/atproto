@@ -15,42 +15,27 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.listRepos`.
+    """Parameters model for :obj:`com.atproto.sync.listRepos`."""
 
-    Attributes:
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.sync.listRepos`.
+    """Output data model for :obj:`com.atproto.sync.listRepos`."""
 
-    Attributes:
-        cursor: Cursor.
-        repos: Repos.
-    """
-
-    repos: t.List['models.ComAtprotoSyncListRepos.Repo']
-    cursor: t.Optional[str] = None
+    repos: t.List['models.ComAtprotoSyncListRepos.Repo']  #: Repos.
+    cursor: t.Optional[str] = None  #: Cursor.
 
 
 @dataclass
 class Repo(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.sync.listRepos`.
+    """Definition model for :obj:`com.atproto.sync.listRepos`."""
 
-    Attributes:
-        did: Did.
-        head: Head.
-    """
-
-    did: str
-    head: str
+    did: str  #: Did.
+    head: str  #: Head.
 
     _type: str = 'com.atproto.sync.listRepos#repo'

@@ -15,24 +15,15 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.server.getAccountInviteCodes`.
+    """Parameters model for :obj:`com.atproto.server.getAccountInviteCodes`."""
 
-    Attributes:
-        includeUsed: Include used.
-        createAvailable: Create available.
-    """
-
-    createAvailable: t.Optional[bool] = None
-    includeUsed: t.Optional[bool] = None
+    createAvailable: t.Optional[bool] = None  #: Create available.
+    includeUsed: t.Optional[bool] = None  #: Include used.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.server.getAccountInviteCodes`.
+    """Output data model for :obj:`com.atproto.server.getAccountInviteCodes`."""
 
-    Attributes:
-        codes: Codes.
-    """
-
-    codes: t.List['models.ComAtprotoServerDefs.InviteCode']
+    codes: t.List['models.ComAtprotoServerDefs.InviteCode']  #: Codes.

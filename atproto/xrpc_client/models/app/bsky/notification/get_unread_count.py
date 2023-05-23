@@ -14,22 +14,14 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.notification.getUnreadCount`.
+    """Parameters model for :obj:`app.bsky.notification.getUnreadCount`."""
 
-    Attributes:
-        seenAt: Seen at.
-    """
-
-    seenAt: t.Optional[str] = None
+    seenAt: t.Optional[str] = None  #: Seen at.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.notification.getUnreadCount`.
+    """Output data model for :obj:`app.bsky.notification.getUnreadCount`."""
 
-    Attributes:
-        count: Count.
-    """
-
-    count: int
+    count: int  #: Count.

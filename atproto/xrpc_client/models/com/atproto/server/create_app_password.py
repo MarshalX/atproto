@@ -14,29 +14,19 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.server.createAppPassword`.
+    """Input data model for :obj:`com.atproto.server.createAppPassword`."""
 
-    Attributes:
-        name: Name.
-    """
-
-    name: str
+    name: str  #: Name.
 
 
 @dataclass
 class AppPassword(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.server.createAppPassword`.
+    """Definition model for :obj:`com.atproto.server.createAppPassword`."""
 
-    Attributes:
-        name: Name.
-        password: Password.
-        createdAt: Created at.
-    """
-
-    createdAt: str
-    name: str
-    password: str
+    createdAt: str  #: Created at.
+    name: str  #: Name.
+    password: str  #: Password.
 
     _type: str = 'com.atproto.server.createAppPassword#appPassword'
 

@@ -15,30 +15,18 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.graph.getFollowers`.
+    """Parameters model for :obj:`app.bsky.graph.getFollowers`."""
 
-    Attributes:
-        actor: Actor.
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    actor: str
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
+    actor: str  #: Actor.
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.graph.getFollowers`.
+    """Output data model for :obj:`app.bsky.graph.getFollowers`."""
 
-    Attributes:
-        subject: Subject.
-        cursor: Cursor.
-        followers: Followers.
-    """
-
-    followers: t.List['models.AppBskyActorDefs.ProfileView']
-    subject: 'models.AppBskyActorDefs.ProfileView'
-    cursor: t.Optional[str] = None
+    followers: t.List['models.AppBskyActorDefs.ProfileView']  #: Followers.
+    subject: 'models.AppBskyActorDefs.ProfileView'  #: Subject.
+    cursor: t.Optional[str] = None  #: Cursor.

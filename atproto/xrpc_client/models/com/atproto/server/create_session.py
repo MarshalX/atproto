@@ -14,32 +14,19 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.server.createSession`.
+    """Input data model for :obj:`com.atproto.server.createSession`."""
 
-    Attributes:
-        identifier: Handle or other identifier supported by the server for the authenticating user.
-        password: Password.
-    """
-
-    identifier: str
-    password: str
+    identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
+    password: str  #: Password.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.server.createSession`.
+    """Output data model for :obj:`com.atproto.server.createSession`."""
 
-    Attributes:
-        accessJwt: Access jwt.
-        refreshJwt: Refresh jwt.
-        handle: Handle.
-        did: Did.
-        email: Email.
-    """
-
-    accessJwt: str
-    did: str
-    handle: str
-    refreshJwt: str
-    email: t.Optional[str] = None
+    accessJwt: str  #: Access jwt.
+    did: str  #: Did.
+    handle: str  #: Handle.
+    refreshJwt: str  #: Refresh jwt.
+    email: t.Optional[str] = None  #: Email.

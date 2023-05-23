@@ -18,10 +18,6 @@ Data: t.Union[t.Type[str], t.Type[bytes]] = bytes
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.repo.uploadBlob`.
+    """Output data model for :obj:`com.atproto.repo.uploadBlob`."""
 
-    Attributes:
-        blob: Blob.
-    """
-
-    blob: BlobRef
+    blob: BlobRef  #: Blob.

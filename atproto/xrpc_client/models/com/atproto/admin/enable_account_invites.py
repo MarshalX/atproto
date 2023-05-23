@@ -13,10 +13,6 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.admin.enableAccountInvites`.
+    """Input data model for :obj:`com.atproto.admin.enableAccountInvites`."""
 
-    Attributes:
-        account: Account.
-    """
-
-    account: str
+    account: str  #: Account.

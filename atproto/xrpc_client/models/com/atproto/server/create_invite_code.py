@@ -14,24 +14,15 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.server.createInviteCode`.
+    """Input data model for :obj:`com.atproto.server.createInviteCode`."""
 
-    Attributes:
-        useCount: Use count.
-        forAccount: For account.
-    """
-
-    useCount: int
-    forAccount: t.Optional[str] = None
+    useCount: int  #: Use count.
+    forAccount: t.Optional[str] = None  #: For account.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.server.createInviteCode`.
+    """Output data model for :obj:`com.atproto.server.createInviteCode`."""
 
-    Attributes:
-        code: Code.
-    """
-
-    code: str
+    code: str  #: Code.

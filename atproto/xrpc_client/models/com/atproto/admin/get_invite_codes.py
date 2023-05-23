@@ -15,28 +15,17 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.admin.getInviteCodes`.
+    """Parameters model for :obj:`com.atproto.admin.getInviteCodes`."""
 
-    Attributes:
-        sort: Sort.
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
-    sort: t.Optional[str] = None
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
+    sort: t.Optional[str] = None  #: Sort.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.admin.getInviteCodes`.
+    """Output data model for :obj:`com.atproto.admin.getInviteCodes`."""
 
-    Attributes:
-        cursor: Cursor.
-        codes: Codes.
-    """
-
-    codes: t.List['models.ComAtprotoServerDefs.InviteCode']
-    cursor: t.Optional[str] = None
+    codes: t.List['models.ComAtprotoServerDefs.InviteCode']  #: Codes.
+    cursor: t.Optional[str] = None  #: Cursor.

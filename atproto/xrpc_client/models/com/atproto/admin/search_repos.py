@@ -15,30 +15,18 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.admin.searchRepos`.
+    """Parameters model for :obj:`com.atproto.admin.searchRepos`."""
 
-    Attributes:
-        term: Term.
-        invitedBy: Invited by.
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    cursor: t.Optional[str] = None
-    invitedBy: t.Optional[str] = None
-    limit: t.Optional[int] = None
-    term: t.Optional[str] = None
+    cursor: t.Optional[str] = None  #: Cursor.
+    invitedBy: t.Optional[str] = None  #: Invited by.
+    limit: t.Optional[int] = None  #: Limit.
+    term: t.Optional[str] = None  #: Term.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.admin.searchRepos`.
+    """Output data model for :obj:`com.atproto.admin.searchRepos`."""
 
-    Attributes:
-        cursor: Cursor.
-        repos: Repos.
-    """
-
-    repos: t.List['models.ComAtprotoAdminDefs.RepoView']
-    cursor: t.Optional[str] = None
+    repos: t.List['models.ComAtprotoAdminDefs.RepoView']  #: Repos.
+    cursor: t.Optional[str] = None  #: Cursor.

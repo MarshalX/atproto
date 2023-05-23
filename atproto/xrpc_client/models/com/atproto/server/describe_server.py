@@ -15,30 +15,19 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.server.describeServer`.
+    """Output data model for :obj:`com.atproto.server.describeServer`."""
 
-    Attributes:
-        inviteCodeRequired: Invite code required.
-        availableUserDomains: Available user domains.
-        links: Links.
-    """
-
-    availableUserDomains: t.List[str]
-    inviteCodeRequired: t.Optional[bool] = None
-    links: t.Optional['models.ComAtprotoServerDescribeServer.Links'] = None
+    availableUserDomains: t.List[str]  #: Available user domains.
+    inviteCodeRequired: t.Optional[bool] = None  #: Invite code required.
+    links: t.Optional['models.ComAtprotoServerDescribeServer.Links'] = None  #: Links.
 
 
 @dataclass
 class Links(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.server.describeServer`.
+    """Definition model for :obj:`com.atproto.server.describeServer`."""
 
-    Attributes:
-        privacyPolicy: Privacy policy.
-        termsOfService: Terms of service.
-    """
-
-    privacyPolicy: t.Optional[str] = None
-    termsOfService: t.Optional[str] = None
+    privacyPolicy: t.Optional[str] = None  #: Privacy policy.
+    termsOfService: t.Optional[str] = None  #: Terms of service.
 
     _type: str = 'com.atproto.server.describeServer#links'

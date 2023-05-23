@@ -13,14 +13,8 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.server.deleteAccount`.
+    """Input data model for :obj:`com.atproto.server.deleteAccount`."""
 
-    Attributes:
-        did: Did.
-        password: Password.
-        token: Token.
-    """
-
-    did: str
-    password: str
-    token: str
+    did: str  #: Did.
+    password: str  #: Password.
+    token: str  #: Token.

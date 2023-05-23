@@ -14,12 +14,7 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.admin.disableInviteCodes`.
+    """Input data model for :obj:`com.atproto.admin.disableInviteCodes`."""
 
-    Attributes:
-        codes: Codes.
-        accounts: Accounts.
-    """
-
-    accounts: t.Optional[t.List[str]] = None
-    codes: t.Optional[t.List[str]] = None
+    accounts: t.Optional[t.List[str]] = None  #: Accounts.
+    codes: t.Optional[t.List[str]] = None  #: Codes.

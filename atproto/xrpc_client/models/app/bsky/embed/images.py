@@ -16,13 +16,9 @@ from atproto.xrpc_client.models.blob_ref import BlobRef
 @dataclass
 class Main(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.images`.
+    """Definition model for :obj:`app.bsky.embed.images`."""
 
-    Attributes:
-        images: Images.
-    """
-
-    images: t.List['models.AppBskyEmbedImages.Image']
+    images: t.List['models.AppBskyEmbedImages.Image']  #: Images.
 
     _type: str = 'app.bsky.embed.images'
 
@@ -30,15 +26,10 @@ class Main(base.ModelBase):
 @dataclass
 class Image(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.images`.
+    """Definition model for :obj:`app.bsky.embed.images`."""
 
-    Attributes:
-        image: Image.
-        alt: Alt.
-    """
-
-    alt: str
-    image: BlobRef
+    alt: str  #: Alt.
+    image: BlobRef  #: Image.
 
     _type: str = 'app.bsky.embed.images#image'
 
@@ -46,13 +37,9 @@ class Image(base.ModelBase):
 @dataclass
 class View(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.images`.
+    """Definition model for :obj:`app.bsky.embed.images`."""
 
-    Attributes:
-        images: Images.
-    """
-
-    images: t.List['models.AppBskyEmbedImages.ViewImage']
+    images: t.List['models.AppBskyEmbedImages.ViewImage']  #: Images.
 
     _type: str = 'app.bsky.embed.images#view'
 
@@ -60,16 +47,10 @@ class View(base.ModelBase):
 @dataclass
 class ViewImage(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.images`.
+    """Definition model for :obj:`app.bsky.embed.images`."""
 
-    Attributes:
-        thumb: Thumb.
-        fullsize: Fullsize.
-        alt: Alt.
-    """
-
-    alt: str
-    fullsize: str
-    thumb: str
+    alt: str  #: Alt.
+    fullsize: str  #: Fullsize.
+    thumb: str  #: Thumb.
 
     _type: str = 'app.bsky.embed.images#viewImage'

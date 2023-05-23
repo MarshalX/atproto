@@ -13,10 +13,6 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.notifyOfUpdate`.
+    """Parameters model for :obj:`com.atproto.sync.notifyOfUpdate`."""
 
-    Attributes:
-        hostname: Hostname of the service that is notifying of update.
-    """
-
-    hostname: str
+    hostname: str  #: Hostname of the service that is notifying of update.

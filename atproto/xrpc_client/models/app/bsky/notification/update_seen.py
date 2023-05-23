@@ -13,10 +13,6 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`app.bsky.notification.updateSeen`.
+    """Input data model for :obj:`app.bsky.notification.updateSeen`."""
 
-    Attributes:
-        seenAt: Seen at.
-    """
-
-    seenAt: str
+    seenAt: str  #: Seen at.

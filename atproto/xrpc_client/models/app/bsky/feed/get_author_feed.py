@@ -15,28 +15,17 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.feed.getAuthorFeed`.
+    """Parameters model for :obj:`app.bsky.feed.getAuthorFeed`."""
 
-    Attributes:
-        actor: Actor.
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    actor: str
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
+    actor: str  #: Actor.
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.feed.getAuthorFeed`.
+    """Output data model for :obj:`app.bsky.feed.getAuthorFeed`."""
 
-    Attributes:
-        cursor: Cursor.
-        feed: Feed.
-    """
-
-    feed: t.List['models.AppBskyFeedDefs.FeedViewPost']
-    cursor: t.Optional[str] = None
+    feed: t.List['models.AppBskyFeedDefs.FeedViewPost']  #: Feed.
+    cursor: t.Optional[str] = None  #: Cursor.

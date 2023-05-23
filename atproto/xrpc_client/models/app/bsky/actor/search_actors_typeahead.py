@@ -15,24 +15,15 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.actor.searchActorsTypeahead`.
+    """Parameters model for :obj:`app.bsky.actor.searchActorsTypeahead`."""
 
-    Attributes:
-        term: Term.
-        limit: Limit.
-    """
-
-    limit: t.Optional[int] = None
-    term: t.Optional[str] = None
+    limit: t.Optional[int] = None  #: Limit.
+    term: t.Optional[str] = None  #: Term.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.actor.searchActorsTypeahead`.
+    """Output data model for :obj:`app.bsky.actor.searchActorsTypeahead`."""
 
-    Attributes:
-        actors: Actors.
-    """
-
-    actors: t.List['models.AppBskyActorDefs.ProfileViewBasic']
+    actors: t.List['models.AppBskyActorDefs.ProfileViewBasic']  #: Actors.

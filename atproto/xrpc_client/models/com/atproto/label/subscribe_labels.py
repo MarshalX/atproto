@@ -15,15 +15,10 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Labels(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.label.subscribeLabels`.
+    """Definition model for :obj:`com.atproto.label.subscribeLabels`."""
 
-    Attributes:
-        seq: Seq.
-        labels: Labels.
-    """
-
-    labels: t.List['models.ComAtprotoLabelDefs.Label']
-    seq: int
+    labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.
+    seq: int  #: Seq.
 
     _type: str = 'com.atproto.label.subscribeLabels#labels'
 
@@ -31,14 +26,9 @@ class Labels(base.ModelBase):
 @dataclass
 class Info(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.label.subscribeLabels`.
+    """Definition model for :obj:`com.atproto.label.subscribeLabels`."""
 
-    Attributes:
-        name: Name.
-        message: Message.
-    """
-
-    name: str
-    message: t.Optional[str] = None
+    name: str  #: Name.
+    message: t.Optional[str] = None  #: Message.
 
     _type: str = 'com.atproto.label.subscribeLabels#info'
