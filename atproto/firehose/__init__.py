@@ -22,6 +22,7 @@ _SUBSCRIBE_LABELS_MESSAGE_TYPE_TO_MODEL = {
     '#info': models.ComAtprotoLabelSubscribeLabels.Info,
 }
 
+#: Subscribe Repos Message
 SubscribeReposMessage = t.Union[
     models.ComAtprotoSyncSubscribeRepos.Commit,
     models.ComAtprotoSyncSubscribeRepos.Handle,
@@ -29,6 +30,7 @@ SubscribeReposMessage = t.Union[
     models.ComAtprotoSyncSubscribeRepos.Tombstone,
     models.ComAtprotoSyncSubscribeRepos.Info,
 ]
+#: Subscribe Labels Message
 SubscribeLabelsMessage = t.Union[
     models.ComAtprotoLabelSubscribeLabels.Labels,
     models.ComAtprotoLabelSubscribeLabels.Info,
@@ -36,6 +38,18 @@ SubscribeLabelsMessage = t.Union[
 
 
 def parse_subscribe_repos_message(message: 'MessageFrame', *, decode_inner_cbor: bool = True) -> SubscribeReposMessage:
+    """Parse Firehose repositories message to the corresponding model.
+
+    Note:
+        Use `decode_inner_cbor` only when required to increase performance.
+
+    Args:
+        message: Message frame.
+        decode_inner_cbor: Decode DAG-CBOR inside models.
+
+    Returns:
+        :obj:`SubscribeReposMessage`: Corresponding message model.
+    """
     model_class = _SUBSCRIBE_REPOS_MESSAGE_TYPE_TO_MODEL[message.type]
     model_instance = get_or_create_model(message.body, model_class)
 
@@ -46,6 +60,14 @@ def parse_subscribe_repos_message(message: 'MessageFrame', *, decode_inner_cbor:
 
 
 def parse_subscribe_labels_message(message: 'MessageFrame') -> SubscribeLabelsMessage:
+    """Parse Firehose labels message to the corresponding model.
+
+    Args:
+        message: Message frame.
+
+    Returns:
+        :obj:`SubscribeLabelsMessage`: Corresponding message model.
+    """
     model_class = _SUBSCRIBE_LABELS_MESSAGE_TYPE_TO_MODEL[message.type]
     return get_or_create_model(message.body, model_class)
 

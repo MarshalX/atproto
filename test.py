@@ -3,18 +3,12 @@ import logging
 import os
 import threading
 
-from atproto import (
-    CAR,
-    AsyncClient,
-    AtUri,
-    Client,
-    FirehoseSubscribeReposClient,
-    models,
-)
+from atproto import CAR, AsyncClient, AtUri, Client, models
 from atproto.firehose import (
     AsyncFirehoseSubscribeLabelsClient,
     AsyncFirehoseSubscribeReposClient,
     FirehoseSubscribeLabelsClient,
+    FirehoseSubscribeReposClient,
     parse_subscribe_repos_message,
 )
 

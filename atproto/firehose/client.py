@@ -108,9 +108,23 @@ class _WebsocketClientBase:
         on_message_callback: t.Union[OnMessageCallback, AsyncOnMessageCallback],
         on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None,
     ) -> None:
+        """Subscribe to Firehose and start client.
+
+        Args:
+            on_message_callback: Callback that will be called on the new Firehose message.
+            on_callback_error_callback: Callback that will be called if the `on_message_callback` raised an exception.
+
+        Returns:
+            :obj:`None`
+        """
         raise NotImplemented
 
     def stop(self) -> None:
+        """Unsubscribe and stop Firehose client.
+
+        Returns:
+            :obj:`None`
+        """
         raise NotImplemented
 
     def _process_message_frame(self, frame: 'MessageFrame') -> None:

@@ -1,6 +1,5 @@
 from .car import CAR
 from .cid import CID
-from .firehose import AsyncFirehoseSubscribeReposClient, FirehoseSubscribeReposClient
 from .firehose import models as firehose_models
 from .nsid import NSID
 from .uri import AtUri
@@ -11,8 +10,6 @@ from .xrpc_client.client.client import Client
 __all__ = [
     'AsyncClient',
     'Client',
-    'AsyncFirehoseSubscribeReposClient',
-    'FirehoseSubscribeReposClient',
     'models',
     'firehose_models',
     'NSID',
