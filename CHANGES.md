@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 0.0.8
+
+**23.05.2023**
+
+* update changelog for v0.0.7 by @MarshalX in https://github.com/MarshalX/atproto/pull/34
+* Fix duplication of field descriptions in docs by @MarshalX in https://github.com/MarshalX/atproto/pull/35
+* Add support for custom feeds. Update lexicons fetched from d661a60 committed 2023-05-23T05:02:36Z by @MarshalX in https://github.com/MarshalX/atproto/pull/36
+* Add Firehose (data streaming) by @MarshalX in https://github.com/MarshalX/atproto/pull/31
+* Add forgotten models by @MarshalX in https://github.com/MarshalX/atproto/pull/37
+* Fix link format in docs by @MarshalX in https://github.com/MarshalX/atproto/pull/38
+
 ## Version 0.0.7
 
 **20.05.2023**
