@@ -66,6 +66,8 @@ if __name__ == '__main__':
 ```
 </details>
 
+🔥[Firehose data streaming is available!](https://atproto.blue/en/latest/firehose.html)
+
 ### Introduction
 
 This SDK attempts to implement everything that provides ATProto. Due to the unstable state of the protocol (it grows and changes fast) and a bit of outdated documentation, only the client side is supported yet. There is support for Lexicon Schemes, XRPC clients and Firehose for now. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Scheme. DAG-CBOR, CAR files.
