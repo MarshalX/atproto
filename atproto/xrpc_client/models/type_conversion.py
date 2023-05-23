@@ -1,6 +1,7 @@
 from atproto.xrpc_client import models
 
 RECORD_TYPE_TO_MODEL_CLASS = {
+    'app.bsky.feed.generator': models.AppBskyFeedGenerator.Main,
     'app.bsky.actor.profile': models.AppBskyActorProfile.Main,
     'app.bsky.feed.repost': models.AppBskyFeedRepost.Main,
     'app.bsky.graph.listitem': models.AppBskyGraphListitem.Main,
