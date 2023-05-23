@@ -8,57 +8,83 @@ from atproto.xrpc_client.models.utils import get_or_create_model
 
 
 class FrameType(Enum):
+    """Type of frame."""
+
     MESSAGE = 1
     ERROR = -1
 
     @classmethod
-    def has_value(cls, value):
+    def has_value(cls, value) -> bool:
         return value in cls._value2member_map_
 
 
 @dataclass
 class MessageFrameHeader:
-    op: FrameType = FrameType.MESSAGE
-    t: Optional[str] = None
+    """Header of the message frame."""
+
+    op: FrameType = FrameType.MESSAGE  #: Operation. For Message header is :obj:`FrameType.MESSAGE` always.
+    t: Optional[str] = None  #: Type of body content.
 
 
 @dataclass
 class ErrorFrameHeader:
-    op: FrameType = FrameType.ERROR
+    """Header of the error frame."""
+
+    op: FrameType = FrameType.ERROR  #: Operation. For Error header is :obj:`FrameType.ERROR` always.
 
 
+#: Base frame header.
 FrameHeader = Union[MessageFrameHeader, ErrorFrameHeader]
 
 
 @dataclass
 class ErrorFrameBody:
-    error: str
-    message: Optional[str] = None
+    """Body of error frame."""
+
+    error: str  #: Code of the error.
+    message: Optional[str] = None  #: Description of the error.
 
 
 @dataclass
 class Frame:
-    header: Union[MessageFrameHeader, ErrorFrameHeader]
-    body: Union[ErrorFrameBody, dict]
+    """Firehose base frame."""
+
+    header: Union[MessageFrameHeader, ErrorFrameHeader]  #: Header.
+    body: Union[ErrorFrameBody, dict]  #: Body
 
     @property
     def operation(self) -> FrameType:
+        """:obj:`FrameType`: Frame operation (frame type)."""
         return self.header.op
 
     @property
     def type(self) -> str:
+        """:obj:`str`: Frame type."""
         return self.header.t
 
     @property
     def is_message(self) -> bool:
+        """:obj:`bool`: Is frame the MessageFrame."""
         return self.operation is FrameType.MESSAGE
 
     @property
     def is_error(self) -> bool:
+        """:obj:`bool`: Is frame the ErrorFrame."""
         return self.operation is FrameType.ERROR
 
     @staticmethod
     def from_bytes(data: Union[bytes, bytearray]) -> Union['MessageFrame', 'ErrorFrame']:
+        """Decode frame from bytes of stream of bytes.
+
+        Args:
+            data: Bytes or stream of bytes of frame.
+
+        Returns:
+            :obj:`atproto.firehose_models.MessageFrame` or :obj:`atproto.firehose_models.ErrorFrame`
+
+        Raises:
+            :class:`atproto.exceptions.FirehoseError`: Invalid data frame.
+        """
         decoded_parts = decode_dag_multi(data)
         if len(decoded_parts) > 2:
             raise FirehoseError('Too many CBOR data parts in the frame')
@@ -76,12 +102,14 @@ class Frame:
 
         try:
             header_op = int(raw_header.get('op', 0))
-            if header_op == FrameType.MESSAGE.value:
-                header = get_or_create_model(raw_header, MessageFrameHeader)
-            elif header_op == FrameType.ERROR.value:
-                header = get_or_create_model(raw_header, ErrorFrameHeader)
-            else:
+            if not FrameType.has_value(header_op):
                 raise FirehoseError('Invalid frame type')
+
+            frame_type = FrameType(header_op)
+            if frame_type is FrameType.MESSAGE:
+                header = get_or_create_model(raw_header, MessageFrameHeader)
+            else:
+                header = get_or_create_model(raw_header, ErrorFrameHeader)
         except (ValueError, AtProtocolError):
             raise FirehoseError('Invalid frame header')
 
@@ -99,15 +127,20 @@ class Frame:
 
 @dataclass
 class MessageFrame(Frame):
-    header: MessageFrameHeader
-    body: dict
+    """Firehose message frame."""
+
+    header: MessageFrameHeader  #: Header.
+    body: dict  #: Body.
 
     @property
     def type(self) -> str:
+        """:obj:`str`: Type of body."""
         return self.header.t
 
 
 @dataclass
 class ErrorFrame(Frame):
-    header: ErrorFrameHeader
-    body: ErrorFrameBody
+    """Firehose error frame."""
+
+    header: ErrorFrameHeader  #: Header.
+    body: ErrorFrameBody  #: Body.

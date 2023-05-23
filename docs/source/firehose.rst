@@ -4,7 +4,6 @@ Firehose (data streaming)
 .. automodule:: atproto.firehose
    :members:
    :undoc-members:
-   :show-inheritance:
    :inherited-members:
 
 Submodules
