@@ -193,6 +193,269 @@ class ActorNamespace(NamespaceBase):
 
 
 @dataclass
+class FeedNamespace(NamespaceBase):
+    async def describe_feed_generator(self, **kwargs) -> models.AppBskyFeedDescribeFeedGenerator.Response:
+        """Returns information about a given feed generator including TOS & offered feed URIs.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedDescribeFeedGenerator.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        response = await self._client.invoke_query(
+            'app.bsky.feed.describeFeedGenerator', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedDescribeFeedGenerator.Response)
+
+    async def get_actor_feeds(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetActorFeeds.Params'], **kwargs
+    ) -> models.AppBskyFeedGetActorFeeds.Response:
+        """Retrieve a list of feeds created by a given actor.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetActorFeeds.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetActorFeeds.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getActorFeeds', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetActorFeeds.Response)
+
+    async def get_author_feed(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetAuthorFeed.Params'], **kwargs
+    ) -> models.AppBskyFeedGetAuthorFeed.Response:
+        """A view of an actor's feed.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetAuthorFeed.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetAuthorFeed.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getAuthorFeed', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetAuthorFeed.Response)
+
+    async def get_feed(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetFeed.Params'], **kwargs
+    ) -> models.AppBskyFeedGetFeed.Response:
+        """Compose and hydrate a feed from a user's selected feed generator.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetFeed.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetFeed.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getFeed', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetFeed.Response)
+
+    async def get_feed_generator(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetFeedGenerator.Params'], **kwargs
+    ) -> models.AppBskyFeedGetFeedGenerator.Response:
+        """Get information about a specific feed offered by a feed generator, such as its online status.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetFeedGenerator.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetFeedGenerator.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getFeedGenerator', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetFeedGenerator.Response)
+
+    async def get_feed_generators(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetFeedGenerators.Params'], **kwargs
+    ) -> models.AppBskyFeedGetFeedGenerators.Response:
+        """Get information about a list of feed generators.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetFeedGenerators.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetFeedGenerators.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getFeedGenerators', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetFeedGenerators.Response)
+
+    async def get_feed_skeleton(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetFeedSkeleton.Params'], **kwargs
+    ) -> models.AppBskyFeedGetFeedSkeleton.Response:
+        """A skeleton of a feed provided by a feed generator.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetFeedSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetFeedSkeleton.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getFeedSkeleton', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetFeedSkeleton.Response)
+
+    async def get_likes(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetLikes.Params'], **kwargs
+    ) -> models.AppBskyFeedGetLikes.Response:
+        """Get likes.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetLikes.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetLikes.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getLikes', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetLikes.Response)
+
+    async def get_post_thread(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetPostThread.Params'], **kwargs
+    ) -> models.AppBskyFeedGetPostThread.Response:
+        """Get post thread.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetPostThread.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetPostThread.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getPostThread', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetPostThread.Response)
+
+    async def get_posts(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetPosts.Params'], **kwargs
+    ) -> models.AppBskyFeedGetPosts.Response:
+        """A view of an actor's feed.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetPosts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetPosts.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getPosts', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetPosts.Response)
+
+    async def get_reposted_by(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetRepostedBy.Params'], **kwargs
+    ) -> models.AppBskyFeedGetRepostedBy.Response:
+        """Get reposted by.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetRepostedBy.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetRepostedBy.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getRepostedBy', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetRepostedBy.Response)
+
+    async def get_timeline(
+        self, params: t.Optional[t.Union[dict, 'models.AppBskyFeedGetTimeline.Params']] = None, **kwargs
+    ) -> models.AppBskyFeedGetTimeline.Response:
+        """A view of the user's home timeline.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetTimeline.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params = get_or_create_model(params, models.AppBskyFeedGetTimeline.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.feed.getTimeline', params=params, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetTimeline.Response)
+
+
+@dataclass
 class GraphNamespace(NamespaceBase):
     async def get_blocks(
         self, params: t.Optional[t.Union[dict, 'models.AppBskyGraphGetBlocks.Params']] = None, **kwargs
@@ -427,141 +690,6 @@ class GraphNamespace(NamespaceBase):
             'app.bsky.graph.unmuteActorList', data=data, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
-
-
-@dataclass
-class FeedNamespace(NamespaceBase):
-    async def get_author_feed(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetAuthorFeed.Params'], **kwargs
-    ) -> models.AppBskyFeedGetAuthorFeed.Response:
-        """A view of an actor's feed.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetAuthorFeed.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetAuthorFeed.Params)
-        response = await self._client.invoke_query(
-            'app.bsky.feed.getAuthorFeed', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetAuthorFeed.Response)
-
-    async def get_likes(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetLikes.Params'], **kwargs
-    ) -> models.AppBskyFeedGetLikes.Response:
-        """Get likes.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetLikes.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetLikes.Params)
-        response = await self._client.invoke_query(
-            'app.bsky.feed.getLikes', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetLikes.Response)
-
-    async def get_post_thread(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetPostThread.Params'], **kwargs
-    ) -> models.AppBskyFeedGetPostThread.Response:
-        """Get post thread.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetPostThread.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetPostThread.Params)
-        response = await self._client.invoke_query(
-            'app.bsky.feed.getPostThread', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetPostThread.Response)
-
-    async def get_posts(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetPosts.Params'], **kwargs
-    ) -> models.AppBskyFeedGetPosts.Response:
-        """A view of an actor's feed.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetPosts.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetPosts.Params)
-        response = await self._client.invoke_query(
-            'app.bsky.feed.getPosts', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetPosts.Response)
-
-    async def get_reposted_by(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetRepostedBy.Params'], **kwargs
-    ) -> models.AppBskyFeedGetRepostedBy.Response:
-        """Get reposted by.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetRepostedBy.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetRepostedBy.Params)
-        response = await self._client.invoke_query(
-            'app.bsky.feed.getRepostedBy', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetRepostedBy.Response)
-
-    async def get_timeline(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyFeedGetTimeline.Params']] = None, **kwargs
-    ) -> models.AppBskyFeedGetTimeline.Response:
-        """A view of the user's home timeline.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyFeedGetTimeline.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params = get_or_create_model(params, models.AppBskyFeedGetTimeline.Params)
-        response = await self._client.invoke_query(
-            'app.bsky.feed.getTimeline', params=params, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyFeedGetTimeline.Response)
 
 
 @dataclass

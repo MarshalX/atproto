@@ -82,7 +82,10 @@ class ViewerState(base.ModelBase):
 
 Preferences = t.List[
     t.Union[
-        'models.AppBskyActorDefs.AdultContentPref', 'models.AppBskyActorDefs.ContentLabelPref', 't.Dict[str, t.Any]'
+        'models.AppBskyActorDefs.AdultContentPref',
+        'models.AppBskyActorDefs.ContentLabelPref',
+        'models.AppBskyActorDefs.SavedFeedsPref',
+        't.Dict[str, t.Any]',
     ]
 ]
 
@@ -106,3 +109,14 @@ class ContentLabelPref(base.ModelBase):
     visibility: str  #: Visibility.
 
     _type: str = 'app.bsky.actor.defs#contentLabelPref'
+
+
+@dataclass
+class SavedFeedsPref(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    pinned: t.List[str]  #: Pinned.
+    saved: t.List[str]  #: Saved.
+
+    _type: str = 'app.bsky.actor.defs#savedFeedsPref'

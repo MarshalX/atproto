@@ -29,7 +29,24 @@ from atproto.xrpc_client.models.app.bsky.embed import (
 )
 from atproto.xrpc_client.models.app.bsky.feed import defs as AppBskyFeedDefs
 from atproto.xrpc_client.models.app.bsky.feed import (
+    describe_feed_generator as AppBskyFeedDescribeFeedGenerator,
+)
+from atproto.xrpc_client.models.app.bsky.feed import generator as AppBskyFeedGenerator
+from atproto.xrpc_client.models.app.bsky.feed import (
+    get_actor_feeds as AppBskyFeedGetActorFeeds,
+)
+from atproto.xrpc_client.models.app.bsky.feed import (
     get_author_feed as AppBskyFeedGetAuthorFeed,
+)
+from atproto.xrpc_client.models.app.bsky.feed import get_feed as AppBskyFeedGetFeed
+from atproto.xrpc_client.models.app.bsky.feed import (
+    get_feed_generator as AppBskyFeedGetFeedGenerator,
+)
+from atproto.xrpc_client.models.app.bsky.feed import (
+    get_feed_generators as AppBskyFeedGetFeedGenerators,
+)
+from atproto.xrpc_client.models.app.bsky.feed import (
+    get_feed_skeleton as AppBskyFeedGetFeedSkeleton,
 )
 from atproto.xrpc_client.models.app.bsky.feed import get_likes as AppBskyFeedGetLikes
 from atproto.xrpc_client.models.app.bsky.feed import (

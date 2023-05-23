@@ -68,8 +68,18 @@ class ReplyRef(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    parent: 'models.AppBskyFeedDefs.PostView'  #: Parent.
-    root: 'models.AppBskyFeedDefs.PostView'  #: Root.
+    parent: t.Union[
+        'models.AppBskyFeedDefs.PostView',
+        'models.AppBskyFeedDefs.NotFoundPost',
+        'models.AppBskyFeedDefs.BlockedPost',
+        't.Dict[str, t.Any]',
+    ]  #: Parent.
+    root: t.Union[
+        'models.AppBskyFeedDefs.PostView',
+        'models.AppBskyFeedDefs.NotFoundPost',
+        'models.AppBskyFeedDefs.BlockedPost',
+        't.Dict[str, t.Any]',
+    ]  #: Root.
 
     _type: str = 'app.bsky.feed.defs#replyRef'
 
@@ -133,3 +143,54 @@ class BlockedPost(base.ModelBase):
     uri: str  #: Uri.
 
     _type: str = 'app.bsky.feed.defs#blockedPost'
+
+
+@dataclass
+class GeneratorView(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.feed.defs`."""
+
+    cid: str  #: Cid.
+    creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
+    displayName: str  #: Display name.
+    indexedAt: str  #: Indexed at.
+    uri: str  #: Uri.
+    avatar: t.Optional[str] = None  #: Avatar.
+    description: t.Optional[str] = None  #: Description.
+    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
+    did: t.Optional[str] = None  #: Did.
+    likeCount: t.Optional[int] = None  #: Like count.
+    viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState'] = None  #: Viewer.
+
+    _type: str = 'app.bsky.feed.defs#generatorView'
+
+
+@dataclass
+class GeneratorViewerState(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.feed.defs`."""
+
+    like: t.Optional[str] = None  #: Like.
+
+    _type: str = 'app.bsky.feed.defs#generatorViewerState'
+
+
+@dataclass
+class SkeletonFeedPost(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.feed.defs`."""
+
+    post: str  #: Post.
+    reason: t.Optional[t.Union['models.AppBskyFeedDefs.SkeletonReasonRepost', 't.Dict[str, t.Any]']] = None  #: Reason.
+
+    _type: str = 'app.bsky.feed.defs#skeletonFeedPost'
+
+
+@dataclass
+class SkeletonReasonRepost(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.feed.defs`."""
+
+    repost: str  #: Repost.
+
+    _type: str = 'app.bsky.feed.defs#skeletonReasonRepost'
