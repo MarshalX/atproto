@@ -11,8 +11,10 @@ All clients present in two variants: sync and async. As a developer, you should 
 
     client = FirehoseSubscribeReposClient()
 
+
     def on_message_handler(message) -> None:
         print(message.header, parse_subscribe_repos_message(message))
+
 
     client.start(on_message_handler)
 
