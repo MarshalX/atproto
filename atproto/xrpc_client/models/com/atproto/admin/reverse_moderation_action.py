@@ -15,17 +15,11 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.admin.reverseModerationAction`.
+    """Input data model for :obj:`com.atproto.admin.reverseModerationAction`."""
 
-    Attributes:
-        id: Id.
-        reason: Reason.
-        createdBy: Created by.
-    """
-
-    createdBy: str
-    id: int
-    reason: str
+    createdBy: str  #: Created by.
+    id: int  #: Id.
+    reason: str  #: Reason.
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.

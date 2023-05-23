@@ -14,34 +14,20 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.repo.createRecord`.
+    """Input data model for :obj:`com.atproto.repo.createRecord`."""
 
-    Attributes:
-        repo: The handle or DID of the repo.
-        collection: The NSID of the record collection.
-        rkey: The key of the record.
-        validate: Validate the record?
-        record: The record to create.
-        swapCommit: Compare and swap with the previous commit by cid.
-    """
-
-    collection: str
-    record: 'base.RecordModelBase'
-    repo: str
-    rkey: t.Optional[str] = None
-    swapCommit: t.Optional[str] = None
-    validate: t.Optional[bool] = None
+    collection: str  #: The NSID of the record collection.
+    record: 'base.RecordModelBase'  #: The record to create.
+    repo: str  #: The handle or DID of the repo.
+    rkey: t.Optional[str] = None  #: The key of the record.
+    swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
+    validate: t.Optional[bool] = None  #: Validate the record?
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.repo.createRecord`.
+    """Output data model for :obj:`com.atproto.repo.createRecord`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-    """
-
-    cid: str
-    uri: str
+    cid: str  #: Cid.
+    uri: str  #: Uri.

@@ -15,17 +15,12 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Main(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.richtext.facet`.
-
-    Attributes:
-        index: Index.
-        features: Features.
-    """
+    """Definition model for :obj:`app.bsky.richtext.facet`."""
 
     features: t.List[
         t.Union['models.AppBskyRichtextFacet.Mention', 'models.AppBskyRichtextFacet.Link', 't.Dict[str, t.Any]']
-    ]
-    index: 'models.AppBskyRichtextFacet.ByteSlice'
+    ]  #: Features.
+    index: 'models.AppBskyRichtextFacet.ByteSlice'  #: Index.
 
     _type: str = 'app.bsky.richtext.facet'
 
@@ -33,13 +28,9 @@ class Main(base.ModelBase):
 @dataclass
 class Mention(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.richtext.facet`. A facet feature for actor mentions.
+    """Definition model for :obj:`app.bsky.richtext.facet`. A facet feature for actor mentions."""
 
-    Attributes:
-        did: Did.
-    """
-
-    did: str
+    did: str  #: Did.
 
     _type: str = 'app.bsky.richtext.facet#mention'
 
@@ -47,13 +38,9 @@ class Mention(base.ModelBase):
 @dataclass
 class Link(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.richtext.facet`. A facet feature for links.
+    """Definition model for :obj:`app.bsky.richtext.facet`. A facet feature for links."""
 
-    Attributes:
-        uri: Uri.
-    """
-
-    uri: str
+    uri: str  #: Uri.
 
     _type: str = 'app.bsky.richtext.facet#link'
 
@@ -61,14 +48,9 @@ class Link(base.ModelBase):
 @dataclass
 class ByteSlice(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.richtext.facet`. A text segment. Start is inclusive, end is exclusive. Indices are for utf8-encoded strings.
+    """Definition model for :obj:`app.bsky.richtext.facet`. A text segment. Start is inclusive, end is exclusive. Indices are for utf8-encoded strings."""
 
-    Attributes:
-        byteStart: Byte start.
-        byteEnd: Byte end.
-    """
-
-    byteEnd: int
-    byteStart: int
+    byteEnd: int  #: Byte end.
+    byteStart: int  #: Byte start.
 
     _type: str = 'app.bsky.richtext.facet#byteSlice'

@@ -13,10 +13,6 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.server.requestPasswordReset`.
+    """Input data model for :obj:`com.atproto.server.requestPasswordReset`."""
 
-    Attributes:
-        email: Email.
-    """
-
-    email: str
+    email: str  #: Email.

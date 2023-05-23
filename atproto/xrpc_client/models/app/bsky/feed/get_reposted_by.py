@@ -15,34 +15,20 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.feed.getRepostedBy`.
+    """Parameters model for :obj:`app.bsky.feed.getRepostedBy`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    uri: str
-    cid: t.Optional[str] = None
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
+    uri: str  #: Uri.
+    cid: t.Optional[str] = None  #: Cid.
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.feed.getRepostedBy`.
+    """Output data model for :obj:`app.bsky.feed.getRepostedBy`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-        cursor: Cursor.
-        repostedBy: Reposted by.
-    """
-
-    repostedBy: t.List['models.AppBskyActorDefs.ProfileView']
-    uri: str
-    cid: t.Optional[str] = None
-    cursor: t.Optional[str] = None
+    repostedBy: t.List['models.AppBskyActorDefs.ProfileView']  #: Reposted by.
+    uri: str  #: Uri.
+    cid: t.Optional[str] = None  #: Cid.
+    cursor: t.Optional[str] = None  #: Cursor.

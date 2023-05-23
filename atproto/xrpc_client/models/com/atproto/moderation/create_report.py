@@ -15,36 +15,25 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.moderation.createReport`.
+    """Input data model for :obj:`com.atproto.moderation.createReport`."""
 
-    Attributes:
-        reasonType: Reason type.
-        reason: Reason.
-        subject: Subject.
-    """
-
-    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
-    subject: t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]']
-    reason: t.Optional[str] = None
+    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
+    subject: t.Union[
+        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    ]  #: Subject.
+    reason: t.Optional[str] = None  #: Reason.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.moderation.createReport`.
+    """Output data model for :obj:`com.atproto.moderation.createReport`."""
 
-    Attributes:
-        id: Id.
-        reasonType: Reason type.
-        reason: Reason.
-        subject: Subject.
-        reportedBy: Reported by.
-        createdAt: Created at.
-    """
-
-    createdAt: str
-    id: int
-    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
-    reportedBy: str
-    subject: t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]']
-    reason: t.Optional[str] = None
+    createdAt: str  #: Created at.
+    id: int  #: Id.
+    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
+    reportedBy: str  #: Reported by.
+    subject: t.Union[
+        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    ]  #: Subject.
+    reason: t.Optional[str] = None  #: Reason.

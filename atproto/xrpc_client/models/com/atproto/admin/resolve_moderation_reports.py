@@ -15,17 +15,11 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.admin.resolveModerationReports`.
+    """Input data model for :obj:`com.atproto.admin.resolveModerationReports`."""
 
-    Attributes:
-        actionId: Action id.
-        reportIds: Report ids.
-        createdBy: Created by.
-    """
-
-    actionId: int
-    createdBy: str
-    reportIds: t.List[int]
+    actionId: int  #: Action id.
+    createdBy: str  #: Created by.
+    reportIds: t.List[int]  #: Report ids.
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.

@@ -13,16 +13,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.server.refreshSession`.
+    """Output data model for :obj:`com.atproto.server.refreshSession`."""
 
-    Attributes:
-        accessJwt: Access jwt.
-        refreshJwt: Refresh jwt.
-        handle: Handle.
-        did: Did.
-    """
-
-    accessJwt: str
-    did: str
-    handle: str
-    refreshJwt: str
+    accessJwt: str  #: Access jwt.
+    did: str  #: Did.
+    handle: str  #: Handle.
+    refreshJwt: str  #: Refresh jwt.

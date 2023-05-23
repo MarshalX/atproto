@@ -15,25 +15,15 @@ from atproto.xrpc_client.models import base
 @dataclass
 class InviteCode(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.server.defs`.
+    """Definition model for :obj:`com.atproto.server.defs`."""
 
-    Attributes:
-        code: Code.
-        available: Available.
-        disabled: Disabled.
-        forAccount: For account.
-        createdBy: Created by.
-        createdAt: Created at.
-        uses: Uses.
-    """
-
-    available: int
-    code: str
-    createdAt: str
-    createdBy: str
-    disabled: bool
-    forAccount: str
-    uses: t.List['models.ComAtprotoServerDefs.InviteCodeUse']
+    available: int  #: Available.
+    code: str  #: Code.
+    createdAt: str  #: Created at.
+    createdBy: str  #: Created by.
+    disabled: bool  #: Disabled.
+    forAccount: str  #: For account.
+    uses: t.List['models.ComAtprotoServerDefs.InviteCodeUse']  #: Uses.
 
     _type: str = 'com.atproto.server.defs#inviteCode'
 
@@ -41,14 +31,9 @@ class InviteCode(base.ModelBase):
 @dataclass
 class InviteCodeUse(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.server.defs`.
+    """Definition model for :obj:`com.atproto.server.defs`."""
 
-    Attributes:
-        usedBy: Used by.
-        usedAt: Used at.
-    """
-
-    usedAt: str
-    usedBy: str
+    usedAt: str  #: Used at.
+    usedBy: str  #: Used by.
 
     _type: str = 'com.atproto.server.defs#inviteCodeUse'

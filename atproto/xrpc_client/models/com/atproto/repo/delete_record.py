@@ -14,18 +14,10 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.repo.deleteRecord`.
+    """Input data model for :obj:`com.atproto.repo.deleteRecord`."""
 
-    Attributes:
-        repo: The handle or DID of the repo.
-        collection: The NSID of the record collection.
-        rkey: The key of the record.
-        swapRecord: Compare and swap with the previous record by cid.
-        swapCommit: Compare and swap with the previous commit by cid.
-    """
-
-    collection: str
-    repo: str
-    rkey: str
-    swapCommit: t.Optional[str] = None
-    swapRecord: t.Optional[str] = None
+    collection: str  #: The NSID of the record collection.
+    repo: str  #: The handle or DID of the repo.
+    rkey: str  #: The key of the record.
+    swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
+    swapRecord: t.Optional[str] = None  #: Compare and swap with the previous record by cid.

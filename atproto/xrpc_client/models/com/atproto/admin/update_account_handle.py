@@ -13,12 +13,7 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.admin.updateAccountHandle`.
+    """Input data model for :obj:`com.atproto.admin.updateAccountHandle`."""
 
-    Attributes:
-        did: Did.
-        handle: Handle.
-    """
-
-    did: str
-    handle: str
+    did: str  #: Did.
+    handle: str  #: Handle.

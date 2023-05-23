@@ -15,13 +15,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.admin.getRepo`.
+    """Parameters model for :obj:`com.atproto.admin.getRepo`."""
 
-    Attributes:
-        did: Did.
-    """
-
-    did: str
+    did: str  #: Did.
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.RepoViewDetail` model.

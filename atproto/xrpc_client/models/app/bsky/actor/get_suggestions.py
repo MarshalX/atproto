@@ -15,26 +15,16 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.actor.getSuggestions`.
+    """Parameters model for :obj:`app.bsky.actor.getSuggestions`."""
 
-    Attributes:
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.actor.getSuggestions`.
+    """Output data model for :obj:`app.bsky.actor.getSuggestions`."""
 
-    Attributes:
-        cursor: Cursor.
-        actors: Actors.
-    """
-
-    actors: t.List['models.AppBskyActorDefs.ProfileView']
-    cursor: t.Optional[str] = None
+    actors: t.List['models.AppBskyActorDefs.ProfileView']  #: Actors.
+    cursor: t.Optional[str] = None  #: Cursor.

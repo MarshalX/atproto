@@ -15,22 +15,14 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.feed.getPosts`.
+    """Parameters model for :obj:`app.bsky.feed.getPosts`."""
 
-    Attributes:
-        uris: Uris.
-    """
-
-    uris: t.List[str]
+    uris: t.List[str]  #: Uris.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.feed.getPosts`.
+    """Output data model for :obj:`app.bsky.feed.getPosts`."""
 
-    Attributes:
-        posts: Posts.
-    """
-
-    posts: t.List['models.AppBskyFeedDefs.PostView']
+    posts: t.List['models.AppBskyFeedDefs.PostView']  #: Posts.

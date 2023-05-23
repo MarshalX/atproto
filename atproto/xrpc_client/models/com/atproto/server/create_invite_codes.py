@@ -15,42 +15,27 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.server.createInviteCodes`.
+    """Input data model for :obj:`com.atproto.server.createInviteCodes`."""
 
-    Attributes:
-        codeCount: Code count.
-        useCount: Use count.
-        forAccounts: For accounts.
-    """
-
-    codeCount: int
-    useCount: int
-    forAccounts: t.Optional[t.List[str]] = None
+    codeCount: int  #: Code count.
+    useCount: int  #: Use count.
+    forAccounts: t.Optional[t.List[str]] = None  #: For accounts.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.server.createInviteCodes`.
+    """Output data model for :obj:`com.atproto.server.createInviteCodes`."""
 
-    Attributes:
-        codes: Codes.
-    """
-
-    codes: t.List['models.ComAtprotoServerCreateInviteCodes.AccountCodes']
+    codes: t.List['models.ComAtprotoServerCreateInviteCodes.AccountCodes']  #: Codes.
 
 
 @dataclass
 class AccountCodes(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.server.createInviteCodes`.
+    """Definition model for :obj:`com.atproto.server.createInviteCodes`."""
 
-    Attributes:
-        account: Account.
-        codes: Codes.
-    """
-
-    account: str
-    codes: t.List[str]
+    account: str  #: Account.
+    codes: t.List[str]  #: Codes.
 
     _type: str = 'com.atproto.server.createInviteCodes#accountCodes'

@@ -15,32 +15,19 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.admin.getModerationReports`.
+    """Parameters model for :obj:`com.atproto.admin.getModerationReports`."""
 
-    Attributes:
-        subject: Subject.
-        resolved: Resolved.
-        actionType: Action type.
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    actionType: t.Optional[str] = None
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
-    resolved: t.Optional[bool] = None
-    subject: t.Optional[str] = None
+    actionType: t.Optional[str] = None  #: Action type.
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
+    resolved: t.Optional[bool] = None  #: Resolved.
+    subject: t.Optional[str] = None  #: Subject.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.admin.getModerationReports`.
+    """Output data model for :obj:`com.atproto.admin.getModerationReports`."""
 
-    Attributes:
-        cursor: Cursor.
-        reports: Reports.
-    """
-
-    reports: t.List['models.ComAtprotoAdminDefs.ReportView']
-    cursor: t.Optional[str] = None
+    reports: t.List['models.ComAtprotoAdminDefs.ReportView']  #: Reports.
+    cursor: t.Optional[str] = None  #: Cursor.

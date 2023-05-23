@@ -15,28 +15,17 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.unspecced.getPopular`.
+    """Parameters model for :obj:`app.bsky.unspecced.getPopular`."""
 
-    Attributes:
-        includeNsfw: Include nsfw.
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    cursor: t.Optional[str] = None
-    includeNsfw: t.Optional[bool] = None
-    limit: t.Optional[int] = None
+    cursor: t.Optional[str] = None  #: Cursor.
+    includeNsfw: t.Optional[bool] = None  #: Include nsfw.
+    limit: t.Optional[int] = None  #: Limit.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.unspecced.getPopular`.
+    """Output data model for :obj:`app.bsky.unspecced.getPopular`."""
 
-    Attributes:
-        cursor: Cursor.
-        feed: Feed.
-    """
-
-    feed: t.List['models.AppBskyFeedDefs.FeedViewPost']
-    cursor: t.Optional[str] = None
+    feed: t.List['models.AppBskyFeedDefs.FeedViewPost']  #: Feed.
+    cursor: t.Optional[str] = None  #: Cursor.

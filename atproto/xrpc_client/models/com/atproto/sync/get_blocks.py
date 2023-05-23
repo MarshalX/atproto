@@ -14,15 +14,10 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.getBlocks`.
+    """Parameters model for :obj:`com.atproto.sync.getBlocks`."""
 
-    Attributes:
-        did: The DID of the repo.
-        cids: Cids.
-    """
-
-    cids: t.List[str]
-    did: str
+    cids: t.List[str]  #: Cids.
+    did: str  #: The DID of the repo.
 
 
 #: Response raw data type.

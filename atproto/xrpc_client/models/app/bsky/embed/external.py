@@ -16,13 +16,9 @@ from atproto.xrpc_client.models.blob_ref import BlobRef
 @dataclass
 class Main(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.external`.
+    """Definition model for :obj:`app.bsky.embed.external`."""
 
-    Attributes:
-        external: External.
-    """
-
-    external: 'models.AppBskyEmbedExternal.External'
+    external: 'models.AppBskyEmbedExternal.External'  #: External.
 
     _type: str = 'app.bsky.embed.external'
 
@@ -30,19 +26,12 @@ class Main(base.ModelBase):
 @dataclass
 class External(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.external`.
+    """Definition model for :obj:`app.bsky.embed.external`."""
 
-    Attributes:
-        uri: Uri.
-        title: Title.
-        description: Description.
-        thumb: Thumb.
-    """
-
-    description: str
-    title: str
-    uri: str
-    thumb: t.Optional[BlobRef] = None
+    description: str  #: Description.
+    title: str  #: Title.
+    uri: str  #: Uri.
+    thumb: t.Optional[BlobRef] = None  #: Thumb.
 
     _type: str = 'app.bsky.embed.external#external'
 
@@ -50,13 +39,9 @@ class External(base.ModelBase):
 @dataclass
 class View(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.external`.
+    """Definition model for :obj:`app.bsky.embed.external`."""
 
-    Attributes:
-        external: External.
-    """
-
-    external: 'models.AppBskyEmbedExternal.ViewExternal'
+    external: 'models.AppBskyEmbedExternal.ViewExternal'  #: External.
 
     _type: str = 'app.bsky.embed.external#view'
 
@@ -64,18 +49,11 @@ class View(base.ModelBase):
 @dataclass
 class ViewExternal(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.external`.
+    """Definition model for :obj:`app.bsky.embed.external`."""
 
-    Attributes:
-        uri: Uri.
-        title: Title.
-        description: Description.
-        thumb: Thumb.
-    """
-
-    description: str
-    title: str
-    uri: str
-    thumb: t.Optional[str] = None
+    description: str  #: Description.
+    title: str  #: Title.
+    uri: str  #: Uri.
+    thumb: t.Optional[str] = None  #: Thumb.
 
     _type: str = 'app.bsky.embed.external#viewExternal'

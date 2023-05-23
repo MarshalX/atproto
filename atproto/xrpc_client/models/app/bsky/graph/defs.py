@@ -17,23 +17,14 @@ from atproto.xrpc_client.models import base
 @dataclass
 class ListViewBasic(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.graph.defs`.
+    """Definition model for :obj:`app.bsky.graph.defs`."""
 
-    Attributes:
-        uri: Uri.
-        name: Name.
-        purpose: Purpose.
-        avatar: Avatar.
-        viewer: Viewer.
-        indexedAt: Indexed at.
-    """
-
-    name: str
-    purpose: 'models.AppBskyGraphDefs.ListPurpose'
-    uri: str
-    avatar: t.Optional[str] = None
-    indexedAt: t.Optional[str] = None
-    viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None
+    name: str  #: Name.
+    purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
+    uri: str  #: Uri.
+    avatar: t.Optional[str] = None  #: Avatar.
+    indexedAt: t.Optional[str] = None  #: Indexed at.
+    viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     _type: str = 'app.bsky.graph.defs#listViewBasic'
 
@@ -41,29 +32,17 @@ class ListViewBasic(base.ModelBase):
 @dataclass
 class ListView(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.graph.defs`.
+    """Definition model for :obj:`app.bsky.graph.defs`."""
 
-    Attributes:
-        uri: Uri.
-        creator: Creator.
-        name: Name.
-        purpose: Purpose.
-        description: Description.
-        descriptionFacets: Description facets.
-        avatar: Avatar.
-        viewer: Viewer.
-        indexedAt: Indexed at.
-    """
-
-    creator: 'models.AppBskyActorDefs.ProfileView'
-    indexedAt: str
-    name: str
-    purpose: 'models.AppBskyGraphDefs.ListPurpose'
-    uri: str
-    avatar: t.Optional[str] = None
-    description: t.Optional[str] = None
-    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None
-    viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None
+    creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
+    indexedAt: str  #: Indexed at.
+    name: str  #: Name.
+    purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
+    uri: str  #: Uri.
+    avatar: t.Optional[str] = None  #: Avatar.
+    description: t.Optional[str] = None  #: Description.
+    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
+    viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     _type: str = 'app.bsky.graph.defs#listView'
 
@@ -71,13 +50,9 @@ class ListView(base.ModelBase):
 @dataclass
 class ListItemView(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.graph.defs`.
+    """Definition model for :obj:`app.bsky.graph.defs`."""
 
-    Attributes:
-        subject: Subject.
-    """
-
-    subject: 'models.AppBskyActorDefs.ProfileView'
+    subject: 'models.AppBskyActorDefs.ProfileView'  #: Subject.
 
     _type: str = 'app.bsky.graph.defs#listItemView'
 
@@ -90,12 +65,8 @@ Modlist: te.Literal['modlist'] = 'modlist'
 @dataclass
 class ListViewerState(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.graph.defs`.
+    """Definition model for :obj:`app.bsky.graph.defs`."""
 
-    Attributes:
-        muted: Muted.
-    """
-
-    muted: t.Optional[bool] = None
+    muted: t.Optional[bool] = None  #: Muted.
 
     _type: str = 'app.bsky.graph.defs#listViewerState'

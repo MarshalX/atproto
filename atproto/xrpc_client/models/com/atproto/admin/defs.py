@@ -17,33 +17,21 @@ from atproto.xrpc_client.models import base
 @dataclass
 class ActionView(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        id: Id.
-        action: Action.
-        subject: Subject.
-        subjectBlobCids: Subject blob cids.
-        createLabelVals: Create label vals.
-        negateLabelVals: Negate label vals.
-        reason: Reason.
-        createdBy: Created by.
-        createdAt: Created at.
-        reversal: Reversal.
-        resolvedReportIds: Resolved report ids.
-    """
-
-    action: 'models.ComAtprotoAdminDefs.ActionType'
-    createdAt: str
-    createdBy: str
-    id: int
-    reason: str
-    resolvedReportIds: t.List[int]
-    subject: t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]']
-    subjectBlobCids: t.List[str]
-    createLabelVals: t.Optional[t.List[str]] = None
-    negateLabelVals: t.Optional[t.List[str]] = None
-    reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None
+    action: 'models.ComAtprotoAdminDefs.ActionType'  #: Action.
+    createdAt: str  #: Created at.
+    createdBy: str  #: Created by.
+    id: int  #: Id.
+    reason: str  #: Reason.
+    resolvedReportIds: t.List[int]  #: Resolved report ids.
+    subject: t.Union[
+        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    ]  #: Subject.
+    subjectBlobCids: t.List[str]  #: Subject blob cids.
+    createLabelVals: t.Optional[t.List[str]] = None  #: Create label vals.
+    negateLabelVals: t.Optional[t.List[str]] = None  #: Negate label vals.
+    reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None  #: Reversal.
 
     _type: str = 'com.atproto.admin.defs#actionView'
 
@@ -51,39 +39,25 @@ class ActionView(base.ModelBase):
 @dataclass
 class ActionViewDetail(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        id: Id.
-        action: Action.
-        subject: Subject.
-        subjectBlobs: Subject blobs.
-        createLabelVals: Create label vals.
-        negateLabelVals: Negate label vals.
-        reason: Reason.
-        createdBy: Created by.
-        createdAt: Created at.
-        reversal: Reversal.
-        resolvedReports: Resolved reports.
-    """
-
-    action: 'models.ComAtprotoAdminDefs.ActionType'
-    createdAt: str
-    createdBy: str
-    id: int
-    reason: str
-    resolvedReports: t.List['models.ComAtprotoAdminDefs.ReportView']
+    action: 'models.ComAtprotoAdminDefs.ActionType'  #: Action.
+    createdAt: str  #: Created at.
+    createdBy: str  #: Created by.
+    id: int  #: Id.
+    reason: str  #: Reason.
+    resolvedReports: t.List['models.ComAtprotoAdminDefs.ReportView']  #: Resolved reports.
     subject: t.Union[
         'models.ComAtprotoAdminDefs.RepoView',
         'models.ComAtprotoAdminDefs.RepoViewNotFound',
         'models.ComAtprotoAdminDefs.RecordView',
         'models.ComAtprotoAdminDefs.RecordViewNotFound',
         't.Dict[str, t.Any]',
-    ]
-    subjectBlobs: t.List['models.ComAtprotoAdminDefs.BlobView']
-    createLabelVals: t.Optional[t.List[str]] = None
-    negateLabelVals: t.Optional[t.List[str]] = None
-    reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None
+    ]  #: Subject.
+    subjectBlobs: t.List['models.ComAtprotoAdminDefs.BlobView']  #: Subject blobs.
+    createLabelVals: t.Optional[t.List[str]] = None  #: Create label vals.
+    negateLabelVals: t.Optional[t.List[str]] = None  #: Negate label vals.
+    reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None  #: Reversal.
 
     _type: str = 'com.atproto.admin.defs#actionViewDetail'
 
@@ -91,15 +65,10 @@ class ActionViewDetail(base.ModelBase):
 @dataclass
 class ActionViewCurrent(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        id: Id.
-        action: Action.
-    """
-
-    action: 'models.ComAtprotoAdminDefs.ActionType'
-    id: int
+    action: 'models.ComAtprotoAdminDefs.ActionType'  #: Action.
+    id: int  #: Id.
 
     _type: str = 'com.atproto.admin.defs#actionViewCurrent'
 
@@ -107,17 +76,11 @@ class ActionViewCurrent(base.ModelBase):
 @dataclass
 class ActionReversal(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        reason: Reason.
-        createdBy: Created by.
-        createdAt: Created at.
-    """
-
-    createdAt: str
-    createdBy: str
-    reason: str
+    createdAt: str  #: Created at.
+    createdBy: str  #: Created by.
+    reason: str  #: Reason.
 
     _type: str = 'com.atproto.admin.defs#actionReversal'
 
@@ -136,25 +99,17 @@ Escalate: te.Literal['escalate'] = 'escalate'
 @dataclass
 class ReportView(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        id: Id.
-        reasonType: Reason type.
-        reason: Reason.
-        subject: Subject.
-        reportedBy: Reported by.
-        createdAt: Created at.
-        resolvedByActionIds: Resolved by action ids.
-    """
-
-    createdAt: str
-    id: int
-    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
-    reportedBy: str
-    resolvedByActionIds: t.List[int]
-    subject: t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]']
-    reason: t.Optional[str] = None
+    createdAt: str  #: Created at.
+    id: int  #: Id.
+    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
+    reportedBy: str  #: Reported by.
+    resolvedByActionIds: t.List[int]  #: Resolved by action ids.
+    subject: t.Union[
+        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    ]  #: Subject.
+    reason: t.Optional[str] = None  #: Reason.
 
     _type: str = 'com.atproto.admin.defs#reportView'
 
@@ -162,31 +117,21 @@ class ReportView(base.ModelBase):
 @dataclass
 class ReportViewDetail(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        id: Id.
-        reasonType: Reason type.
-        reason: Reason.
-        subject: Subject.
-        reportedBy: Reported by.
-        createdAt: Created at.
-        resolvedByActions: Resolved by actions.
-    """
-
-    createdAt: str
-    id: int
-    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'
-    reportedBy: str
-    resolvedByActions: t.List['models.ComAtprotoAdminDefs.ActionView']
+    createdAt: str  #: Created at.
+    id: int  #: Id.
+    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
+    reportedBy: str  #: Reported by.
+    resolvedByActions: t.List['models.ComAtprotoAdminDefs.ActionView']  #: Resolved by actions.
     subject: t.Union[
         'models.ComAtprotoAdminDefs.RepoView',
         'models.ComAtprotoAdminDefs.RepoViewNotFound',
         'models.ComAtprotoAdminDefs.RecordView',
         'models.ComAtprotoAdminDefs.RecordViewNotFound',
         't.Dict[str, t.Any]',
-    ]
-    reason: t.Optional[str] = None
+    ]  #: Subject.
+    reason: t.Optional[str] = None  #: Reason.
 
     _type: str = 'com.atproto.admin.defs#reportViewDetail'
 
@@ -194,27 +139,16 @@ class ReportViewDetail(base.ModelBase):
 @dataclass
 class RepoView(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        did: Did.
-        handle: Handle.
-        email: Email.
-        relatedRecords: Related records.
-        indexedAt: Indexed at.
-        moderation: Moderation.
-        invitedBy: Invited by.
-        invitesDisabled: Invites disabled.
-    """
-
-    did: str
-    handle: str
-    indexedAt: str
-    moderation: 'models.ComAtprotoAdminDefs.Moderation'
-    relatedRecords: t.List['base.RecordModelBase']
-    email: t.Optional[str] = None
-    invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None
-    invitesDisabled: t.Optional[bool] = None
+    did: str  #: Did.
+    handle: str  #: Handle.
+    indexedAt: str  #: Indexed at.
+    moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
+    relatedRecords: t.List['base.RecordModelBase']  #: Related records.
+    email: t.Optional[str] = None  #: Email.
+    invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
+    invitesDisabled: t.Optional[bool] = None  #: Invites disabled.
 
     _type: str = 'com.atproto.admin.defs#repoView'
 
@@ -222,31 +156,18 @@ class RepoView(base.ModelBase):
 @dataclass
 class RepoViewDetail(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        did: Did.
-        handle: Handle.
-        email: Email.
-        relatedRecords: Related records.
-        indexedAt: Indexed at.
-        moderation: Moderation.
-        labels: Labels.
-        invitedBy: Invited by.
-        invites: Invites.
-        invitesDisabled: Invites disabled.
-    """
-
-    did: str
-    handle: str
-    indexedAt: str
-    moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'
-    relatedRecords: t.List['base.RecordModelBase']
-    email: t.Optional[str] = None
-    invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None
-    invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None
-    invitesDisabled: t.Optional[bool] = None
-    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
+    did: str  #: Did.
+    handle: str  #: Handle.
+    indexedAt: str  #: Indexed at.
+    moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
+    relatedRecords: t.List['base.RecordModelBase']  #: Related records.
+    email: t.Optional[str] = None  #: Email.
+    invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
+    invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
+    invitesDisabled: t.Optional[bool] = None  #: Invites disabled.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
     _type: str = 'com.atproto.admin.defs#repoViewDetail'
 
@@ -254,13 +175,9 @@ class RepoViewDetail(base.ModelBase):
 @dataclass
 class RepoViewNotFound(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        did: Did.
-    """
-
-    did: str
+    did: str  #: Did.
 
     _type: str = 'com.atproto.admin.defs#repoViewNotFound'
 
@@ -268,13 +185,9 @@ class RepoViewNotFound(base.ModelBase):
 @dataclass
 class RepoRef(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        did: Did.
-    """
-
-    did: str
+    did: str  #: Did.
 
     _type: str = 'com.atproto.admin.defs#repoRef'
 
@@ -282,25 +195,15 @@ class RepoRef(base.ModelBase):
 @dataclass
 class RecordView(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-        value: Value.
-        blobCids: Blob cids.
-        indexedAt: Indexed at.
-        moderation: Moderation.
-        repo: Repo.
-    """
-
-    blobCids: t.List[str]
-    cid: str
-    indexedAt: str
-    moderation: 'models.ComAtprotoAdminDefs.Moderation'
-    repo: 'models.ComAtprotoAdminDefs.RepoView'
-    uri: str
-    value: 'base.RecordModelBase'
+    blobCids: t.List[str]  #: Blob cids.
+    cid: str  #: Cid.
+    indexedAt: str  #: Indexed at.
+    moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
+    repo: 'models.ComAtprotoAdminDefs.RepoView'  #: Repo.
+    uri: str  #: Uri.
+    value: 'base.RecordModelBase'  #: Value.
 
     _type: str = 'com.atproto.admin.defs#recordView'
 
@@ -308,27 +211,16 @@ class RecordView(base.ModelBase):
 @dataclass
 class RecordViewDetail(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-        value: Value.
-        blobs: Blobs.
-        labels: Labels.
-        indexedAt: Indexed at.
-        moderation: Moderation.
-        repo: Repo.
-    """
-
-    blobs: t.List['models.ComAtprotoAdminDefs.BlobView']
-    cid: str
-    indexedAt: str
-    moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'
-    repo: 'models.ComAtprotoAdminDefs.RepoView'
-    uri: str
-    value: 'base.RecordModelBase'
-    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
+    blobs: t.List['models.ComAtprotoAdminDefs.BlobView']  #: Blobs.
+    cid: str  #: Cid.
+    indexedAt: str  #: Indexed at.
+    moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
+    repo: 'models.ComAtprotoAdminDefs.RepoView'  #: Repo.
+    uri: str  #: Uri.
+    value: 'base.RecordModelBase'  #: Value.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
     _type: str = 'com.atproto.admin.defs#recordViewDetail'
 
@@ -336,13 +228,9 @@ class RecordViewDetail(base.ModelBase):
 @dataclass
 class RecordViewNotFound(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        uri: Uri.
-    """
-
-    uri: str
+    uri: str  #: Uri.
 
     _type: str = 'com.atproto.admin.defs#recordViewNotFound'
 
@@ -350,13 +238,9 @@ class RecordViewNotFound(base.ModelBase):
 @dataclass
 class Moderation(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        currentAction: Current action.
-    """
-
-    currentAction: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None
+    currentAction: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None  #: Current action.
 
     _type: str = 'com.atproto.admin.defs#moderation'
 
@@ -364,17 +248,11 @@ class Moderation(base.ModelBase):
 @dataclass
 class ModerationDetail(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        currentAction: Current action.
-        actions: Actions.
-        reports: Reports.
-    """
-
-    actions: t.List['models.ComAtprotoAdminDefs.ActionView']
-    reports: t.List['models.ComAtprotoAdminDefs.ReportView']
-    currentAction: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None
+    actions: t.List['models.ComAtprotoAdminDefs.ActionView']  #: Actions.
+    reports: t.List['models.ComAtprotoAdminDefs.ReportView']  #: Reports.
+    currentAction: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None  #: Current action.
 
     _type: str = 'com.atproto.admin.defs#moderationDetail'
 
@@ -382,27 +260,18 @@ class ModerationDetail(base.ModelBase):
 @dataclass
 class BlobView(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        cid: Cid.
-        mimeType: Mime type.
-        size: Size.
-        createdAt: Created at.
-        details: Details.
-        moderation: Moderation.
-    """
-
-    cid: str
-    createdAt: str
-    mimeType: str
-    size: int
+    cid: str  #: Cid.
+    createdAt: str  #: Created at.
+    mimeType: str  #: Mime type.
+    size: int  #: Size.
     details: t.Optional[
         t.Union[
             'models.ComAtprotoAdminDefs.ImageDetails', 'models.ComAtprotoAdminDefs.VideoDetails', 't.Dict[str, t.Any]'
         ]
-    ] = None
-    moderation: t.Optional['models.ComAtprotoAdminDefs.Moderation'] = None
+    ] = None  #: Details.
+    moderation: t.Optional['models.ComAtprotoAdminDefs.Moderation'] = None  #: Moderation.
 
     _type: str = 'com.atproto.admin.defs#blobView'
 
@@ -410,15 +279,10 @@ class BlobView(base.ModelBase):
 @dataclass
 class ImageDetails(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        width: Width.
-        height: Height.
-    """
-
-    height: int
-    width: int
+    height: int  #: Height.
+    width: int  #: Width.
 
     _type: str = 'com.atproto.admin.defs#imageDetails'
 
@@ -426,16 +290,10 @@ class ImageDetails(base.ModelBase):
 @dataclass
 class VideoDetails(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.admin.defs`.
+    """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    Attributes:
-        width: Width.
-        height: Height.
-        length: Length.
-    """
-
-    height: int
-    length: int
-    width: int
+    height: int  #: Height.
+    length: int  #: Length.
+    width: int  #: Width.
 
     _type: str = 'com.atproto.admin.defs#videoDetails'

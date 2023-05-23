@@ -15,22 +15,14 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.actor.getProfiles`.
+    """Parameters model for :obj:`app.bsky.actor.getProfiles`."""
 
-    Attributes:
-        actors: Actors.
-    """
-
-    actors: t.List[str]
+    actors: t.List[str]  #: Actors.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.actor.getProfiles`.
+    """Output data model for :obj:`app.bsky.actor.getProfiles`."""
 
-    Attributes:
-        profiles: Profiles.
-    """
-
-    profiles: t.List['models.AppBskyActorDefs.ProfileViewDetailed']
+    profiles: t.List['models.AppBskyActorDefs.ProfileViewDetailed']  #: Profiles.

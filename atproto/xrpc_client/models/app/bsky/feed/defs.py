@@ -15,27 +15,13 @@ from atproto.xrpc_client.models import base
 @dataclass
 class PostView(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.defs`.
+    """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-        author: Author.
-        record: Record.
-        embed: Embed.
-        replyCount: Reply count.
-        repostCount: Repost count.
-        likeCount: Like count.
-        indexedAt: Indexed at.
-        viewer: Viewer.
-        labels: Labels.
-    """
-
-    author: 'models.AppBskyActorDefs.ProfileViewBasic'
-    cid: str
-    indexedAt: str
-    record: 'base.RecordModelBase'
-    uri: str
+    author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
+    cid: str  #: Cid.
+    indexedAt: str  #: Indexed at.
+    record: 'base.RecordModelBase'  #: Record.
+    uri: str  #: Uri.
     embed: t.Optional[
         t.Union[
             'models.AppBskyEmbedImages.View',
@@ -44,12 +30,12 @@ class PostView(base.ModelBase):
             'models.AppBskyEmbedRecordWithMedia.View',
             't.Dict[str, t.Any]',
         ]
-    ] = None
-    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
-    likeCount: t.Optional[int] = None
-    replyCount: t.Optional[int] = None
-    repostCount: t.Optional[int] = None
-    viewer: t.Optional['models.AppBskyFeedDefs.ViewerState'] = None
+    ] = None  #: Embed.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    likeCount: t.Optional[int] = None  #: Like count.
+    replyCount: t.Optional[int] = None  #: Reply count.
+    repostCount: t.Optional[int] = None  #: Repost count.
+    viewer: t.Optional['models.AppBskyFeedDefs.ViewerState'] = None  #: Viewer.
 
     _type: str = 'app.bsky.feed.defs#postView'
 
@@ -57,15 +43,10 @@ class PostView(base.ModelBase):
 @dataclass
 class ViewerState(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.defs`.
+    """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    Attributes:
-        repost: Repost.
-        like: Like.
-    """
-
-    like: t.Optional[str] = None
-    repost: t.Optional[str] = None
+    like: t.Optional[str] = None  #: Like.
+    repost: t.Optional[str] = None  #: Repost.
 
     _type: str = 'app.bsky.feed.defs#viewerState'
 
@@ -73,17 +54,11 @@ class ViewerState(base.ModelBase):
 @dataclass
 class FeedViewPost(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.defs`.
+    """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    Attributes:
-        post: Post.
-        reply: Reply.
-        reason: Reason.
-    """
-
-    post: 'models.AppBskyFeedDefs.PostView'
-    reason: t.Optional[t.Union['models.AppBskyFeedDefs.ReasonRepost', 't.Dict[str, t.Any]']] = None
-    reply: t.Optional['models.AppBskyFeedDefs.ReplyRef'] = None
+    post: 'models.AppBskyFeedDefs.PostView'  #: Post.
+    reason: t.Optional[t.Union['models.AppBskyFeedDefs.ReasonRepost', 't.Dict[str, t.Any]']] = None  #: Reason.
+    reply: t.Optional['models.AppBskyFeedDefs.ReplyRef'] = None  #: Reply.
 
     _type: str = 'app.bsky.feed.defs#feedViewPost'
 
@@ -91,15 +66,10 @@ class FeedViewPost(base.ModelBase):
 @dataclass
 class ReplyRef(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.defs`.
+    """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    Attributes:
-        root: Root.
-        parent: Parent.
-    """
-
-    parent: 'models.AppBskyFeedDefs.PostView'
-    root: 'models.AppBskyFeedDefs.PostView'
+    parent: 'models.AppBskyFeedDefs.PostView'  #: Parent.
+    root: 'models.AppBskyFeedDefs.PostView'  #: Root.
 
     _type: str = 'app.bsky.feed.defs#replyRef'
 
@@ -107,15 +77,10 @@ class ReplyRef(base.ModelBase):
 @dataclass
 class ReasonRepost(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.defs`.
+    """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    Attributes:
-        by: By.
-        indexedAt: Indexed at.
-    """
-
-    by: 'models.AppBskyActorDefs.ProfileViewBasic'
-    indexedAt: str
+    by: 'models.AppBskyActorDefs.ProfileViewBasic'  #: By.
+    indexedAt: str  #: Indexed at.
 
     _type: str = 'app.bsky.feed.defs#reasonRepost'
 
@@ -123,15 +88,9 @@ class ReasonRepost(base.ModelBase):
 @dataclass
 class ThreadViewPost(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.defs`.
+    """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    Attributes:
-        post: Post.
-        parent: Parent.
-        replies: Replies.
-    """
-
-    post: 'models.AppBskyFeedDefs.PostView'
+    post: 'models.AppBskyFeedDefs.PostView'  #: Post.
     parent: t.Optional[
         t.Union[
             'models.AppBskyFeedDefs.ThreadViewPost',
@@ -139,7 +98,7 @@ class ThreadViewPost(base.ModelBase):
             'models.AppBskyFeedDefs.BlockedPost',
             't.Dict[str, t.Any]',
         ]
-    ] = None
+    ] = None  #: Parent.
     replies: t.Optional[
         t.List[
             t.Union[
@@ -149,7 +108,7 @@ class ThreadViewPost(base.ModelBase):
                 't.Dict[str, t.Any]',
             ]
         ]
-    ] = None
+    ] = None  #: Replies.
 
     _type: str = 'app.bsky.feed.defs#threadViewPost'
 
@@ -157,15 +116,10 @@ class ThreadViewPost(base.ModelBase):
 @dataclass
 class NotFoundPost(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.defs`.
+    """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    Attributes:
-        uri: Uri.
-        notFound: Not found.
-    """
-
-    notFound: bool
-    uri: str
+    notFound: bool  #: Not found.
+    uri: str  #: Uri.
 
     _type: str = 'app.bsky.feed.defs#notFoundPost'
 
@@ -173,14 +127,9 @@ class NotFoundPost(base.ModelBase):
 @dataclass
 class BlockedPost(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.defs`.
+    """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    Attributes:
-        uri: Uri.
-        blocked: Blocked.
-    """
-
-    blocked: bool
-    uri: str
+    blocked: bool  #: Blocked.
+    uri: str  #: Uri.
 
     _type: str = 'app.bsky.feed.defs#blockedPost'

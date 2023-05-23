@@ -15,25 +15,17 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.admin.takeModerationAction`.
+    """Input data model for :obj:`com.atproto.admin.takeModerationAction`."""
 
-    Attributes:
-        action: Action.
-        subject: Subject.
-        subjectBlobCids: Subject blob cids.
-        createLabelVals: Create label vals.
-        negateLabelVals: Negate label vals.
-        reason: Reason.
-        createdBy: Created by.
-    """
-
-    action: str
-    createdBy: str
-    reason: str
-    subject: t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]']
-    createLabelVals: t.Optional[t.List[str]] = None
-    negateLabelVals: t.Optional[t.List[str]] = None
-    subjectBlobCids: t.Optional[t.List[str]] = None
+    action: str  #: Action.
+    createdBy: str  #: Created by.
+    reason: str  #: Reason.
+    subject: t.Union[
+        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    ]  #: Subject.
+    createLabelVals: t.Optional[t.List[str]] = None  #: Create label vals.
+    negateLabelVals: t.Optional[t.List[str]] = None  #: Negate label vals.
+    subjectBlobCids: t.Optional[t.List[str]] = None  #: Subject blob cids.
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.

@@ -15,16 +15,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.repo.applyWrites`.
+    """Input data model for :obj:`com.atproto.repo.applyWrites`."""
 
-    Attributes:
-        repo: The handle or DID of the repo.
-        validate: Validate the records?
-        writes: Writes.
-        swapCommit: Swap commit.
-    """
-
-    repo: str
+    repo: str  #: The handle or DID of the repo.
     writes: t.List[
         t.Union[
             'models.ComAtprotoRepoApplyWrites.Create',
@@ -32,25 +25,19 @@ class Data(base.DataModelBase):
             'models.ComAtprotoRepoApplyWrites.Delete',
             't.Dict[str, t.Any]',
         ]
-    ]
-    swapCommit: t.Optional[str] = None
-    validate: t.Optional[bool] = None
+    ]  #: Writes.
+    swapCommit: t.Optional[str] = None  #: Swap commit.
+    validate: t.Optional[bool] = None  #: Validate the records?
 
 
 @dataclass
 class Create(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record.
+    """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record."""
 
-    Attributes:
-        collection: Collection.
-        rkey: Rkey.
-        value: Value.
-    """
-
-    collection: str
-    value: 'base.RecordModelBase'
-    rkey: t.Optional[str] = None
+    collection: str  #: Collection.
+    value: 'base.RecordModelBase'  #: Value.
+    rkey: t.Optional[str] = None  #: Rkey.
 
     _type: str = 'com.atproto.repo.applyWrites#create'
 
@@ -58,17 +45,11 @@ class Create(base.ModelBase):
 @dataclass
 class Update(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.repo.applyWrites`. Update an existing record.
+    """Definition model for :obj:`com.atproto.repo.applyWrites`. Update an existing record."""
 
-    Attributes:
-        collection: Collection.
-        rkey: Rkey.
-        value: Value.
-    """
-
-    collection: str
-    rkey: str
-    value: 'base.RecordModelBase'
+    collection: str  #: Collection.
+    rkey: str  #: Rkey.
+    value: 'base.RecordModelBase'  #: Value.
 
     _type: str = 'com.atproto.repo.applyWrites#update'
 
@@ -76,14 +57,9 @@ class Update(base.ModelBase):
 @dataclass
 class Delete(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.repo.applyWrites`. Delete an existing record.
+    """Definition model for :obj:`com.atproto.repo.applyWrites`. Delete an existing record."""
 
-    Attributes:
-        collection: Collection.
-        rkey: Rkey.
-    """
-
-    collection: str
-    rkey: str
+    collection: str  #: Collection.
+    rkey: str  #: Rkey.
 
     _type: str = 'com.atproto.repo.applyWrites#delete'

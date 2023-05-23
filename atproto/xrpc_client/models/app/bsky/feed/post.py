@@ -15,15 +15,10 @@ from atproto.xrpc_client.models import base
 @dataclass
 class ReplyRef(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.post`.
+    """Definition model for :obj:`app.bsky.feed.post`."""
 
-    Attributes:
-        root: Root.
-        parent: Parent.
-    """
-
-    parent: 'models.ComAtprotoRepoStrongRef.Main'
-    root: 'models.ComAtprotoRepoStrongRef.Main'
+    parent: 'models.ComAtprotoRepoStrongRef.Main'  #: Parent.
+    root: 'models.ComAtprotoRepoStrongRef.Main'  #: Root.
 
     _type: str = 'app.bsky.feed.post#replyRef'
 
@@ -31,17 +26,11 @@ class ReplyRef(base.ModelBase):
 @dataclass
 class Entity(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.post`. Deprecated: use facets instead.
+    """Definition model for :obj:`app.bsky.feed.post`. Deprecated: use facets instead."""
 
-    Attributes:
-        index: Index.
-        type: Expected values are 'mention' and 'link'.
-        value: Value.
-    """
-
-    index: 'models.AppBskyFeedPost.TextSlice'
-    type: str
-    value: str
+    index: 'models.AppBskyFeedPost.TextSlice'  #: Index.
+    type: str  #: Expected values are 'mention' and 'link'.
+    value: str  #: Value.
 
     _type: str = 'app.bsky.feed.post#entity'
 
@@ -49,15 +38,10 @@ class Entity(base.ModelBase):
 @dataclass
 class TextSlice(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.post`. Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings.
+    """Definition model for :obj:`app.bsky.feed.post`. Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings."""
 
-    Attributes:
-        start: Start.
-        end: End.
-    """
-
-    end: int
-    start: int
+    end: int  #: End.
+    start: int  #: Start.
 
     _type: str = 'app.bsky.feed.post#textSlice'
 
@@ -65,19 +49,10 @@ class TextSlice(base.ModelBase):
 @dataclass
 class Main(base.RecordModelBase):
 
-    """Record model for :obj:`app.bsky.feed.post`.
+    """Record model for :obj:`app.bsky.feed.post`."""
 
-    Attributes:
-        text: Text.
-        entities: Deprecated: replaced by app.bsky.richtext.facet.
-        facets: Facets.
-        reply: Reply.
-        embed: Embed.
-        createdAt: Created at.
-    """
-
-    createdAt: str
-    text: str
+    createdAt: str  #: Created at.
+    text: str  #: Text.
     embed: t.Optional[
         t.Union[
             'models.AppBskyEmbedImages.Main',
@@ -86,9 +61,11 @@ class Main(base.RecordModelBase):
             'models.AppBskyEmbedRecordWithMedia.Main',
             't.Dict[str, t.Any]',
         ]
-    ] = None
-    entities: t.Optional[t.List['models.AppBskyFeedPost.Entity']] = None
-    facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None
-    reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None
+    ] = None  #: Embed.
+    entities: t.Optional[
+        t.List['models.AppBskyFeedPost.Entity']
+    ] = None  #: Deprecated: replaced by app.bsky.richtext.facet.
+    facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Facets.
+    reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None  #: Reply.
 
     _type: str = 'app.bsky.feed.post'

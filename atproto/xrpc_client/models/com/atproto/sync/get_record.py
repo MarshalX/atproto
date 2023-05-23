@@ -14,19 +14,12 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.getRecord`.
+    """Parameters model for :obj:`com.atproto.sync.getRecord`."""
 
-    Attributes:
-        did: The DID of the repo.
-        collection: Collection.
-        rkey: Rkey.
-        commit: An optional past commit CID.
-    """
-
-    collection: str
-    did: str
-    rkey: str
-    commit: t.Optional[str] = None
+    collection: str  #: Collection.
+    did: str  #: The DID of the repo.
+    rkey: str  #: Rkey.
+    commit: t.Optional[str] = None  #: An optional past commit CID.
 
 
 #: Response raw data type.

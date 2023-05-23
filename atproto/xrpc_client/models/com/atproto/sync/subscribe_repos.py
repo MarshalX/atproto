@@ -16,31 +16,18 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Commit(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`.
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
-    Attributes:
-        seq: Seq.
-        rebase: Rebase.
-        tooBig: Too big.
-        repo: Repo.
-        commit: Commit.
-        prev: Prev.
-        blocks: CAR file containing relevant blocks.
-        ops: Ops.
-        blobs: Blobs.
-        time: Time.
-    """
-
-    blobs: t.List[CID]
-    blocks: t.Union[str, bytes]
-    commit: CID
-    ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp']
-    rebase: bool
-    repo: str
-    seq: int
-    time: str
-    tooBig: bool
-    prev: t.Optional[CID] = None
+    blobs: t.List[CID]  #: Blobs.
+    blocks: t.Union[str, bytes]  #: CAR file containing relevant blocks.
+    commit: CID  #: Commit.
+    ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp']  #: Ops.
+    rebase: bool  #: Rebase.
+    repo: str  #: Repo.
+    seq: int  #: Seq.
+    time: str  #: Time.
+    tooBig: bool  #: Too big.
+    prev: t.Optional[CID] = None  #: Prev.
 
     _type: str = 'com.atproto.sync.subscribeRepos#commit'
 
@@ -48,19 +35,12 @@ class Commit(base.ModelBase):
 @dataclass
 class Handle(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`.
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
-    Attributes:
-        seq: Seq.
-        did: Did.
-        handle: Handle.
-        time: Time.
-    """
-
-    did: str
-    handle: str
-    seq: int
-    time: str
+    did: str  #: Did.
+    handle: str  #: Handle.
+    seq: int  #: Seq.
+    time: str  #: Time.
 
     _type: str = 'com.atproto.sync.subscribeRepos#handle'
 
@@ -68,19 +48,12 @@ class Handle(base.ModelBase):
 @dataclass
 class Migrate(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`.
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
-    Attributes:
-        seq: Seq.
-        did: Did.
-        migrateTo: Migrate to.
-        time: Time.
-    """
-
-    did: str
-    seq: int
-    time: str
-    migrateTo: t.Optional[str] = None
+    did: str  #: Did.
+    seq: int  #: Seq.
+    time: str  #: Time.
+    migrateTo: t.Optional[str] = None  #: Migrate to.
 
     _type: str = 'com.atproto.sync.subscribeRepos#migrate'
 
@@ -88,17 +61,11 @@ class Migrate(base.ModelBase):
 @dataclass
 class Tombstone(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`.
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
-    Attributes:
-        seq: Seq.
-        did: Did.
-        time: Time.
-    """
-
-    did: str
-    seq: int
-    time: str
+    did: str  #: Did.
+    seq: int  #: Seq.
+    time: str  #: Time.
 
     _type: str = 'com.atproto.sync.subscribeRepos#tombstone'
 
@@ -106,15 +73,10 @@ class Tombstone(base.ModelBase):
 @dataclass
 class Info(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`.
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
-    Attributes:
-        name: Name.
-        message: Message.
-    """
-
-    name: str
-    message: t.Optional[str] = None
+    name: str  #: Name.
+    message: t.Optional[str] = None  #: Message.
 
     _type: str = 'com.atproto.sync.subscribeRepos#info'
 
@@ -122,16 +84,10 @@ class Info(base.ModelBase):
 @dataclass
 class RepoOp(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`.
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
-    Attributes:
-        action: Action.
-        path: Path.
-        cid: Cid.
-    """
-
-    action: str
-    path: str
-    cid: t.Optional[CID] = None
+    action: str  #: Action.
+    path: str  #: Path.
+    cid: t.Optional[CID] = None  #: Cid.
 
     _type: str = 'com.atproto.sync.subscribeRepos#repoOp'

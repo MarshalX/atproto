@@ -15,26 +15,16 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.graph.getMutes`.
+    """Parameters model for :obj:`app.bsky.graph.getMutes`."""
 
-    Attributes:
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.graph.getMutes`.
+    """Output data model for :obj:`app.bsky.graph.getMutes`."""
 
-    Attributes:
-        cursor: Cursor.
-        mutes: Mutes.
-    """
-
-    mutes: t.List['models.AppBskyActorDefs.ProfileView']
-    cursor: t.Optional[str] = None
+    mutes: t.List['models.AppBskyActorDefs.ProfileView']  #: Mutes.
+    cursor: t.Optional[str] = None  #: Cursor.

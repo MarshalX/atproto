@@ -14,22 +14,14 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.identity.resolveHandle`.
+    """Parameters model for :obj:`com.atproto.identity.resolveHandle`."""
 
-    Attributes:
-        handle: The handle to resolve. If not supplied, will resolve the host's own handle.
-    """
-
-    handle: t.Optional[str] = None
+    handle: t.Optional[str] = None  #: The handle to resolve. If not supplied, will resolve the host's own handle.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.identity.resolveHandle`.
+    """Output data model for :obj:`com.atproto.identity.resolveHandle`."""
 
-    Attributes:
-        did: Did.
-    """
-
-    did: str
+    did: str  #: Did.

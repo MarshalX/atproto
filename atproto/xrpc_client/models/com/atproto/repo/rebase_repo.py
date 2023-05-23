@@ -14,12 +14,7 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.repo.rebaseRepo`.
+    """Input data model for :obj:`com.atproto.repo.rebaseRepo`."""
 
-    Attributes:
-        repo: The handle or DID of the repo.
-        swapCommit: Compare and swap with the previous commit by cid.
-    """
-
-    repo: str
-    swapCommit: t.Optional[str] = None
+    repo: str  #: The handle or DID of the repo.
+    swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.

@@ -13,10 +13,6 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.server.revokeAppPassword`.
+    """Input data model for :obj:`com.atproto.server.revokeAppPassword`."""
 
-    Attributes:
-        name: Name.
-    """
-
-    name: str
+    name: str  #: Name.

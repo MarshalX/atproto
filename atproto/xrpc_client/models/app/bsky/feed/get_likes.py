@@ -15,52 +15,32 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.feed.getLikes`.
+    """Parameters model for :obj:`app.bsky.feed.getLikes`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    uri: str
-    cid: t.Optional[str] = None
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
+    uri: str  #: Uri.
+    cid: t.Optional[str] = None  #: Cid.
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.feed.getLikes`.
+    """Output data model for :obj:`app.bsky.feed.getLikes`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-        cursor: Cursor.
-        likes: Likes.
-    """
-
-    likes: t.List['models.AppBskyFeedGetLikes.Like']
-    uri: str
-    cid: t.Optional[str] = None
-    cursor: t.Optional[str] = None
+    likes: t.List['models.AppBskyFeedGetLikes.Like']  #: Likes.
+    uri: str  #: Uri.
+    cid: t.Optional[str] = None  #: Cid.
+    cursor: t.Optional[str] = None  #: Cursor.
 
 
 @dataclass
 class Like(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.feed.getLikes`.
+    """Definition model for :obj:`app.bsky.feed.getLikes`."""
 
-    Attributes:
-        indexedAt: Indexed at.
-        createdAt: Created at.
-        actor: Actor.
-    """
-
-    actor: 'models.AppBskyActorDefs.ProfileView'
-    createdAt: str
-    indexedAt: str
+    actor: 'models.AppBskyActorDefs.ProfileView'  #: Actor.
+    createdAt: str  #: Created at.
+    indexedAt: str  #: Indexed at.
 
     _type: str = 'app.bsky.feed.getLikes#like'

@@ -14,17 +14,11 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.getRepo`.
+    """Parameters model for :obj:`com.atproto.sync.getRepo`."""
 
-    Attributes:
-        did: The DID of the repo.
-        earliest: The earliest commit in the commit range (not inclusive).
-        latest: The latest commit in the commit range (inclusive).
-    """
-
-    did: str
-    earliest: t.Optional[str] = None
-    latest: t.Optional[str] = None
+    did: str  #: The DID of the repo.
+    earliest: t.Optional[str] = None  #: The earliest commit in the commit range (not inclusive).
+    latest: t.Optional[str] = None  #: The latest commit in the commit range (inclusive).
 
 
 #: Response raw data type.

@@ -14,14 +14,8 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.server.getSession`.
+    """Output data model for :obj:`com.atproto.server.getSession`."""
 
-    Attributes:
-        handle: Handle.
-        did: Did.
-        email: Email.
-    """
-
-    did: str
-    handle: str
-    email: t.Optional[str] = None
+    did: str  #: Did.
+    handle: str  #: Handle.
+    email: t.Optional[str] = None  #: Email.

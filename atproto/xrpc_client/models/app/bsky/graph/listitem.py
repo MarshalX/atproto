@@ -13,16 +13,10 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Main(base.RecordModelBase):
 
-    """Record model for :obj:`app.bsky.graph.listitem`.
+    """Record model for :obj:`app.bsky.graph.listitem`."""
 
-    Attributes:
-        subject: Subject.
-        list: List.
-        createdAt: Created at.
-    """
-
-    createdAt: str
-    list: str
-    subject: str
+    createdAt: str  #: Created at.
+    list: str  #: List.
+    subject: str  #: Subject.
 
     _type: str = 'app.bsky.graph.listitem'

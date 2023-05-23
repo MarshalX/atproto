@@ -15,13 +15,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.admin.getModerationAction`.
+    """Parameters model for :obj:`com.atproto.admin.getModerationAction`."""
 
-    Attributes:
-        id: Id.
-    """
-
-    id: int
+    id: int  #: Id.
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionViewDetail` model.

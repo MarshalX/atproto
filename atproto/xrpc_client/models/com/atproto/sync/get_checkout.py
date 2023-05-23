@@ -14,15 +14,10 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.getCheckout`.
+    """Parameters model for :obj:`com.atproto.sync.getCheckout`."""
 
-    Attributes:
-        did: The DID of the repo.
-        commit: The commit to get the checkout from. Defaults to current HEAD.
-    """
-
-    did: str
-    commit: t.Optional[str] = None
+    did: str  #: The DID of the repo.
+    commit: t.Optional[str] = None  #: The commit to get the checkout from. Defaults to current HEAD.
 
 
 #: Response raw data type.

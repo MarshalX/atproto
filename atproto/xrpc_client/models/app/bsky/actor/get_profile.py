@@ -15,13 +15,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.actor.getProfile`.
+    """Parameters model for :obj:`app.bsky.actor.getProfile`."""
 
-    Attributes:
-        actor: Actor.
-    """
-
-    actor: str
+    actor: str  #: Actor.
 
 
 #: Response reference to :obj:`models.AppBskyActorDefs.ProfileViewDetailed` model.

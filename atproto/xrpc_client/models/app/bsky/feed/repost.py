@@ -14,14 +14,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Main(base.RecordModelBase):
 
-    """Record model for :obj:`app.bsky.feed.repost`.
+    """Record model for :obj:`app.bsky.feed.repost`."""
 
-    Attributes:
-        subject: Subject.
-        createdAt: Created at.
-    """
-
-    createdAt: str
-    subject: 'models.ComAtprotoRepoStrongRef.Main'
+    createdAt: str  #: Created at.
+    subject: 'models.ComAtprotoRepoStrongRef.Main'  #: Subject.
 
     _type: str = 'app.bsky.feed.repost'

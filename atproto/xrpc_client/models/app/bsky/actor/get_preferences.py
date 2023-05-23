@@ -14,19 +14,12 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`app.bsky.actor.getPreferences`.
-
-    Attributes:
-    """
+    """Parameters model for :obj:`app.bsky.actor.getPreferences`."""
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`app.bsky.actor.getPreferences`.
+    """Output data model for :obj:`app.bsky.actor.getPreferences`."""
 
-    Attributes:
-        preferences: Preferences.
-    """
-
-    preferences: 'models.AppBskyActorDefs.Preferences'
+    preferences: 'models.AppBskyActorDefs.Preferences'  #: Preferences.

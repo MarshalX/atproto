@@ -13,12 +13,7 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.server.resetPassword`.
+    """Input data model for :obj:`com.atproto.server.resetPassword`."""
 
-    Attributes:
-        token: Token.
-        password: Password.
-    """
-
-    password: str
-    token: str
+    password: str  #: Password.
+    token: str  #: Token.

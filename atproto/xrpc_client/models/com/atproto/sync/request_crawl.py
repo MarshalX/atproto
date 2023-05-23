@@ -13,10 +13,6 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.requestCrawl`.
+    """Parameters model for :obj:`com.atproto.sync.requestCrawl`."""
 
-    Attributes:
-        hostname: Hostname of the service that is requesting to be crawled.
-    """
-
-    hostname: str
+    hostname: str  #: Hostname of the service that is requesting to be crawled.

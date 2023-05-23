@@ -16,22 +16,13 @@ from atproto.xrpc_client.models.blob_ref import BlobRef
 @dataclass
 class Main(base.RecordModelBase):
 
-    """Record model for :obj:`app.bsky.graph.list`.
+    """Record model for :obj:`app.bsky.graph.list`."""
 
-    Attributes:
-        purpose: Purpose.
-        name: Name.
-        description: Description.
-        descriptionFacets: Description facets.
-        avatar: Avatar.
-        createdAt: Created at.
-    """
-
-    createdAt: str
-    name: str
-    purpose: 'models.AppBskyGraphDefs.ListPurpose'
-    avatar: t.Optional[BlobRef] = None
-    description: t.Optional[str] = None
-    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None
+    createdAt: str  #: Created at.
+    name: str  #: Name.
+    purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
+    avatar: t.Optional[BlobRef] = None  #: Avatar.
+    description: t.Optional[str] = None  #: Description.
+    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
 
     _type: str = 'app.bsky.graph.list'

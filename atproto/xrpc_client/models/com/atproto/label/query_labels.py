@@ -15,30 +15,20 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.label.queryLabels`.
+    """Parameters model for :obj:`com.atproto.label.queryLabels`."""
 
-    Attributes:
-        uriPatterns: List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI.
-        sources: Optional list of label sources (DIDs) to filter on.
-        limit: Limit.
-        cursor: Cursor.
-    """
-
-    uriPatterns: t.List[str]
-    cursor: t.Optional[str] = None
-    limit: t.Optional[int] = None
-    sources: t.Optional[t.List[str]] = None
+    uriPatterns: t.List[
+        str
+    ]  #: List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI.
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
+    sources: t.Optional[t.List[str]] = None  #: Optional list of label sources (DIDs) to filter on.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.label.queryLabels`.
+    """Output data model for :obj:`com.atproto.label.queryLabels`."""
 
-    Attributes:
-        cursor: Cursor.
-        labels: Labels.
-    """
-
-    labels: t.List['models.ComAtprotoLabelDefs.Label']
-    cursor: t.Optional[str] = None
+    labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.
+    cursor: t.Optional[str] = None  #: Cursor.

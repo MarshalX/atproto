@@ -15,15 +15,12 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Main(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.recordWithMedia`.
+    """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
-    Attributes:
-        record: Record.
-        media: Media.
-    """
-
-    media: t.Union['models.AppBskyEmbedImages.Main', 'models.AppBskyEmbedExternal.Main', 't.Dict[str, t.Any]']
-    record: 'models.AppBskyEmbedRecord.Main'
+    media: t.Union[
+        'models.AppBskyEmbedImages.Main', 'models.AppBskyEmbedExternal.Main', 't.Dict[str, t.Any]'
+    ]  #: Media.
+    record: 'models.AppBskyEmbedRecord.Main'  #: Record.
 
     _type: str = 'app.bsky.embed.recordWithMedia'
 
@@ -31,14 +28,11 @@ class Main(base.ModelBase):
 @dataclass
 class View(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.recordWithMedia`.
+    """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
-    Attributes:
-        record: Record.
-        media: Media.
-    """
-
-    media: t.Union['models.AppBskyEmbedImages.View', 'models.AppBskyEmbedExternal.View', 't.Dict[str, t.Any]']
-    record: 'models.AppBskyEmbedRecord.View'
+    media: t.Union[
+        'models.AppBskyEmbedImages.View', 'models.AppBskyEmbedExternal.View', 't.Dict[str, t.Any]'
+    ]  #: Media.
+    record: 'models.AppBskyEmbedRecord.View'  #: Record.
 
     _type: str = 'app.bsky.embed.recordWithMedia#view'

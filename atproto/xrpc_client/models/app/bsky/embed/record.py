@@ -15,13 +15,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Main(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.record`.
+    """Definition model for :obj:`app.bsky.embed.record`."""
 
-    Attributes:
-        record: Record.
-    """
-
-    record: 'models.ComAtprotoRepoStrongRef.Main'
+    record: 'models.ComAtprotoRepoStrongRef.Main'  #: Record.
 
     _type: str = 'app.bsky.embed.record'
 
@@ -29,18 +25,14 @@ class Main(base.ModelBase):
 @dataclass
 class View(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.record`.
-
-    Attributes:
-        record: Record.
-    """
+    """Definition model for :obj:`app.bsky.embed.record`."""
 
     record: t.Union[
         'models.AppBskyEmbedRecord.ViewRecord',
         'models.AppBskyEmbedRecord.ViewNotFound',
         'models.AppBskyEmbedRecord.ViewBlocked',
         't.Dict[str, t.Any]',
-    ]
+    ]  #: Record.
 
     _type: str = 'app.bsky.embed.record#view'
 
@@ -48,23 +40,13 @@ class View(base.ModelBase):
 @dataclass
 class ViewRecord(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.record`.
+    """Definition model for :obj:`app.bsky.embed.record`."""
 
-    Attributes:
-        uri: Uri.
-        cid: Cid.
-        author: Author.
-        value: Value.
-        labels: Labels.
-        embeds: Embeds.
-        indexedAt: Indexed at.
-    """
-
-    author: 'models.AppBskyActorDefs.ProfileViewBasic'
-    cid: str
-    indexedAt: str
-    uri: str
-    value: 'base.RecordModelBase'
+    author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
+    cid: str  #: Cid.
+    indexedAt: str  #: Indexed at.
+    uri: str  #: Uri.
+    value: 'base.RecordModelBase'  #: Value.
     embeds: t.Optional[
         t.List[
             t.Union[
@@ -75,8 +57,8 @@ class ViewRecord(base.ModelBase):
                 't.Dict[str, t.Any]',
             ]
         ]
-    ] = None
-    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None
+    ] = None  #: Embeds.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
     _type: str = 'app.bsky.embed.record#viewRecord'
 
@@ -84,13 +66,9 @@ class ViewRecord(base.ModelBase):
 @dataclass
 class ViewNotFound(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.record`.
+    """Definition model for :obj:`app.bsky.embed.record`."""
 
-    Attributes:
-        uri: Uri.
-    """
-
-    uri: str
+    uri: str  #: Uri.
 
     _type: str = 'app.bsky.embed.record#viewNotFound'
 
@@ -98,12 +76,8 @@ class ViewNotFound(base.ModelBase):
 @dataclass
 class ViewBlocked(base.ModelBase):
 
-    """Definition model for :obj:`app.bsky.embed.record`.
+    """Definition model for :obj:`app.bsky.embed.record`."""
 
-    Attributes:
-        uri: Uri.
-    """
-
-    uri: str
+    uri: str  #: Uri.
 
     _type: str = 'app.bsky.embed.record#viewBlocked'

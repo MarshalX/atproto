@@ -15,18 +15,11 @@ from atproto.xrpc_client.models.blob_ref import BlobRef
 @dataclass
 class Main(base.RecordModelBase):
 
-    """Record model for :obj:`app.bsky.actor.profile`.
+    """Record model for :obj:`app.bsky.actor.profile`."""
 
-    Attributes:
-        displayName: Display name.
-        description: Description.
-        avatar: Avatar.
-        banner: Banner.
-    """
-
-    avatar: t.Optional[BlobRef] = None
-    banner: t.Optional[BlobRef] = None
-    description: t.Optional[str] = None
-    displayName: t.Optional[str] = None
+    avatar: t.Optional[BlobRef] = None  #: Avatar.
+    banner: t.Optional[BlobRef] = None  #: Banner.
+    description: t.Optional[str] = None  #: Description.
+    displayName: t.Optional[str] = None  #: Display name.
 
     _type: str = 'app.bsky.actor.profile'
