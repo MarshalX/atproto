@@ -424,6 +424,25 @@ http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (>=1.0.0,<2.0.0)"]
 
 [[package]]
+name = "httpx-ws"
+version = "0.3.1"
+description = "WebSockets support for HTTPX"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "httpx_ws-0.3.1-py3-none-any.whl", hash = "sha256:326773de2f1e4d20ce9aba1fe7972483c589997cf11f061572a82bea2d7057df"},
+    {file = "httpx_ws-0.3.1.tar.gz", hash = "sha256:6ec8341bc8fd4d1b983e9e041d986b4b1c2786658313317ef88808be61100b4e"},
+]
+
+[package.dependencies]
+anyio = "*"
+httpcore = ">=0.16.1"
+httpx = ">=0.23.1"
+typing-extensions = {version = "*", markers = "python_version < \"3.8\""}
+wsproto = "*"
+
+[[package]]
 name = "idna"
 version = "3.4"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -1496,6 +1515,21 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
+name = "wsproto"
+version = "1.2.0"
+description = "WebSockets state-machine based protocol implementation"
+category = "main"
+optional = false
+python-versions = ">=3.7.0"
+files = [
+    {file = "wsproto-1.2.0-py3-none-any.whl", hash = "sha256:b9acddd652b585d75b20477888c56642fdade28bdfd3579aa24a4d2c037dd736"},
+    {file = "wsproto-1.2.0.tar.gz", hash = "sha256:ad565f26ecb92588a3e43bc3d96164de84cd9902482b130d0ddbaa9664a85065"},
+]
+
+[package.dependencies]
+h11 = ">=0.9.0,<1"
+
+[[package]]
 name = "zipp"
 version = "3.15.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -1514,4 +1548,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.7,<3.12"
-content-hash = "cd56cfe2f712854f79395c2d78a510cac45103cbe1c3da5c72442cc05b0d734f"
+content-hash = "6ea992513a0e9788e4af29f8708183af5c55246cfb5ababf2c86960c3c473df2"

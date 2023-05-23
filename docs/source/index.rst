@@ -17,13 +17,25 @@ Documentation
    :caption: SDK
    :maxdepth: 4
 
+   firehose
    xrpc_clients/clients
    namespace
    models
+
+.. toctree::
+   :caption: Utils
+   :maxdepth: 4
+
    nsid
    cid
    uri
    car
+   cbor
+
+.. toctree::
+   :caption: Exceptions
+   :maxdepth: 4
+
    exceptions
 
 .. toctree::
@@ -42,4 +54,5 @@ Documentation
    PyPI <https://pypi.org/project/atproto/>
    Author <https://github.com/MarshalX>
    AT Protocol Docs <https://atproto.com/docs>
+   IPLD data model <https://ipld.io/>
    Discord Bluesky API <https://discord.gg/PCyVJXU9jN>

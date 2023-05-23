@@ -1,6 +1,7 @@
 import dataclasses
 import json
 import typing as t
+from enum import Enum
 
 from dacite import Config, exceptions, from_dict
 
@@ -27,12 +28,19 @@ def _record_model_type_hook(data: dict) -> RecordModelBase:
     return get_or_create_model(data, RECORD_TYPE_TO_MODEL_CLASS[record_type])
 
 
+def _decode_cid_hook(ref: t.Union[CID, str]) -> CID:
+    if isinstance(ref, CID):
+        return ref
+
+    return CID.decode(ref)
+
+
 _TYPE_HOOKS = {
     BlobRef: lambda ref: BlobRef.from_dict(ref),
-    CID: lambda ref: CID.decode(ref),
+    CID: _decode_cid_hook,
     RecordModelBase: _record_model_type_hook,
 }
-_DACITE_CONFIG = Config(type_hooks=_TYPE_HOOKS)
+_DACITE_CONFIG = Config(cast=[Enum], type_hooks=_TYPE_HOOKS)
 
 
 def get_or_create_model(model_data: t.Union[dict], model: t.Type[M]) -> t.Optional[M]:

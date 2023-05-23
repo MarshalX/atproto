@@ -13,9 +13,11 @@ Subpackages
    :maxdepth: 4
 
    atproto.car
+   atproto.cbor
    atproto.cid
    atproto.cli
    atproto.codegen
+   atproto.firehose
    atproto.leb128
    atproto.lexicon
    atproto.nsid

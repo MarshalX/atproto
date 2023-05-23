@@ -2,7 +2,7 @@
 
 ## The AT Protocol SDK
 
-> ⚠️ Under construction. The SDK was built from scratch in 40 hours. Somewhere I speedran. I have a list of things that will break backward compatibility. Until the 1.0.0 release, I am not going to care about it.
+> ⚠️ Under construction. Until the 1.0.0 release, I am not going to care about backward compatibility between versions.
 
 Code snippet:
 ```python

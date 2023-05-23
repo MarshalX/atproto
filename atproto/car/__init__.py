@@ -1,12 +1,10 @@
 import typing as t
 from io import BytesIO
 
-import dag_cbor
-
-from .. import leb128
+from .. import cbor, leb128
 from ..cid import CID
 
-Nodes = t.Dict[CID, dict]
+Blocks = t.Dict[CID, dict]
 
 
 class CAR:
@@ -14,9 +12,9 @@ class CAR:
 
     _CID_V1_BYTES_LEN = 36
 
-    def __init__(self, root: str, nodes: Nodes):
+    def __init__(self, root: str, blocks: Blocks):
         self._root = root
-        self._nodes = nodes
+        self._blocks = blocks
 
     @property
     def root(self):
@@ -24,9 +22,9 @@ class CAR:
         return self._root
 
     @property
-    def nodes(self) -> Nodes:
-        """Get nodes."""
-        return self._nodes
+    def blocks(self) -> Blocks:
+        """Get blocks."""
+        return self._blocks
 
     @classmethod
     def from_bytes(cls, data: bytes) -> 'CAR':
@@ -43,26 +41,26 @@ class CAR:
             >>> repo = client.com.atproto.sync.get_repo({'did': client.me.did})
             >>> car_file = CAR.from_bytes(repo)
             >>> print(car_file.root)
-            >>> print(car_file.nodes)
+            >>> print(car_file.blocks)
 
         Args:
-            data: content of the file.
+            data: Content of the CAR file.
 
         Returns:
             :obj:`atproto.CAR`: Parsed CAR file.
         """
-        repo = BytesIO(data)
+        stream = BytesIO(data)
 
-        header_len, _ = leb128.u.decode_reader(repo)
-        header = dag_cbor.decode(repo.read(header_len))
+        header_len, _ = leb128.u.decode_reader(stream)
+        header = cbor.decode_dag(stream.read(header_len))
         root = header.get('roots')[0]
 
-        nodes = {}
-        while repo.tell() != len(data):
-            block_len, _ = leb128.u.decode_reader(repo)
-            cid = CID.decode(repo.read(CAR._CID_V1_BYTES_LEN))
-            block = dag_cbor.decode(repo.read(block_len - CAR._CID_V1_BYTES_LEN))
+        blocks = {}
+        while stream.tell() != len(data):
+            block_len, _ = leb128.u.decode_reader(stream)
+            cid = CID.decode(stream.read(CAR._CID_V1_BYTES_LEN))
+            block = cbor.decode_dag(stream.read(block_len - CAR._CID_V1_BYTES_LEN))
 
-            nodes[cid] = block
+            blocks[cid] = block
 
-        return cls(root=root, nodes=nodes)
+        return cls(root=root, blocks=blocks)

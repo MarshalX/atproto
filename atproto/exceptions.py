@@ -65,3 +65,7 @@ class BadRequestError(RequestException):
 
 class InvalidAtUriError(AtProtocolError):
     ...
+
+
+class FirehoseError(AtProtocolError):
+    ...

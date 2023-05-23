@@ -4,7 +4,11 @@ from atproto.lexicon import models
 from atproto.lexicon.parser import lexicon_parse_dir
 from atproto.nsid import NSID
 
-_LEX_DEF_TYPES_FOR_PARAMS = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
+_LEX_DEF_TYPES_FOR_PARAMS = {
+    models.LexDefinitionType.QUERY,
+    models.LexDefinitionType.PROCEDURE,
+    models.LexDefinitionType.SUBSCRIPTION,
+}
 _LEX_DEF_TYPES_FOR_RESPONSES = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
 _LEX_DEF_TYPES_FOR_REFS = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
 _LEX_DEF_TYPES_FOR_DATA = {models.LexDefinitionType.PROCEDURE}

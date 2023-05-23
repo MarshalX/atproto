@@ -20,7 +20,7 @@
 
 ## The AT Protocol SDK
 
-> ⚠️ Under construction. The SDK was built from scratch in 40 hours. Somewhere I speedran. I have a list of things that will break backward compatibility. Until the 1.0.0 release, I am not going to care about it. 
+> ⚠️ Under construction. Until the 1.0.0 release, I am not going to care about backward compatibility between versions. 
 
 Code snippet:
 ```python
@@ -66,9 +66,11 @@ if __name__ == '__main__':
 ```
 </details>
 
+🔥[Firehose data streaming is available!](https://atproto.blue/en/latest/firehose.html)
+
 ### Introduction
 
-This SDK attempts to implement everything that provides ATProto. Due to the unstable state of the protocol (it grows and changes fast) and a bit of outdated documentation, only the client side is supported yet. There is support for Lexicon Schemes and XRPC clients for now. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, URI. The support of IPLD (dag-cbor) will be added in the near future.
+This SDK attempts to implement everything that provides ATProto. Due to the unstable state of the protocol (it grows and changes fast) and a bit of outdated documentation, only the client side is supported yet. There is support for Lexicon Schemes, XRPC clients and Firehose for now. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Scheme. DAG-CBOR, CAR files.
 
 ### Requirements
 
@@ -144,7 +146,7 @@ The documentation is live at [atproto.blue](https://atproto.blue/).
 You can get help in several ways:
 - Report bugs, request new features by [creating an issue](https://github.com/MarshalX/atproto/issues/new).
 - Ask questions by [starting a discussion](https://github.com/MarshalX/atproto/discussions/new).
-- Ask questions in [Discord server](https://discord.gg/ZDMSm3UGPN).
+- Ask questions in [Discord server](https://discord.gg/PCyVJXU9jN).
 
 ### Advanced usage
 
