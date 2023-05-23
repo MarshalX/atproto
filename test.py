@@ -140,7 +140,7 @@ def _main_firehose_test():
 
     def on_message_handler(message: 'MessageFrame') -> None:
         print('Message', message.header, parse_subscribe_repos_message(message))
-        raise RuntimeError('kek')
+        # raise RuntimeError('kek')
 
     def on_callback_error_handler(e: BaseException) -> None:
         print('got error', e)
@@ -152,7 +152,7 @@ def _main_firehose_test():
         sleep(3)
         client.stop()
 
-    threading.Thread(target=_stop_after_n_sec).start()
+    # threading.Thread(target=_stop_after_n_sec).start()
     client.start(on_message_handler)
     # client.start(on_message_handler, on_callback_error_handler)
     print('stopped. start again')
@@ -165,7 +165,7 @@ async def _main_async_firehose_test():
 
     async def on_message_handler(message: 'MessageFrame') -> None:
         print('Message', message.header, parse_subscribe_repos_message(message))
-        raise RuntimeError('kek')
+        # raise RuntimeError('kek')
         await asyncio.sleep(0.1)
 
     def on_callback_error_handler(e: BaseException) -> None:
@@ -189,5 +189,5 @@ if __name__ == '__main__':
     # sync_main()
     # asyncio.get_event_loop().run_until_complete(main())
 
-    _main_firehose_test()
+    # _main_firehose_test()
     asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())

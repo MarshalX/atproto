@@ -94,7 +94,7 @@ class _WebsocketClientBase:
 
         return min(base_sec, self._max_reconnect_delay_sec) + rand_sec
 
-    def _process_raw_frame(self, data: bytes):
+    def _process_raw_frame(self, data: bytes) -> None:
         frame = Frame.from_bytes(data)
         if frame.is_error:
             raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
@@ -110,7 +110,7 @@ class _WebsocketClientBase:
     ) -> None:
         raise NotImplemented
 
-    def stop(self):
+    def stop(self) -> None:
         raise NotImplemented
 
     def _process_message_frame(self, frame: 'MessageFrame') -> None:

@@ -18,13 +18,13 @@ class FrameType(Enum):
 
 @dataclass
 class MessageFrameHeader:
-    op: int = FrameType.MESSAGE.value
+    op: FrameType = FrameType.MESSAGE
     t: Optional[str] = None
 
 
 @dataclass
 class ErrorFrameHeader:
-    op: int = FrameType.ERROR.value
+    op: FrameType = FrameType.ERROR
 
 
 FrameHeader = Union[MessageFrameHeader, ErrorFrameHeader]
@@ -42,7 +42,7 @@ class Frame:
     body: Union[ErrorFrameBody, dict]
 
     @property
-    def operation(self) -> int:
+    def operation(self) -> FrameType:
         return self.header.op
 
     @property
@@ -51,11 +51,11 @@ class Frame:
 
     @property
     def is_message(self) -> bool:
-        return self.operation == FrameType.MESSAGE.value
+        return self.operation is FrameType.MESSAGE
 
     @property
     def is_error(self) -> bool:
-        return self.operation == FrameType.ERROR.value
+        return self.operation is FrameType.ERROR
 
     @staticmethod
     def from_bytes(data: Union[bytes, bytearray]) -> Union['MessageFrame', 'ErrorFrame']:
