@@ -35,7 +35,7 @@ SubscribeLabelsMessage = t.Union[
 ]
 
 
-def parse_subscribe_repos_message(message: 'MessageFrame', decode_inner_cbor: bool = True) -> SubscribeReposMessage:
+def parse_subscribe_repos_message(message: 'MessageFrame', *, decode_inner_cbor: bool = True) -> SubscribeReposMessage:
     model_class = _SUBSCRIBE_REPOS_MESSAGE_TYPE_TO_MODEL[message.type]
     model_instance = get_or_create_model(message.body, model_class)
 

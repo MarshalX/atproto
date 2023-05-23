@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, Union
 
-from atproto.cbor import decode_multi
+from atproto.cbor import decode_dag_multi
 from atproto.exceptions import AtProtocolError, FirehoseError
 from atproto.xrpc_client.models.utils import get_or_create_model
 
@@ -59,7 +59,7 @@ class Frame:
 
     @staticmethod
     def from_bytes(data: Union[bytes, bytearray]) -> Union['MessageFrame', 'ErrorFrame']:
-        decoded_parts = decode_multi(data)
+        decoded_parts = decode_dag_multi(data)
         if len(decoded_parts) > 2:
             raise FirehoseError('Too many CBOR data parts in the frame')
         if not len(decoded_parts):
