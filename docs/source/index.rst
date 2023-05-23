@@ -54,5 +54,5 @@ Documentation
    PyPI <https://pypi.org/project/atproto/>
    Author <https://github.com/MarshalX>
    AT Protocol Docs <https://atproto.com/docs>
-   IPLD data model <https://ipld.io/>
+   IPLD Data Model <https://ipld.io/>
    Discord Bluesky API <https://discord.gg/PCyVJXU9jN>
