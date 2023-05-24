@@ -9,8 +9,7 @@ def main():
     post_ref = client.send_post(text='Hello World from Python!')
     print('Post reference:', post_ref)
 
-    # this method returns reference to created repost
-    client.repost(post_ref)
+    print('Reposted post reference:', client.repost(post_ref))
 
 
 if __name__ == '__main__':
