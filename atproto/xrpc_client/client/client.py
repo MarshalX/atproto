@@ -255,7 +255,9 @@ class Client(ClientRaw, SessionMethodsMixin):
         if profile_identify:
             repo = profile_identify
         return self.com.atproto.repo.delete_record(
-            models.ComAtprotoRepoDeleteRecord.Data(collection='app.bsky.feed.post',
-                                                   repo=repo,
-                                                   rkey=record_key,)
+            models.ComAtprotoRepoDeleteRecord.Data(
+                collection='app.bsky.feed.post',
+                repo=repo,
+                rkey=record_key,
+            )
         )
