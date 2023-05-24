@@ -221,10 +221,10 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
 
         Args:
             subject: Reference to the post that should be reposted.
-            profile_identify: Handle or DID. Where to send post.
+            profile_identify: Handle or DID. Where to make repost.
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created post record.
+            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the reposted post record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
