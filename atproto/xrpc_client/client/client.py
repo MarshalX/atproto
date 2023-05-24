@@ -200,3 +200,26 @@ class Client(ClientRaw, SessionMethodsMixin):
                 rkey=record_key,
             )
         )
+
+    def unshare(self, record_key: str, profile_identify: t.Optional[str] = None) -> bool:
+        """Unshare the post.
+
+        Args:
+            record_key: ID (slug) of the post.
+            profile_identify: Handler or DID. Who created the post.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        repo = self.me.did
+        if profile_identify:
+            repo = profile_identify
+        return self.com.atproto.repo.delete_record(
+            models.ComAtprotoRepoDeleteRecord.Data(collection='app.bsky.feed.post',
+                                                   repo=repo,
+                                                   rkey=record_key,)
+        )
