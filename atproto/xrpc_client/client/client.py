@@ -200,3 +200,65 @@ class Client(ClientRaw, SessionMethodsMixin):
                 rkey=record_key,
             )
         )
+
+    def repost(
+        self,
+        subject: models.ComAtprotoRepoStrongRef.Main,
+        profile_identify: t.Optional[str] = None,
+    ) -> models.ComAtprotoRepoCreateRecord.Response:
+        """Repost post.
+
+        Note:
+            If `profile_identify` is not provided will be sent to the current profile.
+
+        Args:
+            subject: Reference to the post that should be reposted.
+            profile_identify: Handle or DID. Where to make repost.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the reposted post record.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        repo = self.me.did
+        if profile_identify:
+            repo = profile_identify
+
+        return self.com.atproto.repo.create_record(
+            models.ComAtprotoRepoCreateRecord.Data(
+                repo=repo,
+                collection='app.bsky.feed.repost',
+                record=models.AppBskyFeedRepost.Main(
+                    createdAt=datetime.now().isoformat(),
+                    subject=subject,
+                ),
+            )
+        )
+
+    def delete_post(self, post_rkey: str, profile_identify: t.Optional[str] = None) -> bool:
+        """Delete post.
+
+        Args:
+            post_rkey: ID (slug) of the post.
+            profile_identify: Handler or DID. Who created the post.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        repo = self.me.did
+        if profile_identify:
+            repo = profile_identify
+
+        return self.com.atproto.repo.delete_record(
+            models.ComAtprotoRepoDeleteRecord.Data(
+                collection='app.bsky.feed.post',
+                repo=repo,
+                rkey=post_rkey,
+            )
+        )
