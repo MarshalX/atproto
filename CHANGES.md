@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.0.9
+
+**25.05.2023**
+
+* Update changelog for v0.0.8 by @MarshalX in https://github.com/MarshalX/atproto/pull/39
+* Add "delete_post" and "repost" methods by @codybraun in https://github.com/MarshalX/atproto/pull/40
+* Fix request error handling by @MarshalX in https://github.com/MarshalX/atproto/pull/41
+
 ## Version 0.0.8
 
 **23.05.2023**
