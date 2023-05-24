@@ -56,7 +56,7 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
 
     if response.status_code in {401, 403}:
         raise exceptions.UnauthorizedError(error_response)
-    elif response.status_code == 404:
+    elif response.status_code == 400:
         raise exceptions.BadRequestError(error_response)
     elif response.status_code in {409, 413, 502}:
         raise exceptions.NetworkError(error_response)

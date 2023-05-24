@@ -1,3 +1,9 @@
+import typing as t
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client.request import Response
+
+
 class AtProtocolError(Exception):
     """Base exception"""
 
@@ -42,7 +48,12 @@ class ModelFieldNotFoundError(ModelError):
     ...
 
 
-class NetworkError(AtProtocolError):
+class RequestErrorBase(AtProtocolError):
+    def __init__(self, response: t.Optional['Response'] = None):
+        self.response: 'Response' = response
+
+
+class NetworkError(RequestErrorBase):
     ...
 
 
@@ -50,16 +61,15 @@ class InvokeTimeoutError(NetworkError):
     ...
 
 
-class UnauthorizedError(AtProtocolError):
-    def __init__(self, response):
-        self.response = response
-
-
-class RequestException(AtProtocolError):
+class UnauthorizedError(RequestErrorBase):
     ...
 
 
-class BadRequestError(RequestException):
+class RequestException(RequestErrorBase):
+    ...
+
+
+class BadRequestError(RequestErrorBase):
     ...
 
 
