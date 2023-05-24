@@ -118,6 +118,42 @@ class Client(ClientRaw, SessionMethodsMixin):
             )
         )
 
+    def repost(
+        self,
+        subject: models.ComAtprotoRepoStrongRef.Main,
+        profile_identify: t.Optional[str] = None,
+    ) -> models.ComAtprotoRepoCreateRecord.Response:
+        """Repost.
+
+        Note:
+            If `profile_identify` is not provided will be sent to the current profile.
+
+        Args:
+            subject: Reference to the post that should be reposted.
+            profile_identify: Handle or DID. Where to send post.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created post record.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        repo = self.me.did
+        if profile_identify:
+            repo = profile_identify
+
+        return self.com.atproto.repo.create_record(
+            models.ComAtprotoRepoCreateRecord.Data(
+                repo=repo,
+                collection='app.bsky.feed.repost',
+                record=models.AppBskyFeedRepost.Main(
+                    createdAt=datetime.now().isoformat(),
+                    subject=subject,
+                ),
+            )
+        )
+
     def send_image(
         self,
         text: str,
