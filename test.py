@@ -3,7 +3,7 @@ import logging
 import os
 import threading
 
-from atproto import CAR, AsyncClient, AtUri, Client, models
+from atproto import CAR, AsyncClient, AtUri, Client, exceptions, models
 from atproto.firehose import (
     AsyncFirehoseSubscribeLabelsClient,
     AsyncFirehoseSubscribeReposClient,
@@ -40,7 +40,7 @@ def sync_main():
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
     # repo = client.com.atproto.sync.get_repo({'did': client.me.did})
-    did = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'}).did
+    # did = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'}).did
     # repo = client.com.atproto.sync.get_repo({'did': did})
     # car_file = CAR.from_bytes(repo)
     # print(car_file.root)
@@ -62,10 +62,14 @@ def sync_main():
 
     # client.com.atproto.repo.get_record({'collection': 'app.bsky.feed.post', 'repo': 'arta.bsky.social'})
 
-    # with open('cat2.jpg', 'rb') as f:
-    #     cat_data = f.read()
-    #
-    #     client.send_image('Cat looking for a Python', cat_data, 'cat alt')
+    with open('cat_big.png', 'rb') as f:
+        cat_data = f.read()
+        try:
+            client.send_image('Cat looking for a Python', cat_data, 'cat alt')
+        except exceptions.BadRequestError as e:
+            print('Status code:', e.response.status_code)
+            print('Error code:', e.response.content.error)
+            print('Error message:', e.response.content.message)
     #
     # resolve = client.com.atproto.identity.resolve_handle(models.ComAtprotoIdentityResolveHandle.Params(profile.handle))
     # assert resolve.did == profile.did
@@ -180,8 +184,8 @@ async def _main_async_firehose_test():
 if __name__ == '__main__':
     # test_strange_embed_images_type()
 
-    # sync_main()
+    sync_main()
     # asyncio.get_event_loop().run_until_complete(main())
 
     # _main_firehose_test()
-    asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())
+    # asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())
