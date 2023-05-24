@@ -1,4 +1,4 @@
-from atproto import AtUri, Client
+from atproto import Client
 
 
 def main():
@@ -9,7 +9,7 @@ def main():
     post_ref = client.send_post(text='Hello World from Python!')
     print('Post reference:', post_ref)
 
-    # this methods return True/False depends on the response. Could throw exceptions too
+    # this method returns reference to created repost
     client.repost(post_ref)
 
 
