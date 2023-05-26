@@ -149,6 +149,9 @@ def _custom_feed_firehose():
                     continue
 
                 record_raw_data = car.blocks.get(op.cid)
+                if not record_raw_data:
+                    continue
+
                 # TODO(MarshalX): provide high-lvl interface to parse record models
 
                 # FIXME(MarshalX): if the record contains custom fields, method will throw the exception
