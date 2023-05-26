@@ -9,7 +9,7 @@ def main(path: Path) -> None:
                 file_path = os.path.join(root, file)
                 with open(file_path, 'r', encoding='UTF-8') as f:
                     content = f.read()
-                    content = content.replace('atproto.xrpc\_client.models.', '')
+                    content = content.replace('atproto.xrpc\\_client.models.', '')
                 with open(file_path, 'w', encoding='UTF-8') as f:
                     f.write(content)
                 print('Fix', file)
