@@ -1,3 +1,4 @@
+.DS_Store
 .idea
 *.iml
 .env
@@ -31,7 +32,13 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
 # Sphinx documentation
 docs/_build/
 
+# Caches
 .ruff_cache/
