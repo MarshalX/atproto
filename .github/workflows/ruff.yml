@@ -20,3 +20,5 @@ jobs:
 
       - name: Run linter check.
         uses: chartboost/ruff-action@v1
+        with:
+          src: "./atproto"
