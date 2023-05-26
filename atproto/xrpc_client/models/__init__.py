@@ -107,6 +107,9 @@ from atproto.xrpc_client.models.app.bsky.richtext import facet as AppBskyRichtex
 from atproto.xrpc_client.models.app.bsky.unspecced import (
     get_popular as AppBskyUnspeccedGetPopular,
 )
+from atproto.xrpc_client.models.app.bsky.unspecced import (
+    get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
+)
 from atproto.xrpc_client.models.com.atproto.admin import defs as ComAtprotoAdminDefs
 from atproto.xrpc_client.models.com.atproto.admin import (
     disable_account_invites as ComAtprotoAdminDisableAccountInvites,
