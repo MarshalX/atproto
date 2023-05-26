@@ -1,8 +1,8 @@
 import asyncio
 import logging
 import os
-import typing as t
 import threading
+import typing as t
 
 from atproto import CAR, AsyncClient, AtUri, Client, exceptions, models
 from atproto.firehose import (
@@ -113,7 +113,7 @@ async def main():
 
 def test_strange_embed_images_type():
     d = {
-        'text': 'Jack will save us from Elon I hope he doesn’t sell us out again @jack.bsky.social here’s to the future in the present moment #bluesky',
+        'text': 'Jack will save us from Elon I hope he doesn`t sell us out again @jack.bsky.social here`s to the future in the present moment #bluesky',
         'embed': {
             '$type': 'app.bsky.embed.images',
             'images': [

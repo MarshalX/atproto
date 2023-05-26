@@ -108,14 +108,13 @@ def main():
 
     print('Successfully fetch lexicons! Next steps:')
 
-    # shortcut to generate all: atp g all
-    print('- Codegen models (atp gen models)')
-    print('- Codegen namespaces (atp gen namespaces)')
-    print('- Codegen async version (atp gen async)')
+    # shortcut to generate all: poetry run atp g all
+    print('- Codegen models (poetry run atp gen models)')
+    print('- Codegen namespaces (poetry run atp gen namespaces)')
+    print('- Codegen async version (poetry run atp gen async)')
 
-    print('- Delete unused imports in generated code (I use built-in feature in IntelliJ IDEA)')
+    print('- Run ruff (poetry run ruff .)')
     print('- Run black (poetry run black .)')
-    print('- Run isort (poetry run isort .)')
 
     print('- Gen docs (cd docs && make gen)')
 
