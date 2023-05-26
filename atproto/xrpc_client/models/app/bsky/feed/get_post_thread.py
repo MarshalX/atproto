@@ -19,6 +19,7 @@ class Params(base.ParamsModelBase):
 
     uri: str  #: Uri.
     depth: t.Optional[int] = None  #: Depth.
+    parentHeight: t.Optional[int] = None  #: Parent height.
 
 
 @dataclass
