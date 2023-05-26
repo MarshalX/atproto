@@ -39,7 +39,3 @@ def gen_client(input_filename: str, output_filename: str) -> None:
 
     write_code(_CLIENT_DIR.joinpath(output_filename), code)
     format_code(_CLIENT_DIR.joinpath(output_filename))
-
-
-if __name__ == '__main__':
-    gen_client('client.py', 'async_client.py')

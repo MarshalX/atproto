@@ -104,9 +104,24 @@ def _write_extracted_lexicons(extracted_files: ExtractedFiles) -> None:
 
 
 def main():
-    sha, commit_date, message = _get_last_commit_info()
-    print(f'Successfully fetch lexicons from {sha} committed {commit_date} with message:\n\n {message}')
-    print('COMMIT IT WITH THE MESSAGE BELOW:')
+    sha, commit_date, _ = _get_last_commit_info()
+
+    print('Successfully fetch lexicons! Next steps:')
+
+    # shortcut to generate all: atp g all
+    print('- Codegen models (atp gen models)')
+    print('- Codegen namespaces (atp gen namespaces)')
+    print('- Codegen async version (atp gen async)')
+
+    print('- Delete unused imports in generated code (I use built-in feature in IntelliJ IDEA)')
+    print('- Run black (poetry run black .)')
+    print('- Run isort (poetry run isort .)')
+
+    print('- Gen docs (cd docs && make gen)')
+
+    print('- Add all new files to Git (git add)')
+    print('- Commit with the message below:', end='\n\n')
+
     print(f'Update lexicons fetched from {sha[:7]} committed {commit_date}')
     _write_extracted_lexicons(_extract_zip(_download_zip_with_code()))
 

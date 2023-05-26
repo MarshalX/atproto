@@ -84,8 +84,8 @@ def build_namespace_tree(lexicons: t.List[LexiconDoc]) -> dict:
     return namespace_tree
 
 
-def build_namespaces() -> dict:
-    lexicons = lexicon_parse_dir()
+def build_namespaces(lexicon_dir=None) -> dict:
+    lexicons = lexicon_parse_dir(lexicon_dir)
     namespace_tree = build_namespace_tree(lexicons)
 
     return namespace_tree

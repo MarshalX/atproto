@@ -7,8 +7,8 @@ from atproto.xrpc_client.namespaces import async_ns
 class AsyncClientRaw(AsyncClientBase):
     """Group all root namespaces"""
 
-    com: async_ns.ComNamespace
-    bsky: async_ns.BskyNamespace
+    com: 'async_ns.ComNamespace'
+    bsky: 'async_ns.BskyNamespace'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -1,4 +1,5 @@
 import typing as t
+from pathlib import Path
 
 from atproto.lexicon import models
 from atproto.lexicon.parser import lexicon_parse_dir
@@ -34,6 +35,22 @@ LexDefs = t.Dict[
 LexDB = t.Dict[NSID, LexDefs]
 
 
+class _LexiconDir:
+    dir_path: t.Optional[Path]
+
+    def __init__(self, default_path: Path = None):
+        self.dir_path = default_path
+
+    def set(self, path: Path):
+        self.dir_path = path
+
+    def get(self) -> Path:
+        return self.dir_path
+
+
+lexicon_dir = _LexiconDir()
+
+
 def _filter_defs_by_type(defs: t.Dict[str, models.LexDefinition], def_types: set) -> LexDefs:
     return {k: v for k, v in defs.items() if v.type in def_types}
 
@@ -51,27 +68,27 @@ def _build_nsid_to_defs_map(lexicons: t.List[models.LexiconDoc], def_types: set)
 
 
 def build_params_models() -> LexDB:
-    return _build_nsid_to_defs_map(lexicon_parse_dir(), _LEX_DEF_TYPES_FOR_PARAMS)
+    return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_PARAMS)
 
 
 def build_data_models() -> LexDB:
-    return _build_nsid_to_defs_map(lexicon_parse_dir(), _LEX_DEF_TYPES_FOR_DATA)
+    return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_DATA)
 
 
 def build_response_models() -> LexDB:
-    return _build_nsid_to_defs_map(lexicon_parse_dir(), _LEX_DEF_TYPES_FOR_RESPONSES)
+    return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_RESPONSES)
 
 
 def build_def_models() -> LexDB:
-    return _build_nsid_to_defs_map(lexicon_parse_dir(), _LEX_DEF_TYPES_FOR_DEF)
+    return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_DEF)
 
 
 def build_record_models() -> LexDB:
-    return _build_nsid_to_defs_map(lexicon_parse_dir(), _LEX_DEF_TYPES_FOR_RECORDS)
+    return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_RECORDS)
 
 
 def build_refs_models() -> LexDB:
-    return _build_nsid_to_defs_map(lexicon_parse_dir(), _LEX_DEF_TYPES_FOR_REFS)
+    return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_REFS)
 
 
 if __name__ == '__main__':
