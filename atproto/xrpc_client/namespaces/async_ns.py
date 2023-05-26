@@ -17,7 +17,7 @@ from atproto.xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase
 class AppNamespace(NamespaceBase):
     bsky: 'BskyNamespace' = field(default_factory=DefaultNamespace)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.bsky = BskyNamespace(self._client)
 
 
@@ -29,7 +29,7 @@ class BskyNamespace(NamespaceBase):
     notification: 'NotificationNamespace' = field(default_factory=DefaultNamespace)
     unspecced: 'UnspeccedNamespace' = field(default_factory=DefaultNamespace)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.actor = ActorNamespace(self._client)
         self.feed = FeedNamespace(self._client)
         self.graph = GraphNamespace(self._client)
@@ -806,7 +806,7 @@ class NotificationNamespace(NamespaceBase):
 class ComNamespace(NamespaceBase):
     atproto: 'AtprotoNamespace' = field(default_factory=DefaultNamespace)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.atproto = AtprotoNamespace(self._client)
 
 
@@ -820,7 +820,7 @@ class AtprotoNamespace(NamespaceBase):
     server: 'ServerNamespace' = field(default_factory=DefaultNamespace)
     sync: 'SyncNamespace' = field(default_factory=DefaultNamespace)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.admin = AdminNamespace(self._client)
         self.identity = IdentityNamespace(self._client)
         self.label = LabelNamespace(self._client)

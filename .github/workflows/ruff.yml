@@ -1,4 +1,4 @@
-name: Black
+name: Ruff
 
 on: [ pull_request, push ]
 
@@ -18,5 +18,5 @@ jobs:
       - name: Install dependencies.
         run: pip install black
 
-      - name: Check code style of package.
-        run: black --check atproto
+      - name: Run linter check.
+        uses: chartboost/ruff-action@v1

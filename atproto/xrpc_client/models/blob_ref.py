@@ -2,7 +2,7 @@ from atproto.cid import CID
 
 
 class BlobRef:
-    def __init__(self, blob_type: str, mime_type: str, ref: str, size: int):
+    def __init__(self, blob_type: str, mime_type: str, ref: str, size: int) -> None:
         self.blob_type = blob_type
         self.mime_type = mime_type
         self.ref = ref

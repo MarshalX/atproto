@@ -9,15 +9,13 @@ from atproto.codegen import (
     convert_camel_case_to_snake_case,
     format_code,
     gen_description_by_camel_case_name,
-)
-from atproto.codegen import get_code_intent as _
-from atproto.codegen import (
     get_import_path,
     get_sync_async_keywords,
     join_code,
     sort_dict_by_key,
     write_code,
 )
+from atproto.codegen import get_code_intent as _
 from atproto.codegen.namespaces.builder import MethodInfo, RecordInfo, build_namespaces
 from atproto.lexicon.models import (
     LexDefinitionType,
@@ -68,7 +66,7 @@ def _get_sub_namespaces_block(sub_namespaces: dict) -> str:
     lines = []
 
     sub_namespaces = sort_dict_by_key(sub_namespaces)
-    for sub_namespace in sub_namespaces.keys():
+    for sub_namespace in sub_namespaces:
         lines.append(
             f"{_(1)}{sub_namespace}: '{get_namespace_name(sub_namespace)}' = field(default_factory=DefaultNamespace)"
         )
@@ -77,10 +75,10 @@ def _get_sub_namespaces_block(sub_namespaces: dict) -> str:
 
 
 def _get_post_init_method(sub_namespaces: dict) -> str:
-    lines = [f'{_(1)}def __post_init__(self):']
+    lines = [f'{_(1)}def __post_init__(self) -> None:']
 
     sub_namespaces = sort_dict_by_key(sub_namespaces)
-    for sub_namespace in sub_namespaces.keys():
+    for sub_namespace in sub_namespaces:
         lines.append(f'{_(2)}self.{sub_namespace} = {get_namespace_name(sub_namespace)}(self._client)')
 
     # TODO(MarshalX): add support for records
@@ -164,10 +162,10 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
     if isinstance(method_info.definition, LexXrpcProcedure):
         method_name = 'invoke_procedure'
 
-    lines.append(f"{_(2)}response = {c}self._client.{method_name}({invoke_args_str})")
+    lines.append(f'{_(2)}response = {c}self._client.{method_name}({invoke_args_str})')
 
     return_type, __ = _get_namespace_method_return_type(method_info)
-    lines.append(f"{_(2)}return get_response_model(response, {return_type})")
+    lines.append(f'{_(2)}return get_response_model(response, {return_type})')
 
     return join_code(lines)
 
@@ -274,7 +272,7 @@ def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> s
     if is_model:
         return_type = f"'{return_type}'"
 
-    return f"{_(1)}{d}def {name}({args}) -> {return_type}:"
+    return f'{_(1)}{d}def {name}({args}) -> {return_type}:'
 
 
 def _get_namespace_methods_block(methods_info: t.List[MethodInfo], sync: bool) -> str:
@@ -310,9 +308,7 @@ def _generate_namespace_in_output(namespace_tree: t.Union[dict, list], output: t
         if isinstance(sub_node, list):
             output.append(_get_namespace_class_def(node_name))
 
-            # TODO(MarshalX): implement later
-            # records = [info for info in sub_node if isinstance(info, RecordInfo)]
-            # output.append(_get_namespace_records_block(records))
+            # TODO(MarshalX): gen namespace by RecordInfo later
             # TODO(MarshalX): generate namespace record classes!
 
             methods = [info for info in sub_node if isinstance(info, MethodInfo)]

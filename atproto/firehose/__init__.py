@@ -73,13 +73,13 @@ def parse_subscribe_labels_message(message: 'MessageFrame') -> SubscribeLabelsMe
 
 
 class FirehoseSubscribeReposClient(FirehoseClient):
-    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None):
+    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None) -> None:
         params = get_or_create_model(params, models.ComAtprotoSyncSubscribeRepos.Params)
         super().__init__(method='com.atproto.sync.subscribeRepos', params=params)
 
 
 class AsyncFirehoseSubscribeReposClient(AsyncFirehoseClient):
-    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None):
+    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None) -> None:
         params = get_or_create_model(params, models.ComAtprotoSyncSubscribeRepos.Params)
         super().__init__(method='com.atproto.sync.subscribeRepos', params=params)
 
@@ -88,12 +88,12 @@ class AsyncFirehoseSubscribeReposClient(AsyncFirehoseClient):
 
 
 class FirehoseSubscribeLabelsClient(FirehoseClient):
-    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels']] = None):
+    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels']] = None) -> None:
         params = get_or_create_model(params, models.ComAtprotoLabelSubscribeLabels.Params)
         super().__init__(method='com.atproto.label.subscribeLabels', params=params)
 
 
 class AsyncFirehoseSubscribeLabelsClient(AsyncFirehoseClient):
-    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels']] = None):
+    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels']] = None) -> None:
         params = get_or_create_model(params, models.ComAtprotoLabelSubscribeLabels.Params)
         super().__init__(method='com.atproto.label.subscribeLabels', params=params)

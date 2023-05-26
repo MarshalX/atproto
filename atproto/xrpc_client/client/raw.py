@@ -10,7 +10,7 @@ class ClientRaw(ClientBase):
     com: 'sync_ns.ComNamespace'
     bsky: 'sync_ns.BskyNamespace'
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.com = sync_ns.ComNamespace(self)

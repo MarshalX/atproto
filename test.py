@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import typing as t
 import threading
 
 from atproto import CAR, AsyncClient, AtUri, Client, exceptions, models
@@ -11,6 +12,9 @@ from atproto.firehose import (
     FirehoseSubscribeReposClient,
     parse_subscribe_repos_message,
 )
+
+if t.TYPE_CHECKING:
+    from atproto.firehose import MessageFrame
 
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
@@ -40,11 +44,11 @@ def sync_main():
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
     # repo = client.com.atproto.sync.get_repo({'did': client.me.did})
-    # did = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'}).did
-    # repo = client.com.atproto.sync.get_repo({'did': did})
-    # car_file = CAR.from_bytes(repo)
-    # print(car_file.root)
-    # print(car_file.nodes)
+    did = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'}).did
+    repo = client.com.atproto.sync.get_repo({'did': did})
+    car_file = CAR.from_bytes(repo)
+    print(car_file.root)
+    print(car_file.blocks)
 
     # res = client.com.atproto.repo.get_record(...)     # implement by yourself
     # also you need to parse "res.value" as profile record using  get_or_create_model method
@@ -174,7 +178,7 @@ async def _main_async_firehose_test():
         await asyncio.sleep(3)
         await client.stop()
 
-    asyncio.create_task(_stop_after_n_sec())
+    _ = asyncio.create_task(_stop_after_n_sec())
     await client.start(on_message_handler)
     # await client.start(on_message_handler, on_callback_error_handler)
     print('stopped. start again')
@@ -184,8 +188,8 @@ async def _main_async_firehose_test():
 if __name__ == '__main__':
     # test_strange_embed_images_type()
 
-    sync_main()
+    # sync_main()
     # asyncio.get_event_loop().run_until_complete(main())
 
-    # _main_firehose_test()
+    _main_firehose_test()
     # asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())

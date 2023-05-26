@@ -12,9 +12,12 @@ from atproto.codegen import (
     capitalize_first_symbol,
     format_code,
     gen_description_by_camel_case_name,
+    get_file_path_parts,
+    get_import_path,
+    join_code,
+    write_code,
 )
 from atproto.codegen import get_code_intent as _
-from atproto.codegen import get_file_path_parts, get_import_path, join_code, write_code
 from atproto.codegen.models import builder
 from atproto.exceptions import InvalidNsidError
 from atproto.lexicon import models
@@ -50,7 +53,7 @@ def save_code_part(nsid: NSID, code: str) -> None:
 
 
 def _get_model_imports() -> str:
-    # TODO(MarshalX): isort can't delete unused imports. mb add ruff
+    # we are using ruff with F401 autofix to delete unused imports
     lines = [
         'from dataclasses import dataclass',
         'import typing as t',
@@ -70,7 +73,7 @@ def _get_model_imports() -> str:
 _NSID_WITH_IMPORTS = set()
 
 
-def _save_code_import_if_not_exist(nsid) -> None:
+def _save_code_import_if_not_exist(nsid: NSID) -> None:
     if nsid not in _NSID_WITH_IMPORTS:
         lines = [DISCLAIMER, _get_model_imports()]
         save_code(nsid, join_code(lines))
@@ -106,8 +109,7 @@ _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT = {
 def _get_optional_typehint(type_hint, *, optional: bool) -> str:
     if optional:
         return f't.Optional[{type_hint}] = None'
-    else:
-        return type_hint
+    return type_hint
 
 
 def _get_ref_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
@@ -137,7 +139,6 @@ def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> t.Tuple[s
 
         # FIXME(MarshalX): Is it works well? ;d
         return get_model_path(ref_nsid, 'Main'), def_name
-        # return get_model_path(ref_nsid, ref_nsid.name), def_name
 
 
 def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
@@ -154,7 +155,7 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     def_names.append('t.Dict[str, t.Any]')
 
     def_names = ', '.join([f"'{name}'" for name in def_names])
-    return _get_optional_typehint(f"t.Union[{def_names}]", optional=optional)
+    return _get_optional_typehint(f't.Union[{def_names}]', optional=optional)
 
 
 def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, optional: bool) -> str:
@@ -162,7 +163,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
 
     if field_type == models.LexUnknown:
         # TODO(MarshalX): some of "unknown" types are well known...
-        return _get_optional_typehint(f"'base.RecordModelBase'", optional=optional)
+        return _get_optional_typehint("'base.RecordModelBase'", optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
     if type_hint:
@@ -179,7 +180,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
         return _get_ref_union_typehint(nsid, field_type_def, optional=optional)
 
     if field_type is models.LexCidLink:
-        return _get_optional_typehint(f'CID', optional=optional)
+        return _get_optional_typehint('CID', optional=optional)
 
     if field_type is models.LexBytes:
         # CAR file containing relevant blocks
@@ -218,7 +219,7 @@ def _get_model_docstring(
     nsid: t.Union[str, NSID], lex_object: t.Union[models.LexObject, models.LexXrpcParameters], model_type: ModelType
 ) -> str:
     model_desc = lex_object.description or ''
-    model_desc = f"{model_type.value} model for :obj:`{nsid}`. {model_desc}"
+    model_desc = f'{model_type.value} model for :obj:`{nsid}`. {model_desc}'
 
     doc_string = [f'{_(1)}"""{model_desc}"""', '']
 
@@ -356,7 +357,7 @@ def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
     type_ = f'te.Literal[{known_values}]'
 
     lines = [
-        f"{get_def_model_name(def_name)} = {type_}",
+        f'{get_def_model_name(def_name)} = {type_}',
         '',
         '',
     ]
@@ -443,13 +444,21 @@ def _generate_record_type_database(lex_db: builder.LexDB) -> None:
 def _generate_ref_models(lex_db: builder.LexDB) -> None:
     for nsid, defs in lex_db.items():
         definition = defs['main']
-        if hasattr(definition, 'input') and definition.input and definition.input.schema:
-            if isinstance(definition.input.schema, models.LexRef):
-                save_code_part(nsid, _get_model_ref(nsid, definition.input.schema))
+        if (
+            hasattr(definition, 'input')
+            and definition.input
+            and definition.input.schema
+            and isinstance(definition.input.schema, models.LexRef)
+        ):
+            save_code_part(nsid, _get_model_ref(nsid, definition.input.schema))
 
-        if hasattr(definition, 'output') and definition.output and definition.output.schema:
-            if isinstance(definition.output.schema, models.LexRef):
-                save_code_part(nsid, _get_model_ref(nsid, definition.output.schema))
+        if (
+            hasattr(definition, 'output')
+            and definition.output
+            and definition.output.schema
+            and isinstance(definition.output.schema, models.LexRef)
+        ):
+            save_code_part(nsid, _get_model_ref(nsid, definition.output.schema))
 
 
 def _generate_init_files(root_package_path: Path) -> None:
@@ -514,19 +523,21 @@ def _generate_empty_init_files(root_package_path: Path):
         write_code(root.joinpath('__init__.py'), DISCLAIMER)
 
 
-def _generate_import_aliases(root_package_path: Path):
-    # is generates __init__.py file if models dir with aliases like this;
-    # from xrpc_client.models.app.bsky.actor import defs as AppBskyActorDefs
+def _generate_import_aliases(root_package_path: Path) -> None:
+    # is generates __init__.py file if models dir with aliases like this:
+    # from xrpc_client.models.app.bsky.actor import defs as AppBskyActorDefs # noqa: ERA001
 
     import_lines = []
-    for root, dirs, files in os.walk(root_package_path):
+    for root, __, files in os.walk(root_package_path):
         root = Path(root)
 
         if root == root_package_path:
             continue
 
         for file in files:
-            if file.startswith('.') or file.startswith('__') or file.endswith('.pyc'):
+            if file.startswith(('.', '__', '.pyc')):
+                continue
+            if '.cpython-' in file:
                 continue
 
             import_parts = root.parts[root.parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
@@ -540,7 +551,7 @@ def _generate_import_aliases(root_package_path: Path):
     write_code(_MODELS_OUTPUT_DIR.joinpath('__init__.py'), join_code(import_lines))
 
 
-def generate_models(lexicon_dir: t.Optional[Path] = None, output_dir: t.Optional[Path] = None):
+def generate_models(lexicon_dir: t.Optional[Path] = None, output_dir: t.Optional[Path] = None) -> None:
     if lexicon_dir:
         builder.lexicon_dir.set(lexicon_dir)
 

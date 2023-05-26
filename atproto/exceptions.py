@@ -49,7 +49,7 @@ class ModelFieldNotFoundError(ModelError):
 
 
 class RequestErrorBase(AtProtocolError):
-    def __init__(self, response: t.Optional['Response'] = None):
+    def __init__(self, response: t.Optional['Response'] = None) -> None:
         self.response: 'Response' = response
 
 

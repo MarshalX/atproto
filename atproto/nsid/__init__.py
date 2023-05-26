@@ -60,13 +60,13 @@ class NSID:
         """Get name."""
         return self.segments[-1]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return _NSID_DELIM.join(self.segments)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(str(self))
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if isinstance(other, NSID):
             return hash(self) == hash(other)
 
@@ -176,17 +176,3 @@ def validate_nsid(nsid: str, *, soft_fail: bool = False) -> bool:
             return False
 
         raise e
-
-
-if __name__ == '__main__':
-    assert validate_nsid('com.atproto.repo-.*', soft_fail=True) is False
-    assert validate_nsid('com.atproto', soft_fail=True) is False
-    assert validate_nsid('com.atproto' + '.test' * 90, soft_fail=True) is False
-    assert validate_nsid('com.atproto.repo.getRecord', soft_fail=True) is True
-    assert validate_nsid('com.atproto.1repo.getRecord', soft_fail=True) is False
-    assert validate_nsid('com.atproto.repo1.getRecord', soft_fail=True) is True
-
-    nsid_obj = NSID.from_str('com.atproto.repo.getRecord')
-    assert nsid_obj.segments == ['com', 'atproto', 'repo', 'getRecord']
-    assert nsid_obj.authority == 'repo.atproto.com'
-    assert nsid_obj.name == 'getRecord'

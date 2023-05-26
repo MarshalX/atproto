@@ -13,7 +13,7 @@ from atproto.exceptions import (
     UnexpectedFieldError,
     WrongTypeError,
 )
-from atproto.xrpc_client.models.base import RecordModelBase
+from atproto.xrpc_client.models.base import ModelBase, RecordModelBase
 from atproto.xrpc_client.models.blob_ref import BlobRef
 from atproto.xrpc_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
 
@@ -58,15 +58,15 @@ def get_or_create_model(model_data: t.Union[dict], model: t.Type[M]) -> t.Option
     except TypeError as e:
         # FIXME(MarshalX): "Params missing 1 required positional argument: 'rkey'" should raise another error
         msg = str(e).replace('__init__()', model.__name__)
-        raise UnexpectedFieldError(msg)
+        raise UnexpectedFieldError(msg) from e
     except exceptions.MissingValueError as e:
-        raise MissingValueError(str(e))
+        raise MissingValueError(str(e)) from e
     except exceptions.WrongTypeError as e:
-        raise WrongTypeError(str(e))
+        raise WrongTypeError(str(e)) from e
     except exceptions.DaciteFieldError as e:
-        raise ModelFieldError(str(e))
+        raise ModelFieldError(str(e)) from e
     except exceptions.DaciteError as e:
-        raise ModelError(str(e))
+        raise ModelError(str(e)) from e
 
 
 def get_response_model(response: 'Response', model: t.Type[M]) -> t.Optional[M]:
@@ -87,18 +87,18 @@ def _handle_dict_key(key: str) -> str:
 def _handle_dict_value(ref: t.Any) -> t.Any:
     if isinstance(ref, BlobRef):
         return ref.to_dict()
-    elif isinstance(ref, CID):
+    if isinstance(ref, CID):
         return ref.encode()
 
     return ref
 
 
-def _model_as_dict_factory(value):
+def _model_as_dict_factory(value) -> dict:
     # exclude None values and process keys and values
     return {_handle_dict_key(k): _handle_dict_value(v) for k, v in value if v is not None}
 
 
-def get_model_as_dict(model) -> dict:
+def get_model_as_dict(model: t.Union[BlobRef, ModelBase]) -> dict:
     if model == BlobRef:
         return model.to_dict()
 
@@ -108,16 +108,16 @@ def get_model_as_dict(model) -> dict:
     return dataclasses.asdict(model, dict_factory=_model_as_dict_factory)
 
 
-def get_model_as_json(model) -> str:
+def get_model_as_json(model: t.Union[BlobRef, ModelBase]) -> str:
     return json.dumps(get_model_as_dict(model))
 
 
-def is_json(json_data: t.Union[str, bytes]):
+def is_json(json_data: t.Union[str, bytes]) -> bool:
     if isinstance(json_data, bytes):
         json_data.decode('UTF-8')
 
     try:
         json.loads(json_data)
         return True
-    except Exception:  # noqa
+    except:  # noqa
         return False
