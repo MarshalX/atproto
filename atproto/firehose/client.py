@@ -20,6 +20,8 @@ from atproto.firehose.models import Frame
 from atproto.xrpc_client.models.common import XrpcError
 
 if t.TYPE_CHECKING:
+    from httpx_ws import AsyncWebSocketSession, WebSocketSession
+
     from atproto.firehose.models import MessageFrame
 
 _BASE_WEBSOCKET_URL = 'https://bsky.social/xrpc'
@@ -40,23 +42,22 @@ def _build_websocket_url(method: str, base_url: t.Optional[str] = None) -> str:
 def _handle_firehose_error_or_stop(exception: Exception) -> bool:
     """Returns if the connection should be properly be closed or reraise exception."""
 
-    print(exception)
     if isinstance(exception, WebSocketDisconnect):
         if exception.code == 1000:
             return True
-        elif exception.code in {1001, 1002, 1003}:
+        if exception.code in {1001, 1002, 1003}:
             return False
-    elif isinstance(exception, WebSocketNetworkError):
+    if isinstance(exception, WebSocketNetworkError):
         return False
-    elif isinstance(exception, httpx.NetworkError):
+    if isinstance(exception, httpx.NetworkError):
         return False
-    elif isinstance(exception, httpx.TimeoutException):
+    if isinstance(exception, httpx.TimeoutException):
         return False
-    elif isinstance(exception, WebSocketInvalidTypeReceived):
+    if isinstance(exception, WebSocketInvalidTypeReceived):
         raise FirehoseError from exception
-    elif isinstance(exception, WebSocketUpgradeError):
+    if isinstance(exception, WebSocketUpgradeError):
         raise FirehoseError from exception
-    elif isinstance(exception, FirehoseError):
+    if isinstance(exception, FirehoseError):
         raise exception
 
     raise FirehoseError from exception
@@ -69,8 +70,8 @@ class _WebsocketClientBase:
         base_url: t.Optional[str] = None,
         params: t.Optional[t.Dict[str, t.Any]] = None,
         *,
-        async_version=False,
-    ):
+        async_version: bool = False,
+    ) -> None:
         self._params = params
         self._url = _build_websocket_url(method, base_url)
 
@@ -82,7 +83,9 @@ class _WebsocketClientBase:
         self._on_message_callback: t.Optional[t.Union[OnMessageCallback, AsyncOnMessageCallback]] = None
         self._on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None
 
-    def _get_client(self):
+    def _get_client(
+        self,
+    ) -> t.Union[t.AsyncGenerator['AsyncWebSocketSession', None], t.Generator['WebSocketSession', None, None]]:
         if self._async_version:
             return aconnect_ws(self._url, params=self._params)
 
@@ -90,7 +93,7 @@ class _WebsocketClientBase:
 
     def _get_reconnection_delay(self) -> int:
         base_sec = 2**self._reconnect_no
-        rand_sec = random.uniform(-0.5, 0.5)
+        rand_sec = random.uniform(-0.5, 0.5)  # noqa: S311
 
         return min(base_sec, self._max_reconnect_delay_sec) + rand_sec
 
@@ -98,7 +101,7 @@ class _WebsocketClientBase:
         frame = Frame.from_bytes(data)
         if frame.is_error:
             raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
-        elif frame.is_message:
+        if frame.is_message:
             self._process_message_frame(frame)
         else:
             raise FirehoseError('Unknown frame type')
@@ -117,7 +120,7 @@ class _WebsocketClientBase:
         Returns:
             :obj:`None`
         """
-        raise NotImplemented
+        raise NotImplementedError
 
     def stop(self) -> None:
         """Unsubscribe and stop Firehose client.
@@ -125,14 +128,16 @@ class _WebsocketClientBase:
         Returns:
             :obj:`None`
         """
-        raise NotImplemented
+        raise NotImplementedError
 
     def _process_message_frame(self, frame: 'MessageFrame') -> None:
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class _WebsocketClient(_WebsocketClientBase):
-    def __init__(self, method: str, base_url: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None):
+    def __init__(
+        self, method: str, base_url: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
+    ) -> None:
         super().__init__(method, base_url, params)
 
         self._stop_lock = threading.Lock()
@@ -140,11 +145,11 @@ class _WebsocketClient(_WebsocketClientBase):
     def _process_message_frame(self, frame: 'MessageFrame') -> None:
         try:
             self._on_message_callback(frame)
-        except Exception as e:  # noqa
+        except Exception as e:  # noqa: BLE001
             if self._on_callback_error_callback:
                 try:
                     self._on_callback_error_callback(e)
-                except Exception:  # noqa
+                except:  # noqa
                     traceback.print_exc()
             else:
                 traceback.print_exc()
@@ -168,7 +173,7 @@ class _WebsocketClient(_WebsocketClientBase):
                     while not self._stop_lock.locked():
                         raw_frame = client.receive_bytes()
                         self._process_raw_frame(raw_frame)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 self._reconnect_no += 1
 
                 should_stop = _handle_firehose_error_or_stop(e)
@@ -177,13 +182,15 @@ class _WebsocketClient(_WebsocketClientBase):
 
         self._stop_lock.release()
 
-    def stop(self):
+    def stop(self) -> None:
         if not self._stop_lock.locked():
             self._stop_lock.acquire()
 
 
 class _AsyncWebsocketClient(_WebsocketClientBase):
-    def __init__(self, method: str, base_url: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None):
+    def __init__(
+        self, method: str, base_url: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
+    ) -> None:
         super().__init__(method, base_url, params, async_version=True)
 
         self._loop = asyncio.get_event_loop()
@@ -201,7 +208,7 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
 
             try:
                 self._on_callback_error_callback(task.exception())
-            except Exception:  # noqa
+            except:  # noqa
                 traceback.print_exc()
 
     def _process_message_frame(self, frame: 'MessageFrame') -> None:
@@ -228,7 +235,7 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
                     while not self._stop_lock.locked():
                         raw_frame = await client.receive_bytes()
                         self._process_raw_frame(raw_frame)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 self._reconnect_no += 1
 
                 should_stop = _handle_firehose_error_or_stop(e)
@@ -237,7 +244,7 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
 
         self._stop_lock.release()
 
-    async def stop(self):
+    async def stop(self) -> None:
         if not self._stop_lock.locked():
             await self._stop_lock.acquire()
 

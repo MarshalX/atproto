@@ -10,7 +10,7 @@ class AsyncClientRaw(AsyncClientBase):
     com: 'async_ns.ComNamespace'
     bsky: 'async_ns.BskyNamespace'
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.com = async_ns.ComNamespace(self)

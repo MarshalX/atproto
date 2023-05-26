@@ -1,8 +1,8 @@
 import typing as t
 from io import BytesIO
 
-from .. import cbor, leb128
-from ..cid import CID
+from atproto import cbor, leb128
+from atproto.cid import CID
 
 Blocks = t.Dict[CID, dict]
 
@@ -12,12 +12,12 @@ class CAR:
 
     _CID_V1_BYTES_LEN = 36
 
-    def __init__(self, root: str, blocks: Blocks):
+    def __init__(self, root: str, blocks: Blocks) -> None:
         self._root = root
         self._blocks = blocks
 
     @property
-    def root(self):
+    def root(self) -> str:
         """Get root."""
         return self._root
 

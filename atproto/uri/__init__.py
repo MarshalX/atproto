@@ -24,7 +24,7 @@ class AtUri:
         Record Field: at://alice.host.com/io.example.song/3yI5-c1z-cc2p-1a#/title
     """
 
-    def __init__(self, host: str, pathname: str, hash_: str, search_params: t.List[t.Tuple[str, t.Any]]):
+    def __init__(self, host: str, pathname: str, hash_: str, search_params: t.List[t.Tuple[str, t.Any]]) -> None:
         self.host = host
         self.pathname = pathname
         self.hash = hash_
@@ -64,7 +64,7 @@ class AtUri:
         return ''
 
     @property
-    def http(self):
+    def http(self) -> str:
         """Convert instance to HTTP URI."""
         return str(self)
 
@@ -93,24 +93,11 @@ class AtUri:
 
         return f'at://{self.host}{path}{query}{hash_}'
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(str(self))
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if isinstance(other, AtUri):
             return hash(self) == hash(other)
 
         return False
-
-
-if __name__ == '__main__':
-    test_uri = 'at://did:plc:poqvcn9iqfkgukdvqvb2qzba/app.bsky.feed.post/1jlmwihiomm9m'
-
-    at_uri = AtUri.from_str(test_uri)
-    at_uri2 = AtUri.from_str(test_uri)
-
-    assert at_uri == at_uri2
-
-    print(at_uri)
-    print(at_uri.rkey)
-    print(at_uri.collection)

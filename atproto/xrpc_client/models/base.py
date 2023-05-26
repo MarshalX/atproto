@@ -5,7 +5,7 @@ from atproto.exceptions import ModelFieldNotFoundError
 
 @dataclass
 class ModelBase:
-    def __getitem__(self, item):
+    def __getitem__(self, item: str):
         if hasattr(self, item):
             return getattr(self, item)
 

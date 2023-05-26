@@ -46,8 +46,8 @@ _LEX_PRIMITIVE_TYPE_TO_CLASS = {
 def _lex_definition_type_hook(data: dict) -> models.LexDefinition:
     try:
         definition_class = _LEX_DEFINITION_TYPE_TO_CLASS[models.LexDefinitionType(data['type'])]
-    except (ValueError, KeyError):
-        raise UnknownDefinitionTypeError('Unknown definition type ' + data['type'])
+    except (ValueError, KeyError) as e:
+        raise UnknownDefinitionTypeError('Unknown definition type ' + data['type']) from e
 
     return lexicon_parse(data, definition_class)
 
@@ -55,8 +55,8 @@ def _lex_definition_type_hook(data: dict) -> models.LexDefinition:
 def _lex_primitive_type_hook(data: dict) -> models.LexPrimitive:
     try:
         primitive_class = _LEX_PRIMITIVE_TYPE_TO_CLASS[models.LexPrimitiveType(data['type'])]
-    except (ValueError, KeyError):
-        raise UnknownPrimitiveTypeError('Unknown primitive type ' + data['type'])
+    except (ValueError, KeyError) as e:
+        raise UnknownPrimitiveTypeError('Unknown primitive type ' + data['type']) from e
 
     return lexicon_parse(data, primitive_class)
 
@@ -64,8 +64,10 @@ def _lex_primitive_type_hook(data: dict) -> models.LexPrimitive:
 _TYPE_HOOKS = {models.LexDefinition: _lex_definition_type_hook, models.LexPrimitive: _lex_primitive_type_hook}
 _DEFAULT_DACITE_CONFIG = dacite.Config(cast=[Enum], type_hooks=_TYPE_HOOKS, check_types=_DEBUG)
 
+L = t.TypeVar('L')
 
-def lexicon_parse(data: dict, data_class=None):
+
+def lexicon_parse(data: dict, data_class: t.Optional[t.Type[L]] = None) -> t.Union[L, models.LexiconDoc]:
     if not data_class:
         data_class = models.LexiconDoc
 
@@ -77,7 +79,7 @@ def lexicon_parse_file(lexicon_path: t.Union[Path, str], *, soft_fail: bool = Fa
         with open(lexicon_path, 'r', encoding='UTF-8') as f:
             plain_lexicon = json.loads(f.read())
             return lexicon_parse(plain_lexicon)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         if soft_fail:
             return None
 
@@ -101,9 +103,3 @@ def lexicon_parse_dir(path: t.Union[Path, str] = None, *, soft_fail: bool = Fals
                 parsed_lexicons.append(parsed_lexicon)
 
     return parsed_lexicons
-
-
-if __name__ == '__main__':
-    lex = lexicon_parse_file(_PATH_TO_LEXICONS.joinpath('app.bsky.actor.profile.json'))
-    all_lex = lexicon_parse_dir(_PATH_TO_LEXICONS)
-    print('Done')

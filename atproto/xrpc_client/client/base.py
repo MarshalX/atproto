@@ -44,7 +44,7 @@ def _handle_kwagrs(kwargs: dict) -> None:
 class ClientBase:
     """Low-level methods are here"""
 
-    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None):
+    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None) -> None:
         if request is None:
             request = Request()
         if base_url is None:
@@ -75,14 +75,13 @@ class ClientBase:
 
         if invoke_type is InvokeType.QUERY:
             return self.request.get(**kwargs)
-        else:
-            return self.request.post(**kwargs)
+        return self.request.post(**kwargs)
 
 
 class AsyncClientBase:
     """Low-level methods are here"""
 
-    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[AsyncRequest] = None):
+    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[AsyncRequest] = None) -> None:
         if request is None:
             request = AsyncRequest()
         if base_url is None:
@@ -113,5 +112,4 @@ class AsyncClientBase:
 
         if invoke_type is InvokeType.QUERY:
             return await self.request.get(**kwargs)
-        else:
-            return await self.request.post(**kwargs)
+        return await self.request.post(**kwargs)

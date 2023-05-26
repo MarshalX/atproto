@@ -14,7 +14,7 @@ class FrameType(Enum):
     ERROR = -1
 
     @classmethod
-    def has_value(cls, value) -> bool:
+    def has_value(cls, value: int) -> bool:
         return value in cls._value2member_map_
 
 
@@ -43,6 +43,32 @@ class ErrorFrameBody:
 
     error: str  #: Code of the error.
     message: Optional[str] = None  #: Description of the error.
+
+
+def parse_frame_header(raw_header: dict) -> FrameHeader:
+    try:
+        header_op = int(raw_header.get('op', 0))
+        if not FrameType.has_value(header_op):
+            raise FirehoseError('Invalid frame type')
+
+        frame_type = FrameType(header_op)
+        if frame_type is FrameType.MESSAGE:
+            return get_or_create_model(raw_header, MessageFrameHeader)
+        return get_or_create_model(raw_header, ErrorFrameHeader)
+    except (ValueError, AtProtocolError) as e:
+        raise FirehoseError('Invalid frame header') from e
+
+
+def parse_frame(header: FrameHeader, raw_body: dict) -> Union['ErrorFrame', 'MessageFrame']:
+    try:
+        if isinstance(header, ErrorFrameHeader):
+            body = get_or_create_model(raw_body, ErrorFrameBody)
+            return ErrorFrame(header, body)
+        if isinstance(header, MessageFrameHeader):
+            return MessageFrame(header, raw_body)
+        raise FirehoseError('Invalid frame type')
+    except AtProtocolError as e:
+        raise FirehoseError('Invalid frame body') from e
 
 
 @dataclass
@@ -100,29 +126,8 @@ class Frame:
         if raw_body is None:
             raise FirehoseError('Frame body not found')
 
-        try:
-            header_op = int(raw_header.get('op', 0))
-            if not FrameType.has_value(header_op):
-                raise FirehoseError('Invalid frame type')
-
-            frame_type = FrameType(header_op)
-            if frame_type is FrameType.MESSAGE:
-                header = get_or_create_model(raw_header, MessageFrameHeader)
-            else:
-                header = get_or_create_model(raw_header, ErrorFrameHeader)
-        except (ValueError, AtProtocolError):
-            raise FirehoseError('Invalid frame header')
-
-        try:
-            if isinstance(header, ErrorFrameHeader):
-                body = get_or_create_model(raw_body, ErrorFrameBody)
-                return ErrorFrame(header, body)
-            elif isinstance(header, MessageFrameHeader):
-                return MessageFrame(header, raw_body)
-            else:
-                raise FirehoseError('Invalid frame type')
-        except AtProtocolError:
-            raise FirehoseError('Invalid frame body')
+        header = parse_frame_header(raw_header)
+        return parse_frame(header, raw_body)
 
 
 @dataclass

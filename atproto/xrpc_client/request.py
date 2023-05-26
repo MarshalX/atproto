@@ -33,10 +33,10 @@ def _parse_response(response: httpx.Response) -> Response:
 def _handle_request_errors(exception: Exception) -> None:
     try:
         raise exception
-    except httpx.TimeoutException:
-        raise exceptions.InvokeTimeoutError()
-    except httpx.NetworkError:
-        raise exceptions.NetworkError()
+    except httpx.TimeoutException as e:
+        raise exceptions.InvokeTimeoutError from e
+    except httpx.NetworkError as e:
+        raise exceptions.NetworkError from e
     # TODO(MarshalX): add more exceptions
 
 
@@ -56,18 +56,18 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
 
     if response.status_code in {401, 403}:
         raise exceptions.UnauthorizedError(error_response)
-    elif response.status_code == 400:
+    if response.status_code == 400:
         raise exceptions.BadRequestError(error_response)
-    elif response.status_code in {409, 413, 502}:
+    if response.status_code in {409, 413, 502}:
         raise exceptions.NetworkError(error_response)
-    else:
-        raise exceptions.RequestException(error_response)
+
+    raise exceptions.RequestException(error_response)
 
 
 class RequestBase:
-    MANDATORY_HEADERS = {'User-Agent': f'atproto/alpha (Python SDK)'}
+    MANDATORY_HEADERS = {'User-Agent': 'atproto/alpha (Python SDK)'}
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._additional_headers: dict = {}
 
     def get_headers(self, additional_headers: t.Optional[dict] = None) -> dict:
@@ -88,20 +88,20 @@ class RequestBase:
 class Request(RequestBase):
     """Class for handling requests errors and working with httpx"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._client = httpx.Client()
 
-    def _send_request(self, method: str, url: str, *args, **kwargs) -> httpx.Response:
+    def _send_request(self, method: str, url: str, **kwargs) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers'))
 
         try:
-            response = self._client.request(method=method, url=url, headers=headers, *args, **kwargs)
+            response = self._client.request(method=method, url=url, headers=headers, **kwargs)
             return _handle_response(response)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             _handle_request_errors(e)
 
-    def close(self):
+    def close(self) -> None:
         self._client.close()
 
     def get(self, *args, **kwargs) -> Response:
@@ -114,20 +114,20 @@ class Request(RequestBase):
 class AsyncRequest(RequestBase):
     """Class for handling requests errors and working with httpx"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._client = httpx.AsyncClient()
 
-    async def _send_request(self, method: str, url: str, *args, **kwargs) -> httpx.Response:
+    async def _send_request(self, method: str, url: str, **kwargs) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers'))
 
         try:
-            response = await self._client.request(method=method, url=url, headers=headers, *args, **kwargs)
+            response = await self._client.request(method=method, url=url, headers=headers, **kwargs)
             return _handle_response(response)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             _handle_request_errors(e)
 
-    async def close(self):
+    async def close(self) -> None:
         await self._client.aclose()
 
     async def get(self, *args, **kwargs) -> Response:

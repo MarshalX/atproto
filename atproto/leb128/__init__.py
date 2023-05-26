@@ -16,7 +16,9 @@ class _U:
     @staticmethod
     def encode(i: int) -> bytearray:
         """Encode the int i using unsigned leb128 and return the encoded bytearray."""
-        assert i >= 0
+        if i < 0:
+            raise ValueError
+
         r = []
         while True:
             byte = i & 0x7F

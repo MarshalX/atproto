@@ -38,10 +38,10 @@ LexDB = t.Dict[NSID, LexDefs]
 class _LexiconDir:
     dir_path: t.Optional[Path]
 
-    def __init__(self, default_path: Path = None):
+    def __init__(self, default_path: Path = None) -> None:
         self.dir_path = default_path
 
-    def set(self, path: Path):
+    def set(self, path: Path) -> None:
         self.dir_path = path
 
     def get(self) -> Path:

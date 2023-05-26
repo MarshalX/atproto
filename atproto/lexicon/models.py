@@ -14,7 +14,7 @@ class LexDefinitionType(Enum):
     SUBSCRIPTION = 'subscription'
 
     PARAMS = 'params'
-    TOKEN = 'token'
+    TOKEN = 'token'  # noqa: S105
     OBJECT = 'object'
 
     BLOB = 'blob'

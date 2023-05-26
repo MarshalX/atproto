@@ -6,7 +6,7 @@ from pathlib import Path
 from atproto.nsid import NSID
 
 DISCLAIMER = [
-    '# THIS IS THE AUTO-GENERATED CODE. DON\'T EDIT IT BY HANDS!',
+    "# THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!",
     '# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.',
     '# This file is part of Python atproto SDK. Licenced under MIT.',
 ]
@@ -20,8 +20,11 @@ OUTPUT_MODEL = 'Response'
 
 
 def format_code(filepath: Path) -> None:
-    subprocess.run(['black', '--quiet', filepath])
-    subprocess.run(['isort', '--quiet', filepath])
+    if not isinstance(filepath, Path):
+        return
+
+    subprocess.run(['ruff', '--quiet', '--fix', filepath])  # noqa: S603, S607
+    subprocess.run(['black', '--quiet', filepath])  # noqa: S603, S607
 
 
 def append_code(filepath: Path, code: str) -> None:
@@ -53,8 +56,7 @@ def get_import_path_old(nsid: NSID) -> str:
 
 def get_import_path(nsid: NSID) -> str:
     nsid_parts = nsid.segments[:-1] + camel_case_split(nsid.name)
-    alias_name = ''.join([p.capitalize() for p in nsid_parts])
-    return alias_name
+    return ''.join([p.capitalize() for p in nsid_parts])
 
 
 def convert_camel_case_to_snake_case(string: str) -> str:
@@ -96,8 +98,8 @@ def get_sync_async_keywords(*, sync: bool) -> t.Tuple[str, str]:
 
 def capitalize_first_symbol(string: str) -> str:
     if string and string[0].islower():
-        chars = [c for c in string[1:]]
+        chars = list(string[1:])
         chars.insert(0, string[0].upper())
-        string = ''.join(chars)
+        return ''.join(chars)
 
     return string

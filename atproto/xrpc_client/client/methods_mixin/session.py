@@ -35,4 +35,4 @@ class SessionMethodsMixin:
         return {'Authorization': f'Bearer {token}'}
 
     def _set_auth_headers(self, token: str) -> None:
-        self.request.set_additional_headers(self._get_auth_headers(token))  # noqa
+        self.request.set_additional_headers(self._get_auth_headers(token))
