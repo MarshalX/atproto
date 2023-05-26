@@ -15,13 +15,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.label.subscribeLabels`.
+    """Parameters model for :obj:`com.atproto.label.subscribeLabels`."""
 
-    Attributes:
-        cursor: The last known event to backfill from.
-    """
-
-    cursor: t.Optional[int] = None
+    cursor: t.Optional[int] = None  #: The last known event to backfill from.
 
 
 @dataclass

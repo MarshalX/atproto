@@ -5,22 +5,16 @@
 ##################################################################
 
 
+import typing as t
 from dataclasses import dataclass
 
+from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
-
-
-@dataclass
-class Params(base.ParamsModelBase):
-
-    """Parameters model for :obj:`com.atproto.identity.resolveHandle`."""
-
-    handle: str  #: The handle to resolve.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.identity.resolveHandle`."""
+    """Output data model for :obj:`app.bsky.unspecced.getPopularFeedGenerators`."""
 
-    did: str  #: Did.
+    feeds: t.List['models.AppBskyFeedDefs.GeneratorView']  #: Feeds.

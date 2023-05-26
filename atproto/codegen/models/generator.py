@@ -462,7 +462,7 @@ def _generate_init_files(root_package_path: Path) -> None:
             if dir_name.startswith('__'):
                 continue
 
-            import_parts = root.parts[root.joinpath(dir_name).parts.index(_MODELS_OUTPUT_DIR.name) :]
+            import_parts = root.parts[root.joinpath(dir_name).parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
             from_import = '.'.join(import_parts)
 
             if dir_name in {'app', 'com'}:
@@ -474,7 +474,7 @@ def _generate_init_files(root_package_path: Path) -> None:
             if file_name.startswith('__'):
                 continue
 
-            import_parts = root.parts[root.parts.index(_MODELS_OUTPUT_DIR.name) :]
+            import_parts = root.parts[root.parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
             from_import = '.'.join(import_parts)
 
             import_lines.append(f'from atproto.{from_import} import {file_name[:-3]}')
@@ -529,7 +529,7 @@ def _generate_import_aliases(root_package_path: Path):
             if file.startswith('.') or file.startswith('__') or file.endswith('.pyc'):
                 continue
 
-            import_parts = root.parts[root.parts.index(_MODELS_OUTPUT_DIR.name) :]
+            import_parts = root.parts[root.parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
             from_import = '.'.join(import_parts)
 
             nsid_parts = list(root.parts[root.parts.index('models') + 1 :]) + file[:-3].split('_')
