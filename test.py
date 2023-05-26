@@ -12,6 +12,7 @@ from atproto.firehose import (
     FirehoseSubscribeReposClient,
     parse_subscribe_repos_message,
 )
+from atproto.xrpc_client.models.utils import _record_model_type_hook
 
 if t.TYPE_CHECKING:
     from atproto.firehose import MessageFrame
@@ -136,6 +137,34 @@ def test_strange_embed_images_type():
     print(m)
 
 
+def _custom_feed_firehose():
+    client = FirehoseSubscribeReposClient()
+
+    def on_message_handler(message: 'MessageFrame') -> None:
+        commit = parse_subscribe_repos_message(message)
+        car: CAR = commit.blocks # FIXME(MarshalX): wrong type hint. mb don't parse inside parse_subscribe_repos_message
+        for op in commit.ops:
+            if op.action == 'create':
+                if not op.cid:
+                    continue
+
+                record_raw_data = car.blocks.get(op.cid)
+                # TODO(MarshalX): provide high-lvl interface to parse record models
+
+                # FIXME(MarshalX): if the record contains custom fields, method will throw the exception
+                #  for example: atproto.exceptions.UnexpectedFieldError: Main got an unexpected keyword argument 'via'
+                #  it's expected behaviour because custom record should be plain dict
+                #  but the code should not raise the exception ig
+                record = _record_model_type_hook(record_raw_data)
+                print(record)
+
+                # TODO(MarshalX): provide high-lvl methods to check is it like, post, etc
+                if record._type == 'app.bsky.feed.like':
+                    print('Like!')
+
+    client.start(on_message_handler)
+
+
 def _main_firehose_test():
     client = FirehoseSubscribeReposClient()
     # client = FirehoseSubscribeLabelsClient()
@@ -191,5 +220,6 @@ if __name__ == '__main__':
     # sync_main()
     # asyncio.get_event_loop().run_until_complete(main())
 
-    _main_firehose_test()
+    _custom_feed_firehose()
+    # _main_firehose_test()
     # asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())
