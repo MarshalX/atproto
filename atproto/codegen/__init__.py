@@ -23,8 +23,8 @@ def format_code(filepath: Path) -> None:
     if not isinstance(filepath, Path):
         return
 
-    subprocess.run(['black', '--quiet', filepath])  # noqa: S603, S607
     subprocess.run(['ruff', '--quiet', '--fix', filepath])  # noqa: S603, S607
+    subprocess.run(['black', '--quiet', filepath])  # noqa: S603, S607
 
 
 def append_code(filepath: Path, code: str) -> None:
