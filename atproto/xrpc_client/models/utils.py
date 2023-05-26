@@ -24,6 +24,7 @@ M = t.TypeVar('M')
 
 
 def _record_model_type_hook(data: dict) -> RecordModelBase:
+    # used for inner Record types
     record_type = data.pop('$type')
     return get_or_create_model(data, RECORD_TYPE_TO_MODEL_CLASS[record_type])
 
@@ -43,9 +44,19 @@ _TYPE_HOOKS = {
 _DACITE_CONFIG = Config(cast=[Enum], type_hooks=_TYPE_HOOKS)
 
 
-def get_or_create_model(model_data: t.Union[dict], model: t.Type[M]) -> t.Optional[M]:
+def get_or_create_model(model_data: t.Union[dict], model: t.Type[M] = None) -> t.Optional[M]:
+    # TODO(MarshalX): add "strict" arg. If not strict return model_data on exception
     if model_data is None:
         return None
+
+    if model is None:
+        # resolve model by $type and try to parse
+        # resolves only Records
+        record_type = model_data.pop('$type')
+        if not record_type or record_type not in RECORD_TYPE_TO_MODEL_CLASS:
+            return None
+
+        return get_or_create_model(model_data, RECORD_TYPE_TO_MODEL_CLASS[record_type])
 
     if isinstance(model_data, model):
         return model_data
@@ -121,3 +132,14 @@ def is_json(json_data: t.Union[str, bytes]) -> bool:
         return True
     except:  # noqa
         return False
+
+
+def is_record_type(model: t.Union[ModelBase, dict], types_module) -> bool:
+    if isinstance(model, RecordModelBase) and hasattr(types_module, 'Main'):
+        # for now records in Main. could be broken late
+        if isinstance(model, dict):  # custom record
+            return types_module.Main._type == model.get('$type')
+
+        return types_module.Main._type == model._type
+
+    return False

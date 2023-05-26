@@ -19,12 +19,17 @@ INPUT_MODEL = 'Data'
 OUTPUT_MODEL = 'Response'
 
 
-def format_code(filepath: Path) -> None:
+def format_code(filepath: Path, quiet: bool = True) -> None:
     if not isinstance(filepath, Path):
         return
 
-    subprocess.run(['ruff', '--quiet', '--fix', filepath])  # noqa: S603, S607
-    subprocess.run(['black', '--quiet', filepath])  # noqa: S603, S607
+    quiet_option = '--quiet'
+    if not quiet:
+        quiet_option = ''
+
+    # FIXME(MarshalX): doesn't work well with not-project dir
+    subprocess.run(['ruff', quiet_option, '--fix', filepath])  # noqa: S603, S607
+    subprocess.run(['black', quiet_option, filepath])  # noqa: S603, S607
 
 
 def append_code(filepath: Path, code: str) -> None:

@@ -528,6 +528,7 @@ def _generate_import_aliases(root_package_path: Path) -> None:
     # from xrpc_client.models.app.bsky.actor import defs as AppBskyActorDefs # noqa: ERA001
 
     import_lines = []
+    ids_db = ['class _Ids:']
     for root, __, files in os.walk(root_package_path):
         root = Path(root)
 
@@ -543,10 +544,18 @@ def _generate_import_aliases(root_package_path: Path) -> None:
             import_parts = root.parts[root.parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
             from_import = '.'.join(import_parts)
 
-            nsid_parts = list(root.parts[root.parts.index('models') + 1 :]) + file[:-3].split('_')
-            alias_name = ''.join([p.capitalize() for p in nsid_parts])
+            nsid_parts = list(root.parts[root.parts.index('models') + 1 :])
+            method_name_parts = file[:-3].split('_')
+            alias_name = ''.join([p.capitalize() for p in [*nsid_parts, *method_name_parts]])
+
+            camel_case_method_name = method_name_parts[0] + ''.join(ele.title() for ele in method_name_parts[1:])
+            method_path = f"{'.'.join(nsid_parts)}.{camel_case_method_name}"
+            ids_db.append(f"{_(1)}{alias_name}: str = '{method_path}'")
 
             import_lines.append(f'from atproto.{from_import} import {file[:-3]} as {alias_name}')
+
+    ids_db.append('ids = _Ids()')
+    import_lines.extend(ids_db)
 
     write_code(_MODELS_OUTPUT_DIR.joinpath('__init__.py'), join_code(import_lines))
 

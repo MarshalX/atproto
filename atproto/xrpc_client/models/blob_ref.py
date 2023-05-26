@@ -17,7 +17,7 @@ class BlobRef:
         return cls(
             blob_type=data['$type'],
             mime_type=data['mimeType'],
-            ref=data['ref']['$link'],
+            ref=data['ref']['$link'],  # 'FIXME(MarshalX): 'CID' object is not subscriptable
             size=int(data['size']),
         )
 

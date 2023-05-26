@@ -1,6 +1,5 @@
 import typing as t
 
-from atproto import CAR
 from atproto.firehose.client import AsyncFirehoseClient, FirehoseClient
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models.utils import get_or_create_model
@@ -37,7 +36,7 @@ SubscribeLabelsMessage = t.Union[
 ]
 
 
-def parse_subscribe_repos_message(message: 'MessageFrame', *, decode_inner_cbor: bool = True) -> SubscribeReposMessage:
+def parse_subscribe_repos_message(message: 'MessageFrame') -> SubscribeReposMessage:
     """Parse Firehose repositories message to the corresponding model.
 
     Note:
@@ -45,18 +44,12 @@ def parse_subscribe_repos_message(message: 'MessageFrame', *, decode_inner_cbor:
 
     Args:
         message: Message frame.
-        decode_inner_cbor: Decode DAG-CBOR inside models.
 
     Returns:
         :obj:`SubscribeReposMessage`: Corresponding message model.
     """
     model_class = _SUBSCRIBE_REPOS_MESSAGE_TYPE_TO_MODEL[message.type]
-    model_instance = get_or_create_model(message.body, model_class)
-
-    if decode_inner_cbor and isinstance(model_instance, models.ComAtprotoSyncSubscribeRepos.Commit):
-        model_instance.blocks = CAR.from_bytes(model_instance.blocks)
-
-    return model_instance
+    return get_or_create_model(message.body, model_class)
 
 
 def parse_subscribe_labels_message(message: 'MessageFrame') -> SubscribeLabelsMessage:
