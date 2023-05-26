@@ -1,4 +1,4 @@
-from atproto.nsid import validate_nsid, NSID
+from atproto.nsid import NSID, validate_nsid
 
 
 def test_nsid_from_str():
