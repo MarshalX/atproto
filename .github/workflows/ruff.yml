@@ -15,9 +15,6 @@ jobs:
         with:
           python-version: 3.7
 
-      - name: Install dependencies.
-        run: pip install black
-
       - name: Run linter check on package.
         uses: chartboost/ruff-action@v1
         with:
