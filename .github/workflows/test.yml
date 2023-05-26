@@ -7,19 +7,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository.
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Set up Python.
         uses: actions/setup-python@v4
         with:
           python-version: '3.7'
 
-      - name: Setup Poetry
+      - name: Setup Poetry.
         uses: snok/install-poetry@v1
 
-      - name: Install dependencies
+      - name: Install dependencies.
         run: poetry install
 
-      - name: Run Tests
+      - name: Run Tests.
         run: poetry run pytest
