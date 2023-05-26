@@ -31,6 +31,10 @@ classifiers = [
 "Author" = "https://github.com/MarshalX"
 "Tracker" = "https://github.com/MarshalX/atproto/issues"
 
+[tool.poetry.scripts]
+atp = "atproto.cli:atproto_cli"
+atproto = "atproto.cli:atproto_cli"
+
 [tool.poetry.dependencies]
 python = ">=3.7,<3.12"
 httpx = ">=0.24.0,<0.25.0"
@@ -40,6 +44,7 @@ typing-extensions = ">=4.5.0,<4.6.0"
 dag-cbor = ">=0.3.2,<0.4.0"
 pyjwt = ">=2.7.0,<2.8.0"
 httpx-ws = ">=0.3.1,<0.4.0"
+click = ">=8.1.3,<8.2.0"
 
 [tool.poetry.dev-dependencies]
 
@@ -53,8 +58,8 @@ sphinx-favicon = "1.0.1"
 furo = "2023.3.27"
 sphinxext-opengraph = "0.8.2"
 
-# poetry self add "poetry-dynamic-versioning[plugin]"
 [tool.poetry-dynamic-versioning]
+# poetry self add "poetry-dynamic-versioning[plugin]"
 enable = true
 strict = true
 bump = true

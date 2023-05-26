@@ -28,7 +28,6 @@ from atproto.lexicon.models import (
 from atproto.nsid import NSID
 
 _NAMESPACES_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('xrpc_client', 'namespaces')
-_NAMESPACES_CLIENT_FILE_PATH = _NAMESPACES_OUTPUT_DIR.joinpath('client', 'raw.py')
 
 _NAMESPACES_SYNC_FILENAME = 'sync_ns.py'
 _NAMESPACES_ASYNC_FILENAME = 'async_ns.py'
@@ -111,7 +110,7 @@ def _get_method_docstring(method_info: MethodInfo) -> str:
 
     doc_string.append(f'{_(2)}Returns:')
 
-    return_type = _get_namespace_method_return_type(method_info)
+    return_type, __ = _get_namespace_method_return_type(method_info)
 
     return_type_desc = 'Output model'
     if return_type == 'bool':
@@ -167,7 +166,7 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
 
     lines.append(f"{_(2)}response = {c}self._client.{method_name}({invoke_args_str})")
 
-    return_type = _get_namespace_method_return_type(method_info)
+    return_type, __ = _get_namespace_method_return_type(method_info)
     lines.append(f"{_(2)}return get_response_model(response, {return_type})")
 
     return join_code(lines)
@@ -247,7 +246,7 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
     return ', '.join(args)
 
 
-def _get_namespace_method_return_type(method_info: MethodInfo) -> str:
+def _get_namespace_method_return_type(method_info: MethodInfo) -> t.Tuple[str, bool]:
     model_name_suffix = ''
     if method_info.definition.output and isinstance(method_info.definition.output.schema, LexRef):
         # fix collisions with type aliases
@@ -255,12 +254,14 @@ def _get_namespace_method_return_type(method_info: MethodInfo) -> str:
         # could be solved by separating models into different folders using segments of NSID
         model_name_suffix = 'Ref'
 
+    is_model = False
     return_type = 'bool'  # return success of response
     if method_info.definition.output:
         # example of methods without response: app.bsky.graph.muteActor, app.bsky.graph.muteActor
+        is_model = True
         return_type = f'models.{get_import_path(method_info.nsid)}.{OUTPUT_MODEL}{model_name_suffix}'
 
-    return return_type
+    return return_type, is_model
 
 
 def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> str:
@@ -268,9 +269,12 @@ def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> s
 
     name = convert_camel_case_to_snake_case(method_info.name)
     args = _get_namespace_method_signature_args(method_info)
-    return_type = _get_namespace_method_return_type(method_info)
+    return_type, is_model = _get_namespace_method_return_type(method_info)
 
-    return f'{_(1)}{d}def {name}({args}) -> {return_type}:'
+    if is_model:
+        return_type = f"'{return_type}'"
+
+    return f"{_(1)}{d}def {name}({args}) -> {return_type}:"
 
 
 def _get_namespace_methods_block(methods_info: t.List[MethodInfo], sync: bool) -> str:
@@ -315,8 +319,20 @@ def _generate_namespace_in_output(namespace_tree: t.Union[dict, list], output: t
             output.append(_get_namespace_methods_block(methods, sync=sync))
 
 
-def generate_namespaces() -> None:
-    namespace_tree = build_namespaces()
+def generate_namespaces(
+    lexicon_dir: t.Optional[Path] = None,
+    output_dir: t.Optional[Path] = None,
+    async_filename: t.Optional[str] = None,
+    sync_filename: t.Optional[str] = None,
+) -> None:
+    if not output_dir:
+        output_dir = _NAMESPACES_OUTPUT_DIR
+    if not async_filename:
+        async_filename = _NAMESPACES_ASYNC_FILENAME
+    if not sync_filename:
+        sync_filename = _NAMESPACES_SYNC_FILENAME
+
+    namespace_tree = build_namespaces(lexicon_dir)
 
     for sync in (True, False):
         generated_code_lines_buffer = []
@@ -324,16 +340,11 @@ def generate_namespaces() -> None:
 
         code = join_code([_get_namespace_imports(), *generated_code_lines_buffer])
 
-        filename = _NAMESPACES_SYNC_FILENAME if sync else _NAMESPACES_ASYNC_FILENAME
-        filepath = _NAMESPACES_OUTPUT_DIR.joinpath(filename)
+        filename = sync_filename if sync else async_filename
+        filepath = output_dir.joinpath(filename)
 
         write_code(filepath, code)
 
     # TODO(MarshalX): generate ClientRaw as root of namespaces
 
-    format_code(_NAMESPACES_OUTPUT_DIR)
-    print('Done')
-
-
-if __name__ == '__main__':
-    generate_namespaces()
+    format_code(output_dir)

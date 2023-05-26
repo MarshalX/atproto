@@ -462,7 +462,7 @@ def _generate_init_files(root_package_path: Path) -> None:
             if dir_name.startswith('__'):
                 continue
 
-            import_parts = root.parts[root.joinpath(dir_name).parts.index('xrpc_client') :]
+            import_parts = root.parts[root.joinpath(dir_name).parts.index(_MODELS_OUTPUT_DIR.name) :]
             from_import = '.'.join(import_parts)
 
             if dir_name in {'app', 'com'}:
@@ -474,7 +474,7 @@ def _generate_init_files(root_package_path: Path) -> None:
             if file_name.startswith('__'):
                 continue
 
-            import_parts = root.parts[root.parts.index('xrpc_client') :]
+            import_parts = root.parts[root.parts.index(_MODELS_OUTPUT_DIR.name) :]
             from_import = '.'.join(import_parts)
 
             import_lines.append(f'from atproto.{from_import} import {file_name[:-3]}')
@@ -529,7 +529,7 @@ def _generate_import_aliases(root_package_path: Path):
             if file.startswith('.') or file.startswith('__') or file.endswith('.pyc'):
                 continue
 
-            import_parts = root.parts[root.parts.index('xrpc_client') :]
+            import_parts = root.parts[root.parts.index(_MODELS_OUTPUT_DIR.name) :]
             from_import = '.'.join(import_parts)
 
             nsid_parts = list(root.parts[root.parts.index('models') + 1 :]) + file[:-3].split('_')
@@ -540,7 +540,15 @@ def _generate_import_aliases(root_package_path: Path):
     write_code(_MODELS_OUTPUT_DIR.joinpath('__init__.py'), join_code(import_lines))
 
 
-def generate_models():
+def generate_models(lexicon_dir: t.Optional[Path] = None, output_dir: t.Optional[Path] = None):
+    if lexicon_dir:
+        builder.lexicon_dir.set(lexicon_dir)
+
+    if output_dir:
+        # TODO(MarshalX): Temp hack for CLI. Pass output_dir everywhere.
+        global _MODELS_OUTPUT_DIR
+        _MODELS_OUTPUT_DIR = output_dir
+
     _generate_params_models(builder.build_params_models())
     _generate_data_models(builder.build_data_models())
     _generate_response_models(builder.build_response_models())
@@ -556,9 +564,3 @@ def generate_models():
     _generate_import_aliases(_MODELS_OUTPUT_DIR)
 
     format_code(_MODELS_OUTPUT_DIR)
-
-    print('Done')
-
-
-if __name__ == '__main__':
-    generate_models()
