@@ -113,7 +113,6 @@ def main():
     print('- Codegen namespaces (poetry run atp gen namespaces)')
     print('- Codegen async version (poetry run atp gen async)')
 
-    print('- Delete unused imports in generated code (I use built-in feature in IntelliJ IDEA)')
     print('- Run ruff (poetry run ruff .)')
     print('- Run black (poetry run black .)')
 
