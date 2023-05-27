@@ -238,7 +238,7 @@ async def _main_async_firehose_test():
     # client = AsyncFirehoseSubscribeLabelsClient()
 
     async def on_message_handler(message: 'MessageFrame') -> None:
-        print('Message', message.header, parse_subscribe_repos_message(message, decode_inner_cbor=False))
+        print('Message', message.header, parse_subscribe_repos_message(message))
         # raise RuntimeError('kek')
         await asyncio.sleep(0.1)
 
