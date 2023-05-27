@@ -5,6 +5,7 @@ from threading import Lock
 from atproto.xrpc_client import models
 from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin
 from atproto.xrpc_client.client.raw import ClientRaw
+from atproto.xrpc_client.models import ids
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client.client.auth import JwtPayload
@@ -111,7 +112,7 @@ class Client(ClientRaw, SessionMethodsMixin):
         return self.com.atproto.repo.create_record(
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=repo,
-                collection='app.bsky.feed.post',
+                collection=ids.AppBskyFeedPost,
                 record=models.AppBskyFeedPost.Main(
                     createdAt=datetime.now().isoformat(), text=text, reply=reply_to, embed=embed
                 ),
@@ -170,7 +171,7 @@ class Client(ClientRaw, SessionMethodsMixin):
         return self.com.atproto.repo.create_record(
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
-                collection='app.bsky.feed.like',
+                collection=ids.AppBskyFeedLike,
                 record=models.AppBskyFeedLike.Main(createdAt=datetime.now().isoformat(), subject=subject),
             )
         )
@@ -195,7 +196,7 @@ class Client(ClientRaw, SessionMethodsMixin):
 
         return self.com.atproto.repo.delete_record(
             models.ComAtprotoRepoDeleteRecord.Data(
-                collection='app.bsky.feed.like',
+                collection=ids.AppBskyFeedLike,
                 repo=repo,
                 rkey=record_key,
             )
@@ -229,7 +230,7 @@ class Client(ClientRaw, SessionMethodsMixin):
         return self.com.atproto.repo.create_record(
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=repo,
-                collection='app.bsky.feed.repost',
+                collection=ids.AppBskyFeedRepost,
                 record=models.AppBskyFeedRepost.Main(
                     createdAt=datetime.now().isoformat(),
                     subject=subject,
@@ -257,7 +258,7 @@ class Client(ClientRaw, SessionMethodsMixin):
 
         return self.com.atproto.repo.delete_record(
             models.ComAtprotoRepoDeleteRecord.Data(
-                collection='app.bsky.feed.post',
+                collection=ids.AppBskyFeedPost,
                 repo=repo,
                 rkey=post_rkey,
             )
