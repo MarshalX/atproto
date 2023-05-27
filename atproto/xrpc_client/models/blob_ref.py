@@ -14,10 +14,12 @@ class BlobRef:
 
     @classmethod
     def from_dict(cls, data: dict) -> 'BlobRef':
+        ref = data['ref'].encode('base58btc') if isinstance(data['ref'], CID) else data['ref']['$link']
+
         return cls(
             blob_type=data['$type'],
             mime_type=data['mimeType'],
-            ref=data['ref']['$link'],  # 'FIXME(MarshalX): 'CID' object is not subscriptable
+            ref=ref,
             size=int(data['size']),
         )
 

@@ -49,7 +49,7 @@ def _get_namespace_imports() -> str:
         'import typing as t',
         '',
         'from atproto.xrpc_client import models',
-        'from atproto.xrpc_client.models.utils import get_or_create_model, get_response_model',
+        'from atproto.xrpc_client.models.utils import get_or_create, get_response_model',
         'from atproto.xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase',
     ]
 
@@ -136,7 +136,7 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
 
     def _override_arg_line(name: str, model_name: str) -> str:
         model_path = f'models.{get_import_path(method_info.nsid)}.{model_name}'
-        return f'{_(2)}{name} = get_or_create_model({name}, {model_path})'
+        return f'{_(2)}{name} = get_or_create({name}, {model_path})'
 
     invoke_args = [f"'{method_info.nsid}'"]
 

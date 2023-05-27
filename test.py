@@ -13,7 +13,7 @@ from atproto.firehose import (
     parse_subscribe_repos_message,
 )
 from atproto.xrpc_client.models import ids
-from atproto.xrpc_client.models.utils import get_or_create_model, is_record_type
+from atproto.xrpc_client.models.utils import get_or_create, is_record_type
 
 if t.TYPE_CHECKING:
     from atproto.firehose import MessageFrame
@@ -51,9 +51,6 @@ def sync_main():
     car_file = CAR.from_bytes(repo)
     print(car_file.root)
     print(car_file.blocks)
-
-    # res = client.com.atproto.repo.get_record(...)     # implement by yourself
-    # also you need to parse "res.value" as profile record using  get_or_create_model method
 
     # search_result = client.bsky.actor.search_actors_typeahead({'term': 'marshal'})
     # for actor in search_result.actors:
@@ -132,9 +129,9 @@ def test_strange_embed_images_type():
         ],
         'createdAt': '2023-03-26T15:36:13.302Z',
     }
-    from atproto.xrpc_client.models.utils import get_or_create_model
+    from atproto.xrpc_client.models.utils import get_or_create
 
-    m = get_or_create_model(d, models.AppBskyFeedPost.Main)
+    m = get_or_create(d, models.AppBskyFeedPost.Main)
     print(m)
 
 
@@ -164,7 +161,8 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict
             if not record_raw_data:
                 continue
 
-            record = get_or_create_model(record_raw_data)
+            # record = get_or_create(record_raw_data)
+            record = get_or_create(record_raw_data, strict=False)
             if uri.collection == ids.AppBskyFeedLike and is_record_type(record, models.AppBskyFeedLike):
                 operation_by_type['likes']['created'].append({'record': record, **create_info})
             elif uri.collection == ids.AppBskyFeedPost and is_record_type(record, models.AppBskyFeedPost):
@@ -204,7 +202,8 @@ def _custom_feed_firehose():
                 posts_to_create.append(post['uri'])
 
         if posts_to_create:
-            print('Posts with M letter:', posts_to_create)
+            ...
+            # print('Posts with M letter:', posts_to_create)
 
     client.start(on_message_handler)
 
