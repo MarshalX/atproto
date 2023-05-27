@@ -1,5 +1,20 @@
 # Change Log
 
+## Version 0.0.10
+
+**27.05.2023**
+
+* Update changelog for v0.0.9 by @MarshalX in https://github.com/MarshalX/atproto/pull/42
+* Add CLI for codegen by @MarshalX in https://github.com/MarshalX/atproto/pull/43
+* Update lexicons fetched from 743eaf1 committed 2023-05-26T00:04:10Z by @MarshalX in https://github.com/MarshalX/atproto/pull/44
+* Add Ruff; init tests; fix code style and type hints by @MarshalX in https://github.com/MarshalX/atproto/pull/45
+* Move docs dependencies to separated group by @MarshalX in https://github.com/MarshalX/atproto/pull/46
+* Fix Ruff for root dir by @MarshalX in https://github.com/MarshalX/atproto/pull/48
+* Update lexicons fetched from c62964b committed 2023-05-26T00:22:05Z by @MarshalX in https://github.com/MarshalX/atproto/pull/49
+* Fix .gitignore by @MarshalX in https://github.com/MarshalX/atproto/pull/50
+* Custom feed generators by @MarshalX in https://github.com/MarshalX/atproto/pull/47
+* Fix firehose params by @MarshalX in https://github.com/MarshalX/atproto/pull/51
+
 ## Version 0.0.9
 
 **25.05.2023**

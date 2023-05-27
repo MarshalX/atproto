@@ -66,7 +66,9 @@ if __name__ == '__main__':
 ```
 </details>
 
-🔥[Firehose data streaming is available!](https://atproto.blue/en/latest/firehose.html)
+🍿 [Example project with custom feed generator](https://github.com/MarshalX/bluesky-feed-generator)
+
+🔥 [Firehose data streaming is available!](https://atproto.blue/en/latest/firehose.html)
 
 ### Introduction
 
