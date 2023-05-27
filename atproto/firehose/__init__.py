@@ -2,7 +2,7 @@ import typing as t
 
 from atproto.firehose.client import AsyncFirehoseClient, FirehoseClient
 from atproto.xrpc_client import models
-from atproto.xrpc_client.models.utils import get_or_create
+from atproto.xrpc_client.models.utils import get_model_as_dict, get_or_create
 
 if t.TYPE_CHECKING:
     from atproto.firehose.models import MessageFrame
@@ -68,12 +68,16 @@ def parse_subscribe_labels_message(message: 'MessageFrame') -> SubscribeLabelsMe
 class FirehoseSubscribeReposClient(FirehoseClient):
     def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None) -> None:
         params = get_or_create(params, models.ComAtprotoSyncSubscribeRepos.Params)
+        if params:
+            params = get_model_as_dict(params)
         super().__init__(method='com.atproto.sync.subscribeRepos', params=params)
 
 
 class AsyncFirehoseSubscribeReposClient(AsyncFirehoseClient):
     def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None) -> None:
         params = get_or_create(params, models.ComAtprotoSyncSubscribeRepos.Params)
+        if params:
+            params = get_model_as_dict(params)
         super().__init__(method='com.atproto.sync.subscribeRepos', params=params)
 
 
