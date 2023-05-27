@@ -119,7 +119,7 @@ ignore = [
 "tests/*.py" = ["S101"]
 "docs/*.py" = ["T201", "INP001", "ERA001"]
 "examples/*.py" = ["T201", "INP001", "ERA001"]
-"atproto/xrpc_client/models/__init__.py" = ["F401"]
+"atproto/xrpc_client/models/__init__.py" = ["F401", "F811"]
 "fetch_new_lexicon.py" = ["T201"]
 "test.py" = ["S101", "ERA001", "T201", "E501", "F401"]
 

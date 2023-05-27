@@ -24,8 +24,9 @@ M = t.TypeVar('M')
 
 
 def _record_model_type_hook(data: dict) -> RecordModelBase:
+    # used for inner Record types
     record_type = data.pop('$type')
-    return get_or_create_model(data, RECORD_TYPE_TO_MODEL_CLASS[record_type])
+    return get_or_create(data, RECORD_TYPE_TO_MODEL_CLASS[record_type])
 
 
 def _decode_cid_hook(ref: t.Union[CID, str]) -> CID:
@@ -43,9 +44,49 @@ _TYPE_HOOKS = {
 _DACITE_CONFIG = Config(cast=[Enum], type_hooks=_TYPE_HOOKS)
 
 
-def get_or_create_model(model_data: t.Union[dict], model: t.Type[M]) -> t.Optional[M]:
+def get_or_create(
+    model_data: t.Union[dict], model: t.Type[M] = None, *, strict: bool = True
+) -> t.Optional[t.Union[M, dict]]:
+    """Get model instance from raw data.
+
+    Note:
+        The record could have custom fields and be custom at all. For example, custom bsky clients add a "via" field
+        to indicate that it was posted using not official client. Such custom types can't be decoded into proper models.
+        You should work with it as with dict. By default, the method raises an exception on custom models.
+        To fallback to dict type disable strict mode using the argument.
+
+    Note:
+        Auto-resolve of model works only with Record type for now.
+
+    Args:
+        model_data: Raw data.
+        model: Class of the model or any another type. If None will be resolved automatically.
+        strict: Fallback to raw data if can't properly parse.
+
+    Returns:
+        Instance of :obj:`model` or :obj:`None` or :obj:`dict` if `strict` is disabled.
+    """
+    try:
+        return _get_or_create(model_data, model, strict=strict)
+    except Exception as e:  # noqa: BLE001
+        if strict:
+            raise e
+
+        return model_data
+
+
+def _get_or_create(model_data: t.Union[dict], model: t.Type[M], *, strict: bool) -> t.Optional[t.Union[M, dict]]:
     if model_data is None:
         return None
+
+    if model is None:
+        # resolve model by $type and try to parse
+        # resolves only Records
+        record_type = model_data.pop('$type')
+        if not record_type or record_type not in RECORD_TYPE_TO_MODEL_CLASS:
+            return None
+
+        return get_or_create(model_data, RECORD_TYPE_TO_MODEL_CLASS[record_type], strict=strict)
 
     if isinstance(model_data, model):
         return model_data
@@ -74,7 +115,7 @@ def get_response_model(response: 'Response', model: t.Type[M]) -> t.Optional[M]:
         # Could not be False? Because the exception with errors will be raised from the server
         return response.success
 
-    return get_or_create_model(response.content, model)
+    return get_or_create(response.content, model)
 
 
 def _handle_dict_key(key: str) -> str:
@@ -121,3 +162,14 @@ def is_json(json_data: t.Union[str, bytes]) -> bool:
         return True
     except:  # noqa
         return False
+
+
+def is_record_type(model: t.Union[ModelBase, dict], types_module) -> bool:
+    if isinstance(model, RecordModelBase) and hasattr(types_module, 'Main'):
+        # for now records in Main. could be broken late
+        if isinstance(model, dict):  # custom record
+            return types_module.Main._type == model.get('$type')
+
+        return types_module.Main._type == model._type
+
+    return False

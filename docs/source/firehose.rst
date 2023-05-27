@@ -23,8 +23,19 @@ More code examples: https://github.com/MarshalX/atproto/tree/main/examples/fireh
 .. note::
     To achieve more performance you could parse only required messages using `message.header` to filter.
 
-.. note::
-    By default :obj:`parse_subscribe_repos_message` and :obj:`parse_subscribe_labels_message` decodes inner DAG-CBOR. Probably you want to decode it only on specific commit to repository. To control this behaviour you can use `decode_inner_cbor` boolean argument.
+By default :obj:`parse_subscribe_repos_message` and :obj:`parse_subscribe_labels_message` doesn't decode inner DAG-CBOR. Probably you want to decode it. To do so use :obj:`atproto.CAR`. Example of message handler with decoding of CAR files (commit blocks):
+
+..  code-block:: python
+
+    from atproto import CAR, models
+
+    def on_message_handler(message) -> None:
+        commit = parse_subscribe_repos_message(message)
+        # we need to be sure that it's commit message with .blocks inside
+        if not isinstance(commit, models.ComAtprotoSyncSubscribeRepos.Commit):
+            return
+
+        car = CAR.from_bytes(commit.blocks)
 
 .. automodule:: atproto.firehose
    :members:

@@ -6,7 +6,7 @@ import httpx
 
 from atproto import exceptions
 from atproto.xrpc_client.models.common import XrpcError
-from atproto.xrpc_client.models.utils import get_or_create_model, is_json
+from atproto.xrpc_client.models.utils import get_or_create, is_json
 
 
 @dataclass
@@ -52,7 +52,7 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
     )
     if response.content and is_json(response.content):
         data = json.loads(response.content)
-        error_response.content = get_or_create_model(data, XrpcError)
+        error_response.content = get_or_create(data, XrpcError)
 
     if response.status_code in {401, 403}:
         raise exceptions.UnauthorizedError(error_response)
