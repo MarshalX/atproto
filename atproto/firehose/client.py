@@ -15,7 +15,7 @@ from httpx_ws import (
     connect_ws,
 )
 
-from atproto.exceptions import FirehoseError
+from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError, FirehoseError
 from atproto.firehose.models import Frame
 from atproto.xrpc_client.models.common import XrpcError
 
@@ -39,8 +39,8 @@ def _build_websocket_url(method: str, base_url: t.Optional[str] = None) -> str:
     return f'{base_url}/{method}'
 
 
-def _handle_firehose_error_or_stop(exception: Exception) -> bool:
-    """Returns if the connection should be properly be closed or reraise exception."""
+def _handle_firehose_error_or_stop(exception: Exception) -> bool:  # noqa: C901
+    """Returns if the connection should be properly being closed or reraise exception."""
 
     if isinstance(exception, WebSocketDisconnect):
         if exception.code == 1000:
@@ -52,6 +52,11 @@ def _handle_firehose_error_or_stop(exception: Exception) -> bool:
     if isinstance(exception, httpx.NetworkError):
         return False
     if isinstance(exception, httpx.TimeoutException):
+        return False
+    if isinstance(exception, (CBORDecodingError, DAGCBORDecodingError)):
+        # FIXME(Marshal): Sometimes firehouse client can't decode CBOR frame.
+        #  Until it's not investigated let's make skip for such frames (it rarely happens)
+        #  https://github.com/MarshalX/atproto/issues/53
         return False
     if isinstance(exception, WebSocketInvalidTypeReceived):
         raise FirehoseError from exception

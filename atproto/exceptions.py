@@ -79,3 +79,11 @@ class InvalidAtUriError(AtProtocolError):
 
 class FirehoseError(AtProtocolError):
     ...
+
+
+class CBORDecodingError(AtProtocolError):
+    ...
+
+
+class DAGCBORDecodingError(AtProtocolError):
+    ...
