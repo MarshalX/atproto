@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 0.0.11
+
+**30.05.2023**
+
+* Update changelog for v0.0.10 by @MarshalX in https://github.com/MarshalX/atproto/pull/52
+* Keep Firehose open on invalid CBOR or DAG-CBOR by @MarshalX in https://github.com/MarshalX/atproto/pull/54
+
 ## Version 0.0.10
 
 **27.05.2023**
