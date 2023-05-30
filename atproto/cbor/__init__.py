@@ -2,6 +2,10 @@ from io import BytesIO
 from typing import List, Union
 
 import dag_cbor as _dag_cbor
+from dag_cbor.decoding import CBORDecodingError as _CBORDecodingError
+from dag_cbor.decoding import DAGCBORDecodingError as _DAGCBORDecodingError
+
+from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError
 
 DagCborData = Union[bytes, bytearray, BytesIO]
 
@@ -27,7 +31,14 @@ def decode_dag(data: DagCborData, *, allow_concat: bool = False, callback=None) 
     Returns:
         :obj:`dag_cbor.IPLDKind`: Decoded DAG-CBOR.
     """
-    return _dag_cbor.decode(data, allow_concat=allow_concat, callback=callback)
+    try:
+        return _dag_cbor.decode(data, allow_concat=allow_concat, callback=callback)
+    except _DAGCBORDecodingError as e:
+        raise DAGCBORDecodingError from e
+    except _CBORDecodingError as e:
+        raise CBORDecodingError from e
+    except Exception as e:
+        raise e
 
 
 def decode_dag_multi(data: DagCborData) -> List[_dag_cbor.IPLDKind]:
