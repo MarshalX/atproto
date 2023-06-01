@@ -5,13 +5,13 @@ from pathlib import Path
 
 from atproto.nsid import NSID
 
-DISCLAIMER = [
+_DISCLAIMER_LINES = [
     "# THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!",
     '# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.',
     '# This file is part of Python atproto SDK. Licenced under MIT.',
 ]
-_MAX_DISCLAIMER_LEN = max([len(s) for s in DISCLAIMER])
-DISCLAIMER = '\n'.join(DISCLAIMER)
+_MAX_DISCLAIMER_LEN = max([len(s) for s in _DISCLAIMER_LINES])
+DISCLAIMER = '\n'.join(_DISCLAIMER_LINES)
 DISCLAIMER = f'{"#" * _MAX_DISCLAIMER_LEN}\n{DISCLAIMER}\n{"#" * _MAX_DISCLAIMER_LEN}\n\n'
 
 PARAMS_MODEL = 'Params'

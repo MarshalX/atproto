@@ -1,5 +1,5 @@
 """
-Original source code: https://github.com/mohanson/leb128
+Original source code: https://github.com/mohanson/leb128 (MIT license)
 
 https://en.wikipedia.org/wiki/LEB128
 
@@ -37,9 +37,9 @@ class _U:
         return r
 
     @staticmethod
-    def decode_reader(r: typing.BinaryIO) -> (int, int):
+    def decode_reader(r: typing.BinaryIO) -> typing.Tuple[int, int]:
         """
-        Decode the unsigned leb128 encoded from a reader, it will return two values, the actual number and the number
+        Decode the unsigned leb128 encoded from a reader, it will return two values, the actual number, and the number
         of bytes read.
         """
         a = bytearray()
@@ -75,9 +75,9 @@ class _I:
         return r
 
     @staticmethod
-    def decode_reader(r: typing.BinaryIO) -> (int, int):
+    def decode_reader(r: typing.BinaryIO) -> typing.Tuple[int, int]:
         """
-        Decode the signed leb128 encoded from a reader, it will return two values, the actual number and the number
+        Decode the signed leb128 encoded from a reader, it will return two values, the actual number, and the number
         of bytes read.
         """
         a = bytearray()

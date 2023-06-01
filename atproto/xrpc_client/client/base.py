@@ -4,6 +4,9 @@ from enum import Enum
 from atproto.xrpc_client.models.utils import get_model_as_dict, get_model_as_json
 from atproto.xrpc_client.request import AsyncRequest, Request, Response
 
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client.models.base import DataModelBase, ParamsModelBase
+
 # TODO(MarshalX): Generate async version automatically!
 
 
@@ -61,12 +64,20 @@ class ClientBase:
         return f'{self._base_url}/{nsid}'
 
     def invoke_query(
-        self, nsid: str, params: t.Optional[dict] = None, data: t.Optional[dict] = None, **kwargs
+        self,
+        nsid: str,
+        params: t.Optional['ParamsModelBase'] = None,
+        data: t.Optional['DataModelBase'] = None,
+        **kwargs,
     ) -> Response:
         return self._invoke(InvokeType.QUERY, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
     def invoke_procedure(
-        self, nsid: str, params: t.Optional[dict] = None, data: t.Optional[dict] = None, **kwargs
+        self,
+        nsid: str,
+        params: t.Optional['ParamsModelBase'] = None,
+        data: t.Optional['DataModelBase'] = None,
+        **kwargs,
     ) -> Response:
         return self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
@@ -98,12 +109,20 @@ class AsyncClientBase:
         return f'{self._base_url}/{nsid}'
 
     async def invoke_query(
-        self, nsid: str, params: t.Optional[dict] = None, data: t.Optional[dict] = None, **kwargs
+        self,
+        nsid: str,
+        params: t.Optional['ParamsModelBase'] = None,
+        data: t.Optional['DataModelBase'] = None,
+        **kwargs,
     ) -> Response:
         return await self._invoke(InvokeType.QUERY, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
     async def invoke_procedure(
-        self, nsid: str, params: t.Optional[dict] = None, data: t.Optional[dict] = None, **kwargs
+        self,
+        nsid: str,
+        params: t.Optional['ParamsModelBase'] = None,
+        data: t.Optional['DataModelBase'] = None,
+        **kwargs,
     ) -> Response:
         return await self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
 

@@ -44,7 +44,7 @@ class _LexiconDir:
     def set(self, path: Path) -> None:
         self.dir_path = path
 
-    def get(self) -> Path:
+    def get(self) -> t.Optional[Path]:
         return self.dir_path
 
 

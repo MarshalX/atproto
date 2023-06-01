@@ -3,6 +3,7 @@ import json
 import typing as t
 from enum import Enum
 
+import typing_extensions as te
 from dacite import Config, exceptions, from_dict
 
 from atproto.cid import CID
@@ -21,6 +22,7 @@ if t.TYPE_CHECKING:
     from atproto.xrpc_client.request import Response
 
 M = t.TypeVar('M')
+ModelData: te.TypeAlias = t.Union[M, dict, None]
 
 
 def _record_model_type_hook(data: dict) -> RecordModelBase:
@@ -45,7 +47,7 @@ _DACITE_CONFIG = Config(cast=[Enum], type_hooks=_TYPE_HOOKS)
 
 
 def get_or_create(
-    model_data: t.Union[dict], model: t.Type[M] = None, *, strict: bool = True
+    model_data: ModelData, model: t.Type[M] = None, *, strict: bool = True
 ) -> t.Optional[t.Union[M, dict]]:
     """Get model instance from raw data.
 
@@ -75,7 +77,7 @@ def get_or_create(
         return model_data
 
 
-def _get_or_create(model_data: t.Union[dict], model: t.Type[M], *, strict: bool) -> t.Optional[t.Union[M, dict]]:
+def _get_or_create(model_data: ModelData, model: t.Type[M], *, strict: bool) -> t.Optional[t.Union[M, dict]]:
     if model_data is None:
         return None
 
@@ -110,16 +112,25 @@ def _get_or_create(model_data: t.Union[dict], model: t.Type[M], *, strict: bool)
         raise ModelError(str(e)) from e
 
 
-def get_response_model(response: 'Response', model: t.Type[M]) -> t.Optional[M]:
+def get_or_create_model(model_data: ModelData, model: t.Type[M]) -> t.Optional[M]:
+    model_instance = get_or_create(model_data, model)
+    if model_instance is not None and not isinstance(model_instance, model):
+        raise ModelError(f"Can't properly parse model of type {model}")
+
+    return model_instance
+
+
+def get_response_model(response: 'Response', model: t.Type[M]) -> M:
     if model is bool:
         # Could not be False? Because the exception with errors will be raised from the server
         return response.success
 
-    return get_or_create(response.content, model)
+    # return is optional if response.content is None, but doesn't occur in practice
+    return get_or_create_model(response.content, model)
 
 
 def _handle_dict_key(key: str) -> str:
-    if key == '_type':  # System field. Replaced to original $ symbol because is not allowed in Python.
+    if key == '_type':  # System field. Replaced to original $ symbol because it is not allowed in Python.
         return '$type'
 
     return key

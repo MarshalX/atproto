@@ -86,7 +86,9 @@ def lexicon_parse_file(lexicon_path: t.Union[Path, str], *, soft_fail: bool = Fa
         raise LexiconParsingError("Can't parse lexicon") from e
 
 
-def lexicon_parse_dir(path: t.Union[Path, str] = None, *, soft_fail: bool = False) -> t.List[models.LexiconDoc]:
+def lexicon_parse_dir(
+    path: t.Optional[t.Union[Path, str]] = None, *, soft_fail: bool = False
+) -> t.List[models.LexiconDoc]:
     if path is None:
         path = _PATH_TO_LEXICONS
 

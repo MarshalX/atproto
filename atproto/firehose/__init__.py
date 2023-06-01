@@ -85,12 +85,16 @@ class AsyncFirehoseSubscribeReposClient(AsyncFirehoseClient):
 
 
 class FirehoseSubscribeLabelsClient(FirehoseClient):
-    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels']] = None) -> None:
+    def __init__(
+        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None
+    ) -> None:
         params = get_or_create(params, models.ComAtprotoLabelSubscribeLabels.Params)
         super().__init__(method='com.atproto.label.subscribeLabels', params=params)
 
 
 class AsyncFirehoseSubscribeLabelsClient(AsyncFirehoseClient):
-    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels']] = None) -> None:
+    def __init__(
+        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None
+    ) -> None:
         params = get_or_create(params, models.ComAtprotoLabelSubscribeLabels.Params)
         super().__init__(method='com.atproto.label.subscribeLabels', params=params)

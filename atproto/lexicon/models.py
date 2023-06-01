@@ -2,7 +2,6 @@ import typing as t
 from dataclasses import dataclass
 from enum import Enum
 
-LexRef = str
 Number = t.Union[int, float, complex]
 
 

@@ -3,6 +3,7 @@ from io import BytesIO
 
 from atproto import cbor, leb128
 from atproto.cid import CID
+from atproto.exceptions import InvalidCARFile
 
 Blocks = t.Dict[CID, dict]
 
@@ -12,12 +13,12 @@ class CAR:
 
     _CID_V1_BYTES_LEN = 36
 
-    def __init__(self, root: str, blocks: Blocks) -> None:
+    def __init__(self, root: CID, blocks: Blocks) -> None:
         self._root = root
         self._blocks = blocks
 
     @property
-    def root(self) -> str:
+    def root(self) -> CID:
         """Get root."""
         return self._root
 
@@ -32,7 +33,7 @@ class CAR:
 
         Note:
             You could pass as `data` response of `client.com.atproto.sync.get_repo`, for example.
-            And another responses of methods in the `sync` namespace.
+            And other responses of methods in the `sync` namespace.
 
         Example:
             >>> from atproto import CAR, Client
@@ -53,7 +54,12 @@ class CAR:
 
         header_len, _ = leb128.u.decode_reader(stream)
         header = cbor.decode_dag(stream.read(header_len))
-        root = header.get('roots')[0]
+
+        roots = header.get('roots')
+        if isinstance(roots, list) and len(roots):
+            root: CID = roots[0]
+        else:
+            raise InvalidCARFile('Invalid CAR file. Expected at least one root.')
 
         blocks = {}
         while stream.tell() != len(data):

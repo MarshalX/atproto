@@ -22,7 +22,7 @@ if t.TYPE_CHECKING:
 class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
     """High-level client for XRPC of ATProto."""
 
-    def __init__(self, base_url: str = None) -> None:
+    def __init__(self, base_url: t.Optional[str] = None) -> None:
         super().__init__(base_url)
 
         self._access_jwt: t.Optional[str] = None

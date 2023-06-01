@@ -6,9 +6,14 @@ if t.TYPE_CHECKING:
     from atproto.xrpc_client.client.raw import ClientRaw
 
 
-@dataclass
 class NamespaceBase:
-    _client: t.Union['ClientRaw', 'AsyncClientRaw']
+    def __init__(self, client: 'ClientRaw') -> None:
+        self._client: 'ClientRaw' = client
+
+
+class AsyncNamespaceBase:
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        self._client: 'AsyncClientRaw' = client
 
 
 @dataclass

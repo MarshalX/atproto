@@ -190,7 +190,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
         # yes, it returns blob,but actually it's blob ref here
         return _get_optional_typehint('BlobRef', optional=optional)
 
-    raise ValueError(f'Unknown field type {field_name.__name__}')
+    raise ValueError(f'Unknown field type {field_type.__name__}')
 
 
 def _get_req_fields_set(lex_obj: t.Union[models.LexObject, models.LexXrpcParameters]) -> set:

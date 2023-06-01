@@ -45,6 +45,8 @@ def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
+    # client.com.atproto.admin.get_moderation_actions()
+
     # repo = client.com.atproto.sync.get_repo({'did': client.me.did})
     did = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'}).did
     repo = client.com.atproto.sync.get_repo({'did': did})

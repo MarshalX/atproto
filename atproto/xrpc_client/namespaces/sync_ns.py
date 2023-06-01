@@ -6,30 +6,24 @@
 
 
 import typing as t
-from dataclasses import dataclass, field
 
 from atproto.xrpc_client import models
-from atproto.xrpc_client.models.utils import get_or_create, get_response_model
-from atproto.xrpc_client.namespaces.base import DefaultNamespace, NamespaceBase
+from atproto.xrpc_client.models.utils import get_or_create_model, get_response_model
+from atproto.xrpc_client.namespaces.base import NamespaceBase
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client.client.sync_raw import ClientRaw
 
 
-@dataclass
 class AppNamespace(NamespaceBase):
-    bsky: 'BskyNamespace' = field(default_factory=DefaultNamespace)
-
-    def __post_init__(self) -> None:
+    def __init__(self, client: 'ClientRaw') -> None:
+        super().__init__(client)
         self.bsky = BskyNamespace(self._client)
 
 
-@dataclass
 class BskyNamespace(NamespaceBase):
-    actor: 'ActorNamespace' = field(default_factory=DefaultNamespace)
-    feed: 'FeedNamespace' = field(default_factory=DefaultNamespace)
-    graph: 'GraphNamespace' = field(default_factory=DefaultNamespace)
-    notification: 'NotificationNamespace' = field(default_factory=DefaultNamespace)
-    unspecced: 'UnspeccedNamespace' = field(default_factory=DefaultNamespace)
-
-    def __post_init__(self) -> None:
+    def __init__(self, client: 'ClientRaw') -> None:
+        super().__init__(client)
         self.actor = ActorNamespace(self._client)
         self.feed = FeedNamespace(self._client)
         self.graph = GraphNamespace(self._client)
@@ -37,7 +31,6 @@ class BskyNamespace(NamespaceBase):
         self.unspecced = UnspeccedNamespace(self._client)
 
 
-@dataclass
 class ActorNamespace(NamespaceBase):
     def get_preferences(
         self, params: t.Optional[t.Union[dict, 'models.AppBskyActorGetPreferences.Params']] = None, **kwargs
@@ -55,9 +48,9 @@ class ActorNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyActorGetPreferences.Params)
+        params_model = get_or_create_model(params, models.AppBskyActorGetPreferences.Params)
         response = self._client.invoke_query(
-            'app.bsky.actor.getPreferences', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.actor.getPreferences', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyActorGetPreferences.Response)
 
@@ -77,9 +70,9 @@ class ActorNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyActorGetProfile.Params)
+        params_model = get_or_create_model(params, models.AppBskyActorGetProfile.Params)
         response = self._client.invoke_query(
-            'app.bsky.actor.getProfile', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.actor.getProfile', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyActorGetProfile.ResponseRef)
 
@@ -99,9 +92,9 @@ class ActorNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyActorGetProfiles.Params)
+        params_model = get_or_create_model(params, models.AppBskyActorGetProfiles.Params)
         response = self._client.invoke_query(
-            'app.bsky.actor.getProfiles', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.actor.getProfiles', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyActorGetProfiles.Response)
 
@@ -121,9 +114,9 @@ class ActorNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyActorGetSuggestions.Params)
+        params_model = get_or_create_model(params, models.AppBskyActorGetSuggestions.Params)
         response = self._client.invoke_query(
-            'app.bsky.actor.getSuggestions', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.actor.getSuggestions', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyActorGetSuggestions.Response)
 
@@ -141,9 +134,9 @@ class ActorNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.AppBskyActorPutPreferences.Data)
+        data_model = get_or_create_model(data, models.AppBskyActorPutPreferences.Data)
         response = self._client.invoke_procedure(
-            'app.bsky.actor.putPreferences', data=data, input_encoding='application/json', **kwargs
+            'app.bsky.actor.putPreferences', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -163,9 +156,9 @@ class ActorNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyActorSearchActors.Params)
+        params_model = get_or_create_model(params, models.AppBskyActorSearchActors.Params)
         response = self._client.invoke_query(
-            'app.bsky.actor.searchActors', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.actor.searchActors', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyActorSearchActors.Response)
 
@@ -185,14 +178,13 @@ class ActorNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyActorSearchActorsTypeahead.Params)
+        params_model = get_or_create_model(params, models.AppBskyActorSearchActorsTypeahead.Params)
         response = self._client.invoke_query(
-            'app.bsky.actor.searchActorsTypeahead', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.actor.searchActorsTypeahead', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyActorSearchActorsTypeahead.Response)
 
 
-@dataclass
 class FeedNamespace(NamespaceBase):
     def describe_feed_generator(self, **kwargs) -> 'models.AppBskyFeedDescribeFeedGenerator.Response':
         """Returns information about a given feed generator including TOS & offered feed URIs.
@@ -228,9 +220,9 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetActorFeeds.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetActorFeeds.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getActorFeeds', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getActorFeeds', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetActorFeeds.Response)
 
@@ -250,9 +242,9 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetAuthorFeed.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetAuthorFeed.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getAuthorFeed', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getAuthorFeed', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetAuthorFeed.Response)
 
@@ -272,9 +264,9 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetFeed.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetFeed.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getFeed', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getFeed', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetFeed.Response)
 
@@ -294,9 +286,9 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetFeedGenerator.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetFeedGenerator.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getFeedGenerator', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getFeedGenerator', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetFeedGenerator.Response)
 
@@ -316,9 +308,9 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetFeedGenerators.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetFeedGenerators.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getFeedGenerators', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getFeedGenerators', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetFeedGenerators.Response)
 
@@ -338,9 +330,9 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetFeedSkeleton.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetFeedSkeleton.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getFeedSkeleton', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getFeedSkeleton', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetFeedSkeleton.Response)
 
@@ -360,9 +352,9 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetLikes.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetLikes.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getLikes', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getLikes', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetLikes.Response)
 
@@ -382,9 +374,9 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetPostThread.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetPostThread.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getPostThread', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getPostThread', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetPostThread.Response)
 
@@ -404,9 +396,9 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetPosts.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetPosts.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getPosts', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getPosts', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetPosts.Response)
 
@@ -426,9 +418,9 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetRepostedBy.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetRepostedBy.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getRepostedBy', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getRepostedBy', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetRepostedBy.Response)
 
@@ -448,14 +440,13 @@ class FeedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyFeedGetTimeline.Params)
+        params_model = get_or_create_model(params, models.AppBskyFeedGetTimeline.Params)
         response = self._client.invoke_query(
-            'app.bsky.feed.getTimeline', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.feed.getTimeline', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetTimeline.Response)
 
 
-@dataclass
 class GraphNamespace(NamespaceBase):
     def get_blocks(
         self, params: t.Optional[t.Union[dict, 'models.AppBskyGraphGetBlocks.Params']] = None, **kwargs
@@ -473,9 +464,9 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyGraphGetBlocks.Params)
+        params_model = get_or_create_model(params, models.AppBskyGraphGetBlocks.Params)
         response = self._client.invoke_query(
-            'app.bsky.graph.getBlocks', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.graph.getBlocks', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetBlocks.Response)
 
@@ -495,9 +486,9 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyGraphGetFollowers.Params)
+        params_model = get_or_create_model(params, models.AppBskyGraphGetFollowers.Params)
         response = self._client.invoke_query(
-            'app.bsky.graph.getFollowers', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.graph.getFollowers', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetFollowers.Response)
 
@@ -517,9 +508,9 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyGraphGetFollows.Params)
+        params_model = get_or_create_model(params, models.AppBskyGraphGetFollows.Params)
         response = self._client.invoke_query(
-            'app.bsky.graph.getFollows', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.graph.getFollows', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetFollows.Response)
 
@@ -539,9 +530,9 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyGraphGetList.Params)
+        params_model = get_or_create_model(params, models.AppBskyGraphGetList.Params)
         response = self._client.invoke_query(
-            'app.bsky.graph.getList', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.graph.getList', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetList.Response)
 
@@ -561,9 +552,9 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyGraphGetListMutes.Params)
+        params_model = get_or_create_model(params, models.AppBskyGraphGetListMutes.Params)
         response = self._client.invoke_query(
-            'app.bsky.graph.getListMutes', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.graph.getListMutes', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetListMutes.Response)
 
@@ -583,9 +574,9 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyGraphGetLists.Params)
+        params_model = get_or_create_model(params, models.AppBskyGraphGetLists.Params)
         response = self._client.invoke_query(
-            'app.bsky.graph.getLists', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.graph.getLists', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetLists.Response)
 
@@ -605,9 +596,9 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyGraphGetMutes.Params)
+        params_model = get_or_create_model(params, models.AppBskyGraphGetMutes.Params)
         response = self._client.invoke_query(
-            'app.bsky.graph.getMutes', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.graph.getMutes', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetMutes.Response)
 
@@ -625,9 +616,9 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.AppBskyGraphMuteActor.Data)
+        data_model = get_or_create_model(data, models.AppBskyGraphMuteActor.Data)
         response = self._client.invoke_procedure(
-            'app.bsky.graph.muteActor', data=data, input_encoding='application/json', **kwargs
+            'app.bsky.graph.muteActor', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -645,9 +636,9 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.AppBskyGraphMuteActorList.Data)
+        data_model = get_or_create_model(data, models.AppBskyGraphMuteActorList.Data)
         response = self._client.invoke_procedure(
-            'app.bsky.graph.muteActorList', data=data, input_encoding='application/json', **kwargs
+            'app.bsky.graph.muteActorList', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -665,9 +656,9 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.AppBskyGraphUnmuteActor.Data)
+        data_model = get_or_create_model(data, models.AppBskyGraphUnmuteActor.Data)
         response = self._client.invoke_procedure(
-            'app.bsky.graph.unmuteActor', data=data, input_encoding='application/json', **kwargs
+            'app.bsky.graph.unmuteActor', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -685,14 +676,13 @@ class GraphNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.AppBskyGraphUnmuteActorList.Data)
+        data_model = get_or_create_model(data, models.AppBskyGraphUnmuteActorList.Data)
         response = self._client.invoke_procedure(
-            'app.bsky.graph.unmuteActorList', data=data, input_encoding='application/json', **kwargs
+            'app.bsky.graph.unmuteActorList', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
 
-@dataclass
 class UnspeccedNamespace(NamespaceBase):
     def get_popular(
         self, params: t.Optional[t.Union[dict, 'models.AppBskyUnspeccedGetPopular.Params']] = None, **kwargs
@@ -710,9 +700,9 @@ class UnspeccedNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyUnspeccedGetPopular.Params)
+        params_model = get_or_create_model(params, models.AppBskyUnspeccedGetPopular.Params)
         response = self._client.invoke_query(
-            'app.bsky.unspecced.getPopular', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.unspecced.getPopular', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyUnspeccedGetPopular.Response)
 
@@ -735,7 +725,6 @@ class UnspeccedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyUnspeccedGetPopularFeedGenerators.Response)
 
 
-@dataclass
 class NotificationNamespace(NamespaceBase):
     def get_unread_count(
         self, params: t.Optional[t.Union[dict, 'models.AppBskyNotificationGetUnreadCount.Params']] = None, **kwargs
@@ -753,9 +742,9 @@ class NotificationNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyNotificationGetUnreadCount.Params)
+        params_model = get_or_create_model(params, models.AppBskyNotificationGetUnreadCount.Params)
         response = self._client.invoke_query(
-            'app.bsky.notification.getUnreadCount', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.notification.getUnreadCount', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyNotificationGetUnreadCount.Response)
 
@@ -775,9 +764,9 @@ class NotificationNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.AppBskyNotificationListNotifications.Params)
+        params_model = get_or_create_model(params, models.AppBskyNotificationListNotifications.Params)
         response = self._client.invoke_query(
-            'app.bsky.notification.listNotifications', params=params, output_encoding='application/json', **kwargs
+            'app.bsky.notification.listNotifications', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyNotificationListNotifications.Response)
 
@@ -795,32 +784,22 @@ class NotificationNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.AppBskyNotificationUpdateSeen.Data)
+        data_model = get_or_create_model(data, models.AppBskyNotificationUpdateSeen.Data)
         response = self._client.invoke_procedure(
-            'app.bsky.notification.updateSeen', data=data, input_encoding='application/json', **kwargs
+            'app.bsky.notification.updateSeen', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
 
-@dataclass
 class ComNamespace(NamespaceBase):
-    atproto: 'AtprotoNamespace' = field(default_factory=DefaultNamespace)
-
-    def __post_init__(self) -> None:
+    def __init__(self, client: 'ClientRaw') -> None:
+        super().__init__(client)
         self.atproto = AtprotoNamespace(self._client)
 
 
-@dataclass
 class AtprotoNamespace(NamespaceBase):
-    admin: 'AdminNamespace' = field(default_factory=DefaultNamespace)
-    identity: 'IdentityNamespace' = field(default_factory=DefaultNamespace)
-    label: 'LabelNamespace' = field(default_factory=DefaultNamespace)
-    moderation: 'ModerationNamespace' = field(default_factory=DefaultNamespace)
-    repo: 'RepoNamespace' = field(default_factory=DefaultNamespace)
-    server: 'ServerNamespace' = field(default_factory=DefaultNamespace)
-    sync: 'SyncNamespace' = field(default_factory=DefaultNamespace)
-
-    def __post_init__(self) -> None:
+    def __init__(self, client: 'ClientRaw') -> None:
+        super().__init__(client)
         self.admin = AdminNamespace(self._client)
         self.identity = IdentityNamespace(self._client)
         self.label = LabelNamespace(self._client)
@@ -830,7 +809,6 @@ class AtprotoNamespace(NamespaceBase):
         self.sync = SyncNamespace(self._client)
 
 
-@dataclass
 class SyncNamespace(NamespaceBase):
     def get_blob(
         self, params: t.Union[dict, 'models.ComAtprotoSyncGetBlob.Params'], **kwargs
@@ -848,8 +826,10 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncGetBlob.Params)
-        response = self._client.invoke_query('com.atproto.sync.getBlob', params=params, output_encoding='*/*', **kwargs)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncGetBlob.Params)
+        response = self._client.invoke_query(
+            'com.atproto.sync.getBlob', params=params_model, output_encoding='*/*', **kwargs
+        )
         return get_response_model(response, models.ComAtprotoSyncGetBlob.Response)
 
     def get_blocks(
@@ -868,9 +848,9 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncGetBlocks.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncGetBlocks.Params)
         response = self._client.invoke_query(
-            'com.atproto.sync.getBlocks', params=params, output_encoding='application/vnd.ipld.car', **kwargs
+            'com.atproto.sync.getBlocks', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
         )
         return get_response_model(response, models.ComAtprotoSyncGetBlocks.Response)
 
@@ -890,9 +870,9 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncGetCheckout.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncGetCheckout.Params)
         response = self._client.invoke_query(
-            'com.atproto.sync.getCheckout', params=params, output_encoding='application/vnd.ipld.car', **kwargs
+            'com.atproto.sync.getCheckout', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
         )
         return get_response_model(response, models.ComAtprotoSyncGetCheckout.Response)
 
@@ -912,9 +892,9 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncGetCommitPath.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncGetCommitPath.Params)
         response = self._client.invoke_query(
-            'com.atproto.sync.getCommitPath', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.sync.getCommitPath', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoSyncGetCommitPath.Response)
 
@@ -934,9 +914,9 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncGetHead.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncGetHead.Params)
         response = self._client.invoke_query(
-            'com.atproto.sync.getHead', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.sync.getHead', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoSyncGetHead.Response)
 
@@ -956,9 +936,9 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncGetRecord.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncGetRecord.Params)
         response = self._client.invoke_query(
-            'com.atproto.sync.getRecord', params=params, output_encoding='application/vnd.ipld.car', **kwargs
+            'com.atproto.sync.getRecord', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
         )
         return get_response_model(response, models.ComAtprotoSyncGetRecord.Response)
 
@@ -978,9 +958,9 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncGetRepo.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncGetRepo.Params)
         response = self._client.invoke_query(
-            'com.atproto.sync.getRepo', params=params, output_encoding='application/vnd.ipld.car', **kwargs
+            'com.atproto.sync.getRepo', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
         )
         return get_response_model(response, models.ComAtprotoSyncGetRepo.Response)
 
@@ -1000,9 +980,9 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncListBlobs.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncListBlobs.Params)
         response = self._client.invoke_query(
-            'com.atproto.sync.listBlobs', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.sync.listBlobs', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoSyncListBlobs.Response)
 
@@ -1022,9 +1002,9 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncListRepos.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncListRepos.Params)
         response = self._client.invoke_query(
-            'com.atproto.sync.listRepos', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.sync.listRepos', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoSyncListRepos.Response)
 
@@ -1042,8 +1022,8 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncNotifyOfUpdate.Params)
-        response = self._client.invoke_query('com.atproto.sync.notifyOfUpdate', params=params, **kwargs)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncNotifyOfUpdate.Params)
+        response = self._client.invoke_query('com.atproto.sync.notifyOfUpdate', params=params_model, **kwargs)
         return get_response_model(response, bool)
 
     def request_crawl(self, params: t.Union[dict, 'models.ComAtprotoSyncRequestCrawl.Params'], **kwargs) -> bool:
@@ -1060,12 +1040,11 @@ class SyncNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoSyncRequestCrawl.Params)
-        response = self._client.invoke_query('com.atproto.sync.requestCrawl', params=params, **kwargs)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncRequestCrawl.Params)
+        response = self._client.invoke_query('com.atproto.sync.requestCrawl', params=params_model, **kwargs)
         return get_response_model(response, bool)
 
 
-@dataclass
 class ServerNamespace(NamespaceBase):
     def create_account(
         self, data: t.Union[dict, 'models.ComAtprotoServerCreateAccount.Data'], **kwargs
@@ -1083,10 +1062,10 @@ class ServerNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoServerCreateAccount.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoServerCreateAccount.Data)
         response = self._client.invoke_procedure(
             'com.atproto.server.createAccount',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -1109,10 +1088,10 @@ class ServerNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoServerCreateAppPassword.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoServerCreateAppPassword.Data)
         response = self._client.invoke_procedure(
             'com.atproto.server.createAppPassword',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -1135,10 +1114,10 @@ class ServerNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoServerCreateInviteCode.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoServerCreateInviteCode.Data)
         response = self._client.invoke_procedure(
             'com.atproto.server.createInviteCode',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -1161,10 +1140,10 @@ class ServerNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoServerCreateInviteCodes.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoServerCreateInviteCodes.Data)
         response = self._client.invoke_procedure(
             'com.atproto.server.createInviteCodes',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -1187,10 +1166,10 @@ class ServerNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoServerCreateSession.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoServerCreateSession.Data)
         response = self._client.invoke_procedure(
             'com.atproto.server.createSession',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -1211,9 +1190,9 @@ class ServerNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoServerDeleteAccount.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoServerDeleteAccount.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.server.deleteAccount', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.server.deleteAccount', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1267,9 +1246,12 @@ class ServerNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoServerGetAccountInviteCodes.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoServerGetAccountInviteCodes.Params)
         response = self._client.invoke_query(
-            'com.atproto.server.getAccountInviteCodes', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.server.getAccountInviteCodes',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
         )
         return get_response_model(response, models.ComAtprotoServerGetAccountInviteCodes.Response)
 
@@ -1359,9 +1341,9 @@ class ServerNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoServerRequestPasswordReset.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoServerRequestPasswordReset.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.server.requestPasswordReset', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.server.requestPasswordReset', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1379,9 +1361,9 @@ class ServerNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoServerResetPassword.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoServerResetPassword.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.server.resetPassword', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.server.resetPassword', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1401,14 +1383,13 @@ class ServerNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoServerRevokeAppPassword.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoServerRevokeAppPassword.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.server.revokeAppPassword', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.server.revokeAppPassword', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
 
-@dataclass
 class RepoNamespace(NamespaceBase):
     def apply_writes(self, data: t.Union[dict, 'models.ComAtprotoRepoApplyWrites.Data'], **kwargs) -> bool:
         """Apply a batch transaction of creates, updates, and deletes.
@@ -1424,9 +1405,9 @@ class RepoNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoRepoApplyWrites.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoRepoApplyWrites.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.repo.applyWrites', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.repo.applyWrites', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1446,10 +1427,10 @@ class RepoNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoRepoCreateRecord.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoRepoCreateRecord.Data)
         response = self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -1470,9 +1451,9 @@ class RepoNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoRepoDeleteRecord.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoRepoDeleteRecord.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.repo.deleteRecord', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1492,9 +1473,9 @@ class RepoNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoRepoDescribeRepo.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoRepoDescribeRepo.Params)
         response = self._client.invoke_query(
-            'com.atproto.repo.describeRepo', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.repo.describeRepo', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoRepoDescribeRepo.Response)
 
@@ -1514,9 +1495,9 @@ class RepoNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoRepoGetRecord.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoRepoGetRecord.Params)
         response = self._client.invoke_query(
-            'com.atproto.repo.getRecord', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
 
@@ -1536,9 +1517,9 @@ class RepoNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoRepoListRecords.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoRepoListRecords.Params)
         response = self._client.invoke_query(
-            'com.atproto.repo.listRecords', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoRepoListRecords.Response)
 
@@ -1558,10 +1539,10 @@ class RepoNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoRepoPutRecord.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoRepoPutRecord.Data)
         response = self._client.invoke_procedure(
             'com.atproto.repo.putRecord',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -1582,9 +1563,9 @@ class RepoNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoRepoRebaseRepo.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoRepoRebaseRepo.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.repo.rebaseRepo', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.repo.rebaseRepo', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1610,7 +1591,6 @@ class RepoNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoRepoUploadBlob.Response)
 
 
-@dataclass
 class AdminNamespace(NamespaceBase):
     def disable_account_invites(
         self, data: t.Union[dict, 'models.ComAtprotoAdminDisableAccountInvites.Data'], **kwargs
@@ -1628,9 +1608,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoAdminDisableAccountInvites.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoAdminDisableAccountInvites.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.admin.disableAccountInvites', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.admin.disableAccountInvites', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1650,9 +1630,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoAdminDisableInviteCodes.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoAdminDisableInviteCodes.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.admin.disableInviteCodes', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.admin.disableInviteCodes', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1672,9 +1652,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoAdminEnableAccountInvites.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoAdminEnableAccountInvites.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.admin.enableAccountInvites', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.admin.enableAccountInvites', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1694,9 +1674,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoAdminGetInviteCodes.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetInviteCodes.Params)
         response = self._client.invoke_query(
-            'com.atproto.admin.getInviteCodes', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.admin.getInviteCodes', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminGetInviteCodes.Response)
 
@@ -1716,9 +1696,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoAdminGetModerationAction.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationAction.Params)
         response = self._client.invoke_query(
-            'com.atproto.admin.getModerationAction', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.admin.getModerationAction', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminGetModerationAction.ResponseRef)
 
@@ -1738,9 +1718,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoAdminGetModerationActions.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationActions.Params)
         response = self._client.invoke_query(
-            'com.atproto.admin.getModerationActions', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.admin.getModerationActions', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminGetModerationActions.Response)
 
@@ -1760,9 +1740,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoAdminGetModerationReport.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationReport.Params)
         response = self._client.invoke_query(
-            'com.atproto.admin.getModerationReport', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.admin.getModerationReport', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminGetModerationReport.ResponseRef)
 
@@ -1782,9 +1762,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoAdminGetModerationReports.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationReports.Params)
         response = self._client.invoke_query(
-            'com.atproto.admin.getModerationReports', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.admin.getModerationReports', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminGetModerationReports.Response)
 
@@ -1804,9 +1784,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoAdminGetRecord.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetRecord.Params)
         response = self._client.invoke_query(
-            'com.atproto.admin.getRecord', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.admin.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminGetRecord.ResponseRef)
 
@@ -1826,9 +1806,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoAdminGetRepo.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetRepo.Params)
         response = self._client.invoke_query(
-            'com.atproto.admin.getRepo', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.admin.getRepo', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminGetRepo.ResponseRef)
 
@@ -1848,10 +1828,10 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoAdminResolveModerationReports.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoAdminResolveModerationReports.Data)
         response = self._client.invoke_procedure(
             'com.atproto.admin.resolveModerationReports',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -1874,10 +1854,10 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoAdminReverseModerationAction.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoAdminReverseModerationAction.Data)
         response = self._client.invoke_procedure(
             'com.atproto.admin.reverseModerationAction',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -1900,9 +1880,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoAdminSearchRepos.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoAdminSearchRepos.Params)
         response = self._client.invoke_query(
-            'com.atproto.admin.searchRepos', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.admin.searchRepos', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminSearchRepos.Response)
 
@@ -1922,10 +1902,10 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoAdminTakeModerationAction.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoAdminTakeModerationAction.Data)
         response = self._client.invoke_procedure(
             'com.atproto.admin.takeModerationAction',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -1948,9 +1928,9 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoAdminUpdateAccountEmail.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoAdminUpdateAccountEmail.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.admin.updateAccountEmail', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.admin.updateAccountEmail', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -1970,14 +1950,13 @@ class AdminNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoAdminUpdateAccountHandle.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoAdminUpdateAccountHandle.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.admin.updateAccountHandle', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.admin.updateAccountHandle', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
 
-@dataclass
 class IdentityNamespace(NamespaceBase):
     def resolve_handle(
         self, params: t.Union[dict, 'models.ComAtprotoIdentityResolveHandle.Params'], **kwargs
@@ -1995,9 +1974,9 @@ class IdentityNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoIdentityResolveHandle.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoIdentityResolveHandle.Params)
         response = self._client.invoke_query(
-            'com.atproto.identity.resolveHandle', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.identity.resolveHandle', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoIdentityResolveHandle.Response)
 
@@ -2015,14 +1994,13 @@ class IdentityNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoIdentityUpdateHandle.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoIdentityUpdateHandle.Data)
         response = self._client.invoke_procedure(
-            'com.atproto.identity.updateHandle', data=data, input_encoding='application/json', **kwargs
+            'com.atproto.identity.updateHandle', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
 
-@dataclass
 class ModerationNamespace(NamespaceBase):
     def create_report(
         self, data: t.Union[dict, 'models.ComAtprotoModerationCreateReport.Data'], **kwargs
@@ -2040,10 +2018,10 @@ class ModerationNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data = get_or_create(data, models.ComAtprotoModerationCreateReport.Data)
+        data_model = get_or_create_model(data, models.ComAtprotoModerationCreateReport.Data)
         response = self._client.invoke_procedure(
             'com.atproto.moderation.createReport',
-            data=data,
+            data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
             **kwargs,
@@ -2051,7 +2029,6 @@ class ModerationNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoModerationCreateReport.Response)
 
 
-@dataclass
 class LabelNamespace(NamespaceBase):
     def query_labels(
         self, params: t.Union[dict, 'models.ComAtprotoLabelQueryLabels.Params'], **kwargs
@@ -2069,8 +2046,8 @@ class LabelNamespace(NamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params = get_or_create(params, models.ComAtprotoLabelQueryLabels.Params)
+        params_model = get_or_create_model(params, models.ComAtprotoLabelQueryLabels.Params)
         response = self._client.invoke_query(
-            'com.atproto.label.queryLabels', params=params, output_encoding='application/json', **kwargs
+            'com.atproto.label.queryLabels', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoLabelQueryLabels.Response)

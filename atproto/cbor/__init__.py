@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import List, Union
+from typing import Dict, List, Union
 
 import dag_cbor as _dag_cbor
 from dag_cbor.decoding import CBORDecodingError as _CBORDecodingError
@@ -20,7 +20,7 @@ class _BytesReadCounter:
         return self._num_bytes_read
 
 
-def decode_dag(data: DagCborData, *, allow_concat: bool = False, callback=None) -> _dag_cbor.IPLDKind:
+def decode_dag(data: DagCborData, *, allow_concat: bool = False, callback=None) -> Dict[str, _dag_cbor.IPLDKind]:
     """Decodes and returns a single data item from the given data, with the DAG-CBOR codec.
 
     Args:
@@ -32,7 +32,10 @@ def decode_dag(data: DagCborData, *, allow_concat: bool = False, callback=None) 
         :obj:`dag_cbor.IPLDKind`: Decoded DAG-CBOR.
     """
     try:
-        return _dag_cbor.decode(data, allow_concat=allow_concat, callback=callback)
+        decoded_data = _dag_cbor.decode(data, allow_concat=allow_concat, callback=callback)
+        if isinstance(decoded_data, dict):
+            return decoded_data
+        raise DAGCBORDecodingError(f'Invalid DAG-CBOR data. Expected dict instead of {type(decoded_data).__name__}')
     except _DAGCBORDecodingError as e:
         raise DAGCBORDecodingError from e
     except _CBORDecodingError as e:
@@ -41,7 +44,7 @@ def decode_dag(data: DagCborData, *, allow_concat: bool = False, callback=None) 
         raise e
 
 
-def decode_dag_multi(data: DagCborData) -> List[_dag_cbor.IPLDKind]:
+def decode_dag_multi(data: DagCborData) -> List[Dict[str, _dag_cbor.IPLDKind]]:
     """Decodes and returns many data items from the given data, with the DAG-CBOR codec.
 
     Args:
@@ -56,7 +59,7 @@ def decode_dag_multi(data: DagCborData) -> List[_dag_cbor.IPLDKind]:
 
     data_size = data.getbuffer().nbytes
 
-    data_parts = []
+    data_parts: List[Dict[str, _dag_cbor.IPLDKind]] = []
     if data_size == 0:
         return data_parts
 
