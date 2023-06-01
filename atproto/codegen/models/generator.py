@@ -190,7 +190,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
         # yes, it returns blob,but actually it's blob ref here
         return _get_optional_typehint('BlobRef', optional=optional)
 
-    raise ValueError(f'Unknown field type {field_name.__name__}')
+    raise ValueError(f'Unknown field type {field_type.__name__}')
 
 
 def _get_req_fields_set(lex_obj: t.Union[models.LexObject, models.LexXrpcParameters]) -> set:
@@ -216,7 +216,9 @@ def _get_field_docstring(field_name: str, field_type) -> str:
 
 
 def _get_model_docstring(
-    nsid: t.Union[str, NSID], lex_object: t.Union[models.LexObject, models.LexXrpcParameters], model_type: ModelType
+    nsid: t.Union[str, NSID],
+    lex_object: t.Union[models.LexXrpcQuery, models.LexSubscription, models.LexObject, models.LexXrpcParameters],
+    model_type: ModelType,
 ) -> str:
     model_desc = lex_object.description or ''
     model_desc = f'{model_type.value} model for :obj:`{nsid}`. {model_desc}'
@@ -257,12 +259,11 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
 def _get_model_ref(nsid: NSID, ref: models.LexRef) -> str:
     # FIXME(MarshalX): "local=True" Is it works well? ;d
     ref_class, _ = _resolve_nsid_ref(nsid, ref.ref, local=True)
-    ref_typehint = f't.Type[{ref_class}]'
 
     # "Ref" suffix required to fix name collisions from different namespaces
     lines = [
         f'#: {OUTPUT_MODEL} reference to :obj:`{ref_class}` model.',
-        f'{OUTPUT_MODEL}Ref: {ref_typehint} = {ref_class}',
+        f'{OUTPUT_MODEL}Ref = {ref_class}',
         '',
         '',
     ]
@@ -271,11 +272,11 @@ def _get_model_ref(nsid: NSID, ref: models.LexRef) -> str:
 
 
 def _get_model_raw_data(name: str) -> str:
-    lines = [f'#: {name} raw data type.', f'{name}: t.Union[t.Type[str], t.Type[bytes]] = bytes\n\n']
+    lines = [f'#: {name} raw data type.', f'{name}: te.TypeAlias = bytes\n\n']
     return join_code(lines)
 
 
-def _generate_params_model(nsid: NSID, definition: t.Union[models.LexXrpcProcedure, models.LexXrpcQuery]) -> str:
+def _generate_params_model(nsid: NSID, definition: t.Union[models.LexXrpcQuery, models.LexSubscription]) -> str:
     lines = [_get_model_class_def(nsid.name, ModelType.PARAMS)]
 
     if definition.parameters:
@@ -351,8 +352,8 @@ def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
         return ''
 
     # FIXME(MarshalX): Use ref resolver
-    known_values = ["'" + get_def_model_name(v.split('#', 1)[1]) + "'" for v in def_model.knownValues]
-    known_values = ', '.join(known_values)
+    known_values_list = ["'" + get_def_model_name(v.split('#', 1)[1]) + "'" for v in def_model.knownValues]
+    known_values = ', '.join(known_values_list)
 
     type_ = f'te.Literal[{known_values}]'
 
@@ -365,16 +366,20 @@ def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
     return join_code(lines)
 
 
-def _generate_params_models(lex_db: builder.LexDB) -> None:
+def _generate_params_models(lex_db: builder.BuiltParamsModels) -> None:
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
 
         definition = defs['main']
         if definition.parameters:
-            save_code_part(nsid, _generate_params_model(nsid, definition))
+            if isinstance(definition.parameters, models.LexXrpcParameters):
+                save_code_part(nsid, _generate_params_model(nsid, definition))
+            else:
+                # LexXrpcProcedure has parameters using another model
+                raise ValueError('Wrong parameters type or not implemented')
 
 
-def _generate_data_models(lex_db: builder.LexDB) -> None:
+def _generate_data_models(lex_db: builder.BuiltDataModels) -> None:
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
 
@@ -383,7 +388,7 @@ def _generate_data_models(lex_db: builder.LexDB) -> None:
             save_code_part(nsid, _generate_data_model(nsid, definition.input))
 
 
-def _generate_response_models(lex_db: builder.LexDB) -> None:
+def _generate_response_models(lex_db: builder.BuiltResponseModels) -> None:
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
 
@@ -392,7 +397,7 @@ def _generate_response_models(lex_db: builder.LexDB) -> None:
             save_code_part(nsid, _generate_response_model(nsid, definition.output))
 
 
-def _generate_def_models(lex_db: builder.LexDB) -> None:
+def _generate_def_models(lex_db: builder.BuiltDefModels) -> None:
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
 
@@ -409,7 +414,7 @@ def _generate_def_models(lex_db: builder.LexDB) -> None:
                 raise ValueError(f'Unhandled type {type(def_model)}')
 
 
-def _generate_record_models(lex_db: builder.LexDB) -> None:
+def _generate_record_models(lex_db: builder.BuiltRecordModels) -> None:
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
 
@@ -419,7 +424,7 @@ def _generate_record_models(lex_db: builder.LexDB) -> None:
                 save_code_part(nsid, _generate_def_model(nsid, def_name, def_record.record, ModelType.RECORD))
 
 
-def _generate_record_type_database(lex_db: builder.LexDB) -> None:
+def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     lines = ['from atproto.xrpc_client import models', 'RECORD_TYPE_TO_MODEL_CLASS = {']
 
     for nsid, defs in lex_db.items():
@@ -441,7 +446,7 @@ def _generate_record_type_database(lex_db: builder.LexDB) -> None:
     write_code(_MODELS_OUTPUT_DIR.joinpath('type_conversion.py'), join_code(lines))
 
 
-def _generate_ref_models(lex_db: builder.LexDB) -> None:
+def _generate_ref_models(lex_db: builder.BuiltRefsModels) -> None:
     for nsid, defs in lex_db.items():
         definition = defs['main']
         if (
@@ -462,16 +467,16 @@ def _generate_ref_models(lex_db: builder.LexDB) -> None:
 
 
 def _generate_init_files(root_package_path: Path) -> None:
-    # one of the ways that I tried. Doesn't work well due to circular imports
+    # One of the ways that I tried. Doesn't work well due to circular imports
     for root, dirs, files in os.walk(root_package_path):
-        root = Path(root)
+        root_path = Path(root)
 
         import_lines = []
         for dir_name in dirs:
             if dir_name.startswith('__'):
                 continue
 
-            import_parts = root.parts[root.joinpath(dir_name).parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
+            import_parts = root_path.parts[root_path.joinpath(dir_name).parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
             from_import = '.'.join(import_parts)
 
             if dir_name in {'app', 'com'}:
@@ -483,24 +488,24 @@ def _generate_init_files(root_package_path: Path) -> None:
             if file_name.startswith('__'):
                 continue
 
-            import_parts = root.parts[root.parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
+            import_parts = root_path.parts[root_path.parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
             from_import = '.'.join(import_parts)
 
             import_lines.append(f'from atproto.{from_import} import {file_name[:-3]}')
 
-        if root.name == 'models':
+        if root_path.name == 'models':
             # FIXME skip for now. should be generated too
             continue
 
-        if root.name == '__pycache__':
+        if root_path.name == '__pycache__':
             continue
 
-        write_code(root.joinpath('__init__.py'), join_code(import_lines))
+        write_code(root_path.joinpath('__init__.py'), join_code(import_lines))
 
 
 def _generate_empty_init_files(root_package_path: Path):
     for root, dirs, files in os.walk(root_package_path):
-        root = Path(root)
+        root_path = Path(root)
 
         for dir_name in dirs:
             if dir_name.startswith('__'):
@@ -513,14 +518,14 @@ def _generate_empty_init_files(root_package_path: Path):
             if file_name.startswith('__'):
                 continue
 
-        if root.name == 'models':
+        if root_path.name == 'models':
             # FIXME skip for now. should be generated too
             continue
 
-        if root.name == '__pycache__':
+        if root_path.name == '__pycache__':
             continue
 
-        write_code(root.joinpath('__init__.py'), DISCLAIMER)
+        write_code(root_path.joinpath('__init__.py'), DISCLAIMER)
 
 
 def _generate_import_aliases(root_package_path: Path) -> None:
@@ -530,9 +535,9 @@ def _generate_import_aliases(root_package_path: Path) -> None:
     import_lines = []
     ids_db = ['class _Ids:']
     for root, __, files in os.walk(root_package_path):
-        root = Path(root)
+        root_path = Path(root)
 
-        if root == root_package_path:
+        if root_path == root_package_path:
             continue
 
         for file in files:
@@ -541,10 +546,10 @@ def _generate_import_aliases(root_package_path: Path) -> None:
             if '.cpython-' in file:
                 continue
 
-            import_parts = root.parts[root.parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
+            import_parts = root_path.parts[root_path.parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
             from_import = '.'.join(import_parts)
 
-            nsid_parts = list(root.parts[root.parts.index('models') + 1 :])
+            nsid_parts = list(root_path.parts[root_path.parts.index('models') + 1 :])
             method_name_parts = file[:-3].split('_')
             alias_name = ''.join([p.capitalize() for p in [*nsid_parts, *method_name_parts]])
 

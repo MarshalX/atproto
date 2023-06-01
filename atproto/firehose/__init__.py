@@ -2,7 +2,7 @@ import typing as t
 
 from atproto.firehose.client import AsyncFirehoseClient, FirehoseClient
 from atproto.xrpc_client import models
-from atproto.xrpc_client.models.utils import get_model_as_dict, get_or_create
+from atproto.xrpc_client.models.utils import get_model_as_dict, get_or_create_model
 
 if t.TYPE_CHECKING:
     from atproto.firehose.models import MessageFrame
@@ -49,7 +49,7 @@ def parse_subscribe_repos_message(message: 'MessageFrame') -> SubscribeReposMess
         :obj:`SubscribeReposMessage`: Corresponding message model.
     """
     model_class = _SUBSCRIBE_REPOS_MESSAGE_TYPE_TO_MODEL[message.type]
-    return get_or_create(message.body, model_class)
+    return get_or_create_model(message.body, model_class)
 
 
 def parse_subscribe_labels_message(message: 'MessageFrame') -> SubscribeLabelsMessage:
@@ -62,35 +62,55 @@ def parse_subscribe_labels_message(message: 'MessageFrame') -> SubscribeLabelsMe
         :obj:`SubscribeLabelsMessage`: Corresponding message model.
     """
     model_class = _SUBSCRIBE_LABELS_MESSAGE_TYPE_TO_MODEL[message.type]
-    return get_or_create(message.body, model_class)
+    return get_or_create_model(message.body, model_class)
 
 
 class FirehoseSubscribeReposClient(FirehoseClient):
     def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None) -> None:
-        params = get_or_create(params, models.ComAtprotoSyncSubscribeRepos.Params)
-        if params:
-            params = get_model_as_dict(params)
-        super().__init__(method='com.atproto.sync.subscribeRepos', params=params)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncSubscribeRepos.Params)
+
+        params_dict = None
+        if params_model:
+            params_dict = get_model_as_dict(params_model)
+
+        super().__init__(method='com.atproto.sync.subscribeRepos', params=params_dict)
 
 
 class AsyncFirehoseSubscribeReposClient(AsyncFirehoseClient):
     def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None) -> None:
-        params = get_or_create(params, models.ComAtprotoSyncSubscribeRepos.Params)
-        if params:
-            params = get_model_as_dict(params)
-        super().__init__(method='com.atproto.sync.subscribeRepos', params=params)
+        params_model = get_or_create_model(params, models.ComAtprotoSyncSubscribeRepos.Params)
+
+        params_dict = None
+        if params_model:
+            params_dict = get_model_as_dict(params_model)
+
+        super().__init__(method='com.atproto.sync.subscribeRepos', params=params_dict)
 
 
 # TODO(MarshalX): SubscribeLabels doesn't work yet? HTTP 502 Error
 
 
 class FirehoseSubscribeLabelsClient(FirehoseClient):
-    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels']] = None) -> None:
-        params = get_or_create(params, models.ComAtprotoLabelSubscribeLabels.Params)
-        super().__init__(method='com.atproto.label.subscribeLabels', params=params)
+    def __init__(
+        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None
+    ) -> None:
+        params_model = get_or_create_model(params, models.ComAtprotoLabelSubscribeLabels.Params)
+
+        params_dict = None
+        if params_model:
+            params_dict = get_model_as_dict(params_model)
+
+        super().__init__(method='com.atproto.label.subscribeLabels', params=params_dict)
 
 
 class AsyncFirehoseSubscribeLabelsClient(AsyncFirehoseClient):
-    def __init__(self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels']] = None) -> None:
-        params = get_or_create(params, models.ComAtprotoLabelSubscribeLabels.Params)
-        super().__init__(method='com.atproto.label.subscribeLabels', params=params)
+    def __init__(
+        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None
+    ) -> None:
+        params_model = get_or_create_model(params, models.ComAtprotoLabelSubscribeLabels.Params)
+
+        params_dict = None
+        if params_model:
+            params_dict = get_model_as_dict(params_model)
+
+        super().__init__(method='com.atproto.label.subscribeLabels', params=params_dict)

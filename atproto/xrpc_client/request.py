@@ -98,8 +98,9 @@ class Request(RequestBase):
         try:
             response = self._client.request(method=method, url=url, headers=headers, **kwargs)
             return _handle_response(response)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             _handle_request_errors(e)
+            raise e
 
     def close(self) -> None:
         self._client.close()
@@ -124,8 +125,9 @@ class AsyncRequest(RequestBase):
         try:
             response = await self._client.request(method=method, url=url, headers=headers, **kwargs)
             return _handle_response(response)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             _handle_request_errors(e)
+            raise e
 
     async def close(self) -> None:
         await self._client.aclose()

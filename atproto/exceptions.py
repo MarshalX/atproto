@@ -50,7 +50,7 @@ class ModelFieldNotFoundError(ModelError):
 
 class RequestErrorBase(AtProtocolError):
     def __init__(self, response: t.Optional['Response'] = None) -> None:
-        self.response: 'Response' = response
+        self.response: t.Optional['Response'] = response
 
 
 class NetworkError(RequestErrorBase):
@@ -86,4 +86,8 @@ class CBORDecodingError(AtProtocolError):
 
 
 class DAGCBORDecodingError(AtProtocolError):
+    ...
+
+
+class InvalidCARFile(AtProtocolError):
     ...

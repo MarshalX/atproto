@@ -5,7 +5,6 @@
 ##################################################################
 
 
-import typing as t
 from dataclasses import dataclass
 
 from atproto.xrpc_client import models
@@ -21,4 +20,4 @@ class Params(base.ParamsModelBase):
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.RepoViewDetail` model.
-ResponseRef: t.Type[models.ComAtprotoAdminDefs.RepoViewDetail] = models.ComAtprotoAdminDefs.RepoViewDetail
+ResponseRef = models.ComAtprotoAdminDefs.RepoViewDetail

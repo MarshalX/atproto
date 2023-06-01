@@ -31,7 +31,12 @@ class AliasedGroup(click.Group):
     ) -> t.Tuple[t.Optional[str], t.Optional[click.Command], t.List[str]]:
         # always return the full command name
         _, cmd, args = super().resolve_command(ctx, args)
-        return cmd.name, cmd, args
+
+        name = None
+        if cmd:
+            name = cmd.name
+
+        return name, cmd, args
 
 
 @click.group(cls=AliasedGroup)
@@ -46,9 +51,8 @@ def atproto_cli(ctx: click.Context) -> None:
 @click.option('--lexicon-dir', type=click.Path(exists=True), default=None, help='Path to dir with .JSON lexicon files.')
 @click.pass_context
 def gen(ctx: click.Context, lexicon_dir: t.Optional[str]) -> None:
-    if lexicon_dir:
-        lexicon_dir = Path(lexicon_dir)
-    ctx.obj['lexicon_dir'] = lexicon_dir
+    lexicon_dir_path = Path(lexicon_dir) if lexicon_dir else None
+    ctx.obj['lexicon_dir'] = lexicon_dir_path
 
 
 @gen.command(name='all', help='Generated models, namespaces, and async clients with default configs.')
@@ -86,13 +90,13 @@ def gen_models(ctx: click.Context, output_dir: t.Optional[str]) -> None:
 
     if output_dir:
         # FIXME(MarshalX): remove hardcoded imports
-        output_dir = Path(output_dir)
         click.secho(
             "It doesn't work with '--output-dir' option very well because of hardcoded imports! Replace by yourself",
             fg='red',
         )
-
-    _gen_models(ctx.obj.get('lexicon_dir'), output_dir)
+        _gen_models(ctx.obj.get('lexicon_dir'), Path(output_dir))
+    else:
+        _gen_models(ctx.obj.get('lexicon_dir'))
 
     click.echo('Done!')
 
@@ -107,10 +111,8 @@ def gen_namespaces(
 ) -> None:
     click.echo('Generating namespaces...')
 
-    if output_dir:
-        output_dir = Path(output_dir)
-
-    _gen_namespaces(ctx.obj.get('lexicon_dir'), output_dir, async_filename, sync_filename)
+    output_dir_path = Path(output_dir) if output_dir else None
+    _gen_namespaces(ctx.obj.get('lexicon_dir'), output_dir_path, async_filename, sync_filename)
 
     click.echo('Done!')
 

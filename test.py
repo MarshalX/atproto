@@ -45,6 +45,8 @@ def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
+    # client.com.atproto.admin.get_moderation_actions()
+
     # repo = client.com.atproto.sync.get_repo({'did': client.me.did})
     did = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'}).did
     repo = client.com.atproto.sync.get_repo({'did': did})
@@ -109,32 +111,6 @@ async def main():
     # assert resolve.did == profile.did
 
 
-def test_strange_embed_images_type():
-    d = {
-        'text': 'Jack will save us from Elon I hope he doesn`t sell us out again @jack.bsky.social here`s to the future in the present moment #bluesky',
-        'embed': {
-            '$type': 'app.bsky.embed.images',
-            'images': [
-                {
-                    'alt': '',
-                    'image': {
-                        'cid': 'bafkreib66ejhcuiomfqusm52xriallilizk6uqppymyaz7dmz7yargpwhi',
-                        'mimeType': 'image/jpeg',
-                    },
-                }
-            ],
-        },
-        'entities': [
-            {'type': 'mention', 'index': {'end': 81, 'start': 64}, 'value': 'did:plc:6fktaamhhxdqb2ypum33kbkj'}
-        ],
-        'createdAt': '2023-03-26T15:36:13.302Z',
-    }
-    from atproto.xrpc_client.models.utils import get_or_create
-
-    m = get_or_create(d, models.AppBskyFeedPost.Main)
-    print(m)
-
-
 def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict:  # noqa: C901
     operation_by_type = {
         'posts': {'created': [], 'deleted': []},
@@ -190,20 +166,8 @@ def _custom_feed_firehose():
             return
 
         ops = _get_ops_by_type(commit)
-
-        # Here we can filter, process, run ML with classificator, etc.
-        # After our feed alg we can save posts uri in our DB
-        # also we should process here deleted posts to remove it from our DB
-        # for example lets create our custom feed that will contain all posts that contains M letter
-
-        posts_to_create = []
         for post in ops['posts']['created']:
-            if 'M' in post['record'].text:
-                posts_to_create.append(post['uri'])
-
-        if posts_to_create:
-            ...
-            # print('Posts with M letter:', posts_to_create)
+            print(post['record'].text)
 
     client.start(on_message_handler)
 
@@ -258,9 +222,7 @@ async def _main_async_firehose_test():
 
 
 if __name__ == '__main__':
-    # test_strange_embed_images_type()
-
-    # sync_main()
+    sync_main()
     # asyncio.get_event_loop().run_until_complete(main())
 
     _custom_feed_firehose()

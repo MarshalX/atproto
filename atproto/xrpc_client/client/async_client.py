@@ -14,22 +14,15 @@ from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin
 from atproto.xrpc_client.models import ids
 
 if t.TYPE_CHECKING:
-    from atproto.xrpc_client.client.auth import JwtPayload
     from atproto.xrpc_client.client.base import InvokeType
     from atproto.xrpc_client.request import Response
 
 
-class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
+class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
     """High-level client for XRPC of ATProto."""
 
-    def __init__(self, base_url: str = None) -> None:
+    def __init__(self, base_url: t.Optional[str] = None) -> None:
         super().__init__(base_url)
-
-        self._access_jwt: t.Optional[str] = None
-        self._access_jwt_payload: t.Optional['JwtPayload'] = None
-
-        self._refresh_jwt: t.Optional[str] = None
-        self._refresh_jwt_payload: t.Optional['JwtPayload'] = None
 
         self._refresh_lock = Lock()
 
@@ -63,11 +56,12 @@ class AsyncClient(AsyncClientRaw, SessionMethodsMixin):
         return refresh_session
 
     async def login(self, login: str, password: str) -> models.AppBskyActorGetProfile.ResponseRef:
-        """Authorize client and get profile info.
+        """Authorize a client and get profile info.
 
         Args:
             login: Handle/username of the account.
-            password: Password of the account. Could be app specific one.
+            password: Password of the account.
+            Could be an app-specific one.
 
         Returns:
             :obj:`models.AppBskyActorGetProfile.ResponseRef`: Profile information.
