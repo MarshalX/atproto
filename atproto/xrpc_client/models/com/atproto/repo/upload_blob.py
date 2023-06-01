@@ -5,14 +5,15 @@
 ##################################################################
 
 
-import typing as t
 from dataclasses import dataclass
+
+import typing_extensions as te
 
 from atproto.xrpc_client.models import base
 from atproto.xrpc_client.models.blob_ref import BlobRef
 
 #: Data raw data type.
-Data: t.Union[t.Type[str], t.Type[bytes]] = bytes
+Data: te.TypeAlias = bytes
 
 
 @dataclass

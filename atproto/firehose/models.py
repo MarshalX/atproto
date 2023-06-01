@@ -84,11 +84,6 @@ class Frame:
         return self.header.op
 
     @property
-    def type(self) -> str:
-        """:obj:`str`: Frame type."""
-        return self.header.t
-
-    @property
     def is_message(self) -> bool:
         """:obj:`bool`: Is frame the MessageFrame."""
         return self.operation is FrameType.MESSAGE

@@ -8,6 +8,8 @@
 import typing as t
 from dataclasses import dataclass
 
+import typing_extensions as te
+
 from atproto.xrpc_client.models import base
 
 
@@ -22,4 +24,4 @@ class Params(base.ParamsModelBase):
 
 
 #: Response raw data type.
-Response: t.Union[t.Type[str], t.Type[bytes]] = bytes
+Response: te.TypeAlias = bytes

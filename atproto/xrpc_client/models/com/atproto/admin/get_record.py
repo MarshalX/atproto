@@ -22,4 +22,4 @@ class Params(base.ParamsModelBase):
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.RecordViewDetail` model.
-ResponseRef: t.Type[models.ComAtprotoAdminDefs.RecordViewDetail] = models.ComAtprotoAdminDefs.RecordViewDetail
+ResponseRef = models.ComAtprotoAdminDefs.RecordViewDetail

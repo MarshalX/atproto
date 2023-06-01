@@ -16,18 +16,13 @@ from httpx_ws import (
 )
 
 from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError, FirehoseError
-from atproto.firehose.models import Frame
+from atproto.firehose.models import ErrorFrame, Frame, MessageFrame
 from atproto.xrpc_client.models.common import XrpcError
-
-if t.TYPE_CHECKING:
-    from httpx_ws import AsyncWebSocketSession, WebSocketSession
-
-    from atproto.firehose.models import MessageFrame
 
 _BASE_WEBSOCKET_URL = 'https://bsky.social/xrpc'
 
-OnMessageCallback = t.Callable[['MessageFrame'], None]
-AsyncOnMessageCallback = t.Callable[['MessageFrame'], t.Awaitable[None]]
+OnMessageCallback = t.Callable[['MessageFrame'], t.Generator[t.Any, None, t.Any]]
+AsyncOnMessageCallback = t.Callable[['MessageFrame'], t.Coroutine[t.Any, t.Any, t.Any]]
 
 OnCallbackErrorCallback = t.Callable[[BaseException], None]
 
@@ -74,13 +69,9 @@ class _WebsocketClientBase:
         method: str,
         base_url: t.Optional[str] = None,
         params: t.Optional[t.Dict[str, t.Any]] = None,
-        *,
-        async_version: bool = False,
     ) -> None:
         self._params = params
         self._url = _build_websocket_url(method, base_url)
-
-        self._async_version = async_version
 
         self._reconnect_no = 0
         self._max_reconnect_delay_sec = 64
@@ -88,13 +79,11 @@ class _WebsocketClientBase:
         self._on_message_callback: t.Optional[t.Union[OnMessageCallback, AsyncOnMessageCallback]] = None
         self._on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None
 
-    def _get_client(
-        self,
-    ) -> t.Union[t.AsyncGenerator['AsyncWebSocketSession', None], t.Generator['WebSocketSession', None, None]]:
-        if self._async_version:
-            return aconnect_ws(self._url, params=self._params)
-
+    def _get_client(self):
         return connect_ws(self._url, params=self._params)
+
+    def _get_async_client(self):
+        return aconnect_ws(self._url, params=self._params)
 
     def _get_reconnection_delay(self) -> int:
         base_sec = 2**self._reconnect_no
@@ -104,9 +93,9 @@ class _WebsocketClientBase:
 
     def _process_raw_frame(self, data: bytes) -> None:
         frame = Frame.from_bytes(data)
-        if frame.is_error:
+        if isinstance(frame, ErrorFrame):
             raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
-        if frame.is_message:
+        if isinstance(frame, MessageFrame):
             self._process_message_frame(frame)
         else:
             raise FirehoseError('Unknown frame type')
@@ -125,9 +114,10 @@ class _WebsocketClientBase:
         Returns:
             :obj:`None`
         """
-        raise NotImplementedError
+        self._on_message_callback = on_message_callback
+        self._on_callback_error_callback = on_callback_error_callback
 
-    def stop(self) -> None:
+    def stop(self):
         """Unsubscribe and stop Firehose client.
 
         Returns:
@@ -159,13 +149,8 @@ class _WebsocketClient(_WebsocketClientBase):
             else:
                 traceback.print_exc()
 
-    def start(
-        self,
-        on_message_callback: OnMessageCallback,
-        on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None,
-    ) -> None:
-        self._on_message_callback = on_message_callback
-        self._on_callback_error_callback = on_callback_error_callback
+    def start(self, *args, **kwargs):
+        super().start(*args, **kwargs)
 
         while not self._stop_lock.locked():
             try:
@@ -187,7 +172,7 @@ class _WebsocketClient(_WebsocketClientBase):
 
         self._stop_lock.release()
 
-    def stop(self) -> None:
+    def stop(self):
         if not self._stop_lock.locked():
             self._stop_lock.acquire()
 
@@ -196,45 +181,41 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
     def __init__(
         self, method: str, base_url: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
     ) -> None:
-        super().__init__(method, base_url, params, async_version=True)
+        super().__init__(method, base_url, params)
 
         self._loop = asyncio.get_event_loop()
-        self._on_message_tasks = set()
+        self._on_message_tasks: t.Set[asyncio.Task] = set()
 
         self._stop_lock = asyncio.Lock()
 
     def _on_message_callback_done(self, task: asyncio.Task) -> None:
         self._on_message_tasks.discard(task)
 
-        if task.exception():
+        exception = task.exception()
+        if exception:
             if not self._on_callback_error_callback:
                 traceback.print_exc()
                 return
 
             try:
-                self._on_callback_error_callback(task.exception())
+                self._on_callback_error_callback(exception)
             except:  # noqa
                 traceback.print_exc()
 
     def _process_message_frame(self, frame: 'MessageFrame') -> None:
-        task = self._loop.create_task(self._on_message_callback(frame))
+        task: asyncio.Task = self._loop.create_task(self._on_message_callback(frame))
         self._on_message_tasks.add(task)
         task.add_done_callback(self._on_message_callback_done)
 
-    async def start(
-        self,
-        on_message_callback: AsyncOnMessageCallback,
-        on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None,
-    ) -> None:
-        self._on_message_callback = on_message_callback
-        self._on_callback_error_callback = on_callback_error_callback
+    async def start(self, *args, **kwargs):
+        super().start(*args, **kwargs)
 
         while not self._stop_lock.locked():
             try:
                 if self._reconnect_no != 0:
                     await asyncio.sleep(self._get_reconnection_delay())
 
-                async with self._get_client() as client:
+                async with self._get_async_client() as client:
                     self._reconnect_no = 0
 
                     while not self._stop_lock.locked():
@@ -249,7 +230,7 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
 
         self._stop_lock.release()
 
-    async def stop(self) -> None:
+    async def stop(self):
         if not self._stop_lock.locked():
             await self._stop_lock.acquire()
 

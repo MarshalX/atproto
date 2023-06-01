@@ -12,7 +12,7 @@ from atproto.xrpc_client.models.utils import get_or_create_model, get_response_m
 from atproto.xrpc_client.namespaces.base import NamespaceBase
 
 if t.TYPE_CHECKING:
-    from atproto.xrpc_client.client.sync_raw import ClientRaw
+    from atproto.xrpc_client.client.raw import ClientRaw
 
 
 class AppNamespace(NamespaceBase):

@@ -28,7 +28,7 @@ ModelData: te.TypeAlias = t.Union[M, dict, None]
 def _record_model_type_hook(data: dict) -> RecordModelBase:
     # used for inner Record types
     record_type = data.pop('$type')
-    return get_or_create(data, RECORD_TYPE_TO_MODEL_CLASS[record_type])
+    return get_or_create_model(data, RECORD_TYPE_TO_MODEL_CLASS[record_type])
 
 
 def _decode_cid_hook(ref: t.Union[CID, str]) -> CID:

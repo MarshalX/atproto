@@ -1,4 +1,5 @@
 import typing as t
+from dataclasses import dataclass
 
 from atproto.lexicon.models import (
     LexDefinition,
@@ -12,7 +13,6 @@ from atproto.lexicon.parser import lexicon_parse_dir
 from atproto.nsid import NSID
 
 _VALID_LEX_DEF_TYPES = {LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, LexDefinitionType.RECORD}
-_VALID_LEX_DEF_TYPE = t.Union[LexXrpcProcedure, LexXrpcQuery, LexRecord]
 
 
 def _filter_namespace_valid_definitions(definitions: t.Dict[str, LexDefinition]) -> t.Dict[str, LexDefinition]:
@@ -32,43 +32,63 @@ def get_definition_by_name(name: str, defs: t.Dict[str, LexDefinition]) -> LexDe
     return defs['main']
 
 
-class ObjectInfo(t.NamedTuple):
+@dataclass
+class ObjectInfo:
     name: str
     nsid: NSID
-    definition: _VALID_LEX_DEF_TYPE
 
 
-class MethodInfo(ObjectInfo):
-    pass
+@dataclass
+class ProcedureInfo(ObjectInfo):
+    definition: LexXrpcProcedure
 
 
+@dataclass
+class QueryInfo(ObjectInfo):
+    definition: LexXrpcQuery
+
+
+MethodInfo = t.Union[ProcedureInfo, QueryInfo]
+
+
+@dataclass
 class RecordInfo(ObjectInfo):
-    pass
+    definition: LexRecord
 
 
 def _enrich_namespace_tree(root: dict, nsid: NSID, defs: t.Dict[str, LexDefinition]) -> None:
+    root_node: t.Union[dict, list] = root
+
     segments_count = len(nsid.segments)
     for path_level, segment in enumerate(nsid.segments):
         # if method
         if path_level == segments_count - 1:
             definition = get_definition_by_name(segment, defs)
 
-            model_class = MethodInfo
-            if definition.type is LexDefinitionType.RECORD:
+            model_class: t.Type[ObjectInfo]
+            if definition.type is LexDefinitionType.PROCEDURE:
+                model_class = ProcedureInfo
+            elif definition.type is LexDefinitionType.QUERY:
+                model_class = QueryInfo
+            elif definition.type is LexDefinitionType.RECORD:
                 model_class = RecordInfo
+            else:
+                raise RuntimeError(f'Unknown definition type: {definition.type}')
 
             # TODO(MarshalX): fake records as namespaces with methods to be able to reuse code of generator?
 
-            root.append(model_class(name=segment, nsid=nsid, definition=definition))
+            if model_class:
+                root_node.append(model_class(name=segment, nsid=nsid, definition=definition))
+
             continue
 
-        if segment not in root:
+        if segment not in root_node:
             # if end of method's path
             if path_level == segments_count - 2:
-                root[segment] = []
+                root_node[segment] = []
             else:
-                root[segment] = {}
-        root = root[segment]
+                root_node[segment] = {}
+        root_node = root_node[segment]
 
 
 def build_namespace_tree(lexicons: t.List[LexiconDoc]) -> dict:

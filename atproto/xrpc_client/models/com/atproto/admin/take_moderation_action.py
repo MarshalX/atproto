@@ -29,4 +29,4 @@ class Data(base.DataModelBase):
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.
-ResponseRef: t.Type[models.ComAtprotoAdminDefs.ActionView] = models.ComAtprotoAdminDefs.ActionView
+ResponseRef = models.ComAtprotoAdminDefs.ActionView

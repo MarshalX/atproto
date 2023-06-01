@@ -16,12 +16,12 @@ from atproto.codegen import (
     write_code,
 )
 from atproto.codegen import get_code_intent as _
-from atproto.codegen.namespaces.builder import MethodInfo, RecordInfo, build_namespaces
+from atproto.codegen.namespaces.builder import MethodInfo, ProcedureInfo, QueryInfo, RecordInfo, build_namespaces
 from atproto.lexicon.models import (
-    LexDefinitionType,
     LexObject,
     LexRef,
     LexXrpcProcedure,
+    LexXrpcQuery,
 )
 from atproto.nsid import NSID
 
@@ -53,7 +53,7 @@ def _get_namespace_imports() -> str:
         '',
         'if t.TYPE_CHECKING:',
         f'{_(1)}from atproto.xrpc_client.client.async_raw import AsyncClientRaw',
-        f'{_(1)}from atproto.xrpc_client.client.sync_raw import ClientRaw',
+        f'{_(1)}from atproto.xrpc_client.client.raw import ClientRaw',
     ]
 
     return join_code(lines)
@@ -88,7 +88,7 @@ def _get_method_docstring(method_info: MethodInfo) -> str:
 
     doc_string = [f'{_(2)}"""{method_desc}', '', f'{_(2)}Args:']
 
-    presented_args = _get_namespace_method_signature_args_names(method_info)
+    presented_args = _get_namespace_method_signature_args_names(method_info.definition)
     if 'params' in presented_args:
         doc_string.append(f'{_(3)}params: Parameters.')
     if 'data_schema' in presented_args:
@@ -119,12 +119,22 @@ def _get_method_docstring(method_info: MethodInfo) -> str:
     return join_code(doc_string)
 
 
+@t.overload
+def _get_namespace_method_body(method_info: ProcedureInfo, *, sync: bool) -> str:
+    ...
+
+
+@t.overload
+def _get_namespace_method_body(method_info: QueryInfo, *, sync: bool) -> str:
+    ...
+
+
 def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
     d, c = get_sync_async_keywords(sync=sync)
 
     lines = [_get_method_docstring(method_info)]
 
-    presented_args = _get_namespace_method_signature_args_names(method_info)
+    presented_args = _get_namespace_method_signature_args_names(method_info.definition)
     presented_args.remove('self')
 
     def _override_arg_line(name: str, model_name: str) -> str:
@@ -178,21 +188,21 @@ def _get_namespace_method_signature_arg(
     return f'{name}: {type_hint}{default_value}'
 
 
-def _get_namespace_method_signature_args_names(method_info: MethodInfo) -> t.Set[str]:
+def _get_namespace_method_signature_args_names(definition: t.Union[LexXrpcProcedure, LexXrpcQuery]) -> t.Set[str]:
     args = {'self'}
-    if method_info.definition.parameters:
+    if definition.parameters:
         args.add('params')
 
-    if method_info.definition.type is LexDefinitionType.PROCEDURE and method_info.definition.input:
-        if method_info.definition.input.schema:
+    if isinstance(definition, LexXrpcProcedure) and definition.input:
+        if definition.input.schema:
             args.add('data_schema')
         else:
             args.add('data_alias')
 
-        if method_info.definition.input.encoding:
+        if definition.input.encoding:
             args.add('input_encoding')
 
-    if method_info.definition.output and method_info.definition.output.encoding:
+    if definition.output and definition.output.encoding:
         args.add('output_encoding')
 
     return args
@@ -218,7 +228,7 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
         arg = _get_namespace_method_signature_arg('params', method_info.nsid, PARAMS_MODEL, optional=is_optional)
         _add_arg(arg, optional=is_optional)
 
-    if method_info.definition.type is LexDefinitionType.PROCEDURE and method_info.definition.input:
+    if isinstance(method_info, ProcedureInfo) and method_info.definition.input:
         schema = method_info.definition.input.schema
         if schema:
             is_optional = is_optional_arg(schema)
@@ -289,7 +299,7 @@ def _get_namespace_records_block(records_info: t.List[RecordInfo]) -> str:
     return join_code(lines)
 
 
-def _generate_namespace_in_output(namespace_tree: t.Union[dict, list], output: t.List[str], *, sync: bool) -> None:
+def _generate_namespace_in_output(namespace_tree: dict, output: t.List[str], *, sync: bool) -> None:
     for node_name, sub_node in namespace_tree.items():
         if isinstance(sub_node, dict):
             output.append(_get_namespace_class_def(node_name, sync=sync))
@@ -303,7 +313,7 @@ def _generate_namespace_in_output(namespace_tree: t.Union[dict, list], output: t
             # TODO(MarshalX): gen namespace by RecordInfo later
             # TODO(MarshalX): generate namespace record classes!
 
-            methods = [info for info in sub_node if isinstance(info, MethodInfo)]
+            methods = [info for info in sub_node if isinstance(info, (ProcedureInfo, QueryInfo))]
             output.append(_get_namespace_methods_block(methods, sync=sync))
 
 

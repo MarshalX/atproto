@@ -67,10 +67,7 @@ _DEFAULT_DACITE_CONFIG = dacite.Config(cast=[Enum], type_hooks=_TYPE_HOOKS, chec
 L = t.TypeVar('L')
 
 
-def lexicon_parse(data: dict, data_class: t.Optional[t.Type[L]] = None) -> t.Union[L, models.LexiconDoc]:
-    if not data_class:
-        data_class = models.LexiconDoc
-
+def lexicon_parse(data: dict, data_class: t.Optional[t.Type[L]] = models.LexiconDoc) -> L:
     return dacite.from_dict(data_class=data_class, data=data, config=_DEFAULT_DACITE_CONFIG)
 
 
@@ -87,19 +84,20 @@ def lexicon_parse_file(lexicon_path: t.Union[Path, str], *, soft_fail: bool = Fa
 
 
 def lexicon_parse_dir(
-    path: t.Optional[t.Union[Path, str]] = None, *, soft_fail: bool = False
+    lexicon_dir: t.Optional[t.Union[Path, str]] = None, *, soft_fail: bool = False
 ) -> t.List[models.LexiconDoc]:
-    if path is None:
-        path = _PATH_TO_LEXICONS
+    lexicon_dir_path = Path(lexicon_dir) if isinstance(lexicon_dir, str) else lexicon_dir
+    if lexicon_dir_path is None:
+        lexicon_dir_path = _PATH_TO_LEXICONS
 
     parsed_lexicons = []
 
-    for _, _, lexicons in os.walk(path):
+    for _, _, lexicons in os.walk(lexicon_dir_path):
         for lexicon in lexicons:
             if not lexicon.endswith(_LEXICON_FILE_EXT):
                 continue
 
-            lexicon_path = path.joinpath(lexicon)
+            lexicon_path = lexicon_dir_path.joinpath(lexicon)
             parsed_lexicon = lexicon_parse_file(lexicon_path, soft_fail=soft_fail)
             if parsed_lexicon:
                 parsed_lexicons.append(parsed_lexicon)
