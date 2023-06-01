@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.0.12
+
+**01.06.2023**
+
+* Update changelog for v0.0.11 by @MarshalX in https://github.com/MarshalX/atproto/pull/55
+* Add mypy; fix types; fix error handling of requests by @MarshalX in https://github.com/MarshalX/atproto/pull/56
+* Increase max message size in Firehose by @MarshalX in https://github.com/MarshalX/atproto/pull/57
+
 ## Version 0.0.11
 
 **30.05.2023**
