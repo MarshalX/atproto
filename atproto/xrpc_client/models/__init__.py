@@ -63,6 +63,7 @@ from atproto.xrpc_client.models.com.atproto.admin import get_moderation_report a
 from atproto.xrpc_client.models.com.atproto.admin import get_moderation_reports as ComAtprotoAdminGetModerationReports
 from atproto.xrpc_client.models.com.atproto.admin import get_record as ComAtprotoAdminGetRecord
 from atproto.xrpc_client.models.com.atproto.admin import get_repo as ComAtprotoAdminGetRepo
+from atproto.xrpc_client.models.com.atproto.admin import rebase_repo as ComAtprotoAdminRebaseRepo
 from atproto.xrpc_client.models.com.atproto.admin import (
     resolve_moderation_reports as ComAtprotoAdminResolveModerationReports,
 )
@@ -190,6 +191,7 @@ class _Ids:
     ComAtprotoAdminTakeModerationAction: str = 'com.atproto.admin.takeModerationAction'
     ComAtprotoAdminGetModerationReport: str = 'com.atproto.admin.getModerationReport'
     ComAtprotoAdminGetModerationReports: str = 'com.atproto.admin.getModerationReports'
+    ComAtprotoAdminRebaseRepo: str = 'com.atproto.admin.rebaseRepo'
     ComAtprotoAdminUpdateAccountEmail: str = 'com.atproto.admin.updateAccountEmail'
     ComAtprotoAdminEnableAccountInvites: str = 'com.atproto.admin.enableAccountInvites'
     ComAtprotoAdminDisableAccountInvites: str = 'com.atproto.admin.disableAccountInvites'

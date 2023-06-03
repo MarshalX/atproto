@@ -108,10 +108,7 @@ def main():
 
     print('Successfully fetch lexicons! Next steps:')
 
-    # shortcut to generate all: poetry run atp g all
-    print('- Codegen models (poetry run atp gen models)')
-    print('- Codegen namespaces (poetry run atp gen namespaces)')
-    print('- Codegen async version (poetry run atp gen async)')
+    print('- Run codegen (poetry run atp gen all)')
 
     print('- Run ruff (poetry run ruff .)')
     print('- Run black (poetry run black .)')

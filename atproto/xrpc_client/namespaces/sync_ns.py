@@ -1812,6 +1812,26 @@ class AdminNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoAdminGetRepo.ResponseRef)
 
+    def rebase_repo(self, data: t.Union[dict, 'models.ComAtprotoAdminRebaseRepo.Data'], **kwargs) -> bool:
+        """Administrative action to rebase an account's repo.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminRebaseRepo.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.admin.rebaseRepo', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     def resolve_moderation_reports(
         self, data: t.Union[dict, 'models.ComAtprotoAdminResolveModerationReports.Data'], **kwargs
     ) -> 'models.ComAtprotoAdminResolveModerationReports.ResponseRef':
