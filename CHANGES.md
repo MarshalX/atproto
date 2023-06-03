@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 0.0.13
+
+**03.06.2023**
+
+* Update changelog for v0.0.12 by @MarshalX in https://github.com/MarshalX/atproto/pull/58
+* Update lexicons (add admin.rebaseRepo) fetched from 4a6c976 committed 2023-05-30T15:50:46Z by @MarshalX in https://github.com/MarshalX/atproto/pull/59
+
 ## Version 0.0.12
 
 **01.06.2023**
