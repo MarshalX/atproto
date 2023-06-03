@@ -19,8 +19,12 @@ class Params(base.ParamsModelBase):
 
     actionType: t.Optional[str] = None  #: Action type.
     cursor: t.Optional[str] = None  #: Cursor.
+    ignoreSubjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
     limit: t.Optional[int] = None  #: Limit.
     resolved: t.Optional[bool] = None  #: Resolved.
+    reverse: t.Optional[
+        bool
+    ] = None  #: Reverse the order of the returned records? when true, returns reports in chronological order.
     subject: t.Optional[str] = None  #: Subject.
 
 

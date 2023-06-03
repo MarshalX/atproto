@@ -54,16 +54,10 @@ def sync_main():
     print(car_file.root)
     print(car_file.blocks)
 
+    search_result = client.bsky.actor.search_actors_typeahead()
     # search_result = client.bsky.actor.search_actors_typeahead({'term': 'marshal'})
-    # for actor in search_result.actors:
-    #     print(actor.handle, actor.displayName)
-
-    # session = client.com.atproto.server.create_session({'identifier': 'my-handle', 'password': 'my-pass'})
-    # token = session.accessJwt
-    # refresh_token = session.refreshJwt
-    #
-    # refreshed_session = client.com.atproto.server.refresh_session(headers={'Authorization': f'Bearer {refresh_token}'})
-    # new_token = refreshed_session.accessJwt
+    for actor in search_result.actors:
+        print(actor.handle, actor.displayName)
 
     # client.com.atproto.repo.get_record({'collection': 'app.bsky.feed.post', 'repo': 'arta.bsky.social'})
 
