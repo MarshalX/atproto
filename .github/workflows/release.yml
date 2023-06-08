@@ -13,6 +13,12 @@ jobs:
       id-token: write
 
     steps:
+      - name: Cimon (eBPF).
+        uses: cycodelabs/cimon-action@v0
+        with:
+          client-id: ${{ secrets.CIMON_CLIENT_ID }}
+          secret: ${{ secrets.CIMON_SECRET }}
+
       - name: Checkout repository.
         uses: actions/checkout@v3
         with:
