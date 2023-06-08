@@ -12,6 +12,11 @@ jobs:
         with:
           client-id: ${{ secrets.CIMON_CLIENT_ID }}
           secret: ${{ secrets.CIMON_SECRET }}
+          prevent: true
+          allowed-hosts: >
+            files.pythonhosted.org
+            install.python-poetry.org
+            pypi.org
 
       - name: Checkout repository.
         uses: actions/checkout@v3
