@@ -1,5 +1,17 @@
 # Change Log
 
+## Version 0.0.14
+
+**10.06.2023**
+
+* Update changelog for v0.0.13 by @MarshalX in https://github.com/MarshalX/atproto/pull/60
+* Add Cimon in Detect Mode by @MarshalX in https://github.com/MarshalX/atproto/pull/63
+* Enable Cimon Prevent Mode by @MarshalX in https://github.com/MarshalX/atproto/pull/64
+* Add send_embed example by @MarshalX in https://github.com/MarshalX/atproto/pull/66
+* Update README by @MarshalX in https://github.com/MarshalX/atproto/pull/67
+* Update lexicons fetched from 8857fb0 committed 2023-06-09T13:21:09Z by @MarshalX in https://github.com/MarshalX/atproto/pull/68
+* Bump requests from 2.30.0 to 2.31.0 by @dependabot in https://github.com/MarshalX/atproto/pull/69
+
 ## Version 0.0.13
 
 **03.06.2023**
