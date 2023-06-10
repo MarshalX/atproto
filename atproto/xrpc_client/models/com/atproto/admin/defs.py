@@ -110,6 +110,7 @@ class ReportView(base.ModelBase):
         'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
     ]  #: Subject.
     reason: t.Optional[str] = None  #: Reason.
+    subjectRepoHandle: t.Optional[str] = None  #: Subject repo handle.
 
     _type: str = 'com.atproto.admin.defs#reportView'
 
