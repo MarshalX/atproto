@@ -13,11 +13,18 @@ jobs:
       id-token: write
 
     steps:
-      - name: Cimon (eBPF).
+      - name: Run Cimon (eBPF).
         uses: cycodelabs/cimon-action@v0
         with:
           client-id: ${{ secrets.CIMON_CLIENT_ID }}
           secret: ${{ secrets.CIMON_SECRET }}
+          prevent: true
+          fail-on-error: true
+          allowed-hosts: >
+            files.pythonhosted.org
+            install.python-poetry.org
+            pypi.org
+            upload.pypi.org
 
       - name: Checkout repository.
         uses: actions/checkout@v3
@@ -30,7 +37,7 @@ jobs:
           generate_release_notes: true
 
       - name: Setup Python.
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.7
 
