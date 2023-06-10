@@ -45,6 +45,9 @@ def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
+    valid = client.com.atproto.repo.get_record({'collection': ids.AppBskyFeedGenerator, 'repo': 'test.marshal.dev', 'rkey': 'whats-alf'}).value
+    print(valid)
+
     # client.com.atproto.admin.get_moderation_actions()
 
     # repo = client.com.atproto.sync.get_repo({'did': client.me.did})

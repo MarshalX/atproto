@@ -1,11 +1,13 @@
+from datetime import datetime
+
 from atproto import Client, models
+
+# to send links as "link card" or "quote post" look at the send_embed.py example
 
 
 def main():
     client = Client()
     client.login('my-handle', 'my-password')
-
-    from datetime import datetime
 
     text = 'example link'
     url = 'https://google.com'
@@ -22,7 +24,7 @@ def main():
     client.com.atproto.repo.create_record(
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,  # or any another DID
-            collection='app.bsky.feed.post',
+            collection=models.ids.AppBskyFeedPost,
             record=models.AppBskyFeedPost.Main(createdAt=datetime.now().isoformat(), text=text, facets=facets),
         )
     )
