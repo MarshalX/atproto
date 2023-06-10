@@ -21,6 +21,7 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     ignoreSubjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
     limit: t.Optional[int] = None  #: Limit.
+    reporters: t.Optional[t.List[str]] = None  #: Filter reports made by one or more DIDs.
     resolved: t.Optional[bool] = None  #: Resolved.
     reverse: t.Optional[
         bool
