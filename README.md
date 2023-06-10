@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
 ### Introduction
 
-This SDK attempts to implement everything that provides ATProto. Due to the unstable state of the protocol (it grows and changes fast) and a bit of outdated documentation, only the client side is supported yet. There is support for Lexicon Schemes, XRPC clients and Firehose for now. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Scheme. DAG-CBOR, CAR files.
+This SDK attempts to implement everything that provides ATProto. Due to the unstable state of the protocol (it grows and changes fast) and a bit of outdated documentation, only the client side is supported yet. There is support for Lexicon Schemes, XRPC clients, and Firehose for now. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Schemes. DAG-CBOR, CAR files.
 
 ### Requirements
 
@@ -81,14 +81,8 @@ This SDK attempts to implement everything that provides ATProto. Due to the unst
 
 ### Installing
 
-#### From PyPI
 ``` bash
 pip3 install -U atproto
-```
-
-#### From main branch of the repository
-``` bash
-pip install -U git+https://github.com/MarshalX/atproto.git
 ```
 
 ### Quick start
@@ -261,7 +255,7 @@ with open('cat.jpg', 'rb') as f:
     client.com.atproto.repo.create_record(
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,
-            collection='app.bsky.feed.post',
+            collection=models.ids.AppBskyFeedPost,
             record=models.AppBskyFeedPost.Main(
                 createdAt=datetime.now().isoformat(), text='Text of the post', embed=embed
             ),
