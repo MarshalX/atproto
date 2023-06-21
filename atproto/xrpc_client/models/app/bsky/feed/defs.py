@@ -152,13 +152,13 @@ class GeneratorView(base.ModelBase):
 
     cid: str  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
+    did: str  #: Did.
     displayName: str  #: Display name.
     indexedAt: str  #: Indexed at.
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
     description: t.Optional[str] = None  #: Description.
     descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
-    did: t.Optional[str] = None  #: Did.
     likeCount: t.Optional[int] = None  #: Like count.
     viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState'] = None  #: Viewer.
 
