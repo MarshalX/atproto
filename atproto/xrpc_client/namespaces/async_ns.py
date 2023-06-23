@@ -1008,13 +1008,11 @@ class SyncNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoSyncListRepos.Response)
 
-    async def notify_of_update(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncNotifyOfUpdate.Params'], **kwargs
-    ) -> bool:
+    async def notify_of_update(self, data: t.Union[dict, 'models.ComAtprotoSyncNotifyOfUpdate.Data'], **kwargs) -> bool:
         """Notify a crawling service of a recent update. Often when a long break between updates causes the connection with the crawling service to break.
 
         Args:
-            params: Parameters.
+            data: Input data.
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
@@ -1024,15 +1022,17 @@ class SyncNamespace(AsyncNamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params_model = get_or_create_model(params, models.ComAtprotoSyncNotifyOfUpdate.Params)
-        response = await self._client.invoke_query('com.atproto.sync.notifyOfUpdate', params=params_model, **kwargs)
+        data_model = get_or_create_model(data, models.ComAtprotoSyncNotifyOfUpdate.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.sync.notifyOfUpdate', data=data_model, input_encoding='application/json', **kwargs
+        )
         return get_response_model(response, bool)
 
-    async def request_crawl(self, params: t.Union[dict, 'models.ComAtprotoSyncRequestCrawl.Params'], **kwargs) -> bool:
+    async def request_crawl(self, data: t.Union[dict, 'models.ComAtprotoSyncRequestCrawl.Data'], **kwargs) -> bool:
         """Request a service to persistently crawl hosted repos.
 
         Args:
-            params: Parameters.
+            data: Input data.
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
@@ -1042,8 +1042,10 @@ class SyncNamespace(AsyncNamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params_model = get_or_create_model(params, models.ComAtprotoSyncRequestCrawl.Params)
-        response = await self._client.invoke_query('com.atproto.sync.requestCrawl', params=params_model, **kwargs)
+        data_model = get_or_create_model(data, models.ComAtprotoSyncRequestCrawl.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.sync.requestCrawl', data=data_model, input_encoding='application/json', **kwargs
+        )
         return get_response_model(response, bool)
 
 

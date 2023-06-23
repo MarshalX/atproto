@@ -11,8 +11,8 @@ from atproto.xrpc_client.models import base
 
 
 @dataclass
-class Params(base.ParamsModelBase):
+class Data(base.DataModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.requestCrawl`."""
+    """Input data model for :obj:`com.atproto.sync.requestCrawl`."""
 
     hostname: str  #: Hostname of the service that is requesting to be crawled.
