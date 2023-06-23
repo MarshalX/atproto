@@ -19,7 +19,6 @@ jobs:
           client-id: ${{ secrets.CIMON_CLIENT_ID }}
           secret: ${{ secrets.CIMON_SECRET }}
           prevent: true
-          fail-on-error: true
           allowed-hosts: >
             files.pythonhosted.org
             install.python-poetry.org
