@@ -1,5 +1,17 @@
 # Change Log
 
+## Version 0.0.15
+
+**23.06.2023**
+
+* Update changelog for v0.0.14 by @MarshalX in https://github.com/MarshalX/atproto/pull/70
+* Update Cimon by @MarshalX in https://github.com/MarshalX/atproto/pull/71
+* Update lexicons fetched from 84032a6 committed 2023-06-12T21:51:38Z by @MarshalX in https://github.com/MarshalX/atproto/pull/72
+* Update Ruff; make _MANDATORY_HEADERS private; fix issues by @MarshalX in https://github.com/MarshalX/atproto/pull/73
+* Disable Cimon fail-on-error flag by @MarshalX in https://github.com/MarshalX/atproto/pull/74
+* Update lexicons fetched from 2768fb9 committed 2023-06-20T14:36:09Z by @MarshalX in https://github.com/MarshalX/atproto/pull/75
+* Fix dynamic versioning build backend by @MarshalX in https://github.com/MarshalX/atproto/pull/76
+
 ## Version 0.0.14
 
 **10.06.2023**
