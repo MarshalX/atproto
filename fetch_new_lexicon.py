@@ -90,8 +90,7 @@ def _write_to_file(filename: str, content: bytes) -> None:
 
 def _format_lexicon_filename(original_filename: str) -> str:
     filename = original_filename.replace(_build_valid_path_to_lexicons(), '')
-    filename = filename.replace('/', '.')
-    return filename
+    return filename.replace('/', '.')
 
 
 def _write_extracted_lexicons(extracted_files: ExtractedFiles) -> None:
