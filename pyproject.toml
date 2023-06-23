@@ -48,7 +48,7 @@ click = ">=8.1.3,<8.2.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "23.3.0"
-ruff = ">=0.0.270,<0.1.0"
+ruff = ">=0.0.275,<0.1.0"
 mypy = ">=1.3.0,<1.4.0"
 
 [tool.poetry.group.docs.dependencies]
@@ -78,7 +78,6 @@ build-backend = "poetry.core.masonry.api"
 [tool.mypy]
 python_version = "3.7"
 disallow_untyped_defs = false # TODO(MarshalX) enable
-
 
 [tool.ruff]
 extend-select = [

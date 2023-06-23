@@ -47,22 +47,25 @@ _DACITE_CONFIG = Config(cast=[Enum], type_hooks=_TYPE_HOOKS)
 
 
 def get_or_create(
-    model_data: ModelData, model: t.Type[M] = None, *, strict: bool = True
+    model_data: ModelData, model: t.Optional[t.Type[M]] = None, *, strict: bool = True
 ) -> t.Optional[t.Union[M, dict]]:
     """Get model instance from raw data.
 
     Note:
-        The record could have custom fields and be custom at all. For example, custom bsky clients add a "via" field
-        to indicate that it was posted using not official client. Such custom types can't be decoded into proper models.
-        You should work with it as with dict. By default, the method raises an exception on custom models.
-        To fallback to dict type disable strict mode using the argument.
+        The record could have custom fields and be completely custom.
+        For example, custom bsky clients add a "via" field
+        to indicate that it was posted using a not official client.
+        Such custom types can't be decoded into proper models.
+        You should work with it as with dict.
+        By default, the method raises an exception on custom models.
+        To fall back to a dict type, disable strict mode using the argument.
 
     Note:
-        Auto-resolve of model works only with Record type for now.
+        Auto-resolve of a model works only with a Record type for now.
 
     Args:
         model_data: Raw data.
-        model: Class of the model or any another type. If None will be resolved automatically.
+        model: Class of the model or any another type. If None, it will be resolved automatically.
         strict: Fallback to raw data if can't properly parse.
 
     Returns:

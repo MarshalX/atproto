@@ -65,13 +65,13 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
 
 
 class RequestBase:
-    MANDATORY_HEADERS = {'User-Agent': 'atproto/alpha (Python SDK)'}
+    _MANDATORY_HEADERS: t.ClassVar[t.Dict[str, str]] = {'User-Agent': 'atproto/alpha (Python SDK)'}
 
     def __init__(self) -> None:
         self._additional_headers: dict = {}
 
     def get_headers(self, additional_headers: t.Optional[dict] = None) -> dict:
-        headers = {**self.MANDATORY_HEADERS, **self._additional_headers}
+        headers = {**RequestBase._MANDATORY_HEADERS, **self._additional_headers}
 
         if additional_headers:
             headers.update(additional_headers)
