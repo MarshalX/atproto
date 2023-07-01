@@ -66,6 +66,7 @@ class Main(base.RecordModelBase):
         t.List['models.AppBskyFeedPost.Entity']
     ] = None  #: Deprecated: replaced by app.bsky.richtext.facet.
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Facets.
+    langs: t.Optional[t.List[str]] = None  #: Langs.
     reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None  #: Reply.
 
     _type: str = 'app.bsky.feed.post'

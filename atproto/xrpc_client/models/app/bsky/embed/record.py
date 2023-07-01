@@ -32,6 +32,7 @@ class View(base.ModelBase):
         'models.AppBskyEmbedRecord.ViewNotFound',
         'models.AppBskyEmbedRecord.ViewBlocked',
         'models.AppBskyFeedDefs.GeneratorView',
+        'models.AppBskyGraphDefs.ListView',
         't.Dict[str, t.Any]',
     ]  #: Record.
 

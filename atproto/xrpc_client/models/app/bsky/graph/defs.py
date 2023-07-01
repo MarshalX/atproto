@@ -19,6 +19,7 @@ class ListViewBasic(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
+    cid: str  #: Cid.
     name: str  #: Name.
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
     uri: str  #: Uri.
@@ -34,6 +35,7 @@ class ListView(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
+    cid: str  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
     indexedAt: str  #: Indexed at.
     name: str  #: Name.
