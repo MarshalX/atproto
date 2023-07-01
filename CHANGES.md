@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.0.16
+
+**01.07.2023**
+
+* Update changelog for v0.0.15 by @MarshalX in https://github.com/MarshalX/atproto/pull/77
+* Update lexicons fetched from 0306f81 committed 2023-06-23T20:30:52Z by @MarshalX in https://github.com/MarshalX/atproto/pull/79
+* Lock ruff version in GHA workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/81
+
 ## Version 0.0.15
 
 **23.06.2023**
