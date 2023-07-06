@@ -724,6 +724,28 @@ class UnspeccedNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetPopularFeedGenerators.Response)
 
+    async def get_timeline_skeleton(
+        self, params: t.Optional[t.Union[dict, 'models.AppBskyUnspeccedGetTimelineSkeleton.Params']] = None, **kwargs
+    ) -> 'models.AppBskyUnspeccedGetTimelineSkeleton.Response':
+        """A skeleton of a timeline - UNSPECCED & WILL GO AWAY SOON.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetTimelineSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create_model(params, models.AppBskyUnspeccedGetTimelineSkeleton.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getTimelineSkeleton', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetTimelineSkeleton.Response)
+
 
 class NotificationNamespace(AsyncNamespaceBase):
     async def get_unread_count(
