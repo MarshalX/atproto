@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.0.17
+
+**06.07.2023**
+
+* Update changelog for v0.0.16 by @MarshalX in https://github.com/MarshalX/atproto/pull/82
+* Move the websocket client into part of the atproto package by @MarshalX in https://github.com/MarshalX/atproto/pull/84
+* Update lexicons fetched from e7a0d27 committed 2023-07-03T16:28:39Z by @MarshalX in https://github.com/MarshalX/atproto/pull/85
+
 ## Version 0.0.16
 
 **01.07.2023**
