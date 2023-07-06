@@ -6,7 +6,10 @@ import traceback
 import typing as t
 
 import httpx
-from httpx_ws import (
+
+from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError, FirehoseError
+from atproto.firehose.models import ErrorFrame, Frame, MessageFrame
+from atproto.ws_client import (
     WebSocketDisconnect,
     WebSocketInvalidTypeReceived,
     WebSocketNetworkError,
@@ -14,9 +17,6 @@ from httpx_ws import (
     aconnect_ws,
     connect_ws,
 )
-
-from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError, FirehoseError
-from atproto.firehose.models import ErrorFrame, Frame, MessageFrame
 from atproto.xrpc_client.models.common import XrpcError
 
 _BASE_WEBSOCKET_URL = 'https://bsky.social/xrpc'
