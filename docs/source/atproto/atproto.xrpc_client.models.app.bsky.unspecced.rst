@@ -14,3 +14,4 @@ Submodules
 
    atproto.xrpc_client.models.app.bsky.unspecced.get_popular
    atproto.xrpc_client.models.app.bsky.unspecced.get_popular_feed_generators
+   atproto.xrpc_client.models.app.bsky.unspecced.get_timeline_skeleton
