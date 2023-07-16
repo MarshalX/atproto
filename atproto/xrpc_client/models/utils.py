@@ -179,11 +179,11 @@ def is_json(json_data: t.Union[str, bytes]) -> bool:
 
 
 def is_record_type(model: t.Union[ModelBase, dict], types_module) -> bool:
-    if isinstance(model, RecordModelBase) and hasattr(types_module, 'Main'):
-        # for now records in Main. could be broken late
-        if isinstance(model, dict):  # custom record
-            return types_module.Main._type == model.get('$type')
+    # for now, records in the Main class only. could be broken late
+    if not hasattr(types_module, 'Main'):
+        return False
 
-        return types_module.Main._type == model._type
+    if isinstance(model, dict):  # custom (extended) record
+        return types_module.Main._type == model.get('$type')
 
-    return False
+    return types_module.Main._type == model._type
