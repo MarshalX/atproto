@@ -13,8 +13,18 @@ from atproto.xrpc_client.models import base
 
 
 @dataclass
+class Params(base.ParamsModelBase):
+
+    """Parameters model for :obj:`app.bsky.unspecced.getPopularFeedGenerators`."""
+
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
+
+
+@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.unspecced.getPopularFeedGenerators`."""
 
     feeds: t.List['models.AppBskyFeedDefs.GeneratorView']  #: Feeds.
+    cursor: t.Optional[str] = None  #: Cursor.

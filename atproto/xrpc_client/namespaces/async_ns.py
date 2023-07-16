@@ -706,10 +706,15 @@ class UnspeccedNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetPopular.Response)
 
-    async def get_popular_feed_generators(self, **kwargs) -> 'models.AppBskyUnspeccedGetPopularFeedGenerators.Response':
+    async def get_popular_feed_generators(
+        self,
+        params: t.Optional[t.Union[dict, 'models.AppBskyUnspeccedGetPopularFeedGenerators.Params']] = None,
+        **kwargs,
+    ) -> 'models.AppBskyUnspeccedGetPopularFeedGenerators.Response':
         """An unspecced view of globally popular feed generators.
 
         Args:
+            params: Parameters.
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
@@ -719,8 +724,12 @@ class UnspeccedNamespace(AsyncNamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
+        params_model = get_or_create_model(params, models.AppBskyUnspeccedGetPopularFeedGenerators.Params)
         response = await self._client.invoke_query(
-            'app.bsky.unspecced.getPopularFeedGenerators', output_encoding='application/json', **kwargs
+            'app.bsky.unspecced.getPopularFeedGenerators',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
         )
         return get_response_model(response, models.AppBskyUnspeccedGetPopularFeedGenerators.Response)
 
