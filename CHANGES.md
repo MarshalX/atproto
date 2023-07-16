@@ -1,5 +1,14 @@
 # Change Log
 
+## Version 0.0.18
+
+**16.07.2023**
+
+* Update changelog for v0.0.17 by @MarshalX in https://github.com/MarshalX/atproto/pull/86
+* Fix is_record_type for dict record types by @joelghill in https://github.com/MarshalX/atproto/pull/88
+* Lower version of typing-extensions as possible; update ruff by @MarshalX in https://github.com/MarshalX/atproto/pull/90
+* Update lexicons fetched from b9ca76f committed 2023-07-14T23:05:56Z by @MarshalX in https://github.com/MarshalX/atproto/pull/91
+
 ## Version 0.0.17
 
 **06.07.2023**
