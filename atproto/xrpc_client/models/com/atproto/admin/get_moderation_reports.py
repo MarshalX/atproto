@@ -18,6 +18,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.admin.getModerationReports`."""
 
     actionType: t.Optional[str] = None  #: Action type.
+    actionedBy: t.Optional[str] = None  #: Get all reports that were actioned by a specific moderator.
     cursor: t.Optional[str] = None  #: Cursor.
     ignoreSubjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
     limit: t.Optional[int] = None  #: Limit.
