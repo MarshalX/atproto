@@ -265,3 +265,85 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
                 rkey=post_rkey,
             )
         )
+
+    async def get_all_follows(self, profile_identify: t.Optional[str] = None) -> models.AppBskyGraphGetFollows.Response:
+        """Get All Follows
+
+        Args:
+            profile_identify: Handler or DID.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetFollows.Response`: Reference to the Follows.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        async def _fetch(actor: str, cursor: t.Optional[str]) -> models.AppBskyGraphGetFollows.Response:
+            d = models.AppBskyGraphGetFollows.Params(actor=actor, limit=100)
+            if cursor:
+                d.cursor = cursor
+            return await self.bsky.graph.get_follows(d)
+
+        actor = self.me.did
+        if profile_identify:
+            actor = profile_identify
+
+        cursor = None
+        follows = []
+        subject = None
+
+        while True:
+            fetched = await _fetch(actor, cursor)
+            if not subject:
+                subject = fetched.subject
+
+            if not fetched.cursor:
+                break
+
+            follows = follows + fetched.follows
+            cursor = fetched.cursor
+
+        return models.AppBskyGraphGetFollows.Response(follows=follows, cursor=None, subject=subject)
+
+    async def get_all_followers(
+        self, profile_identify: t.Optional[str] = None
+    ) -> models.AppBskyGraphGetFollowers.Response:
+        """Get All Followers
+
+        Args:
+            profile_identify: Handler or DID.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetFollowers.Response`: Reference to the Followers.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        async def _fetch(actor: str, cursor: t.Optional[str]) -> models.AppBskyGraphGetFollowers.Response:
+            d = models.AppBskyGraphGetFollowers.Params(actor=actor, limit=100)
+            if cursor:
+                d.cursor = cursor
+            return await self.bsky.graph.get_followers(d)
+
+        actor = self.me.did
+        if profile_identify:
+            actor = profile_identify
+
+        cursor = None
+        followers = []
+        subject = None
+
+        while True:
+            fetched = await _fetch(actor, cursor)
+            if not subject:
+                subject = fetched.subject
+
+            if not fetched.cursor:
+                break
+
+            followers = followers + fetched.followers
+            cursor = fetched.cursor
+
+        return models.AppBskyGraphGetFollowers.Response(followers=followers, cursor=None, subject=subject)
