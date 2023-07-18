@@ -6,6 +6,7 @@ from atproto.xrpc_client import models
 from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin
 from atproto.xrpc_client.client.raw import ClientRaw
 from atproto.xrpc_client.models import ids
+from atproto.xrpc_client.models.languages import DEFAULT_LANGUAGE_CODE1
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client.client.base import InvokeType
@@ -80,17 +81,22 @@ class Client(SessionMethodsMixin, ClientRaw):
                 'models.AppBskyEmbedRecordWithMedia.Main',
             ]
         ] = None,
+        langs: t.Optional[t.List[str]] = None,
     ) -> models.ComAtprotoRepoCreateRecord.Response:
         """Send post.
 
         Note:
             If `profile_identify` is not provided will be sent to the current profile.
 
+            The default language is ``en``.
+            Available languages are defined in :py:mod:`atproto.xrpc_client.models.languages`.
+
         Args:
             text: Text of the post.
             profile_identify: Handle or DID. Where to send post.
             reply_to: Root and parent of the post to reply to.
             embed: Embed models that should be attached to the post.
+            langs: List of used languages in the post.
 
         Returns:
             :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created post record.
@@ -103,12 +109,15 @@ class Client(SessionMethodsMixin, ClientRaw):
         if profile_identify:
             repo = profile_identify
 
+        if not langs:
+            langs = [DEFAULT_LANGUAGE_CODE1]
+
         return self.com.atproto.repo.create_record(
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=repo,
                 collection=ids.AppBskyFeedPost,
                 record=models.AppBskyFeedPost.Main(
-                    createdAt=datetime.now().isoformat(), text=text, reply=reply_to, embed=embed
+                    createdAt=datetime.now().isoformat(), text=text, reply=reply_to, embed=embed, langs=langs
                 ),
             )
         )

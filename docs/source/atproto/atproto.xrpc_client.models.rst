@@ -24,5 +24,6 @@ Submodules
    atproto.xrpc_client.models.base
    atproto.xrpc_client.models.blob_ref
    atproto.xrpc_client.models.common
+   atproto.xrpc_client.models.languages
    atproto.xrpc_client.models.type_conversion
    atproto.xrpc_client.models.utils
