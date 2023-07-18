@@ -14,4 +14,5 @@ Submodules
 
    ../atproto/atproto.xrpc_client.models.app
    ../atproto/atproto.xrpc_client.models.com
+   ../atproto/atproto.xrpc_client.models.languages
    ../atproto/atproto.xrpc_client.models.utils
