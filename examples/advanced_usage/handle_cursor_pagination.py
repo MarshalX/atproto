@@ -1,3 +1,5 @@
+import typing as t
+
 from atproto import Client
 from atproto.xrpc_client import models
 
@@ -8,12 +10,12 @@ def main():
     client.login('my-handle', 'my-password')
     handle = 'target-handle'
 
-    def _fetch(actor: str, cursor: str | None) -> models.AppBskyGraphGetFollows.Response:
-        d = models.AppBskyGraphGetFollows.Params(actor=actor, limit=100)
+    def _fetch(actor: str, cursor: t.Union[str, None]) -> models.AppBskyGraphGetFollows.Response:
+        params = models.AppBskyGraphGetFollows.Params(actor=actor, limit=100)
         if cursor:
-            d.cursor = cursor
+            params.cursor = cursor
 
-        return client.bsky.graph.get_follows(d)
+        return client.bsky.graph.get_follows(params)
 
     cursor = None
     follows = []
