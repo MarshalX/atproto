@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Optional, Union
 
 from atproto.cbor import decode_dag_multi
-from atproto.exceptions import AtProtocolError, FirehoseError
+from atproto.exceptions import AtProtocolError, FirehoseDecodingError
 from atproto.xrpc_client.models.utils import get_or_create_model
 
 
@@ -49,14 +49,14 @@ def parse_frame_header(raw_header: dict) -> FrameHeader:
     try:
         header_op = int(raw_header.get('op', 0))
         if not FrameType.has_value(header_op):
-            raise FirehoseError('Invalid frame type')
+            raise FirehoseDecodingError('Invalid frame type')
 
         frame_type = FrameType(header_op)
         if frame_type is FrameType.MESSAGE:
             return get_or_create_model(raw_header, MessageFrameHeader)
         return get_or_create_model(raw_header, ErrorFrameHeader)
     except (ValueError, AtProtocolError) as e:
-        raise FirehoseError('Invalid frame header') from e
+        raise FirehoseDecodingError('Invalid frame header') from e
 
 
 def parse_frame(header: FrameHeader, raw_body: dict) -> Union['ErrorFrame', 'MessageFrame']:
@@ -66,9 +66,9 @@ def parse_frame(header: FrameHeader, raw_body: dict) -> Union['ErrorFrame', 'Mes
             return ErrorFrame(header, body)
         if isinstance(header, MessageFrameHeader):
             return MessageFrame(header, raw_body)
-        raise FirehoseError('Invalid frame type')
+        raise FirehoseDecodingError('Invalid frame type')
     except AtProtocolError as e:
-        raise FirehoseError('Invalid frame body') from e
+        raise FirehoseDecodingError('Invalid frame body') from e
 
 
 @dataclass
@@ -108,9 +108,9 @@ class Frame:
         """
         decoded_parts = decode_dag_multi(data)
         if len(decoded_parts) > 2:
-            raise FirehoseError('Too many CBOR data parts in the frame')
+            raise FirehoseDecodingError('Too many CBOR data parts in the frame')
         if not len(decoded_parts):
-            raise FirehoseError('Invalid frame without CBOR data')
+            raise FirehoseDecodingError('Invalid frame without CBOR data')
 
         raw_header = decoded_parts[0]
 
@@ -119,7 +119,7 @@ class Frame:
             raw_body = decoded_parts[1]
 
         if raw_body is None:
-            raise FirehoseError('Frame body not found')
+            raise FirehoseDecodingError('Frame body not found')
 
         header = parse_frame_header(raw_header)
         return parse_frame(header, raw_body)
