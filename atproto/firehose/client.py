@@ -7,7 +7,7 @@ import typing as t
 
 import httpx
 
-from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError, FirehoseError
+from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError, FirehoseDecodingError, FirehoseError
 from atproto.firehose.models import ErrorFrame, Frame, MessageFrame
 from atproto.ws_client import (
     WebSocketDisconnect,
@@ -35,7 +35,20 @@ def _build_websocket_url(method: str, base_url: t.Optional[str] = None) -> str:
     return f'{base_url}/{method}'
 
 
-def _handle_firehose_error_or_stop(exception: Exception) -> bool:  # noqa: C901
+def _handle_frame_decoding_error(exception: Exception) -> None:
+    if isinstance(exception, (CBORDecodingError, DAGCBORDecodingError, FirehoseDecodingError)):
+        # Ignore an invalid firehose frame that could not be properly decoded.
+        # It's better to ignore one frame rather than stop the whole connection
+        # or trap into an infinite loop of reconnections.
+
+        # TODO(MarshalX): investigate exceptions that could be raised here.
+        #  Maybe bug in CBOR library or in decode_dag_multi method.
+        return
+
+    raise exception
+
+
+def _handle_websocket_error_or_stop(exception: Exception) -> bool:
     """Returns if the connection should be properly being closed or reraise exception."""
 
     if isinstance(exception, WebSocketDisconnect):
@@ -49,18 +62,10 @@ def _handle_firehose_error_or_stop(exception: Exception) -> bool:  # noqa: C901
         return False
     if isinstance(exception, httpx.TimeoutException):
         return False
-    if isinstance(exception, (CBORDecodingError, DAGCBORDecodingError)):
-        # Reconnect will be occurred on DAG-CBOR decoding error.
-
-        # Decoding error could occur when bytes len more than _MAX_MESSAGE_SIZE_BYTES (5MB for now).
-        # More info: https://github.com/MarshalX/atproto/issues/53
-        return False
     if isinstance(exception, WebSocketInvalidTypeReceived):
         raise FirehoseError from exception
     if isinstance(exception, WebSocketUpgradeError):
         raise FirehoseError from exception
-    if isinstance(exception, FirehoseError):
-        raise exception
 
     raise FirehoseError from exception
 
@@ -100,7 +105,7 @@ class _WebsocketClientBase:
         if isinstance(frame, MessageFrame):
             self._process_message_frame(frame)
         else:
-            raise FirehoseError('Unknown frame type')
+            raise FirehoseDecodingError('Unknown frame type')
 
     def start(
         self,
@@ -120,7 +125,7 @@ class _WebsocketClientBase:
         self._on_callback_error_callback = on_callback_error_callback
 
     def stop(self):
-        """Unsubscribe and stop Firehose client.
+        """Unsubscribe and stop the Firehose client.
 
         Returns:
             :obj:`None`
@@ -164,11 +169,15 @@ class _WebsocketClient(_WebsocketClientBase):
 
                     while not self._stop_lock.locked():
                         raw_frame = client.receive_bytes()
-                        self._process_raw_frame(raw_frame)
+
+                        try:
+                            self._process_raw_frame(raw_frame)
+                        except Exception as e:  # noqa: BLE001
+                            _handle_frame_decoding_error(e)
             except Exception as e:  # noqa: BLE001
                 self._reconnect_no += 1
 
-                should_stop = _handle_firehose_error_or_stop(e)
+                should_stop = _handle_websocket_error_or_stop(e)
                 if should_stop:
                     break
 
@@ -222,11 +231,14 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
 
                     while not self._stop_lock.locked():
                         raw_frame = await client.receive_bytes()
-                        self._process_raw_frame(raw_frame)
+                        try:
+                            self._process_raw_frame(raw_frame)
+                        except Exception as e:  # noqa: BLE001
+                            _handle_frame_decoding_error(e)
             except Exception as e:  # noqa: BLE001
                 self._reconnect_no += 1
 
-                should_stop = _handle_firehose_error_or_stop(e)
+                should_stop = _handle_websocket_error_or_stop(e)
                 if should_stop:
                     break
 

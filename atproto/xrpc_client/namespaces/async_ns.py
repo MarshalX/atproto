@@ -1080,6 +1080,418 @@ class SyncNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
 
+class AdminNamespace(AsyncNamespaceBase):
+    async def disable_account_invites(
+        self, data: t.Union[dict, 'models.ComAtprotoAdminDisableAccountInvites.Data'], **kwargs
+    ) -> bool:
+        """Disable an account from receiving new invite codes, but does not invalidate existing codes.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminDisableAccountInvites.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.disableAccountInvites', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def disable_invite_codes(
+        self, data: t.Optional[t.Union[dict, 'models.ComAtprotoAdminDisableInviteCodes.Data']] = None, **kwargs
+    ) -> bool:
+        """Disable some set of codes and/or all codes associated with a set of users.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminDisableInviteCodes.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.disableInviteCodes', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def enable_account_invites(
+        self, data: t.Union[dict, 'models.ComAtprotoAdminEnableAccountInvites.Data'], **kwargs
+    ) -> bool:
+        """Re-enable an accounts ability to receive invite codes.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminEnableAccountInvites.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.enableAccountInvites', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def get_invite_codes(
+        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetInviteCodes.Params']] = None, **kwargs
+    ) -> 'models.ComAtprotoAdminGetInviteCodes.Response':
+        """Admin view of invite codes.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminGetInviteCodes.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetInviteCodes.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.admin.getInviteCodes', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminGetInviteCodes.Response)
+
+    async def get_moderation_action(
+        self, params: t.Union[dict, 'models.ComAtprotoAdminGetModerationAction.Params'], **kwargs
+    ) -> 'models.ComAtprotoAdminGetModerationAction.ResponseRef':
+        """View details about a moderation action.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminGetModerationAction.ResponseRef`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationAction.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.admin.getModerationAction', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminGetModerationAction.ResponseRef)
+
+    async def get_moderation_actions(
+        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetModerationActions.Params']] = None, **kwargs
+    ) -> 'models.ComAtprotoAdminGetModerationActions.Response':
+        """List moderation actions related to a subject.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminGetModerationActions.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationActions.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.admin.getModerationActions', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminGetModerationActions.Response)
+
+    async def get_moderation_report(
+        self, params: t.Union[dict, 'models.ComAtprotoAdminGetModerationReport.Params'], **kwargs
+    ) -> 'models.ComAtprotoAdminGetModerationReport.ResponseRef':
+        """View details about a moderation report.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminGetModerationReport.ResponseRef`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationReport.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.admin.getModerationReport', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminGetModerationReport.ResponseRef)
+
+    async def get_moderation_reports(
+        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetModerationReports.Params']] = None, **kwargs
+    ) -> 'models.ComAtprotoAdminGetModerationReports.Response':
+        """List moderation reports related to a subject.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminGetModerationReports.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationReports.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.admin.getModerationReports', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminGetModerationReports.Response)
+
+    async def get_record(
+        self, params: t.Union[dict, 'models.ComAtprotoAdminGetRecord.Params'], **kwargs
+    ) -> 'models.ComAtprotoAdminGetRecord.ResponseRef':
+        """View details about a record.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminGetRecord.ResponseRef`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetRecord.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.admin.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminGetRecord.ResponseRef)
+
+    async def get_repo(
+        self, params: t.Union[dict, 'models.ComAtprotoAdminGetRepo.Params'], **kwargs
+    ) -> 'models.ComAtprotoAdminGetRepo.ResponseRef':
+        """View details about a repository.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminGetRepo.ResponseRef`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create_model(params, models.ComAtprotoAdminGetRepo.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.admin.getRepo', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminGetRepo.ResponseRef)
+
+    async def rebase_repo(self, data: t.Union[dict, 'models.ComAtprotoAdminRebaseRepo.Data'], **kwargs) -> bool:
+        """Administrative action to rebase an account's repo.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminRebaseRepo.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.rebaseRepo', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def resolve_moderation_reports(
+        self, data: t.Union[dict, 'models.ComAtprotoAdminResolveModerationReports.Data'], **kwargs
+    ) -> 'models.ComAtprotoAdminResolveModerationReports.ResponseRef':
+        """Resolve moderation reports by an action.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminResolveModerationReports.ResponseRef`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminResolveModerationReports.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.resolveModerationReports',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoAdminResolveModerationReports.ResponseRef)
+
+    async def reverse_moderation_action(
+        self, data: t.Union[dict, 'models.ComAtprotoAdminReverseModerationAction.Data'], **kwargs
+    ) -> 'models.ComAtprotoAdminReverseModerationAction.ResponseRef':
+        """Reverse a moderation action.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminReverseModerationAction.ResponseRef`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminReverseModerationAction.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.reverseModerationAction',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoAdminReverseModerationAction.ResponseRef)
+
+    async def search_repos(
+        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminSearchRepos.Params']] = None, **kwargs
+    ) -> 'models.ComAtprotoAdminSearchRepos.Response':
+        """Find repositories based on a search term.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminSearchRepos.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create_model(params, models.ComAtprotoAdminSearchRepos.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.admin.searchRepos', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminSearchRepos.Response)
+
+    async def send_email(
+        self, data: t.Union[dict, 'models.ComAtprotoAdminSendEmail.Data'], **kwargs
+    ) -> 'models.ComAtprotoAdminSendEmail.Response':
+        """Send email to a user's primary email address.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminSendEmail.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminSendEmail.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.sendEmail',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoAdminSendEmail.Response)
+
+    async def take_moderation_action(
+        self, data: t.Union[dict, 'models.ComAtprotoAdminTakeModerationAction.Data'], **kwargs
+    ) -> 'models.ComAtprotoAdminTakeModerationAction.ResponseRef':
+        """Take a moderation action on a repo.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminTakeModerationAction.ResponseRef`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminTakeModerationAction.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.takeModerationAction',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoAdminTakeModerationAction.ResponseRef)
+
+    async def update_account_email(
+        self, data: t.Union[dict, 'models.ComAtprotoAdminUpdateAccountEmail.Data'], **kwargs
+    ) -> bool:
+        """Administrative action to update an account's email.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminUpdateAccountEmail.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.updateAccountEmail', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def update_account_handle(
+        self, data: t.Union[dict, 'models.ComAtprotoAdminUpdateAccountHandle.Data'], **kwargs
+    ) -> bool:
+        """Administrative action to update an account's handle.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create_model(data, models.ComAtprotoAdminUpdateAccountHandle.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.updateAccountHandle', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class ServerNamespace(AsyncNamespaceBase):
     async def create_account(
         self, data: t.Union[dict, 'models.ComAtprotoServerCreateAccount.Data'], **kwargs
@@ -1624,392 +2036,6 @@ class RepoNamespace(AsyncNamespaceBase):
             'com.atproto.repo.uploadBlob', data=data, input_encoding='*/*', output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoRepoUploadBlob.Response)
-
-
-class AdminNamespace(AsyncNamespaceBase):
-    async def disable_account_invites(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminDisableAccountInvites.Data'], **kwargs
-    ) -> bool:
-        """Disable an account from receiving new invite codes, but does not invalidate existing codes.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create_model(data, models.ComAtprotoAdminDisableAccountInvites.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.disableAccountInvites', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    async def disable_invite_codes(
-        self, data: t.Optional[t.Union[dict, 'models.ComAtprotoAdminDisableInviteCodes.Data']] = None, **kwargs
-    ) -> bool:
-        """Disable some set of codes and/or all codes associated with a set of users.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create_model(data, models.ComAtprotoAdminDisableInviteCodes.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.disableInviteCodes', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    async def enable_account_invites(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminEnableAccountInvites.Data'], **kwargs
-    ) -> bool:
-        """Re-enable an accounts ability to receive invite codes.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create_model(data, models.ComAtprotoAdminEnableAccountInvites.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.enableAccountInvites', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    async def get_invite_codes(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetInviteCodes.Params']] = None, **kwargs
-    ) -> 'models.ComAtprotoAdminGetInviteCodes.Response':
-        """Admin view of invite codes.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminGetInviteCodes.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create_model(params, models.ComAtprotoAdminGetInviteCodes.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.admin.getInviteCodes', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminGetInviteCodes.Response)
-
-    async def get_moderation_action(
-        self, params: t.Union[dict, 'models.ComAtprotoAdminGetModerationAction.Params'], **kwargs
-    ) -> 'models.ComAtprotoAdminGetModerationAction.ResponseRef':
-        """View details about a moderation action.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminGetModerationAction.ResponseRef`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationAction.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.admin.getModerationAction', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminGetModerationAction.ResponseRef)
-
-    async def get_moderation_actions(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetModerationActions.Params']] = None, **kwargs
-    ) -> 'models.ComAtprotoAdminGetModerationActions.Response':
-        """List moderation actions related to a subject.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminGetModerationActions.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationActions.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.admin.getModerationActions', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminGetModerationActions.Response)
-
-    async def get_moderation_report(
-        self, params: t.Union[dict, 'models.ComAtprotoAdminGetModerationReport.Params'], **kwargs
-    ) -> 'models.ComAtprotoAdminGetModerationReport.ResponseRef':
-        """View details about a moderation report.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminGetModerationReport.ResponseRef`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationReport.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.admin.getModerationReport', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminGetModerationReport.ResponseRef)
-
-    async def get_moderation_reports(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetModerationReports.Params']] = None, **kwargs
-    ) -> 'models.ComAtprotoAdminGetModerationReports.Response':
-        """List moderation reports related to a subject.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminGetModerationReports.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create_model(params, models.ComAtprotoAdminGetModerationReports.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.admin.getModerationReports', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminGetModerationReports.Response)
-
-    async def get_record(
-        self, params: t.Union[dict, 'models.ComAtprotoAdminGetRecord.Params'], **kwargs
-    ) -> 'models.ComAtprotoAdminGetRecord.ResponseRef':
-        """View details about a record.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminGetRecord.ResponseRef`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create_model(params, models.ComAtprotoAdminGetRecord.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.admin.getRecord', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminGetRecord.ResponseRef)
-
-    async def get_repo(
-        self, params: t.Union[dict, 'models.ComAtprotoAdminGetRepo.Params'], **kwargs
-    ) -> 'models.ComAtprotoAdminGetRepo.ResponseRef':
-        """View details about a repository.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminGetRepo.ResponseRef`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create_model(params, models.ComAtprotoAdminGetRepo.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.admin.getRepo', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminGetRepo.ResponseRef)
-
-    async def rebase_repo(self, data: t.Union[dict, 'models.ComAtprotoAdminRebaseRepo.Data'], **kwargs) -> bool:
-        """Administrative action to rebase an account's repo.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create_model(data, models.ComAtprotoAdminRebaseRepo.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.rebaseRepo', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    async def resolve_moderation_reports(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminResolveModerationReports.Data'], **kwargs
-    ) -> 'models.ComAtprotoAdminResolveModerationReports.ResponseRef':
-        """Resolve moderation reports by an action.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminResolveModerationReports.ResponseRef`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create_model(data, models.ComAtprotoAdminResolveModerationReports.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.resolveModerationReports',
-            data=data_model,
-            input_encoding='application/json',
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoAdminResolveModerationReports.ResponseRef)
-
-    async def reverse_moderation_action(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminReverseModerationAction.Data'], **kwargs
-    ) -> 'models.ComAtprotoAdminReverseModerationAction.ResponseRef':
-        """Reverse a moderation action.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminReverseModerationAction.ResponseRef`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create_model(data, models.ComAtprotoAdminReverseModerationAction.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.reverseModerationAction',
-            data=data_model,
-            input_encoding='application/json',
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoAdminReverseModerationAction.ResponseRef)
-
-    async def search_repos(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminSearchRepos.Params']] = None, **kwargs
-    ) -> 'models.ComAtprotoAdminSearchRepos.Response':
-        """Find repositories based on a search term.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminSearchRepos.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create_model(params, models.ComAtprotoAdminSearchRepos.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.admin.searchRepos', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminSearchRepos.Response)
-
-    async def take_moderation_action(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminTakeModerationAction.Data'], **kwargs
-    ) -> 'models.ComAtprotoAdminTakeModerationAction.ResponseRef':
-        """Take a moderation action on a repo.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminTakeModerationAction.ResponseRef`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create_model(data, models.ComAtprotoAdminTakeModerationAction.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.takeModerationAction',
-            data=data_model,
-            input_encoding='application/json',
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoAdminTakeModerationAction.ResponseRef)
-
-    async def update_account_email(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminUpdateAccountEmail.Data'], **kwargs
-    ) -> bool:
-        """Administrative action to update an account's email.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create_model(data, models.ComAtprotoAdminUpdateAccountEmail.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.updateAccountEmail', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    async def update_account_handle(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminUpdateAccountHandle.Data'], **kwargs
-    ) -> bool:
-        """Administrative action to update an account's handle.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create_model(data, models.ComAtprotoAdminUpdateAccountHandle.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.updateAccountHandle', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
 
 
 class IdentityNamespace(AsyncNamespaceBase):

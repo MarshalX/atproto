@@ -3,7 +3,6 @@ from typing import Dict, List, Union
 
 import dag_cbor as _dag_cbor
 from dag_cbor.decoding import CBORDecodingError as _CBORDecodingError
-from dag_cbor.decoding import DAGCBORDecodingError as _DAGCBORDecodingError
 
 from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError
 
@@ -36,12 +35,10 @@ def decode_dag(data: DagCborData, *, allow_concat: bool = False, callback=None) 
         if isinstance(decoded_data, dict):
             return decoded_data
         raise DAGCBORDecodingError(f'Invalid DAG-CBOR data. Expected dict instead of {type(decoded_data).__name__}')
-    except _DAGCBORDecodingError as e:
-        raise DAGCBORDecodingError from e
     except _CBORDecodingError as e:
         raise CBORDecodingError from e
-    except Exception as e:
-        raise e
+    except Exception as e:  # noqa: BLE001
+        raise DAGCBORDecodingError from e
 
 
 def decode_dag_multi(data: DagCborData) -> List[Dict[str, _dag_cbor.IPLDKind]]:

@@ -1,5 +1,14 @@
 # Change Log
 
+## Version 0.0.19
+
+**18.07.2023**
+
+* Update changelog for v0.0.18 by @MarshalX in https://github.com/MarshalX/atproto/pull/92
+* Add posts langs support by @MarshalX in https://github.com/MarshalX/atproto/pull/96
+* Fix infinite loop of reconnections to Firehose by @MarshalX in https://github.com/MarshalX/atproto/pull/97
+* Update lexicons fetched from 775944e committed 2023-07-17T23:06:44Z by @MarshalX in https://github.com/MarshalX/atproto/pull/98
+
 ## Version 0.0.18
 
 **16.07.2023**

@@ -81,6 +81,10 @@ class FirehoseError(AtProtocolError):
     ...
 
 
+class FirehoseDecodingError(FirehoseError):
+    ...
+
+
 class CBORDecodingError(AtProtocolError):
     ...
 
