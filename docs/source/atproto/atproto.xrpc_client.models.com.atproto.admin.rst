@@ -27,6 +27,7 @@ Submodules
    atproto.xrpc_client.models.com.atproto.admin.resolve_moderation_reports
    atproto.xrpc_client.models.com.atproto.admin.reverse_moderation_action
    atproto.xrpc_client.models.com.atproto.admin.search_repos
+   atproto.xrpc_client.models.com.atproto.admin.send_email
    atproto.xrpc_client.models.com.atproto.admin.take_moderation_action
    atproto.xrpc_client.models.com.atproto.admin.update_account_email
    atproto.xrpc_client.models.com.atproto.admin.update_account_handle
