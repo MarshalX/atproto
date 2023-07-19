@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.0.20
+
+**19.07.2023**
+
+* Update changelog for v0.0.19 by @MarshalX in https://github.com/MarshalX/atproto/pull/99
+* Add pagination example using cursors by @ymdpharm in https://github.com/MarshalX/atproto/pull/93
+* Migrate to websockets lib (fixed all known issues with lost firehouse frames, reconnections and crashes) by @MarshalX in https://github.com/MarshalX/atproto/pull/101
+
 ## Version 0.0.19
 
 **18.07.2023**
