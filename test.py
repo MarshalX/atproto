@@ -157,7 +157,7 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict
 
 
 def _custom_feed_firehose():
-    client = FirehoseSubscribeReposClient()
+    client = FirehoseSubscribeReposClient({'cursor': 93278360})
 
     def on_message_handler(message: 'MessageFrame') -> None:
         commit = parse_subscribe_repos_message(message)
@@ -189,7 +189,7 @@ def _main_firehose_test():
         sleep(3)
         client.stop()
 
-    # threading.Thread(target=_stop_after_n_sec).start()
+    threading.Thread(target=_stop_after_n_sec).start()
     client.start(on_message_handler)
     # client.start(on_message_handler, on_callback_error_handler)
     print('stopped. start again')
@@ -197,7 +197,7 @@ def _main_firehose_test():
 
 
 async def _main_async_firehose_test():
-    client = AsyncFirehoseSubscribeReposClient()
+    client = AsyncFirehoseSubscribeReposClient({'cursor': 93278360})
     # client = AsyncFirehoseSubscribeLabelsClient()
 
     async def on_message_handler(message: 'MessageFrame') -> None:
@@ -221,9 +221,9 @@ async def _main_async_firehose_test():
 
 
 if __name__ == '__main__':
-    sync_main()
+    # sync_main()
     # asyncio.get_event_loop().run_until_complete(main())
 
-    _custom_feed_firehose()
-    # _main_firehose_test()
-    # asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())
+    # _custom_feed_firehose()
+    _main_firehose_test()
+    asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())

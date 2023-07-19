@@ -1,25 +1,27 @@
 import asyncio
 import random
+import socket
 import threading
 import time
 import traceback
 import typing as t
+from urllib.parse import urlencode
 
-import httpx
+from websockets.client import connect as aconnect
+from websockets.exceptions import (
+    ConnectionClosedError,
+    ConnectionClosedOK,
+    InvalidHandshake,
+    PayloadTooBig,
+    ProtocolError,
+)
+from websockets.sync.client import connect
 
 from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError, FirehoseDecodingError, FirehoseError
 from atproto.firehose.models import ErrorFrame, Frame, MessageFrame
-from atproto.ws_client import (
-    WebSocketDisconnect,
-    WebSocketInvalidTypeReceived,
-    WebSocketNetworkError,
-    WebSocketUpgradeError,
-    aconnect_ws,
-    connect_ws,
-)
 from atproto.xrpc_client.models.common import XrpcError
 
-_BASE_WEBSOCKET_URL = 'https://bsky.social/xrpc'
+_BASE_WEBSOCKET_URI = 'wss://bsky.social/xrpc'
 _MAX_MESSAGE_SIZE_BYTES = 1024 * 1024 * 5  # 5MB
 
 OnMessageCallback = t.Callable[['MessageFrame'], t.Generator[t.Any, None, t.Any]]
@@ -28,11 +30,17 @@ AsyncOnMessageCallback = t.Callable[['MessageFrame'], t.Coroutine[t.Any, t.Any, 
 OnCallbackErrorCallback = t.Callable[[BaseException], None]
 
 
-def _build_websocket_url(method: str, base_url: t.Optional[str] = None) -> str:
-    if base_url is None:
-        base_url = _BASE_WEBSOCKET_URL
+def _build_websocket_uri(
+    method: str, base_uri: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
+) -> str:
+    if base_uri is None:
+        base_uri = _BASE_WEBSOCKET_URI
 
-    return f'{base_url}/{method}'
+    query_string = ''
+    if params:
+        query_string = f'?{urlencode(params)}'
+
+    return f'{base_uri}/{method}{query_string}'
 
 
 def _handle_frame_decoding_error(exception: Exception) -> None:
@@ -40,9 +48,6 @@ def _handle_frame_decoding_error(exception: Exception) -> None:
         # Ignore an invalid firehose frame that could not be properly decoded.
         # It's better to ignore one frame rather than stop the whole connection
         # or trap into an infinite loop of reconnections.
-
-        # TODO(MarshalX): investigate exceptions that could be raised here.
-        #  Maybe bug in CBOR library or in decode_dag_multi method.
         return
 
     raise exception
@@ -50,22 +55,10 @@ def _handle_frame_decoding_error(exception: Exception) -> None:
 
 def _handle_websocket_error_or_stop(exception: Exception) -> bool:
     """Returns if the connection should be properly being closed or reraise exception."""
-
-    if isinstance(exception, WebSocketDisconnect):
-        if exception.code == 1000:
-            return True
-        if exception.code in {1001, 1002, 1003}:
-            return False
-    if isinstance(exception, WebSocketNetworkError):
+    if isinstance(exception, (ConnectionClosedOK,)):
+        return True
+    if isinstance(exception, (ConnectionClosedError, InvalidHandshake, PayloadTooBig, ProtocolError, socket.gaierror)):
         return False
-    if isinstance(exception, httpx.NetworkError):
-        return False
-    if isinstance(exception, httpx.TimeoutException):
-        return False
-    if isinstance(exception, WebSocketInvalidTypeReceived):
-        raise FirehoseError from exception
-    if isinstance(exception, WebSocketUpgradeError):
-        raise FirehoseError from exception
 
     raise FirehoseError from exception
 
@@ -77,8 +70,7 @@ class _WebsocketClientBase:
         base_url: t.Optional[str] = None,
         params: t.Optional[t.Dict[str, t.Any]] = None,
     ) -> None:
-        self._params = params
-        self._url = _build_websocket_url(method, base_url)
+        self._url = _build_websocket_uri(method, base_url, params)
 
         self._reconnect_no = 0
         self._max_reconnect_delay_sec = 64
@@ -87,10 +79,10 @@ class _WebsocketClientBase:
         self._on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None
 
     def _get_client(self):
-        return connect_ws(self._url, params=self._params, max_message_size_bytes=_MAX_MESSAGE_SIZE_BYTES)
+        return connect(self._url, max_size=_MAX_MESSAGE_SIZE_BYTES)
 
     def _get_async_client(self):
-        return aconnect_ws(self._url, params=self._params, max_message_size_bytes=_MAX_MESSAGE_SIZE_BYTES)
+        return aconnect(self._url, max_size=_MAX_MESSAGE_SIZE_BYTES)
 
     def _get_reconnection_delay(self) -> int:
         base_sec = 2**self._reconnect_no
@@ -168,7 +160,10 @@ class _WebsocketClient(_WebsocketClientBase):
                     self._reconnect_no = 0
 
                     while not self._stop_lock.locked():
-                        raw_frame = client.receive_bytes()
+                        raw_frame = client.recv()
+                        if isinstance(raw_frame, str):
+                            # skip text frames (should not be occurred)
+                            continue
 
                         try:
                             self._process_raw_frame(raw_frame)
@@ -181,7 +176,8 @@ class _WebsocketClient(_WebsocketClientBase):
                 if should_stop:
                     break
 
-        self._stop_lock.release()
+        if self._stop_lock.locked():
+            self._stop_lock.release()
 
     def stop(self):
         if not self._stop_lock.locked():
@@ -230,7 +226,11 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
                     self._reconnect_no = 0
 
                     while not self._stop_lock.locked():
-                        raw_frame = await client.receive_bytes()
+                        raw_frame = await client.recv()
+                        if isinstance(raw_frame, str):
+                            # skip text frames (should not be occurred)
+                            continue
+
                         try:
                             self._process_raw_frame(raw_frame)
                         except Exception as e:  # noqa: BLE001
@@ -242,7 +242,8 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
                 if should_stop:
                     break
 
-        self._stop_lock.release()
+        if self._stop_lock.locked():
+            self._stop_lock.release()
 
     async def stop(self):
         if not self._stop_lock.locked():
