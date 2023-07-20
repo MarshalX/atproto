@@ -36,7 +36,7 @@ class Create(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record."""
 
     collection: str  #: Collection.
-    value: 'base.RecordModelBase'  #: Value.
+    value: 'base.UnknownDict'  #: Value.
     rkey: t.Optional[str] = None  #: Rkey.
 
     _type: str = 'com.atproto.repo.applyWrites#create'
@@ -49,7 +49,7 @@ class Update(base.ModelBase):
 
     collection: str  #: Collection.
     rkey: str  #: Rkey.
-    value: 'base.RecordModelBase'  #: Value.
+    value: 'base.UnknownDict'  #: Value.
 
     _type: str = 'com.atproto.repo.applyWrites#update'
 

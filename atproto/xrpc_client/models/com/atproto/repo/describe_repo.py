@@ -26,6 +26,6 @@ class Response(base.ResponseModelBase):
 
     collections: t.List[str]  #: Collections.
     did: str  #: Did.
-    didDoc: 'base.RecordModelBase'  #: Did doc.
+    didDoc: 'base.UnknownDict'  #: Did doc.
     handle: str  #: Handle.
     handleIsCorrect: bool  #: Handle is correct.

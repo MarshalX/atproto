@@ -48,7 +48,7 @@ class ViewRecord(base.ModelBase):
     cid: str  #: Cid.
     indexedAt: str  #: Indexed at.
     uri: str  #: Uri.
-    value: 'base.RecordModelBase'  #: Value.
+    value: 'base.UnknownDict'  #: Value.
     embeds: t.Optional[
         t.List[
             t.Union[

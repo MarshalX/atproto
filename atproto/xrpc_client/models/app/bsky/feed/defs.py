@@ -20,7 +20,7 @@ class PostView(base.ModelBase):
     author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
     cid: str  #: Cid.
     indexedAt: str  #: Indexed at.
-    record: 'base.RecordModelBase'  #: Record.
+    record: 'base.UnknownDict'  #: Record.
     uri: str  #: Uri.
     embed: t.Optional[
         t.Union[

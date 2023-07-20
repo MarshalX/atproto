@@ -30,5 +30,5 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.repo.getRecord`."""
 
     uri: str  #: Uri.
-    value: 'base.RecordModelBase'  #: Value.
+    value: 'base.UnknownDict'  #: Value.
     cid: t.Optional[str] = None  #: Cid.

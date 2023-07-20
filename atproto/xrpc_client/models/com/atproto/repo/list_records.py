@@ -42,6 +42,6 @@ class Record(base.ModelBase):
 
     cid: str  #: Cid.
     uri: str  #: Uri.
-    value: 'base.RecordModelBase'  #: Value.
+    value: 'base.UnknownDict'  #: Value.
 
     _type: str = 'com.atproto.repo.listRecords#record'

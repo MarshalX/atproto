@@ -61,6 +61,7 @@ def _get_model_imports() -> str:
         'import typing_extensions as te',
         'from atproto.xrpc_client import models',
         'from atproto.xrpc_client.models import base',
+        'from atproto.xrpc_client.models import unknown_type',
         'from atproto.xrpc_client.models.blob_ref import BlobRef',
         '',
         'from atproto import CID',
@@ -162,8 +163,8 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
-        # TODO(MarshalX): some of "unknown" types are well known...
-        return _get_optional_typehint("'base.RecordModelBase'", optional=optional)
+        # unknown type is a generic response with records or any not described type in the lexicon. for example didDoc
+        return _get_optional_typehint("'base.UnknownDict'", optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
     if type_hint:
@@ -425,7 +426,15 @@ def _generate_record_models(lex_db: builder.BuiltRecordModels) -> None:
 
 
 def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
-    lines = ['from atproto.xrpc_client import models', 'RECORD_TYPE_TO_MODEL_CLASS = {']
+    type_conversion_lines = ['from atproto.xrpc_client import models', 'RECORD_TYPE_TO_MODEL_CLASS = {']
+    unknown_record_type_hint_lines = [
+        'import typing as t',
+        'import typing_extensions as te',
+        'if t.TYPE_CHECKING:',
+        f'{_(4)}from atproto.xrpc_client import models',
+        '',
+        'UnknownRecordType: te.TypeAlias = t.Union[',
+    ]
 
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
@@ -439,11 +448,14 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
 
                 path_to_class = f'models.{get_import_path(nsid)}.{class_name}'
 
-                lines.append(f"'{record_type}': {path_to_class},")
+                type_conversion_lines.append(f"'{record_type}': {path_to_class},")
+                unknown_record_type_hint_lines.append(f"{_(4)}'{path_to_class}',")
 
-    lines.append('}')
+    type_conversion_lines.append('}')
+    unknown_record_type_hint_lines.append(']')
 
-    write_code(_MODELS_OUTPUT_DIR.joinpath('type_conversion.py'), join_code(lines))
+    write_code(_MODELS_OUTPUT_DIR.joinpath('type_conversion.py'), join_code(type_conversion_lines))
+    write_code(_MODELS_OUTPUT_DIR.joinpath('unknown_type.py'), join_code(unknown_record_type_hint_lines))
 
 
 def _generate_ref_models(lex_db: builder.BuiltRefsModels) -> None:

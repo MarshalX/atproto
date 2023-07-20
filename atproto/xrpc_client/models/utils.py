@@ -14,9 +14,10 @@ from atproto.exceptions import (
     UnexpectedFieldError,
     WrongTypeError,
 )
-from atproto.xrpc_client.models.base import ModelBase, RecordModelBase
+from atproto.xrpc_client.models.base import DotDict, ModelBase, UnknownDict
 from atproto.xrpc_client.models.blob_ref import BlobRef
 from atproto.xrpc_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
+from atproto.xrpc_client.models.unknown_type import UnknownRecordType
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client.request import Response
@@ -25,10 +26,12 @@ M = t.TypeVar('M')
 ModelData: te.TypeAlias = t.Union[M, dict, None]
 
 
-def _record_model_type_hook(data: dict) -> RecordModelBase:
-    # used for inner Record types
-    record_type = data.pop('$type')
-    return get_or_create_model(data, RECORD_TYPE_TO_MODEL_CLASS[record_type])
+def _unknown_type_hook(data: dict) -> t.Union[UnknownRecordType, DotDict]:
+    if '$type' in data:
+        # $type used for inner Record types
+        return get_or_create_model(data, RECORD_TYPE_TO_MODEL_CLASS[data.pop('$type')])
+    # any another unknown (not described by lexicon) type
+    return DotDict(data)
 
 
 def _decode_cid_hook(ref: t.Union[CID, str]) -> CID:
@@ -41,7 +44,7 @@ def _decode_cid_hook(ref: t.Union[CID, str]) -> CID:
 _TYPE_HOOKS = {
     BlobRef: lambda ref: BlobRef.from_dict(ref),
     CID: _decode_cid_hook,
-    RecordModelBase: _record_model_type_hook,
+    UnknownDict: _unknown_type_hook,
 }
 _DACITE_CONFIG = Config(cast=[Enum], type_hooks=_TYPE_HOOKS)
 
