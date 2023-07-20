@@ -98,7 +98,7 @@ client = Client()
 # Client('https://my.awesome.server/xrpc')
 ```
 
-Fro async:
+For async:
 ```python
 from atproto import AsyncClient
 
