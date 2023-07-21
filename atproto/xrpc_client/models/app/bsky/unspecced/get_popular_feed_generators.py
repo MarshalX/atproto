@@ -19,6 +19,7 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = None  #: Limit.
+    query: t.Optional[str] = None  #: Query.
 
 
 @dataclass
