@@ -46,13 +46,23 @@ def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
-    # r = client.send_post('regress test')
-    # print(r)
+    lexicon_correct_record = client.com.atproto.repo.get_record(
+        {'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yihcrp6f2c'}
+    )
+    print(lexicon_correct_record.value.text)
+    print(type(lexicon_correct_record.value))
+    extended_record = client.com.atproto.repo.get_record(
+        {'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yinh52ne2x'}
+    )
+    print(extended_record.value.text)
+    print(extended_record.value.lol)  # custom (out of lexicon) attribute
+    print(type(extended_record.value))
 
     did_doc = client.com.atproto.repo.describe_repo({'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}).didDoc
     print(did_doc.service)
     print(did_doc['service'])
     print(did_doc['@context'])
+    print(type(did_doc))
 
     atproto_feed = client.com.atproto.repo.get_record(
         {'collection': ids.AppBskyFeedGenerator, 'repo': 'marshal.dev', 'rkey': 'atproto'}
@@ -116,7 +126,7 @@ async def main():
     # with open('cat2.png', 'rb') as f:
     #     cat_data = f.read()
 
-    # await async_client.send_image('Cat looking for a Async Python', cat_data, 'async cat alt')
+    # await async_client.send_image('Cat looking for an Async Python', cat_data, 'async cat alt')
 
     # resolve = await async_client.com.atproto.identity.resolve_handle(
     #     models.ComAtprotoIdentityResolveHandle.Params(profile.handle)
@@ -171,11 +181,9 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict
 
 
 def _custom_feed_firehose():
-    client = FirehoseSubscribeReposClient({'cursor': 93278360})
     client = FirehoseSubscribeReposClient()
 
     def on_message_handler(message: 'MessageFrame') -> None:
-        # return
         commit = parse_subscribe_repos_message(message)
         if not isinstance(commit, models.ComAtprotoSyncSubscribeRepos.Commit):
             return

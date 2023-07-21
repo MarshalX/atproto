@@ -29,7 +29,7 @@ ModelData: te.TypeAlias = t.Union[M, dict, None]
 def _unknown_type_hook(data: dict) -> t.Union[UnknownRecordType, DotDict]:
     if '$type' in data:
         # $type used for inner Record types
-        return get_or_create_model(data, RECORD_TYPE_TO_MODEL_CLASS[data.pop('$type')])
+        return get_or_create(data, strict=False)
     # any another unknown (not described by lexicon) type
     return DotDict(data)
 
@@ -51,7 +51,7 @@ _DACITE_CONFIG = Config(cast=[Enum], type_hooks=_TYPE_HOOKS)
 
 def get_or_create(
     model_data: ModelData, model: t.Optional[t.Type[M]] = None, *, strict: bool = True
-) -> t.Optional[t.Union[M, dict]]:
+) -> t.Optional[t.Union[M, UnknownRecordType, DotDict]]:
     """Get model instance from raw data.
 
     Note:
@@ -80,17 +80,19 @@ def get_or_create(
         if strict:
             raise e
 
-        return model_data
+        return DotDict(model_data)
 
 
-def _get_or_create(model_data: ModelData, model: t.Type[M], *, strict: bool) -> t.Optional[t.Union[M, dict]]:
+def _get_or_create(
+    model_data: ModelData, model: t.Type[M], *, strict: bool
+) -> t.Optional[t.Union[M, UnknownRecordType, DotDict]]:
     if model_data is None:
         return None
 
     if model is None:
         # resolve model by $type and try to parse
         # resolves only Records
-        record_type = model_data.pop('$type')
+        record_type = model_data.pop('$type', None)
         if not record_type or record_type not in RECORD_TYPE_TO_MODEL_CLASS:
             return None
 
