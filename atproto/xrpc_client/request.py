@@ -93,7 +93,7 @@ class Request(RequestBase):
         self._client = httpx.Client()
 
     def _send_request(self, method: str, url: str, **kwargs) -> httpx.Response:
-        headers = self.get_headers(kwargs.pop('headers'))
+        headers = self.get_headers(kwargs.pop('headers', None))
 
         try:
             response = self._client.request(method=method, url=url, headers=headers, **kwargs)
@@ -120,7 +120,7 @@ class AsyncRequest(RequestBase):
         self._client = httpx.AsyncClient()
 
     async def _send_request(self, method: str, url: str, **kwargs) -> httpx.Response:
-        headers = self.get_headers(kwargs.pop('headers'))
+        headers = self.get_headers(kwargs.pop('headers', None))
 
         try:
             response = await self._client.request(method=method, url=url, headers=headers, **kwargs)
