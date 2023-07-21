@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 0.0.21
+
+**21.07.2023**
+
+* Add dot notation for dictionaries by @MarshalX in https://github.com/MarshalX/atproto/pull/106
+* Fix unknown type that could be plain dictionary by @MarshalX in https://github.com/MarshalX/atproto/pull/105
+* Fix parsing of custom (extended) records by @MarshalX in https://github.com/MarshalX/atproto/pull/106
+* Fix a small typo in `README.md` by @ndrezn in https://github.com/MarshalX/atproto/pull/104
+* Update lexicons fetched from b2ef386 committed 2023-07-20T16:00:51Z by @MarshalX in https://github.com/MarshalX/atproto/pull/107
+* Update changelog for v0.0.20 by @MarshalX in https://github.com/MarshalX/atproto/pull/103
+
 ## Version 0.0.20
 
 **19.07.2023**
