@@ -146,7 +146,7 @@ class RepoView(base.ModelBase):
     handle: str  #: Handle.
     indexedAt: str  #: Indexed at.
     moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
-    relatedRecords: t.List['base.RecordModelBase']  #: Related records.
+    relatedRecords: t.List['base.UnknownDict']  #: Related records.
     email: t.Optional[str] = None  #: Email.
     invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
     invitesDisabled: t.Optional[bool] = None  #: Invites disabled.
@@ -163,7 +163,7 @@ class RepoViewDetail(base.ModelBase):
     handle: str  #: Handle.
     indexedAt: str  #: Indexed at.
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
-    relatedRecords: t.List['base.RecordModelBase']  #: Related records.
+    relatedRecords: t.List['base.UnknownDict']  #: Related records.
     email: t.Optional[str] = None  #: Email.
     invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
     invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
@@ -204,7 +204,7 @@ class RecordView(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
     repo: 'models.ComAtprotoAdminDefs.RepoView'  #: Repo.
     uri: str  #: Uri.
-    value: 'base.RecordModelBase'  #: Value.
+    value: 'base.UnknownDict'  #: Value.
 
     _type: str = 'com.atproto.admin.defs#recordView'
 
@@ -220,7 +220,7 @@ class RecordViewDetail(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
     repo: 'models.ComAtprotoAdminDefs.RepoView'  #: Repo.
     uri: str  #: Uri.
-    value: 'base.RecordModelBase'  #: Value.
+    value: 'base.UnknownDict'  #: Value.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
     _type: str = 'com.atproto.admin.defs#recordViewDetail'

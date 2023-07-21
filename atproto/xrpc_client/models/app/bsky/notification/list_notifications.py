@@ -41,7 +41,7 @@ class Notification(base.ModelBase):
     indexedAt: str  #: Indexed at.
     isRead: bool  #: Is read.
     reason: str  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', and 'quote'.
-    record: 'base.RecordModelBase'  #: Record.
+    record: 'base.UnknownDict'  #: Record.
     uri: str  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     reasonSubject: t.Optional[str] = None  #: Reason subject.

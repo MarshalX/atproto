@@ -3,6 +3,7 @@ import logging
 import os
 import threading
 import typing as t
+from datetime import datetime
 
 from atproto import CAR, AsyncClient, AtUri, Client, exceptions, models
 from atproto.firehose import (
@@ -45,10 +46,23 @@ def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
-    valid = client.com.atproto.repo.get_record(
-        {'collection': ids.AppBskyFeedGenerator, 'repo': 'test.marshal.dev', 'rkey': 'whats-alf'}
+    # r = client.send_post('regress test')
+    # print(r)
+
+    did_doc = client.com.atproto.repo.describe_repo({'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}).didDoc
+    print(did_doc.service)
+    print(did_doc['service'])
+    print(did_doc['@context'])
+
+    atproto_feed = client.com.atproto.repo.get_record(
+        {'collection': ids.AppBskyFeedGenerator, 'repo': 'marshal.dev', 'rkey': 'atproto'}
     ).value
-    print(valid)
+    print(atproto_feed)
+    print(atproto_feed.createdAt)
+    print(atproto_feed['createdAt'])
+    print(type(atproto_feed))
+
+    exit(0)
 
     # client.com.atproto.admin.get_moderation_actions()
 
@@ -158,8 +172,10 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict
 
 def _custom_feed_firehose():
     client = FirehoseSubscribeReposClient({'cursor': 93278360})
+    client = FirehoseSubscribeReposClient()
 
     def on_message_handler(message: 'MessageFrame') -> None:
+        # return
         commit = parse_subscribe_repos_message(message)
         if not isinstance(commit, models.ComAtprotoSyncSubscribeRepos.Commit):
             return
@@ -221,9 +237,9 @@ async def _main_async_firehose_test():
 
 
 if __name__ == '__main__':
-    # sync_main()
+    sync_main()
     # asyncio.get_event_loop().run_until_complete(main())
 
     # _custom_feed_firehose()
-    _main_firehose_test()
-    asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())
+    # _main_firehose_test()
+    # asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())

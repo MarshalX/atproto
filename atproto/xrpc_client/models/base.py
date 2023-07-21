@@ -1,9 +1,6 @@
-from dataclasses import dataclass
-
 from atproto.exceptions import ModelFieldNotFoundError
 
 
-@dataclass
 class ModelBase:
     def __getitem__(self, item: str):
         if hasattr(self, item):
@@ -12,21 +9,43 @@ class ModelBase:
         raise ModelFieldNotFoundError(f"Can't find field '{item}' in the object of type {type(self)}.")
 
 
-@dataclass
 class ParamsModelBase(ModelBase):
     pass
 
 
-@dataclass
 class DataModelBase(ModelBase):
     pass
 
 
-@dataclass
 class ResponseModelBase(ModelBase):
     pass
 
 
-@dataclass
-class RecordModelBase(ModelBase):
+class UnknownDict(ModelBase):
+    pass
+
+
+class DotDict(UnknownDict):
+    def __init__(self, data: dict):
+        self._data = data
+
+    def __getattr__(self, item):
+        return self._data.get(item)
+
+    def __setattr__(self, key, value):
+        if key == '_data':
+            super().__setattr__(key, value)
+            return
+
+        self._data[key] = value
+
+    def __delattr__(self, item):
+        del self._data[item]
+
+
+class UnknownRecord(UnknownDict):
+    pass
+
+
+class RecordModelBase(UnknownRecord):
     pass
