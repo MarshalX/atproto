@@ -53,11 +53,6 @@ def sync_main():
     print(extended_record.value.lol)  # custom (out of lexicon) attribute
     print(type(extended_record.value))
 
-    assert is_record_type(extended_record.value, ids.AppBskyFeedPost) is True
-    assert is_record_type(extended_record.value, ids.AppBskyFeedGenerator) is False
-    dict_model = get_model_as_dict(extended_record.value)
-    assert isinstance(dict_model, dict) is True
-
     did_doc = client.com.atproto.repo.describe_repo({'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}).didDoc
     print(did_doc)
     print(did_doc.service)
@@ -72,6 +67,16 @@ def sync_main():
     print(atproto_feed.createdAt)
     print(atproto_feed['createdAt'])
     print(type(atproto_feed))
+
+    assert is_record_type(lexicon_correct_record.value, ids.AppBskyFeedPost) is True
+    assert is_record_type(lexicon_correct_record.value, ids.AppBskyFeedGenerator) is False
+
+    assert is_record_type(extended_record.value, ids.AppBskyFeedPost) is True
+    assert is_record_type(extended_record.value, ids.AppBskyFeedGenerator) is False
+    assert is_record_type(extended_record.value, models.AppBskyFeedPost) is True
+    assert is_record_type(extended_record.value, models.AppBskyFeedGenerator) is False
+    dict_model = get_model_as_dict(extended_record.value)
+    assert isinstance(dict_model, dict) is True
 
     exit(0)
 

@@ -1,5 +1,6 @@
 import dataclasses
 import json
+import types
 import typing as t
 from enum import Enum
 
@@ -11,6 +12,7 @@ from atproto.exceptions import (
     MissingValueError,
     ModelError,
     ModelFieldError,
+    ModelFieldNotFoundError,
     UnexpectedFieldError,
     WrongTypeError,
 )
@@ -91,6 +93,23 @@ def get_or_create(
         return DotDict(model_data)
 
 
+def _validate_unexpected_fields(model_data: ModelData, model: t.Type[M]) -> None:
+    model_type = None
+    if isinstance(model_data, dict):
+        # preserve the value of the service field to restore it later in case of fallback
+        model_type = model_data.pop(_TYPE_SERVICE_FIELD, None)
+
+    try:
+        model(**model_data)
+        return
+    except Exception as e:
+        if model_type:
+            # restore service field to include it in the fall backed model (DotDict)
+            model_data[_TYPE_SERVICE_FIELD] = model_type
+
+        raise e
+
+
 def _get_or_create(
     model_data: ModelData, model: t.Type[M], *, strict: bool
 ) -> t.Optional[t.Union[M, UnknownRecordType, DotDict]]:
@@ -99,8 +118,8 @@ def _get_or_create(
 
     if model is None:
         # resolve a record model by type and try to deserialize
-        record_type = model_data.pop(_TYPE_SERVICE_FIELD, None)
-        if not record_type or record_type not in RECORD_TYPE_TO_MODEL_CLASS:
+        record_type = model_data.get(_TYPE_SERVICE_FIELD)
+        if record_type not in RECORD_TYPE_TO_MODEL_CLASS:
             return None
 
         return get_or_create(model_data, RECORD_TYPE_TO_MODEL_CLASS[record_type], strict=strict)
@@ -109,9 +128,7 @@ def _get_or_create(
         return model_data
 
     try:
-        # validate unexpected fields
-        model(**model_data)
-
+        _validate_unexpected_fields(model_data, model)
         return from_dict(model, model_data, config=_DACITE_CONFIG)
     except TypeError as e:
         # FIXME(MarshalX): "Params missing 1 required positional argument: 'rkey'" should raise another error
@@ -182,12 +199,39 @@ def is_json(json_data: t.Union[str, bytes]) -> bool:
         return False
 
 
-def is_record_type(model: t.Union[ModelBase, dict], types_module) -> bool:
-    # for now, records in the Main class only. could be broken late
-    if not hasattr(types_module, 'Main'):
-        return False
+def is_record_type(model: ModelBase, expected_type: t.Union[str, types.ModuleType]) -> bool:
+    """Verify that the model is the expected Record type.
 
-    if isinstance(model, dict):  # custom (extended) record
-        return types_module.Main._type == model.get('$type')
+    Args:
+        model: Model to be verified.
+        expected_type: Excepted type.
+            Could be NSID or Python Module.
 
-    return types_module.Main._type == model._type
+    Example:
+        >>> from atproto import Client, models
+        >>> from atproto.xrpc_client.models import ids, is_record_type
+        >>> client = Client()
+        >>> client.login('username', 'pass')
+        >>> record = client.com.atproto.repo.get_record(...)
+        >>> # using NSID:
+        >>> is_record_type(record.value, ids.AppBskyFeedPost)
+        >>> # using Python module:
+        >>> is_record_type(record.value, models.AppBskyFeedPost)
+
+    Returns:
+        :obj:`bool`: Is record or not.
+    """
+    if isinstance(expected_type, types.ModuleType):
+        # for now, all records are defined in the Main class
+        if not hasattr(expected_type, 'Main'):
+            return False
+
+        expected_type = expected_type.Main._type
+
+    if isinstance(model, DotDict):  # custom (extended) record
+        try:
+            return expected_type == model[_TYPE_SERVICE_FIELD]
+        except ModelFieldNotFoundError:
+            return False
+
+    return expected_type == model._type
