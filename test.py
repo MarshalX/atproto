@@ -3,7 +3,6 @@ import logging
 import os
 import threading
 import typing as t
-from datetime import datetime
 
 from atproto import CAR, AsyncClient, AtUri, Client, exceptions, models
 from atproto.firehose import (
@@ -11,7 +10,7 @@ from atproto.firehose import (
     FirehoseSubscribeReposClient,
     parse_subscribe_repos_message,
 )
-from atproto.xrpc_client.models import get_model_as_dict, get_or_create, ids, is_record_type
+from atproto.xrpc_client.models import get_model_as_dict, ids, is_record_type
 
 if t.TYPE_CHECKING:
     from atproto.firehose import MessageFrame
@@ -140,67 +139,6 @@ async def main():
     # assert resolve.did == profile.did
 
 
-def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict:  # noqa: C901
-    operation_by_type = {
-        'posts': {'created': [], 'deleted': []},
-        'reposts': {'created': [], 'deleted': []},
-        'likes': {'created': [], 'deleted': []},
-        'follows': {'created': [], 'deleted': []},
-    }
-
-    car = CAR.from_bytes(commit.blocks)
-    for op in commit.ops:
-        uri = AtUri.from_str(f'at://{commit.repo}/{op.path}')
-
-        if op.action == 'update':
-            # not supported yet
-            continue
-
-        if op.action == 'create':
-            if not op.cid:
-                continue
-
-            create_info = {'uri': str(uri), 'cid': str(op.cid), 'author': commit.repo}
-
-            record_raw_data = car.blocks.get(op.cid)
-            if not record_raw_data:
-                continue
-
-            # record = get_or_create(record_raw_data)
-            record = get_or_create(record_raw_data, strict=False)
-            if uri.collection == ids.AppBskyFeedLike and is_record_type(record, models.AppBskyFeedLike):
-                operation_by_type['likes']['created'].append({'record': record, **create_info})
-            elif uri.collection == ids.AppBskyFeedPost and is_record_type(record, models.AppBskyFeedPost):
-                operation_by_type['posts']['created'].append({'record': record, **create_info})
-            elif uri.collection == ids.AppBskyGraphFollow and is_record_type(record, models.AppBskyGraphFollow):
-                operation_by_type['follows']['created'].append({'record': record, **create_info})
-
-        if op.action == 'delete':
-            if uri.collection == ids.AppBskyFeedLike:
-                operation_by_type['likes']['deleted'].append({'uri': str(uri)})
-            if uri.collection == ids.AppBskyFeedPost:
-                operation_by_type['posts']['deleted'].append({'uri': str(uri)})
-            if uri.collection == ids.AppBskyGraphFollow:
-                operation_by_type['follows']['deleted'].append({'uri': str(uri)})
-
-    return operation_by_type
-
-
-def _custom_feed_firehose():
-    client = FirehoseSubscribeReposClient()
-
-    def on_message_handler(message: 'MessageFrame') -> None:
-        commit = parse_subscribe_repos_message(message)
-        if not isinstance(commit, models.ComAtprotoSyncSubscribeRepos.Commit):
-            return
-
-        ops = _get_ops_by_type(commit)
-        for post in ops['posts']['created']:
-            print(post['record'].text)
-
-    client.start(on_message_handler)
-
-
 def _main_firehose_test():
     client = FirehoseSubscribeReposClient()
 
@@ -249,8 +187,6 @@ async def _main_async_firehose_test():
 if __name__ == '__main__':
     sync_main()
     # asyncio.get_event_loop().run_until_complete(main())
-
-    # _custom_feed_firehose()
 
     # _main_firehose_test()
     # asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())

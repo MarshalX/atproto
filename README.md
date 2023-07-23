@@ -60,7 +60,7 @@ async def main():
 
     
 if __name__ == '__main__':
-    # use run() for higher Python version
+    # use run() for a higher Python version
     asyncio.get_event_loop().run_until_complete(main())
 
 ```
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
 ### Introduction
 
-This SDK attempts to implement everything that provides ATProto. Due to the unstable state of the protocol (it grows and changes fast) and a bit of outdated documentation, only the client side is supported yet. There is support for Lexicon Schemes, XRPC clients, and Firehose for now. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Schemes. DAG-CBOR, CAR files.
+This SDK attempts to implement everything that provides ATProto. Due to the unstable state of the protocol (it grows and changes fast) and a bit of outdated documentation, only the client side is supported for now. There is support for Lexicon Schemes, XRPC clients, and Firehose for now. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Schemes. DAG-CBOR, CAR files.
 
 ### Requirements
 
@@ -87,7 +87,7 @@ pip3 install -U atproto
 
 ### Quick start
 
-First of all, you need to create the instance of the XRPC Client. To do so you have 2 major options: asynchronous, and synchronous. The difference only in import and how you call the methods. If you are not familiar with async use sync instead.
+First of all, you need to create the instance of the XRPC Client. To do so you have 2 major options: asynchronous, and synchronous. The difference only in import and how you call the methods. If you are not familiar with async, use sync instead.
 
 For sync:
 ```python
@@ -146,7 +146,7 @@ You can get help in several ways:
 
 ### Advanced usage
 
-I'll be honest. The high-level Client that was shown in the "Quick Start" section is not a real ATProto API. It's syntax sugar built upon the real XRPC methods! The high-level methods are not cover the full need of developers. To be able to do anything that you want you should know to work with low-level API. Let's dive into it!
+I'll be honest. The high-level Client that was shown in the "Quick Start" section is not a real ATProto API. This is syntax sugar built upon the real XRPC methods! The high-level methods are not cover the full need of developers. To be able to do anything that you want you should know to work with low-level API. Let's dive into it!
 
 The basics:
 - Namespaces – classes that group sub-namespaces and the XRPC queries and procedures. Built upon NSID ATProto semantic.
@@ -159,7 +159,7 @@ Client().com
 Client().bsky
 ```
 
-To dive deeper you can navigate using hints from your IDE. Thanks to well-type hinted SDK it's much easier.
+To dive deeper, you can navigate using hints from your IDE. Thanks to well-type hinted SDK, it's much easier.
 ```python
 from atproto import Client
 Client().com.atproto.server.create_session(...)
@@ -168,9 +168,9 @@ Client().bsky.feed.get_likes(...)
 Client().bsky.graph.get_follows(...)
 ```
 
-The endpoint of the path is always the method that you want to call. The method presents a query or procedure in XRPC. You should not care about it much. The only thing you need to know is that the procedures required data objects. Queries could be called with or without params at all.
+The endpoint of the path is always the method that you want to call. The method presents a query or procedure in XRPC. You should not care about it much. The only thing you need to know is that the procedures required data objects. Queries could be called with or without params.
 
-To deal with methods we need to deal with models! Models are available in the `models` module and have NSID-based aliases. Let's take a look at it.
+To deal with methods, we need to deal with models! Models are available in the `models` module and have NSID-based aliases. Let's take a look at it.
 ```python
 from atproto import models
 models.ComAtprotoIdentityResolveHandle
@@ -179,7 +179,7 @@ models.AppBskyActorGetProfile
 # 90+ more...
 ```
 
-The model classes in the models aliases could be:
+The model classes in the "models" aliases could be:
 - Data model
 - Params model
 - Response model
@@ -187,7 +187,7 @@ The model classes in the models aliases could be:
 - Type model
 - Type reference model
 
-The only thing you need to know is how to create instances of models. Not with all models you will work as model-creator. For example, Response models will be created by SDK for you.
+The only thing you need to know is how to create instances of models. Not with all models, you will work as model-creator. For example, SDK will create Response models for you.
 
 There are a few ways how to create the instance of a model:
 - Dict-based
