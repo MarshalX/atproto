@@ -8,6 +8,7 @@ class ModelBase:
 
     Provides square brackets [] notation to get attributes like in a dictionary.
     """
+
     def __getitem__(self, item: str):
         if hasattr(self, item):
             return getattr(self, item)
@@ -35,7 +36,7 @@ class DotDict(UnknownDict):
     """Dot notation for dictionaries.
 
     Note:
-        If the record is out of the official lexicon, it’s impossible to deserialize it to a proper data model.
+        If the record is out of the official lexicon, it`s impossible to deserialize it to a proper data model.
         Such models will fall back to dictionaries.
         All unknown "Union" types will also be caught as dicts.
         This class exists to provide an ability to use such fallbacks as “real” data models.
