@@ -1,5 +1,20 @@
 # Change Log
 
+## Version 0.0.22
+
+**23.07.2023**
+
+* ❗ Delete get_or_create_model method (backward incompatible) by @MarshalX in https://github.com/MarshalX/atproto/pull/111
+* Add documentation for base models by @MarshalX in https://github.com/MarshalX/atproto/pull/109
+* Add import aliases for "models.utils" by @MarshalX in https://github.com/MarshalX/atproto/pull/111
+* Add str and repr for BlobRef by @MarshalX in https://github.com/MarshalX/atproto/pull/113
+* Add Firehose process commits example by @MarshalX in https://github.com/MarshalX/atproto/pull/114
+* Implement additional magic methods for DotDict by @MarshalX in https://github.com/MarshalX/atproto/pull/109
+* Make languages constants immutable by @MarshalX in https://github.com/MarshalX/atproto/pull/110
+* Fix get_model_as_dict for DotDict by @MarshalX in https://github.com/MarshalX/atproto/pull/111
+* Fix is_record_type for DotDict models by @MarshalX in https://github.com/MarshalX/atproto/pull/112
+* Update changelog for v0.0.21 by @MarshalX in https://github.com/MarshalX/atproto/pull/108
+
 ## Version 0.0.21
 
 **21.07.2023**
