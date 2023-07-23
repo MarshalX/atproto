@@ -11,8 +11,7 @@ from atproto.firehose import (
     FirehoseSubscribeReposClient,
     parse_subscribe_repos_message,
 )
-from atproto.xrpc_client.models import ids
-from atproto.xrpc_client.models.utils import get_or_create, is_record_type
+from atproto.xrpc_client.models import get_model_as_dict, get_or_create, ids, is_record_type
 
 if t.TYPE_CHECKING:
     from atproto.firehose import MessageFrame
@@ -53,6 +52,11 @@ def sync_main():
     print(extended_record.value.text)
     print(extended_record.value.lol)  # custom (out of lexicon) attribute
     print(type(extended_record.value))
+
+    assert is_record_type(extended_record.value, ids.AppBskyFeedPost) is True
+    assert is_record_type(extended_record.value, ids.AppBskyFeedGenerator) is False
+    dict_model = get_model_as_dict(extended_record.value)
+    assert isinstance(dict_model, dict) is True
 
     did_doc = client.com.atproto.repo.describe_repo({'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}).didDoc
     print(did_doc)

@@ -4,7 +4,7 @@ from typing import Optional, Union
 
 from atproto.cbor import decode_dag_multi
 from atproto.exceptions import AtProtocolError, FirehoseDecodingError
-from atproto.xrpc_client.models.utils import get_or_create_model
+from atproto.xrpc_client.models.utils import get_or_create
 
 
 class FrameType(Enum):
@@ -53,8 +53,8 @@ def parse_frame_header(raw_header: dict) -> FrameHeader:
 
         frame_type = FrameType(header_op)
         if frame_type is FrameType.MESSAGE:
-            return get_or_create_model(raw_header, MessageFrameHeader)
-        return get_or_create_model(raw_header, ErrorFrameHeader)
+            return get_or_create(raw_header, MessageFrameHeader)
+        return get_or_create(raw_header, ErrorFrameHeader)
     except (ValueError, AtProtocolError) as e:
         raise FirehoseDecodingError('Invalid frame header') from e
 
@@ -62,7 +62,7 @@ def parse_frame_header(raw_header: dict) -> FrameHeader:
 def parse_frame(header: FrameHeader, raw_body: dict) -> Union['ErrorFrame', 'MessageFrame']:
     try:
         if isinstance(header, ErrorFrameHeader):
-            body = get_or_create_model(raw_body, ErrorFrameBody)
+            body = get_or_create(raw_body, ErrorFrameBody)
             return ErrorFrame(header, body)
         if isinstance(header, MessageFrameHeader):
             return MessageFrame(header, raw_body)
