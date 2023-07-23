@@ -49,11 +49,8 @@ class DotDict(UnknownDict):
     def to_dict(self) -> dict:
         return deepcopy(self._data)
 
-    def __getattr__(self, item: str) -> t.Any:
-        try:
-            return self._data[item]
-        except KeyError as e:
-            raise AttributeError from e
+    def __getattr__(self, item: str) -> t.Optional[t.Any]:
+        return self._data.get(item)
 
     def __setattr__(self, key: str, value: t.Any) -> None:
         if key == '_data':
