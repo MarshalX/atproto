@@ -25,3 +25,9 @@ class BlobRef:
 
     def to_dict(self) -> dict:
         return {'$type': self.blob_type, 'mimeType': self.mime_type, 'size': self.size, 'ref': {'$link': self.ref}}
+
+    def __str__(self) -> str:
+        return str(self.to_dict())
+
+    def __repr__(self) -> str:
+        return f'BlobRef({self})'
