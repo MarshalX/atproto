@@ -124,6 +124,7 @@ from atproto.xrpc_client.models.com.atproto.sync import list_repos as ComAtproto
 from atproto.xrpc_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
 from atproto.xrpc_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto.xrpc_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
+from atproto.xrpc_client.models.utils import get_model_as_dict, get_model_as_json, get_or_create, is_record_type
 
 
 class _Ids:

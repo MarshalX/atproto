@@ -25,10 +25,11 @@ if t.TYPE_CHECKING:
 M = t.TypeVar('M')
 ModelData: te.TypeAlias = t.Union[M, dict, None]
 
+_TYPE_SERVICE_FIELD = '$type'
+
 
 def _unknown_type_hook(data: dict) -> t.Union[UnknownRecordType, DotDict]:
-    if '$type' in data:
-        # $type used for inner Record types
+    if _TYPE_SERVICE_FIELD in data:
         return get_or_create(data, strict=False)
     # any another unknown (not described by lexicon) type
     return DotDict(data)
@@ -56,26 +57,33 @@ def get_or_create(
 
     Note:
         The record could have custom fields and be completely custom.
-        For example, custom bsky clients add a "via" field
-        to indicate that it was posted using a not official client.
-        Such custom types can't be decoded into proper models.
-        You should work with it as with dict.
-        By default, the method raises an exception on custom models.
-        To fall back to a dict type, disable strict mode using the argument.
+        For example, custom bsky clients add a "via" field to indicate that it was posted using a not official client.
+        Such custom types can't be decoded into proper models,
+        and will be decoded to :obj:`atproto.xrpc_client.models.base.DotDict`.
 
     Note:
-        Auto-resolve of a model works only with a Record type for now.
+        By default, the method raises an exception on custom models.
+        To fall back to a :obj:`atproto.xrpc_client.models.base.DotDict` type, disable strict mode using the argument.
+
+    Note:
+        Model auto-resolve works only with a Record type for now.
 
     Args:
         model_data: Raw data.
         model: Class of the model or any another type. If None, it will be resolved automatically.
-        strict: Fallback to raw data if can't properly parse.
+        strict: Disable fallback to dictionary (:obj:`atproto.xrpc_client.models.base.DotDict`)
+            if can't be properly deserialized. Will raise the exception instead.
 
     Returns:
-        Instance of :obj:`model` or :obj:`None` or :obj:`dict` if `strict` is disabled.
+        Instance of :obj:`model` or :obj:`None` or
+        :obj:`atproto.xrpc_client.models.base.DotDict` if `strict` is disabled.
     """
     try:
-        return _get_or_create(model_data, model, strict=strict)
+        model_instance = _get_or_create(model_data, model, strict=strict)
+        if strict and model_instance is not None and not isinstance(model_instance, model):
+            raise ModelError(f"Can't properly parse model of type {model}")
+
+        return model_instance
     except Exception as e:  # noqa: BLE001
         if strict:
             raise e
@@ -90,9 +98,8 @@ def _get_or_create(
         return None
 
     if model is None:
-        # resolve model by $type and try to parse
-        # resolves only Records
-        record_type = model_data.pop('$type', None)
+        # resolve a record model by type and try to deserialize
+        record_type = model_data.pop(_TYPE_SERVICE_FIELD, None)
         if not record_type or record_type not in RECORD_TYPE_TO_MODEL_CLASS:
             return None
 
@@ -120,26 +127,18 @@ def _get_or_create(
         raise ModelError(str(e)) from e
 
 
-def get_or_create_model(model_data: ModelData, model: t.Type[M]) -> t.Optional[M]:
-    model_instance = get_or_create(model_data, model)
-    if model_instance is not None and not isinstance(model_instance, model):
-        raise ModelError(f"Can't properly parse model of type {model}")
-
-    return model_instance
-
-
 def get_response_model(response: 'Response', model: t.Type[M]) -> M:
     if model is bool:
         # Could not be False? Because the exception with errors will be raised from the server
         return response.success
 
     # return is optional if response.content is None, but doesn't occur in practice
-    return get_or_create_model(response.content, model)
+    return get_or_create(response.content, model)
 
 
 def _handle_dict_key(key: str) -> str:
     if key == '_type':  # System field. Replaced to original $ symbol because it is not allowed in Python.
-        return '$type'
+        return _TYPE_SERVICE_FIELD
 
     return key
 
@@ -159,7 +158,7 @@ def _model_as_dict_factory(value) -> dict:
 
 
 def get_model_as_dict(model: t.Union[BlobRef, ModelBase]) -> dict:
-    if model == BlobRef:
+    if isinstance(model, (BlobRef, DotDict)):
         return model.to_dict()
 
     if not dataclasses.is_dataclass(model):

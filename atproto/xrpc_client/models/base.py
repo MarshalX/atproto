@@ -1,4 +1,5 @@
 import typing as t
+from copy import deepcopy
 
 from atproto.exceptions import ModelFieldNotFoundError
 
@@ -45,8 +46,14 @@ class DotDict(UnknownDict):
     def __init__(self, data: dict) -> None:
         self._data = data
 
+    def to_dict(self) -> dict:
+        return deepcopy(self._data)
+
     def __getattr__(self, item: str) -> t.Any:
-        return self._data.get(item)
+        try:
+            return self._data[item]
+        except KeyError as e:
+            raise AttributeError from e
 
     def __setattr__(self, key: str, value: t.Any) -> None:
         if key == '_data':

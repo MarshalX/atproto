@@ -572,6 +572,14 @@ def _generate_import_aliases(root_package_path: Path) -> None:
 
             import_lines.append(f'from atproto.{from_import} import {file[:-3]} as {alias_name}')
 
+    import_lines.append(
+        'from atproto.xrpc_client.models.utils import '
+        'get_model_as_dict, '
+        'get_model_as_json, '
+        'get_or_create, '
+        'is_record_type'
+    )
+
     ids_db.append('ids = _Ids()')
     import_lines.extend(ids_db)
 
