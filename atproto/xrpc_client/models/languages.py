@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from types import MappingProxyType
 
 
-@dataclass
+@dataclass(frozen=True)
 class Language:
     """Language used in a post."""
 
@@ -15,7 +15,7 @@ class Language:
 # language databases:
 # - official db: https://www.loc.gov/standards/iso639-2/php/code_list.php
 # - bsky app: https://github.com/bluesky-social/social-app/blob/main/src/locale/languages.ts
-LANGUAGES: t.List[Language] = [
+LANGUAGES: t.Tuple = (
     Language(name='Afar', code1='aa', code2='aar'),
     Language(name='Abkhazian', code1='ab', code2='abk'),
     Language(name='Achinese', code1='', code2='ace'),
@@ -523,7 +523,7 @@ LANGUAGES: t.List[Language] = [
     Language(name='Zulu', code1='zu', code2='zul'),
     Language(name='Zuni', code1=' ', code2='zun'),
     Language(name='Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki', code1='', code2='zza'),
-]
+)
 
 #: Mapping `code1` to language instance. Use ``LANGUAGES_MAP_CODE1.get('someCode1')``. ``None`` means unknown lang.
 LANGUAGES_MAP_CODE1: t.Mapping[str, Language] = MappingProxyType({lang.code1: lang for lang in LANGUAGES})
