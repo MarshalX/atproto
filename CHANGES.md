@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 0.0.23
+
+**23.07.2023**
+
+* Update changelog for v0.0.22 by @MarshalX in https://github.com/MarshalX/atproto/pull/115
+* Return None instead of exception on unknown field in DotDict by @MarshalX in https://github.com/MarshalX/atproto/pull/116
+
 ## Version 0.0.22
 
 **23.07.2023**
