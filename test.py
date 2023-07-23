@@ -7,9 +7,7 @@ from datetime import datetime
 
 from atproto import CAR, AsyncClient, AtUri, Client, exceptions, models
 from atproto.firehose import (
-    AsyncFirehoseSubscribeLabelsClient,
     AsyncFirehoseSubscribeReposClient,
-    FirehoseSubscribeLabelsClient,
     FirehoseSubscribeReposClient,
     parse_subscribe_repos_message,
 )
@@ -21,8 +19,6 @@ if t.TYPE_CHECKING:
 
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
-
-# TODO(MarshalX): add record namespaces with 5 const methods? CRUDL
 
 
 def convert_uri_to_url():
@@ -59,6 +55,7 @@ def sync_main():
     print(type(extended_record.value))
 
     did_doc = client.com.atproto.repo.describe_repo({'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}).didDoc
+    print(did_doc)
     print(did_doc.service)
     print(did_doc['service'])
     print(did_doc['@context'])
@@ -197,7 +194,6 @@ def _custom_feed_firehose():
 
 def _main_firehose_test():
     client = FirehoseSubscribeReposClient()
-    # client = FirehoseSubscribeLabelsClient()
 
     def on_message_handler(message: 'MessageFrame') -> None:
         print('Message', message.header, parse_subscribe_repos_message(message))
@@ -214,20 +210,17 @@ def _main_firehose_test():
         client.stop()
 
     threading.Thread(target=_stop_after_n_sec).start()
-    client.start(on_message_handler)
-    # client.start(on_message_handler, on_callback_error_handler)
+    client.start(on_message_handler, on_callback_error_handler)
     print('stopped. start again')
     # client.start(on_message_handler, on_callback_error_handler)
 
 
 async def _main_async_firehose_test():
-    client = AsyncFirehoseSubscribeReposClient({'cursor': 93278360})
-    # client = AsyncFirehoseSubscribeLabelsClient()
+    client = AsyncFirehoseSubscribeReposClient()
 
     async def on_message_handler(message: 'MessageFrame') -> None:
         print('Message', message.header, parse_subscribe_repos_message(message))
         # raise RuntimeError('kek')
-        await asyncio.sleep(0.1)
 
     def on_callback_error_handler(e: BaseException) -> None:
         print('got error', e)
@@ -238,9 +231,9 @@ async def _main_async_firehose_test():
         await client.stop()
 
     _ = asyncio.create_task(_stop_after_n_sec())
-    await client.start(on_message_handler)
-    # await client.start(on_message_handler, on_callback_error_handler)
-    print('stopped. start again')
+    await client.start(on_message_handler, on_callback_error_handler)
+
+    # print('stopped. start again')
     # await client.start(on_message_handler, on_callback_error_handler)
 
 
@@ -249,5 +242,6 @@ if __name__ == '__main__':
     # asyncio.get_event_loop().run_until_complete(main())
 
     # _custom_feed_firehose()
+
     # _main_firehose_test()
     # asyncio.get_event_loop().run_until_complete(_main_async_firehose_test())
