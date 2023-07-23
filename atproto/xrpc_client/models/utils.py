@@ -230,7 +230,7 @@ def is_record_type(model: ModelBase, expected_type: t.Union[str, types.ModuleTyp
 
     if isinstance(model, DotDict):  # custom (extended) record
         try:
-            return expected_type == model['$type']
+            return expected_type == model[_TYPE_SERVICE_FIELD]
         except ModelFieldNotFoundError:
             return False
 

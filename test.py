@@ -68,6 +68,9 @@ def sync_main():
     print(atproto_feed['createdAt'])
     print(type(atproto_feed))
 
+    assert is_record_type(lexicon_correct_record.value, ids.AppBskyFeedPost) is True
+    assert is_record_type(lexicon_correct_record.value, ids.AppBskyFeedGenerator) is False
+
     assert is_record_type(extended_record.value, ids.AppBskyFeedPost) is True
     assert is_record_type(extended_record.value, ids.AppBskyFeedGenerator) is False
     assert is_record_type(extended_record.value, models.AppBskyFeedPost) is True
