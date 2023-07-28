@@ -6,31 +6,38 @@ from atproto import Client, models
 def main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
-
-    current_profile_record = client.com.atproto.repo.get_record(
-        models.ComAtprotoRepoGetRecord.Params(
-            collection=models.ids.AppBskyActorProfile,
-            repo=client.me.did,
-            rkey='self',
+    
+    try:
+        current_profile_record = client.com.atproto.repo.get_record(
+            models.ComAtprotoRepoGetRecord.Params(
+                collection=models.ids.AppBskyActorProfile,
+                repo=client.me.did,
+                rkey='self',
+            )
         )
-    )
-    current_profile = current_profile_record.value
+        current_profile = current_profile_record.value
+        swapRecord = current_profile_record.cid
+    except:
+        current_profile = models.AppBskyActorProfile.Main
+        swapRecord = None
 
     # set new values to update
     new_description = None
-    new_display_name = 'I love Python'
+    new_display_name = None
+    new_avatar = None
+    new_banner = None
 
     client.com.atproto.repo.put_record(
         models.ComAtprotoRepoPutRecord.Data(
             collection=models.ids.AppBskyActorProfile,
             repo=client.me.did,
             rkey='self',
-            swapRecord=current_profile_record.cid,
+            swapRecord=swapRecord,
             record=models.AppBskyActorProfile.Main(
-                avatar=current_profile.avatar,
-                banner=current_profile.banner,
+                avatar=new_avatar or current_profile.avatar,
+                banner=new_banner or current_profile.banner,
                 description=new_description or current_profile.description,
-                displayName=new_display_name or current_profile.display_name,
+                displayName=new_display_name or current_profile.displayName,
             ),
         )
     )
