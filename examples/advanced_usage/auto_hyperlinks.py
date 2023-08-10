@@ -1,12 +1,13 @@
-from datetime import datetime
 import re
+from datetime import datetime
+
 from atproto import Client, models
 
 
 def extract_url_byte_positions(text, aggressive=True, encoding='utf-8'):
-    '''
+    """
     If aggressive is False, only links beginning http or https will be detected
-    '''
+    """
     encoded_text = text.encode(encoding)
 
     if aggressive:
@@ -20,7 +21,7 @@ def extract_url_byte_positions(text, aggressive=True, encoding='utf-8'):
         url_bytes = match.group(0)
         url = url_bytes.decode(encoding)
         url_byte_positions.append((url, match.start(), match.end()))
-    
+
     return url_byte_positions
 
 
@@ -36,7 +37,7 @@ def main():
 
     #AT requires URL to include http or https when creating the facet. Appends to URL if not present
     for link in url_positions:
-        uri = link[0] if "http" == link[0][0:4] else f"http://{link[0]}"
+        uri = link[0] if link[0].startswith('http') else f'http://{link[0]}'
         facets.append(
                     models.AppBskyRichtextFacet.Main(
             features=[models.AppBskyRichtextFacet.Link(uri=uri)],
@@ -53,9 +54,6 @@ def main():
             ),
         )
     )
-
-
-
 
 if __name__ == '__main__':
     main()
