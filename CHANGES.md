@@ -1,5 +1,17 @@
 # Change Log
 
+## Version 0.0.24
+
+**15.08.2023**
+
+* Add update profile example by @MarshalX in https://github.com/MarshalX/atproto/pull/120
+* Add automatic link (facet) detection example by @Jxck-S in https://github.com/MarshalX/atproto/pull/122
+* Update changelog for v0.0.23 by @MarshalX in https://github.com/MarshalX/atproto/pull/117
+* Update changelog by @MarshalX in https://github.com/MarshalX/atproto/pull/118
+* Update lexicons fetched from 244bf46 committed 2023-08-10T20:54:24Z by @MarshalX in https://github.com/MarshalX/atproto/pull/124
+* Update packages; fix CVE-2023-37920 (certifi) by @MarshalX in https://github.com/MarshalX/atproto/pull/125
+* Fix update profile example by @IamC8 in https://github.com/MarshalX/atproto/pull/121
+
 ## Version 0.0.23
 
 **23.07.2023**
