@@ -4,7 +4,7 @@ from datetime import datetime
 from atproto import Client, models
 
 
-def extract_url_byte_positions(text, aggressive=True, encoding='utf-8'):
+def extract_url_byte_positions(text, *, aggressive: bool, encoding='UTF-8'):
     """
     If aggressive is False, only links beginning http or https will be detected
     """
@@ -31,29 +31,28 @@ def main():
 
     text = 'Example post with automatic link detection https://github.com/MarshalX/atproto, google.com and apple.com'
 
-    # Determine locations of URLs in the post text
+    # Determine locations of URLs in the post's text
     url_positions = extract_url_byte_positions(text, aggressive=True)
     facets = []
 
-    #AT requires URL to include http or https when creating the facet. Appends to URL if not present
+    # AT requires URL to include http or https when creating the facet. Appends to URL if not present
     for link in url_positions:
-        uri = link[0] if link[0].startswith('http') else f'http://{link[0]}'
+        uri = link[0] if link[0].startswith('http') else f'https://{link[0]}'
         facets.append(
-                    models.AppBskyRichtextFacet.Main(
-            features=[models.AppBskyRichtextFacet.Link(uri=uri)],
-            index=models.AppBskyRichtextFacet.ByteSlice(byteStart=link[1], byteEnd=link[2]),
-        )
+            models.AppBskyRichtextFacet.Main(
+                features=[models.AppBskyRichtextFacet.Link(uri=uri)],
+                index=models.AppBskyRichtextFacet.ByteSlice(byteStart=link[1], byteEnd=link[2]),
+            )
         )
 
     client.com.atproto.repo.create_record(
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,
             collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(
-                createdAt=datetime.now().isoformat(), text=text, facets=facets
-            ),
+            record=models.AppBskyFeedPost.Main(createdAt=datetime.now().isoformat(), text=text, facets=facets),
         )
     )
+
 
 if __name__ == '__main__':
     main()
