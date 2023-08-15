@@ -684,6 +684,26 @@ class GraphNamespace(NamespaceBase):
 
 
 class UnspeccedNamespace(NamespaceBase):
+    def apply_labels(self, data: t.Union[dict, 'models.AppBskyUnspeccedApplyLabels.Data'], **kwargs) -> bool:
+        """Allow a labeler to apply labels directly.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.AppBskyUnspeccedApplyLabels.Data)
+        response = self._client.invoke_procedure(
+            'app.bsky.unspecced.applyLabels', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     def get_popular(
         self, params: t.Optional[t.Union[dict, 'models.AppBskyUnspeccedGetPopular.Params']] = None, **kwargs
     ) -> 'models.AppBskyUnspeccedGetPopular.Response':

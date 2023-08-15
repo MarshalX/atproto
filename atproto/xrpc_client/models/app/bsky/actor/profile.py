@@ -8,6 +8,7 @@
 import typing as t
 from dataclasses import dataclass
 
+from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 from atproto.xrpc_client.models.blob_ref import BlobRef
 
@@ -21,5 +22,6 @@ class Main(base.RecordModelBase):
     banner: t.Optional[BlobRef] = None  #: Banner.
     description: t.Optional[str] = None  #: Description.
     displayName: t.Optional[str] = None  #: Display name.
+    labels: t.Optional[t.Union['models.ComAtprotoLabelDefs.SelfLabels', 't.Dict[str, t.Any]']] = None  #: Labels.
 
     _type: str = 'app.bsky.actor.profile'

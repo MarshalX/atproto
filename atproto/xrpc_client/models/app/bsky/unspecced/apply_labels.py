@@ -8,13 +8,13 @@
 import typing as t
 from dataclasses import dataclass
 
+from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.admin.disableAccountInvites`."""
+    """Input data model for :obj:`app.bsky.unspecced.applyLabels`."""
 
-    account: str  #: Account.
-    note: t.Optional[str] = None  #: Additionally add a note describing why the invites were disabled.
+    labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.

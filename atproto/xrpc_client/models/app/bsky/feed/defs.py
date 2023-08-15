@@ -139,10 +139,22 @@ class BlockedPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
+    author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.
     blocked: bool  #: Blocked.
     uri: str  #: Uri.
 
     _type: str = 'app.bsky.feed.defs#blockedPost'
+
+
+@dataclass
+class BlockedAuthor(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.feed.defs`."""
+
+    did: str  #: Did.
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
+
+    _type: str = 'app.bsky.feed.defs#blockedAuthor'
 
 
 @dataclass

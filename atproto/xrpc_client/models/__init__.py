@@ -48,6 +48,7 @@ from atproto.xrpc_client.models.app.bsky.notification import get_unread_count as
 from atproto.xrpc_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
 from atproto.xrpc_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto.xrpc_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
+from atproto.xrpc_client.models.app.bsky.unspecced import apply_labels as AppBskyUnspeccedApplyLabels
 from atproto.xrpc_client.models.app.bsky.unspecced import get_popular as AppBskyUnspeccedGetPopular
 from atproto.xrpc_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
@@ -137,6 +138,7 @@ class _Ids:
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
     AppBskyUnspeccedGetTimelineSkeleton: str = 'app.bsky.unspecced.getTimelineSkeleton'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
+    AppBskyUnspeccedApplyLabels: str = 'app.bsky.unspecced.applyLabels'
     AppBskyUnspeccedGetPopular: str = 'app.bsky.unspecced.getPopular'
     AppBskyGraphGetLists: str = 'app.bsky.graph.getLists'
     AppBskyGraphListitem: str = 'app.bsky.graph.listitem'

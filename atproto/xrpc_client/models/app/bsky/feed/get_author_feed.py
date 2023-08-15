@@ -19,6 +19,7 @@ class Params(base.ParamsModelBase):
 
     actor: str  #: Actor.
     cursor: t.Optional[str] = None  #: Cursor.
+    filter: t.Optional[str] = None  #: Filter.
     limit: t.Optional[int] = None  #: Limit.
 
 
