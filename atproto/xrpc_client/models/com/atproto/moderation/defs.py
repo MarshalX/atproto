@@ -5,7 +5,12 @@
 ##################################################################
 
 
+import typing as t
+
 import typing_extensions as te
+
+if t.TYPE_CHECKING:
+    pass
 
 ReasonType = te.Literal[
     'ReasonSpam', 'ReasonViolation', 'ReasonMisleading', 'ReasonSexual', 'ReasonRude', 'ReasonOther'

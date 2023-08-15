@@ -1,10 +1,13 @@
 import typing as t
 from copy import deepcopy
 
+from pydantic import BaseModel
+
 from atproto.exceptions import ModelFieldNotFoundError
 
 
-class ModelBase:
+class ModelBase(BaseModel):
+# class ModelBase:
     """Base class for all data classes.
 
     Provides square brackets [] notation to get attributes like in a dictionary.

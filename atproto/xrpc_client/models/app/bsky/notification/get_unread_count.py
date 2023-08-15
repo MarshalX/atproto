@@ -6,12 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`app.bsky.notification.getUnreadCount`."""
@@ -19,7 +19,6 @@ class Params(base.ParamsModelBase):
     seenAt: t.Optional[str] = None  #: Seen at.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.notification.getUnreadCount`."""

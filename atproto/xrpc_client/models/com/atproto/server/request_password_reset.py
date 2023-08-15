@@ -5,12 +5,13 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.requestPasswordReset`."""

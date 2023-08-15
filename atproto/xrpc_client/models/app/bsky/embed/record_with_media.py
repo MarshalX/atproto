@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Main(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
@@ -25,7 +24,6 @@ class Main(base.ModelBase):
     _type: str = 'app.bsky.embed.recordWithMedia'
 
 
-@dataclass
 class View(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""

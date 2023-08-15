@@ -35,7 +35,7 @@ class Client(SessionMethodsMixin, ClientRaw):
         return super()._invoke(invoke_type, **kwargs)
 
     def _get_and_set_session(self, login: str, password: str) -> models.ComAtprotoServerCreateSession.Response:
-        session = self.com.atproto.server.create_session(models.ComAtprotoServerCreateSession.Data(login, password))
+        session = self.com.atproto.server.create_session(models.ComAtprotoServerCreateSession.Data(identifier=login, password=password))
         self._set_session(session)
 
         return session
@@ -48,7 +48,7 @@ class Client(SessionMethodsMixin, ClientRaw):
 
         return refresh_session
 
-    def login(self, login: str, password: str) -> models.AppBskyActorGetProfile.ResponseRef:
+    def login(self, login: str, password: str) -> models.AppBskyActorDefs.ProfileViewDetailed:
         """Authorize a client and get profile info.
 
         Args:
@@ -57,14 +57,14 @@ class Client(SessionMethodsMixin, ClientRaw):
             Could be an app-specific one.
 
         Returns:
-            :obj:`models.AppBskyActorGetProfile.ResponseRef`: Profile information.
+            :obj:`models.AppBskyActorDefs.ProfileViewDetailed`: Profile information.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
         session = self._get_and_set_session(login, password)
-        self.me = self.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(session.handle))
+        self.me = self.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=session.handle))
 
         return self.me
 

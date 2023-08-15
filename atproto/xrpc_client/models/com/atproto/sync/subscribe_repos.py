@@ -6,14 +6,13 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto import CID
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto import CID
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.sync.subscribeRepos`."""
@@ -21,26 +20,24 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[int] = None  #: The last known event to backfill from.
 
 
-@dataclass
 class Commit(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
-    blobs: t.List[CID]  #: Blobs.
+    blobs: t.List['CID']  #: Blobs.
     blocks: t.Union[str, bytes]  #: CAR file containing relevant blocks.
-    commit: CID  #: Commit.
+    commit: 'CID'  #: Commit.
     ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp']  #: Ops.
     rebase: bool  #: Rebase.
     repo: str  #: Repo.
     seq: int  #: Seq.
     time: str  #: Time.
     tooBig: bool  #: Too big.
-    prev: t.Optional[CID] = None  #: Prev.
+    prev: t.Optional['CID'] = None  #: Prev.
 
     _type: str = 'com.atproto.sync.subscribeRepos#commit'
 
 
-@dataclass
 class Handle(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
@@ -53,7 +50,6 @@ class Handle(base.ModelBase):
     _type: str = 'com.atproto.sync.subscribeRepos#handle'
 
 
-@dataclass
 class Migrate(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
@@ -66,7 +62,6 @@ class Migrate(base.ModelBase):
     _type: str = 'com.atproto.sync.subscribeRepos#migrate'
 
 
-@dataclass
 class Tombstone(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
@@ -78,7 +73,6 @@ class Tombstone(base.ModelBase):
     _type: str = 'com.atproto.sync.subscribeRepos#tombstone'
 
 
-@dataclass
 class Info(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
@@ -89,13 +83,12 @@ class Info(base.ModelBase):
     _type: str = 'com.atproto.sync.subscribeRepos#info'
 
 
-@dataclass
 class RepoOp(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
     action: str  #: Action.
     path: str  #: Path.
-    cid: t.Optional[CID] = None  #: Cid.
+    cid: t.Optional['CID'] = None  #: Cid.
 
     _type: str = 'com.atproto.sync.subscribeRepos#repoOp'

@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class InviteCode(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.server.defs`."""
@@ -28,7 +27,6 @@ class InviteCode(base.ModelBase):
     _type: str = 'com.atproto.server.defs#inviteCode'
 
 
-@dataclass
 class InviteCodeUse(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.server.defs`."""

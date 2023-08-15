@@ -6,15 +6,14 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
 import typing_extensions as te
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class ListViewBasic(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.graph.defs`."""
@@ -30,7 +29,6 @@ class ListViewBasic(base.ModelBase):
     _type: str = 'app.bsky.graph.defs#listViewBasic'
 
 
-@dataclass
 class ListView(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.graph.defs`."""
@@ -49,7 +47,6 @@ class ListView(base.ModelBase):
     _type: str = 'app.bsky.graph.defs#listView'
 
 
-@dataclass
 class ListItemView(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.graph.defs`."""
@@ -64,7 +61,6 @@ ListPurpose = te.Literal['Modlist']
 Modlist: te.Literal['modlist'] = 'modlist'
 
 
-@dataclass
 class ListViewerState(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.graph.defs`."""

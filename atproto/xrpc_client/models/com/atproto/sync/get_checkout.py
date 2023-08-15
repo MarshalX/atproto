@@ -6,14 +6,14 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
 import typing_extensions as te
 
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.sync.getCheckout`."""

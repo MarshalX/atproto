@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Main(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
@@ -22,7 +21,6 @@ class Main(base.ModelBase):
     _type: str = 'app.bsky.embed.record'
 
 
-@dataclass
 class View(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
@@ -39,7 +37,6 @@ class View(base.ModelBase):
     _type: str = 'app.bsky.embed.record#view'
 
 
-@dataclass
 class ViewRecord(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
@@ -65,7 +62,6 @@ class ViewRecord(base.ModelBase):
     _type: str = 'app.bsky.embed.record#viewRecord'
 
 
-@dataclass
 class ViewNotFound(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
@@ -76,7 +72,6 @@ class ViewNotFound(base.ModelBase):
     _type: str = 'app.bsky.embed.record#viewNotFound'
 
 
-@dataclass
 class ViewBlocked(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""

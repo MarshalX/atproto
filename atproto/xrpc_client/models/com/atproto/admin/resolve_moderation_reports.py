@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.admin.resolveModerationReports`."""
@@ -23,4 +22,4 @@ class Data(base.DataModelBase):
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.
-ResponseRef = models.ComAtprotoAdminDefs.ActionView
+ResponseRef = 'models.ComAtprotoAdminDefs.ActionView'

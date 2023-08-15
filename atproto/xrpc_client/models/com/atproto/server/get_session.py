@@ -6,12 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.server.getSession`."""

@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.repo.applyWrites`."""
@@ -27,10 +26,9 @@ class Data(base.DataModelBase):
         ]
     ]  #: Writes.
     swapCommit: t.Optional[str] = None  #: Swap commit.
-    validate: t.Optional[bool] = None  #: Validate the records?
+    validateFixMe: t.Optional[bool] = None  #: Validate the records?
 
 
-@dataclass
 class Create(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record."""
@@ -42,7 +40,6 @@ class Create(base.ModelBase):
     _type: str = 'com.atproto.repo.applyWrites#create'
 
 
-@dataclass
 class Update(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Update an existing record."""
@@ -54,7 +51,6 @@ class Update(base.ModelBase):
     _type: str = 'com.atproto.repo.applyWrites#update'
 
 
-@dataclass
 class Delete(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Delete an existing record."""

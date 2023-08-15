@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.sync.listRepos`."""
@@ -21,7 +20,6 @@ class Params(base.ParamsModelBase):
     limit: t.Optional[int] = None  #: Limit.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.sync.listRepos`."""
@@ -30,7 +28,6 @@ class Response(base.ResponseModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
 
 
-@dataclass
 class Repo(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.sync.listRepos`."""

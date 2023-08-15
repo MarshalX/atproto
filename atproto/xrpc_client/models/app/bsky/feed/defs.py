@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class PostView(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -40,7 +39,6 @@ class PostView(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#postView'
 
 
-@dataclass
 class ViewerState(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -51,7 +49,6 @@ class ViewerState(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#viewerState'
 
 
-@dataclass
 class FeedViewPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -63,7 +60,6 @@ class FeedViewPost(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#feedViewPost'
 
 
-@dataclass
 class ReplyRef(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -84,7 +80,6 @@ class ReplyRef(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#replyRef'
 
 
-@dataclass
 class ReasonRepost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -95,7 +90,6 @@ class ReasonRepost(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#reasonRepost'
 
 
-@dataclass
 class ThreadViewPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -123,7 +117,6 @@ class ThreadViewPost(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#threadViewPost'
 
 
-@dataclass
 class NotFoundPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -134,7 +127,6 @@ class NotFoundPost(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#notFoundPost'
 
 
-@dataclass
 class BlockedPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -146,7 +138,6 @@ class BlockedPost(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#blockedPost'
 
 
-@dataclass
 class BlockedAuthor(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -157,7 +148,6 @@ class BlockedAuthor(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#blockedAuthor'
 
 
-@dataclass
 class GeneratorView(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -177,7 +167,6 @@ class GeneratorView(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#generatorView'
 
 
-@dataclass
 class GeneratorViewerState(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -187,7 +176,6 @@ class GeneratorViewerState(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#generatorViewerState'
 
 
-@dataclass
 class SkeletonFeedPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -198,7 +186,6 @@ class SkeletonFeedPost(base.ModelBase):
     _type: str = 'app.bsky.feed.defs#skeletonFeedPost'
 
 
-@dataclass
 class SkeletonReasonRepost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""

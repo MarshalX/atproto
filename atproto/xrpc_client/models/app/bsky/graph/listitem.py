@@ -5,12 +5,13 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.graph.listitem`."""

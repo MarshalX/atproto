@@ -5,13 +5,13 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.feed.like`."""

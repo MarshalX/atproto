@@ -5,13 +5,13 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.admin.getModerationReport`."""
@@ -20,4 +20,4 @@ class Params(base.ParamsModelBase):
 
 
 #: Response reference to :obj:`models.ComAtprotoAdminDefs.ReportViewDetail` model.
-ResponseRef = models.ComAtprotoAdminDefs.ReportViewDetail
+ResponseRef = 'models.ComAtprotoAdminDefs.ReportViewDetail'

@@ -7,6 +7,7 @@ from atproto.xrpc_client.models.app.bsky.actor import profile as AppBskyActorPro
 from atproto.xrpc_client.models.app.bsky.actor import put_preferences as AppBskyActorPutPreferences
 from atproto.xrpc_client.models.app.bsky.actor import search_actors as AppBskyActorSearchActors
 from atproto.xrpc_client.models.app.bsky.actor import search_actors_typeahead as AppBskyActorSearchActorsTypeahead
+from atproto.xrpc_client.models.app.bsky.actor.defs import ProfileViewDetailed
 from atproto.xrpc_client.models.app.bsky.embed import external as AppBskyEmbedExternal
 from atproto.xrpc_client.models.app.bsky.embed import images as AppBskyEmbedImages
 from atproto.xrpc_client.models.app.bsky.embed import record as AppBskyEmbedRecord
@@ -251,3 +252,7 @@ class _Ids:
 
 
 ids = _Ids()
+
+
+from atproto.xrpc_client import models
+ProfileViewDetailed.model_rebuild()

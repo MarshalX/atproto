@@ -6,12 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.repo.putRecord`."""
@@ -22,10 +22,9 @@ class Data(base.DataModelBase):
     rkey: str  #: The key of the record.
     swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
     swapRecord: t.Optional[str] = None  #: Compare and swap with the previous record by cid.
-    validate: t.Optional[bool] = None  #: Validate the record?
+    validateFixMe: t.Optional[bool] = None  #: Validate the record?
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.repo.putRecord`."""

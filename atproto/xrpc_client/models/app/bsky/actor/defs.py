@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class ProfileViewBasic(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -27,7 +26,6 @@ class ProfileViewBasic(base.ModelBase):
     _type: str = 'app.bsky.actor.defs#profileViewBasic'
 
 
-@dataclass
 class ProfileView(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -44,7 +42,6 @@ class ProfileView(base.ModelBase):
     _type: str = 'app.bsky.actor.defs#profileView'
 
 
-@dataclass
 class ProfileViewDetailed(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -65,7 +62,6 @@ class ProfileViewDetailed(base.ModelBase):
     _type: str = 'app.bsky.actor.defs#profileViewDetailed'
 
 
-@dataclass
 class ViewerState(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -90,7 +86,6 @@ Preferences = t.List[
 ]
 
 
-@dataclass
 class AdultContentPref(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -100,7 +95,6 @@ class AdultContentPref(base.ModelBase):
     _type: str = 'app.bsky.actor.defs#adultContentPref'
 
 
-@dataclass
 class ContentLabelPref(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -111,7 +105,6 @@ class ContentLabelPref(base.ModelBase):
     _type: str = 'app.bsky.actor.defs#contentLabelPref'
 
 
-@dataclass
 class SavedFeedsPref(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""

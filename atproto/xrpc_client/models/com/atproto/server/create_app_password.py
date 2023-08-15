@@ -5,12 +5,13 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.createAppPassword`."""
@@ -18,7 +19,6 @@ class Data(base.DataModelBase):
     name: str  #: Name.
 
 
-@dataclass
 class AppPassword(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.server.createAppPassword`."""
@@ -31,4 +31,4 @@ class AppPassword(base.ModelBase):
 
 
 #: Response reference to :obj:`AppPassword` model.
-ResponseRef = AppPassword
+ResponseRef = 'AppPassword'

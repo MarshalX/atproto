@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.admin.searchRepos`."""
@@ -23,7 +22,6 @@ class Params(base.ParamsModelBase):
     term: t.Optional[str] = None  #: Term.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.admin.searchRepos`."""

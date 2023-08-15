@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class ReplyRef(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.post`."""
@@ -23,7 +22,6 @@ class ReplyRef(base.ModelBase):
     _type: str = 'app.bsky.feed.post#replyRef'
 
 
-@dataclass
 class Entity(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.post`. Deprecated: use facets instead."""
@@ -35,7 +33,6 @@ class Entity(base.ModelBase):
     _type: str = 'app.bsky.feed.post#entity'
 
 
-@dataclass
 class TextSlice(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.post`. Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings."""
@@ -46,7 +43,6 @@ class TextSlice(base.ModelBase):
     _type: str = 'app.bsky.feed.post#textSlice'
 
 
-@dataclass
 class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.feed.post`."""

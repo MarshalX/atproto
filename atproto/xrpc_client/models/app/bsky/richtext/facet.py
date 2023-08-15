@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Main(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.richtext.facet`."""
@@ -25,7 +24,6 @@ class Main(base.ModelBase):
     _type: str = 'app.bsky.richtext.facet'
 
 
-@dataclass
 class Mention(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.richtext.facet`. A facet feature for actor mentions."""
@@ -35,7 +33,6 @@ class Mention(base.ModelBase):
     _type: str = 'app.bsky.richtext.facet#mention'
 
 
-@dataclass
 class Link(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.richtext.facet`. A facet feature for links."""
@@ -45,7 +42,6 @@ class Link(base.ModelBase):
     _type: str = 'app.bsky.richtext.facet#link'
 
 
-@dataclass
 class ByteSlice(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.richtext.facet`. A text segment. Start is inclusive, end is exclusive. Indices are for utf8-encoded strings."""

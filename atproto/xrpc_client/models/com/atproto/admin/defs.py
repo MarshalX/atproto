@@ -6,15 +6,14 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
 import typing_extensions as te
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class ActionView(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -36,7 +35,6 @@ class ActionView(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#actionView'
 
 
-@dataclass
 class ActionViewDetail(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -62,7 +60,6 @@ class ActionViewDetail(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#actionViewDetail'
 
 
-@dataclass
 class ActionViewCurrent(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -73,7 +70,6 @@ class ActionViewCurrent(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#actionViewCurrent'
 
 
-@dataclass
 class ActionReversal(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -96,7 +92,6 @@ Acknowledge: te.Literal['acknowledge'] = 'acknowledge'
 Escalate: te.Literal['escalate'] = 'escalate'
 
 
-@dataclass
 class ReportView(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -115,7 +110,6 @@ class ReportView(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#reportView'
 
 
-@dataclass
 class ReportViewDetail(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -137,7 +131,6 @@ class ReportViewDetail(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#reportViewDetail'
 
 
-@dataclass
 class RepoView(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -155,7 +148,6 @@ class RepoView(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#repoView'
 
 
-@dataclass
 class RepoViewDetail(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -175,7 +167,6 @@ class RepoViewDetail(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#repoViewDetail'
 
 
-@dataclass
 class RepoViewNotFound(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -185,7 +176,6 @@ class RepoViewNotFound(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#repoViewNotFound'
 
 
-@dataclass
 class RepoRef(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -195,7 +185,6 @@ class RepoRef(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#repoRef'
 
 
-@dataclass
 class RecordView(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -211,7 +200,6 @@ class RecordView(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#recordView'
 
 
-@dataclass
 class RecordViewDetail(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -228,7 +216,6 @@ class RecordViewDetail(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#recordViewDetail'
 
 
-@dataclass
 class RecordViewNotFound(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -238,7 +225,6 @@ class RecordViewNotFound(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#recordViewNotFound'
 
 
-@dataclass
 class Moderation(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -248,7 +234,6 @@ class Moderation(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#moderation'
 
 
-@dataclass
 class ModerationDetail(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -260,7 +245,6 @@ class ModerationDetail(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#moderationDetail'
 
 
-@dataclass
 class BlobView(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -279,7 +263,6 @@ class BlobView(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#blobView'
 
 
-@dataclass
 class ImageDetails(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -290,7 +273,6 @@ class ImageDetails(base.ModelBase):
     _type: str = 'com.atproto.admin.defs#imageDetails'
 
 
-@dataclass
 class VideoDetails(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""

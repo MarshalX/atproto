@@ -6,20 +6,19 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
+    from atproto.xrpc_client.models.blob_ref import BlobRef
 from atproto.xrpc_client.models import base
-from atproto.xrpc_client.models.blob_ref import BlobRef
 
 
-@dataclass
 class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.actor.profile`."""
 
-    avatar: t.Optional[BlobRef] = None  #: Avatar.
-    banner: t.Optional[BlobRef] = None  #: Banner.
+    avatar: t.Optional['BlobRef'] = None  #: Avatar.
+    banner: t.Optional['BlobRef'] = None  #: Banner.
     description: t.Optional[str] = None  #: Description.
     displayName: t.Optional[str] = None  #: Display name.
     labels: t.Optional[t.Union['models.ComAtprotoLabelDefs.SelfLabels', 't.Dict[str, t.Any]']] = None  #: Labels.

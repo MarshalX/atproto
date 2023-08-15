@@ -55,16 +55,16 @@ def save_code_part(nsid: NSID, code: str) -> None:
 def _get_model_imports() -> str:
     # we are using ruff with F401 autofix to delete unused imports
     lines = [
-        'from dataclasses import dataclass',
         'import typing as t',
         '',
         'import typing_extensions as te',
-        'from atproto.xrpc_client import models',
+        'if t.TYPE_CHECKING:',
+        f'{_(1)}from atproto.xrpc_client import models',
+        f'{_(1)}from atproto.xrpc_client.models.blob_ref import BlobRef',
+        f'{_(1)}from atproto import CID',
         'from atproto.xrpc_client.models import base',
         'from atproto.xrpc_client.models import unknown_type',
-        'from atproto.xrpc_client.models.blob_ref import BlobRef',
         '',
-        'from atproto import CID',
         '',
     ]
 
@@ -82,7 +82,7 @@ def _save_code_import_if_not_exist(nsid: NSID) -> None:
 
 
 def _get_model_class_def(name: str, model_type: ModelType) -> str:
-    lines = ['@dataclass']
+    lines = []
 
     if model_type is ModelType.PARAMS:
         lines.append(f'class {PARAMS_MODEL}(base.ParamsModelBase):')
@@ -182,7 +182,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
         return _get_ref_union_typehint(nsid, field_type_def, optional=optional)
 
     if field_type is models.LexCidLink:
-        return _get_optional_typehint('CID', optional=optional)
+        return _get_optional_typehint("'CID'", optional=optional)
 
     if field_type is models.LexBytes:
         # CAR file containing relevant blocks
@@ -190,7 +190,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
 
     if field_type is models.LexBlob:
         # yes, it returns blob,but actually it's blob ref here
-        return _get_optional_typehint('BlobRef', optional=optional)
+        return _get_optional_typehint("'BlobRef'", optional=optional)
 
     raise ValueError(f'Unknown field type {field_type.__name__}')
 
@@ -265,7 +265,7 @@ def _get_model_ref(nsid: NSID, ref: models.LexRef) -> str:
     # "Ref" suffix required to fix name collisions from different namespaces
     lines = [
         f'#: {OUTPUT_MODEL} reference to :obj:`{ref_class}` model.',
-        f'{OUTPUT_MODEL}Ref = {ref_class}',
+        f'{OUTPUT_MODEL}Ref = "{ref_class}"', # FIXME(MarshalX): pydantic support
         '',
         '',
     ]

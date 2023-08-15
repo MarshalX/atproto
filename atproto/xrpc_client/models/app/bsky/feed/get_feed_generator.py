@@ -5,13 +5,13 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`app.bsky.feed.getFeedGenerator`."""
@@ -19,7 +19,6 @@ class Params(base.ParamsModelBase):
     feed: str  #: Feed.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.feed.getFeedGenerator`."""

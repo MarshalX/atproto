@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.server.listAppPasswords`."""
@@ -20,7 +19,6 @@ class Response(base.ResponseModelBase):
     passwords: t.List['models.ComAtprotoServerListAppPasswords.AppPassword']  #: Passwords.
 
 
-@dataclass
 class AppPassword(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.server.listAppPasswords`."""

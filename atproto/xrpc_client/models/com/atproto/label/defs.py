@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Label(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto resource (eg, repo or record)"""
@@ -29,7 +28,6 @@ class Label(base.ModelBase):
     _type: str = 'com.atproto.label.defs#label'
 
 
-@dataclass
 class SelfLabels(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tags on an atproto record, published by the author within the record."""
@@ -39,7 +37,6 @@ class SelfLabels(base.ModelBase):
     _type: str = 'com.atproto.label.defs#selfLabels'
 
 
-@dataclass
 class SelfLabel(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto record, published by the author within the record. Note -- schemas should use #selfLabels, not #selfLabel."""

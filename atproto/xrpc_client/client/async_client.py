@@ -56,7 +56,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
 
         return refresh_session
 
-    async def login(self, login: str, password: str) -> models.AppBskyActorGetProfile.ResponseRef:
+    async def login(self, login: str, password: str) -> models.AppBskyActorDefs.ProfileViewDetailed:
         """Authorize a client and get profile info.
 
         Args:
@@ -65,7 +65,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
             Could be an app-specific one.
 
         Returns:
-            :obj:`models.AppBskyActorGetProfile.ResponseRef`: Profile information.
+            :obj:`models.AppBskyActorDefs.ProfileViewDetailed`: Profile information.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.

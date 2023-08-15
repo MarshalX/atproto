@@ -5,7 +5,7 @@ import typing as t
 from enum import Enum
 
 import typing_extensions as te
-from dacite import Config, exceptions, from_dict
+from dacite import Config, exceptions
 
 from atproto.cid import CID
 from atproto.exceptions import (
@@ -128,8 +128,7 @@ def _get_or_create(
         return model_data
 
     try:
-        _validate_unexpected_fields(model_data, model)
-        return from_dict(model, model_data, config=_DACITE_CONFIG)
+        return model(**model_data)
     except TypeError as e:
         # FIXME(MarshalX): "Params missing 1 required positional argument: 'rkey'" should raise another error
         msg = str(e).replace('__init__()', model.__name__)
@@ -177,6 +176,8 @@ def _model_as_dict_factory(value) -> dict:
 def get_model_as_dict(model: t.Union[BlobRef, ModelBase]) -> dict:
     if isinstance(model, (BlobRef, DotDict)):
         return model.to_dict()
+
+    return model.model_dump()
 
     if not dataclasses.is_dataclass(model):
         raise ModelError('Invalid model')

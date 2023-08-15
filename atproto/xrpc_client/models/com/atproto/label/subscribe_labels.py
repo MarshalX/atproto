@@ -6,13 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.label.subscribeLabels`."""
@@ -20,7 +19,6 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[int] = None  #: The last known event to backfill from.
 
 
-@dataclass
 class Labels(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.subscribeLabels`."""
@@ -31,7 +29,6 @@ class Labels(base.ModelBase):
     _type: str = 'com.atproto.label.subscribeLabels#labels'
 
 
-@dataclass
 class Info(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.subscribeLabels`."""
