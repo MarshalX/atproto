@@ -8,6 +8,7 @@
 import typing as t
 from dataclasses import dataclass
 
+from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
@@ -26,3 +27,23 @@ class Label(base.ModelBase):
     neg: t.Optional[bool] = None  #: if true, this is a negation label, overwriting a previous label.
 
     _type: str = 'com.atproto.label.defs#label'
+
+
+@dataclass
+class SelfLabels(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.label.defs`. Metadata tags on an atproto record, published by the author within the record."""
+
+    values: t.List['models.ComAtprotoLabelDefs.SelfLabel']  #: Values.
+
+    _type: str = 'com.atproto.label.defs#selfLabels'
+
+
+@dataclass
+class SelfLabel(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto record, published by the author within the record. Note -- schemas should use #selfLabels, not #selfLabel."""
+
+    val: str  #: the short string name of the value or type of this label.
+
+    _type: str = 'com.atproto.label.defs#selfLabel'

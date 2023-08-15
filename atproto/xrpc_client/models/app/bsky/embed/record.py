@@ -70,6 +70,7 @@ class ViewNotFound(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
 
+    notFound: bool  #: Not found.
     uri: str  #: Uri.
 
     _type: str = 'app.bsky.embed.record#viewNotFound'
@@ -80,6 +81,8 @@ class ViewBlocked(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
 
+    author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.
+    blocked: bool  #: Blocked.
     uri: str  #: Uri.
 
     _type: str = 'app.bsky.embed.record#viewBlocked'

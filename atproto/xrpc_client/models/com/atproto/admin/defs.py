@@ -148,6 +148,7 @@ class RepoView(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
     relatedRecords: t.List['base.UnknownDict']  #: Related records.
     email: t.Optional[str] = None  #: Email.
+    inviteNote: t.Optional[str] = None  #: Invite note.
     invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
     invitesDisabled: t.Optional[bool] = None  #: Invites disabled.
 
@@ -165,6 +166,7 @@ class RepoViewDetail(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
     relatedRecords: t.List['base.UnknownDict']  #: Related records.
     email: t.Optional[str] = None  #: Email.
+    inviteNote: t.Optional[str] = None  #: Invite note.
     invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
     invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
     invitesDisabled: t.Optional[bool] = None  #: Invites disabled.

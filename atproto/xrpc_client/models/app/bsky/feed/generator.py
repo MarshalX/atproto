@@ -24,5 +24,6 @@ class Main(base.RecordModelBase):
     avatar: t.Optional[BlobRef] = None  #: Avatar.
     description: t.Optional[str] = None  #: Description.
     descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
+    labels: t.Optional[t.Union['models.ComAtprotoLabelDefs.SelfLabels', 't.Dict[str, t.Any]']] = None  #: Labels.
 
     _type: str = 'app.bsky.feed.generator'

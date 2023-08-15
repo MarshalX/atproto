@@ -66,6 +66,7 @@ class Main(base.RecordModelBase):
         t.List['models.AppBskyFeedPost.Entity']
     ] = None  #: Deprecated: replaced by app.bsky.richtext.facet.
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Facets.
+    labels: t.Optional[t.Union['models.ComAtprotoLabelDefs.SelfLabels', 't.Dict[str, t.Any]']] = None  #: Labels.
     langs: t.Optional[t.List[str]] = None  #: Langs.
     reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None  #: Reply.
 
