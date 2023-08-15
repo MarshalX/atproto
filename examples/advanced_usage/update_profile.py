@@ -21,8 +21,7 @@ def main():
     except BadRequestError:
         current_profile = swap_record_cid = None
 
-    old_description = None
-    old_display_name = None
+    old_description = old_display_name = None
     if current_profile:
         old_description = current_profile.description
         old_display_name = current_profile.displayName
