@@ -7,7 +7,6 @@ from atproto.exceptions import ModelFieldNotFoundError
 
 
 class ModelBase(BaseModel):
-# class ModelBase:
     """Base class for all data classes.
 
     Provides square brackets [] notation to get attributes like in a dictionary.

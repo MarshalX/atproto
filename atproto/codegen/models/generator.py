@@ -579,9 +579,12 @@ def _generate_import_aliases(root_package_path: Path) -> None:
         'get_or_create, '
         'is_record_type'
     )
+    import_lines.append('from atproto.xrpc_client.models.models_loader import load_models')
 
     ids_db.append('ids = _Ids()')
     import_lines.extend(ids_db)
+
+    import_lines.append('load_models()')
 
     write_code(_MODELS_OUTPUT_DIR.joinpath('__init__.py'), join_code(import_lines))
 

@@ -1,11 +1,10 @@
 # from multiformats import CID as _CID
-# from atproto.xrpc_client.models.base import ModelBase
+from pydantic import BaseModel
 
 
 # CID = _CID
 
-# class CID(ModelBase):
-class CID:
+class CID(BaseModel):
     def encode(self, *_, **__):
         ...
 

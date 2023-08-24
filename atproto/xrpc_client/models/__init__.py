@@ -7,7 +7,6 @@ from atproto.xrpc_client.models.app.bsky.actor import profile as AppBskyActorPro
 from atproto.xrpc_client.models.app.bsky.actor import put_preferences as AppBskyActorPutPreferences
 from atproto.xrpc_client.models.app.bsky.actor import search_actors as AppBskyActorSearchActors
 from atproto.xrpc_client.models.app.bsky.actor import search_actors_typeahead as AppBskyActorSearchActorsTypeahead
-from atproto.xrpc_client.models.app.bsky.actor.defs import ProfileViewDetailed
 from atproto.xrpc_client.models.app.bsky.embed import external as AppBskyEmbedExternal
 from atproto.xrpc_client.models.app.bsky.embed import images as AppBskyEmbedImages
 from atproto.xrpc_client.models.app.bsky.embed import record as AppBskyEmbedRecord
@@ -126,6 +125,7 @@ from atproto.xrpc_client.models.com.atproto.sync import list_repos as ComAtproto
 from atproto.xrpc_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
 from atproto.xrpc_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto.xrpc_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
+from atproto.xrpc_client.models.models_loader import load_models
 from atproto.xrpc_client.models.utils import get_model_as_dict, get_model_as_json, get_or_create, is_record_type
 
 
@@ -252,7 +252,4 @@ class _Ids:
 
 
 ids = _Ids()
-
-
-from atproto.xrpc_client import models
-ProfileViewDetailed.model_rebuild()
+load_models()

@@ -1,12 +1,14 @@
 import typing as t
 
+from pydantic import BaseModel
+
 if t.TYPE_CHECKING:
     from atproto.cid import CID
 
 
-# class BlobRef(ModelBase):  # FIXME ModelBase
-class BlobRef:
+class BlobRef(BaseModel):
     def __init__(self, blob_type: str, mime_type: str, ref: str, size: int) -> None:
+        super().__init__()
         self.blob_type = blob_type
         self.mime_type = mime_type
         self.ref = ref
