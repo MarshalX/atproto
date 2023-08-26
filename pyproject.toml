@@ -40,11 +40,12 @@ python = ">=3.7,<3.12"
 httpx = ">=0.24.0,<0.25.0"
 dacite = ">=1.8.0,<1.9.0"
 multiformats = ">=0.2.1,<0.3.0"
-typing-extensions = ">=3.10.0.0,<4.6.0"
+typing-extensions = ">=3.10.0.0,<4.7.1"
 dag-cbor = ">=0.3.2,<0.4.0"
 pyjwt = ">=2.7.0,<2.8.0"
 click = ">=8.1.3,<8.2.0"
 websockets = ">=11.0.3,<11.1.0"
+pydantic = ">=2.0,<3.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "23.3.0"

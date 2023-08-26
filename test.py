@@ -40,7 +40,9 @@ def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
     h = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'})
+    print(h)
     s = client.bsky.actor.search_actors_typeahead({'term': 'bsky'})
+    print(s)
 
     # post_ref = client.send_post(text='Hello World from Python!')
 
