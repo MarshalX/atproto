@@ -4,6 +4,7 @@ import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
+    from atproto.xrpc_client.models import base
     from atproto.xrpc_client import models
 
 UnknownRecordType: te.TypeAlias = t.Union[
@@ -31,3 +32,4 @@ UnknownRecordTypePydantic = te.Annotated[
     ],
     Field(discriminator='py_type'),
 ]
+UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'base.DotDictType']

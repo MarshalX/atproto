@@ -17,7 +17,7 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.repo.putRecord`."""
 
     collection: str  #: The NSID of the record collection.
-    record: 'unknown_type.UnknownRecordTypePydantic'  #: The record to write.
+    record: 'unknown_type.UnknownType'  #: The record to write.
     repo: str  #: The handle or DID of the repo.
     rkey: str  #: The key of the record.
     swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.

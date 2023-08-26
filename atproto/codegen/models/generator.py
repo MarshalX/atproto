@@ -139,7 +139,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
 
     if field_type == models.LexUnknown:
         # unknown type is a generic response with records or any not described type in the lexicon. for example, didDoc
-        return _get_optional_typehint("'unknown_type.UnknownRecordTypePydantic'", optional=optional)
+        return _get_optional_typehint("'unknown_type.UnknownType'", optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
     if type_hint:
@@ -391,6 +391,7 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
         'import typing_extensions as te',
         'from pydantic import Field',
         'if t.TYPE_CHECKING:',
+        f'{_(4)}from atproto.xrpc_client.models import base',
         f'{_(4)}from atproto.xrpc_client import models',
         '',
         'UnknownRecordType: te.TypeAlias = t.Union[',
@@ -417,6 +418,9 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
 
     unknown_record_type_hint_lines.append(']')
     unknown_record_type_pydantic_lines.append('], Field(discriminator="py_type")]')
+    unknown_record_type_pydantic_lines.append(
+        "UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'base.DotDictType']"
+    )
 
     unknown_record_type_hint_lines.extend(unknown_record_type_pydantic_lines)
 

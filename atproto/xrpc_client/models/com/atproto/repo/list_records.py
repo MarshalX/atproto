@@ -42,7 +42,7 @@ class Record(base.ModelBase):
 
     cid: str  #: Cid.
     uri: str  #: Uri.
-    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
+    value: 'unknown_type.UnknownType'  #: Value.
 
     py_type: te.Literal['com.atproto.repo.listRecords#record'] = Field(
         default='com.atproto.repo.listRecords#record', alias='$type'

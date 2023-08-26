@@ -158,7 +158,7 @@ class RepoView(base.ModelBase):
     handle: str  #: Handle.
     indexedAt: str  #: Indexed at.
     moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
-    relatedRecords: t.List['unknown_type.UnknownRecordTypePydantic']  #: Related records.
+    relatedRecords: t.List['unknown_type.UnknownType']  #: Related records.
     email: t.Optional[str] = None  #: Email.
     inviteNote: t.Optional[str] = None  #: Invite note.
     invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
@@ -177,7 +177,7 @@ class RepoViewDetail(base.ModelBase):
     handle: str  #: Handle.
     indexedAt: str  #: Indexed at.
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
-    relatedRecords: t.List['unknown_type.UnknownRecordTypePydantic']  #: Related records.
+    relatedRecords: t.List['unknown_type.UnknownType']  #: Related records.
     email: t.Optional[str] = None  #: Email.
     inviteNote: t.Optional[str] = None  #: Invite note.
     invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
@@ -222,7 +222,7 @@ class RecordView(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
     repo: 'models.ComAtprotoAdminDefs.RepoView'  #: Repo.
     uri: str  #: Uri.
-    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
+    value: 'unknown_type.UnknownType'  #: Value.
 
     py_type: te.Literal['com.atproto.admin.defs#recordView'] = Field(
         default='com.atproto.admin.defs#recordView', alias='$type'
@@ -239,7 +239,7 @@ class RecordViewDetail(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
     repo: 'models.ComAtprotoAdminDefs.RepoView'  #: Repo.
     uri: str  #: Uri.
-    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
+    value: 'unknown_type.UnknownType'  #: Value.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
     py_type: te.Literal['com.atproto.admin.defs#recordViewDetail'] = Field(

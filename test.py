@@ -39,8 +39,8 @@ def convert_uri_to_url():
 def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
-    # h = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'})
-    # s = client.bsky.actor.search_actors_typeahead({'term': 'bsky'})
+    h = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'})
+    s = client.bsky.actor.search_actors_typeahead({'term': 'bsky'})
 
     # post_ref = client.send_post(text='Hello World from Python!')
 
@@ -72,6 +72,8 @@ def sync_main():
     print(type(post.value))
     print(type(custom_like.value))
     print(type(custom_post.value))
+    print(custom_post.value)
+    print(custom_like.value)
 
     lexicon_correct_record = client.com.atproto.repo.get_record(
         {'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yihcrp6f2c'}
@@ -82,17 +84,15 @@ def sync_main():
         {'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yinh52ne2x'}
     )
     print(extended_record.value.text)
-    # FIXME
-    # print(extended_record.value.lol)  # custom (out of lexicon) attribute
+    print(extended_record.value.lol)  # custom (out of lexicon) attribute
     print(type(extended_record.value))
 
-    # FIXME
-    # did_doc = client.com.atproto.repo.describe_repo({'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}).didDoc
-    # print(did_doc)
-    # print(did_doc.service)
-    # print(did_doc['service'])
-    # print(did_doc['@context'])
-    # print(type(did_doc))
+    did_doc = client.com.atproto.repo.describe_repo({'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}).didDoc
+    print(type(did_doc))
+    print(did_doc)
+    print(did_doc.service)
+    print(did_doc['service'])
+    print(did_doc['@context'])
 
     atproto_feed = client.com.atproto.repo.get_record(
         {'collection': ids.AppBskyFeedGenerator, 'repo': 'marshal.dev', 'rkey': 'atproto'}
@@ -111,6 +111,10 @@ def sync_main():
     assert is_record_type(extended_record.value, models.AppBskyFeedGenerator) is False
     dict_model = get_model_as_dict(extended_record.value)
     assert isinstance(dict_model, dict) is True
+
+    post_uri = 'at://did:plc:hbtuqflamm5j2i7yahtzsnue/app.bsky.feed.post/3k3ic43ucbq2f'
+    response = client.bsky.feed.get_post_thread({'uri': post_uri, 'depth': 1, 'parentHeight': 0})
+    assert response.thread.post.embed.py_type == 'app.bsky.embed.recordWithMedia#view'
 
     exit(0)
 

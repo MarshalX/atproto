@@ -50,7 +50,7 @@ class ViewRecord(base.ModelBase):
     cid: str  #: Cid.
     indexedAt: str  #: Indexed at.
     uri: str  #: Uri.
-    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
+    value: 'unknown_type.UnknownType'  #: Value.
     embeds: t.Optional[
         t.List[
             te.Annotated[

@@ -1,13 +1,10 @@
-import dataclasses
 import json
 import types
 import typing as t
-from enum import Enum
 
 import typing_extensions as te
-from dacite import Config, exceptions
+from dacite import exceptions
 
-from atproto.cid import CID
 from atproto.exceptions import (
     MissingValueError,
     ModelError,
@@ -16,7 +13,7 @@ from atproto.exceptions import (
     UnexpectedFieldError,
     WrongTypeError,
 )
-from atproto.xrpc_client.models.base import DotDict, ModelBase, UnknownDict
+from atproto.xrpc_client.models.base import DotDict, ModelBase
 from atproto.xrpc_client.models.blob_ref import BlobRef
 from atproto.xrpc_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
 from atproto.xrpc_client.models.unknown_type import UnknownRecordType
@@ -28,27 +25,6 @@ M = t.TypeVar('M')
 ModelData: te.TypeAlias = t.Union[M, dict, None]
 
 _TYPE_SERVICE_FIELD = '$type'
-
-
-def _unknown_type_hook(data: dict) -> t.Union[UnknownRecordType, DotDict]:
-    if _TYPE_SERVICE_FIELD in data:
-        return get_or_create(data, strict=False)
-    # any another unknown (not described by lexicon) type
-    return DotDict(data)
-
-
-def _decode_cid_hook(ref: t.Union[CID, str]) -> CID:
-    if isinstance(ref, CID):
-        return ref
-
-    return CID.decode(ref)
-
-
-_TYPE_HOOKS = {
-    CID: _decode_cid_hook,
-    UnknownDict: _unknown_type_hook,
-}
-_DACITE_CONFIG = Config(cast=[Enum], type_hooks=_TYPE_HOOKS)
 
 
 def get_or_create(
@@ -151,40 +127,18 @@ def get_response_model(response: 'Response', model: t.Type[M]) -> M:
     return get_or_create(response.content, model)
 
 
-def _handle_dict_key(key: str) -> str:
-    if key == '_type':  # System field. Replaced to original $ symbol because it is not allowed in Python.
-        return _TYPE_SERVICE_FIELD
-
-    return key
-
-
-def _handle_dict_value(ref: t.Any) -> t.Any:
-    if isinstance(ref, CID):
-        return ref.encode()
-
-    return ref
-
-
-def _model_as_dict_factory(value) -> dict:
-    # exclude None values and process keys and values
-    return {_handle_dict_key(k): _handle_dict_value(v) for k, v in value if v is not None}
-
-
-def get_model_as_dict(model: t.Union[BlobRef, ModelBase]) -> dict:
+def get_model_as_dict(model: t.Union[DotDict, BlobRef, ModelBase]) -> dict:
     if isinstance(model, DotDict):
         return model.to_dict()
 
-    return model.model_dump(exclude_none=True)
-
-    if not dataclasses.is_dataclass(model):
-        raise ModelError('Invalid model')
-
-    return dataclasses.asdict(model, dict_factory=_model_as_dict_factory)
+    return model.model_dump(exclude_none=True, by_alias=True)
 
 
-def get_model_as_json(model: t.Union[BlobRef, ModelBase]) -> str:
+def get_model_as_json(model: t.Union[DotDict, BlobRef, ModelBase]) -> str:
+    if isinstance(model, DotDict):
+        return json.dumps(get_model_as_dict(model))
+
     return model.model_dump_json(exclude_none=True, by_alias=True)
-    return json.dumps(get_model_as_dict(model))
 
 
 def is_json(json_data: t.Union[str, bytes]) -> bool:

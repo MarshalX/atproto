@@ -39,7 +39,7 @@ class Create(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record."""
 
     collection: str  #: Collection.
-    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
+    value: 'unknown_type.UnknownType'  #: Value.
     rkey: t.Optional[str] = None  #: Rkey.
 
     py_type: te.Literal['com.atproto.repo.applyWrites#create'] = Field(
@@ -53,7 +53,7 @@ class Update(base.ModelBase):
 
     collection: str  #: Collection.
     rkey: str  #: Rkey.
-    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
+    value: 'unknown_type.UnknownType'  #: Value.
 
     py_type: te.Literal['com.atproto.repo.applyWrites#update'] = Field(
         default='com.atproto.repo.applyWrites#update', alias='$type'
