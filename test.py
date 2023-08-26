@@ -10,7 +10,7 @@ from atproto.firehose import (
     FirehoseSubscribeReposClient,
     parse_subscribe_repos_message,
 )
-from atproto.xrpc_client.models import get_model_as_dict, get_model_as_json, ids, is_record_type
+from atproto.xrpc_client.models import get_model_as_dict, get_model_as_json, get_or_create, ids, is_record_type
 
 if t.TYPE_CHECKING:
     from atproto.firehose import MessageFrame
@@ -169,10 +169,10 @@ async def main():
     print(profile)
 
     # should be async open
-    # with open('cat2.png', 'rb') as f:
+    # with open('cat.png', 'rb') as f:
     #     cat_data = f.read()
 
-    # await async_client.send_image('Cat looking for an Async Python', cat_data, 'async cat alt')
+    # await async_client.send_image('Cat', cat_data, 'async cat alt')
 
     # resolve = await async_client.com.atproto.identity.resolve_handle(
     #     models.ComAtprotoIdentityResolveHandle.Params(profile.handle)
@@ -184,7 +184,11 @@ def _main_firehose_test():
     client = FirehoseSubscribeReposClient()
 
     def on_message_handler(message: 'MessageFrame') -> None:
-        print('Message', message.header, parse_subscribe_repos_message(message))
+        msg = parse_subscribe_repos_message(message)
+        print('Message', message.header, msg)
+
+        recreated_model = get_or_create(get_model_as_dict(msg), models.ComAtprotoSyncSubscribeRepos.Commit)
+        assert msg.prev == recreated_model.prev
         # raise RuntimeError('kek')
 
     def on_callback_error_handler(e: BaseException) -> None:
@@ -198,7 +202,8 @@ def _main_firehose_test():
         client.stop()
 
     threading.Thread(target=_stop_after_n_sec).start()
-    client.start(on_message_handler, on_callback_error_handler)
+    client.start(on_message_handler)
+    # client.start(on_message_handler, on_callback_error_handler)
     print('stopped. start again')
     # client.start(on_message_handler, on_callback_error_handler)
 

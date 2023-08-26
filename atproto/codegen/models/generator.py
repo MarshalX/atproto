@@ -55,7 +55,7 @@ def _get_model_imports() -> str:
         'if t.TYPE_CHECKING:',
         f'{_(1)}from atproto.xrpc_client import models',
         f'{_(1)}from atproto.xrpc_client.models.blob_ref import BlobRef',
-        f'{_(1)}from atproto import CID',
+        f'{_(1)}from atproto import CIDType',
         'from atproto.xrpc_client.models import base',
         'from atproto.xrpc_client.models import unknown_type',
         '',
@@ -156,7 +156,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
         return _get_ref_union_typehint(nsid, field_type_def, optional=optional)
 
     if field_type is models.LexCidLink:
-        return _get_optional_typehint("'CID'", optional=optional)
+        return _get_optional_typehint("'CIDType'", optional=optional)
 
     if field_type is models.LexBytes:
         # CAR file containing relevant blocks

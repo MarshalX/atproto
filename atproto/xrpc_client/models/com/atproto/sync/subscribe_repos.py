@@ -11,7 +11,7 @@ import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
-    from atproto import CID
+    from atproto import CIDType
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
@@ -27,16 +27,16 @@ class Commit(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
-    blobs: t.List['CID']  #: Blobs.
+    blobs: t.List['CIDType']  #: Blobs.
     blocks: t.Union[str, bytes]  #: CAR file containing relevant blocks.
-    commit: 'CID'  #: Commit.
+    commit: 'CIDType'  #: Commit.
     ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp']  #: Ops.
     rebase: bool  #: Rebase.
     repo: str  #: Repo.
     seq: int  #: Seq.
     time: str  #: Time.
     tooBig: bool  #: Too big.
-    prev: t.Optional['CID'] = None  #: Prev.
+    prev: t.Optional['CIDType'] = None  #: Prev.
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#commit'] = Field(
         default='com.atproto.sync.subscribeRepos#commit', alias='$type'
@@ -102,7 +102,7 @@ class RepoOp(base.ModelBase):
 
     action: str  #: Action.
     path: str  #: Path.
-    cid: t.Optional['CID'] = None  #: Cid.
+    cid: t.Optional['CIDType'] = None  #: Cid.
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#repoOp'] = Field(
         default='com.atproto.sync.subscribeRepos#repoOp', alias='$type'

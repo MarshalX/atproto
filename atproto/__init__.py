@@ -1,5 +1,5 @@
 from .car import CAR
-from .cid import CID
+from .cid import CID, CIDType
 from .firehose import models as firehose_models
 from .nsid import NSID
 from .uri import AtUri
@@ -17,5 +17,6 @@ __all__ = [
     'NSID',
     'CAR',
     'CID',
+    'CIDType',
     'AtUri',
 ]

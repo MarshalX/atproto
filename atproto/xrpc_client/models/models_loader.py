@@ -39,10 +39,11 @@ def __rebuild_all_models():
     # load models to the scope
     from atproto.xrpc_client import models  # noqa
     from atproto.xrpc_client.models.blob_ref import BlobRef
-    from atproto.cid import CID
+    from atproto import CIDType
+
+    CIDType  # noqa: B018
 
     BlobRef.model_rebuild()
-    CID.model_rebuild()
     for __model in __get_models_to_rebuild_set():
         __model.model_rebuild()
 
