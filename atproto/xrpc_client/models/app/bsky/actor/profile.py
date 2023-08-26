@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
     from atproto.xrpc_client.models.blob_ref import BlobRef
@@ -21,6 +24,8 @@ class Main(base.RecordModelBase):
     banner: t.Optional['BlobRef'] = None  #: Banner.
     description: t.Optional[str] = None  #: Description.
     displayName: t.Optional[str] = None  #: Display name.
-    labels: t.Optional[t.Union['models.ComAtprotoLabelDefs.SelfLabels', 't.Dict[str, t.Any]']] = None  #: Labels.
+    labels: t.Optional[
+        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
+    ] = None  #: Labels.
 
-    _type: str = 'app.bsky.actor.profile'
+    py_type: te.Literal['app.bsky.actor.profile'] = Field(default='app.bsky.actor.profile', alias='$type')

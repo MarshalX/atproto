@@ -9,7 +9,7 @@ import typing as t
 
 if t.TYPE_CHECKING:
     pass
-from atproto.xrpc_client.models import base
+from atproto.xrpc_client.models import base, unknown_type
 
 
 class Params(base.ParamsModelBase):
@@ -25,6 +25,6 @@ class Response(base.ResponseModelBase):
 
     collections: t.List[str]  #: Collections.
     did: str  #: Did.
-    didDoc: 'base.UnknownDict'  #: Did doc.
+    didDoc: 'unknown_type.UnknownRecordTypePydantic'  #: Did doc.
     handle: str  #: Handle.
     handleIsCorrect: bool  #: Handle is correct.

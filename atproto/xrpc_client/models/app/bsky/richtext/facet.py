@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -17,11 +20,14 @@ class Main(base.ModelBase):
     """Definition model for :obj:`app.bsky.richtext.facet`."""
 
     features: t.List[
-        t.Union['models.AppBskyRichtextFacet.Mention', 'models.AppBskyRichtextFacet.Link', 't.Dict[str, t.Any]']
+        te.Annotated[
+            t.Union['models.AppBskyRichtextFacet.Mention', 'models.AppBskyRichtextFacet.Link'],
+            Field(discriminator='py_type'),
+        ]
     ]  #: Features.
     index: 'models.AppBskyRichtextFacet.ByteSlice'  #: Index.
 
-    _type: str = 'app.bsky.richtext.facet'
+    py_type: te.Literal['app.bsky.richtext.facet'] = Field(default='app.bsky.richtext.facet', alias='$type')
 
 
 class Mention(base.ModelBase):
@@ -30,7 +36,9 @@ class Mention(base.ModelBase):
 
     did: str  #: Did.
 
-    _type: str = 'app.bsky.richtext.facet#mention'
+    py_type: te.Literal['app.bsky.richtext.facet#mention'] = Field(
+        default='app.bsky.richtext.facet#mention', alias='$type'
+    )
 
 
 class Link(base.ModelBase):
@@ -39,7 +47,7 @@ class Link(base.ModelBase):
 
     uri: str  #: Uri.
 
-    _type: str = 'app.bsky.richtext.facet#link'
+    py_type: te.Literal['app.bsky.richtext.facet#link'] = Field(default='app.bsky.richtext.facet#link', alias='$type')
 
 
 class ByteSlice(base.ModelBase):
@@ -49,4 +57,6 @@ class ByteSlice(base.ModelBase):
     byteEnd: int  #: Byte end.
     byteStart: int  #: Byte start.
 
-    _type: str = 'app.bsky.richtext.facet#byteSlice'
+    py_type: te.Literal['app.bsky.richtext.facet#byteSlice'] = Field(
+        default='app.bsky.richtext.facet#byteSlice', alias='$type'
+    )

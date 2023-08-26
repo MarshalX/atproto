@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -27,8 +30,6 @@ class AppPassword(base.ModelBase):
     name: str  #: Name.
     password: str  #: Password.
 
-    _type: str = 'com.atproto.server.createAppPassword#appPassword'
-
-
-#: Response reference to :obj:`AppPassword` model.
-ResponseRef = 'AppPassword'
+    py_type: te.Literal['com.atproto.server.createAppPassword#appPassword'] = Field(
+        default='com.atproto.server.createAppPassword#appPassword', alias='$type'
+    )

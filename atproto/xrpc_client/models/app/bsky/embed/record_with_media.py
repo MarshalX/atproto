@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -16,21 +19,25 @@ class Main(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
-    media: t.Union[
-        'models.AppBskyEmbedImages.Main', 'models.AppBskyEmbedExternal.Main', 't.Dict[str, t.Any]'
+    media: te.Annotated[
+        t.Union['models.AppBskyEmbedImages.Main', 'models.AppBskyEmbedExternal.Main'], Field(discriminator='py_type')
     ]  #: Media.
     record: 'models.AppBskyEmbedRecord.Main'  #: Record.
 
-    _type: str = 'app.bsky.embed.recordWithMedia'
+    py_type: te.Literal['app.bsky.embed.recordWithMedia'] = Field(
+        default='app.bsky.embed.recordWithMedia', alias='$type'
+    )
 
 
 class View(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
-    media: t.Union[
-        'models.AppBskyEmbedImages.View', 'models.AppBskyEmbedExternal.View', 't.Dict[str, t.Any]'
+    media: te.Annotated[
+        t.Union['models.AppBskyEmbedImages.View', 'models.AppBskyEmbedExternal.View'], Field(discriminator='py_type')
     ]  #: Media.
     record: 'models.AppBskyEmbedRecord.View'  #: Record.
 
-    _type: str = 'app.bsky.embed.recordWithMedia#view'
+    py_type: te.Literal['app.bsky.embed.recordWithMedia#view'] = Field(
+        default='app.bsky.embed.recordWithMedia#view', alias='$type'
+    )

@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 # CID = _CID
 
+
 class CID(BaseModel):
     def encode(self, *_, **__):
         ...

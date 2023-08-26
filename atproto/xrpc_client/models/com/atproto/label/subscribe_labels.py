@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -26,7 +29,9 @@ class Labels(base.ModelBase):
     labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.
     seq: int  #: Seq.
 
-    _type: str = 'com.atproto.label.subscribeLabels#labels'
+    py_type: te.Literal['com.atproto.label.subscribeLabels#labels'] = Field(
+        default='com.atproto.label.subscribeLabels#labels', alias='$type'
+    )
 
 
 class Info(base.ModelBase):
@@ -36,4 +41,6 @@ class Info(base.ModelBase):
     name: str  #: Name.
     message: t.Optional[str] = None  #: Message.
 
-    _type: str = 'com.atproto.label.subscribeLabels#info'
+    py_type: te.Literal['com.atproto.label.subscribeLabels#info'] = Field(
+        default='com.atproto.label.subscribeLabels#info', alias='$type'
+    )

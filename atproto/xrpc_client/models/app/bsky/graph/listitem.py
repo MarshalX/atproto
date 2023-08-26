@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -20,4 +23,4 @@ class Main(base.RecordModelBase):
     list: str  #: List.
     subject: str  #: Subject.
 
-    _type: str = 'app.bsky.graph.listitem'
+    py_type: te.Literal['app.bsky.graph.listitem'] = Field(default='app.bsky.graph.listitem', alias='$type')

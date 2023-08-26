@@ -17,7 +17,3 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.admin.getRepo`."""
 
     did: str  #: Did.
-
-
-#: Response reference to :obj:`models.ComAtprotoAdminDefs.RepoViewDetail` model.
-ResponseRef = 'models.ComAtprotoAdminDefs.RepoViewDetail'

@@ -56,7 +56,7 @@ class ActorNamespace(NamespaceBase):
 
     def get_profile(
         self, params: t.Union[dict, 'models.AppBskyActorGetProfile.Params'], **kwargs
-    ) -> 'models.AppBskyActorGetProfile.ResponseRef':
+    ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
         """Get profile.
 
         Args:
@@ -64,7 +64,7 @@ class ActorNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.AppBskyActorGetProfile.ResponseRef`: Output model.
+            :obj:`models.AppBskyActorDefs.ProfileViewDetailed`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -74,7 +74,7 @@ class ActorNamespace(NamespaceBase):
         response = self._client.invoke_query(
             'app.bsky.actor.getProfile', params=params_model, output_encoding='application/json', **kwargs
         )
-        return get_response_model(response, models.AppBskyActorGetProfile.ResponseRef)
+        return get_response_model(response, models.AppBskyActorDefs.ProfileViewDetailed)
 
     def get_profiles(
         self, params: t.Union[dict, 'models.AppBskyActorGetProfiles.Params'], **kwargs
@@ -1191,7 +1191,7 @@ class AdminNamespace(NamespaceBase):
 
     def get_moderation_action(
         self, params: t.Union[dict, 'models.ComAtprotoAdminGetModerationAction.Params'], **kwargs
-    ) -> 'models.ComAtprotoAdminGetModerationAction.ResponseRef':
+    ) -> 'models.ComAtprotoAdminDefs.ActionViewDetail':
         """View details about a moderation action.
 
         Args:
@@ -1199,7 +1199,7 @@ class AdminNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoAdminGetModerationAction.ResponseRef`: Output model.
+            :obj:`models.ComAtprotoAdminDefs.ActionViewDetail`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1209,7 +1209,7 @@ class AdminNamespace(NamespaceBase):
         response = self._client.invoke_query(
             'com.atproto.admin.getModerationAction', params=params_model, output_encoding='application/json', **kwargs
         )
-        return get_response_model(response, models.ComAtprotoAdminGetModerationAction.ResponseRef)
+        return get_response_model(response, models.ComAtprotoAdminDefs.ActionViewDetail)
 
     def get_moderation_actions(
         self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetModerationActions.Params']] = None, **kwargs
@@ -1235,7 +1235,7 @@ class AdminNamespace(NamespaceBase):
 
     def get_moderation_report(
         self, params: t.Union[dict, 'models.ComAtprotoAdminGetModerationReport.Params'], **kwargs
-    ) -> 'models.ComAtprotoAdminGetModerationReport.ResponseRef':
+    ) -> 'models.ComAtprotoAdminDefs.ReportViewDetail':
         """View details about a moderation report.
 
         Args:
@@ -1243,7 +1243,7 @@ class AdminNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoAdminGetModerationReport.ResponseRef`: Output model.
+            :obj:`models.ComAtprotoAdminDefs.ReportViewDetail`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1253,7 +1253,7 @@ class AdminNamespace(NamespaceBase):
         response = self._client.invoke_query(
             'com.atproto.admin.getModerationReport', params=params_model, output_encoding='application/json', **kwargs
         )
-        return get_response_model(response, models.ComAtprotoAdminGetModerationReport.ResponseRef)
+        return get_response_model(response, models.ComAtprotoAdminDefs.ReportViewDetail)
 
     def get_moderation_reports(
         self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetModerationReports.Params']] = None, **kwargs
@@ -1279,7 +1279,7 @@ class AdminNamespace(NamespaceBase):
 
     def get_record(
         self, params: t.Union[dict, 'models.ComAtprotoAdminGetRecord.Params'], **kwargs
-    ) -> 'models.ComAtprotoAdminGetRecord.ResponseRef':
+    ) -> 'models.ComAtprotoAdminDefs.RecordViewDetail':
         """View details about a record.
 
         Args:
@@ -1287,7 +1287,7 @@ class AdminNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoAdminGetRecord.ResponseRef`: Output model.
+            :obj:`models.ComAtprotoAdminDefs.RecordViewDetail`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1297,11 +1297,11 @@ class AdminNamespace(NamespaceBase):
         response = self._client.invoke_query(
             'com.atproto.admin.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
-        return get_response_model(response, models.ComAtprotoAdminGetRecord.ResponseRef)
+        return get_response_model(response, models.ComAtprotoAdminDefs.RecordViewDetail)
 
     def get_repo(
         self, params: t.Union[dict, 'models.ComAtprotoAdminGetRepo.Params'], **kwargs
-    ) -> 'models.ComAtprotoAdminGetRepo.ResponseRef':
+    ) -> 'models.ComAtprotoAdminDefs.RepoViewDetail':
         """View details about a repository.
 
         Args:
@@ -1309,7 +1309,7 @@ class AdminNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoAdminGetRepo.ResponseRef`: Output model.
+            :obj:`models.ComAtprotoAdminDefs.RepoViewDetail`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1319,7 +1319,7 @@ class AdminNamespace(NamespaceBase):
         response = self._client.invoke_query(
             'com.atproto.admin.getRepo', params=params_model, output_encoding='application/json', **kwargs
         )
-        return get_response_model(response, models.ComAtprotoAdminGetRepo.ResponseRef)
+        return get_response_model(response, models.ComAtprotoAdminDefs.RepoViewDetail)
 
     def rebase_repo(self, data: t.Union[dict, 'models.ComAtprotoAdminRebaseRepo.Data'], **kwargs) -> bool:
         """Administrative action to rebase an account's repo.
@@ -1343,7 +1343,7 @@ class AdminNamespace(NamespaceBase):
 
     def resolve_moderation_reports(
         self, data: t.Union[dict, 'models.ComAtprotoAdminResolveModerationReports.Data'], **kwargs
-    ) -> 'models.ComAtprotoAdminResolveModerationReports.ResponseRef':
+    ) -> 'models.ComAtprotoAdminDefs.ActionView':
         """Resolve moderation reports by an action.
 
         Args:
@@ -1351,7 +1351,7 @@ class AdminNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoAdminResolveModerationReports.ResponseRef`: Output model.
+            :obj:`models.ComAtprotoAdminDefs.ActionView`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1365,11 +1365,11 @@ class AdminNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoAdminResolveModerationReports.ResponseRef)
+        return get_response_model(response, models.ComAtprotoAdminDefs.ActionView)
 
     def reverse_moderation_action(
         self, data: t.Union[dict, 'models.ComAtprotoAdminReverseModerationAction.Data'], **kwargs
-    ) -> 'models.ComAtprotoAdminReverseModerationAction.ResponseRef':
+    ) -> 'models.ComAtprotoAdminDefs.ActionView':
         """Reverse a moderation action.
 
         Args:
@@ -1377,7 +1377,7 @@ class AdminNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoAdminReverseModerationAction.ResponseRef`: Output model.
+            :obj:`models.ComAtprotoAdminDefs.ActionView`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1391,7 +1391,7 @@ class AdminNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoAdminReverseModerationAction.ResponseRef)
+        return get_response_model(response, models.ComAtprotoAdminDefs.ActionView)
 
     def search_repos(
         self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminSearchRepos.Params']] = None, **kwargs
@@ -1443,7 +1443,7 @@ class AdminNamespace(NamespaceBase):
 
     def take_moderation_action(
         self, data: t.Union[dict, 'models.ComAtprotoAdminTakeModerationAction.Data'], **kwargs
-    ) -> 'models.ComAtprotoAdminTakeModerationAction.ResponseRef':
+    ) -> 'models.ComAtprotoAdminDefs.ActionView':
         """Take a moderation action on a repo.
 
         Args:
@@ -1451,7 +1451,7 @@ class AdminNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoAdminTakeModerationAction.ResponseRef`: Output model.
+            :obj:`models.ComAtprotoAdminDefs.ActionView`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1465,7 +1465,7 @@ class AdminNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoAdminTakeModerationAction.ResponseRef)
+        return get_response_model(response, models.ComAtprotoAdminDefs.ActionView)
 
     def update_account_email(
         self, data: t.Union[dict, 'models.ComAtprotoAdminUpdateAccountEmail.Data'], **kwargs
@@ -1541,7 +1541,7 @@ class ServerNamespace(NamespaceBase):
 
     def create_app_password(
         self, data: t.Union[dict, 'models.ComAtprotoServerCreateAppPassword.Data'], **kwargs
-    ) -> 'models.ComAtprotoServerCreateAppPassword.ResponseRef':
+    ) -> 'models.ComAtprotoServerCreateAppPassword.AppPassword':
         """Create an app-specific password.
 
         Args:
@@ -1549,7 +1549,7 @@ class ServerNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoServerCreateAppPassword.ResponseRef`: Output model.
+            :obj:`models.ComAtprotoServerCreateAppPassword.AppPassword`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1563,7 +1563,7 @@ class ServerNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoServerCreateAppPassword.ResponseRef)
+        return get_response_model(response, models.ComAtprotoServerCreateAppPassword.AppPassword)
 
     def create_invite_code(
         self, data: t.Union[dict, 'models.ComAtprotoServerCreateInviteCode.Data'], **kwargs

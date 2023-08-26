@@ -42,7 +42,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
 
     async def _get_and_set_session(self, login: str, password: str) -> models.ComAtprotoServerCreateSession.Response:
         session = await self.com.atproto.server.create_session(
-            models.ComAtprotoServerCreateSession.Data(login, password)
+            models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
         )
         self._set_session(session)
 
@@ -72,7 +72,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
         """
 
         session = await self._get_and_set_session(login, password)
-        self.me = await self.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(session.handle))
+        self.me = await self.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=session.handle))
 
         return self.me
 

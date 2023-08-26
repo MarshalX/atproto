@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -25,9 +28,11 @@ class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.feed.getPostThread`."""
 
-    thread: t.Union[
-        'models.AppBskyFeedDefs.ThreadViewPost',
-        'models.AppBskyFeedDefs.NotFoundPost',
-        'models.AppBskyFeedDefs.BlockedPost',
-        't.Dict[str, t.Any]',
+    thread: te.Annotated[
+        t.Union[
+            'models.AppBskyFeedDefs.ThreadViewPost',
+            'models.AppBskyFeedDefs.NotFoundPost',
+            'models.AppBskyFeedDefs.BlockedPost',
+        ],
+        Field(discriminator='py_type'),
     ]  #: Thread.

@@ -7,9 +7,12 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base
+from atproto.xrpc_client.models import base, unknown_type
 
 
 class Params(base.ParamsModelBase):
@@ -39,6 +42,8 @@ class Record(base.ModelBase):
 
     cid: str  #: Cid.
     uri: str  #: Uri.
-    value: 'base.UnknownDict'  #: Value.
+    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
 
-    _type: str = 'com.atproto.repo.listRecords#record'
+    py_type: te.Literal['com.atproto.repo.listRecords#record'] = Field(
+        default='com.atproto.repo.listRecords#record', alias='$type'
+    )

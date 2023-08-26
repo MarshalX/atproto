@@ -3,6 +3,7 @@ import subprocess
 import typing as t
 from pathlib import Path
 
+from atproto.exceptions import InvalidNsidError
 from atproto.nsid import NSID
 
 _DISCLAIMER_LINES = [
@@ -108,3 +109,35 @@ def capitalize_first_symbol(string: str) -> str:
         return ''.join(chars)
 
     return string
+
+
+def get_def_model_name(method_name: str) -> str:
+    return f'{capitalize_first_symbol(method_name)}'
+
+
+def get_model_path(nsid: NSID, method_name: str) -> str:
+    return f'models.{get_import_path(nsid)}.{get_def_model_name(method_name)}'
+
+
+def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> t.Tuple[str, str]:
+    """Returns the path to the model and model name"""
+    if '#' in ref:
+        ref_nsid_str, def_name = ref.split('#', 1)
+        def_name = get_def_model_name(def_name)
+
+        try:
+            ref_nsid = NSID.from_str(ref_nsid_str)
+            return get_model_path(ref_nsid, def_name), def_name
+        except InvalidNsidError:
+            if local:
+                return def_name, def_name
+            return get_model_path(nsid, def_name), def_name
+    else:
+        ref_nsid = NSID.from_str(ref)
+        def_name = get_def_model_name(nsid.name)
+
+        if local:
+            return def_name, def_name
+
+        # FIXME(MarshalX): Is it works well? ;d
+        return get_model_path(ref_nsid, 'Main'), def_name

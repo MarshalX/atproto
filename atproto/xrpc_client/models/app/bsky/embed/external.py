@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
     from atproto.xrpc_client.models.blob_ref import BlobRef
@@ -19,7 +22,7 @@ class Main(base.ModelBase):
 
     external: 'models.AppBskyEmbedExternal.External'  #: External.
 
-    _type: str = 'app.bsky.embed.external'
+    py_type: te.Literal['app.bsky.embed.external'] = Field(default='app.bsky.embed.external', alias='$type')
 
 
 class External(base.ModelBase):
@@ -31,7 +34,9 @@ class External(base.ModelBase):
     uri: str  #: Uri.
     thumb: t.Optional['BlobRef'] = None  #: Thumb.
 
-    _type: str = 'app.bsky.embed.external#external'
+    py_type: te.Literal['app.bsky.embed.external#external'] = Field(
+        default='app.bsky.embed.external#external', alias='$type'
+    )
 
 
 class View(base.ModelBase):
@@ -40,7 +45,7 @@ class View(base.ModelBase):
 
     external: 'models.AppBskyEmbedExternal.ViewExternal'  #: External.
 
-    _type: str = 'app.bsky.embed.external#view'
+    py_type: te.Literal['app.bsky.embed.external#view'] = Field(default='app.bsky.embed.external#view', alias='$type')
 
 
 class ViewExternal(base.ModelBase):
@@ -52,4 +57,6 @@ class ViewExternal(base.ModelBase):
     uri: str  #: Uri.
     thumb: t.Optional[str] = None  #: Thumb.
 
-    _type: str = 'app.bsky.embed.external#viewExternal'
+    py_type: te.Literal['app.bsky.embed.external#viewExternal'] = Field(
+        default='app.bsky.embed.external#viewExternal', alias='$type'
+    )

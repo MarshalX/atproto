@@ -8,10 +8,11 @@ from atproto.codegen import (
     INPUT_MODEL,
     OUTPUT_MODEL,
     PARAMS_MODEL,
+    _resolve_nsid_ref,
     append_code,
-    capitalize_first_symbol,
     format_code,
     gen_description_by_camel_case_name,
+    get_def_model_name,
     get_file_path_parts,
     get_import_path,
     join_code,
@@ -19,7 +20,6 @@ from atproto.codegen import (
 )
 from atproto.codegen import get_code_intent as _
 from atproto.codegen.models import builder
-from atproto.exceptions import InvalidNsidError
 from atproto.lexicon import models
 from atproto.nsid import NSID
 
@@ -32,14 +32,6 @@ class ModelType(Enum):
     RESPONSE = 'Output data'
     DEF = 'Definition'
     RECORD = 'Record'
-
-
-def get_def_model_name(method_name: str) -> str:
-    return f'{capitalize_first_symbol(method_name)}'
-
-
-def get_model_path(nsid: NSID, method_name: str) -> str:
-    return f'models.{get_import_path(nsid)}.{get_def_model_name(method_name)}'
 
 
 def save_code(nsid: NSID, code: str) -> None:
@@ -58,6 +50,8 @@ def _get_model_imports() -> str:
         'import typing as t',
         '',
         'import typing_extensions as te',
+        'from pydantic import Field',
+        '',
         'if t.TYPE_CHECKING:',
         f'{_(1)}from atproto.xrpc_client import models',
         f'{_(1)}from atproto.xrpc_client.models.blob_ref import BlobRef',
@@ -107,39 +101,16 @@ _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT = {
 }
 
 
-def _get_optional_typehint(type_hint, *, optional: bool) -> str:
+def _get_optional_typehint(type_hint, *, optional: bool, with_value: bool = True) -> str:
+    value = ' = None' if with_value else ''
     if optional:
-        return f't.Optional[{type_hint}] = None'
+        return f't.Optional[{type_hint}]{value}'
     return type_hint
 
 
 def _get_ref_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
     model_path, _ = _resolve_nsid_ref(nsid, field_type_def.ref)
     return _get_optional_typehint(f"'{model_path}'", optional=optional)
-
-
-def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> t.Tuple[str, str]:
-    """Returns path to the model and model name"""
-    if '#' in ref:
-        ref_nsid_str, def_name = ref.split('#', 1)
-        def_name = get_def_model_name(def_name)
-
-        try:
-            ref_nsid = NSID.from_str(ref_nsid_str)
-            return get_model_path(ref_nsid, def_name), def_name
-        except InvalidNsidError:
-            if local:
-                return def_name, def_name
-            return get_model_path(nsid, def_name), def_name
-    else:
-        ref_nsid = NSID.from_str(ref)
-        def_name = get_def_model_name(nsid.name)
-
-        if local:
-            return def_name, def_name
-
-        # FIXME(MarshalX): Is it works well? ;d
-        return get_model_path(ref_nsid, 'Main'), def_name
 
 
 def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
@@ -154,18 +125,21 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     # ref: https://github.com/bluesky-social/atproto/blob/b01e47b61730d05a780f7a42667b91ccaa192e8e/packages/lex-cli/src/codegen/lex-gen.ts#L325
     # grep by "{$type: string; [k: string]: unknown}" string
     # TODO(MarshalX): use 'base.UnknownDict' and convert to DotDict
-    def_names.append('t.Dict[str, t.Any]')
+    # def_names.append('t.Dict[str, t.Any]')  # FIXME(MarshalX): support pydantic
 
     def_names = ', '.join([f"'{name}'" for name in def_names])
-    return _get_optional_typehint(f't.Union[{def_names}]', optional=optional)
+    def_field_meta = 'Field(default=None, discriminator="py_type")' if optional else 'Field(discriminator="py_type")'
+
+    annotated_union = f'te.Annotated[t.Union[{def_names}], {def_field_meta}]'
+    return _get_optional_typehint(annotated_union, optional=optional)
 
 
 def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, optional: bool) -> str:
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
-        # unknown type is a generic response with records or any not described type in the lexicon. for example didDoc
-        return _get_optional_typehint("'base.UnknownDict'", optional=optional)
+        # unknown type is a generic response with records or any not described type in the lexicon. for example, didDoc
+        return _get_optional_typehint("'unknown_type.UnknownRecordTypePydantic'", optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
     if type_hint:
@@ -258,21 +232,6 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
     return join_code(fields)
 
 
-def _get_model_ref(nsid: NSID, ref: models.LexRef) -> str:
-    # FIXME(MarshalX): "local=True" Is it works well? ;d
-    ref_class, _ = _resolve_nsid_ref(nsid, ref.ref, local=True)
-
-    # "Ref" suffix required to fix name collisions from different namespaces
-    lines = [
-        f'#: {OUTPUT_MODEL} reference to :obj:`{ref_class}` model.',
-        f'{OUTPUT_MODEL}Ref = "{ref_class}"', # FIXME(MarshalX): pydantic support
-        '',
-        '',
-    ]
-
-    return join_code(lines)
-
-
 def _get_model_raw_data(name: str) -> str:
     lines = [f'#: {name} raw data type.', f'{name}: te.TypeAlias = bytes\n\n']
     return join_code(lines)
@@ -327,8 +286,7 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
     if def_name == 'main':
         def_type = str(nsid)
 
-    lines.append(f"{_(1)}_type: str = '{def_type}'")
-
+    lines.append(f"{_(1)}py_type: te.Literal['{def_type}'] = Field(default='{def_type}', alias='$type')")
     lines.append('')
 
     return join_code(lines)
@@ -431,11 +389,13 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     unknown_record_type_hint_lines = [
         'import typing as t',
         'import typing_extensions as te',
+        'from pydantic import Field',
         'if t.TYPE_CHECKING:',
         f'{_(4)}from atproto.xrpc_client import models',
         '',
         'UnknownRecordType: te.TypeAlias = t.Union[',
     ]
+    unknown_record_type_pydantic_lines = ['UnknownRecordTypePydantic = te.Annotated[t.Union[']
 
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
@@ -451,32 +411,17 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
 
                 type_conversion_lines.append(f"'{record_type}': {path_to_class},")
                 unknown_record_type_hint_lines.append(f"{_(4)}'{path_to_class}',")
+                unknown_record_type_pydantic_lines.append(f"{_(4)}'{path_to_class}',")
 
     type_conversion_lines.append('}')
+
     unknown_record_type_hint_lines.append(']')
+    unknown_record_type_pydantic_lines.append('], Field(discriminator="py_type")]')
+
+    unknown_record_type_hint_lines.extend(unknown_record_type_pydantic_lines)
 
     write_code(_MODELS_OUTPUT_DIR.joinpath('type_conversion.py'), join_code(type_conversion_lines))
     write_code(_MODELS_OUTPUT_DIR.joinpath('unknown_type.py'), join_code(unknown_record_type_hint_lines))
-
-
-def _generate_ref_models(lex_db: builder.BuiltRefsModels) -> None:
-    for nsid, defs in lex_db.items():
-        definition = defs['main']
-        if (
-            hasattr(definition, 'input')
-            and definition.input
-            and definition.input.schema
-            and isinstance(definition.input.schema, models.LexRef)
-        ):
-            save_code_part(nsid, _get_model_ref(nsid, definition.input.schema))
-
-        if (
-            hasattr(definition, 'output')
-            and definition.output
-            and definition.output.schema
-            and isinstance(definition.output.schema, models.LexRef)
-        ):
-            save_code_part(nsid, _get_model_ref(nsid, definition.output.schema))
 
 
 def _generate_init_files(root_package_path: Path) -> None:
@@ -605,9 +550,6 @@ def generate_models(lexicon_dir: t.Optional[Path] = None, output_dir: t.Optional
 
     _generate_record_models(builder.build_record_models())
     _generate_record_type_database(builder.build_record_models())
-
-    # refs should be generated at the end!
-    _generate_ref_models(builder.build_refs_models())
 
     _generate_empty_init_files(_MODELS_OUTPUT_DIR)
     _generate_import_aliases(_MODELS_OUTPUT_DIR)

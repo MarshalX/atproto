@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
     from atproto.xrpc_client.models.blob_ref import BlobRef
@@ -23,6 +26,8 @@ class Main(base.RecordModelBase):
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
     description: t.Optional[str] = None  #: Description.
     descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
-    labels: t.Optional[t.Union['models.ComAtprotoLabelDefs.SelfLabels', 't.Dict[str, t.Any]']] = None  #: Labels.
+    labels: t.Optional[
+        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
+    ] = None  #: Labels.
 
-    _type: str = 'app.bsky.feed.generator'
+    py_type: te.Literal['app.bsky.feed.generator'] = Field(default='app.bsky.feed.generator', alias='$type')

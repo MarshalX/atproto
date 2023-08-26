@@ -17,8 +17,3 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.actor.getProfile`."""
 
     actor: str  #: Actor.
-
-
-#: Response reference to :obj:`models.AppBskyActorDefs.ProfileViewDetailed` model.
-from atproto.xrpc_client.models.app.bsky.actor.defs import ProfileViewDetailed
-ResponseRef = ProfileViewDetailed

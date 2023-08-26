@@ -18,7 +18,3 @@ class Params(base.ParamsModelBase):
 
     uri: str  #: Uri.
     cid: t.Optional[str] = None  #: Cid.
-
-
-#: Response reference to :obj:`models.ComAtprotoAdminDefs.RecordViewDetail` model.
-ResponseRef = 'models.ComAtprotoAdminDefs.RecordViewDetail'

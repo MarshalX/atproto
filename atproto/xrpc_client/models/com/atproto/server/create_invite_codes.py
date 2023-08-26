@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -35,4 +38,6 @@ class AccountCodes(base.ModelBase):
     account: str  #: Account.
     codes: t.List[str]  #: Codes.
 
-    _type: str = 'com.atproto.server.createInviteCodes#accountCodes'
+    py_type: te.Literal['com.atproto.server.createInviteCodes#accountCodes'] = Field(
+        default='com.atproto.server.createInviteCodes#accountCodes', alias='$type'
+    )

@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -19,4 +22,4 @@ class Main(base.RecordModelBase):
     createdAt: str  #: Created at.
     subject: str  #: Subject.
 
-    _type: str = 'app.bsky.graph.follow'
+    py_type: te.Literal['app.bsky.graph.follow'] = Field(default='app.bsky.graph.follow', alias='$type')

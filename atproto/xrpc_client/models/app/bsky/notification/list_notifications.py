@@ -7,9 +7,12 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base
+from atproto.xrpc_client.models import base, unknown_type
 
 
 class Params(base.ParamsModelBase):
@@ -38,9 +41,11 @@ class Notification(base.ModelBase):
     indexedAt: str  #: Indexed at.
     isRead: bool  #: Is read.
     reason: str  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', and 'quote'.
-    record: 'base.UnknownDict'  #: Record.
+    record: 'unknown_type.UnknownRecordTypePydantic'  #: Record.
     uri: str  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     reasonSubject: t.Optional[str] = None  #: Reason subject.
 
-    _type: str = 'app.bsky.notification.listNotifications#notification'
+    py_type: te.Literal['app.bsky.notification.listNotifications#notification'] = Field(
+        default='app.bsky.notification.listNotifications#notification', alias='$type'
+    )

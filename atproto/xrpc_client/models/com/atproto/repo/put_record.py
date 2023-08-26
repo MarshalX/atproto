@@ -9,7 +9,7 @@ import typing as t
 
 if t.TYPE_CHECKING:
     pass
-from atproto.xrpc_client.models import base
+from atproto.xrpc_client.models import base, unknown_type
 
 
 class Data(base.DataModelBase):
@@ -17,12 +17,12 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.repo.putRecord`."""
 
     collection: str  #: The NSID of the record collection.
-    record: 'base.UnknownDict'  #: The record to write.
+    record: 'unknown_type.UnknownRecordTypePydantic'  #: The record to write.
     repo: str  #: The handle or DID of the repo.
     rkey: str  #: The key of the record.
     swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
     swapRecord: t.Optional[str] = None  #: Compare and swap with the previous record by cid.
-    validateFixMe: t.Optional[bool] = None  #: Validate the record?
+    validateAliasMe: t.Optional[bool] = None  #: Validate the record?
 
 
 class Response(base.ResponseModelBase):

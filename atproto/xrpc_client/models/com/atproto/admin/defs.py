@@ -8,10 +8,11 @@
 import typing as t
 
 import typing_extensions as te
+from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base
+from atproto.xrpc_client.models import base, unknown_type
 
 
 class ActionView(base.ModelBase):
@@ -24,15 +25,18 @@ class ActionView(base.ModelBase):
     id: int  #: Id.
     reason: str  #: Reason.
     resolvedReportIds: t.List[int]  #: Resolved report ids.
-    subject: t.Union[
-        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    subject: te.Annotated[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        Field(discriminator='py_type'),
     ]  #: Subject.
     subjectBlobCids: t.List[str]  #: Subject blob cids.
     createLabelVals: t.Optional[t.List[str]] = None  #: Create label vals.
     negateLabelVals: t.Optional[t.List[str]] = None  #: Negate label vals.
     reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None  #: Reversal.
 
-    _type: str = 'com.atproto.admin.defs#actionView'
+    py_type: te.Literal['com.atproto.admin.defs#actionView'] = Field(
+        default='com.atproto.admin.defs#actionView', alias='$type'
+    )
 
 
 class ActionViewDetail(base.ModelBase):
@@ -45,19 +49,23 @@ class ActionViewDetail(base.ModelBase):
     id: int  #: Id.
     reason: str  #: Reason.
     resolvedReports: t.List['models.ComAtprotoAdminDefs.ReportView']  #: Resolved reports.
-    subject: t.Union[
-        'models.ComAtprotoAdminDefs.RepoView',
-        'models.ComAtprotoAdminDefs.RepoViewNotFound',
-        'models.ComAtprotoAdminDefs.RecordView',
-        'models.ComAtprotoAdminDefs.RecordViewNotFound',
-        't.Dict[str, t.Any]',
+    subject: te.Annotated[
+        t.Union[
+            'models.ComAtprotoAdminDefs.RepoView',
+            'models.ComAtprotoAdminDefs.RepoViewNotFound',
+            'models.ComAtprotoAdminDefs.RecordView',
+            'models.ComAtprotoAdminDefs.RecordViewNotFound',
+        ],
+        Field(discriminator='py_type'),
     ]  #: Subject.
     subjectBlobs: t.List['models.ComAtprotoAdminDefs.BlobView']  #: Subject blobs.
     createLabelVals: t.Optional[t.List[str]] = None  #: Create label vals.
     negateLabelVals: t.Optional[t.List[str]] = None  #: Negate label vals.
     reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None  #: Reversal.
 
-    _type: str = 'com.atproto.admin.defs#actionViewDetail'
+    py_type: te.Literal['com.atproto.admin.defs#actionViewDetail'] = Field(
+        default='com.atproto.admin.defs#actionViewDetail', alias='$type'
+    )
 
 
 class ActionViewCurrent(base.ModelBase):
@@ -67,7 +75,9 @@ class ActionViewCurrent(base.ModelBase):
     action: 'models.ComAtprotoAdminDefs.ActionType'  #: Action.
     id: int  #: Id.
 
-    _type: str = 'com.atproto.admin.defs#actionViewCurrent'
+    py_type: te.Literal['com.atproto.admin.defs#actionViewCurrent'] = Field(
+        default='com.atproto.admin.defs#actionViewCurrent', alias='$type'
+    )
 
 
 class ActionReversal(base.ModelBase):
@@ -78,7 +88,9 @@ class ActionReversal(base.ModelBase):
     createdBy: str  #: Created by.
     reason: str  #: Reason.
 
-    _type: str = 'com.atproto.admin.defs#actionReversal'
+    py_type: te.Literal['com.atproto.admin.defs#actionReversal'] = Field(
+        default='com.atproto.admin.defs#actionReversal', alias='$type'
+    )
 
 
 ActionType = te.Literal['Takedown', 'Flag', 'Acknowledge', 'Escalate']
@@ -101,13 +113,16 @@ class ReportView(base.ModelBase):
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
     reportedBy: str  #: Reported by.
     resolvedByActionIds: t.List[int]  #: Resolved by action ids.
-    subject: t.Union[
-        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    subject: te.Annotated[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        Field(discriminator='py_type'),
     ]  #: Subject.
     reason: t.Optional[str] = None  #: Reason.
     subjectRepoHandle: t.Optional[str] = None  #: Subject repo handle.
 
-    _type: str = 'com.atproto.admin.defs#reportView'
+    py_type: te.Literal['com.atproto.admin.defs#reportView'] = Field(
+        default='com.atproto.admin.defs#reportView', alias='$type'
+    )
 
 
 class ReportViewDetail(base.ModelBase):
@@ -119,16 +134,20 @@ class ReportViewDetail(base.ModelBase):
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
     reportedBy: str  #: Reported by.
     resolvedByActions: t.List['models.ComAtprotoAdminDefs.ActionView']  #: Resolved by actions.
-    subject: t.Union[
-        'models.ComAtprotoAdminDefs.RepoView',
-        'models.ComAtprotoAdminDefs.RepoViewNotFound',
-        'models.ComAtprotoAdminDefs.RecordView',
-        'models.ComAtprotoAdminDefs.RecordViewNotFound',
-        't.Dict[str, t.Any]',
+    subject: te.Annotated[
+        t.Union[
+            'models.ComAtprotoAdminDefs.RepoView',
+            'models.ComAtprotoAdminDefs.RepoViewNotFound',
+            'models.ComAtprotoAdminDefs.RecordView',
+            'models.ComAtprotoAdminDefs.RecordViewNotFound',
+        ],
+        Field(discriminator='py_type'),
     ]  #: Subject.
     reason: t.Optional[str] = None  #: Reason.
 
-    _type: str = 'com.atproto.admin.defs#reportViewDetail'
+    py_type: te.Literal['com.atproto.admin.defs#reportViewDetail'] = Field(
+        default='com.atproto.admin.defs#reportViewDetail', alias='$type'
+    )
 
 
 class RepoView(base.ModelBase):
@@ -139,13 +158,15 @@ class RepoView(base.ModelBase):
     handle: str  #: Handle.
     indexedAt: str  #: Indexed at.
     moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
-    relatedRecords: t.List['base.UnknownDict']  #: Related records.
+    relatedRecords: t.List['unknown_type.UnknownRecordTypePydantic']  #: Related records.
     email: t.Optional[str] = None  #: Email.
     inviteNote: t.Optional[str] = None  #: Invite note.
     invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
     invitesDisabled: t.Optional[bool] = None  #: Invites disabled.
 
-    _type: str = 'com.atproto.admin.defs#repoView'
+    py_type: te.Literal['com.atproto.admin.defs#repoView'] = Field(
+        default='com.atproto.admin.defs#repoView', alias='$type'
+    )
 
 
 class RepoViewDetail(base.ModelBase):
@@ -156,7 +177,7 @@ class RepoViewDetail(base.ModelBase):
     handle: str  #: Handle.
     indexedAt: str  #: Indexed at.
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
-    relatedRecords: t.List['base.UnknownDict']  #: Related records.
+    relatedRecords: t.List['unknown_type.UnknownRecordTypePydantic']  #: Related records.
     email: t.Optional[str] = None  #: Email.
     inviteNote: t.Optional[str] = None  #: Invite note.
     invitedBy: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
@@ -164,7 +185,9 @@ class RepoViewDetail(base.ModelBase):
     invitesDisabled: t.Optional[bool] = None  #: Invites disabled.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
-    _type: str = 'com.atproto.admin.defs#repoViewDetail'
+    py_type: te.Literal['com.atproto.admin.defs#repoViewDetail'] = Field(
+        default='com.atproto.admin.defs#repoViewDetail', alias='$type'
+    )
 
 
 class RepoViewNotFound(base.ModelBase):
@@ -173,7 +196,9 @@ class RepoViewNotFound(base.ModelBase):
 
     did: str  #: Did.
 
-    _type: str = 'com.atproto.admin.defs#repoViewNotFound'
+    py_type: te.Literal['com.atproto.admin.defs#repoViewNotFound'] = Field(
+        default='com.atproto.admin.defs#repoViewNotFound', alias='$type'
+    )
 
 
 class RepoRef(base.ModelBase):
@@ -182,7 +207,9 @@ class RepoRef(base.ModelBase):
 
     did: str  #: Did.
 
-    _type: str = 'com.atproto.admin.defs#repoRef'
+    py_type: te.Literal['com.atproto.admin.defs#repoRef'] = Field(
+        default='com.atproto.admin.defs#repoRef', alias='$type'
+    )
 
 
 class RecordView(base.ModelBase):
@@ -195,9 +222,11 @@ class RecordView(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
     repo: 'models.ComAtprotoAdminDefs.RepoView'  #: Repo.
     uri: str  #: Uri.
-    value: 'base.UnknownDict'  #: Value.
+    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
 
-    _type: str = 'com.atproto.admin.defs#recordView'
+    py_type: te.Literal['com.atproto.admin.defs#recordView'] = Field(
+        default='com.atproto.admin.defs#recordView', alias='$type'
+    )
 
 
 class RecordViewDetail(base.ModelBase):
@@ -210,10 +239,12 @@ class RecordViewDetail(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
     repo: 'models.ComAtprotoAdminDefs.RepoView'  #: Repo.
     uri: str  #: Uri.
-    value: 'base.UnknownDict'  #: Value.
+    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
-    _type: str = 'com.atproto.admin.defs#recordViewDetail'
+    py_type: te.Literal['com.atproto.admin.defs#recordViewDetail'] = Field(
+        default='com.atproto.admin.defs#recordViewDetail', alias='$type'
+    )
 
 
 class RecordViewNotFound(base.ModelBase):
@@ -222,7 +253,9 @@ class RecordViewNotFound(base.ModelBase):
 
     uri: str  #: Uri.
 
-    _type: str = 'com.atproto.admin.defs#recordViewNotFound'
+    py_type: te.Literal['com.atproto.admin.defs#recordViewNotFound'] = Field(
+        default='com.atproto.admin.defs#recordViewNotFound', alias='$type'
+    )
 
 
 class Moderation(base.ModelBase):
@@ -231,7 +264,9 @@ class Moderation(base.ModelBase):
 
     currentAction: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None  #: Current action.
 
-    _type: str = 'com.atproto.admin.defs#moderation'
+    py_type: te.Literal['com.atproto.admin.defs#moderation'] = Field(
+        default='com.atproto.admin.defs#moderation', alias='$type'
+    )
 
 
 class ModerationDetail(base.ModelBase):
@@ -242,7 +277,9 @@ class ModerationDetail(base.ModelBase):
     reports: t.List['models.ComAtprotoAdminDefs.ReportView']  #: Reports.
     currentAction: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None  #: Current action.
 
-    _type: str = 'com.atproto.admin.defs#moderationDetail'
+    py_type: te.Literal['com.atproto.admin.defs#moderationDetail'] = Field(
+        default='com.atproto.admin.defs#moderationDetail', alias='$type'
+    )
 
 
 class BlobView(base.ModelBase):
@@ -254,13 +291,16 @@ class BlobView(base.ModelBase):
     mimeType: str  #: Mime type.
     size: int  #: Size.
     details: t.Optional[
-        t.Union[
-            'models.ComAtprotoAdminDefs.ImageDetails', 'models.ComAtprotoAdminDefs.VideoDetails', 't.Dict[str, t.Any]'
+        te.Annotated[
+            t.Union['models.ComAtprotoAdminDefs.ImageDetails', 'models.ComAtprotoAdminDefs.VideoDetails'],
+            Field(default=None, discriminator='py_type'),
         ]
     ] = None  #: Details.
     moderation: t.Optional['models.ComAtprotoAdminDefs.Moderation'] = None  #: Moderation.
 
-    _type: str = 'com.atproto.admin.defs#blobView'
+    py_type: te.Literal['com.atproto.admin.defs#blobView'] = Field(
+        default='com.atproto.admin.defs#blobView', alias='$type'
+    )
 
 
 class ImageDetails(base.ModelBase):
@@ -270,7 +310,9 @@ class ImageDetails(base.ModelBase):
     height: int  #: Height.
     width: int  #: Width.
 
-    _type: str = 'com.atproto.admin.defs#imageDetails'
+    py_type: te.Literal['com.atproto.admin.defs#imageDetails'] = Field(
+        default='com.atproto.admin.defs#imageDetails', alias='$type'
+    )
 
 
 class VideoDetails(base.ModelBase):
@@ -281,4 +323,6 @@ class VideoDetails(base.ModelBase):
     length: int  #: Length.
     width: int  #: Width.
 
-    _type: str = 'com.atproto.admin.defs#videoDetails'
+    py_type: te.Literal['com.atproto.admin.defs#videoDetails'] = Field(
+        default='com.atproto.admin.defs#videoDetails', alias='$type'
+    )

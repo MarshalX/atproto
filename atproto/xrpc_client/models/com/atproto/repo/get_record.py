@@ -9,7 +9,7 @@ import typing as t
 
 if t.TYPE_CHECKING:
     pass
-from atproto.xrpc_client.models import base
+from atproto.xrpc_client.models import base, unknown_type
 
 
 class Params(base.ParamsModelBase):
@@ -29,5 +29,5 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.repo.getRecord`."""
 
     uri: str  #: Uri.
-    value: 'base.UnknownDict'  #: Value.
+    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
     cid: t.Optional[str] = None  #: Cid.

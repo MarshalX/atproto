@@ -17,7 +17,3 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.admin.getModerationAction`."""
 
     id: int  #: Id.
-
-
-#: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionViewDetail` model.
-ResponseRef = 'models.ComAtprotoAdminDefs.ActionViewDetail'

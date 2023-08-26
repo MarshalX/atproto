@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -28,4 +31,6 @@ class Links(base.ModelBase):
     privacyPolicy: t.Optional[str] = None  #: Privacy policy.
     termsOfService: t.Optional[str] = None  #: Terms of service.
 
-    _type: str = 'com.atproto.server.describeServer#links'
+    py_type: te.Literal['com.atproto.server.describeServer#links'] = Field(
+        default='com.atproto.server.describeServer#links', alias='$type'
+    )

@@ -19,7 +19,3 @@ class Data(base.DataModelBase):
     createdBy: str  #: Created by.
     id: int  #: Id.
     reason: str  #: Reason.
-
-
-#: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.
-ResponseRef = 'models.ComAtprotoAdminDefs.ActionView'

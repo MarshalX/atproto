@@ -8,6 +8,7 @@
 import typing as t
 
 import typing_extensions as te
+from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
@@ -26,7 +27,9 @@ class ListViewBasic(base.ModelBase):
     indexedAt: t.Optional[str] = None  #: Indexed at.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.graph.defs#listViewBasic'
+    py_type: te.Literal['app.bsky.graph.defs#listViewBasic'] = Field(
+        default='app.bsky.graph.defs#listViewBasic', alias='$type'
+    )
 
 
 class ListView(base.ModelBase):
@@ -44,7 +47,7 @@ class ListView(base.ModelBase):
     descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.graph.defs#listView'
+    py_type: te.Literal['app.bsky.graph.defs#listView'] = Field(default='app.bsky.graph.defs#listView', alias='$type')
 
 
 class ListItemView(base.ModelBase):
@@ -53,7 +56,9 @@ class ListItemView(base.ModelBase):
 
     subject: 'models.AppBskyActorDefs.ProfileView'  #: Subject.
 
-    _type: str = 'app.bsky.graph.defs#listItemView'
+    py_type: te.Literal['app.bsky.graph.defs#listItemView'] = Field(
+        default='app.bsky.graph.defs#listItemView', alias='$type'
+    )
 
 
 ListPurpose = te.Literal['Modlist']
@@ -67,4 +72,6 @@ class ListViewerState(base.ModelBase):
 
     muted: t.Optional[bool] = None  #: Muted.
 
-    _type: str = 'app.bsky.graph.defs#listViewerState'
+    py_type: te.Literal['app.bsky.graph.defs#listViewerState'] = Field(
+        default='app.bsky.graph.defs#listViewerState', alias='$type'
+    )

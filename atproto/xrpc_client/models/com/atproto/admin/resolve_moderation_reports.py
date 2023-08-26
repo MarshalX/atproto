@@ -19,7 +19,3 @@ class Data(base.DataModelBase):
     actionId: int  #: Action id.
     createdBy: str  #: Created by.
     reportIds: t.List[int]  #: Report ids.
-
-
-#: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.
-ResponseRef = 'models.ComAtprotoAdminDefs.ActionView'

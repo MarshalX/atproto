@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -23,7 +26,9 @@ class ProfileViewBasic(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.actor.defs#profileViewBasic'
+    py_type: te.Literal['app.bsky.actor.defs#profileViewBasic'] = Field(
+        default='app.bsky.actor.defs#profileViewBasic', alias='$type'
+    )
 
 
 class ProfileView(base.ModelBase):
@@ -39,7 +44,9 @@ class ProfileView(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.actor.defs#profileView'
+    py_type: te.Literal['app.bsky.actor.defs#profileView'] = Field(
+        default='app.bsky.actor.defs#profileView', alias='$type'
+    )
 
 
 class ProfileViewDetailed(base.ModelBase):
@@ -59,7 +66,9 @@ class ProfileViewDetailed(base.ModelBase):
     postsCount: t.Optional[int] = None  #: Posts count.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.actor.defs#profileViewDetailed'
+    py_type: te.Literal['app.bsky.actor.defs#profileViewDetailed'] = Field(
+        default='app.bsky.actor.defs#profileViewDetailed', alias='$type'
+    )
 
 
 class ViewerState(base.ModelBase):
@@ -73,15 +82,19 @@ class ViewerState(base.ModelBase):
     muted: t.Optional[bool] = None  #: Muted.
     mutedByList: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Muted by list.
 
-    _type: str = 'app.bsky.actor.defs#viewerState'
+    py_type: te.Literal['app.bsky.actor.defs#viewerState'] = Field(
+        default='app.bsky.actor.defs#viewerState', alias='$type'
+    )
 
 
 Preferences = t.List[
-    t.Union[
-        'models.AppBskyActorDefs.AdultContentPref',
-        'models.AppBskyActorDefs.ContentLabelPref',
-        'models.AppBskyActorDefs.SavedFeedsPref',
-        't.Dict[str, t.Any]',
+    te.Annotated[
+        t.Union[
+            'models.AppBskyActorDefs.AdultContentPref',
+            'models.AppBskyActorDefs.ContentLabelPref',
+            'models.AppBskyActorDefs.SavedFeedsPref',
+        ],
+        Field(discriminator='py_type'),
     ]
 ]
 
@@ -92,7 +105,9 @@ class AdultContentPref(base.ModelBase):
 
     enabled: bool  #: Enabled.
 
-    _type: str = 'app.bsky.actor.defs#adultContentPref'
+    py_type: te.Literal['app.bsky.actor.defs#adultContentPref'] = Field(
+        default='app.bsky.actor.defs#adultContentPref', alias='$type'
+    )
 
 
 class ContentLabelPref(base.ModelBase):
@@ -102,7 +117,9 @@ class ContentLabelPref(base.ModelBase):
     label: str  #: Label.
     visibility: str  #: Visibility.
 
-    _type: str = 'app.bsky.actor.defs#contentLabelPref'
+    py_type: te.Literal['app.bsky.actor.defs#contentLabelPref'] = Field(
+        default='app.bsky.actor.defs#contentLabelPref', alias='$type'
+    )
 
 
 class SavedFeedsPref(base.ModelBase):
@@ -112,4 +129,6 @@ class SavedFeedsPref(base.ModelBase):
     pinned: t.List[str]  #: Pinned.
     saved: t.List[str]  #: Saved.
 
-    _type: str = 'app.bsky.actor.defs#savedFeedsPref'
+    py_type: te.Literal['app.bsky.actor.defs#savedFeedsPref'] = Field(
+        default='app.bsky.actor.defs#savedFeedsPref', alias='$type'
+    )

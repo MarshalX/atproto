@@ -35,7 +35,9 @@ class Client(SessionMethodsMixin, ClientRaw):
         return super()._invoke(invoke_type, **kwargs)
 
     def _get_and_set_session(self, login: str, password: str) -> models.ComAtprotoServerCreateSession.Response:
-        session = self.com.atproto.server.create_session(models.ComAtprotoServerCreateSession.Data(identifier=login, password=password))
+        session = self.com.atproto.server.create_session(
+            models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
+        )
         self._set_session(session)
 
         return session

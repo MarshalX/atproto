@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto import CID
     from atproto.xrpc_client import models
@@ -35,7 +38,9 @@ class Commit(base.ModelBase):
     tooBig: bool  #: Too big.
     prev: t.Optional['CID'] = None  #: Prev.
 
-    _type: str = 'com.atproto.sync.subscribeRepos#commit'
+    py_type: te.Literal['com.atproto.sync.subscribeRepos#commit'] = Field(
+        default='com.atproto.sync.subscribeRepos#commit', alias='$type'
+    )
 
 
 class Handle(base.ModelBase):
@@ -47,7 +52,9 @@ class Handle(base.ModelBase):
     seq: int  #: Seq.
     time: str  #: Time.
 
-    _type: str = 'com.atproto.sync.subscribeRepos#handle'
+    py_type: te.Literal['com.atproto.sync.subscribeRepos#handle'] = Field(
+        default='com.atproto.sync.subscribeRepos#handle', alias='$type'
+    )
 
 
 class Migrate(base.ModelBase):
@@ -59,7 +66,9 @@ class Migrate(base.ModelBase):
     time: str  #: Time.
     migrateTo: t.Optional[str] = None  #: Migrate to.
 
-    _type: str = 'com.atproto.sync.subscribeRepos#migrate'
+    py_type: te.Literal['com.atproto.sync.subscribeRepos#migrate'] = Field(
+        default='com.atproto.sync.subscribeRepos#migrate', alias='$type'
+    )
 
 
 class Tombstone(base.ModelBase):
@@ -70,7 +79,9 @@ class Tombstone(base.ModelBase):
     seq: int  #: Seq.
     time: str  #: Time.
 
-    _type: str = 'com.atproto.sync.subscribeRepos#tombstone'
+    py_type: te.Literal['com.atproto.sync.subscribeRepos#tombstone'] = Field(
+        default='com.atproto.sync.subscribeRepos#tombstone', alias='$type'
+    )
 
 
 class Info(base.ModelBase):
@@ -80,7 +91,9 @@ class Info(base.ModelBase):
     name: str  #: Name.
     message: t.Optional[str] = None  #: Message.
 
-    _type: str = 'com.atproto.sync.subscribeRepos#info'
+    py_type: te.Literal['com.atproto.sync.subscribeRepos#info'] = Field(
+        default='com.atproto.sync.subscribeRepos#info', alias='$type'
+    )
 
 
 class RepoOp(base.ModelBase):
@@ -91,4 +104,6 @@ class RepoOp(base.ModelBase):
     path: str  #: Path.
     cid: t.Optional['CID'] = None  #: Cid.
 
-    _type: str = 'com.atproto.sync.subscribeRepos#repoOp'
+    py_type: te.Literal['com.atproto.sync.subscribeRepos#repoOp'] = Field(
+        default='com.atproto.sync.subscribeRepos#repoOp', alias='$type'
+    )

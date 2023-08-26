@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -27,7 +30,9 @@ class Feed(base.ModelBase):
 
     uri: str  #: Uri.
 
-    _type: str = 'app.bsky.feed.describeFeedGenerator#feed'
+    py_type: te.Literal['app.bsky.feed.describeFeedGenerator#feed'] = Field(
+        default='app.bsky.feed.describeFeedGenerator#feed', alias='$type'
+    )
 
 
 class Links(base.ModelBase):
@@ -37,4 +42,6 @@ class Links(base.ModelBase):
     privacyPolicy: t.Optional[str] = None  #: Privacy policy.
     termsOfService: t.Optional[str] = None  #: Terms of service.
 
-    _type: str = 'app.bsky.feed.describeFeedGenerator#links'
+    py_type: te.Literal['app.bsky.feed.describeFeedGenerator#links'] = Field(
+        default='app.bsky.feed.describeFeedGenerator#links', alias='$type'
+    )

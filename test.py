@@ -10,7 +10,7 @@ from atproto.firehose import (
     FirehoseSubscribeReposClient,
     parse_subscribe_repos_message,
 )
-from atproto.xrpc_client.models import get_model_as_dict, ids, is_record_type
+from atproto.xrpc_client.models import get_model_as_dict, ids, is_record_type, get_model_as_json
 
 if t.TYPE_CHECKING:
     from atproto.firehose import MessageFrame
@@ -39,6 +39,39 @@ def convert_uri_to_url():
 def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+    # h = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'})
+    # s = client.bsky.actor.search_actors_typeahead({'term': 'bsky'})
+
+    # post_ref = client.send_post(text='Hello World from Python!')
+
+    # We can put likes only with reference to the post. You need to create/get post first to be able to like it
+    # cid='bafyreidaszwnbzl65oqryswowxzrexlqfeoh47zhtvo65yv5wblosgdrkq' uri='at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.like/3k5u5ammyg72r'
+    # r = client.like(models.ComAtprotoRepoStrongRef.Main(cid=post_ref.cid, uri=post_ref.uri))
+    # print(r)
+
+    feed = client.com.atproto.repo.get_record(
+        {'collection': 'app.bsky.feed.generator', 'repo': 'did:plc:2wqb5jjkxli4rcswpyb624xj', 'rkey': 'Filecoin'}
+    )
+    post = client.com.atproto.repo.get_record(
+        {'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yihcrp6f2c'}
+    )
+    custom_post = client.com.atproto.repo.get_record(
+        {'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yinh52ne2x'}
+    )
+    custom_like = client.com.atproto.repo.get_record(
+        {'collection': 'app.bsky.feed.like', 'repo': 'test.marshal.dev', 'rkey': '3k5u5ammyg72r'}
+    )
+    like = client.com.atproto.repo.get_record(
+        {'collection': 'app.bsky.feed.like', 'repo': 'test.marshal.dev', 'rkey': '3k5u7c7j7a52v'}
+    )
+    print(type(feed.value))
+    print(get_model_as_json(feed.value))
+    print(get_model_as_json(feed.value.avatar))
+
+    print(type(like.value))
+    print(type(post.value))
+    print(type(custom_like.value))
+    print(type(custom_post.value))
 
     lexicon_correct_record = client.com.atproto.repo.get_record(
         {'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yihcrp6f2c'}
@@ -49,15 +82,17 @@ def sync_main():
         {'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yinh52ne2x'}
     )
     print(extended_record.value.text)
-    print(extended_record.value.lol)  # custom (out of lexicon) attribute
+    # FIXME
+    # print(extended_record.value.lol)  # custom (out of lexicon) attribute
     print(type(extended_record.value))
 
-    did_doc = client.com.atproto.repo.describe_repo({'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}).didDoc
-    print(did_doc)
-    print(did_doc.service)
-    print(did_doc['service'])
-    print(did_doc['@context'])
-    print(type(did_doc))
+    # FIXME
+    # did_doc = client.com.atproto.repo.describe_repo({'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}).didDoc
+    # print(did_doc)
+    # print(did_doc.service)
+    # print(did_doc['service'])
+    # print(did_doc['@context'])
+    # print(type(did_doc))
 
     atproto_feed = client.com.atproto.repo.get_record(
         {'collection': ids.AppBskyFeedGenerator, 'repo': 'marshal.dev', 'rkey': 'atproto'}

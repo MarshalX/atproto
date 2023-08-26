@@ -7,9 +7,12 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base
+from atproto.xrpc_client.models import base, unknown_type
 
 
 class Data(base.DataModelBase):
@@ -18,15 +21,17 @@ class Data(base.DataModelBase):
 
     repo: str  #: The handle or DID of the repo.
     writes: t.List[
-        t.Union[
-            'models.ComAtprotoRepoApplyWrites.Create',
-            'models.ComAtprotoRepoApplyWrites.Update',
-            'models.ComAtprotoRepoApplyWrites.Delete',
-            't.Dict[str, t.Any]',
+        te.Annotated[
+            t.Union[
+                'models.ComAtprotoRepoApplyWrites.Create',
+                'models.ComAtprotoRepoApplyWrites.Update',
+                'models.ComAtprotoRepoApplyWrites.Delete',
+            ],
+            Field(discriminator='py_type'),
         ]
     ]  #: Writes.
     swapCommit: t.Optional[str] = None  #: Swap commit.
-    validateFixMe: t.Optional[bool] = None  #: Validate the records?
+    validateAliasMe: t.Optional[bool] = None  #: Validate the records?
 
 
 class Create(base.ModelBase):
@@ -34,10 +39,12 @@ class Create(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record."""
 
     collection: str  #: Collection.
-    value: 'base.UnknownDict'  #: Value.
+    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
     rkey: t.Optional[str] = None  #: Rkey.
 
-    _type: str = 'com.atproto.repo.applyWrites#create'
+    py_type: te.Literal['com.atproto.repo.applyWrites#create'] = Field(
+        default='com.atproto.repo.applyWrites#create', alias='$type'
+    )
 
 
 class Update(base.ModelBase):
@@ -46,9 +53,11 @@ class Update(base.ModelBase):
 
     collection: str  #: Collection.
     rkey: str  #: Rkey.
-    value: 'base.UnknownDict'  #: Value.
+    value: 'unknown_type.UnknownRecordTypePydantic'  #: Value.
 
-    _type: str = 'com.atproto.repo.applyWrites#update'
+    py_type: te.Literal['com.atproto.repo.applyWrites#update'] = Field(
+        default='com.atproto.repo.applyWrites#update', alias='$type'
+    )
 
 
 class Delete(base.ModelBase):
@@ -58,4 +67,6 @@ class Delete(base.ModelBase):
     collection: str  #: Collection.
     rkey: str  #: Rkey.
 
-    _type: str = 'com.atproto.repo.applyWrites#delete'
+    py_type: te.Literal['com.atproto.repo.applyWrites#delete'] = Field(
+        default='com.atproto.repo.applyWrites#delete', alias='$type'
+    )

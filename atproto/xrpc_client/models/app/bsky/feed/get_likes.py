@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -40,4 +43,4 @@ class Like(base.ModelBase):
     createdAt: str  #: Created at.
     indexedAt: str  #: Indexed at.
 
-    _type: str = 'app.bsky.feed.getLikes#like'
+    py_type: te.Literal['app.bsky.feed.getLikes#like'] = Field(default='app.bsky.feed.getLikes#like', alias='$type')

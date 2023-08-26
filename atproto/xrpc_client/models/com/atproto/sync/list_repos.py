@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -35,4 +38,6 @@ class Repo(base.ModelBase):
     did: str  #: Did.
     head: str  #: Head.
 
-    _type: str = 'com.atproto.sync.listRepos#repo'
+    py_type: te.Literal['com.atproto.sync.listRepos#repo'] = Field(
+        default='com.atproto.sync.listRepos#repo', alias='$type'
+    )

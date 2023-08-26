@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -19,4 +22,4 @@ class Main(base.RecordModelBase):
     createdAt: str  #: Created at.
     subject: 'models.ComAtprotoRepoStrongRef.Main'  #: Subject.
 
-    _type: str = 'app.bsky.feed.repost'
+    py_type: te.Literal['app.bsky.feed.repost'] = Field(default='app.bsky.feed.repost', alias='$type')

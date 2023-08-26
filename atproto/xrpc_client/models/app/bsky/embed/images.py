@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
     from atproto.xrpc_client.models.blob_ref import BlobRef
@@ -19,7 +22,7 @@ class Main(base.ModelBase):
 
     images: t.List['models.AppBskyEmbedImages.Image']  #: Images.
 
-    _type: str = 'app.bsky.embed.images'
+    py_type: te.Literal['app.bsky.embed.images'] = Field(default='app.bsky.embed.images', alias='$type')
 
 
 class Image(base.ModelBase):
@@ -29,7 +32,7 @@ class Image(base.ModelBase):
     alt: str  #: Alt.
     image: 'BlobRef'  #: Image.
 
-    _type: str = 'app.bsky.embed.images#image'
+    py_type: te.Literal['app.bsky.embed.images#image'] = Field(default='app.bsky.embed.images#image', alias='$type')
 
 
 class View(base.ModelBase):
@@ -38,7 +41,7 @@ class View(base.ModelBase):
 
     images: t.List['models.AppBskyEmbedImages.ViewImage']  #: Images.
 
-    _type: str = 'app.bsky.embed.images#view'
+    py_type: te.Literal['app.bsky.embed.images#view'] = Field(default='app.bsky.embed.images#view', alias='$type')
 
 
 class ViewImage(base.ModelBase):
@@ -49,4 +52,6 @@ class ViewImage(base.ModelBase):
     fullsize: str  #: Fullsize.
     thumb: str  #: Thumb.
 
-    _type: str = 'app.bsky.embed.images#viewImage'
+    py_type: te.Literal['app.bsky.embed.images#viewImage'] = Field(
+        default='app.bsky.embed.images#viewImage', alias='$type'
+    )

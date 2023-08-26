@@ -45,7 +45,6 @@ def _decode_cid_hook(ref: t.Union[CID, str]) -> CID:
 
 
 _TYPE_HOOKS = {
-    BlobRef: lambda ref: BlobRef.from_dict(ref),
     CID: _decode_cid_hook,
     UnknownDict: _unknown_type_hook,
 }
@@ -160,8 +159,6 @@ def _handle_dict_key(key: str) -> str:
 
 
 def _handle_dict_value(ref: t.Any) -> t.Any:
-    if isinstance(ref, BlobRef):
-        return ref.to_dict()
     if isinstance(ref, CID):
         return ref.encode()
 
@@ -174,10 +171,10 @@ def _model_as_dict_factory(value) -> dict:
 
 
 def get_model_as_dict(model: t.Union[BlobRef, ModelBase]) -> dict:
-    if isinstance(model, (BlobRef, DotDict)):
+    if isinstance(model, DotDict):
         return model.to_dict()
 
-    return model.model_dump()
+    return model.model_dump(exclude_none=True)
 
     if not dataclasses.is_dataclass(model):
         raise ModelError('Invalid model')
@@ -186,6 +183,7 @@ def get_model_as_dict(model: t.Union[BlobRef, ModelBase]) -> dict:
 
 
 def get_model_as_json(model: t.Union[BlobRef, ModelBase]) -> str:
+    return model.model_dump_json(exclude_none=True, by_alias=True)
     return json.dumps(get_model_as_dict(model))
 
 
@@ -227,7 +225,7 @@ def is_record_type(model: ModelBase, expected_type: t.Union[str, types.ModuleTyp
         if not hasattr(expected_type, 'Main'):
             return False
 
-        expected_type = expected_type.Main._type
+        expected_type = expected_type.Main.model_fields['py_type'].default
 
     if isinstance(model, DotDict):  # custom (extended) record
         try:
@@ -235,4 +233,4 @@ def is_record_type(model: ModelBase, expected_type: t.Union[str, types.ModuleTyp
         except ModelFieldNotFoundError:
             return False
 
-    return expected_type == model._type
+    return expected_type == model.py_type

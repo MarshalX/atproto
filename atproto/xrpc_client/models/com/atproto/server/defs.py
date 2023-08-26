@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -24,7 +27,9 @@ class InviteCode(base.ModelBase):
     forAccount: str  #: For account.
     uses: t.List['models.ComAtprotoServerDefs.InviteCodeUse']  #: Uses.
 
-    _type: str = 'com.atproto.server.defs#inviteCode'
+    py_type: te.Literal['com.atproto.server.defs#inviteCode'] = Field(
+        default='com.atproto.server.defs#inviteCode', alias='$type'
+    )
 
 
 class InviteCodeUse(base.ModelBase):
@@ -34,4 +39,6 @@ class InviteCodeUse(base.ModelBase):
     usedAt: str  #: Used at.
     usedBy: str  #: Used by.
 
-    _type: str = 'com.atproto.server.defs#inviteCodeUse'
+    py_type: te.Literal['com.atproto.server.defs#inviteCodeUse'] = Field(
+        default='com.atproto.server.defs#inviteCodeUse', alias='$type'
+    )

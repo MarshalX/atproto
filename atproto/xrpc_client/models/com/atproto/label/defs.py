@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -25,7 +28,7 @@ class Label(base.ModelBase):
     ] = None  #: optionally, CID specifying the specific version of 'uri' resource this label applies to.
     neg: t.Optional[bool] = None  #: if true, this is a negation label, overwriting a previous label.
 
-    _type: str = 'com.atproto.label.defs#label'
+    py_type: te.Literal['com.atproto.label.defs#label'] = Field(default='com.atproto.label.defs#label', alias='$type')
 
 
 class SelfLabels(base.ModelBase):
@@ -34,7 +37,9 @@ class SelfLabels(base.ModelBase):
 
     values: t.List['models.ComAtprotoLabelDefs.SelfLabel']  #: Values.
 
-    _type: str = 'com.atproto.label.defs#selfLabels'
+    py_type: te.Literal['com.atproto.label.defs#selfLabels'] = Field(
+        default='com.atproto.label.defs#selfLabels', alias='$type'
+    )
 
 
 class SelfLabel(base.ModelBase):
@@ -43,4 +48,6 @@ class SelfLabel(base.ModelBase):
 
     val: str  #: the short string name of the value or type of this label.
 
-    _type: str = 'com.atproto.label.defs#selfLabel'
+    py_type: te.Literal['com.atproto.label.defs#selfLabel'] = Field(
+        default='com.atproto.label.defs#selfLabel', alias='$type'
+    )

@@ -7,6 +7,9 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -17,8 +20,9 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.moderation.createReport`."""
 
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
-    subject: t.Union[
-        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    subject: te.Annotated[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        Field(discriminator='py_type'),
     ]  #: Subject.
     reason: t.Optional[str] = None  #: Reason.
 
@@ -31,7 +35,8 @@ class Response(base.ResponseModelBase):
     id: int  #: Id.
     reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
     reportedBy: str  #: Reported by.
-    subject: t.Union[
-        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    subject: te.Annotated[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        Field(discriminator='py_type'),
     ]  #: Subject.
     reason: t.Optional[str] = None  #: Reason.
