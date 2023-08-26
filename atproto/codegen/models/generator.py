@@ -386,7 +386,8 @@ def _generate_record_models(lex_db: builder.BuiltRecordModels) -> None:
 
 def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     type_conversion_lines = ['from atproto.xrpc_client import models', 'RECORD_TYPE_TO_MODEL_CLASS = {']
-    unknown_record_type_hint_lines = [
+
+    import_lines = [
         'import typing as t',
         'import typing_extensions as te',
         'from pydantic import Field',
@@ -394,16 +395,16 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
         f'{_(4)}from atproto.xrpc_client.models import base',
         f'{_(4)}from atproto.xrpc_client import models',
         '',
-        'UnknownRecordType: te.TypeAlias = t.Union[',
     ]
+    unknown_record_type_hint_lines = ['UnknownRecordType: te.TypeAlias = t.Union[']
     unknown_record_type_pydantic_lines = ['UnknownRecordTypePydantic = te.Annotated[t.Union[']
 
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
 
         for def_name, def_record in defs.items():
-            # for now there are records only in under "main" definition name.
-            # need to rework a bit if this behaviour will be changed
+            # for now, there are records only in under "main" definition name.
+            # need to rework a bit if this behavior is changed
             if isinstance(def_record, models.LexRecord):
                 class_name = get_def_model_name(def_name)
                 record_type = str(nsid)
@@ -411,6 +412,7 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
                 path_to_class = f'models.{get_import_path(nsid)}.{class_name}'
 
                 type_conversion_lines.append(f"'{record_type}': {path_to_class},")
+
                 unknown_record_type_hint_lines.append(f"{_(4)}'{path_to_class}',")
                 unknown_record_type_pydantic_lines.append(f"{_(4)}'{path_to_class}',")
 
@@ -421,11 +423,10 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     unknown_record_type_pydantic_lines.append(
         "UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'base.DotDictType']"
     )
-
-    unknown_record_type_hint_lines.extend(unknown_record_type_pydantic_lines)
+    unknown_type_lines = [*import_lines, *unknown_record_type_hint_lines, *unknown_record_type_pydantic_lines]
 
     write_code(_MODELS_OUTPUT_DIR.joinpath('type_conversion.py'), join_code(type_conversion_lines))
-    write_code(_MODELS_OUTPUT_DIR.joinpath('unknown_type.py'), join_code(unknown_record_type_hint_lines))
+    write_code(_MODELS_OUTPUT_DIR.joinpath('unknown_type.py'), join_code(unknown_type_lines))
 
 
 def _generate_init_files(root_package_path: Path) -> None:
