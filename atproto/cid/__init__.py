@@ -1,8 +1,6 @@
-# from multiformats import CID as _CID
 from pydantic import BaseModel
 
-
-# CID = _CID
+# TODO(MarshalX): implement with pydantic
 
 
 class CID(BaseModel):

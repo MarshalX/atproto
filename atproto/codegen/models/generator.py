@@ -125,7 +125,7 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     # ref: https://github.com/bluesky-social/atproto/blob/b01e47b61730d05a780f7a42667b91ccaa192e8e/packages/lex-cli/src/codegen/lex-gen.ts#L325
     # grep by "{$type: string; [k: string]: unknown}" string
     # TODO(MarshalX): use 'base.UnknownDict' and convert to DotDict
-    # def_names.append('t.Dict[str, t.Any]')  # FIXME(MarshalX): support pydantic
+    # append 't.Dict[str, t.Any]' to def_names  # FIXME(MarshalX): support pydantic
 
     def_names = ', '.join([f"'{name}'" for name in def_names])
     def_field_meta = 'Field(default=None, discriminator="py_type")' if optional else 'Field(discriminator="py_type")'

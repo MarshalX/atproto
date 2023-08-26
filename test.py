@@ -10,7 +10,7 @@ from atproto.firehose import (
     FirehoseSubscribeReposClient,
     parse_subscribe_repos_message,
 )
-from atproto.xrpc_client.models import get_model_as_dict, ids, is_record_type, get_model_as_json
+from atproto.xrpc_client.models import get_model_as_dict, get_model_as_json, ids, is_record_type
 
 if t.TYPE_CHECKING:
     from atproto.firehose import MessageFrame
