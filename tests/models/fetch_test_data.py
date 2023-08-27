@@ -107,8 +107,8 @@ def main() -> None:
             method='com.atproto.repo.get_record',
             params={
                 'collection': 'app.bsky.feed.generator',
-                'repo': 'did:plc:2wqb5jjkxli4rcswpyb624xj',
-                'rkey': 'Filecoin',
+                'repo': 'marshal.dev',
+                'rkey': 'atproto',
             },
         ),
         Call(

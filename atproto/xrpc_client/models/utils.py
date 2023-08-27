@@ -152,7 +152,7 @@ def is_json(json_data: t.Union[str, bytes]) -> bool:
         return False
 
 
-def is_record_type(model: ModelBase, expected_type: t.Union[str, types.ModuleType]) -> bool:
+def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[str, types.ModuleType]) -> bool:
     """Verify that the model is the expected Record type.
 
     Args:
