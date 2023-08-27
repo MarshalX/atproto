@@ -101,7 +101,6 @@ def main() -> None:
 
     methods_to_run: t.List[Call] = [
         Call(name='resolve_handle', method='com.atproto.identity.resolve_handle', params={'handle': 'bsky.app'}),
-        Call(name='search_actors_typeahead', method='bsky.actor.search_actors_typeahead', params={'term': 'bsky'}),
         Call(
             name='feed_record',
             method='com.atproto.repo.get_record',
