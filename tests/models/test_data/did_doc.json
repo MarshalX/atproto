@@ -1,0 +1,40 @@
+{
+    "handle": "wwelna.bsky.social",
+    "did": "did:plc:ze3uieyyns7prike7itbdjiy",
+    "didDoc": {
+        "@context": [
+            "https://www.w3.org/ns/did/v1",
+            "https://w3id.org/security/suites/secp256k1-2019/v1"
+        ],
+        "id": "did:plc:ze3uieyyns7prike7itbdjiy",
+        "alsoKnownAs": [
+            "at://wwelna.bsky.social"
+        ],
+        "verificationMethod": [
+            {
+                "id": "#atproto",
+                "type": "EcdsaSecp256k1VerificationKey2019",
+                "controller": "did:plc:ze3uieyyns7prike7itbdjiy",
+                "publicKeyMultibase": "zQYEBzXeuTM9UR3rfvNag6L3RNAs5pQZyYPsomTsgQhsxLdEgCrPTLgFna8yqCnxPpNT7DBk6Ym3dgPKNu86vt9GR"
+            }
+        ],
+        "service": [
+            {
+                "id": "#atproto_pds",
+                "type": "AtprotoPersonalDataServer",
+                "serviceEndpoint": "https://bsky.social"
+            }
+        ]
+    },
+    "collections": [
+        "app.bsky.actor.profile",
+        "app.bsky.feed.like",
+        "app.bsky.feed.post",
+        "app.bsky.feed.repost",
+        "app.bsky.graph.block",
+        "app.bsky.graph.follow",
+        "app.bsky.graph.list",
+        "app.bsky.graph.listitem"
+    ],
+    "handleIsCorrect": true
+}

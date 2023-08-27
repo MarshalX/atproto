@@ -1,0 +1,19 @@
+{
+    "uri": "at://did:plc:2wqb5jjkxli4rcswpyb624xj/app.bsky.feed.generator/Filecoin",
+    "cid": "bafyreihd52t5wovnb634i7frncrzn4naussto5ksgehzpanrjtgrwa4lye",
+    "value": {
+        "did": "did:web:filecoinbsky.com",
+        "$type": "app.bsky.feed.generator",
+        "avatar": {
+            "$type": "blob",
+            "ref": {
+                "$link": "bafkreic4kwwb4zto7owfpmu7dyr7irvyuoghl2qnmlj7sawm2sakpsp2ji"
+            },
+            "mimeType": "image/jpeg",
+            "size": 9826
+        },
+        "createdAt": "2023-08-08T12:57:14.515280",
+        "description": "Filecoin Foundation Feed",
+        "displayName": "FilecoinFoundation"
+    }
+}

@@ -22,8 +22,8 @@ if t.TYPE_CHECKING:
 class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
     """High-level client for XRPC of ATProto."""
 
-    def __init__(self, base_url: t.Optional[str] = None) -> None:
-        super().__init__(base_url)
+    def __init__(self, base_url: t.Optional[str] = None, *args, **kwargs) -> None:
+        super().__init__(base_url, *args, **kwargs)
 
         self._refresh_lock = Lock()
 

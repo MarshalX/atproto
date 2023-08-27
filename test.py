@@ -39,10 +39,6 @@ def convert_uri_to_url():
 def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
-    h = client.com.atproto.identity.resolve_handle({'handle': 'bsky.app'})
-    print(h)
-    s = client.bsky.actor.search_actors_typeahead({'term': 'bsky'})
-    print(s)
 
     # post_ref = client.send_post(text='Hello World from Python!')
 
@@ -88,13 +84,6 @@ def sync_main():
     print(extended_record.value.text)
     print(extended_record.value.lol)  # custom (out of lexicon) attribute
     print(type(extended_record.value))
-
-    did_doc = client.com.atproto.repo.describe_repo({'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}).didDoc
-    print(type(did_doc))
-    print(did_doc)
-    print(did_doc.service)
-    print(did_doc['service'])
-    print(did_doc['@context'])
 
     atproto_feed = client.com.atproto.repo.get_record(
         {'collection': ids.AppBskyFeedGenerator, 'repo': 'marshal.dev', 'rkey': 'atproto'}
