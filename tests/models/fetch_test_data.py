@@ -142,6 +142,11 @@ def main() -> None:
                 'parentHeight': 0,
             },
         ),
+        Call(
+            name='get_follows',
+            method='app.bsky.graph.get_follows',
+            params={'actor': 'test.marshal.dev', 'limit': 10},
+        ),
     ]
 
     run_methods(client, methods_to_run)

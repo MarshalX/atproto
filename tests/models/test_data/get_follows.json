@@ -1,0 +1,141 @@
+{
+    "subject": {
+        "did": "did:plc:kvwvcn5iqfooopmyzvb4qzba",
+        "handle": "test.marshal.dev",
+        "displayName": "I love Python 3",
+        "description": "test",
+        "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
+        "indexedAt": "2023-07-28T18:17:15.466Z",
+        "viewer": {
+            "muted": false,
+            "blockedBy": false
+        },
+        "labels": []
+    },
+    "follows": [
+        {
+            "did": "did:plc:vpkhqolt662uhesyj6nxm7ys",
+            "handle": "why.bsky.team",
+            "displayName": "Why",
+            "description": "Technical advisor to @bluesky, first engineer at Protocol Labs. Wizard Utopian",
+            "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:vpkhqolt662uhesyj6nxm7ys/bafkreihxiic7f65slclhzy3aanyvrclotyvatwmd7lct4g4bwfvnzqlexa@jpeg",
+            "indexedAt": "2023-07-02T23:59:30.706Z",
+            "viewer": {
+                "muted": false,
+                "blockedBy": false,
+                "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3jueqtsliw22n"
+            },
+            "labels": []
+        },
+        {
+            "did": "did:plc:l3rouwludahu3ui3bt66mfvj",
+            "handle": "divy.zone",
+            "displayName": "devin ivy \ud83d\udc0b",
+            "description": "\ud83c\udf00bluesky team",
+            "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:l3rouwludahu3ui3bt66mfvj/bafkreidx62owa2htpluf7izkfxfqkqsthsmqxiutwy5lmblvpvxhdc2xtq@jpeg",
+            "indexedAt": "2023-07-02T23:59:30.705Z",
+            "viewer": {
+                "muted": true,
+                "mutedByList": {
+                    "uri": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.list/3k5z5k4k6qw2r",
+                    "cid": "bafyreigk3kmjipz5emav5vqmvdtivwz757tfpg5lnsbfoscnqx7wpjjime",
+                    "name": "test mute list",
+                    "purpose": "app.bsky.graph.defs#modlist",
+                    "indexedAt": "2023-08-28T10:08:27.812Z",
+                    "viewer": {
+                        "muted": true
+                    }
+                },
+                "blockedBy": false,
+                "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3jueqt6dbqs2g"
+            },
+            "labels": []
+        },
+        {
+            "did": "did:plc:uewxgchsjy4kmtu7dcxa77us",
+            "handle": "bloombergnews.bsky.social",
+            "displayName": "Bloomberg",
+            "description": "we're working on it. you know what we mean.\n\nThe first word in business news. \nNewsletters: http://bloom.bg/newsletters \nPodcasts: http://bloom.bg/podcasts \nThe Big Take podcast: http://trib.al/jtoXfuT",
+            "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:uewxgchsjy4kmtu7dcxa77us/bafkreiakf7idqsxdw6mur57feg2ns7hdhg6oalorn5celiio2ygxacrvhy@jpeg",
+            "indexedAt": "2023-07-03T04:36:15.006Z",
+            "viewer": {
+                "muted": false,
+                "blockedBy": false,
+                "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3judlmnlegx2f"
+            },
+            "labels": []
+        },
+        {
+            "did": "did:plc:oky5czdrnfjpqslsw2a5iclo",
+            "handle": "jay.bsky.team",
+            "displayName": "Jay \ud83e\udd8b",
+            "description": "CEO of Bluesky, steward of AT Protocol. Let\u2019s build a federated republic, starting with this server.\n\nNature, knowledge, technology. I like to think of a cybernetic forest. \ud83c\udf31 \ud83e\udeb4 \ud83c\udf33 ",
+            "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:oky5czdrnfjpqslsw2a5iclo/bafkreihquydaf5xer53afkmdefp2hpwbtqcgurxo2hsdkrpwpvm6uhkyg4@jpeg",
+            "indexedAt": "2023-07-02T23:59:30.709Z",
+            "viewer": {
+                "muted": false,
+                "blockedBy": false,
+                "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3judl7ak7gp2f"
+            },
+            "labels": []
+        },
+        {
+            "did": "did:plc:z72i7hdynmk6r22z27h6tvur",
+            "handle": "bsky.app",
+            "displayName": "Bluesky",
+            "description": "Official Bluesky account (check domain\ud83d\udc46)\n\nFollow for updates and announcements",
+            "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:z72i7hdynmk6r22z27h6tvur/bafkreic5kmqlhrhbfnh2bx6fsetvkra4noqja5ngsnnadrvubd6jcoc3ae@jpeg",
+            "indexedAt": "2023-07-03T01:10:55.392Z",
+            "viewer": {
+                "muted": false,
+                "blockedBy": false,
+                "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3judkza2vrb2y"
+            },
+            "labels": []
+        },
+        {
+            "did": "did:plc:m2jwplpernhxkzbo4ev5ljwj",
+            "handle": "vercel.com",
+            "displayName": "Vercel",
+            "description": "Vercel\u2019s frontend cloud gives developers the frameworks, workflows, and infrastructure to build a faster, more personalized web. Creators of @nextjs.org.",
+            "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:m2jwplpernhxkzbo4ev5ljwj/bafkreicybrf3xp2eesezps5c6xm4brmexjsml4cavkvmlm6xznuj4uddiq@jpeg",
+            "indexedAt": "2023-07-03T03:38:08.594Z",
+            "viewer": {
+                "muted": false,
+                "blockedBy": false,
+                "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3judkwijszc25"
+            },
+            "labels": []
+        },
+        {
+            "did": "did:plc:6fktaamhhxdqb2ypum33kbkj",
+            "handle": "jack.bsky.social",
+            "displayName": "jack",
+            "description": "Dog, artist-reader, and avid lover.",
+            "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:6fktaamhhxdqb2ypum33kbkj/bafkreiddtepilrl35fkksahtvieg5tnhfltcuafktvc6c44ppvkqcvowaa@jpeg",
+            "indexedAt": "2023-07-02T23:59:30.711Z",
+            "viewer": {
+                "muted": false,
+                "blockedBy": false,
+                "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3jucc7isp2s2z"
+            },
+            "labels": []
+        },
+        {
+            "did": "did:plc:s6jnht6koorxz7trghirytmf",
+            "handle": "marshal.dev",
+            "displayName": "Ilya (Marshal)",
+            "description": "Software Engineer\n\n\ud83d\udc0d The AT Protocol SDK for Python: https://atproto.blue/\n\ud83c\udf7f Custom Feed in Python: https://github.com/MarshalX/bluesky-feed-generator\n\nhttps://marshal.dev & https://github.com/MarshalX",
+            "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:s6jnht6koorxz7trghirytmf/bafkreihyuxbogcsrarso2ulwvjzq2spezopsgnt26uface5zwyiy5yhyje@jpeg",
+            "indexedAt": "2023-07-07T16:47:11.813Z",
+            "viewer": {
+                "muted": false,
+                "blockedBy": false,
+                "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3jucbzvek222k",
+                "followedBy": "at://did:plc:s6jnht6koorxz7trghirytmf/app.bsky.graph.follow/3jucc25a7qs2k"
+            },
+            "labels": []
+        }
+    ],
+    "cursor": "1682536253184::bafyreicbazjbm65mgbs2s25qmlqpe2betv7vssid32q5ckidy4js6dctve"
+}
