@@ -93,15 +93,28 @@ class ActionReversal(base.ModelBase):
     )
 
 
-ActionType = te.Literal['Takedown', 'Flag', 'Acknowledge', 'Escalate']
+ActionType = t.Union[
+    'models.ComAtprotoAdminDefs.Takedown',
+    'models.ComAtprotoAdminDefs.Flag',
+    'models.ComAtprotoAdminDefs.Acknowledge',
+    'models.ComAtprotoAdminDefs.Escalate',
+]  #: Action type
 
-Takedown: te.Literal['takedown'] = 'takedown'
+Takedown = te.Literal[
+    'com.atproto.admin.defs#takedown'
+]  #: Moderation action type: Takedown. Indicates that content should not be served by the PDS.
 
-Flag: te.Literal['flag'] = 'flag'
+Flag = te.Literal[
+    'com.atproto.admin.defs#flag'
+]  #: Moderation action type: Flag. Indicates that the content was reviewed and considered to violate PDS rules, but may still be served.
 
-Acknowledge: te.Literal['acknowledge'] = 'acknowledge'
+Acknowledge = te.Literal[
+    'com.atproto.admin.defs#acknowledge'
+]  #: Moderation action type: Acknowledge. Indicates that the content was reviewed and not considered to violate PDS rules.
 
-Escalate: te.Literal['escalate'] = 'escalate'
+Escalate = te.Literal[
+    'com.atproto.admin.defs#escalate'
+]  #: Moderation action type: Escalate. Indicates that the content has been flagged for additional review.
 
 
 class ReportView(base.ModelBase):

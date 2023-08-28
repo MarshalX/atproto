@@ -292,9 +292,13 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
     return join_code(lines)
 
 
-def _generate_def_token(def_name: str) -> str:
+def _generate_def_token(nsid: NSID, def_name: str, def_model: models.LexToken) -> str:
+    description = def_model.description
+    if not description:
+        description = gen_description_by_camel_case_name(def_name)
+
     lines = [
-        f"{get_def_model_name(def_name)}: te.Literal['{def_name}'] = '{def_name}'",
+        f"{get_def_model_name(def_name)} = te.Literal['{nsid}#{def_name}'] #: {description}",
         '',
         '',
     ]
@@ -305,20 +309,33 @@ def _generate_def_array(nsid: NSID, def_name: str, def_model: models.LexArray) -
     return f'{get_def_model_name(def_name)} = {_get_model_field_typehint(nsid, def_name, def_model, optional=False)}\n'
 
 
-def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
-    # FIXME(MarshalX): Doesn't support all fields
+def _generate_def_string(nsid: NSID, def_name: str, def_model: models.LexString) -> str:
+    # FIXME(MarshalX): support more fields. only knownValues field is supported for now
 
     if not def_model.knownValues:
         return ''
 
-    # FIXME(MarshalX): Use ref resolver
-    known_values_list = ["'" + get_def_model_name(v.split('#', 1)[1]) + "'" for v in def_model.knownValues]
-    known_values = ', '.join(known_values_list)
+    union_types = []
+    for known_value in def_model.knownValues:
+        if '#' in known_value:
+            # reference to literal (token)
+            model_path, _ = _resolve_nsid_ref(nsid, known_value)
+            type_ = f"'{model_path}'"
+        else:
+            # literal
+            # FIXME(MarshalX): not used for now
+            type_ = f"te.Literal['{known_value}']"
 
-    type_ = f'te.Literal[{known_values}]'
+        union_types.append(type_)
+
+    final_type = f"t.Union[{', '.join(union_types)}]"
+
+    description = def_model.description
+    if not description:
+        description = gen_description_by_camel_case_name(def_name)
 
     lines = [
-        f'{get_def_model_name(def_name)} = {type_}',
+        f'{get_def_model_name(def_name)} = {final_type} #: {description}',
         '',
         '',
     ]
@@ -363,9 +380,9 @@ def _generate_def_models(lex_db: builder.BuiltDefModels) -> None:
 
         for def_name, def_model in defs.items():
             if isinstance(def_model, models.LexToken):
-                save_code_part(nsid, _generate_def_token(def_name))
+                save_code_part(nsid, _generate_def_token(nsid, def_name, def_model))
             elif isinstance(def_model, models.LexString):
-                save_code_part(nsid, _generate_def_string(def_name, def_model))
+                save_code_part(nsid, _generate_def_string(nsid, def_name, def_model))
             elif isinstance(def_model, models.LexObject):
                 save_code_part(nsid, _generate_def_model(nsid, def_name, def_model, ModelType.DEF))
             elif isinstance(def_model, models.LexArray):

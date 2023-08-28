@@ -10,20 +10,35 @@ import typing as t
 import typing_extensions as te
 
 if t.TYPE_CHECKING:
-    pass
+    from atproto.xrpc_client import models
 
-ReasonType = te.Literal[
-    'ReasonSpam', 'ReasonViolation', 'ReasonMisleading', 'ReasonSexual', 'ReasonRude', 'ReasonOther'
-]
+ReasonType = t.Union[
+    'models.ComAtprotoModerationDefs.ReasonSpam',
+    'models.ComAtprotoModerationDefs.ReasonViolation',
+    'models.ComAtprotoModerationDefs.ReasonMisleading',
+    'models.ComAtprotoModerationDefs.ReasonSexual',
+    'models.ComAtprotoModerationDefs.ReasonRude',
+    'models.ComAtprotoModerationDefs.ReasonOther',
+]  #: Reason type
 
-ReasonSpam: te.Literal['reasonSpam'] = 'reasonSpam'
+ReasonSpam = te.Literal[
+    'com.atproto.moderation.defs#reasonSpam'
+]  #: Spam: frequent unwanted promotion, replies, mentions
 
-ReasonViolation: te.Literal['reasonViolation'] = 'reasonViolation'
+ReasonViolation = te.Literal[
+    'com.atproto.moderation.defs#reasonViolation'
+]  #: Direct violation of server rules, laws, terms of service
 
-ReasonMisleading: te.Literal['reasonMisleading'] = 'reasonMisleading'
+ReasonMisleading = te.Literal[
+    'com.atproto.moderation.defs#reasonMisleading'
+]  #: Misleading identity, affiliation, or content
 
-ReasonSexual: te.Literal['reasonSexual'] = 'reasonSexual'
+ReasonSexual = te.Literal['com.atproto.moderation.defs#reasonSexual']  #: Unwanted or mislabeled sexual content
 
-ReasonRude: te.Literal['reasonRude'] = 'reasonRude'
+ReasonRude = te.Literal[
+    'com.atproto.moderation.defs#reasonRude'
+]  #: Rude, harassing, explicit, or otherwise unwelcoming behavior
 
-ReasonOther: te.Literal['reasonOther'] = 'reasonOther'
+ReasonOther = te.Literal[
+    'com.atproto.moderation.defs#reasonOther'
+]  #: Other: reports not falling under another report category

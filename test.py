@@ -40,6 +40,15 @@ def sync_main():
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
+    params = models.AppBskyGraphGetFollows.Params(actor='test.marshal.dev')
+    # followers = client.bsky.graph.get_followers(params=params)
+    followers = client.bsky.graph.get_follows(params=params)
+
+    print(type(followers))
+    print(followers)
+
+    exit(0)
+
     post = client.com.atproto.repo.get_record(
         {'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yihcrp6f2c'}
     )
