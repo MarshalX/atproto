@@ -5,7 +5,7 @@ def main(client: Client, handle: str):
     print(f'\nProfile Posts of {handle}:\n\n')
 
     # Get profile's posts. Use pagination (cursor + limit) to fetch all
-    profile_feed = client.bsky.feed.get_author_feed({'actor': handle})
+    profile_feed = client.app.bsky.feed.get_author_feed({'actor': handle})
     for feed_view in profile_feed.feed:
         print('-', feed_view.post.record.text)
 

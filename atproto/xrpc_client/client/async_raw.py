@@ -8,10 +8,10 @@ class AsyncClientRaw(AsyncClientBase):
     """Group all root namespaces"""
 
     com: 'async_ns.ComNamespace'
-    bsky: 'async_ns.BskyNamespace'
+    app: 'async_ns.AppNamespace'
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.com = async_ns.ComNamespace(self)
-        self.bsky = async_ns.BskyNamespace(self)
+        self.app = async_ns.AppNamespace(self)

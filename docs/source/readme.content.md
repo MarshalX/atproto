@@ -80,11 +80,11 @@ The basics:
 - Namespaces – classes that group sub-namespaces and the XRPC queries and procedures. Built upon NSID ATProto semantic.
 - Model – dataclasses for input, output, and params of the methods from namespaces. Models describe Record and all other types in the Lexicon Schemes.
 
-The client contains references to the root of all namespaces. It's `app` and `bsky` for now.
+The client contains references to the root of all namespaces. It's `com` and `app` for now.
 ```python
 from atproto import Client
 Client().com
-Client().bsky
+Client().app
 ```
 
 To dive deeper you can navigate using hints from your IDE. Thanks to well-type hinted SDK it's much easier.
@@ -92,8 +92,8 @@ To dive deeper you can navigate using hints from your IDE. Thanks to well-type h
 from atproto import Client
 Client().com.atproto.server.create_session(...)
 Client().com.atproto.sync.get_blob(...)
-Client().bsky.feed.get_likes(...)
-Client().bsky.graph.get_follows(...)
+Client().app.bsky.feed.get_likes(...)
+Client().app.bsky.graph.get_follows(...)
 ```
 
 The endpoint of the path is always the method that you want to call. The method presents a query or procedure in XRPC. You should not care about it much. The only thing you need to know is that the procedures required data objects. Queries could be called with or without params at all.

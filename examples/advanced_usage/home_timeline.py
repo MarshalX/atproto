@@ -8,7 +8,7 @@ def main():
     print('Home (Following):\n\n')
 
     # Get "Home" page. Use pagination (cursor + limit) to fetch all posts
-    timeline = client.bsky.feed.get_timeline({'algorithm': 'reverse-chronological'})
+    timeline = client.app.bsky.feed.get_timeline({'algorithm': 'reverse-chronological'})
     for feed_view in timeline.feed:
         author = feed_view.post.author
 

@@ -8,10 +8,10 @@ class ClientRaw(ClientBase):
     """Group all root namespaces"""
 
     com: 'sync_ns.ComNamespace'
-    bsky: 'sync_ns.BskyNamespace'
+    app: 'sync_ns.AppNamespace'
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.com = sync_ns.ComNamespace(self)
-        self.bsky = sync_ns.BskyNamespace(self)
+        self.app = sync_ns.AppNamespace(self)

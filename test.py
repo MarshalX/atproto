@@ -29,7 +29,7 @@ def convert_uri_to_url():
         path_type = 'post'
     # add more collections here...
 
-    handle = client.bsky.actor.get_profile({'actor': at.hostname}).handle
+    handle = client.app.bsky.actor.get_profile({'actor': at.hostname}).handle
 
     web_app_url = f'https://staging.bsky.app/profile/{handle}/{path_type}/{at.rkey}'
     print(web_app_url)
@@ -41,8 +41,8 @@ def sync_main():
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
     params = models.AppBskyGraphGetFollows.Params(actor='test.marshal.dev')
-    # followers = client.bsky.graph.get_followers(params=params)
-    followers = client.bsky.graph.get_follows(params=params)
+    # followers = client.app.bsky.graph.get_followers(params=params)
+    followers = client.app.bsky.graph.get_follows(params=params)
 
     print(type(followers))
     print(followers)
@@ -87,8 +87,8 @@ def sync_main():
     print(car_file.root)
     print(car_file.blocks)
 
-    search_result = client.bsky.actor.search_actors_typeahead()
-    # search_result = client.bsky.actor.search_actors_typeahead({'term': 'marshal'})
+    search_result = client.app.bsky.actor.search_actors_typeahead()
+    # search_result = client.app.bsky.actor.search_actors_typeahead({'term': 'marshal'})
     for actor in search_result.actors:
         print(actor.handle, actor.displayName)
 

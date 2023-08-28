@@ -135,7 +135,7 @@ def main() -> None:
         ),
         Call(
             name='thread_view_post_with_embed_media',
-            method='bsky.feed.get_post_thread',
+            method='app.bsky.feed.get_post_thread',
             params={
                 'uri': 'at://did:plc:hbtuqflamm5j2i7yahtzsnue/app.bsky.feed.post/3k3ic43ucbq2f',
                 'depth': 1,

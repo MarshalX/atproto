@@ -66,7 +66,7 @@ class Client(SessionMethodsMixin, ClientRaw):
         """
 
         session = self._get_and_set_session(login, password)
-        self.me = self.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=session.handle))
+        self.me = self.app.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=session.handle))
 
         return self.me
 

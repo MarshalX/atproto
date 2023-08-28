@@ -72,7 +72,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
         """
 
         session = await self._get_and_set_session(login, password)
-        self.me = await self.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=session.handle))
+        self.me = await self.app.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=session.handle))
 
         return self.me
 
