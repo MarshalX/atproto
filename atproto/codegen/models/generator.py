@@ -411,6 +411,7 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
         'if t.TYPE_CHECKING:',
         f'{_(4)}from atproto.xrpc_client.models import base',
         f'{_(4)}from atproto.xrpc_client import models',
+        f'{_(4)}from atproto.xrpc_client.models import dot_dict',
         '',
     ]
     unknown_record_type_hint_lines = ['UnknownRecordType: te.TypeAlias = t.Union[']
@@ -438,7 +439,7 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     unknown_record_type_hint_lines.append(']')
     unknown_record_type_pydantic_lines.append('], Field(discriminator="py_type")]')
     unknown_record_type_pydantic_lines.append(
-        "UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'base.DotDictType']"
+        "UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType']"
     )
     unknown_type_lines = [*import_lines, *unknown_record_type_hint_lines, *unknown_record_type_pydantic_lines]
 

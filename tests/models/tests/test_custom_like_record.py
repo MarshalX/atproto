@@ -1,5 +1,6 @@
 from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base, get_model_as_dict, get_or_create
+from atproto.xrpc_client.models import get_model_as_dict, get_or_create
+from atproto.xrpc_client.models.dot_dict import DotDict
 from tests.models.tests.utils import load_data_from_file
 
 TEST_DATA = load_data_from_file('custom_like_record')
@@ -9,7 +10,7 @@ def test_custom_like_record_deserialization():
     model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
-    assert isinstance(model.value, base.DotDict)
+    assert isinstance(model.value, DotDict)
 
     assert model.value['$type'] == models.ids.AppBskyFeedLike
     # record_type is the custom field out of lexicon

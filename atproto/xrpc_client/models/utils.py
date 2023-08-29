@@ -13,8 +13,9 @@ from atproto.exceptions import (
     UnexpectedFieldError,
     WrongTypeError,
 )
-from atproto.xrpc_client.models.base import DotDict, ModelBase
+from atproto.xrpc_client.models.base import ModelBase
 from atproto.xrpc_client.models.blob_ref import BlobRef
+from atproto.xrpc_client.models.dot_dict import DotDict
 from atproto.xrpc_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
 from atproto.xrpc_client.models.unknown_type import UnknownRecordType
 

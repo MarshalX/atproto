@@ -5,7 +5,7 @@ from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-    from atproto.xrpc_client.models import base
+    from atproto.xrpc_client.models import dot_dict
 
 UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyFeedGenerator.Main',
@@ -32,4 +32,4 @@ UnknownRecordTypePydantic = te.Annotated[
     ],
     Field(discriminator='py_type'),
 ]
-UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'base.DotDictType']
+UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType']
