@@ -28,6 +28,8 @@ jobs:
 
       - name: Setup Poetry.
         uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
 
       - name: Install dependencies.
         run: poetry install
