@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.0.25
+
+**30.08.2023**
+
+🔥 Bsky made breaking changes in models of firehose. This release fixes it
+* Update changelog for v0.0.24 by @MarshalX in https://github.com/MarshalX/atproto/pull/126
+* Update lexicons fetched from ad1fcf1 committed 2023-08-30T00:07:21Z by @MarshalX in https://github.com/MarshalX/atproto/pull/131
+
 ## Version 0.0.24
 
 **15.08.2023**
