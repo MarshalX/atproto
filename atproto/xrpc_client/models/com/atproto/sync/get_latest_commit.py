@@ -5,16 +5,23 @@
 ##################################################################
 
 
-import typing as t
 from dataclasses import dataclass
 
 from atproto.xrpc_client.models import base
 
 
 @dataclass
-class Data(base.DataModelBase):
+class Params(base.ParamsModelBase):
 
-    """Input data model for :obj:`com.atproto.repo.rebaseRepo`."""
+    """Parameters model for :obj:`com.atproto.sync.getLatestCommit`."""
 
-    repo: str  #: The handle or DID of the repo.
-    swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
+    did: str  #: The DID of the repo.
+
+
+@dataclass
+class Response(base.ResponseModelBase):
+
+    """Output data model for :obj:`com.atproto.sync.getLatestCommit`."""
+
+    cid: str  #: Cid.
+    rev: str  #: Rev.

@@ -17,8 +17,9 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.listBlobs`."""
 
     did: str  #: The DID of the repo.
-    earliest: t.Optional[str] = None  #: The earliest commit to start from.
-    latest: t.Optional[str] = None  #: The most recent commit.
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
+    since: t.Optional[str] = None  #: Optional revision of the repo to list blobs since.
 
 
 @dataclass
@@ -27,3 +28,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.sync.listBlobs`."""
 
     cids: t.List[str]  #: Cids.
+    cursor: t.Optional[str] = None  #: Cursor.

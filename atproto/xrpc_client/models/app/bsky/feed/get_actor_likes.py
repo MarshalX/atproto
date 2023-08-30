@@ -8,22 +8,24 @@
 import typing as t
 from dataclasses import dataclass
 
+from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
 @dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.getCommitPath`."""
+    """Parameters model for :obj:`app.bsky.feed.getActorLikes`."""
 
-    did: str  #: The DID of the repo.
-    earliest: t.Optional[str] = None  #: The earliest commit to start from.
-    latest: t.Optional[str] = None  #: The most recent commit.
+    actor: str  #: Actor.
+    cursor: t.Optional[str] = None  #: Cursor.
+    limit: t.Optional[int] = None  #: Limit.
 
 
 @dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.sync.getCommitPath`."""
+    """Output data model for :obj:`app.bsky.feed.getActorLikes`."""
 
-    commits: t.List[str]  #: Commits.
+    feed: t.List['models.AppBskyFeedDefs.FeedViewPost']  #: Feed.
+    cursor: t.Optional[str] = None  #: Cursor.

@@ -14,4 +14,5 @@ Submodules
 
    atproto.xrpc_client.models.app.bsky.notification.get_unread_count
    atproto.xrpc_client.models.app.bsky.notification.list_notifications
+   atproto.xrpc_client.models.app.bsky.notification.register_push
    atproto.xrpc_client.models.app.bsky.notification.update_seen

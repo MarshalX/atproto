@@ -32,10 +32,12 @@ class Commit(base.ModelBase):
     ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp']  #: Ops.
     rebase: bool  #: Rebase.
     repo: str  #: Repo.
+    rev: str  #: The rev of the emitted commit.
     seq: int  #: Seq.
     time: str  #: Time.
     tooBig: bool  #: Too big.
     prev: t.Optional[CID] = None  #: Prev.
+    since: t.Optional[str] = None  #: The rev of the last emitted commit from this repo.
 
     _type: str = 'com.atproto.sync.subscribeRepos#commit'
 
@@ -92,7 +94,7 @@ class Info(base.ModelBase):
 @dataclass
 class RepoOp(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. A repo operation, ie a write of a single record. For creates and updates, cid is the record's CID as of this operation. For deletes, it's null."""
 
     action: str  #: Action.
     path: str  #: Path.

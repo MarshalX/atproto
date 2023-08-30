@@ -5,7 +5,6 @@
 ##################################################################
 
 
-import typing as t
 from dataclasses import dataclass
 
 from atproto.xrpc_client.models import base
@@ -14,7 +13,9 @@ from atproto.xrpc_client.models import base
 @dataclass
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.admin.rebaseRepo`."""
+    """Input data model for :obj:`app.bsky.notification.registerPush`."""
 
-    repo: str  #: The handle or DID of the repo.
-    swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
+    appId: str  #: App id.
+    platform: str  #: Platform.
+    serviceDid: str  #: Service did.
+    token: str  #: Token.

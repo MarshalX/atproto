@@ -7,18 +7,12 @@
 
 from dataclasses import dataclass
 
-import typing_extensions as te
-
 from atproto.xrpc_client.models import base
 
 
 @dataclass
-class Params(base.ParamsModelBase):
+class Data(base.DataModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.getCheckout`."""
+    """Input data model for :obj:`com.atproto.temp.upgradeRepoVersion`."""
 
-    did: str  #: The DID of the repo.
-
-
-#: Response raw data type.
-Response: te.TypeAlias = bytes
+    did: str  #: Did.

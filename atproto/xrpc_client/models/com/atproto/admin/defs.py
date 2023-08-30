@@ -30,6 +30,9 @@ class ActionView(base.ModelBase):
     ]  #: Subject.
     subjectBlobCids: t.List[str]  #: Subject blob cids.
     createLabelVals: t.Optional[t.List[str]] = None  #: Create label vals.
+    durationInHours: t.Optional[
+        int
+    ] = None  #: Indicates how long this action was meant to be in effect before automatically expiring.
     negateLabelVals: t.Optional[t.List[str]] = None  #: Negate label vals.
     reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None  #: Reversal.
 
@@ -56,6 +59,9 @@ class ActionViewDetail(base.ModelBase):
     ]  #: Subject.
     subjectBlobs: t.List['models.ComAtprotoAdminDefs.BlobView']  #: Subject blobs.
     createLabelVals: t.Optional[t.List[str]] = None  #: Create label vals.
+    durationInHours: t.Optional[
+        int
+    ] = None  #: Indicates how long this action was meant to be in effect before automatically expiring.
     negateLabelVals: t.Optional[t.List[str]] = None  #: Negate label vals.
     reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None  #: Reversal.
 
@@ -69,6 +75,9 @@ class ActionViewCurrent(base.ModelBase):
 
     action: 'models.ComAtprotoAdminDefs.ActionType'  #: Action.
     id: int  #: Id.
+    durationInHours: t.Optional[
+        int
+    ] = None  #: Indicates how long this action was meant to be in effect before automatically expiring.
 
     _type: str = 'com.atproto.admin.defs#actionViewCurrent'
 

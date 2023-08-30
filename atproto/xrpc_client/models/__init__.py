@@ -15,6 +15,7 @@ from atproto.xrpc_client.models.app.bsky.feed import defs as AppBskyFeedDefs
 from atproto.xrpc_client.models.app.bsky.feed import describe_feed_generator as AppBskyFeedDescribeFeedGenerator
 from atproto.xrpc_client.models.app.bsky.feed import generator as AppBskyFeedGenerator
 from atproto.xrpc_client.models.app.bsky.feed import get_actor_feeds as AppBskyFeedGetActorFeeds
+from atproto.xrpc_client.models.app.bsky.feed import get_actor_likes as AppBskyFeedGetActorLikes
 from atproto.xrpc_client.models.app.bsky.feed import get_author_feed as AppBskyFeedGetAuthorFeed
 from atproto.xrpc_client.models.app.bsky.feed import get_feed as AppBskyFeedGetFeed
 from atproto.xrpc_client.models.app.bsky.feed import get_feed_generator as AppBskyFeedGetFeedGenerator
@@ -46,6 +47,7 @@ from atproto.xrpc_client.models.app.bsky.graph import unmute_actor as AppBskyGra
 from atproto.xrpc_client.models.app.bsky.graph import unmute_actor_list as AppBskyGraphUnmuteActorList
 from atproto.xrpc_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
 from atproto.xrpc_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
+from atproto.xrpc_client.models.app.bsky.notification import register_push as AppBskyNotificationRegisterPush
 from atproto.xrpc_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto.xrpc_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
 from atproto.xrpc_client.models.app.bsky.unspecced import apply_labels as AppBskyUnspeccedApplyLabels
@@ -65,7 +67,6 @@ from atproto.xrpc_client.models.com.atproto.admin import get_moderation_report a
 from atproto.xrpc_client.models.com.atproto.admin import get_moderation_reports as ComAtprotoAdminGetModerationReports
 from atproto.xrpc_client.models.com.atproto.admin import get_record as ComAtprotoAdminGetRecord
 from atproto.xrpc_client.models.com.atproto.admin import get_repo as ComAtprotoAdminGetRepo
-from atproto.xrpc_client.models.com.atproto.admin import rebase_repo as ComAtprotoAdminRebaseRepo
 from atproto.xrpc_client.models.com.atproto.admin import (
     resolve_moderation_reports as ComAtprotoAdminResolveModerationReports,
 )
@@ -91,7 +92,6 @@ from atproto.xrpc_client.models.com.atproto.repo import describe_repo as ComAtpr
 from atproto.xrpc_client.models.com.atproto.repo import get_record as ComAtprotoRepoGetRecord
 from atproto.xrpc_client.models.com.atproto.repo import list_records as ComAtprotoRepoListRecords
 from atproto.xrpc_client.models.com.atproto.repo import put_record as ComAtprotoRepoPutRecord
-from atproto.xrpc_client.models.com.atproto.repo import rebase_repo as ComAtprotoRepoRebaseRepo
 from atproto.xrpc_client.models.com.atproto.repo import strong_ref as ComAtprotoRepoStrongRef
 from atproto.xrpc_client.models.com.atproto.repo import upload_blob as ComAtprotoRepoUploadBlob
 from atproto.xrpc_client.models.com.atproto.server import create_account as ComAtprotoServerCreateAccount
@@ -116,8 +116,8 @@ from atproto.xrpc_client.models.com.atproto.server import revoke_app_password as
 from atproto.xrpc_client.models.com.atproto.sync import get_blob as ComAtprotoSyncGetBlob
 from atproto.xrpc_client.models.com.atproto.sync import get_blocks as ComAtprotoSyncGetBlocks
 from atproto.xrpc_client.models.com.atproto.sync import get_checkout as ComAtprotoSyncGetCheckout
-from atproto.xrpc_client.models.com.atproto.sync import get_commit_path as ComAtprotoSyncGetCommitPath
 from atproto.xrpc_client.models.com.atproto.sync import get_head as ComAtprotoSyncGetHead
+from atproto.xrpc_client.models.com.atproto.sync import get_latest_commit as ComAtprotoSyncGetLatestCommit
 from atproto.xrpc_client.models.com.atproto.sync import get_record as ComAtprotoSyncGetRecord
 from atproto.xrpc_client.models.com.atproto.sync import get_repo as ComAtprotoSyncGetRepo
 from atproto.xrpc_client.models.com.atproto.sync import list_blobs as ComAtprotoSyncListBlobs
@@ -125,6 +125,7 @@ from atproto.xrpc_client.models.com.atproto.sync import list_repos as ComAtproto
 from atproto.xrpc_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
 from atproto.xrpc_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto.xrpc_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
+from atproto.xrpc_client.models.com.atproto.temp import upgrade_repo_version as ComAtprotoTempUpgradeRepoVersion
 from atproto.xrpc_client.models.utils import get_model_as_dict, get_model_as_json, get_or_create, is_record_type
 
 
@@ -136,6 +137,7 @@ class _Ids:
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyNotificationListNotifications: str = 'app.bsky.notification.listNotifications'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
+    AppBskyNotificationRegisterPush: str = 'app.bsky.notification.registerPush'
     AppBskyUnspeccedGetTimelineSkeleton: str = 'app.bsky.unspecced.getTimelineSkeleton'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
     AppBskyUnspeccedApplyLabels: str = 'app.bsky.unspecced.applyLabels'
@@ -164,6 +166,7 @@ class _Ids:
     AppBskyFeedGetPostThread: str = 'app.bsky.feed.getPostThread'
     AppBskyFeedGetAuthorFeed: str = 'app.bsky.feed.getAuthorFeed'
     AppBskyFeedGetPosts: str = 'app.bsky.feed.getPosts'
+    AppBskyFeedGetActorLikes: str = 'app.bsky.feed.getActorLikes'
     AppBskyFeedLike: str = 'app.bsky.feed.like'
     AppBskyFeedDescribeFeedGenerator: str = 'app.bsky.feed.describeFeedGenerator'
     AppBskyFeedGenerator: str = 'app.bsky.feed.generator'
@@ -183,6 +186,7 @@ class _Ids:
     AppBskyActorGetProfiles: str = 'app.bsky.actor.getProfiles'
     AppBskyActorSearchActorsTypeahead: str = 'app.bsky.actor.searchActorsTypeahead'
     AppBskyActorGetProfile: str = 'app.bsky.actor.getProfile'
+    ComAtprotoTempUpgradeRepoVersion: str = 'com.atproto.temp.upgradeRepoVersion'
     ComAtprotoIdentityResolveHandle: str = 'com.atproto.identity.resolveHandle'
     ComAtprotoIdentityUpdateHandle: str = 'com.atproto.identity.updateHandle'
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'
@@ -197,7 +201,6 @@ class _Ids:
     ComAtprotoAdminTakeModerationAction: str = 'com.atproto.admin.takeModerationAction'
     ComAtprotoAdminGetModerationReport: str = 'com.atproto.admin.getModerationReport'
     ComAtprotoAdminGetModerationReports: str = 'com.atproto.admin.getModerationReports'
-    ComAtprotoAdminRebaseRepo: str = 'com.atproto.admin.rebaseRepo'
     ComAtprotoAdminUpdateAccountEmail: str = 'com.atproto.admin.updateAccountEmail'
     ComAtprotoAdminSendEmail: str = 'com.atproto.admin.sendEmail'
     ComAtprotoAdminEnableAccountInvites: str = 'com.atproto.admin.enableAccountInvites'
@@ -227,12 +230,12 @@ class _Ids:
     ComAtprotoSyncListBlobs: str = 'com.atproto.sync.listBlobs'
     ComAtprotoSyncGetHead: str = 'com.atproto.sync.getHead'
     ComAtprotoSyncGetRepo: str = 'com.atproto.sync.getRepo'
-    ComAtprotoSyncGetCommitPath: str = 'com.atproto.sync.getCommitPath'
     ComAtprotoSyncGetBlocks: str = 'com.atproto.sync.getBlocks'
     ComAtprotoSyncGetCheckout: str = 'com.atproto.sync.getCheckout'
     ComAtprotoSyncListRepos: str = 'com.atproto.sync.listRepos'
     ComAtprotoSyncGetRecord: str = 'com.atproto.sync.getRecord'
     ComAtprotoSyncGetBlob: str = 'com.atproto.sync.getBlob'
+    ComAtprotoSyncGetLatestCommit: str = 'com.atproto.sync.getLatestCommit'
     ComAtprotoSyncRequestCrawl: str = 'com.atproto.sync.requestCrawl'
     ComAtprotoSyncSubscribeRepos: str = 'com.atproto.sync.subscribeRepos'
     ComAtprotoSyncNotifyOfUpdate: str = 'com.atproto.sync.notifyOfUpdate'
@@ -244,7 +247,6 @@ class _Ids:
     ComAtprotoRepoListRecords: str = 'com.atproto.repo.listRecords'
     ComAtprotoRepoApplyWrites: str = 'com.atproto.repo.applyWrites'
     ComAtprotoRepoDeleteRecord: str = 'com.atproto.repo.deleteRecord'
-    ComAtprotoRepoRebaseRepo: str = 'com.atproto.repo.rebaseRepo'
     ComAtprotoRepoUploadBlob: str = 'com.atproto.repo.uploadBlob'
     ComAtprotoModerationDefs: str = 'com.atproto.moderation.defs'
     ComAtprotoModerationCreateReport: str = 'com.atproto.moderation.createReport'

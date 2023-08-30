@@ -17,6 +17,7 @@ Submodules
    atproto.xrpc_client.models.com.atproto.sync.get_checkout
    atproto.xrpc_client.models.com.atproto.sync.get_commit_path
    atproto.xrpc_client.models.com.atproto.sync.get_head
+   atproto.xrpc_client.models.com.atproto.sync.get_latest_commit
    atproto.xrpc_client.models.com.atproto.sync.get_record
    atproto.xrpc_client.models.com.atproto.sync.get_repo
    atproto.xrpc_client.models.com.atproto.sync.list_blobs
