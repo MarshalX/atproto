@@ -970,28 +970,6 @@ class SyncNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoSyncGetCheckout.Response)
 
-    async def get_commit_path(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetCommitPath.Params'], **kwargs
-    ) -> 'models.ComAtprotoSyncGetCommitPath.Response':
-        """Gets the path of repo commits.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoSyncGetCommitPath.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoSyncGetCommitPath.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.sync.getCommitPath', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoSyncGetCommitPath.Response)
-
     async def get_head(
         self, params: t.Union[dict, 'models.ComAtprotoSyncGetHead.Params'], **kwargs
     ) -> 'models.ComAtprotoSyncGetHead.Response':
@@ -1385,26 +1363,6 @@ class AdminNamespace(AsyncNamespaceBase):
             'com.atproto.admin.getRepo', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminGetRepo.ResponseRef)
-
-    async def rebase_repo(self, data: t.Union[dict, 'models.ComAtprotoAdminRebaseRepo.Data'], **kwargs) -> bool:
-        """Administrative action to rebase an account's repo.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.ComAtprotoAdminRebaseRepo.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.rebaseRepo', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
 
     async def resolve_moderation_reports(
         self, data: t.Union[dict, 'models.ComAtprotoAdminResolveModerationReports.Data'], **kwargs
@@ -2080,26 +2038,6 @@ class RepoNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ComAtprotoRepoPutRecord.Response)
-
-    async def rebase_repo(self, data: t.Union[dict, 'models.ComAtprotoRepoRebaseRepo.Data'], **kwargs) -> bool:
-        """Simple rebase of repo that deletes history.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.ComAtprotoRepoRebaseRepo.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.repo.rebaseRepo', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
 
     async def upload_blob(
         self, data: 'models.ComAtprotoRepoUploadBlob.Data', **kwargs

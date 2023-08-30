@@ -105,6 +105,8 @@ def _write_extracted_lexicons(extracted_files: ExtractedFiles) -> None:
 def main():
     sha, commit_date, _ = _get_last_commit_info()
 
+    # FIXME(MarshalX): the script doesn't care about deleted lexicons
+
     print('Successfully fetch lexicons! Next steps:')
 
     print('- Run codegen (poetry run atp gen all)')

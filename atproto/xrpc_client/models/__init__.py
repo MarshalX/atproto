@@ -67,7 +67,6 @@ from atproto.xrpc_client.models.com.atproto.admin import get_moderation_report a
 from atproto.xrpc_client.models.com.atproto.admin import get_moderation_reports as ComAtprotoAdminGetModerationReports
 from atproto.xrpc_client.models.com.atproto.admin import get_record as ComAtprotoAdminGetRecord
 from atproto.xrpc_client.models.com.atproto.admin import get_repo as ComAtprotoAdminGetRepo
-from atproto.xrpc_client.models.com.atproto.admin import rebase_repo as ComAtprotoAdminRebaseRepo
 from atproto.xrpc_client.models.com.atproto.admin import (
     resolve_moderation_reports as ComAtprotoAdminResolveModerationReports,
 )
@@ -93,7 +92,6 @@ from atproto.xrpc_client.models.com.atproto.repo import describe_repo as ComAtpr
 from atproto.xrpc_client.models.com.atproto.repo import get_record as ComAtprotoRepoGetRecord
 from atproto.xrpc_client.models.com.atproto.repo import list_records as ComAtprotoRepoListRecords
 from atproto.xrpc_client.models.com.atproto.repo import put_record as ComAtprotoRepoPutRecord
-from atproto.xrpc_client.models.com.atproto.repo import rebase_repo as ComAtprotoRepoRebaseRepo
 from atproto.xrpc_client.models.com.atproto.repo import strong_ref as ComAtprotoRepoStrongRef
 from atproto.xrpc_client.models.com.atproto.repo import upload_blob as ComAtprotoRepoUploadBlob
 from atproto.xrpc_client.models.com.atproto.server import create_account as ComAtprotoServerCreateAccount
@@ -118,7 +116,6 @@ from atproto.xrpc_client.models.com.atproto.server import revoke_app_password as
 from atproto.xrpc_client.models.com.atproto.sync import get_blob as ComAtprotoSyncGetBlob
 from atproto.xrpc_client.models.com.atproto.sync import get_blocks as ComAtprotoSyncGetBlocks
 from atproto.xrpc_client.models.com.atproto.sync import get_checkout as ComAtprotoSyncGetCheckout
-from atproto.xrpc_client.models.com.atproto.sync import get_commit_path as ComAtprotoSyncGetCommitPath
 from atproto.xrpc_client.models.com.atproto.sync import get_head as ComAtprotoSyncGetHead
 from atproto.xrpc_client.models.com.atproto.sync import get_latest_commit as ComAtprotoSyncGetLatestCommit
 from atproto.xrpc_client.models.com.atproto.sync import get_record as ComAtprotoSyncGetRecord
@@ -204,7 +201,6 @@ class _Ids:
     ComAtprotoAdminTakeModerationAction: str = 'com.atproto.admin.takeModerationAction'
     ComAtprotoAdminGetModerationReport: str = 'com.atproto.admin.getModerationReport'
     ComAtprotoAdminGetModerationReports: str = 'com.atproto.admin.getModerationReports'
-    ComAtprotoAdminRebaseRepo: str = 'com.atproto.admin.rebaseRepo'
     ComAtprotoAdminUpdateAccountEmail: str = 'com.atproto.admin.updateAccountEmail'
     ComAtprotoAdminSendEmail: str = 'com.atproto.admin.sendEmail'
     ComAtprotoAdminEnableAccountInvites: str = 'com.atproto.admin.enableAccountInvites'
@@ -234,7 +230,6 @@ class _Ids:
     ComAtprotoSyncListBlobs: str = 'com.atproto.sync.listBlobs'
     ComAtprotoSyncGetHead: str = 'com.atproto.sync.getHead'
     ComAtprotoSyncGetRepo: str = 'com.atproto.sync.getRepo'
-    ComAtprotoSyncGetCommitPath: str = 'com.atproto.sync.getCommitPath'
     ComAtprotoSyncGetBlocks: str = 'com.atproto.sync.getBlocks'
     ComAtprotoSyncGetCheckout: str = 'com.atproto.sync.getCheckout'
     ComAtprotoSyncListRepos: str = 'com.atproto.sync.listRepos'
@@ -252,7 +247,6 @@ class _Ids:
     ComAtprotoRepoListRecords: str = 'com.atproto.repo.listRecords'
     ComAtprotoRepoApplyWrites: str = 'com.atproto.repo.applyWrites'
     ComAtprotoRepoDeleteRecord: str = 'com.atproto.repo.deleteRecord'
-    ComAtprotoRepoRebaseRepo: str = 'com.atproto.repo.rebaseRepo'
     ComAtprotoRepoUploadBlob: str = 'com.atproto.repo.uploadBlob'
     ComAtprotoModerationDefs: str = 'com.atproto.moderation.defs'
     ComAtprotoModerationCreateReport: str = 'com.atproto.moderation.createReport'
