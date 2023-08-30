@@ -19,3 +19,4 @@ Subpackages
    atproto.xrpc_client.models.com.atproto.repo
    atproto.xrpc_client.models.com.atproto.server
    atproto.xrpc_client.models.com.atproto.sync
+   atproto.xrpc_client.models.com.atproto.temp

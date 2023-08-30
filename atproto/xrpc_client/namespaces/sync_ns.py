@@ -226,6 +226,28 @@ class FeedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyFeedGetActorFeeds.Response)
 
+    def get_actor_likes(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetActorLikes.Params'], **kwargs
+    ) -> 'models.AppBskyFeedGetActorLikes.Response':
+        """A view of the posts liked by an actor.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetActorLikes.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.AppBskyFeedGetActorLikes.Params)
+        response = self._client.invoke_query(
+            'app.bsky.feed.getActorLikes', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetActorLikes.Response)
+
     def get_author_feed(
         self, params: t.Union[dict, 'models.AppBskyFeedGetAuthorFeed.Params'], **kwargs
     ) -> 'models.AppBskyFeedGetAuthorFeed.Response':
@@ -821,6 +843,26 @@ class NotificationNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyNotificationListNotifications.Response)
 
+    def register_push(self, data: t.Union[dict, 'models.AppBskyNotificationRegisterPush.Data'], **kwargs) -> bool:
+        """Register for push notifications with a service.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.AppBskyNotificationRegisterPush.Data)
+        response = self._client.invoke_procedure(
+            'app.bsky.notification.registerPush', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     def update_seen(self, data: t.Union[dict, 'models.AppBskyNotificationUpdateSeen.Data'], **kwargs) -> bool:
         """Notify server that the user has seen notifications.
 
@@ -858,6 +900,7 @@ class AtprotoNamespace(NamespaceBase):
         self.repo = RepoNamespace(self._client)
         self.server = ServerNamespace(self._client)
         self.sync = SyncNamespace(self._client)
+        self.temp = TempNamespace(self._client)
 
 
 class SyncNamespace(NamespaceBase):
@@ -908,7 +951,7 @@ class SyncNamespace(NamespaceBase):
     def get_checkout(
         self, params: t.Union[dict, 'models.ComAtprotoSyncGetCheckout.Params'], **kwargs
     ) -> 'models.ComAtprotoSyncGetCheckout.Response':
-        """Gets the repo state.
+        """DEPRECATED - please use com.atproto.sync.getRepo instead.
 
         Args:
             params: Parameters.
@@ -952,7 +995,7 @@ class SyncNamespace(NamespaceBase):
     def get_head(
         self, params: t.Union[dict, 'models.ComAtprotoSyncGetHead.Params'], **kwargs
     ) -> 'models.ComAtprotoSyncGetHead.Response':
-        """Gets the current HEAD CID of a repo.
+        """DEPRECATED - please use com.atproto.sync.getLatestCommit instead.
 
         Args:
             params: Parameters.
@@ -970,6 +1013,28 @@ class SyncNamespace(NamespaceBase):
             'com.atproto.sync.getHead', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoSyncGetHead.Response)
+
+    def get_latest_commit(
+        self, params: t.Union[dict, 'models.ComAtprotoSyncGetLatestCommit.Params'], **kwargs
+    ) -> 'models.ComAtprotoSyncGetLatestCommit.Response':
+        """Gets the current commit CID & revision of the repo.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSyncGetLatestCommit.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoSyncGetLatestCommit.Params)
+        response = self._client.invoke_query(
+            'com.atproto.sync.getLatestCommit', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSyncGetLatestCommit.Response)
 
     def get_record(
         self, params: t.Union[dict, 'models.ComAtprotoSyncGetRecord.Params'], **kwargs
@@ -996,7 +1061,7 @@ class SyncNamespace(NamespaceBase):
     def get_repo(
         self, params: t.Union[dict, 'models.ComAtprotoSyncGetRepo.Params'], **kwargs
     ) -> 'models.ComAtprotoSyncGetRepo.Response':
-        """Gets the repo state.
+        """Gets the did's repo, optionally catching up from a specific revision.
 
         Args:
             params: Parameters.
@@ -1018,7 +1083,7 @@ class SyncNamespace(NamespaceBase):
     def list_blobs(
         self, params: t.Union[dict, 'models.ComAtprotoSyncListBlobs.Params'], **kwargs
     ) -> 'models.ComAtprotoSyncListBlobs.Response':
-        """List blob cids for some range of commits.
+        """List blob cids since some revision.
 
         Args:
             params: Parameters.
@@ -2152,3 +2217,27 @@ class LabelNamespace(NamespaceBase):
             'com.atproto.label.queryLabels', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoLabelQueryLabels.Response)
+
+
+class TempNamespace(NamespaceBase):
+    def upgrade_repo_version(
+        self, data: t.Union[dict, 'models.ComAtprotoTempUpgradeRepoVersion.Data'], **kwargs
+    ) -> bool:
+        """Upgrade a repo to v3.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoTempUpgradeRepoVersion.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.temp.upgradeRepoVersion', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)

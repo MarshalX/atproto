@@ -16,6 +16,7 @@ Submodules
    atproto.xrpc_client.models.app.bsky.feed.describe_feed_generator
    atproto.xrpc_client.models.app.bsky.feed.generator
    atproto.xrpc_client.models.app.bsky.feed.get_actor_feeds
+   atproto.xrpc_client.models.app.bsky.feed.get_actor_likes
    atproto.xrpc_client.models.app.bsky.feed.get_author_feed
    atproto.xrpc_client.models.app.bsky.feed.get_feed
    atproto.xrpc_client.models.app.bsky.feed.get_feed_generator

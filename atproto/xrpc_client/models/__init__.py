@@ -15,6 +15,7 @@ from atproto.xrpc_client.models.app.bsky.feed import defs as AppBskyFeedDefs
 from atproto.xrpc_client.models.app.bsky.feed import describe_feed_generator as AppBskyFeedDescribeFeedGenerator
 from atproto.xrpc_client.models.app.bsky.feed import generator as AppBskyFeedGenerator
 from atproto.xrpc_client.models.app.bsky.feed import get_actor_feeds as AppBskyFeedGetActorFeeds
+from atproto.xrpc_client.models.app.bsky.feed import get_actor_likes as AppBskyFeedGetActorLikes
 from atproto.xrpc_client.models.app.bsky.feed import get_author_feed as AppBskyFeedGetAuthorFeed
 from atproto.xrpc_client.models.app.bsky.feed import get_feed as AppBskyFeedGetFeed
 from atproto.xrpc_client.models.app.bsky.feed import get_feed_generator as AppBskyFeedGetFeedGenerator
@@ -46,6 +47,7 @@ from atproto.xrpc_client.models.app.bsky.graph import unmute_actor as AppBskyGra
 from atproto.xrpc_client.models.app.bsky.graph import unmute_actor_list as AppBskyGraphUnmuteActorList
 from atproto.xrpc_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
 from atproto.xrpc_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
+from atproto.xrpc_client.models.app.bsky.notification import register_push as AppBskyNotificationRegisterPush
 from atproto.xrpc_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto.xrpc_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
 from atproto.xrpc_client.models.app.bsky.unspecced import apply_labels as AppBskyUnspeccedApplyLabels
@@ -118,6 +120,7 @@ from atproto.xrpc_client.models.com.atproto.sync import get_blocks as ComAtproto
 from atproto.xrpc_client.models.com.atproto.sync import get_checkout as ComAtprotoSyncGetCheckout
 from atproto.xrpc_client.models.com.atproto.sync import get_commit_path as ComAtprotoSyncGetCommitPath
 from atproto.xrpc_client.models.com.atproto.sync import get_head as ComAtprotoSyncGetHead
+from atproto.xrpc_client.models.com.atproto.sync import get_latest_commit as ComAtprotoSyncGetLatestCommit
 from atproto.xrpc_client.models.com.atproto.sync import get_record as ComAtprotoSyncGetRecord
 from atproto.xrpc_client.models.com.atproto.sync import get_repo as ComAtprotoSyncGetRepo
 from atproto.xrpc_client.models.com.atproto.sync import list_blobs as ComAtprotoSyncListBlobs
@@ -125,6 +128,7 @@ from atproto.xrpc_client.models.com.atproto.sync import list_repos as ComAtproto
 from atproto.xrpc_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
 from atproto.xrpc_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto.xrpc_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
+from atproto.xrpc_client.models.com.atproto.temp import upgrade_repo_version as ComAtprotoTempUpgradeRepoVersion
 from atproto.xrpc_client.models.utils import get_model_as_dict, get_model_as_json, get_or_create, is_record_type
 
 
@@ -136,6 +140,7 @@ class _Ids:
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyNotificationListNotifications: str = 'app.bsky.notification.listNotifications'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
+    AppBskyNotificationRegisterPush: str = 'app.bsky.notification.registerPush'
     AppBskyUnspeccedGetTimelineSkeleton: str = 'app.bsky.unspecced.getTimelineSkeleton'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
     AppBskyUnspeccedApplyLabels: str = 'app.bsky.unspecced.applyLabels'
@@ -164,6 +169,7 @@ class _Ids:
     AppBskyFeedGetPostThread: str = 'app.bsky.feed.getPostThread'
     AppBskyFeedGetAuthorFeed: str = 'app.bsky.feed.getAuthorFeed'
     AppBskyFeedGetPosts: str = 'app.bsky.feed.getPosts'
+    AppBskyFeedGetActorLikes: str = 'app.bsky.feed.getActorLikes'
     AppBskyFeedLike: str = 'app.bsky.feed.like'
     AppBskyFeedDescribeFeedGenerator: str = 'app.bsky.feed.describeFeedGenerator'
     AppBskyFeedGenerator: str = 'app.bsky.feed.generator'
@@ -183,6 +189,7 @@ class _Ids:
     AppBskyActorGetProfiles: str = 'app.bsky.actor.getProfiles'
     AppBskyActorSearchActorsTypeahead: str = 'app.bsky.actor.searchActorsTypeahead'
     AppBskyActorGetProfile: str = 'app.bsky.actor.getProfile'
+    ComAtprotoTempUpgradeRepoVersion: str = 'com.atproto.temp.upgradeRepoVersion'
     ComAtprotoIdentityResolveHandle: str = 'com.atproto.identity.resolveHandle'
     ComAtprotoIdentityUpdateHandle: str = 'com.atproto.identity.updateHandle'
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'
@@ -233,6 +240,7 @@ class _Ids:
     ComAtprotoSyncListRepos: str = 'com.atproto.sync.listRepos'
     ComAtprotoSyncGetRecord: str = 'com.atproto.sync.getRecord'
     ComAtprotoSyncGetBlob: str = 'com.atproto.sync.getBlob'
+    ComAtprotoSyncGetLatestCommit: str = 'com.atproto.sync.getLatestCommit'
     ComAtprotoSyncRequestCrawl: str = 'com.atproto.sync.requestCrawl'
     ComAtprotoSyncSubscribeRepos: str = 'com.atproto.sync.subscribeRepos'
     ComAtprotoSyncNotifyOfUpdate: str = 'com.atproto.sync.notifyOfUpdate'
