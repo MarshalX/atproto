@@ -41,10 +41,9 @@ jobs:
           python-version: 3.7
 
       - name: Setup Poetry.
-        run: curl -sSL https://install.python-poetry.org | python - -y
-
-      - name: Add Poetry to PATH.
-        run: echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
 
       - name: Install Poetry Plugin.
         run: poetry self add "poetry-dynamic-versioning[plugin]"
