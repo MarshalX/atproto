@@ -18,4 +18,4 @@ def main(path: Path) -> None:
 
 
 if __name__ == '__main__':
-    main(Path(__file__).parent.joinpath('source'))
+    main(Path(__file__).absolute().parent.joinpath('source'))

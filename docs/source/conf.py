@@ -13,6 +13,8 @@
 import os
 import sys
 
+from docs.source.alias_resolver import resolve_internal_aliases, resolve_intersphinx_aliases
+
 sys.path.insert(0, os.path.abspath('../..'))
 
 master_doc = 'index'
@@ -42,6 +44,7 @@ extensions = [
     'sphinx_copybutton',
     'sphinx_favicon',
     'myst_parser',
+    'sphinxcontrib.autodoc_pydantic',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -115,3 +118,15 @@ ogp_site_url = 'https://atproto.blue/'
 ogp_image = 'https://repository-images.githubusercontent.com/569485568/9d743322-10a2-4290-9a05-a88348cce2b6'
 ogp_type = 'article'
 ogp_enable_meta_description = True
+
+
+# Pydantic models
+autodoc_pydantic_model_undoc_members = True
+autodoc_pydantic_model_show_json = True
+autodoc_pydantic_settings_show_json = False
+autodoc_pydantic_model_show_config_summary = False
+
+
+def setup(app):
+    app.connect('doctree-read', resolve_internal_aliases)
+    app.connect('missing-reference', resolve_intersphinx_aliases)

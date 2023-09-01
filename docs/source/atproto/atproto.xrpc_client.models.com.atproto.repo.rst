@@ -19,6 +19,5 @@ Submodules
    atproto.xrpc_client.models.com.atproto.repo.get_record
    atproto.xrpc_client.models.com.atproto.repo.list_records
    atproto.xrpc_client.models.com.atproto.repo.put_record
-   atproto.xrpc_client.models.com.atproto.repo.rebase_repo
    atproto.xrpc_client.models.com.atproto.repo.strong_ref
    atproto.xrpc_client.models.com.atproto.repo.upload_blob
