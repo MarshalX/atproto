@@ -9,7 +9,7 @@ class ModelBase(BaseModel):
     Provides square brackets [] notation to get attributes like in a dictionary.
     """
 
-    model_config = ConfigDict(extra='forbid')
+    model_config = ConfigDict(extra='forbid', strict=True)
 
     def __getitem__(self, item: str):
         if hasattr(self, item):

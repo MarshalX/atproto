@@ -2,7 +2,7 @@ import pytest
 from pydantic import ValidationError
 
 from atproto.xrpc_client import models
-from atproto.xrpc_client.models import get_model_as_dict, get_or_create
+from atproto.xrpc_client.models import dot_dict, get_model_as_dict, get_or_create
 from atproto.xrpc_client.models.blob_ref import BlobRef
 from tests.models.tests.utils import load_data_from_file
 
@@ -19,13 +19,6 @@ def test_feed_record_deserialization():
     assert model.value['did'] == 'did:web:feed.atproto.blue'
     assert model.value.createdAt == '2023-07-20T10:17:40.298101'
     assert model.value['createdAt'] == '2023-07-20T10:17:40.298101'
-
-
-def test_feed_record_py_type_frozen():
-    model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
-
-    with pytest.raises(ValidationError):
-        model.value.py_type = 'app.bsky.feed.generator'
 
 
 def test_feed_record_serialization():
@@ -73,3 +66,27 @@ def test_feed_record_avatar_serialization():
     assert restored_avatar.mime_type == avatar.mime_type
     assert restored_avatar.ref.link == avatar.ref.link
     assert restored_avatar.cid == avatar.cid
+
+
+def test_feed_record_py_type_frozen():
+    model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
+
+    with pytest.raises(ValidationError):
+        model.value.py_type = 'app.bsky.feed.generator'
+
+
+def test_feed_record_model_strict_mode():
+    test_data = load_data_from_file('feed_record')
+
+    non_str_did = 123
+    test_data['value']['did'] = non_str_did
+
+    model = get_or_create(test_data, models.ComAtprotoRepoGetRecord.Response)
+
+    assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
+
+    # we expect here to fall back into DotDict because strict validation is failed
+    assert not isinstance(model.value, models.AppBskyFeedGenerator.Main)
+    assert isinstance(model.value, dot_dict.DotDict)
+
+    assert model.value.did == non_str_did

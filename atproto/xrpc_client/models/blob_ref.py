@@ -12,7 +12,7 @@ class BlobRefLink(BaseModel):
 
 
 class BlobRef(BaseModel):
-    model_config = ConfigDict(extra='forbid')
+    model_config = ConfigDict(extra='forbid', strict=True)
 
     mime_type: str = Field(alias='mimeType')
     size: int
