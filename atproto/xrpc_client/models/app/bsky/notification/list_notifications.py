@@ -47,5 +47,5 @@ class Notification(base.ModelBase):
     reasonSubject: t.Optional[str] = None  #: Reason subject.
 
     py_type: te.Literal['app.bsky.notification.listNotifications#notification'] = Field(
-        default='app.bsky.notification.listNotifications#notification', alias='$type'
+        default='app.bsky.notification.listNotifications#notification', alias='$type', frozen=True
     )

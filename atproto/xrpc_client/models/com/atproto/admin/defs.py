@@ -38,7 +38,7 @@ class ActionView(base.ModelBase):
     reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None  #: Reversal.
 
     py_type: te.Literal['com.atproto.admin.defs#actionView'] = Field(
-        default='com.atproto.admin.defs#actionView', alias='$type'
+        default='com.atproto.admin.defs#actionView', alias='$type', frozen=True
     )
 
 
@@ -70,7 +70,7 @@ class ActionViewDetail(base.ModelBase):
     reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None  #: Reversal.
 
     py_type: te.Literal['com.atproto.admin.defs#actionViewDetail'] = Field(
-        default='com.atproto.admin.defs#actionViewDetail', alias='$type'
+        default='com.atproto.admin.defs#actionViewDetail', alias='$type', frozen=True
     )
 
 
@@ -85,7 +85,7 @@ class ActionViewCurrent(base.ModelBase):
     ] = None  #: Indicates how long this action was meant to be in effect before automatically expiring.
 
     py_type: te.Literal['com.atproto.admin.defs#actionViewCurrent'] = Field(
-        default='com.atproto.admin.defs#actionViewCurrent', alias='$type'
+        default='com.atproto.admin.defs#actionViewCurrent', alias='$type', frozen=True
     )
 
 
@@ -98,7 +98,7 @@ class ActionReversal(base.ModelBase):
     reason: str  #: Reason.
 
     py_type: te.Literal['com.atproto.admin.defs#actionReversal'] = Field(
-        default='com.atproto.admin.defs#actionReversal', alias='$type'
+        default='com.atproto.admin.defs#actionReversal', alias='$type', frozen=True
     )
 
 
@@ -143,7 +143,7 @@ class ReportView(base.ModelBase):
     subjectRepoHandle: t.Optional[str] = None  #: Subject repo handle.
 
     py_type: te.Literal['com.atproto.admin.defs#reportView'] = Field(
-        default='com.atproto.admin.defs#reportView', alias='$type'
+        default='com.atproto.admin.defs#reportView', alias='$type', frozen=True
     )
 
 
@@ -168,7 +168,7 @@ class ReportViewDetail(base.ModelBase):
     reason: t.Optional[str] = None  #: Reason.
 
     py_type: te.Literal['com.atproto.admin.defs#reportViewDetail'] = Field(
-        default='com.atproto.admin.defs#reportViewDetail', alias='$type'
+        default='com.atproto.admin.defs#reportViewDetail', alias='$type', frozen=True
     )
 
 
@@ -187,7 +187,7 @@ class RepoView(base.ModelBase):
     invitesDisabled: t.Optional[bool] = None  #: Invites disabled.
 
     py_type: te.Literal['com.atproto.admin.defs#repoView'] = Field(
-        default='com.atproto.admin.defs#repoView', alias='$type'
+        default='com.atproto.admin.defs#repoView', alias='$type', frozen=True
     )
 
 
@@ -208,7 +208,7 @@ class RepoViewDetail(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
     py_type: te.Literal['com.atproto.admin.defs#repoViewDetail'] = Field(
-        default='com.atproto.admin.defs#repoViewDetail', alias='$type'
+        default='com.atproto.admin.defs#repoViewDetail', alias='$type', frozen=True
     )
 
 
@@ -219,7 +219,7 @@ class RepoViewNotFound(base.ModelBase):
     did: str  #: Did.
 
     py_type: te.Literal['com.atproto.admin.defs#repoViewNotFound'] = Field(
-        default='com.atproto.admin.defs#repoViewNotFound', alias='$type'
+        default='com.atproto.admin.defs#repoViewNotFound', alias='$type', frozen=True
     )
 
 
@@ -230,7 +230,7 @@ class RepoRef(base.ModelBase):
     did: str  #: Did.
 
     py_type: te.Literal['com.atproto.admin.defs#repoRef'] = Field(
-        default='com.atproto.admin.defs#repoRef', alias='$type'
+        default='com.atproto.admin.defs#repoRef', alias='$type', frozen=True
     )
 
 
@@ -247,7 +247,7 @@ class RecordView(base.ModelBase):
     value: 'unknown_type.UnknownType'  #: Value.
 
     py_type: te.Literal['com.atproto.admin.defs#recordView'] = Field(
-        default='com.atproto.admin.defs#recordView', alias='$type'
+        default='com.atproto.admin.defs#recordView', alias='$type', frozen=True
     )
 
 
@@ -265,7 +265,7 @@ class RecordViewDetail(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
     py_type: te.Literal['com.atproto.admin.defs#recordViewDetail'] = Field(
-        default='com.atproto.admin.defs#recordViewDetail', alias='$type'
+        default='com.atproto.admin.defs#recordViewDetail', alias='$type', frozen=True
     )
 
 
@@ -276,7 +276,7 @@ class RecordViewNotFound(base.ModelBase):
     uri: str  #: Uri.
 
     py_type: te.Literal['com.atproto.admin.defs#recordViewNotFound'] = Field(
-        default='com.atproto.admin.defs#recordViewNotFound', alias='$type'
+        default='com.atproto.admin.defs#recordViewNotFound', alias='$type', frozen=True
     )
 
 
@@ -287,7 +287,7 @@ class Moderation(base.ModelBase):
     currentAction: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None  #: Current action.
 
     py_type: te.Literal['com.atproto.admin.defs#moderation'] = Field(
-        default='com.atproto.admin.defs#moderation', alias='$type'
+        default='com.atproto.admin.defs#moderation', alias='$type', frozen=True
     )
 
 
@@ -300,7 +300,7 @@ class ModerationDetail(base.ModelBase):
     currentAction: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = None  #: Current action.
 
     py_type: te.Literal['com.atproto.admin.defs#moderationDetail'] = Field(
-        default='com.atproto.admin.defs#moderationDetail', alias='$type'
+        default='com.atproto.admin.defs#moderationDetail', alias='$type', frozen=True
     )
 
 
@@ -321,7 +321,7 @@ class BlobView(base.ModelBase):
     moderation: t.Optional['models.ComAtprotoAdminDefs.Moderation'] = None  #: Moderation.
 
     py_type: te.Literal['com.atproto.admin.defs#blobView'] = Field(
-        default='com.atproto.admin.defs#blobView', alias='$type'
+        default='com.atproto.admin.defs#blobView', alias='$type', frozen=True
     )
 
 
@@ -333,7 +333,7 @@ class ImageDetails(base.ModelBase):
     width: int  #: Width.
 
     py_type: te.Literal['com.atproto.admin.defs#imageDetails'] = Field(
-        default='com.atproto.admin.defs#imageDetails', alias='$type'
+        default='com.atproto.admin.defs#imageDetails', alias='$type', frozen=True
     )
 
 
@@ -346,5 +346,5 @@ class VideoDetails(base.ModelBase):
     width: int  #: Width.
 
     py_type: te.Literal['com.atproto.admin.defs#videoDetails'] = Field(
-        default='com.atproto.admin.defs#videoDetails', alias='$type'
+        default='com.atproto.admin.defs#videoDetails', alias='$type', frozen=True
     )

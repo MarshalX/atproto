@@ -23,4 +23,6 @@ class Main(base.RecordModelBase):
     list: str  #: List.
     subject: str  #: Subject.
 
-    py_type: te.Literal['app.bsky.graph.listitem'] = Field(default='app.bsky.graph.listitem', alias='$type')
+    py_type: te.Literal['app.bsky.graph.listitem'] = Field(
+        default='app.bsky.graph.listitem', alias='$type', frozen=True
+    )

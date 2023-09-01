@@ -45,5 +45,5 @@ class Record(base.ModelBase):
     value: 'unknown_type.UnknownType'  #: Value.
 
     py_type: te.Literal['com.atproto.repo.listRecords#record'] = Field(
-        default='com.atproto.repo.listRecords#record', alias='$type'
+        default='com.atproto.repo.listRecords#record', alias='$type', frozen=True
     )

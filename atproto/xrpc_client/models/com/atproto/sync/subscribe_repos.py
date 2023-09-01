@@ -41,7 +41,7 @@ class Commit(base.ModelBase):
     since: t.Optional[str] = None  #: The rev of the last emitted commit from this repo.
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#commit'] = Field(
-        default='com.atproto.sync.subscribeRepos#commit', alias='$type'
+        default='com.atproto.sync.subscribeRepos#commit', alias='$type', frozen=True
     )
 
 
@@ -55,7 +55,7 @@ class Handle(base.ModelBase):
     time: str  #: Time.
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#handle'] = Field(
-        default='com.atproto.sync.subscribeRepos#handle', alias='$type'
+        default='com.atproto.sync.subscribeRepos#handle', alias='$type', frozen=True
     )
 
 
@@ -69,7 +69,7 @@ class Migrate(base.ModelBase):
     migrateTo: t.Optional[str] = None  #: Migrate to.
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#migrate'] = Field(
-        default='com.atproto.sync.subscribeRepos#migrate', alias='$type'
+        default='com.atproto.sync.subscribeRepos#migrate', alias='$type', frozen=True
     )
 
 
@@ -82,7 +82,7 @@ class Tombstone(base.ModelBase):
     time: str  #: Time.
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#tombstone'] = Field(
-        default='com.atproto.sync.subscribeRepos#tombstone', alias='$type'
+        default='com.atproto.sync.subscribeRepos#tombstone', alias='$type', frozen=True
     )
 
 
@@ -94,7 +94,7 @@ class Info(base.ModelBase):
     message: t.Optional[str] = None  #: Message.
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#info'] = Field(
-        default='com.atproto.sync.subscribeRepos#info', alias='$type'
+        default='com.atproto.sync.subscribeRepos#info', alias='$type', frozen=True
     )
 
 
@@ -107,5 +107,5 @@ class RepoOp(base.ModelBase):
     cid: t.Optional['CIDType'] = None  #: Cid.
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#repoOp'] = Field(
-        default='com.atproto.sync.subscribeRepos#repoOp', alias='$type'
+        default='com.atproto.sync.subscribeRepos#repoOp', alias='$type', frozen=True
     )

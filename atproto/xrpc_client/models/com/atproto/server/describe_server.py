@@ -32,5 +32,5 @@ class Links(base.ModelBase):
     termsOfService: t.Optional[str] = None  #: Terms of service.
 
     py_type: te.Literal['com.atproto.server.describeServer#links'] = Field(
-        default='com.atproto.server.describeServer#links', alias='$type'
+        default='com.atproto.server.describeServer#links', alias='$type', frozen=True
     )

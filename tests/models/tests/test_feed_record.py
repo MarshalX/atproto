@@ -1,3 +1,6 @@
+import pytest
+from pydantic import ValidationError
+
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import get_model_as_dict, get_or_create
 from atproto.xrpc_client.models.blob_ref import BlobRef
@@ -16,6 +19,13 @@ def test_feed_record_deserialization():
     assert model.value['did'] == 'did:web:feed.atproto.blue'
     assert model.value.createdAt == '2023-07-20T10:17:40.298101'
     assert model.value['createdAt'] == '2023-07-20T10:17:40.298101'
+
+
+def test_feed_record_py_type_frozen():
+    model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
+
+    with pytest.raises(ValidationError):
+        model.value.py_type = 'app.bsky.feed.generator'
 
 
 def test_feed_record_serialization():

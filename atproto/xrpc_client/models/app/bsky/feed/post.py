@@ -22,7 +22,9 @@ class ReplyRef(base.ModelBase):
     parent: 'models.ComAtprotoRepoStrongRef.Main'  #: Parent.
     root: 'models.ComAtprotoRepoStrongRef.Main'  #: Root.
 
-    py_type: te.Literal['app.bsky.feed.post#replyRef'] = Field(default='app.bsky.feed.post#replyRef', alias='$type')
+    py_type: te.Literal['app.bsky.feed.post#replyRef'] = Field(
+        default='app.bsky.feed.post#replyRef', alias='$type', frozen=True
+    )
 
 
 class Entity(base.ModelBase):
@@ -33,7 +35,9 @@ class Entity(base.ModelBase):
     type: str  #: Expected values are 'mention' and 'link'.
     value: str  #: Value.
 
-    py_type: te.Literal['app.bsky.feed.post#entity'] = Field(default='app.bsky.feed.post#entity', alias='$type')
+    py_type: te.Literal['app.bsky.feed.post#entity'] = Field(
+        default='app.bsky.feed.post#entity', alias='$type', frozen=True
+    )
 
 
 class TextSlice(base.ModelBase):
@@ -43,7 +47,9 @@ class TextSlice(base.ModelBase):
     end: int  #: End.
     start: int  #: Start.
 
-    py_type: te.Literal['app.bsky.feed.post#textSlice'] = Field(default='app.bsky.feed.post#textSlice', alias='$type')
+    py_type: te.Literal['app.bsky.feed.post#textSlice'] = Field(
+        default='app.bsky.feed.post#textSlice', alias='$type', frozen=True
+    )
 
 
 class Main(base.RecordModelBase):
@@ -73,4 +79,4 @@ class Main(base.RecordModelBase):
     langs: t.Optional[t.List[str]] = None  #: Langs.
     reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None  #: Reply.
 
-    py_type: te.Literal['app.bsky.feed.post'] = Field(default='app.bsky.feed.post', alias='$type')
+    py_type: te.Literal['app.bsky.feed.post'] = Field(default='app.bsky.feed.post', alias='$type', frozen=True)

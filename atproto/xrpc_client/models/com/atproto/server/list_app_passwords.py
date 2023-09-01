@@ -30,5 +30,5 @@ class AppPassword(base.ModelBase):
     name: str  #: Name.
 
     py_type: te.Literal['com.atproto.server.listAppPasswords#appPassword'] = Field(
-        default='com.atproto.server.listAppPasswords#appPassword', alias='$type'
+        default='com.atproto.server.listAppPasswords#appPassword', alias='$type', frozen=True
     )

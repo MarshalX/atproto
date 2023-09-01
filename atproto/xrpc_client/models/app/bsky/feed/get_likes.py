@@ -43,4 +43,6 @@ class Like(base.ModelBase):
     createdAt: str  #: Created at.
     indexedAt: str  #: Indexed at.
 
-    py_type: te.Literal['app.bsky.feed.getLikes#like'] = Field(default='app.bsky.feed.getLikes#like', alias='$type')
+    py_type: te.Literal['app.bsky.feed.getLikes#like'] = Field(
+        default='app.bsky.feed.getLikes#like', alias='$type', frozen=True
+    )

@@ -39,5 +39,5 @@ class Repo(base.ModelBase):
     head: str  #: Head.
 
     py_type: te.Literal['com.atproto.sync.listRepos#repo'] = Field(
-        default='com.atproto.sync.listRepos#repo', alias='$type'
+        default='com.atproto.sync.listRepos#repo', alias='$type', frozen=True
     )

@@ -28,7 +28,7 @@ class InviteCode(base.ModelBase):
     uses: t.List['models.ComAtprotoServerDefs.InviteCodeUse']  #: Uses.
 
     py_type: te.Literal['com.atproto.server.defs#inviteCode'] = Field(
-        default='com.atproto.server.defs#inviteCode', alias='$type'
+        default='com.atproto.server.defs#inviteCode', alias='$type', frozen=True
     )
 
 
@@ -40,5 +40,5 @@ class InviteCodeUse(base.ModelBase):
     usedBy: str  #: Used by.
 
     py_type: te.Literal['com.atproto.server.defs#inviteCodeUse'] = Field(
-        default='com.atproto.server.defs#inviteCodeUse', alias='$type'
+        default='com.atproto.server.defs#inviteCodeUse', alias='$type', frozen=True
     )

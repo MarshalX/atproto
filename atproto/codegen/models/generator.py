@@ -286,7 +286,7 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
     if def_name == 'main':
         def_type = str(nsid)
 
-    lines.append(f"{_(1)}py_type: te.Literal['{def_type}'] = Field(default='{def_type}', alias='$type')")
+    lines.append(f"{_(1)}py_type: te.Literal['{def_type}'] = Field(default='{def_type}', alias='$type', frozen=True)")
     lines.append('')
 
     return join_code(lines)

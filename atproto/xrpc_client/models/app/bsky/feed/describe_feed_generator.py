@@ -31,7 +31,7 @@ class Feed(base.ModelBase):
     uri: str  #: Uri.
 
     py_type: te.Literal['app.bsky.feed.describeFeedGenerator#feed'] = Field(
-        default='app.bsky.feed.describeFeedGenerator#feed', alias='$type'
+        default='app.bsky.feed.describeFeedGenerator#feed', alias='$type', frozen=True
     )
 
 
@@ -43,5 +43,5 @@ class Links(base.ModelBase):
     termsOfService: t.Optional[str] = None  #: Terms of service.
 
     py_type: te.Literal['app.bsky.feed.describeFeedGenerator#links'] = Field(
-        default='app.bsky.feed.describeFeedGenerator#links', alias='$type'
+        default='app.bsky.feed.describeFeedGenerator#links', alias='$type', frozen=True
     )

@@ -22,4 +22,4 @@ class Main(base.RecordModelBase):
     createdAt: str  #: Created at.
     subject: str  #: Subject.
 
-    py_type: te.Literal['app.bsky.graph.follow'] = Field(default='app.bsky.graph.follow', alias='$type')
+    py_type: te.Literal['app.bsky.graph.follow'] = Field(default='app.bsky.graph.follow', alias='$type', frozen=True)

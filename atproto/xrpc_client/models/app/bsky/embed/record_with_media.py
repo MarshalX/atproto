@@ -25,7 +25,7 @@ class Main(base.ModelBase):
     record: 'models.AppBskyEmbedRecord.Main'  #: Record.
 
     py_type: te.Literal['app.bsky.embed.recordWithMedia'] = Field(
-        default='app.bsky.embed.recordWithMedia', alias='$type'
+        default='app.bsky.embed.recordWithMedia', alias='$type', frozen=True
     )
 
 
@@ -39,5 +39,5 @@ class View(base.ModelBase):
     record: 'models.AppBskyEmbedRecord.View'  #: Record.
 
     py_type: te.Literal['app.bsky.embed.recordWithMedia#view'] = Field(
-        default='app.bsky.embed.recordWithMedia#view', alias='$type'
+        default='app.bsky.embed.recordWithMedia#view', alias='$type', frozen=True
     )

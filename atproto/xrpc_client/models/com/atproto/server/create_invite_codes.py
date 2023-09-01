@@ -39,5 +39,5 @@ class AccountCodes(base.ModelBase):
     codes: t.List[str]  #: Codes.
 
     py_type: te.Literal['com.atproto.server.createInviteCodes#accountCodes'] = Field(
-        default='com.atproto.server.createInviteCodes#accountCodes', alias='$type'
+        default='com.atproto.server.createInviteCodes#accountCodes', alias='$type', frozen=True
     )

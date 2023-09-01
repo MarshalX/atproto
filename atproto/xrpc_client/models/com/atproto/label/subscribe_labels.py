@@ -30,7 +30,7 @@ class Labels(base.ModelBase):
     seq: int  #: Seq.
 
     py_type: te.Literal['com.atproto.label.subscribeLabels#labels'] = Field(
-        default='com.atproto.label.subscribeLabels#labels', alias='$type'
+        default='com.atproto.label.subscribeLabels#labels', alias='$type', frozen=True
     )
 
 
@@ -42,5 +42,5 @@ class Info(base.ModelBase):
     message: t.Optional[str] = None  #: Message.
 
     py_type: te.Literal['com.atproto.label.subscribeLabels#info'] = Field(
-        default='com.atproto.label.subscribeLabels#info', alias='$type'
+        default='com.atproto.label.subscribeLabels#info', alias='$type', frozen=True
     )

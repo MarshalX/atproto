@@ -28,4 +28,4 @@ class Main(base.RecordModelBase):
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Labels.
 
-    py_type: te.Literal['app.bsky.actor.profile'] = Field(default='app.bsky.actor.profile', alias='$type')
+    py_type: te.Literal['app.bsky.actor.profile'] = Field(default='app.bsky.actor.profile', alias='$type', frozen=True)

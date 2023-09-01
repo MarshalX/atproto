@@ -22,7 +22,7 @@ class Main(base.ModelBase):
 
     images: t.List['models.AppBskyEmbedImages.Image']  #: Images.
 
-    py_type: te.Literal['app.bsky.embed.images'] = Field(default='app.bsky.embed.images', alias='$type')
+    py_type: te.Literal['app.bsky.embed.images'] = Field(default='app.bsky.embed.images', alias='$type', frozen=True)
 
 
 class Image(base.ModelBase):
@@ -32,7 +32,9 @@ class Image(base.ModelBase):
     alt: str  #: Alt.
     image: 'BlobRef'  #: Image.
 
-    py_type: te.Literal['app.bsky.embed.images#image'] = Field(default='app.bsky.embed.images#image', alias='$type')
+    py_type: te.Literal['app.bsky.embed.images#image'] = Field(
+        default='app.bsky.embed.images#image', alias='$type', frozen=True
+    )
 
 
 class View(base.ModelBase):
@@ -41,7 +43,9 @@ class View(base.ModelBase):
 
     images: t.List['models.AppBskyEmbedImages.ViewImage']  #: Images.
 
-    py_type: te.Literal['app.bsky.embed.images#view'] = Field(default='app.bsky.embed.images#view', alias='$type')
+    py_type: te.Literal['app.bsky.embed.images#view'] = Field(
+        default='app.bsky.embed.images#view', alias='$type', frozen=True
+    )
 
 
 class ViewImage(base.ModelBase):
@@ -53,5 +57,5 @@ class ViewImage(base.ModelBase):
     thumb: str  #: Thumb.
 
     py_type: te.Literal['app.bsky.embed.images#viewImage'] = Field(
-        default='app.bsky.embed.images#viewImage', alias='$type'
+        default='app.bsky.embed.images#viewImage', alias='$type', frozen=True
     )

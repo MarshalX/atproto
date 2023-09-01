@@ -27,7 +27,7 @@ class ProfileViewBasic(base.ModelBase):
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.actor.defs#profileViewBasic'] = Field(
-        default='app.bsky.actor.defs#profileViewBasic', alias='$type'
+        default='app.bsky.actor.defs#profileViewBasic', alias='$type', frozen=True
     )
 
 
@@ -45,7 +45,7 @@ class ProfileView(base.ModelBase):
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.actor.defs#profileView'] = Field(
-        default='app.bsky.actor.defs#profileView', alias='$type'
+        default='app.bsky.actor.defs#profileView', alias='$type', frozen=True
     )
 
 
@@ -67,7 +67,7 @@ class ProfileViewDetailed(base.ModelBase):
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.actor.defs#profileViewDetailed'] = Field(
-        default='app.bsky.actor.defs#profileViewDetailed', alias='$type'
+        default='app.bsky.actor.defs#profileViewDetailed', alias='$type', frozen=True
     )
 
 
@@ -83,7 +83,7 @@ class ViewerState(base.ModelBase):
     mutedByList: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Muted by list.
 
     py_type: te.Literal['app.bsky.actor.defs#viewerState'] = Field(
-        default='app.bsky.actor.defs#viewerState', alias='$type'
+        default='app.bsky.actor.defs#viewerState', alias='$type', frozen=True
     )
 
 
@@ -106,7 +106,7 @@ class AdultContentPref(base.ModelBase):
     enabled: bool  #: Enabled.
 
     py_type: te.Literal['app.bsky.actor.defs#adultContentPref'] = Field(
-        default='app.bsky.actor.defs#adultContentPref', alias='$type'
+        default='app.bsky.actor.defs#adultContentPref', alias='$type', frozen=True
     )
 
 
@@ -118,7 +118,7 @@ class ContentLabelPref(base.ModelBase):
     visibility: str  #: Visibility.
 
     py_type: te.Literal['app.bsky.actor.defs#contentLabelPref'] = Field(
-        default='app.bsky.actor.defs#contentLabelPref', alias='$type'
+        default='app.bsky.actor.defs#contentLabelPref', alias='$type', frozen=True
     )
 
 
@@ -130,5 +130,5 @@ class SavedFeedsPref(base.ModelBase):
     saved: t.List[str]  #: Saved.
 
     py_type: te.Literal['app.bsky.actor.defs#savedFeedsPref'] = Field(
-        default='app.bsky.actor.defs#savedFeedsPref', alias='$type'
+        default='app.bsky.actor.defs#savedFeedsPref', alias='$type', frozen=True
     )

@@ -28,7 +28,9 @@ class Label(base.ModelBase):
     ] = None  #: optionally, CID specifying the specific version of 'uri' resource this label applies to.
     neg: t.Optional[bool] = None  #: if true, this is a negation label, overwriting a previous label.
 
-    py_type: te.Literal['com.atproto.label.defs#label'] = Field(default='com.atproto.label.defs#label', alias='$type')
+    py_type: te.Literal['com.atproto.label.defs#label'] = Field(
+        default='com.atproto.label.defs#label', alias='$type', frozen=True
+    )
 
 
 class SelfLabels(base.ModelBase):
@@ -38,7 +40,7 @@ class SelfLabels(base.ModelBase):
     values: t.List['models.ComAtprotoLabelDefs.SelfLabel']  #: Values.
 
     py_type: te.Literal['com.atproto.label.defs#selfLabels'] = Field(
-        default='com.atproto.label.defs#selfLabels', alias='$type'
+        default='com.atproto.label.defs#selfLabels', alias='$type', frozen=True
     )
 
 
@@ -49,5 +51,5 @@ class SelfLabel(base.ModelBase):
     val: str  #: the short string name of the value or type of this label.
 
     py_type: te.Literal['com.atproto.label.defs#selfLabel'] = Field(
-        default='com.atproto.label.defs#selfLabel', alias='$type'
+        default='com.atproto.label.defs#selfLabel', alias='$type', frozen=True
     )

@@ -28,7 +28,7 @@ class ListViewBasic(base.ModelBase):
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.graph.defs#listViewBasic'] = Field(
-        default='app.bsky.graph.defs#listViewBasic', alias='$type'
+        default='app.bsky.graph.defs#listViewBasic', alias='$type', frozen=True
     )
 
 
@@ -47,7 +47,9 @@ class ListView(base.ModelBase):
     descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
-    py_type: te.Literal['app.bsky.graph.defs#listView'] = Field(default='app.bsky.graph.defs#listView', alias='$type')
+    py_type: te.Literal['app.bsky.graph.defs#listView'] = Field(
+        default='app.bsky.graph.defs#listView', alias='$type', frozen=True
+    )
 
 
 class ListItemView(base.ModelBase):
@@ -57,7 +59,7 @@ class ListItemView(base.ModelBase):
     subject: 'models.AppBskyActorDefs.ProfileView'  #: Subject.
 
     py_type: te.Literal['app.bsky.graph.defs#listItemView'] = Field(
-        default='app.bsky.graph.defs#listItemView', alias='$type'
+        default='app.bsky.graph.defs#listItemView', alias='$type', frozen=True
     )
 
 
@@ -75,5 +77,5 @@ class ListViewerState(base.ModelBase):
     muted: t.Optional[bool] = None  #: Muted.
 
     py_type: te.Literal['app.bsky.graph.defs#listViewerState'] = Field(
-        default='app.bsky.graph.defs#listViewerState', alias='$type'
+        default='app.bsky.graph.defs#listViewerState', alias='$type', frozen=True
     )

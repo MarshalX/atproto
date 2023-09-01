@@ -43,7 +43,7 @@ class Create(base.ModelBase):
     rkey: t.Optional[str] = None  #: Rkey.
 
     py_type: te.Literal['com.atproto.repo.applyWrites#create'] = Field(
-        default='com.atproto.repo.applyWrites#create', alias='$type'
+        default='com.atproto.repo.applyWrites#create', alias='$type', frozen=True
     )
 
 
@@ -56,7 +56,7 @@ class Update(base.ModelBase):
     value: 'unknown_type.UnknownType'  #: Value.
 
     py_type: te.Literal['com.atproto.repo.applyWrites#update'] = Field(
-        default='com.atproto.repo.applyWrites#update', alias='$type'
+        default='com.atproto.repo.applyWrites#update', alias='$type', frozen=True
     )
 
 
@@ -68,5 +68,5 @@ class Delete(base.ModelBase):
     rkey: str  #: Rkey.
 
     py_type: te.Literal['com.atproto.repo.applyWrites#delete'] = Field(
-        default='com.atproto.repo.applyWrites#delete', alias='$type'
+        default='com.atproto.repo.applyWrites#delete', alias='$type', frozen=True
     )

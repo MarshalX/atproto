@@ -22,4 +22,6 @@ class Main(base.ModelBase):
     cid: str  #: Cid.
     uri: str  #: Uri.
 
-    py_type: te.Literal['com.atproto.repo.strongRef'] = Field(default='com.atproto.repo.strongRef', alias='$type')
+    py_type: te.Literal['com.atproto.repo.strongRef'] = Field(
+        default='com.atproto.repo.strongRef', alias='$type', frozen=True
+    )

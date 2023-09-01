@@ -27,7 +27,9 @@ class Main(base.ModelBase):
     ]  #: Features.
     index: 'models.AppBskyRichtextFacet.ByteSlice'  #: Index.
 
-    py_type: te.Literal['app.bsky.richtext.facet'] = Field(default='app.bsky.richtext.facet', alias='$type')
+    py_type: te.Literal['app.bsky.richtext.facet'] = Field(
+        default='app.bsky.richtext.facet', alias='$type', frozen=True
+    )
 
 
 class Mention(base.ModelBase):
@@ -37,7 +39,7 @@ class Mention(base.ModelBase):
     did: str  #: Did.
 
     py_type: te.Literal['app.bsky.richtext.facet#mention'] = Field(
-        default='app.bsky.richtext.facet#mention', alias='$type'
+        default='app.bsky.richtext.facet#mention', alias='$type', frozen=True
     )
 
 
@@ -47,7 +49,9 @@ class Link(base.ModelBase):
 
     uri: str  #: Uri.
 
-    py_type: te.Literal['app.bsky.richtext.facet#link'] = Field(default='app.bsky.richtext.facet#link', alias='$type')
+    py_type: te.Literal['app.bsky.richtext.facet#link'] = Field(
+        default='app.bsky.richtext.facet#link', alias='$type', frozen=True
+    )
 
 
 class ByteSlice(base.ModelBase):
@@ -58,5 +62,5 @@ class ByteSlice(base.ModelBase):
     byteStart: int  #: Byte start.
 
     py_type: te.Literal['app.bsky.richtext.facet#byteSlice'] = Field(
-        default='app.bsky.richtext.facet#byteSlice', alias='$type'
+        default='app.bsky.richtext.facet#byteSlice', alias='$type', frozen=True
     )

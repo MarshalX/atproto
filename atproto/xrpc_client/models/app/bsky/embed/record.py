@@ -21,7 +21,7 @@ class Main(base.ModelBase):
 
     record: 'models.ComAtprotoRepoStrongRef.Main'  #: Record.
 
-    py_type: te.Literal['app.bsky.embed.record'] = Field(default='app.bsky.embed.record', alias='$type')
+    py_type: te.Literal['app.bsky.embed.record'] = Field(default='app.bsky.embed.record', alias='$type', frozen=True)
 
 
 class View(base.ModelBase):
@@ -39,7 +39,9 @@ class View(base.ModelBase):
         Field(discriminator='py_type'),
     ]  #: Record.
 
-    py_type: te.Literal['app.bsky.embed.record#view'] = Field(default='app.bsky.embed.record#view', alias='$type')
+    py_type: te.Literal['app.bsky.embed.record#view'] = Field(
+        default='app.bsky.embed.record#view', alias='$type', frozen=True
+    )
 
 
 class ViewRecord(base.ModelBase):
@@ -67,7 +69,7 @@ class ViewRecord(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
     py_type: te.Literal['app.bsky.embed.record#viewRecord'] = Field(
-        default='app.bsky.embed.record#viewRecord', alias='$type'
+        default='app.bsky.embed.record#viewRecord', alias='$type', frozen=True
     )
 
 
@@ -79,7 +81,7 @@ class ViewNotFound(base.ModelBase):
     uri: str  #: Uri.
 
     py_type: te.Literal['app.bsky.embed.record#viewNotFound'] = Field(
-        default='app.bsky.embed.record#viewNotFound', alias='$type'
+        default='app.bsky.embed.record#viewNotFound', alias='$type', frozen=True
     )
 
 
@@ -92,5 +94,5 @@ class ViewBlocked(base.ModelBase):
     uri: str  #: Uri.
 
     py_type: te.Literal['app.bsky.embed.record#viewBlocked'] = Field(
-        default='app.bsky.embed.record#viewBlocked', alias='$type'
+        default='app.bsky.embed.record#viewBlocked', alias='$type', frozen=True
     )

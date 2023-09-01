@@ -22,4 +22,4 @@ class Main(base.RecordModelBase):
     createdAt: str  #: Created at.
     subject: 'models.ComAtprotoRepoStrongRef.Main'  #: Subject.
 
-    py_type: te.Literal['app.bsky.feed.like'] = Field(default='app.bsky.feed.like', alias='$type')
+    py_type: te.Literal['app.bsky.feed.like'] = Field(default='app.bsky.feed.like', alias='$type', frozen=True)
