@@ -14,15 +14,14 @@ from atproto.xrpc_client.models import base
 
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.getCommitPath`."""
+    """Parameters model for :obj:`com.atproto.sync.getLatestCommit`."""
 
     did: str  #: The DID of the repo.
-    earliest: t.Optional[str] = None  #: The earliest commit to start from.
-    latest: t.Optional[str] = None  #: The most recent commit.
 
 
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.sync.getCommitPath`."""
+    """Output data model for :obj:`com.atproto.sync.getLatestCommit`."""
 
-    commits: t.List[str]  #: Commits.
+    cid: str  #: Cid.
+    rev: str  #: Rev.

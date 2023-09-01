@@ -19,7 +19,6 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.getCheckout`."""
 
     did: str  #: The DID of the repo.
-    commit: t.Optional[str] = None  #: The commit to get the checkout from. Defaults to current HEAD.
 
 
 #: Response raw data type.

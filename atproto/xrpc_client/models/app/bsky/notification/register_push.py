@@ -14,7 +14,9 @@ from atproto.xrpc_client.models import base
 
 class Data(base.DataModelBase):
 
-    """Input data model for :obj:`com.atproto.repo.rebaseRepo`."""
+    """Input data model for :obj:`app.bsky.notification.registerPush`."""
 
-    repo: str  #: The handle or DID of the repo.
-    swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
+    appId: str  #: App id.
+    platform: str  #: Platform.
+    serviceDid: str  #: Service did.
+    token: str  #: Token.
