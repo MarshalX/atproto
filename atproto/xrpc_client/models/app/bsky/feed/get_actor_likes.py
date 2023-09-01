@@ -6,25 +6,26 @@
 
 
 import typing as t
+from dataclasses import dataclass
 
-if t.TYPE_CHECKING:
-    pass
+from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
+@dataclass
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.sync.listBlobs`."""
+    """Parameters model for :obj:`app.bsky.feed.getActorLikes`."""
 
-    did: str  #: The DID of the repo.
+    actor: str  #: Actor.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = None  #: Limit.
-    since: t.Optional[str] = None  #: Optional revision of the repo to list blobs since.
 
 
+@dataclass
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.sync.listBlobs`."""
+    """Output data model for :obj:`app.bsky.feed.getActorLikes`."""
 
-    cids: t.List[str]  #: Cids.
+    feed: t.List['models.AppBskyFeedDefs.FeedViewPost']  #: Feed.
     cursor: t.Optional[str] = None  #: Cursor.

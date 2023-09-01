@@ -19,8 +19,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.getRepo`."""
 
     did: str  #: The DID of the repo.
-    earliest: t.Optional[str] = None  #: The earliest commit in the commit range (not inclusive).
-    latest: t.Optional[str] = None  #: The latest commit in the commit range (inclusive).
+    since: t.Optional[str] = None  #: The revision of the repo to catch up from.
 
 
 #: Response raw data type.

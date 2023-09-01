@@ -27,5 +27,8 @@ class Data(base.DataModelBase):
         Field(discriminator='py_type'),
     ]  #: Subject.
     createLabelVals: t.Optional[t.List[str]] = None  #: Create label vals.
+    durationInHours: t.Optional[
+        int
+    ] = None  #: Indicates how long this action was meant to be in effect before automatically expiring.
     negateLabelVals: t.Optional[t.List[str]] = None  #: Negate label vals.
     subjectBlobCids: t.Optional[t.List[str]] = None  #: Subject blob cids.
