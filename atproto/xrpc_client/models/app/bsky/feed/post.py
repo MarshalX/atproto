@@ -44,8 +44,8 @@ class TextSlice(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.post`. Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings."""
 
-    end: int = Field(min_length=0)  #: End.
-    start: int = Field(min_length=0)  #: Start.
+    end: int = Field(ge=0)  #: End.
+    start: int = Field(ge=0)  #: Start.
 
     py_type: te.Literal['app.bsky.feed.post#textSlice'] = Field(
         default='app.bsky.feed.post#textSlice', alias='$type', frozen=True

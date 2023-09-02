@@ -176,6 +176,8 @@ def _get_model_field_value(field_type_def, alias_name: t.Optional[str] = None, *
     alias: t.Union[str, not_set] = alias_name or not_set
     min_length: t.Union[int, not_set] = not_set
     max_length: t.Union[int, not_set] = not_set
+    ge: t.Union[int, not_set] = not_set
+    le: t.Union[int, not_set] = not_set
     frozen: t.Union[bool, not_set] = not_set
 
     field_type = type(field_type_def)
@@ -184,9 +186,9 @@ def _get_model_field_value(field_type_def, alias_name: t.Optional[str] = None, *
         if field_type_def.default is not None:
             default = field_type_def.default
         if field_type_def.minimum is not None:
-            min_length = field_type_def.minimum
+            ge = field_type_def.minimum
         if field_type_def.maximum is not None:
-            max_length = field_type_def.maximum
+            le = field_type_def.maximum
         if field_type_def.const is not None:
             frozen = field_type_def.const
 
@@ -220,6 +222,8 @@ def _get_model_field_value(field_type_def, alias_name: t.Optional[str] = None, *
         'alias': alias,
         'min_length': min_length,
         'max_length': max_length,
+        'ge': ge,
+        'le': le,
         'frozen': frozen,
     }
 

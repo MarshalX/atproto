@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
         alias='uriPatterns'
     )  #: List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, min_length=1, max_length=250)  #: Limit.
+    limit: t.Optional[int] = Field(default=50, ge=1, le=250)  #: Limit.
     sources: t.Optional[t.List[str]] = None  #: Optional list of label sources (DIDs) to filter on.
 
 

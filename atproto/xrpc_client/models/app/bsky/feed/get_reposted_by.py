@@ -21,7 +21,7 @@ class Params(base.ParamsModelBase):
     uri: str  #: Uri.
     cid: t.Optional[str] = None  #: Cid.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: Limit.
+    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
 class Response(base.ResponseModelBase):

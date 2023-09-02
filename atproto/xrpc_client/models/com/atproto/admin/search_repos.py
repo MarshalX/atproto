@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     invited_by: t.Optional[str] = Field(default=None, alias='invitedBy')  #: Invited by.
-    limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: Limit.
+    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     term: t.Optional[str] = None  #: Term.
 
 

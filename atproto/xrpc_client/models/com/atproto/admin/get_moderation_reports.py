@@ -24,7 +24,7 @@ class Params(base.ParamsModelBase):
     )  #: Get all reports that were actioned by a specific moderator.
     cursor: t.Optional[str] = None  #: Cursor.
     ignore_subjects: t.Optional[t.List[str]] = Field(default=None, alias='ignoreSubjects')  #: Ignore subjects.
-    limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: Limit.
+    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     reporters: t.Optional[t.List[str]] = None  #: Filter reports made by one or more DIDs.
     resolved: t.Optional[bool] = None  #: Resolved.
     reverse: t.Optional[

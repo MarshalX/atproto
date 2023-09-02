@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
 
     did: str  #: The DID of the repo.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=500, min_length=1, max_length=1000)  #: Limit.
+    limit: t.Optional[int] = Field(default=500, ge=1, le=1000)  #: Limit.
     since: t.Optional[str] = None  #: Optional revision of the repo to list blobs since.
 
 

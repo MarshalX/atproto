@@ -20,10 +20,8 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getPostThread`."""
 
     uri: str  #: Uri.
-    depth: t.Optional[int] = Field(default=6, min_length=0, max_length=1000)  #: Depth.
-    parent_height: t.Optional[int] = Field(
-        default=80, alias='parentHeight', min_length=0, max_length=1000
-    )  #: Parent height.
+    depth: t.Optional[int] = Field(default=6, ge=0, le=1000)  #: Depth.
+    parent_height: t.Optional[int] = Field(default=80, alias='parentHeight', ge=0, le=1000)  #: Parent height.
 
 
 class Response(base.ResponseModelBase):

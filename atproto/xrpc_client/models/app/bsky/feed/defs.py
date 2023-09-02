@@ -196,7 +196,7 @@ class GeneratorView(base.ModelBase):
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = Field(
         default=None, alias='descriptionFacets'
     )  #: Description facets.
-    like_count: t.Optional[int] = Field(default=None, alias='likeCount', min_length=0)  #: Like count.
+    like_count: t.Optional[int] = Field(default=None, alias='likeCount', ge=0)  #: Like count.
     viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.feed.defs#generatorView'] = Field(
