@@ -1,5 +1,4 @@
-from atproto import AtUri, Client
-from atproto.xrpc_client.models.utils import create_strong_ref
+from atproto import AtUri, Client, models
 
 
 def main():
@@ -10,7 +9,7 @@ def main():
     print('Post response:', response)
 
     # same with the like_post.py example, we need to work with references of posts and likes
-    like_ref = client.like(create_strong_ref(response))
+    like_ref = client.like(models.create_strong_ref(response))
     print('Like reference:', like_ref)
 
     # rkey means a record key. the ID of the like object

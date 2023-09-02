@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from atproto import Client, models
-from atproto.xrpc_client.models.utils import create_strong_ref
 
 
 def main():
@@ -28,7 +27,7 @@ def main():
 
     text_quote = 'Example post with embed post and quote (quote post)'
     # AppBskyEmbedRecord is the same as "quote post" in the app
-    embed_post = models.AppBskyEmbedRecord.Main(record=create_strong_ref(post_with_link_card))
+    embed_post = models.AppBskyEmbedRecord.Main(record=models.create_strong_ref(post_with_link_card))
 
     client.com.atproto.repo.create_record(
         models.ComAtprotoRepoCreateRecord.Data(

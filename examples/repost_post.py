@@ -1,5 +1,4 @@
-from atproto import Client
-from atproto.xrpc_client.models.utils import create_strong_ref
+from atproto import Client, models
 
 
 def main():
@@ -10,7 +9,7 @@ def main():
     print('Post response:', response)
 
     # As in the like_post.py example, we need to create a reference to the post to repost
-    print('Reposted post response:', client.repost(create_strong_ref(response)))
+    print('Reposted post response:', client.repost(models.create_strong_ref(response)))
 
 
 if __name__ == '__main__':

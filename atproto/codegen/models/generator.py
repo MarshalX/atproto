@@ -661,6 +661,7 @@ def _generate_import_aliases(root_package_path: Path) -> None:
 
     import_lines.append(
         'from atproto.xrpc_client.models.utils import '
+        'create_strong_ref, '
         'get_model_as_dict, '
         'get_model_as_json, '
         'get_or_create, '

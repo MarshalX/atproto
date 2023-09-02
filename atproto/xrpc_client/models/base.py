@@ -3,7 +3,11 @@ from pydantic import BaseModel, ConfigDict
 from atproto.exceptions import ModelFieldNotFoundError
 
 
-class ModelBase(BaseModel):
+class AtProtocolBase:
+    ...
+
+
+class ModelBase(BaseModel, AtProtocolBase):
     """Base class for all data classes.
 
     Provides square brackets [] notation to get attributes like in a dictionary.
@@ -30,7 +34,7 @@ class ResponseModelBase(ModelBase):
     pass
 
 
-class UnknownDict:
+class UnknownDict(AtProtocolBase):
     pass
 
 

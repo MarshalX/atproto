@@ -17,6 +17,27 @@ class DotDict(UnknownDict):
         Such models will fall back to dictionaries.
         All unknown "Union" types will also be caught as dicts.
         This class exists to provide an ability to use such fallbacks as “real” data models.
+
+    Example:
+        >>> test_data = {'a': 1, 'b': {'c': 2}, 'd': [{'e': 3}, 4, 5]}
+        >>> model = DotDict(test_data)
+        >>> assert isinstance(model, DotDict)
+        >>> assert model.nonExistingField is None
+        >>> assert model.a == 1
+        >>> assert model['a'] == 1
+        >>> assert model['b']['c'] == 2
+        >>> assert model.b.c == 2
+        >>> assert model.b['c'] == 2
+        >>> assert model['b'].c == 2
+        >>> assert model.d[0].e == 3
+        >>> assert model['d'][0]['e'] == 3
+        >>> assert model['d'][0].e == 3
+        >>> assert model['d'][1] == 4
+        >>> assert model['d'][2] == 5
+        >>> model['d'][0]['e'] = 6
+        >>> assert model['d'][0]['e'] == 6
+        >>> assert DotDict(test_data) == DotDict(test_data)
+        >>> assert model.to_dict() == test_data
     """
 
     def __init__(self, data: dict) -> None:
@@ -25,6 +46,7 @@ class DotDict(UnknownDict):
             self.__setitem__(k, v)
 
     def to_dict(self) -> dict:
+        """Unwrap DotDict to Python built-in dict."""
         return deepcopy(self._data)
 
     def __getitem__(self, item: str) -> t.Optional[t.Any]:

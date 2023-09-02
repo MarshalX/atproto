@@ -6,16 +6,16 @@
 
 Code snippet:
 ```python
-from atproto import Client
+from atproto import Client, models
 
 
 def main():
     client = Client()
     profile = client.login('my-handle', 'my-password')
-    print('Welcome,', profile.displayName)
+    print('Welcome,', profile.display_name)
     
-    post_ref = client.send_post(text='Hello World from Python!')
-    client.like(post_ref)
+    response = client.send_post(text='Hello World from Python!')
+    client.like(models.create_strong_ref(response))
 
     
 if __name__ == '__main__':
@@ -29,20 +29,20 @@ if __name__ == '__main__':
 ```python
 import asyncio
 
-from atproto import AsyncClient
+from atproto import AsyncClient, models
 
 
 async def main():
     client = AsyncClient()
     profile = await client.login('my-handle', 'my-password')
-    print('Welcome,', profile.displayName)
-    
-    post_ref = await client.send_post(text='Hello World from Python!')
-    await client.like(post_ref)
+    print('Welcome,', profile.display_name)
 
-    
+    response = await client.send_post(text='Hello World from Python!')
+    await client.like(models.create_strong_ref(response))
+
+
 if __name__ == '__main__':
-    # use run() for higher Python version
+    # use run() for a higher Python version
     asyncio.get_event_loop().run_until_complete(main())
 
 ```

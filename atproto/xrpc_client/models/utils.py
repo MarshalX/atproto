@@ -3,15 +3,11 @@ import types
 import typing as t
 
 import typing_extensions as te
-from dacite import exceptions
+from pydantic import ValidationError
 
 from atproto.exceptions import (
-    MissingValueError,
     ModelError,
-    ModelFieldError,
     ModelFieldNotFoundError,
-    UnexpectedFieldError,
-    WrongTypeError,
 )
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models.base import ModelBase
@@ -55,7 +51,7 @@ def get_or_create(
 
     Returns:
         Instance of :obj:`model` or :obj:`None` or
-        :obj:`atproto.xrpc_client.models.base.DotDict` if `strict` is disabled.
+        :obj:`atproto.xrpc_client.models.dot_dict.DotDict` if `strict` is disabled.
     """
     try:
         model_instance = _get_or_create(model_data, model, strict=strict)
@@ -68,23 +64,6 @@ def get_or_create(
             raise e
 
         return DotDict(model_data)
-
-
-def _validate_unexpected_fields(model_data: ModelData, model: t.Type[M]) -> None:
-    model_type = None
-    if isinstance(model_data, dict):
-        # preserve the value of the service field to restore it later in case of fallback
-        model_type = model_data.pop(_TYPE_SERVICE_FIELD, None)
-
-    try:
-        model(**model_data)
-        return
-    except Exception as e:
-        if model_type:
-            # restore service field to include it in the fall backed model (DotDict)
-            model_data[_TYPE_SERVICE_FIELD] = model_type
-
-        raise e
 
 
 def _get_or_create(
@@ -106,17 +85,7 @@ def _get_or_create(
 
     try:
         return model(**model_data)
-    except TypeError as e:
-        # FIXME(MarshalX): "Params missing 1 required positional argument: 'rkey'" should raise another error
-        msg = str(e).replace('__init__()', model.__name__)
-        raise UnexpectedFieldError(msg) from e
-    except exceptions.MissingValueError as e:
-        raise MissingValueError(str(e)) from e
-    except exceptions.WrongTypeError as e:
-        raise WrongTypeError(str(e)) from e
-    except exceptions.DaciteFieldError as e:
-        raise ModelFieldError(str(e)) from e
-    except exceptions.DaciteError as e:
+    except ValidationError as e:
         raise ModelError(str(e)) from e
 
 
@@ -192,5 +161,24 @@ def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[st
     return expected_type == model.py_type
 
 
-def create_strong_ref(response: models.ComAtprotoRepoCreateRecord.Response) -> models.ComAtprotoRepoStrongRef.Main:
-    return models.ComAtprotoRepoStrongRef.Main(cid=response.cid, uri=response.uri)
+def create_strong_ref(model: ModelBase) -> models.ComAtprotoRepoStrongRef.Main:
+    """Create a strong ref from the model.
+
+    Args:
+        model: Any model with `cid` and `uri` fields.
+
+    Example:
+        >>> from atproto import Client
+        >>> client = Client()
+        >>> client.login('my-handle', 'my-password')
+        >>> response = client.send_post(text='Hello World from Python!')
+        >>> client.like(create_strong_ref(response))
+        >>> client.repost(create_strong_ref(response))
+
+    Returns:
+        :obj:`atproto.xrpc_client.models.com.atproto.repo.strong_ref.Main`: Strong ref.
+    """
+    if hasattr(model, 'cid') and hasattr(model, 'uri'):
+        return models.ComAtprotoRepoStrongRef.Main(cid=model.cid, uri=model.uri)
+
+    raise ModelError('Could not create strong ref from model')

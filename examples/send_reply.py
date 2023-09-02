@@ -1,15 +1,14 @@
 from atproto import Client, models
-from atproto.xrpc_client.models.utils import create_strong_ref
 
 
 def main():
     client = Client()
     client.login('my-handle', 'my-password')
 
-    root_post_ref = create_strong_ref(client.send_post('Post from Python SDK'))
+    root_post_ref = models.create_strong_ref(client.send_post('Post from Python SDK'))
 
     # Reply to the root post. We need to pass ReplyRef with root and parent
-    reply_to_root = create_strong_ref(
+    reply_to_root = models.create_strong_ref(
         client.send_post(
             text='Reply to the root post',
             reply_to=models.AppBskyFeedPost.ReplyRef(parent=root_post_ref, root=root_post_ref),
