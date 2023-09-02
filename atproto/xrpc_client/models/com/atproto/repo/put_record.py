@@ -7,6 +7,8 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base, unknown_type
@@ -19,10 +21,10 @@ class Data(base.DataModelBase):
     collection: str  #: The NSID of the record collection.
     record: 'unknown_type.UnknownType'  #: The record to write.
     repo: str  #: The handle or DID of the repo.
-    rkey: str  #: The key of the record.
+    rkey: str = Field(max_length=15)  #: The key of the record.
     swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
     swapRecord: t.Optional[str] = None  #: Compare and swap with the previous record by cid.
-    validateAliasMe: t.Optional[bool] = None  #: Validate the record?
+    validate: t.Optional[bool] = None  #: Validate the record?
 
 
 class Response(base.ResponseModelBase):

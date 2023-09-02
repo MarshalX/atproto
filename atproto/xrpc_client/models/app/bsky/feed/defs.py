@@ -148,7 +148,7 @@ class NotFoundPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    notFound: bool  #: Not found.
+    notFound: bool = Field(frozen=True)  #: Not found.
     uri: str  #: Uri.
 
     py_type: te.Literal['app.bsky.feed.defs#notFoundPost'] = Field(
@@ -161,7 +161,7 @@ class BlockedPost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.
-    blocked: bool  #: Blocked.
+    blocked: bool = Field(frozen=True)  #: Blocked.
     uri: str  #: Uri.
 
     py_type: te.Literal['app.bsky.feed.defs#blockedPost'] = Field(
@@ -192,9 +192,9 @@ class GeneratorView(base.ModelBase):
     indexedAt: str  #: Indexed at.
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
-    description: t.Optional[str] = None  #: Description.
+    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
-    likeCount: t.Optional[int] = None  #: Like count.
+    likeCount: t.Optional[int] = Field(default=None, min_length=0)  #: Like count.
     viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.feed.defs#generatorView'] = Field(

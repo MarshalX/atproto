@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
     collection: str  #: The NSID of the record type.
     repo: str  #: The handle or DID of the repo.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = None  #: The number of records to return.
+    limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: The number of records to return.
     reverse: t.Optional[bool] = None  #: Reverse the order of the returned records?
     rkeyEnd: t.Optional[str] = None  #: DEPRECATED: The highest sort-ordered rkey to stop at (exclusive).
     rkeyStart: t.Optional[str] = None  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).

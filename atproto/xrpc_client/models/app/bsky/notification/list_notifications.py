@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.notification.listNotifications`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = None  #: Limit.
+    limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: Limit.
     seenAt: t.Optional[str] = None  #: Seen at.
 
 

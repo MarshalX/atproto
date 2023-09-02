@@ -77,7 +77,7 @@ class ViewNotFound(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
 
-    notFound: bool  #: Not found.
+    notFound: bool = Field(frozen=True)  #: Not found.
     uri: str  #: Uri.
 
     py_type: te.Literal['app.bsky.embed.record#viewNotFound'] = Field(
@@ -90,7 +90,7 @@ class ViewBlocked(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.
-    blocked: bool  #: Blocked.
+    blocked: bool = Field(frozen=True)  #: Blocked.
     uri: str  #: Uri.
 
     py_type: te.Literal['app.bsky.embed.record#viewBlocked'] = Field(

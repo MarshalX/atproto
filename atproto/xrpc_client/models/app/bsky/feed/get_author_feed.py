@@ -7,6 +7,8 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -19,7 +21,7 @@ class Params(base.ParamsModelBase):
     actor: str  #: Actor.
     cursor: t.Optional[str] = None  #: Cursor.
     filter: t.Optional[str] = None  #: Filter.
-    limit: t.Optional[int] = None  #: Limit.
+    limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: Limit.
 
 
 class Response(base.ResponseModelBase):

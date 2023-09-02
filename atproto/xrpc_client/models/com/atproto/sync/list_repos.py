@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.listRepos`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = None  #: Limit.
+    limit: t.Optional[int] = Field(default=500, min_length=1, max_length=1000)  #: Limit.
 
 
 class Response(base.ResponseModelBase):

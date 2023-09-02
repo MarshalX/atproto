@@ -19,7 +19,7 @@ class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.createInviteCodes`."""
 
-    codeCount: int  #: Code count.
+    codeCount: int = None  #: Code count.
     useCount: int  #: Use count.
     forAccounts: t.Optional[t.List[str]] = None  #: For accounts.
 

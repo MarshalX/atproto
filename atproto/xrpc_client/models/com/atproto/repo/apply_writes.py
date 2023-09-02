@@ -31,7 +31,7 @@ class Data(base.DataModelBase):
         ]
     ]  #: Writes.
     swapCommit: t.Optional[str] = None  #: Swap commit.
-    validateAliasMe: t.Optional[bool] = None  #: Validate the records?
+    validate: t.Optional[bool] = None  #: Validate the records?
 
 
 class Create(base.ModelBase):
@@ -40,7 +40,7 @@ class Create(base.ModelBase):
 
     collection: str  #: Collection.
     value: 'unknown_type.UnknownType'  #: Value.
-    rkey: t.Optional[str] = None  #: Rkey.
+    rkey: t.Optional[str] = Field(default=None, max_length=15)  #: Rkey.
 
     py_type: te.Literal['com.atproto.repo.applyWrites#create'] = Field(
         default='com.atproto.repo.applyWrites#create', alias='$type', frozen=True

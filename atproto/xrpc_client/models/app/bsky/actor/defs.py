@@ -22,7 +22,7 @@ class ProfileViewBasic(base.ModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     avatar: t.Optional[str] = None  #: Avatar.
-    displayName: t.Optional[str] = None  #: Display name.
+    displayName: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
@@ -38,8 +38,8 @@ class ProfileView(base.ModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     avatar: t.Optional[str] = None  #: Avatar.
-    description: t.Optional[str] = None  #: Description.
-    displayName: t.Optional[str] = None  #: Display name.
+    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
+    displayName: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     indexedAt: t.Optional[str] = None  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
@@ -57,8 +57,8 @@ class ProfileViewDetailed(base.ModelBase):
     handle: str  #: Handle.
     avatar: t.Optional[str] = None  #: Avatar.
     banner: t.Optional[str] = None  #: Banner.
-    description: t.Optional[str] = None  #: Description.
-    displayName: t.Optional[str] = None  #: Display name.
+    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
+    displayName: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     followersCount: t.Optional[int] = None  #: Followers count.
     followsCount: t.Optional[int] = None  #: Follows count.
     indexedAt: t.Optional[str] = None  #: Indexed at.
@@ -103,7 +103,7 @@ class AdultContentPref(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    enabled: bool  #: Enabled.
+    enabled: bool = None  #: Enabled.
 
     py_type: te.Literal['app.bsky.actor.defs#adultContentPref'] = Field(
         default='app.bsky.actor.defs#adultContentPref', alias='$type', frozen=True

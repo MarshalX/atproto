@@ -7,6 +7,8 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -20,7 +22,7 @@ class Params(base.ParamsModelBase):
     actionedBy: t.Optional[str] = None  #: Get all reports that were actioned by a specific moderator.
     cursor: t.Optional[str] = None  #: Cursor.
     ignoreSubjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
-    limit: t.Optional[int] = None  #: Limit.
+    limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: Limit.
     reporters: t.Optional[t.List[str]] = None  #: Filter reports made by one or more DIDs.
     resolved: t.Optional[bool] = None  #: Resolved.
     reverse: t.Optional[

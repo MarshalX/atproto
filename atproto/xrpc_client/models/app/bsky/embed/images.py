@@ -20,7 +20,7 @@ class Main(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.images`."""
 
-    images: t.List['models.AppBskyEmbedImages.Image']  #: Images.
+    images: t.List['models.AppBskyEmbedImages.Image'] = Field(max_length=4)  #: Images.
 
     py_type: te.Literal['app.bsky.embed.images'] = Field(default='app.bsky.embed.images', alias='$type', frozen=True)
 
@@ -41,7 +41,7 @@ class View(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.images`."""
 
-    images: t.List['models.AppBskyEmbedImages.ViewImage']  #: Images.
+    images: t.List['models.AppBskyEmbedImages.ViewImage'] = Field(max_length=4)  #: Images.
 
     py_type: te.Literal['app.bsky.embed.images#view'] = Field(
         default='app.bsky.embed.images#view', alias='$type', frozen=True

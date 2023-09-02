@@ -7,6 +7,8 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -17,7 +19,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.admin.getInviteCodes`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = None  #: Limit.
+    limit: t.Optional[int] = Field(default=100, min_length=1, max_length=500)  #: Limit.
     sort: t.Optional[str] = None  #: Sort.
 
 

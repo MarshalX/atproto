@@ -22,8 +22,8 @@ class Main(base.RecordModelBase):
 
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
     banner: t.Optional['BlobRef'] = None  #: Banner.
-    description: t.Optional[str] = None  #: Description.
-    displayName: t.Optional[str] = None  #: Display name.
+    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
+    displayName: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Labels.

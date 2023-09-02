@@ -22,9 +22,9 @@ class Main(base.RecordModelBase):
 
     createdAt: str  #: Created at.
     did: str  #: Did.
-    displayName: str  #: Display name.
+    displayName: str = Field(max_length=240)  #: Display name.
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
-    description: t.Optional[str] = None  #: Description.
+    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]

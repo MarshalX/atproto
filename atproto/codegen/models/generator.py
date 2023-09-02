@@ -101,10 +101,9 @@ _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT = {
 }
 
 
-def _get_optional_typehint(type_hint, *, optional: bool, with_value: bool = True) -> str:
-    value = ' = None' if with_value else ''
+def _get_optional_typehint(type_hint, *, optional: bool) -> str:
     if optional:
-        return f't.Optional[{type_hint}]{value}'
+        return f't.Optional[{type_hint}]'
     return type_hint
 
 
@@ -169,6 +168,89 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
     raise ValueError(f'Unknown field type {field_type.__name__}')
 
 
+def _get_model_field_value(field_type_def, alias_name: t.Optional[str] = None, *, optional: bool) -> str:  # noqa: C901
+    not_set = object()
+
+    default: t.Any = not_set
+    alias: t.Union[str, not_set] = not_set
+    min_length: t.Union[int, not_set] = not_set
+    max_length: t.Union[int, not_set] = not_set
+    frozen: t.Union[bool, not_set] = not_set
+
+    field_type = type(field_type_def)
+
+    if field_type == models.LexInteger:
+        if field_type_def.default is not None:
+            default = field_type_def.default
+        if field_type_def.minimum is not None:
+            min_length = field_type_def.minimum
+        if field_type_def.maximum is not None:
+            max_length = field_type_def.maximum
+        if field_type_def.const is not None:
+            frozen = field_type_def.const
+
+    elif field_type == models.LexString:
+        if field_type_def.default is not None:
+            default = field_type_def.default
+        if field_type_def.const is not None:
+            frozen = field_type_def.const
+        if field_type_def.minLength is not None:
+            min_length = field_type_def.minLength
+        if field_type_def.maxLength is not None:
+            max_length = field_type_def.maxLength
+
+    elif field_type == models.LexBoolean:
+        if field_type_def.default is not None:
+            default = field_type_def.default
+        if field_type_def.const is not None:
+            frozen = field_type_def.const
+
+    elif field_type is models.LexArray:
+        if field_type_def.minLength is not None:
+            min_length = field_type_def.minLength
+        if field_type_def.maxLength is not None:
+            max_length = field_type_def.maxLength
+
+    if default is not_set and optional:
+        default = None
+
+    field_params = {
+        'default': default,
+        'alias': alias,
+        'min_length': min_length,
+        'max_length': max_length,
+        'frozen': frozen,
+    }
+
+    values = []
+    only_default = default is not not_set
+    for name, value in field_params.items():
+        if value is not_set:
+            continue
+
+        if name != 'default':
+            only_default = False
+
+        value_str = f'{name}='
+        if isinstance(value, str):
+            value_str += f"'{value}'"
+        elif isinstance(value, bool):
+            value_str += 'True' if value else 'False'
+        else:
+            value_str += str(value)
+
+        values.append(value_str)
+
+    if only_default:
+        return 'None'
+
+    if not values:
+        return ''
+
+    field_params_str = ', '.join(values)
+    return f'Field({field_params_str})'
+
+
 def _get_req_fields_set(lex_obj: t.Union[models.LexObject, models.LexXrpcParameters]) -> set:
     required_fields = set()
     if lex_obj.required:
@@ -210,13 +292,16 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
     fields = []
     optional_fields = []
 
-    for field_name, field_type in lex_object.properties.items():
+    for field_name, field_type_def in lex_object.properties.items():
         is_optional = field_name not in required_fields
-        type_hint = _get_model_field_typehint(nsid, field_name, field_type, optional=is_optional)
-        description = _get_field_docstring(field_name, field_type)
 
-        # TODO(MarshalX): Add default values. for bool, etc..
-        field_def = f'{_(1)}{field_name}: {type_hint} #: {description}'
+        type_hint = _get_model_field_typehint(nsid, field_name, field_type_def, optional=is_optional)
+        value = _get_model_field_value(field_type_def, field_name, optional=is_optional)
+        description = _get_field_docstring(field_name, field_type_def)
+
+        value_def = f' = {value}' if value else ''
+        field_def = f'{_(1)}{field_name}: {type_hint}{value_def} #: {description}'
+
         if is_optional:
             optional_fields.append(field_def)
         else:

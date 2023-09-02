@@ -20,7 +20,7 @@ class ListViewBasic(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
     cid: str  #: Cid.
-    name: str  #: Name.
+    name: str = Field(min_length=1, max_length=64)  #: Name.
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
@@ -39,11 +39,11 @@ class ListView(base.ModelBase):
     cid: str  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
     indexedAt: str  #: Indexed at.
-    name: str  #: Name.
+    name: str = Field(min_length=1, max_length=64)  #: Name.
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
-    description: t.Optional[str] = None  #: Description.
+    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 

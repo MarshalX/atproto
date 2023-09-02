@@ -22,7 +22,7 @@ class Label(base.ModelBase):
     cts: str  #: timestamp when this label was created.
     src: str  #: DID of the actor who created this label.
     uri: str  #: AT URI of the record, repository (account), or other resource which this label applies to.
-    val: str  #: the short string name of the value or type of this label.
+    val: str = Field(max_length=128)  #: the short string name of the value or type of this label.
     cid: t.Optional[
         str
     ] = None  #: optionally, CID specifying the specific version of 'uri' resource this label applies to.
@@ -37,7 +37,7 @@ class SelfLabels(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tags on an atproto record, published by the author within the record."""
 
-    values: t.List['models.ComAtprotoLabelDefs.SelfLabel']  #: Values.
+    values: t.List['models.ComAtprotoLabelDefs.SelfLabel'] = Field(max_length=10)  #: Values.
 
     py_type: te.Literal['com.atproto.label.defs#selfLabels'] = Field(
         default='com.atproto.label.defs#selfLabels', alias='$type', frozen=True
@@ -48,7 +48,7 @@ class SelfLabel(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto record, published by the author within the record. Note -- schemas should use #selfLabels, not #selfLabel."""
 
-    val: str  #: the short string name of the value or type of this label.
+    val: str = Field(max_length=128)  #: the short string name of the value or type of this label.
 
     py_type: te.Literal['com.atproto.label.defs#selfLabel'] = Field(
         default='com.atproto.label.defs#selfLabel', alias='$type', frozen=True

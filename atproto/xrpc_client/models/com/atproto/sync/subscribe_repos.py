@@ -30,7 +30,7 @@ class Commit(base.ModelBase):
     blobs: t.List['CIDType']  #: Blobs.
     blocks: t.Union[str, bytes]  #: CAR file containing relevant blocks.
     commit: 'CIDType'  #: Commit.
-    ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp']  #: Ops.
+    ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp'] = Field(max_length=200)  #: Ops.
     rebase: bool  #: Rebase.
     repo: str  #: Repo.
     rev: str  #: The rev of the emitted commit.
