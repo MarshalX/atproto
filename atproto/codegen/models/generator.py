@@ -1,6 +1,7 @@
 import os
 import typing as t
 from enum import Enum
+from functools import lru_cache
 from pathlib import Path
 
 from atproto.codegen import (
@@ -291,6 +292,22 @@ def _get_model_docstring(
     return join_code(doc_string)
 
 
+@lru_cache(maxsize=None)
+def _get_pydantic_reserved_names() -> t.Set[str]:
+    from pydantic import BaseModel
+
+    class Model(BaseModel):
+        pass
+
+    instance = Model()
+
+    return {name for name in dir(instance) if not name.startswith('_')}
+
+
+def _is_reserved_pydantic_name(name: str) -> bool:
+    return name in _get_pydantic_reserved_names()
+
+
 def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters]) -> str:
     required_fields = _get_req_fields_set(lex_object)
 
@@ -302,7 +319,14 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
 
         alias_name = None
         snake_cased_field_name = convert_camel_case_to_snake_case(field_name)
+
         if snake_cased_field_name != field_name:
+            # make aliases for fields with camel case names
+            alias_name = field_name
+
+        if _is_reserved_pydantic_name(snake_cased_field_name):
+            # make aliases for fields with reserved names
+            snake_cased_field_name += '_'  # add underscore to the end
             alias_name = field_name
 
         type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional)

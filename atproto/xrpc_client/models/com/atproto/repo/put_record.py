@@ -28,7 +28,7 @@ class Data(base.DataModelBase):
     swap_record: t.Optional[str] = Field(
         default=None, alias='swapRecord'
     )  #: Compare and swap with the previous record by cid.
-    validate: t.Optional[bool] = None  #: Validate the record?
+    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Validate the record?
 
 
 class Response(base.ResponseModelBase):

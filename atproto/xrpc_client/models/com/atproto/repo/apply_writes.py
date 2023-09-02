@@ -31,7 +31,7 @@ class Data(base.DataModelBase):
         ]
     ]  #: Writes.
     swap_commit: t.Optional[str] = Field(default=None, alias='swapCommit')  #: Swap commit.
-    validate: t.Optional[bool] = None  #: Validate the records?
+    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Validate the records?
 
 
 class Create(base.ModelBase):

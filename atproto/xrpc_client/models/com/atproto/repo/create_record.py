@@ -25,7 +25,7 @@ class Data(base.DataModelBase):
     swap_commit: t.Optional[str] = Field(
         default=None, alias='swapCommit'
     )  #: Compare and swap with the previous commit by cid.
-    validate: t.Optional[bool] = None  #: Validate the record?
+    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Validate the record?
 
 
 class Response(base.ResponseModelBase):
