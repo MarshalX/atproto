@@ -30,7 +30,7 @@ class Data(base.DataModelBase):
             Field(discriminator='py_type'),
         ]
     ]  #: Writes.
-    swapCommit: t.Optional[str] = None  #: Swap commit.
+    swap_commit: t.Optional[str] = Field(default=None, alias='swapCommit')  #: Swap commit.
     validate: t.Optional[bool] = None  #: Validate the records?
 
 

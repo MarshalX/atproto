@@ -7,6 +7,8 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base, unknown_type
@@ -25,6 +27,6 @@ class Response(base.ResponseModelBase):
 
     collections: t.List[str]  #: Collections.
     did: str  #: Did.
-    didDoc: 'unknown_type.UnknownType'  #: Did doc.
+    did_doc: 'unknown_type.UnknownType' = Field(alias='didDoc')  #: Did doc.
     handle: str  #: Handle.
-    handleIsCorrect: bool  #: Handle is correct.
+    handle_is_correct: bool = Field(alias='handleIsCorrect')  #: Handle is correct.

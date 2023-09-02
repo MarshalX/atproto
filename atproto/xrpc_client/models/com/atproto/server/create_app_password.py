@@ -26,7 +26,7 @@ class AppPassword(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.server.createAppPassword`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     name: str  #: Name.
     password: str  #: Password.
 

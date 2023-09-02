@@ -18,10 +18,12 @@ class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.admin.getModerationReports`."""
 
-    actionType: t.Optional[str] = None  #: Action type.
-    actionedBy: t.Optional[str] = None  #: Get all reports that were actioned by a specific moderator.
+    action_type: t.Optional[str] = Field(default=None, alias='actionType')  #: Action type.
+    actioned_by: t.Optional[str] = Field(
+        default=None, alias='actionedBy'
+    )  #: Get all reports that were actioned by a specific moderator.
     cursor: t.Optional[str] = None  #: Cursor.
-    ignoreSubjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
+    ignore_subjects: t.Optional[t.List[str]] = Field(default=None, alias='ignoreSubjects')  #: Ignore subjects.
     limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: Limit.
     reporters: t.Optional[t.List[str]] = None  #: Filter reports made by one or more DIDs.
     resolved: t.Optional[bool] = None  #: Resolved.

@@ -24,7 +24,7 @@ class ListViewBasic(base.ModelBase):
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
-    indexedAt: t.Optional[str] = None  #: Indexed at.
+    indexed_at: t.Optional[str] = Field(default=None, alias='indexedAt')  #: Indexed at.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.graph.defs#listViewBasic'] = Field(
@@ -38,13 +38,15 @@ class ListView(base.ModelBase):
 
     cid: str  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
-    indexedAt: str  #: Indexed at.
+    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
     name: str = Field(min_length=1, max_length=64)  #: Name.
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
-    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
+    description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = Field(
+        default=None, alias='descriptionFacets'
+    )  #: Description facets.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.graph.defs#listView'] = Field(

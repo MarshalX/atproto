@@ -119,7 +119,7 @@ class Client(SessionMethodsMixin, ClientRaw):
                 repo=repo,
                 collection=ids.AppBskyFeedPost,
                 record=models.AppBskyFeedPost.Main(
-                    createdAt=datetime.now().isoformat(), text=text, reply=reply_to, embed=embed, langs=langs
+                    created_at=datetime.now().isoformat(), text=text, reply=reply_to, embed=embed, langs=langs
                 ),
             )
         )
@@ -177,7 +177,7 @@ class Client(SessionMethodsMixin, ClientRaw):
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
                 collection=ids.AppBskyFeedLike,
-                record=models.AppBskyFeedLike.Main(createdAt=datetime.now().isoformat(), subject=subject),
+                record=models.AppBskyFeedLike.Main(created_at=datetime.now().isoformat(), subject=subject),
             )
         )
 
@@ -237,7 +237,7 @@ class Client(SessionMethodsMixin, ClientRaw):
                 repo=repo,
                 collection=ids.AppBskyFeedRepost,
                 record=models.AppBskyFeedRepost.Main(
-                    createdAt=datetime.now().isoformat(),
+                    created_at=datetime.now().isoformat(),
                     subject=subject,
                 ),
             )

@@ -36,7 +36,7 @@ class Commit(base.ModelBase):
     rev: str  #: The rev of the emitted commit.
     seq: int  #: Seq.
     time: str  #: Time.
-    tooBig: bool  #: Too big.
+    too_big: bool = Field(alias='tooBig')  #: Too big.
     prev: t.Optional['CIDType'] = None  #: Prev.
     since: t.Optional[str] = None  #: The rev of the last emitted commit from this repo.
 
@@ -66,7 +66,7 @@ class Migrate(base.ModelBase):
     did: str  #: Did.
     seq: int  #: Seq.
     time: str  #: Time.
-    migrateTo: t.Optional[str] = None  #: Migrate to.
+    migrate_to: t.Optional[str] = Field(default=None, alias='migrateTo')  #: Migrate to.
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#migrate'] = Field(
         default='com.atproto.sync.subscribeRepos#migrate', alias='$type', frozen=True

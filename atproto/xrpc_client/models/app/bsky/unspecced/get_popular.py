@@ -19,7 +19,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getPopular`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    includeNsfw: t.Optional[bool] = None  #: Include nsfw.
+    include_nsfw: t.Optional[bool] = Field(default=False, alias='includeNsfw')  #: Include nsfw.
     limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: Limit.
 
 

@@ -17,8 +17,8 @@ def test_feed_record_deserialization():
 
     assert model.value.did == 'did:web:feed.atproto.blue'
     assert model.value['did'] == 'did:web:feed.atproto.blue'
-    assert model.value.createdAt == '2023-07-20T10:17:40.298101'
-    assert model.value['createdAt'] == '2023-07-20T10:17:40.298101'
+    assert model.value.created_at == '2023-07-20T10:17:40.298101'
+    assert model.value['created_at'] == '2023-07-20T10:17:40.298101'
 
 
 def test_feed_record_serialization():
@@ -34,8 +34,8 @@ def test_feed_record_serialization():
     assert restored_model.value['py_type'] == models.ids.AppBskyFeedGenerator
     assert restored_model.value.did == 'did:web:feed.atproto.blue'
     assert restored_model.value['did'] == 'did:web:feed.atproto.blue'
-    assert restored_model.value.createdAt == '2023-07-20T10:17:40.298101'
-    assert restored_model.value['createdAt'] == '2023-07-20T10:17:40.298101'
+    assert restored_model.value.created_at == '2023-07-20T10:17:40.298101'
+    assert restored_model.value['created_at'] == '2023-07-20T10:17:40.298101'
 
     assert model_dict['value']['did'] == 'did:web:feed.atproto.blue'
     assert model_dict['value']['createdAt'] == '2023-07-20T10:17:40.298101'

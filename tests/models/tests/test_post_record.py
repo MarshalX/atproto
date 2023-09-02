@@ -25,10 +25,10 @@ def test_post_record_deserialization():
     assert model.value['langs'] == expected_langs
     assert model['value']['langs'] == expected_langs
     assert model['value'].langs == expected_langs
-    assert model.value.createdAt == expected_created_at
-    assert model.value['createdAt'] == expected_created_at
-    assert model['value']['createdAt'] == expected_created_at
-    assert model['value'].createdAt == expected_created_at
+    assert model.value.created_at == expected_created_at
+    assert model.value['created_at'] == expected_created_at
+    assert model['value']['created_at'] == expected_created_at
+    assert model['value'].created_at == expected_created_at
 
 
 def test_post_record_serialization():
@@ -50,8 +50,8 @@ def test_post_record_serialization():
     assert restored_model.value['text'] == expected_text
     assert restored_model.value.langs == expected_langs
     assert restored_model.value['langs'] == expected_langs
-    assert restored_model.value.createdAt == expected_created_at
-    assert restored_model.value['createdAt'] == expected_created_at
+    assert restored_model.value.created_at == expected_created_at
+    assert restored_model.value['created_at'] == expected_created_at
 
     assert model_dict['value']['$type'] == models.ids.AppBskyFeedPost
     assert model_dict['value']['text'] == expected_text

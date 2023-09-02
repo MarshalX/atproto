@@ -19,7 +19,7 @@ class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.moderation.createReport`."""
 
-    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
+    reason_type: 'models.ComAtprotoModerationDefs.ReasonType' = Field(alias='reasonType')  #: Reason type.
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
@@ -31,10 +31,10 @@ class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.moderation.createReport`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     id: int  #: Id.
-    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
-    reportedBy: str  #: Reported by.
+    reason_type: 'models.ComAtprotoModerationDefs.ReasonType' = Field(alias='reasonType')  #: Reason type.
+    reported_by: str = Field(alias='reportedBy')  #: Reported by.
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),

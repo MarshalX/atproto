@@ -19,9 +19,9 @@ class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.createInviteCodes`."""
 
-    codeCount: int = None  #: Code count.
-    useCount: int  #: Use count.
-    forAccounts: t.Optional[t.List[str]] = None  #: For accounts.
+    code_count: int = Field(default=1, alias='codeCount')  #: Code count.
+    use_count: int = Field(alias='useCount')  #: Use count.
+    for_accounts: t.Optional[t.List[str]] = Field(default=None, alias='forAccounts')  #: For accounts.
 
 
 class Response(base.ResponseModelBase):

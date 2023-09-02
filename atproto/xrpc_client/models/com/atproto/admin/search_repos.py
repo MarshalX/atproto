@@ -19,7 +19,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.admin.searchRepos`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    invitedBy: t.Optional[str] = None  #: Invited by.
+    invited_by: t.Optional[str] = Field(default=None, alias='invitedBy')  #: Invited by.
     limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: Limit.
     term: t.Optional[str] = None  #: Term.
 

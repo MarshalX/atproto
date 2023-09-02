@@ -19,7 +19,7 @@ class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.graph.block`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     subject: str  #: Subject.
 
     py_type: te.Literal['app.bsky.graph.block'] = Field(default='app.bsky.graph.block', alias='$type', frozen=True)

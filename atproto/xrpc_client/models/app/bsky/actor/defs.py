@@ -22,7 +22,7 @@ class ProfileViewBasic(base.ModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     avatar: t.Optional[str] = None  #: Avatar.
-    displayName: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
+    display_name: t.Optional[str] = Field(default=None, alias='displayName', max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
@@ -39,8 +39,8 @@ class ProfileView(base.ModelBase):
     handle: str  #: Handle.
     avatar: t.Optional[str] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
-    displayName: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
-    indexedAt: t.Optional[str] = None  #: Indexed at.
+    display_name: t.Optional[str] = Field(default=None, alias='displayName', max_length=640)  #: Display name.
+    indexed_at: t.Optional[str] = Field(default=None, alias='indexedAt')  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
@@ -58,12 +58,12 @@ class ProfileViewDetailed(base.ModelBase):
     avatar: t.Optional[str] = None  #: Avatar.
     banner: t.Optional[str] = None  #: Banner.
     description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
-    displayName: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
-    followersCount: t.Optional[int] = None  #: Followers count.
-    followsCount: t.Optional[int] = None  #: Follows count.
-    indexedAt: t.Optional[str] = None  #: Indexed at.
+    display_name: t.Optional[str] = Field(default=None, alias='displayName', max_length=640)  #: Display name.
+    followers_count: t.Optional[int] = Field(default=None, alias='followersCount')  #: Followers count.
+    follows_count: t.Optional[int] = Field(default=None, alias='followsCount')  #: Follows count.
+    indexed_at: t.Optional[str] = Field(default=None, alias='indexedAt')  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    postsCount: t.Optional[int] = None  #: Posts count.
+    posts_count: t.Optional[int] = Field(default=None, alias='postsCount')  #: Posts count.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.actor.defs#profileViewDetailed'] = Field(
@@ -75,12 +75,14 @@ class ViewerState(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    blockedBy: t.Optional[bool] = None  #: Blocked by.
+    blocked_by: t.Optional[bool] = Field(default=None, alias='blockedBy')  #: Blocked by.
     blocking: t.Optional[str] = None  #: Blocking.
-    followedBy: t.Optional[str] = None  #: Followed by.
+    followed_by: t.Optional[str] = Field(default=None, alias='followedBy')  #: Followed by.
     following: t.Optional[str] = None  #: Following.
     muted: t.Optional[bool] = None  #: Muted.
-    mutedByList: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Muted by list.
+    muted_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = Field(
+        default=None, alias='mutedByList'
+    )  #: Muted by list.
 
     py_type: te.Literal['app.bsky.actor.defs#viewerState'] = Field(
         default='app.bsky.actor.defs#viewerState', alias='$type', frozen=True

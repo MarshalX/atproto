@@ -19,7 +19,7 @@ class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.feed.repost`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     subject: 'models.ComAtprotoRepoStrongRef.Main'  #: Subject.
 
     py_type: te.Literal['app.bsky.feed.repost'] = Field(default='app.bsky.feed.repost', alias='$type', frozen=True)

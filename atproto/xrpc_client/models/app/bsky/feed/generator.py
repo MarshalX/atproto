@@ -20,12 +20,14 @@ class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.feed.generator`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     did: str  #: Did.
-    displayName: str = Field(max_length=240)  #: Display name.
+    display_name: str = Field(alias='displayName', max_length=240)  #: Display name.
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
-    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
+    description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = Field(
+        default=None, alias='descriptionFacets'
+    )  #: Description facets.
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Labels.

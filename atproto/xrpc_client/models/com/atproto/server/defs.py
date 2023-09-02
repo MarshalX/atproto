@@ -21,10 +21,10 @@ class InviteCode(base.ModelBase):
 
     available: int  #: Available.
     code: str  #: Code.
-    createdAt: str  #: Created at.
-    createdBy: str  #: Created by.
+    created_at: str = Field(alias='createdAt')  #: Created at.
+    created_by: str = Field(alias='createdBy')  #: Created by.
     disabled: bool  #: Disabled.
-    forAccount: str  #: For account.
+    for_account: str = Field(alias='forAccount')  #: For account.
     uses: t.List['models.ComAtprotoServerDefs.InviteCodeUse']  #: Uses.
 
     py_type: te.Literal['com.atproto.server.defs#inviteCode'] = Field(
@@ -36,8 +36,8 @@ class InviteCodeUse(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.server.defs`."""
 
-    usedAt: str  #: Used at.
-    usedBy: str  #: Used by.
+    used_at: str = Field(alias='usedAt')  #: Used at.
+    used_by: str = Field(alias='usedBy')  #: Used by.
 
     py_type: te.Literal['com.atproto.server.defs#inviteCodeUse'] = Field(
         default='com.atproto.server.defs#inviteCodeUse', alias='$type', frozen=True

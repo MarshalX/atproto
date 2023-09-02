@@ -7,6 +7,8 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -16,4 +18,4 @@ class Data(base.DataModelBase):
 
     """Input data model for :obj:`app.bsky.notification.updateSeen`."""
 
-    seenAt: str  #: Seen at.
+    seen_at: str = Field(alias='seenAt')  #: Seen at.

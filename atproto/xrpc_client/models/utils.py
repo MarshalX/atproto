@@ -13,6 +13,7 @@ from atproto.exceptions import (
     UnexpectedFieldError,
     WrongTypeError,
 )
+from atproto.xrpc_client import models
 from atproto.xrpc_client.models.base import ModelBase
 from atproto.xrpc_client.models.blob_ref import BlobRef
 from atproto.xrpc_client.models.dot_dict import DotDict
@@ -189,3 +190,7 @@ def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[st
             return False
 
     return expected_type == model.py_type
+
+
+def create_strong_ref(response: models.ComAtprotoRepoCreateRecord.Response) -> models.ComAtprotoRepoStrongRef.Main:
+    return models.ComAtprotoRepoStrongRef.Main(cid=response.cid, uri=response.uri)

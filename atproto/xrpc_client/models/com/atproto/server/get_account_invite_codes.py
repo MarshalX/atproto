@@ -7,6 +7,8 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -16,8 +18,8 @@ class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.server.getAccountInviteCodes`."""
 
-    createAvailable: t.Optional[bool] = None  #: Create available.
-    includeUsed: t.Optional[bool] = None  #: Include used.
+    create_available: t.Optional[bool] = Field(default=True, alias='createAvailable')  #: Create available.
+    include_used: t.Optional[bool] = Field(default=True, alias='includeUsed')  #: Include used.
 
 
 class Response(base.ResponseModelBase):

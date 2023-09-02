@@ -20,15 +20,15 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.takeModerationAction`."""
 
     action: str  #: Action.
-    createdBy: str  #: Created by.
+    created_by: str = Field(alias='createdBy')  #: Created by.
     reason: str  #: Reason.
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    createLabelVals: t.Optional[t.List[str]] = None  #: Create label vals.
-    durationInHours: t.Optional[
-        int
-    ] = None  #: Indicates how long this action was meant to be in effect before automatically expiring.
-    negateLabelVals: t.Optional[t.List[str]] = None  #: Negate label vals.
-    subjectBlobCids: t.Optional[t.List[str]] = None  #: Subject blob cids.
+    create_label_vals: t.Optional[t.List[str]] = Field(default=None, alias='createLabelVals')  #: Create label vals.
+    duration_in_hours: t.Optional[int] = Field(
+        default=None, alias='durationInHours'
+    )  #: Indicates how long this action was meant to be in effect before automatically expiring.
+    negate_label_vals: t.Optional[t.List[str]] = Field(default=None, alias='negateLabelVals')  #: Negate label vals.
+    subject_blob_cids: t.Optional[t.List[str]] = Field(default=None, alias='subjectBlobCids')  #: Subject blob cids.

@@ -22,7 +22,9 @@ class Data(base.DataModelBase):
     record: 'unknown_type.UnknownType'  #: The record to create.
     repo: str  #: The handle or DID of the repo.
     rkey: t.Optional[str] = Field(default=None, max_length=15)  #: The key of the record.
-    swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
+    swap_commit: t.Optional[str] = Field(
+        default=None, alias='swapCommit'
+    )  #: Compare and swap with the previous commit by cid.
     validate: t.Optional[bool] = None  #: Validate the record?
 
 

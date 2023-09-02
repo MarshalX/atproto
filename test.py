@@ -47,8 +47,6 @@ def sync_main():
     print(type(followers))
     print(followers)
 
-    exit(0)
-
     post = client.com.atproto.repo.get_record(
         {'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yihcrp6f2c'}
     )
@@ -76,8 +74,6 @@ def sync_main():
     print(extended_record.value.lol)  # custom (out of lexicon) attribute
     print(type(extended_record.value))
 
-    exit(0)
-
     # client.com.atproto.admin.get_moderation_actions()
 
     # repo = client.com.atproto.sync.get_repo({'did': client.me.did})
@@ -87,10 +83,9 @@ def sync_main():
     print(car_file.root)
     print(car_file.blocks)
 
-    search_result = client.app.bsky.actor.search_actors_typeahead()
-    # search_result = client.app.bsky.actor.search_actors_typeahead({'term': 'marshal'})
+    search_result = client.app.bsky.actor.search_actors_typeahead({'term': 'marshal'})
     for actor in search_result.actors:
-        print(actor.handle, actor.displayName)
+        print(actor.handle, actor.display_name)
 
     # client.com.atproto.repo.get_record({'collection': 'app.bsky.feed.post', 'repo': 'arta.bsky.social'})
 
@@ -102,23 +97,6 @@ def sync_main():
             print('Status code:', e.response.status_code)
             print('Error code:', e.response.content.error)
             print('Error message:', e.response.content.message)
-    #
-    # resolve = client.com.atproto.identity.resolve_handle(models.ComAtprotoIdentityResolveHandle.Params(profile.handle))
-    # assert resolve.did == profile.did
-
-    # print(client.com.atproto.server.describe_server())
-
-    # post_ref = client.send_post('Test like-unlike')
-    # print('post ref', post_ref)
-    # like_ref = client.like(post_ref)
-    # print('like ref', like_ref)
-    # like_rkey = AtUri.from_str(like_ref.uri).rkey
-    # print('like rkey', like_rkey)
-    # print(client.unlike(like_rkey))
-
-    # reply = client.send_post('reply to root test', reply_to=models.AppBskyFeedPost.ReplyRef(created_post, created_post))
-    # reply_to_reply = client.send_post('reply to reply test', reply_to=models.ReplyRef(reply, created_post))
-    # reply = client.send_post('reply to root test 2', reply_to=models.ReplyRef(created_post, created_post))
 
 
 async def main():

@@ -10,6 +10,7 @@ from atproto.codegen import (
     PARAMS_MODEL,
     _resolve_nsid_ref,
     append_code,
+    convert_camel_case_to_snake_case,
     format_code,
     gen_description_by_camel_case_name,
     get_def_model_name,
@@ -133,7 +134,7 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     return _get_optional_typehint(annotated_union, optional=optional)
 
 
-def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, optional: bool) -> str:
+def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
@@ -145,7 +146,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
         return _get_optional_typehint(type_hint, optional=optional)
 
     if field_type is models.LexArray:
-        items_type_hint = _get_model_field_typehint(nsid, field_name, field_type_def.items, optional=False)
+        items_type_hint = _get_model_field_typehint(nsid, field_type_def.items, optional=False)
         return _get_optional_typehint(f't.List[{items_type_hint}]', optional=optional)
 
     if field_type is models.LexRef:
@@ -172,7 +173,7 @@ def _get_model_field_value(field_type_def, alias_name: t.Optional[str] = None, *
     not_set = object()
 
     default: t.Any = not_set
-    alias: t.Union[str, not_set] = not_set
+    alias: t.Union[str, not_set] = alias_name or not_set
     min_length: t.Union[int, not_set] = not_set
     max_length: t.Union[int, not_set] = not_set
     frozen: t.Union[bool, not_set] = not_set
@@ -295,12 +296,17 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
     for field_name, field_type_def in lex_object.properties.items():
         is_optional = field_name not in required_fields
 
-        type_hint = _get_model_field_typehint(nsid, field_name, field_type_def, optional=is_optional)
-        value = _get_model_field_value(field_type_def, field_name, optional=is_optional)
+        alias_name = None
+        snake_cased_field_name = convert_camel_case_to_snake_case(field_name)
+        if snake_cased_field_name != field_name:
+            alias_name = field_name
+
+        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional)
+        value = _get_model_field_value(field_type_def, alias_name, optional=is_optional)
         description = _get_field_docstring(field_name, field_type_def)
 
         value_def = f' = {value}' if value else ''
-        field_def = f'{_(1)}{field_name}: {type_hint}{value_def} #: {description}'
+        field_def = f'{_(1)}{snake_cased_field_name}: {type_hint}{value_def} #: {description}'
 
         if is_optional:
             optional_fields.append(field_def)
@@ -391,7 +397,7 @@ def _generate_def_token(nsid: NSID, def_name: str, def_model: models.LexToken) -
 
 
 def _generate_def_array(nsid: NSID, def_name: str, def_model: models.LexArray) -> str:
-    return f'{get_def_model_name(def_name)} = {_get_model_field_typehint(nsid, def_name, def_model, optional=False)}\n'
+    return f'{get_def_model_name(def_name)} = {_get_model_field_typehint(nsid, def_model, optional=False)}\n'
 
 
 def _generate_def_string(nsid: NSID, def_name: str, def_model: models.LexString) -> str:

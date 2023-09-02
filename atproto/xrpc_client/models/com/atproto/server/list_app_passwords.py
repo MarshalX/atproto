@@ -26,7 +26,7 @@ class AppPassword(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.server.listAppPasswords`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     name: str  #: Name.
 
     py_type: te.Literal['com.atproto.server.listAppPasswords#appPassword'] = Field(

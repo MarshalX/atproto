@@ -11,7 +11,7 @@ def _find_muted_follow(
     model: models.AppBskyGraphGetFollows.Response,
 ) -> t.Optional[models.AppBskyActorDefs.ProfileView]:
     for follow in model.follows:
-        if follow.viewer.mutedByList:
+        if follow.viewer.muted_by_list:
             return follow
 
     return None
@@ -32,7 +32,7 @@ def test_get_follows_deserialization():
     muted_by_list_follow = _find_muted_follow(model)
     assert muted_by_list_follow is not None
     assert isinstance(muted_by_list_follow, models.AppBskyActorDefs.ProfileView)
-    assert muted_by_list_follow.viewer.mutedByList.purpose == expected_purpose
+    assert muted_by_list_follow.viewer.muted_by_list.purpose == expected_purpose
     assert muted_by_list_follow.viewer.muted is True
 
 
@@ -55,5 +55,5 @@ def test_get_follows_serialization():
     restored_muted_by_list_follow = _find_muted_follow(restored_model)
     assert restored_muted_by_list_follow is not None
     assert isinstance(restored_muted_by_list_follow, models.AppBskyActorDefs.ProfileView)
-    assert restored_muted_by_list_follow.viewer.mutedByList.purpose == expected_purpose
+    assert restored_muted_by_list_follow.viewer.muted_by_list.purpose == expected_purpose
     assert restored_muted_by_list_follow.viewer.muted is True

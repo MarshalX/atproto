@@ -19,7 +19,7 @@ class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.graph.listitem`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     list: str  #: List.
     subject: str  #: Subject.
 

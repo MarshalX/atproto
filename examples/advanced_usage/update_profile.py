@@ -24,7 +24,7 @@ def main():
     old_description = old_display_name = None
     if current_profile:
         old_description = current_profile.description
-        old_display_name = current_profile.displayName
+        old_display_name = current_profile.display_name
 
     # set new values to update
     new_description = None
@@ -35,12 +35,12 @@ def main():
             collection=models.ids.AppBskyActorProfile,
             repo=client.me.did,
             rkey='self',
-            swapRecord=swap_record_cid,
+            swap_record=swap_record_cid,
             record=models.AppBskyActorProfile.Main(
                 avatar=current_profile.avatar,  # keep old avatar. to set a new one, you should upload blob first
                 banner=current_profile.banner,  # keep old banner. to set a new one, you should upload blob first
                 description=new_description or old_description,
-                displayName=new_display_name or old_display_name,
+                display_name=new_display_name or old_display_name,
             ),
         )
     )

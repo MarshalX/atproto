@@ -21,7 +21,7 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: Limit.
-    seenAt: t.Optional[str] = None  #: Seen at.
+    seen_at: t.Optional[str] = Field(default=None, alias='seenAt')  #: Seen at.
 
 
 class Response(base.ResponseModelBase):
@@ -38,13 +38,13 @@ class Notification(base.ModelBase):
 
     author: 'models.AppBskyActorDefs.ProfileView'  #: Author.
     cid: str  #: Cid.
-    indexedAt: str  #: Indexed at.
-    isRead: bool  #: Is read.
+    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
+    is_read: bool = Field(alias='isRead')  #: Is read.
     reason: str  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', and 'quote'.
     record: 'unknown_type.UnknownType'  #: Record.
     uri: str  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    reasonSubject: t.Optional[str] = None  #: Reason subject.
+    reason_subject: t.Optional[str] = Field(default=None, alias='reasonSubject')  #: Reason subject.
 
     py_type: te.Literal['app.bsky.notification.listNotifications#notification'] = Field(
         default='app.bsky.notification.listNotifications#notification', alias='$type', frozen=True

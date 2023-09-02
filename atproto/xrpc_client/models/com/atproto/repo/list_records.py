@@ -24,8 +24,12 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, min_length=1, max_length=100)  #: The number of records to return.
     reverse: t.Optional[bool] = None  #: Reverse the order of the returned records?
-    rkeyEnd: t.Optional[str] = None  #: DEPRECATED: The highest sort-ordered rkey to stop at (exclusive).
-    rkeyStart: t.Optional[str] = None  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).
+    rkey_end: t.Optional[str] = Field(
+        default=None, alias='rkeyEnd'
+    )  #: DEPRECATED: The highest sort-ordered rkey to stop at (exclusive).
+    rkey_start: t.Optional[str] = Field(
+        default=None, alias='rkeyStart'
+    )  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).
 
 
 class Response(base.ResponseModelBase):

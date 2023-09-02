@@ -21,7 +21,9 @@ class Params(base.ParamsModelBase):
 
     uri: str  #: Uri.
     depth: t.Optional[int] = Field(default=6, min_length=0, max_length=1000)  #: Depth.
-    parentHeight: t.Optional[int] = Field(default=80, min_length=0, max_length=1000)  #: Parent height.
+    parent_height: t.Optional[int] = Field(
+        default=80, alias='parentHeight', min_length=0, max_length=1000
+    )  #: Parent height.
 
 
 class Response(base.ResponseModelBase):

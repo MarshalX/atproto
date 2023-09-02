@@ -25,10 +25,10 @@ def test_like_record_deserialization():
     assert model.value.subject['uri'] == expected_uri
     assert model['value']['subject']['uri'] == expected_uri
     assert model['value'].subject.uri == expected_uri
-    assert model.value.createdAt == expected_created_at
-    assert model.value['createdAt'] == expected_created_at
-    assert model['value']['createdAt'] == expected_created_at
-    assert model['value'].createdAt == expected_created_at
+    assert model.value.created_at == expected_created_at
+    assert model.value['created_at'] == expected_created_at
+    assert model['value']['created_at'] == expected_created_at
+    assert model['value'].created_at == expected_created_at
 
 
 def test_like_record_serialization():
@@ -52,8 +52,8 @@ def test_like_record_serialization():
     assert restored_model.value.subject.cid == expected_cid
     assert restored_model.value.subject['cid'] == expected_cid
     assert restored_model.value['subject']['cid'] == expected_cid
-    assert restored_model.value.createdAt == expected_created_at
-    assert restored_model.value['createdAt'] == expected_created_at
+    assert restored_model.value.created_at == expected_created_at
+    assert restored_model.value['created_at'] == expected_created_at
 
     assert model_dict['value']['$type'] == models.ids.AppBskyFeedLike
     assert model_dict['value']['subject']['uri'] == expected_uri

@@ -15,8 +15,8 @@ def test_did_doc_deserialization():
     service = [{'id': '#atproto_pds', 'type': 'AtprotoPersonalDataServer', 'serviceEndpoint': 'https://bsky.social'}]
     verification_method_id = '#atproto'
 
-    assert isinstance(model.didDoc, DotDict)
-    assert model.didDoc['@context'] == context
-    assert model.didDoc['service'] == service
-    assert model.didDoc.service == service
-    assert model.didDoc.verificationMethod[0].id == verification_method_id
+    assert isinstance(model.did_doc, DotDict)
+    assert model.did_doc['@context'] == context
+    assert model.did_doc['service'] == service
+    assert model.did_doc.service == service
+    assert model.did_doc.verificationMethod[0].id == verification_method_id

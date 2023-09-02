@@ -7,6 +7,8 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -16,6 +18,6 @@ class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.admin.reverseModerationAction`."""
 
-    createdBy: str  #: Created by.
+    created_by: str = Field(alias='createdBy')  #: Created by.
     id: int  #: Id.
     reason: str  #: Reason.

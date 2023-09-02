@@ -7,6 +7,8 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -23,6 +25,6 @@ class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.feed.getFeedGenerator`."""
 
-    isOnline: bool  #: Is online.
-    isValid: bool  #: Is valid.
+    is_online: bool = Field(alias='isOnline')  #: Is online.
+    is_valid: bool = Field(alias='isValid')  #: Is valid.
     view: 'models.AppBskyFeedDefs.GeneratorView'  #: View.

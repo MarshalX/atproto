@@ -7,6 +7,8 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -17,7 +19,7 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.sendEmail`."""
 
     content: str  #: Content.
-    recipientDid: str  #: Recipient did.
+    recipient_did: str = Field(alias='recipientDid')  #: Recipient did.
     subject: t.Optional[str] = None  #: Subject.
 
 
