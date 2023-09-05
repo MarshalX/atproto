@@ -1,6 +1,7 @@
 import typing as t
 from io import BytesIO
 
+import libipld
 from atproto import cbor, leb128
 from atproto.cid import CID
 from atproto.exceptions import InvalidCARFile
@@ -50,6 +51,10 @@ class CAR:
         Returns:
             :obj:`atproto.CAR`: Parsed CAR file.
         """
+        blocks = libipld.decode_car(data)
+        root_is_not_implemented_yet = CID.decode('zb2rhe5P4gXftAwvA4eXQ5HJwsER2owDyS9sKaQRRVQPn93bA')
+        return cls(root=root_is_not_implemented_yet, blocks=blocks)
+
         stream = BytesIO(data)
 
         header_len, _ = leb128.u.decode_reader(stream)
