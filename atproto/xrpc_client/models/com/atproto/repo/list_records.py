@@ -12,7 +12,8 @@ from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base, unknown_type
+    from atproto.xrpc_client.models.unknown_type import UnknownType
+from atproto.xrpc_client.models import base
 
 
 class Params(base.ParamsModelBase):
@@ -46,7 +47,7 @@ class Record(base.ModelBase):
 
     cid: str  #: Cid.
     uri: str  #: Uri.
-    value: 'unknown_type.UnknownType'  #: Value.
+    value: 'UnknownType'  #: Value.
 
     py_type: te.Literal['com.atproto.repo.listRecords#record'] = Field(
         default='com.atproto.repo.listRecords#record', alias='$type', frozen=True

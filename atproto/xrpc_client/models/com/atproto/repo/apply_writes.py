@@ -12,7 +12,8 @@ from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base, unknown_type
+    from atproto.xrpc_client.models.unknown_type import UnknownType
+from atproto.xrpc_client.models import base
 
 
 class Data(base.DataModelBase):
@@ -39,7 +40,7 @@ class Create(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record."""
 
     collection: str  #: Collection.
-    value: 'unknown_type.UnknownType'  #: Value.
+    value: 'UnknownType'  #: Value.
     rkey: t.Optional[str] = Field(default=None, max_length=15)  #: Rkey.
 
     py_type: te.Literal['com.atproto.repo.applyWrites#create'] = Field(
@@ -53,7 +54,7 @@ class Update(base.ModelBase):
 
     collection: str  #: Collection.
     rkey: str  #: Rkey.
-    value: 'unknown_type.UnknownType'  #: Value.
+    value: 'UnknownType'  #: Value.
 
     py_type: te.Literal['com.atproto.repo.applyWrites#update'] = Field(
         default='com.atproto.repo.applyWrites#update', alias='$type', frozen=True

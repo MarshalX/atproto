@@ -8,8 +8,8 @@
 import typing as t
 
 if t.TYPE_CHECKING:
-    pass
-from atproto.xrpc_client.models import base, unknown_type
+    from atproto.xrpc_client.models.unknown_type import UnknownType
+from atproto.xrpc_client.models import base
 
 
 class Params(base.ParamsModelBase):
@@ -29,5 +29,5 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.repo.getRecord`."""
 
     uri: str  #: Uri.
-    value: 'unknown_type.UnknownType'  #: Value.
+    value: 'UnknownType'  #: Value.
     cid: t.Optional[str] = None  #: Cid.

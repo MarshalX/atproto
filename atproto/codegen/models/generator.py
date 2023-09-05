@@ -56,10 +56,10 @@ def _get_model_imports() -> str:
         '',
         'if t.TYPE_CHECKING:',
         f'{_(1)}from atproto.xrpc_client import models',
+        f'{_(1)}from atproto.xrpc_client.models.unknown_type import UnknownType',
         f'{_(1)}from atproto.xrpc_client.models.blob_ref import BlobRef',
         f'{_(1)}from atproto import CIDType',
         'from atproto.xrpc_client.models import base',
-        'from atproto.xrpc_client.models import unknown_type',
         '',
         '',
     ]
@@ -140,7 +140,7 @@ def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool) -> 
 
     if field_type == models.LexUnknown:
         # unknown type is a generic response with records or any not described type in the lexicon. for example, didDoc
-        return _get_optional_typehint("'unknown_type.UnknownType'", optional=optional)
+        return _get_optional_typehint("'UnknownType'", optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
     if type_hint:

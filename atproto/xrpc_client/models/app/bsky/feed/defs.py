@@ -12,7 +12,8 @@ from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base, unknown_type
+    from atproto.xrpc_client.models.unknown_type import UnknownType
+from atproto.xrpc_client.models import base
 
 
 class PostView(base.ModelBase):
@@ -22,7 +23,7 @@ class PostView(base.ModelBase):
     author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
     cid: str  #: Cid.
     indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
-    record: 'unknown_type.UnknownType'  #: Record.
+    record: 'UnknownType'  #: Record.
     uri: str  #: Uri.
     embed: t.Optional[
         te.Annotated[
