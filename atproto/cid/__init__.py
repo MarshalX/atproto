@@ -1,12 +1,52 @@
 import typing as t
+from dataclasses import dataclass
 
+import libipld
 import typing_extensions as te
-from multiformats import CID as _CID
 from pydantic import GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 
-CID = _CID
+
+@dataclass
+class Multihash:
+    code: int
+    size: int
+    digest: bytes
+
+
+@dataclass
+class CID:
+    _cid: str
+    version: int
+    codec: int
+    hash: Multihash
+
+    @classmethod
+    def decode(cls, value: str) -> 'CID':
+        cid = libipld.decode_cid(value)
+
+        multihash = Multihash(
+            code=cid['hash']['code'],
+            size=cid['hash']['size'],
+            digest=cid['hash']['digest'],
+        )
+
+        return cls(
+            _cid=value,
+            version=cid['version'],
+            codec=cid['codec'],
+            hash=multihash,
+        )
+
+    def encode(self) -> str:
+        return self._cid
+
+    def __str__(self) -> str:
+        return self.encode()
+
+    def __hash__(self):
+        return hash(self.encode())
 
 
 class _CIDPydanticAnnotation:

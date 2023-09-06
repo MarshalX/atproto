@@ -27,7 +27,7 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict
 
             create_info = {'uri': str(uri), 'cid': str(op.cid), 'author': commit.repo}
 
-            record_raw_data = car.blocks.get(str(op.cid))
+            record_raw_data = car.blocks.get(op.cid)
             if not record_raw_data:
                 continue
 

@@ -1,8 +1,8 @@
 from io import BytesIO
 from typing import Dict, List, Union
 
-import libipld
 import dag_cbor as _dag_cbor
+import libipld
 from dag_cbor.decoding import CBORDecodingError as _CBORDecodingError
 
 from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError
@@ -31,7 +31,7 @@ def decode_dag(data: DagCborData, *, allow_concat: bool = False, callback=None) 
     Returns:
         :obj:`dag_cbor.IPLDKind`: Decoded DAG-CBOR.
     """
-    return libipld.decode_dag(data)
+    return libipld.decode_dag_cbor(data)
 
     try:
         decoded_data = _dag_cbor.decode(data, allow_concat=allow_concat, callback=callback)
@@ -53,7 +53,7 @@ def decode_dag_multi(data: DagCborData) -> List[Dict[str, _dag_cbor.IPLDKind]]:
     Returns:
         :obj:`list` of :obj:`dag_cbor.IPLDKind`: Decoded DAG-CBOR.
     """
-    return libipld.decode_dag_multi(data)
+    return libipld.decode_dag_cbor_multi(data)
 
     if not isinstance(data, BytesIO):
         data = BytesIO(data)

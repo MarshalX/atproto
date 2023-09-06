@@ -18,7 +18,6 @@ Subpackages
    atproto.cli
    atproto.codegen
    atproto.firehose
-   atproto.leb128
    atproto.lexicon
    atproto.nsid
    atproto.uri
