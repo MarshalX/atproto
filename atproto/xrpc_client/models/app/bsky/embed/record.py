@@ -12,7 +12,8 @@ from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base, unknown_type
+    from atproto.xrpc_client.models.unknown_type import UnknownType
+from atproto.xrpc_client.models import base
 
 
 class Main(base.ModelBase):
@@ -52,7 +53,7 @@ class ViewRecord(base.ModelBase):
     cid: str  #: Cid.
     indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
     uri: str  #: Uri.
-    value: 'unknown_type.UnknownType'  #: Value.
+    value: 'UnknownType'  #: Value.
     embeds: t.Optional[
         t.List[
             te.Annotated[

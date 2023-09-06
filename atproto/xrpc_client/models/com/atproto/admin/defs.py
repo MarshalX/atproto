@@ -12,7 +12,8 @@ from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base, unknown_type
+    from atproto.xrpc_client.models.unknown_type import UnknownType
+from atproto.xrpc_client.models import base
 
 
 class ActionView(base.ModelBase):
@@ -184,7 +185,7 @@ class RepoView(base.ModelBase):
     handle: str  #: Handle.
     indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
     moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
-    related_records: t.List['unknown_type.UnknownType'] = Field(alias='relatedRecords')  #: Related records.
+    related_records: t.List['UnknownType'] = Field(alias='relatedRecords')  #: Related records.
     email: t.Optional[str] = None  #: Email.
     invite_note: t.Optional[str] = Field(default=None, alias='inviteNote')  #: Invite note.
     invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = Field(
@@ -205,7 +206,7 @@ class RepoViewDetail(base.ModelBase):
     handle: str  #: Handle.
     indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
-    related_records: t.List['unknown_type.UnknownType'] = Field(alias='relatedRecords')  #: Related records.
+    related_records: t.List['UnknownType'] = Field(alias='relatedRecords')  #: Related records.
     email: t.Optional[str] = None  #: Email.
     invite_note: t.Optional[str] = Field(default=None, alias='inviteNote')  #: Invite note.
     invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = Field(
@@ -252,7 +253,7 @@ class RecordView(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.Moderation'  #: Moderation.
     repo: 'models.ComAtprotoAdminDefs.RepoView'  #: Repo.
     uri: str  #: Uri.
-    value: 'unknown_type.UnknownType'  #: Value.
+    value: 'UnknownType'  #: Value.
 
     py_type: te.Literal['com.atproto.admin.defs#recordView'] = Field(
         default='com.atproto.admin.defs#recordView', alias='$type', frozen=True
@@ -269,7 +270,7 @@ class RecordViewDetail(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
     repo: 'models.ComAtprotoAdminDefs.RepoView'  #: Repo.
     uri: str  #: Uri.
-    value: 'unknown_type.UnknownType'  #: Value.
+    value: 'UnknownType'  #: Value.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
     py_type: te.Literal['com.atproto.admin.defs#recordViewDetail'] = Field(

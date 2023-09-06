@@ -12,7 +12,8 @@ from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
-from atproto.xrpc_client.models import base, unknown_type
+    from atproto.xrpc_client.models.unknown_type import UnknownType
+from atproto.xrpc_client.models import base
 
 
 class Params(base.ParamsModelBase):
@@ -41,7 +42,7 @@ class Notification(base.ModelBase):
     indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
     is_read: bool = Field(alias='isRead')  #: Is read.
     reason: str  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', and 'quote'.
-    record: 'unknown_type.UnknownType'  #: Record.
+    record: 'UnknownType'  #: Record.
     uri: str  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     reason_subject: t.Optional[str] = Field(default=None, alias='reasonSubject')  #: Reason subject.
