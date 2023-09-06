@@ -11,8 +11,6 @@ Blocks = t.Dict[CID, dict]
 class CAR:
     """CAR file."""
 
-    _CID_V1_BYTES_LEN = 36
-
     def __init__(self, root: CID, blocks: Blocks) -> None:
         self._root = root
         self._blocks = blocks

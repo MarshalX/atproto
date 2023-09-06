@@ -59,7 +59,7 @@ class _CIDPydanticAnnotation:
         """
         We return a pydantic_core.CoreSchema that behaves in the following ways:
 
-        * strings will be parsed as `CID` instances
+        * Strings will be parsed as `CID` instances
         * `CID` instances will be parsed as `CID` instances without any changes
         * Nothing else will pass validation
         * Serialization will always return just a str

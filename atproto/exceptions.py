@@ -69,10 +69,6 @@ class FirehoseDecodingError(FirehoseError):
     ...
 
 
-class CBORDecodingError(AtProtocolError):
-    ...
-
-
 class DAGCBORDecodingError(AtProtocolError):
     ...
 
