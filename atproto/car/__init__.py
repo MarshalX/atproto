@@ -1,7 +1,7 @@
 import typing as t
-from io import BytesIO
 
-from atproto import cbor, leb128
+import libipld
+
 from atproto.cid import CID
 from atproto.exceptions import InvalidCARFile
 
@@ -10,8 +10,6 @@ Blocks = t.Dict[CID, dict]
 
 class CAR:
     """CAR file."""
-
-    _CID_V1_BYTES_LEN = 36
 
     def __init__(self, root: CID, blocks: Blocks) -> None:
         self._root = root
@@ -50,10 +48,7 @@ class CAR:
         Returns:
             :obj:`atproto.CAR`: Parsed CAR file.
         """
-        stream = BytesIO(data)
-
-        header_len, _ = leb128.u.decode_reader(stream)
-        header = cbor.decode_dag(stream.read(header_len))
+        header, blocks = libipld.decode_car(data)
 
         roots = header.get('roots')
         if isinstance(roots, list) and len(roots):
@@ -61,12 +56,5 @@ class CAR:
         else:
             raise InvalidCARFile('Invalid CAR file. Expected at least one root.')
 
-        blocks = {}
-        while stream.tell() != len(data):
-            block_len, _ = leb128.u.decode_reader(stream)
-            cid = CID.decode(stream.read(CAR._CID_V1_BYTES_LEN))
-            block = cbor.decode_dag(stream.read(block_len - CAR._CID_V1_BYTES_LEN))
-
-            blocks[cid] = block
-
+        blocks = {CID.decode(cid): block for cid, block in blocks.items()}
         return cls(root=root, blocks=blocks)
