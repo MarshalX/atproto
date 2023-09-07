@@ -1,5 +1,80 @@
 # Change Log
 
+## Version 0.0.26
+
+**08.09.2023**
+
+All models have been migrated to Pydantic v2. 
+Fields constraints have been added. 
+Decoding of DAG-CBOR, CID and CAR files has been migrated to the brand-new library [libipld](https://github.com/MarshalX/python-libipld).
+This library is powered by Rust and is much faster than the previous implementation. 
+Pydantic v2 also uses Rust in the core. 
+This leads to a significant performance boost.
+
+Firehose catch up benchmark:
+- The previous SDK version: 700 commits in 5 seconds.
+- After migration to Pydantic v2: 2650 commits in 5 seconds.
+- After migration to [libipld](https://github.com/MarshalX/python-libipld): **20000 commits in 5 seconds**.
+- Using pydantic v2 and [libipld](https://github.com/MarshalX/python-libipld) with multiprocessing: **30000 commits in 5 seconds**.
+
+The new release gives a **40x performance boost**! But the cost is a lot of breaking changes.
+
+Example of firehose consumer with multiprocessing: [process_commits.py](https://github.com/MarshalX/atproto/blob/main/examples/firehose/process_commits.py)
+
+_Test stand for benchmarks: MacBook Pro 2021, Apple M1 Pro, 32 GB RAM, 450mbps connection speed, Python 3.8_
+
+**❗Breaking changes**
+- Python 3.7.0 has been dropped. The minimum supported version is now **Python 3.7.1**.
+- Camel cased fields are gone. Use snake case instead. For example, `createdAt` is now `created_at`.
+- Root namespace has been fixed from `bsky` to `app`. For example, `Client().bsky.feed.get_likes` is now `Client().app.bsky.feed.get_likes`.
+- Using similar model instances as strong refs is not allowed anymore. Use `models.create_strong_ref` helper function to convert refs ([example](https://github.com/MarshalX/atproto/blob/e20b8072f383628ea1a5ff306fc8625e1adf4072/examples/like_post.py#L11)).
+- Creating model instances using positional arguments is no longer supported. Use keyword arguments instead. For example, thant's not possible anymore `models.ComAtprotoIdentityResolveHandle.Params('marshal.dev')`. Use `models.ComAtprotoIdentityResolveHandle.Params(handle='marshal.dev')` instead.
+- Fields that conflict with reserved Pydantic names has _ (underscore) suffix. For example, `validation` is now `validation_`.
+- `DotDict` has been moved to `models.dot_dict`.
+- Inheritance of base models has been changed. Please check new base classes.
+- Inheritance of `DotDict` has been changed. Please check the new base class.
+- `BlobRef` model doesn't contain `to_dict()` method anymore.
+- `CID` class has been reimplemented using [libipld](https://github.com/MarshalX/python-libipld) lib. It supports much less API.
+- `_type` field of models has been renamed to `py_type`. Now it's constant.
+- `leb128` module has been removed.
+- Type hint of `CID` has been changed to `CIDType`.
+- Type hint of `DotDict` has been changed to `DotDictType`.
+- `multiformats` and `dag-cbor` dependencies have been removed.
+- These reference classes have been removed:
+    - `ResponseRef` from `get_profile`. Use `models.AppBskyActorDefs.ProfileViewDetailed` instead.
+    - `ResponseRef` from `get_moderation_action`. Use `models.ComAtprotoAdminDefs.ActionViewDetail` instead.
+    - `ResponseRef` from `get_moderation_report`. Use `models.ComAtprotoAdminDefs.ReportViewDetail` instead.
+    - `ResponseRef` from `get_record`. Use `models.ComAtprotoAdminDefs.RecordViewDetail` instead.
+    - `ResponseRef` from `get_repo`. Use `models.ComAtprotoAdminDefs.RepoViewDetail` instead.
+    - `ResponseRef` from `resolve_moderation_reports`. Use `models.ComAtprotoAdminDefs.ActionView` instead.
+    - `ResponseRef` from `reverse_moderation_action`. Use `models.ComAtprotoAdminDefs.ActionView` instead.
+    - `ResponseRef` from `take_moderation_action`. Use `models.ComAtprotoAdminDefs.ActionView` instead.
+    - `ResponseRef` from `create_app_password`. Use `models.ComAtprotoServerCreateAppPassword.AppPassword` instead.
+- These exceptions have been removed: 
+  - `UnexpectedFieldError`. Use `ModelError` instead.
+  - `MissingValueError`. Use `ModelError` instead.
+  - `ModelFieldError`. Use `ModelError` instead.
+  - `WrongTypeError`. Use `ModelError` instead.
+  - `CBORDecodingError`. Use `DAGCBORDecodingError` instead.
+
+**New Features**
+- Unit tests for model serialization and deserialization.
+- Nested dictionaries support in `DotDict` models.
+- `DotDict` models now support `__getitem__` and `__setitem__` methods.
+- `create_strong_ref` helper function to convert ref-like models to strong refs.
+- Fields constraints for models. Now you can see the max items count for the image array, max string length, etc.
+- Better documentation of models.
+
+**Minor Changes**
+- Fixed nesting of `DotDict` models.
+- Fixed serialization of `Union` types.
+- Fixed serialization of `Literal` types.
+- Fixed sending proper datetime values to the server.
+- Fixed printing tracebacks in the Firehose async client.
+- Fixed chaining of firehose exceptions.
+- Fixed locked and outdated `typing-extensions` dependency.
+- Fixed passing of arguments to `ClientBase`.
+
 ## Version 0.0.25
 
 **30.08.2023**
