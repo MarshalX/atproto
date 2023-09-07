@@ -1,5 +1,4 @@
 import asyncio
-from datetime import datetime, timezone
 
 from atproto import AsyncClient
 
@@ -19,12 +18,12 @@ async def main():
         print('Start listening for notifications...')
         while True:
             # save the time in UTC when we fetch notifications
-            last_seen_at = datetime.now(timezone.utc).isoformat()
+            last_seen_at = async_client.get_current_time_iso()
 
             # fetch new notifications
             response = await async_client.app.bsky.notification.list_notifications()
 
-            # create task list to run callbacks concurrently
+            # create a task list to run callbacks concurrently
             on_notification_tasks = []
             for notification in response.notifications:
                 if not notification.is_read:

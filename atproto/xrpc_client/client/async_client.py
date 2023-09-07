@@ -6,11 +6,10 @@
 
 import typing as t
 from asyncio import Lock
-from datetime import datetime
 
 from atproto.xrpc_client import models
 from atproto.xrpc_client.client.async_raw import AsyncClientRaw
-from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin
+from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
 from atproto.xrpc_client.models import ids
 from atproto.xrpc_client.models.languages import DEFAULT_LANGUAGE_CODE1
 
@@ -19,7 +18,7 @@ if t.TYPE_CHECKING:
     from atproto.xrpc_client.request import Response
 
 
-class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
+class AsyncClient(SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args, **kwargs) -> None:
@@ -125,7 +124,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
                 repo=repo,
                 collection=ids.AppBskyFeedPost,
                 record=models.AppBskyFeedPost.Main(
-                    created_at=datetime.now().isoformat(), text=text, reply=reply_to, embed=embed, langs=langs
+                    created_at=self.get_current_time_iso(), text=text, reply=reply_to, embed=embed, langs=langs
                 ),
             )
         )
@@ -183,7 +182,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
                 collection=ids.AppBskyFeedLike,
-                record=models.AppBskyFeedLike.Main(created_at=datetime.now().isoformat(), subject=subject),
+                record=models.AppBskyFeedLike.Main(created_at=self.get_current_time_iso(), subject=subject),
             )
         )
 
@@ -243,7 +242,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
                 repo=repo,
                 collection=ids.AppBskyFeedRepost,
                 record=models.AppBskyFeedRepost.Main(
-                    created_at=datetime.now().isoformat(),
+                    created_at=self.get_current_time_iso(),
                     subject=subject,
                 ),
             )
