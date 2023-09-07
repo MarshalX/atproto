@@ -26,6 +26,7 @@ ALIASES_DB = {
     'models.AppBskyFeedGetPostThread': 'atproto.xrpc_client.models.app.bsky.feed.get_post_thread',
     'models.AppBskyFeedGetPosts': 'atproto.xrpc_client.models.app.bsky.feed.get_posts',
     'models.AppBskyFeedGetRepostedBy': 'atproto.xrpc_client.models.app.bsky.feed.get_reposted_by',
+    'models.AppBskyFeedGetSuggestedFeeds': 'atproto.xrpc_client.models.app.bsky.feed.get_suggested_feeds',
     'models.AppBskyFeedGetTimeline': 'atproto.xrpc_client.models.app.bsky.feed.get_timeline',
     'models.AppBskyFeedLike': 'atproto.xrpc_client.models.app.bsky.feed.like',
     'models.AppBskyFeedPost': 'atproto.xrpc_client.models.app.bsky.feed.post',

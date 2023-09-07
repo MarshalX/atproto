@@ -446,6 +446,28 @@ class FeedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyFeedGetRepostedBy.Response)
 
+    def get_suggested_feeds(
+        self, params: t.Optional[t.Union[dict, 'models.AppBskyFeedGetSuggestedFeeds.Params']] = None, **kwargs
+    ) -> 'models.AppBskyFeedGetSuggestedFeeds.Response':
+        """Get a list of suggested feeds for the viewer.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetSuggestedFeeds.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.AppBskyFeedGetSuggestedFeeds.Params)
+        response = self._client.invoke_query(
+            'app.bsky.feed.getSuggestedFeeds', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetSuggestedFeeds.Response)
+
     def get_timeline(
         self, params: t.Optional[t.Union[dict, 'models.AppBskyFeedGetTimeline.Params']] = None, **kwargs
     ) -> 'models.AppBskyFeedGetTimeline.Response':

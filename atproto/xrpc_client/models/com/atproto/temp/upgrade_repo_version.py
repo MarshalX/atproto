@@ -17,3 +17,4 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.temp.upgradeRepoVersion`."""
 
     did: str  #: Did.
+    force: t.Optional[bool] = None  #: Force.
