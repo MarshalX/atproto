@@ -53,12 +53,18 @@ def _handle_frame_decoding_error(exception: Exception) -> None:
     raise exception
 
 
+def _print_exception(exception: BaseException) -> None:
+    traceback.print_exception(type(exception), exception, exception.__traceback__)
+
+
 def _handle_websocket_error_or_stop(exception: Exception) -> bool:
     """Returns if the connection should be properly being closed or reraise exception."""
     if isinstance(exception, (ConnectionClosedOK,)):
         return True
     if isinstance(exception, (ConnectionClosedError, InvalidHandshake, PayloadTooBig, ProtocolError, socket.gaierror)):
         return False
+    if isinstance(exception, FirehoseError):
+        raise exception
 
     raise FirehoseError from exception
 
@@ -201,7 +207,7 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
         exception = task.exception()
         if exception:
             if not self._on_callback_error_callback:
-                traceback.print_exc()
+                _print_exception(exception)
                 return
 
             try:
