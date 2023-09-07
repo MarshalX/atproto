@@ -1,0 +1,49 @@
+name: Publish PyPI Release
+
+on:
+  release:
+    types: [ created ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - name: Run Cimon (eBPF).
+        uses: cycodelabs/cimon-action@v0
+        with:
+          client-id: ${{ secrets.CIMON_CLIENT_ID }}
+          secret: ${{ secrets.CIMON_SECRET }}
+          prevent: true
+          allowed-hosts: >
+            files.pythonhosted.org
+            install.python-poetry.org
+            pypi.org
+            upload.pypi.org
+
+      - name: Checkout repository.
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python.
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+
+      - name: Setup Poetry.
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+
+      - name: Install Poetry Plugin.
+        run: poetry self add "poetry-dynamic-versioning[plugin]"
+
+      - name: Build package.
+        run: poetry build
+
+      - name: Publish a Python distribution to PyPI.
+        uses: pypa/gh-action-pypi-publish@release/v1
