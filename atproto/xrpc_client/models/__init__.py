@@ -25,6 +25,7 @@ from atproto.xrpc_client.models.app.bsky.feed import get_likes as AppBskyFeedGet
 from atproto.xrpc_client.models.app.bsky.feed import get_post_thread as AppBskyFeedGetPostThread
 from atproto.xrpc_client.models.app.bsky.feed import get_posts as AppBskyFeedGetPosts
 from atproto.xrpc_client.models.app.bsky.feed import get_reposted_by as AppBskyFeedGetRepostedBy
+from atproto.xrpc_client.models.app.bsky.feed import get_suggested_feeds as AppBskyFeedGetSuggestedFeeds
 from atproto.xrpc_client.models.app.bsky.feed import get_timeline as AppBskyFeedGetTimeline
 from atproto.xrpc_client.models.app.bsky.feed import like as AppBskyFeedLike
 from atproto.xrpc_client.models.app.bsky.feed import post as AppBskyFeedPost
@@ -173,6 +174,7 @@ class _Ids:
     AppBskyFeedGetPostThread: str = 'app.bsky.feed.getPostThread'
     AppBskyFeedGetAuthorFeed: str = 'app.bsky.feed.getAuthorFeed'
     AppBskyFeedGetPosts: str = 'app.bsky.feed.getPosts'
+    AppBskyFeedGetSuggestedFeeds: str = 'app.bsky.feed.getSuggestedFeeds'
     AppBskyFeedGetActorLikes: str = 'app.bsky.feed.getActorLikes'
     AppBskyFeedLike: str = 'app.bsky.feed.like'
     AppBskyFeedDescribeFeedGenerator: str = 'app.bsky.feed.describeFeedGenerator'

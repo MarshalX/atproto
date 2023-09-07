@@ -31,9 +31,24 @@ class Image(base.ModelBase):
 
     alt: str  #: Alt.
     image: 'BlobRef'  #: Image.
+    aspect_ratio: t.Optional['models.AppBskyEmbedImages.AspectRatio'] = Field(
+        default=None, alias='aspectRatio'
+    )  #: Aspect ratio.
 
     py_type: te.Literal['app.bsky.embed.images#image'] = Field(
         default='app.bsky.embed.images#image', alias='$type', frozen=True
+    )
+
+
+class AspectRatio(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.embed.images`. width:height represents an aspect ratio. It may be approximate, and may not correspond to absolute dimensions in any given unit."""
+
+    height: int = Field(ge=1)  #: Height.
+    width: int = Field(ge=1)  #: Width.
+
+    py_type: te.Literal['app.bsky.embed.images#aspectRatio'] = Field(
+        default='app.bsky.embed.images#aspectRatio', alias='$type', frozen=True
     )
 
 
@@ -55,6 +70,9 @@ class ViewImage(base.ModelBase):
     alt: str  #: Alt.
     fullsize: str  #: Fullsize.
     thumb: str  #: Thumb.
+    aspect_ratio: t.Optional['models.AppBskyEmbedImages.AspectRatio'] = Field(
+        default=None, alias='aspectRatio'
+    )  #: Aspect ratio.
 
     py_type: te.Literal['app.bsky.embed.images#viewImage'] = Field(
         default='app.bsky.embed.images#viewImage', alias='$type', frozen=True

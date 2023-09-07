@@ -26,6 +26,7 @@ Submodules
    atproto.xrpc_client.models.app.bsky.feed.get_post_thread
    atproto.xrpc_client.models.app.bsky.feed.get_posts
    atproto.xrpc_client.models.app.bsky.feed.get_reposted_by
+   atproto.xrpc_client.models.app.bsky.feed.get_suggested_feeds
    atproto.xrpc_client.models.app.bsky.feed.get_timeline
    atproto.xrpc_client.models.app.bsky.feed.like
    atproto.xrpc_client.models.app.bsky.feed.post
