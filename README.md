@@ -224,8 +224,6 @@ Models could be nested as hell. Be ready for it!
 
 This is how we can send a post with the image using low-level XRPC Client:
 ```python
-from datetime import datetime
-
 from atproto import Client, models
 
 
@@ -244,7 +242,7 @@ with open('cat.jpg', 'rb') as f:
             repo=client.me.did,
             collection=models.ids.AppBskyFeedPost,
             record=models.AppBskyFeedPost.Main(
-                created_at=datetime.now().isoformat(), text='Text of the post', embed=embed
+                created_at=client.get_current_time_iso(), text='Text of the post', embed=embed
             ),
         )
     )

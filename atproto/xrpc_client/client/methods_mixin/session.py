@@ -1,5 +1,5 @@
 import typing as t
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
 from atproto.xrpc_client.client.auth import get_jwt_payload
 
@@ -19,12 +19,10 @@ class SessionMethodsMixin:
         self._refresh_jwt_payload: t.Optional['JwtPayload'] = None
 
     def _should_refresh_session(self) -> bool:
-        expired_at = datetime.fromtimestamp(self._access_jwt_payload.exp, tz=timezone.utc)
+        expired_at = self.get_time_from_timestamp(self._access_jwt_payload.exp)
         expired_at = expired_at - timedelta(minutes=15)  # let's update the token a bit later than required
 
-        datetime_now = datetime.now(timezone.utc)
-
-        return datetime_now > expired_at
+        return self.get_current_time() > expired_at
 
     def _set_session(
         self,

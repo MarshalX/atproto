@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from atproto import Client, models
 
 
@@ -21,7 +19,9 @@ def main():
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,  # or any another DID
             collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(created_at=datetime.now().isoformat(), text=text, embed=embed_external),
+            record=models.AppBskyFeedPost.Main(
+                created_at=client.get_current_time_iso(), text=text, embed=embed_external
+            ),
         )
     )
 
@@ -34,7 +34,7 @@ def main():
             repo=client.me.did,  # or any another DID
             collection=models.ids.AppBskyFeedPost,
             record=models.AppBskyFeedPost.Main(
-                created_at=datetime.now().isoformat(), text=text_quote, embed=embed_post
+                created_at=client.get_current_time_iso(), text=text_quote, embed=embed_post
             ),
         )
     )

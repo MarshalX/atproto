@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from atproto import Client, models
 
 # to send links as "link card" or "quote post" look at the send_embed.py example
@@ -25,7 +23,7 @@ def main():
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,  # or any another DID
             collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(created_at=datetime.now().isoformat(), text=text, facets=facets),
+            record=models.AppBskyFeedPost.Main(created_at=client.get_current_time_iso(), text=text, facets=facets),
         )
     )
 

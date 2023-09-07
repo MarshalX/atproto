@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 from time import sleep
 
 from atproto import Client
@@ -14,7 +13,7 @@ def main():
     # fetch new notifications
     while True:
         # save the time in UTC when we fetch notifications
-        last_seen_at = datetime.now(timezone.utc).isoformat()
+        last_seen_at = client.get_current_time_iso()
 
         response = client.app.bsky.notification.list_notifications()
         for notification in response.notifications:
