@@ -13,3 +13,4 @@ Submodules
    :maxdepth: 4
 
    atproto.xrpc_client.client.methods_mixin.session
+   atproto.xrpc_client.client.methods_mixin.time
