@@ -6,21 +6,22 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.createInviteCode`."""
 
-    useCount: int  #: Use count.
-    forAccount: t.Optional[str] = None  #: For account.
+    use_count: int = Field(alias='useCount')  #: Use count.
+    for_account: t.Optional[str] = Field(default=None, alias='forAccount')  #: For account.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.server.createInviteCode`."""

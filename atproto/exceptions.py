@@ -28,22 +28,6 @@ class ModelError(AtProtocolError):
     ...
 
 
-class UnexpectedFieldError(ModelError):
-    ...
-
-
-class MissingValueError(ModelError):
-    ...
-
-
-class ModelFieldError(ModelError):
-    ...
-
-
-class WrongTypeError(ModelFieldError):
-    ...
-
-
 class ModelFieldNotFoundError(ModelError):
     ...
 
@@ -82,10 +66,6 @@ class FirehoseError(AtProtocolError):
 
 
 class FirehoseDecodingError(FirehoseError):
-    ...
-
-
-class CBORDecodingError(AtProtocolError):
     ...
 
 

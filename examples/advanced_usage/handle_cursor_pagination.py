@@ -15,7 +15,7 @@ def main():
         if cursor:
             params.cursor = cursor
 
-        return client.bsky.graph.get_follows(params)
+        return client.app.bsky.graph.get_follows(params)
 
     cursor = None
     follows = []

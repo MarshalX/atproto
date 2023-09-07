@@ -5,17 +5,21 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.graph.follow`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     subject: str  #: Subject.
 
-    _type: str = 'app.bsky.graph.follow'
+    py_type: te.Literal['app.bsky.graph.follow'] = Field(default='app.bsky.graph.follow', alias='$type', frozen=True)

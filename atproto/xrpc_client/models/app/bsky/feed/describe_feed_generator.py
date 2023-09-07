@@ -6,13 +6,15 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.feed.describeFeedGenerator`."""
@@ -22,22 +24,24 @@ class Response(base.ResponseModelBase):
     links: t.Optional['models.AppBskyFeedDescribeFeedGenerator.Links'] = None  #: Links.
 
 
-@dataclass
 class Feed(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.describeFeedGenerator`."""
 
     uri: str  #: Uri.
 
-    _type: str = 'app.bsky.feed.describeFeedGenerator#feed'
+    py_type: te.Literal['app.bsky.feed.describeFeedGenerator#feed'] = Field(
+        default='app.bsky.feed.describeFeedGenerator#feed', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class Links(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.describeFeedGenerator`."""
 
-    privacyPolicy: t.Optional[str] = None  #: Privacy policy.
-    termsOfService: t.Optional[str] = None  #: Terms of service.
+    privacy_policy: t.Optional[str] = Field(default=None, alias='privacyPolicy')  #: Privacy policy.
+    terms_of_service: t.Optional[str] = Field(default=None, alias='termsOfService')  #: Terms of service.
 
-    _type: str = 'app.bsky.feed.describeFeedGenerator#links'
+    py_type: te.Literal['app.bsky.feed.describeFeedGenerator#links'] = Field(
+        default='app.bsky.feed.describeFeedGenerator#links', alias='$type', frozen=True
+    )

@@ -1,0 +1,13 @@
+{
+    "uri": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.like/3k5u5ammyg72r",
+    "cid": "bafyreidaszwnbzl65oqryswowxzrexlqfeoh47zhtvo65yv5wblosgdrkq",
+    "value": {
+        "$type": "app.bsky.feed.like",
+        "subject": {
+            "cid": "bafyreidv557u6jqpwxemefixdk5w4saatkbm2lrsy2rys3bdqbwutlumba",
+            "uri": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k5u5amiexh2r"
+        },
+        "createdAt": "2023-08-26T12:19:50.226623",
+        "record_type": "app.bsky.feed.like"
+    }
+}

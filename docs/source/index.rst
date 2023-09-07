@@ -12,6 +12,7 @@ Documentation
    :maxdepth: 4
 
    readme
+   Examples <https://github.com/MarshalX/atproto/tree/main/examples>
 
 .. toctree::
    :caption: SDK

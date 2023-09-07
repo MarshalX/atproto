@@ -6,12 +6,12 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client.models.unknown_type import UnknownType
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.repo.getRecord`."""
@@ -24,11 +24,10 @@ class Params(base.ParamsModelBase):
     ] = None  #: The CID of the version of the record. If not specified, then return the most recent version.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.repo.getRecord`."""
 
     uri: str  #: Uri.
-    value: 'base.UnknownDict'  #: Value.
+    value: 'UnknownType'  #: Value.
     cid: t.Optional[str] = None  #: Cid.

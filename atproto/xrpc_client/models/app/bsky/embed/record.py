@@ -6,83 +6,94 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
+    from atproto.xrpc_client.models.unknown_type import UnknownType
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Main(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     record: 'models.ComAtprotoRepoStrongRef.Main'  #: Record.
 
-    _type: str = 'app.bsky.embed.record'
+    py_type: te.Literal['app.bsky.embed.record'] = Field(default='app.bsky.embed.record', alias='$type', frozen=True)
 
 
-@dataclass
 class View(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
 
-    record: t.Union[
-        'models.AppBskyEmbedRecord.ViewRecord',
-        'models.AppBskyEmbedRecord.ViewNotFound',
-        'models.AppBskyEmbedRecord.ViewBlocked',
-        'models.AppBskyFeedDefs.GeneratorView',
-        'models.AppBskyGraphDefs.ListView',
-        't.Dict[str, t.Any]',
+    record: te.Annotated[
+        t.Union[
+            'models.AppBskyEmbedRecord.ViewRecord',
+            'models.AppBskyEmbedRecord.ViewNotFound',
+            'models.AppBskyEmbedRecord.ViewBlocked',
+            'models.AppBskyFeedDefs.GeneratorView',
+            'models.AppBskyGraphDefs.ListView',
+        ],
+        Field(discriminator='py_type'),
     ]  #: Record.
 
-    _type: str = 'app.bsky.embed.record#view'
+    py_type: te.Literal['app.bsky.embed.record#view'] = Field(
+        default='app.bsky.embed.record#view', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ViewRecord(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
     cid: str  #: Cid.
-    indexedAt: str  #: Indexed at.
+    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
     uri: str  #: Uri.
-    value: 'base.UnknownDict'  #: Value.
+    value: 'UnknownType'  #: Value.
     embeds: t.Optional[
         t.List[
-            t.Union[
-                'models.AppBskyEmbedImages.View',
-                'models.AppBskyEmbedExternal.View',
-                'models.AppBskyEmbedRecord.View',
-                'models.AppBskyEmbedRecordWithMedia.View',
-                't.Dict[str, t.Any]',
+            te.Annotated[
+                t.Union[
+                    'models.AppBskyEmbedImages.View',
+                    'models.AppBskyEmbedExternal.View',
+                    'models.AppBskyEmbedRecord.View',
+                    'models.AppBskyEmbedRecordWithMedia.View',
+                ],
+                Field(discriminator='py_type'),
             ]
         ]
     ] = None  #: Embeds.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
-    _type: str = 'app.bsky.embed.record#viewRecord'
+    py_type: te.Literal['app.bsky.embed.record#viewRecord'] = Field(
+        default='app.bsky.embed.record#viewRecord', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ViewNotFound(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
 
-    notFound: bool  #: Not found.
+    not_found: bool = Field(alias='notFound', frozen=True)  #: Not found.
     uri: str  #: Uri.
 
-    _type: str = 'app.bsky.embed.record#viewNotFound'
+    py_type: te.Literal['app.bsky.embed.record#viewNotFound'] = Field(
+        default='app.bsky.embed.record#viewNotFound', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ViewBlocked(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.
-    blocked: bool  #: Blocked.
+    blocked: bool = Field(frozen=True)  #: Blocked.
     uri: str  #: Uri.
 
-    _type: str = 'app.bsky.embed.record#viewBlocked'
+    py_type: te.Literal['app.bsky.embed.record#viewBlocked'] = Field(
+        default='app.bsky.embed.record#viewBlocked', alias='$type', frozen=True
+    )

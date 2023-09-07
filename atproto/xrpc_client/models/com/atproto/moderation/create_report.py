@@ -6,34 +6,37 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.moderation.createReport`."""
 
-    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
-    subject: t.Union[
-        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    reason_type: 'models.ComAtprotoModerationDefs.ReasonType' = Field(alias='reasonType')  #: Reason type.
+    subject: te.Annotated[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        Field(discriminator='py_type'),
     ]  #: Subject.
     reason: t.Optional[str] = None  #: Reason.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.moderation.createReport`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     id: int  #: Id.
-    reasonType: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
-    reportedBy: str  #: Reported by.
-    subject: t.Union[
-        'models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main', 't.Dict[str, t.Any]'
+    reason_type: 'models.ComAtprotoModerationDefs.ReasonType' = Field(alias='reasonType')  #: Reason type.
+    reported_by: str = Field(alias='reportedBy')  #: Reported by.
+    subject: te.Annotated[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        Field(discriminator='py_type'),
     ]  #: Subject.
     reason: t.Optional[str] = None  #: Reason.

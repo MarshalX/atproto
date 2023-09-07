@@ -41,7 +41,7 @@ def main():
         facets.append(
             models.AppBskyRichtextFacet.Main(
                 features=[models.AppBskyRichtextFacet.Link(uri=uri)],
-                index=models.AppBskyRichtextFacet.ByteSlice(byteStart=link[1], byteEnd=link[2]),
+                index=models.AppBskyRichtextFacet.ByteSlice(byte_start=link[1], byte_end=link[2]),
             )
         )
 
@@ -49,7 +49,7 @@ def main():
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,
             collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(createdAt=datetime.now().isoformat(), text=text, facets=facets),
+            record=models.AppBskyFeedPost.Main(created_at=datetime.now().isoformat(), text=text, facets=facets),
         )
     )
 

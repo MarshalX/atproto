@@ -126,7 +126,14 @@ from atproto.xrpc_client.models.com.atproto.sync import notify_of_update as ComA
 from atproto.xrpc_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto.xrpc_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
 from atproto.xrpc_client.models.com.atproto.temp import upgrade_repo_version as ComAtprotoTempUpgradeRepoVersion
-from atproto.xrpc_client.models.utils import get_model_as_dict, get_model_as_json, get_or_create, is_record_type
+from atproto.xrpc_client.models.models_loader import load_models
+from atproto.xrpc_client.models.utils import (
+    create_strong_ref,
+    get_model_as_dict,
+    get_model_as_json,
+    get_or_create,
+    is_record_type,
+)
 
 
 class _Ids:
@@ -253,3 +260,4 @@ class _Ids:
 
 
 ids = _Ids()
+load_models()

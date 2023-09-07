@@ -5,17 +5,20 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.server.refreshSession`."""
 
-    accessJwt: str  #: Access jwt.
+    access_jwt: str = Field(alias='accessJwt')  #: Access jwt.
     did: str  #: Did.
     handle: str  #: Handle.
-    refreshJwt: str  #: Refresh jwt.
+    refresh_jwt: str = Field(alias='refreshJwt')  #: Refresh jwt.

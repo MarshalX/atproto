@@ -6,13 +6,14 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`app.bsky.feed.getRepostedBy`."""
@@ -20,15 +21,14 @@ class Params(base.ParamsModelBase):
     uri: str  #: Uri.
     cid: t.Optional[str] = None  #: Cid.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = None  #: Limit.
+    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.feed.getRepostedBy`."""
 
-    repostedBy: t.List['models.AppBskyActorDefs.ProfileView']  #: Reposted by.
+    reposted_by: t.List['models.AppBskyActorDefs.ProfileView'] = Field(alias='repostedBy')  #: Reposted by.
     uri: str  #: Uri.
     cid: t.Optional[str] = None  #: Cid.
     cursor: t.Optional[str] = None  #: Cursor.

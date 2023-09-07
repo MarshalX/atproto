@@ -6,41 +6,47 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
+    from atproto.xrpc_client.models.unknown_type import UnknownType
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class PostView(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
     cid: str  #: Cid.
-    indexedAt: str  #: Indexed at.
-    record: 'base.UnknownDict'  #: Record.
+    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
+    record: 'UnknownType'  #: Record.
     uri: str  #: Uri.
     embed: t.Optional[
-        t.Union[
-            'models.AppBskyEmbedImages.View',
-            'models.AppBskyEmbedExternal.View',
-            'models.AppBskyEmbedRecord.View',
-            'models.AppBskyEmbedRecordWithMedia.View',
-            't.Dict[str, t.Any]',
+        te.Annotated[
+            t.Union[
+                'models.AppBskyEmbedImages.View',
+                'models.AppBskyEmbedExternal.View',
+                'models.AppBskyEmbedRecord.View',
+                'models.AppBskyEmbedRecordWithMedia.View',
+            ],
+            Field(default=None, discriminator='py_type'),
         ]
     ] = None  #: Embed.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    likeCount: t.Optional[int] = None  #: Like count.
-    replyCount: t.Optional[int] = None  #: Reply count.
-    repostCount: t.Optional[int] = None  #: Repost count.
+    like_count: t.Optional[int] = Field(default=None, alias='likeCount')  #: Like count.
+    reply_count: t.Optional[int] = Field(default=None, alias='replyCount')  #: Reply count.
+    repost_count: t.Optional[int] = Field(default=None, alias='repostCount')  #: Repost count.
     viewer: t.Optional['models.AppBskyFeedDefs.ViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.feed.defs#postView'
+    py_type: te.Literal['app.bsky.feed.defs#postView'] = Field(
+        default='app.bsky.feed.defs#postView', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ViewerState(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -48,105 +54,122 @@ class ViewerState(base.ModelBase):
     like: t.Optional[str] = None  #: Like.
     repost: t.Optional[str] = None  #: Repost.
 
-    _type: str = 'app.bsky.feed.defs#viewerState'
+    py_type: te.Literal['app.bsky.feed.defs#viewerState'] = Field(
+        default='app.bsky.feed.defs#viewerState', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class FeedViewPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     post: 'models.AppBskyFeedDefs.PostView'  #: Post.
-    reason: t.Optional[t.Union['models.AppBskyFeedDefs.ReasonRepost', 't.Dict[str, t.Any]']] = None  #: Reason.
+    reason: t.Optional[
+        te.Annotated[t.Union['models.AppBskyFeedDefs.ReasonRepost'], Field(default=None, discriminator='py_type')]
+    ] = None  #: Reason.
     reply: t.Optional['models.AppBskyFeedDefs.ReplyRef'] = None  #: Reply.
 
-    _type: str = 'app.bsky.feed.defs#feedViewPost'
+    py_type: te.Literal['app.bsky.feed.defs#feedViewPost'] = Field(
+        default='app.bsky.feed.defs#feedViewPost', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ReplyRef(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    parent: t.Union[
-        'models.AppBskyFeedDefs.PostView',
-        'models.AppBskyFeedDefs.NotFoundPost',
-        'models.AppBskyFeedDefs.BlockedPost',
-        't.Dict[str, t.Any]',
+    parent: te.Annotated[
+        t.Union[
+            'models.AppBskyFeedDefs.PostView',
+            'models.AppBskyFeedDefs.NotFoundPost',
+            'models.AppBskyFeedDefs.BlockedPost',
+        ],
+        Field(discriminator='py_type'),
     ]  #: Parent.
-    root: t.Union[
-        'models.AppBskyFeedDefs.PostView',
-        'models.AppBskyFeedDefs.NotFoundPost',
-        'models.AppBskyFeedDefs.BlockedPost',
-        't.Dict[str, t.Any]',
+    root: te.Annotated[
+        t.Union[
+            'models.AppBskyFeedDefs.PostView',
+            'models.AppBskyFeedDefs.NotFoundPost',
+            'models.AppBskyFeedDefs.BlockedPost',
+        ],
+        Field(discriminator='py_type'),
     ]  #: Root.
 
-    _type: str = 'app.bsky.feed.defs#replyRef'
+    py_type: te.Literal['app.bsky.feed.defs#replyRef'] = Field(
+        default='app.bsky.feed.defs#replyRef', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ReasonRepost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     by: 'models.AppBskyActorDefs.ProfileViewBasic'  #: By.
-    indexedAt: str  #: Indexed at.
+    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
 
-    _type: str = 'app.bsky.feed.defs#reasonRepost'
+    py_type: te.Literal['app.bsky.feed.defs#reasonRepost'] = Field(
+        default='app.bsky.feed.defs#reasonRepost', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ThreadViewPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     post: 'models.AppBskyFeedDefs.PostView'  #: Post.
     parent: t.Optional[
-        t.Union[
-            'models.AppBskyFeedDefs.ThreadViewPost',
-            'models.AppBskyFeedDefs.NotFoundPost',
-            'models.AppBskyFeedDefs.BlockedPost',
-            't.Dict[str, t.Any]',
-        ]
-    ] = None  #: Parent.
-    replies: t.Optional[
-        t.List[
+        te.Annotated[
             t.Union[
                 'models.AppBskyFeedDefs.ThreadViewPost',
                 'models.AppBskyFeedDefs.NotFoundPost',
                 'models.AppBskyFeedDefs.BlockedPost',
-                't.Dict[str, t.Any]',
+            ],
+            Field(default=None, discriminator='py_type'),
+        ]
+    ] = None  #: Parent.
+    replies: t.Optional[
+        t.List[
+            te.Annotated[
+                t.Union[
+                    'models.AppBskyFeedDefs.ThreadViewPost',
+                    'models.AppBskyFeedDefs.NotFoundPost',
+                    'models.AppBskyFeedDefs.BlockedPost',
+                ],
+                Field(discriminator='py_type'),
             ]
         ]
     ] = None  #: Replies.
 
-    _type: str = 'app.bsky.feed.defs#threadViewPost'
+    py_type: te.Literal['app.bsky.feed.defs#threadViewPost'] = Field(
+        default='app.bsky.feed.defs#threadViewPost', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class NotFoundPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    notFound: bool  #: Not found.
+    not_found: bool = Field(alias='notFound', frozen=True)  #: Not found.
     uri: str  #: Uri.
 
-    _type: str = 'app.bsky.feed.defs#notFoundPost'
+    py_type: te.Literal['app.bsky.feed.defs#notFoundPost'] = Field(
+        default='app.bsky.feed.defs#notFoundPost', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class BlockedPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.
-    blocked: bool  #: Blocked.
+    blocked: bool = Field(frozen=True)  #: Blocked.
     uri: str  #: Uri.
 
-    _type: str = 'app.bsky.feed.defs#blockedPost'
+    py_type: te.Literal['app.bsky.feed.defs#blockedPost'] = Field(
+        default='app.bsky.feed.defs#blockedPost', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class BlockedAuthor(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -154,10 +177,11 @@ class BlockedAuthor(base.ModelBase):
     did: str  #: Did.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.feed.defs#blockedAuthor'
+    py_type: te.Literal['app.bsky.feed.defs#blockedAuthor'] = Field(
+        default='app.bsky.feed.defs#blockedAuthor', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class GeneratorView(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
@@ -165,44 +189,55 @@ class GeneratorView(base.ModelBase):
     cid: str  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
     did: str  #: Did.
-    displayName: str  #: Display name.
-    indexedAt: str  #: Indexed at.
+    display_name: str = Field(alias='displayName')  #: Display name.
+    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
-    description: t.Optional[str] = None  #: Description.
-    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
-    likeCount: t.Optional[int] = None  #: Like count.
+    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
+    description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = Field(
+        default=None, alias='descriptionFacets'
+    )  #: Description facets.
+    like_count: t.Optional[int] = Field(default=None, alias='likeCount', ge=0)  #: Like count.
     viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.feed.defs#generatorView'
+    py_type: te.Literal['app.bsky.feed.defs#generatorView'] = Field(
+        default='app.bsky.feed.defs#generatorView', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class GeneratorViewerState(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     like: t.Optional[str] = None  #: Like.
 
-    _type: str = 'app.bsky.feed.defs#generatorViewerState'
+    py_type: te.Literal['app.bsky.feed.defs#generatorViewerState'] = Field(
+        default='app.bsky.feed.defs#generatorViewerState', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class SkeletonFeedPost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     post: str  #: Post.
-    reason: t.Optional[t.Union['models.AppBskyFeedDefs.SkeletonReasonRepost', 't.Dict[str, t.Any]']] = None  #: Reason.
+    reason: t.Optional[
+        te.Annotated[
+            t.Union['models.AppBskyFeedDefs.SkeletonReasonRepost'], Field(default=None, discriminator='py_type')
+        ]
+    ] = None  #: Reason.
 
-    _type: str = 'app.bsky.feed.defs#skeletonFeedPost'
+    py_type: te.Literal['app.bsky.feed.defs#skeletonFeedPost'] = Field(
+        default='app.bsky.feed.defs#skeletonFeedPost', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class SkeletonReasonRepost(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     repost: str  #: Repost.
 
-    _type: str = 'app.bsky.feed.defs#skeletonReasonRepost'
+    py_type: te.Literal['app.bsky.feed.defs#skeletonReasonRepost'] = Field(
+        default='app.bsky.feed.defs#skeletonReasonRepost', alias='$type', frozen=True
+    )

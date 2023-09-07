@@ -6,6 +6,7 @@ from atproto.codegen import (
     INPUT_MODEL,
     OUTPUT_MODEL,
     PARAMS_MODEL,
+    _resolve_nsid_ref,
     convert_camel_case_to_snake_case,
     format_code,
     gen_description_by_camel_case_name,
@@ -248,19 +249,16 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
 
 
 def _get_namespace_method_return_type(method_info: MethodInfo) -> t.Tuple[str, bool]:
-    model_name_suffix = ''
     if method_info.definition.output and isinstance(method_info.definition.output.schema, LexRef):
-        # fix collisions with type aliases
-        # example of collisions: com.atproto.admin.getRepo, com.atproto.sync.getRepo
-        # could be solved by separating models into different folders using segments of NSID
-        model_name_suffix = 'Ref'
+        ref_class, _ = _resolve_nsid_ref(method_info.nsid, method_info.definition.output.schema.ref)
+        return ref_class, True
 
     is_model = False
     return_type = 'bool'  # return success of response
     if method_info.definition.output:
         # example of methods without response: app.bsky.graph.muteActor, app.bsky.graph.muteActor
         is_model = True
-        return_type = f'models.{get_import_path(method_info.nsid)}.{OUTPUT_MODEL}{model_name_suffix}'
+        return_type = f'models.{get_import_path(method_info.nsid)}.{OUTPUT_MODEL}'
 
     return return_type, is_model
 

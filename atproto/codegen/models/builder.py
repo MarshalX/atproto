@@ -112,18 +112,9 @@ def build_record_models() -> BuiltRecordModels:
     return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_RECORDS)
 
 
-BuiltRefsModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexXrpcQuery, models.LexXrpcProcedure]]]
-
-
-def build_refs_models() -> BuiltRefsModels:
-    _LEX_DEF_TYPES_FOR_REFS = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
-    return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_REFS)
-
-
 if __name__ == '__main__':
     build_params_models()
     build_data_models()
     build_response_models()
     build_def_models()
     build_record_models()
-    build_refs_models()

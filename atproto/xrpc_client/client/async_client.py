@@ -22,8 +22,8 @@ if t.TYPE_CHECKING:
 class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
     """High-level client for XRPC of ATProto."""
 
-    def __init__(self, base_url: t.Optional[str] = None) -> None:
-        super().__init__(base_url)
+    def __init__(self, base_url: t.Optional[str] = None, *args, **kwargs) -> None:
+        super().__init__(base_url, *args, **kwargs)
 
         self._refresh_lock = Lock()
 
@@ -42,7 +42,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
 
     async def _get_and_set_session(self, login: str, password: str) -> models.ComAtprotoServerCreateSession.Response:
         session = await self.com.atproto.server.create_session(
-            models.ComAtprotoServerCreateSession.Data(login, password)
+            models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
         )
         self._set_session(session)
 
@@ -56,7 +56,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
 
         return refresh_session
 
-    async def login(self, login: str, password: str) -> models.AppBskyActorGetProfile.ResponseRef:
+    async def login(self, login: str, password: str) -> models.AppBskyActorDefs.ProfileViewDetailed:
         """Authorize a client and get profile info.
 
         Args:
@@ -65,14 +65,14 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
             Could be an app-specific one.
 
         Returns:
-            :obj:`models.AppBskyActorGetProfile.ResponseRef`: Profile information.
+            :obj:`models.AppBskyActorDefs.ProfileViewDetailed`: Profile information.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
         session = await self._get_and_set_session(login, password)
-        self.me = await self.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(session.handle))
+        self.me = await self.app.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=session.handle))
 
         return self.me
 
@@ -125,7 +125,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
                 repo=repo,
                 collection=ids.AppBskyFeedPost,
                 record=models.AppBskyFeedPost.Main(
-                    createdAt=datetime.now().isoformat(), text=text, reply=reply_to, embed=embed, langs=langs
+                    created_at=datetime.now().isoformat(), text=text, reply=reply_to, embed=embed, langs=langs
                 ),
             )
         )
@@ -183,7 +183,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
                 collection=ids.AppBskyFeedLike,
-                record=models.AppBskyFeedLike.Main(createdAt=datetime.now().isoformat(), subject=subject),
+                record=models.AppBskyFeedLike.Main(created_at=datetime.now().isoformat(), subject=subject),
             )
         )
 
@@ -243,7 +243,7 @@ class AsyncClient(SessionMethodsMixin, AsyncClientRaw):
                 repo=repo,
                 collection=ids.AppBskyFeedRepost,
                 record=models.AppBskyFeedRepost.Main(
-                    createdAt=datetime.now().isoformat(),
+                    created_at=datetime.now().isoformat(),
                     subject=subject,
                 ),
             )

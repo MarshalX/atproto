@@ -5,18 +5,21 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.feed.like`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     subject: 'models.ComAtprotoRepoStrongRef.Main'  #: Subject.
 
-    _type: str = 'app.bsky.feed.like'
+    py_type: te.Literal['app.bsky.feed.like'] = Field(default='app.bsky.feed.like', alias='$type', frozen=True)

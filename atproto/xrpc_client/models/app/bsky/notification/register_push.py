@@ -5,17 +5,20 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`app.bsky.notification.registerPush`."""
 
-    appId: str  #: App id.
+    app_id: str = Field(alias='appId')  #: App id.
     platform: str  #: Platform.
-    serviceDid: str  #: Service did.
+    service_did: str = Field(alias='serviceDid')  #: Service did.
     token: str  #: Token.

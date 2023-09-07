@@ -6,21 +6,18 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.admin.resolveModerationReports`."""
 
-    actionId: int  #: Action id.
-    createdBy: str  #: Created by.
-    reportIds: t.List[int]  #: Report ids.
-
-
-#: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.
-ResponseRef = models.ComAtprotoAdminDefs.ActionView
+    action_id: int = Field(alias='actionId')  #: Action id.
+    created_by: str = Field(alias='createdBy')  #: Created by.
+    report_ids: t.List[int] = Field(alias='reportIds')  #: Report ids.

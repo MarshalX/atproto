@@ -6,12 +6,14 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client.models.unknown_type import UnknownType
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.repo.describeRepo`."""
@@ -19,13 +21,12 @@ class Params(base.ParamsModelBase):
     repo: str  #: The handle or DID of the repo.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.repo.describeRepo`."""
 
     collections: t.List[str]  #: Collections.
     did: str  #: Did.
-    didDoc: 'base.UnknownDict'  #: Did doc.
+    did_doc: 'UnknownType' = Field(alias='didDoc')  #: Did doc.
     handle: str  #: Handle.
-    handleIsCorrect: bool  #: Handle is correct.
+    handle_is_correct: bool = Field(alias='handleIsCorrect')  #: Handle is correct.

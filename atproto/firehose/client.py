@@ -17,7 +17,7 @@ from websockets.exceptions import (
 )
 from websockets.sync.client import connect
 
-from atproto.exceptions import CBORDecodingError, DAGCBORDecodingError, FirehoseDecodingError, FirehoseError
+from atproto.exceptions import DAGCBORDecodingError, FirehoseDecodingError, FirehoseError
 from atproto.firehose.models import ErrorFrame, Frame, MessageFrame
 from atproto.xrpc_client.models.common import XrpcError
 
@@ -44,7 +44,7 @@ def _build_websocket_uri(
 
 
 def _handle_frame_decoding_error(exception: Exception) -> None:
-    if isinstance(exception, (CBORDecodingError, DAGCBORDecodingError, FirehoseDecodingError)):
+    if isinstance(exception, (DAGCBORDecodingError, FirehoseDecodingError)):
         # Ignore an invalid firehose frame that could not be properly decoded.
         # It's better to ignore one frame rather than stop the whole connection
         # or trap into an infinite loop of reconnections.

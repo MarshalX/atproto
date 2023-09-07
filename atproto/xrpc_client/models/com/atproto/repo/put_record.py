@@ -6,26 +6,31 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client.models.unknown_type import UnknownType
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.repo.putRecord`."""
 
     collection: str  #: The NSID of the record collection.
-    record: 'base.UnknownDict'  #: The record to write.
+    record: 'UnknownType'  #: The record to write.
     repo: str  #: The handle or DID of the repo.
-    rkey: str  #: The key of the record.
-    swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
-    swapRecord: t.Optional[str] = None  #: Compare and swap with the previous record by cid.
-    validate: t.Optional[bool] = None  #: Validate the record?
+    rkey: str = Field(max_length=15)  #: The key of the record.
+    swap_commit: t.Optional[str] = Field(
+        default=None, alias='swapCommit'
+    )  #: Compare and swap with the previous commit by cid.
+    swap_record: t.Optional[str] = Field(
+        default=None, alias='swapRecord'
+    )  #: Compare and swap with the previous record by cid.
+    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Validate the record?
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.repo.putRecord`."""

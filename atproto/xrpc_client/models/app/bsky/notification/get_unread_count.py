@@ -6,20 +6,21 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`app.bsky.notification.getUnreadCount`."""
 
-    seenAt: t.Optional[str] = None  #: Seen at.
+    seen_at: t.Optional[str] = Field(default=None, alias='seenAt')  #: Seen at.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.notification.getUnreadCount`."""

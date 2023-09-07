@@ -6,13 +6,15 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class ProfileViewBasic(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -20,14 +22,15 @@ class ProfileViewBasic(base.ModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     avatar: t.Optional[str] = None  #: Avatar.
-    displayName: t.Optional[str] = None  #: Display name.
+    display_name: t.Optional[str] = Field(default=None, alias='displayName', max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.actor.defs#profileViewBasic'
+    py_type: te.Literal['app.bsky.actor.defs#profileViewBasic'] = Field(
+        default='app.bsky.actor.defs#profileViewBasic', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ProfileView(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -35,16 +38,17 @@ class ProfileView(base.ModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     avatar: t.Optional[str] = None  #: Avatar.
-    description: t.Optional[str] = None  #: Description.
-    displayName: t.Optional[str] = None  #: Display name.
-    indexedAt: t.Optional[str] = None  #: Indexed at.
+    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
+    display_name: t.Optional[str] = Field(default=None, alias='displayName', max_length=640)  #: Display name.
+    indexed_at: t.Optional[str] = Field(default=None, alias='indexedAt')  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.actor.defs#profileView'
+    py_type: te.Literal['app.bsky.actor.defs#profileView'] = Field(
+        default='app.bsky.actor.defs#profileView', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ProfileViewDetailed(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -53,54 +57,61 @@ class ProfileViewDetailed(base.ModelBase):
     handle: str  #: Handle.
     avatar: t.Optional[str] = None  #: Avatar.
     banner: t.Optional[str] = None  #: Banner.
-    description: t.Optional[str] = None  #: Description.
-    displayName: t.Optional[str] = None  #: Display name.
-    followersCount: t.Optional[int] = None  #: Followers count.
-    followsCount: t.Optional[int] = None  #: Follows count.
-    indexedAt: t.Optional[str] = None  #: Indexed at.
+    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
+    display_name: t.Optional[str] = Field(default=None, alias='displayName', max_length=640)  #: Display name.
+    followers_count: t.Optional[int] = Field(default=None, alias='followersCount')  #: Followers count.
+    follows_count: t.Optional[int] = Field(default=None, alias='followsCount')  #: Follows count.
+    indexed_at: t.Optional[str] = Field(default=None, alias='indexedAt')  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    postsCount: t.Optional[int] = None  #: Posts count.
+    posts_count: t.Optional[int] = Field(default=None, alias='postsCount')  #: Posts count.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
-    _type: str = 'app.bsky.actor.defs#profileViewDetailed'
+    py_type: te.Literal['app.bsky.actor.defs#profileViewDetailed'] = Field(
+        default='app.bsky.actor.defs#profileViewDetailed', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ViewerState(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    blockedBy: t.Optional[bool] = None  #: Blocked by.
+    blocked_by: t.Optional[bool] = Field(default=None, alias='blockedBy')  #: Blocked by.
     blocking: t.Optional[str] = None  #: Blocking.
-    followedBy: t.Optional[str] = None  #: Followed by.
+    followed_by: t.Optional[str] = Field(default=None, alias='followedBy')  #: Followed by.
     following: t.Optional[str] = None  #: Following.
     muted: t.Optional[bool] = None  #: Muted.
-    mutedByList: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Muted by list.
+    muted_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = Field(
+        default=None, alias='mutedByList'
+    )  #: Muted by list.
 
-    _type: str = 'app.bsky.actor.defs#viewerState'
+    py_type: te.Literal['app.bsky.actor.defs#viewerState'] = Field(
+        default='app.bsky.actor.defs#viewerState', alias='$type', frozen=True
+    )
 
 
 Preferences = t.List[
-    t.Union[
-        'models.AppBskyActorDefs.AdultContentPref',
-        'models.AppBskyActorDefs.ContentLabelPref',
-        'models.AppBskyActorDefs.SavedFeedsPref',
-        't.Dict[str, t.Any]',
+    te.Annotated[
+        t.Union[
+            'models.AppBskyActorDefs.AdultContentPref',
+            'models.AppBskyActorDefs.ContentLabelPref',
+            'models.AppBskyActorDefs.SavedFeedsPref',
+        ],
+        Field(discriminator='py_type'),
     ]
 ]
 
 
-@dataclass
 class AdultContentPref(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    enabled: bool  #: Enabled.
+    enabled: bool = None  #: Enabled.
 
-    _type: str = 'app.bsky.actor.defs#adultContentPref'
+    py_type: te.Literal['app.bsky.actor.defs#adultContentPref'] = Field(
+        default='app.bsky.actor.defs#adultContentPref', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ContentLabelPref(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -108,10 +119,11 @@ class ContentLabelPref(base.ModelBase):
     label: str  #: Label.
     visibility: str  #: Visibility.
 
-    _type: str = 'app.bsky.actor.defs#contentLabelPref'
+    py_type: te.Literal['app.bsky.actor.defs#contentLabelPref'] = Field(
+        default='app.bsky.actor.defs#contentLabelPref', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class SavedFeedsPref(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
@@ -119,4 +131,6 @@ class SavedFeedsPref(base.ModelBase):
     pinned: t.List[str]  #: Pinned.
     saved: t.List[str]  #: Saved.
 
-    _type: str = 'app.bsky.actor.defs#savedFeedsPref'
+    py_type: te.Literal['app.bsky.actor.defs#savedFeedsPref'] = Field(
+        default='app.bsky.actor.defs#savedFeedsPref', alias='$type', frozen=True
+    )

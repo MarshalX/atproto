@@ -1,23 +1,22 @@
-from atproto import AtUri, Client
+from atproto import AtUri, Client, models
 
 
 def main():
     client = Client()
     client.login('my-handle', 'my-password')
 
-    # same with the like_post.py example we need to for with references of posts and likes
+    response = client.send_post('Test like-unlike from Python SDK')
+    print('Post response:', response)
 
-    post_ref = client.send_post('Test like-unlike from Python SDK')
-    print('Post reference:', post_ref)
-
-    like_ref = client.like(post_ref)
+    # same with the like_post.py example, we need to work with references of posts and likes
+    like_ref = client.like(models.create_strong_ref(response))
     print('Like reference:', like_ref)
 
-    # rkey means record key. The ID of the like object
+    # rkey means a record key. the ID of the like object
     like_rkey = AtUri.from_str(like_ref.uri).rkey
     print('Like rkey:', like_rkey)
 
-    # this methods return True/False depends on the response. Could throw exceptions too
+    # this method return True/False depends on the response. could throw exceptions too
     print(client.unlike(like_rkey))
 
 

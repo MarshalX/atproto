@@ -21,19 +21,21 @@ def main():
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,  # or any another DID
             collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(createdAt=datetime.now().isoformat(), text=text, embed=embed_external),
+            record=models.AppBskyFeedPost.Main(created_at=datetime.now().isoformat(), text=text, embed=embed_external),
         )
     )
 
     text_quote = 'Example post with embed post and quote (quote post)'
     # AppBskyEmbedRecord is the same as "quote post" in the app
-    embed_post = models.AppBskyEmbedRecord.Main(record=post_with_link_card)
+    embed_post = models.AppBskyEmbedRecord.Main(record=models.create_strong_ref(post_with_link_card))
 
     client.com.atproto.repo.create_record(
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,  # or any another DID
             collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(createdAt=datetime.now().isoformat(), text=text_quote, embed=embed_post),
+            record=models.AppBskyFeedPost.Main(
+                created_at=datetime.now().isoformat(), text=text_quote, embed=embed_post
+            ),
         )
     )
 

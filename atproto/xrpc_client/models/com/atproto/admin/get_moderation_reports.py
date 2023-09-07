@@ -6,22 +6,25 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.admin.getModerationReports`."""
 
-    actionType: t.Optional[str] = None  #: Action type.
-    actionedBy: t.Optional[str] = None  #: Get all reports that were actioned by a specific moderator.
+    action_type: t.Optional[str] = Field(default=None, alias='actionType')  #: Action type.
+    actioned_by: t.Optional[str] = Field(
+        default=None, alias='actionedBy'
+    )  #: Get all reports that were actioned by a specific moderator.
     cursor: t.Optional[str] = None  #: Cursor.
-    ignoreSubjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
-    limit: t.Optional[int] = None  #: Limit.
+    ignore_subjects: t.Optional[t.List[str]] = Field(default=None, alias='ignoreSubjects')  #: Ignore subjects.
+    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     reporters: t.Optional[t.List[str]] = None  #: Filter reports made by one or more DIDs.
     resolved: t.Optional[bool] = None  #: Resolved.
     reverse: t.Optional[
@@ -30,7 +33,6 @@ class Params(base.ParamsModelBase):
     subject: t.Optional[str] = None  #: Subject.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.admin.getModerationReports`."""

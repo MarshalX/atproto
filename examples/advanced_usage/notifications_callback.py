@@ -22,19 +22,19 @@ async def main():
             last_seen_at = datetime.now(timezone.utc).isoformat()
 
             # fetch new notifications
-            response = await async_client.bsky.notification.list_notifications()
+            response = await async_client.app.bsky.notification.list_notifications()
 
             # create task list to run callbacks concurrently
             on_notification_tasks = []
             for notification in response.notifications:
-                if not notification.isRead:
+                if not notification.is_read:
                     on_notification_tasks.append(on_notification(notification))
 
             # run callback on each notification
             await asyncio.gather(*on_notification_tasks)
 
             # mark notifications as processed (isRead=True)
-            await async_client.bsky.notification.update_seen({'seenAt': last_seen_at})
+            await async_client.app.bsky.notification.update_seen({'seen_at': last_seen_at})
             print('Successfully process notification. Last seen at:', last_seen_at)
 
             await asyncio.sleep(FETCH_NOTIFICATIONS_DELAY_SEC)
@@ -44,5 +44,5 @@ async def main():
 
 
 if __name__ == '__main__':
-    # use run() for higher Python version
+    # use run() for a higher Python version
     asyncio.get_event_loop().run_until_complete(main())

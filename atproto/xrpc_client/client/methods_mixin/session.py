@@ -32,13 +32,13 @@ class SessionMethodsMixin:
             'models.ComAtprotoServerCreateSession.Response', 'models.ComAtprotoServerRefreshSession.Response'
         ],
     ) -> None:
-        self._access_jwt = session.accessJwt
-        self._access_jwt_payload = get_jwt_payload(session.accessJwt)
+        self._access_jwt = session.access_jwt
+        self._access_jwt_payload = get_jwt_payload(session.access_jwt)
 
-        self._refresh_jwt = session.refreshJwt
-        self._refresh_jwt_payload = get_jwt_payload(session.refreshJwt)
+        self._refresh_jwt = session.refresh_jwt
+        self._refresh_jwt_payload = get_jwt_payload(session.refresh_jwt)
 
-        self._set_auth_headers(session.accessJwt)
+        self._set_auth_headers(session.access_jwt)
 
     @staticmethod
     def _get_auth_headers(token: str) -> t.Dict[str, str]:

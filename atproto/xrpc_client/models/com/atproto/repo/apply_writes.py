@@ -6,55 +6,61 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
+    from atproto.xrpc_client.models.unknown_type import UnknownType
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.repo.applyWrites`."""
 
     repo: str  #: The handle or DID of the repo.
     writes: t.List[
-        t.Union[
-            'models.ComAtprotoRepoApplyWrites.Create',
-            'models.ComAtprotoRepoApplyWrites.Update',
-            'models.ComAtprotoRepoApplyWrites.Delete',
-            't.Dict[str, t.Any]',
+        te.Annotated[
+            t.Union[
+                'models.ComAtprotoRepoApplyWrites.Create',
+                'models.ComAtprotoRepoApplyWrites.Update',
+                'models.ComAtprotoRepoApplyWrites.Delete',
+            ],
+            Field(discriminator='py_type'),
         ]
     ]  #: Writes.
-    swapCommit: t.Optional[str] = None  #: Swap commit.
-    validate: t.Optional[bool] = None  #: Validate the records?
+    swap_commit: t.Optional[str] = Field(default=None, alias='swapCommit')  #: Swap commit.
+    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Validate the records?
 
 
-@dataclass
 class Create(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record."""
 
     collection: str  #: Collection.
-    value: 'base.UnknownDict'  #: Value.
-    rkey: t.Optional[str] = None  #: Rkey.
+    value: 'UnknownType'  #: Value.
+    rkey: t.Optional[str] = Field(default=None, max_length=15)  #: Rkey.
 
-    _type: str = 'com.atproto.repo.applyWrites#create'
+    py_type: te.Literal['com.atproto.repo.applyWrites#create'] = Field(
+        default='com.atproto.repo.applyWrites#create', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class Update(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Update an existing record."""
 
     collection: str  #: Collection.
     rkey: str  #: Rkey.
-    value: 'base.UnknownDict'  #: Value.
+    value: 'UnknownType'  #: Value.
 
-    _type: str = 'com.atproto.repo.applyWrites#update'
+    py_type: te.Literal['com.atproto.repo.applyWrites#update'] = Field(
+        default='com.atproto.repo.applyWrites#update', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class Delete(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Delete an existing record."""
@@ -62,4 +68,6 @@ class Delete(base.ModelBase):
     collection: str  #: Collection.
     rkey: str  #: Rkey.
 
-    _type: str = 'com.atproto.repo.applyWrites#delete'
+    py_type: te.Literal['com.atproto.repo.applyWrites#delete'] = Field(
+        default='com.atproto.repo.applyWrites#delete', alias='$type', frozen=True
+    )

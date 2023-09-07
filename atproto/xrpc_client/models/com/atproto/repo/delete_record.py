@@ -6,12 +6,14 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.repo.deleteRecord`."""
@@ -19,5 +21,9 @@ class Data(base.DataModelBase):
     collection: str  #: The NSID of the record collection.
     repo: str  #: The handle or DID of the repo.
     rkey: str  #: The key of the record.
-    swapCommit: t.Optional[str] = None  #: Compare and swap with the previous commit by cid.
-    swapRecord: t.Optional[str] = None  #: Compare and swap with the previous record by cid.
+    swap_commit: t.Optional[str] = Field(
+        default=None, alias='swapCommit'
+    )  #: Compare and swap with the previous commit by cid.
+    swap_record: t.Optional[str] = Field(
+        default=None, alias='swapRecord'
+    )  #: Compare and swap with the previous record by cid.

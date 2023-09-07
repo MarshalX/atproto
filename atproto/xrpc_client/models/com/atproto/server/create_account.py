@@ -6,12 +6,14 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.createAccount`."""
@@ -20,16 +22,15 @@ class Data(base.DataModelBase):
     handle: str  #: Handle.
     password: str  #: Password.
     did: t.Optional[str] = None  #: Did.
-    inviteCode: t.Optional[str] = None  #: Invite code.
-    recoveryKey: t.Optional[str] = None  #: Recovery key.
+    invite_code: t.Optional[str] = Field(default=None, alias='inviteCode')  #: Invite code.
+    recovery_key: t.Optional[str] = Field(default=None, alias='recoveryKey')  #: Recovery key.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.server.createAccount`."""
 
-    accessJwt: str  #: Access jwt.
+    access_jwt: str = Field(alias='accessJwt')  #: Access jwt.
     did: str  #: Did.
     handle: str  #: Handle.
-    refreshJwt: str  #: Refresh jwt.
+    refresh_jwt: str = Field(alias='refreshJwt')  #: Refresh jwt.

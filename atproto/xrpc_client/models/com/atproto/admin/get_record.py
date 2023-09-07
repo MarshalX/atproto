@@ -6,20 +6,15 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.admin.getRecord`."""
 
     uri: str  #: Uri.
     cid: t.Optional[str] = None  #: Cid.
-
-
-#: Response reference to :obj:`models.ComAtprotoAdminDefs.RecordViewDetail` model.
-ResponseRef = models.ComAtprotoAdminDefs.RecordViewDetail

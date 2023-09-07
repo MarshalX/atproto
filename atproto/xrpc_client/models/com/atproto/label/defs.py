@@ -6,13 +6,15 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Label(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto resource (eg, repo or record)"""
@@ -20,30 +22,34 @@ class Label(base.ModelBase):
     cts: str  #: timestamp when this label was created.
     src: str  #: DID of the actor who created this label.
     uri: str  #: AT URI of the record, repository (account), or other resource which this label applies to.
-    val: str  #: the short string name of the value or type of this label.
+    val: str = Field(max_length=128)  #: the short string name of the value or type of this label.
     cid: t.Optional[
         str
     ] = None  #: optionally, CID specifying the specific version of 'uri' resource this label applies to.
     neg: t.Optional[bool] = None  #: if true, this is a negation label, overwriting a previous label.
 
-    _type: str = 'com.atproto.label.defs#label'
+    py_type: te.Literal['com.atproto.label.defs#label'] = Field(
+        default='com.atproto.label.defs#label', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class SelfLabels(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tags on an atproto record, published by the author within the record."""
 
-    values: t.List['models.ComAtprotoLabelDefs.SelfLabel']  #: Values.
+    values: t.List['models.ComAtprotoLabelDefs.SelfLabel'] = Field(max_length=10)  #: Values.
 
-    _type: str = 'com.atproto.label.defs#selfLabels'
+    py_type: te.Literal['com.atproto.label.defs#selfLabels'] = Field(
+        default='com.atproto.label.defs#selfLabels', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class SelfLabel(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto record, published by the author within the record. Note -- schemas should use #selfLabels, not #selfLabel."""
 
-    val: str  #: the short string name of the value or type of this label.
+    val: str = Field(max_length=128)  #: the short string name of the value or type of this label.
 
-    _type: str = 'com.atproto.label.defs#selfLabel'
+    py_type: te.Literal['com.atproto.label.defs#selfLabel'] = Field(
+        default='com.atproto.label.defs#selfLabel', alias='$type', frozen=True
+    )

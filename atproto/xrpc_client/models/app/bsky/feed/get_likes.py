@@ -6,13 +6,15 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`app.bsky.feed.getLikes`."""
@@ -20,10 +22,9 @@ class Params(base.ParamsModelBase):
     uri: str  #: Uri.
     cid: t.Optional[str] = None  #: Cid.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = None  #: Limit.
+    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.feed.getLikes`."""
@@ -34,13 +35,14 @@ class Response(base.ResponseModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
 
 
-@dataclass
 class Like(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.feed.getLikes`."""
 
     actor: 'models.AppBskyActorDefs.ProfileView'  #: Actor.
-    createdAt: str  #: Created at.
-    indexedAt: str  #: Indexed at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
+    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
 
-    _type: str = 'app.bsky.feed.getLikes#like'
+    py_type: te.Literal['app.bsky.feed.getLikes#like'] = Field(
+        default='app.bsky.feed.getLikes#like', alias='$type', frozen=True
+    )

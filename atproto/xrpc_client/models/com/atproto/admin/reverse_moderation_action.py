@@ -5,21 +5,19 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
-from atproto.xrpc_client import models
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.admin.reverseModerationAction`."""
 
-    createdBy: str  #: Created by.
+    created_by: str = Field(alias='createdBy')  #: Created by.
     id: int  #: Id.
     reason: str  #: Reason.
-
-
-#: Response reference to :obj:`models.ComAtprotoAdminDefs.ActionView` model.
-ResponseRef = models.ComAtprotoAdminDefs.ActionView

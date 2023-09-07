@@ -23,7 +23,6 @@ Submodules
    atproto.xrpc_client.models.com.atproto.admin.get_moderation_reports
    atproto.xrpc_client.models.com.atproto.admin.get_record
    atproto.xrpc_client.models.com.atproto.admin.get_repo
-   atproto.xrpc_client.models.com.atproto.admin.rebase_repo
    atproto.xrpc_client.models.com.atproto.admin.resolve_moderation_reports
    atproto.xrpc_client.models.com.atproto.admin.reverse_moderation_action
    atproto.xrpc_client.models.com.atproto.admin.search_repos

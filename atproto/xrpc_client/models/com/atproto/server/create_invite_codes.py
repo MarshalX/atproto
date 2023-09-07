@@ -6,23 +6,24 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.createInviteCodes`."""
 
-    codeCount: int  #: Code count.
-    useCount: int  #: Use count.
-    forAccounts: t.Optional[t.List[str]] = None  #: For accounts.
+    code_count: int = Field(default=1, alias='codeCount')  #: Code count.
+    use_count: int = Field(alias='useCount')  #: Use count.
+    for_accounts: t.Optional[t.List[str]] = Field(default=None, alias='forAccounts')  #: For accounts.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.server.createInviteCodes`."""
@@ -30,7 +31,6 @@ class Response(base.ResponseModelBase):
     codes: t.List['models.ComAtprotoServerCreateInviteCodes.AccountCodes']  #: Codes.
 
 
-@dataclass
 class AccountCodes(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.server.createInviteCodes`."""
@@ -38,4 +38,6 @@ class AccountCodes(base.ModelBase):
     account: str  #: Account.
     codes: t.List[str]  #: Codes.
 
-    _type: str = 'com.atproto.server.createInviteCodes#accountCodes'
+    py_type: te.Literal['com.atproto.server.createInviteCodes#accountCodes'] = Field(
+        default='com.atproto.server.createInviteCodes#accountCodes', alias='$type', frozen=True
+    )

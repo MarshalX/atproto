@@ -1,3 +1,5 @@
+import multiprocessing
+
 from atproto import CAR, AtUri
 from atproto.firehose import FirehoseSubscribeReposClient, parse_subscribe_repos_message
 from atproto.firehose.models import MessageFrame
@@ -50,18 +52,31 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict
     return operation_by_type
 
 
-if __name__ == '__main__':
-    client = FirehoseSubscribeReposClient()
+def worker_main(pool_queue) -> None:
+    while True:
+        message = pool_queue.get()
 
-    def on_message_handler(message: MessageFrame) -> None:
         commit = parse_subscribe_repos_message(message)
         if not isinstance(commit, models.ComAtprotoSyncSubscribeRepos.Commit):
-            return
+            continue
 
         ops = _get_ops_by_type(commit)
         for post in ops['posts']['created']:
             post_msg = post['record'].text
             post_langs = post['record'].langs
             print(f'New post in the network! Langs: {post_langs}. Text: {post_msg}')
+
+
+if __name__ == '__main__':
+    client = FirehoseSubscribeReposClient()
+
+    workers_count = multiprocessing.cpu_count() * 2 - 1
+    max_queue_size = 500
+
+    queue = multiprocessing.Queue(maxsize=max_queue_size)
+    pool = multiprocessing.Pool(workers_count, worker_main, (queue,))
+
+    def on_message_handler(message: MessageFrame) -> None:
+        queue.put(message)
 
     client.start(on_message_handler)

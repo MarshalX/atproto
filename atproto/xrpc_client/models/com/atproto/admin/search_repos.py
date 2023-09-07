@@ -6,24 +6,24 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.admin.searchRepos`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    invitedBy: t.Optional[str] = None  #: Invited by.
-    limit: t.Optional[int] = None  #: Limit.
+    invited_by: t.Optional[str] = Field(default=None, alias='invitedBy')  #: Invited by.
+    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     term: t.Optional[str] = None  #: Term.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.admin.searchRepos`."""

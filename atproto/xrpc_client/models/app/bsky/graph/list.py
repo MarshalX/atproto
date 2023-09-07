@@ -6,24 +6,30 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
+    from atproto.xrpc_client.models.blob_ref import BlobRef
 from atproto.xrpc_client.models import base
-from atproto.xrpc_client.models.blob_ref import BlobRef
 
 
-@dataclass
 class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.graph.list`."""
 
-    createdAt: str  #: Created at.
-    name: str  #: Name.
+    created_at: str = Field(alias='createdAt')  #: Created at.
+    name: str = Field(min_length=1, max_length=64)  #: Name.
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
-    avatar: t.Optional[BlobRef] = None  #: Avatar.
-    description: t.Optional[str] = None  #: Description.
-    descriptionFacets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
-    labels: t.Optional[t.Union['models.ComAtprotoLabelDefs.SelfLabels', 't.Dict[str, t.Any]']] = None  #: Labels.
+    avatar: t.Optional['BlobRef'] = None  #: Avatar.
+    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
+    description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = Field(
+        default=None, alias='descriptionFacets'
+    )  #: Description facets.
+    labels: t.Optional[
+        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
+    ] = None  #: Labels.
 
-    _type: str = 'app.bsky.graph.list'
+    py_type: te.Literal['app.bsky.graph.list'] = Field(default='app.bsky.graph.list', alias='$type', frozen=True)

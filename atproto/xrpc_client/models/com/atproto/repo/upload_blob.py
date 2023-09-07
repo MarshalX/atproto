@@ -5,20 +5,20 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
 import typing_extensions as te
 
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client.models.blob_ref import BlobRef
 from atproto.xrpc_client.models import base
-from atproto.xrpc_client.models.blob_ref import BlobRef
 
 #: Data raw data type.
 Data: te.TypeAlias = bytes
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.repo.uploadBlob`."""
 
-    blob: BlobRef  #: Blob.
+    blob: 'BlobRef'  #: Blob.

@@ -6,22 +6,26 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
+    from atproto.xrpc_client.models.blob_ref import BlobRef
 from atproto.xrpc_client.models import base
-from atproto.xrpc_client.models.blob_ref import BlobRef
 
 
-@dataclass
 class Main(base.RecordModelBase):
 
     """Record model for :obj:`app.bsky.actor.profile`."""
 
-    avatar: t.Optional[BlobRef] = None  #: Avatar.
-    banner: t.Optional[BlobRef] = None  #: Banner.
-    description: t.Optional[str] = None  #: Description.
-    displayName: t.Optional[str] = None  #: Display name.
-    labels: t.Optional[t.Union['models.ComAtprotoLabelDefs.SelfLabels', 't.Dict[str, t.Any]']] = None  #: Labels.
+    avatar: t.Optional['BlobRef'] = None  #: Avatar.
+    banner: t.Optional['BlobRef'] = None  #: Banner.
+    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
+    display_name: t.Optional[str] = Field(default=None, alias='displayName', max_length=640)  #: Display name.
+    labels: t.Optional[
+        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
+    ] = None  #: Labels.
 
-    _type: str = 'app.bsky.actor.profile'
+    py_type: te.Literal['app.bsky.actor.profile'] = Field(default='app.bsky.actor.profile', alias='$type', frozen=True)

@@ -6,13 +6,15 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.label.subscribeLabels`."""
@@ -20,7 +22,6 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[int] = None  #: The last known event to backfill from.
 
 
-@dataclass
 class Labels(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.subscribeLabels`."""
@@ -28,10 +29,11 @@ class Labels(base.ModelBase):
     labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.
     seq: int  #: Seq.
 
-    _type: str = 'com.atproto.label.subscribeLabels#labels'
+    py_type: te.Literal['com.atproto.label.subscribeLabels#labels'] = Field(
+        default='com.atproto.label.subscribeLabels#labels', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class Info(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.subscribeLabels`."""
@@ -39,4 +41,6 @@ class Info(base.ModelBase):
     name: str  #: Name.
     message: t.Optional[str] = None  #: Message.
 
-    _type: str = 'com.atproto.label.subscribeLabels#info'
+    py_type: te.Literal['com.atproto.label.subscribeLabels#info'] = Field(
+        default='com.atproto.label.subscribeLabels#info', alias='$type', frozen=True
+    )

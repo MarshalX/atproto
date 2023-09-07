@@ -6,13 +6,16 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
+    from atproto.xrpc_client.models.unknown_type import UnknownType
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.repo.listRecords`."""
@@ -20,13 +23,16 @@ class Params(base.ParamsModelBase):
     collection: str  #: The NSID of the record type.
     repo: str  #: The handle or DID of the repo.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = None  #: The number of records to return.
+    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: The number of records to return.
     reverse: t.Optional[bool] = None  #: Reverse the order of the returned records?
-    rkeyEnd: t.Optional[str] = None  #: DEPRECATED: The highest sort-ordered rkey to stop at (exclusive).
-    rkeyStart: t.Optional[str] = None  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).
+    rkey_end: t.Optional[str] = Field(
+        default=None, alias='rkeyEnd'
+    )  #: DEPRECATED: The highest sort-ordered rkey to stop at (exclusive).
+    rkey_start: t.Optional[str] = Field(
+        default=None, alias='rkeyStart'
+    )  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.repo.listRecords`."""
@@ -35,13 +41,14 @@ class Response(base.ResponseModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
 
 
-@dataclass
 class Record(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.repo.listRecords`."""
 
     cid: str  #: Cid.
     uri: str  #: Uri.
-    value: 'base.UnknownDict'  #: Value.
+    value: 'UnknownType'  #: Value.
 
-    _type: str = 'com.atproto.repo.listRecords#record'
+    py_type: te.Literal['com.atproto.repo.listRecords#record'] = Field(
+        default='com.atproto.repo.listRecords#record', alias='$type', frozen=True
+    )

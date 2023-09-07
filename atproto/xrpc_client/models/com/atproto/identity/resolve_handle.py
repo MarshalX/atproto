@@ -5,12 +5,13 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.identity.resolveHandle`."""
@@ -18,7 +19,6 @@ class Params(base.ParamsModelBase):
     handle: str  #: The handle to resolve.
 
 
-@dataclass
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.identity.resolveHandle`."""

@@ -20,7 +20,7 @@ def _stop_after_n_sec():
 # run our sleep functions in another thread
 threading.Thread(target=_stop_after_n_sec).start()
 
-# run client for N seconds
+# run the client for N seconds
 client.start(on_message_handler)
 
 print(f'Successfully stopped after {_STOP_AFTER_SECONDS} seconds!')

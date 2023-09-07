@@ -5,12 +5,16 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.createAppPassword`."""
@@ -18,17 +22,14 @@ class Data(base.DataModelBase):
     name: str  #: Name.
 
 
-@dataclass
 class AppPassword(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.server.createAppPassword`."""
 
-    createdAt: str  #: Created at.
+    created_at: str = Field(alias='createdAt')  #: Created at.
     name: str  #: Name.
     password: str  #: Password.
 
-    _type: str = 'com.atproto.server.createAppPassword#appPassword'
-
-
-#: Response reference to :obj:`AppPassword` model.
-ResponseRef = AppPassword
+    py_type: te.Literal['com.atproto.server.createAppPassword#appPassword'] = Field(
+        default='com.atproto.server.createAppPassword#appPassword', alias='$type', frozen=True
+    )

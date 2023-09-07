@@ -5,12 +5,16 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Main(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.repo.strongRef`."""
@@ -18,4 +22,6 @@ class Main(base.ModelBase):
     cid: str  #: Cid.
     uri: str  #: Uri.
 
-    _type: str = 'com.atproto.repo.strongRef'
+    py_type: te.Literal['com.atproto.repo.strongRef'] = Field(
+        default='com.atproto.repo.strongRef', alias='$type', frozen=True
+    )

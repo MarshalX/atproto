@@ -5,19 +5,15 @@
 ##################################################################
 
 
-from dataclasses import dataclass
+import typing as t
 
-from atproto.xrpc_client import models
+if t.TYPE_CHECKING:
+    pass
 from atproto.xrpc_client.models import base
 
 
-@dataclass
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`app.bsky.actor.getProfile`."""
 
     actor: str  #: Actor.
-
-
-#: Response reference to :obj:`models.AppBskyActorDefs.ProfileViewDetailed` model.
-ResponseRef = models.AppBskyActorDefs.ProfileViewDetailed

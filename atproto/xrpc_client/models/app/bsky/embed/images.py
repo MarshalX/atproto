@@ -6,45 +6,48 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
-from atproto.xrpc_client import models
+import typing_extensions as te
+from pydantic import Field
+
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client import models
+    from atproto.xrpc_client.models.blob_ref import BlobRef
 from atproto.xrpc_client.models import base
-from atproto.xrpc_client.models.blob_ref import BlobRef
 
 
-@dataclass
 class Main(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.images`."""
 
-    images: t.List['models.AppBskyEmbedImages.Image']  #: Images.
+    images: t.List['models.AppBskyEmbedImages.Image'] = Field(max_length=4)  #: Images.
 
-    _type: str = 'app.bsky.embed.images'
+    py_type: te.Literal['app.bsky.embed.images'] = Field(default='app.bsky.embed.images', alias='$type', frozen=True)
 
 
-@dataclass
 class Image(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.images`."""
 
     alt: str  #: Alt.
-    image: BlobRef  #: Image.
+    image: 'BlobRef'  #: Image.
 
-    _type: str = 'app.bsky.embed.images#image'
+    py_type: te.Literal['app.bsky.embed.images#image'] = Field(
+        default='app.bsky.embed.images#image', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class View(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.images`."""
 
-    images: t.List['models.AppBskyEmbedImages.ViewImage']  #: Images.
+    images: t.List['models.AppBskyEmbedImages.ViewImage'] = Field(max_length=4)  #: Images.
 
-    _type: str = 'app.bsky.embed.images#view'
+    py_type: te.Literal['app.bsky.embed.images#view'] = Field(
+        default='app.bsky.embed.images#view', alias='$type', frozen=True
+    )
 
 
-@dataclass
 class ViewImage(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.embed.images`."""
@@ -53,4 +56,6 @@ class ViewImage(base.ModelBase):
     fullsize: str  #: Fullsize.
     thumb: str  #: Thumb.
 
-    _type: str = 'app.bsky.embed.images#viewImage'
+    py_type: te.Literal['app.bsky.embed.images#viewImage'] = Field(
+        default='app.bsky.embed.images#viewImage', alias='$type', frozen=True
+    )

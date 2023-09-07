@@ -17,7 +17,7 @@ def main():
             features=[models.AppBskyRichtextFacet.Link(uri=url)],
             # we should pass when our link starts and ends in the text
             # the example below selects all the text
-            index=models.AppBskyRichtextFacet.ByteSlice(byteStart=0, byteEnd=len(text.encode('UTF-8'))),
+            index=models.AppBskyRichtextFacet.ByteSlice(byte_start=0, byte_end=len(text.encode('UTF-8'))),
         )
     ]
 
@@ -25,7 +25,7 @@ def main():
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,  # or any another DID
             collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(createdAt=datetime.now().isoformat(), text=text, facets=facets),
+            record=models.AppBskyFeedPost.Main(created_at=datetime.now().isoformat(), text=text, facets=facets),
         )
     )
 

@@ -1,6 +1,7 @@
 import os
 import typing as t
 from enum import Enum
+from functools import lru_cache
 from pathlib import Path
 
 from atproto.codegen import (
@@ -8,10 +9,12 @@ from atproto.codegen import (
     INPUT_MODEL,
     OUTPUT_MODEL,
     PARAMS_MODEL,
+    _resolve_nsid_ref,
     append_code,
-    capitalize_first_symbol,
+    convert_camel_case_to_snake_case,
     format_code,
     gen_description_by_camel_case_name,
+    get_def_model_name,
     get_file_path_parts,
     get_import_path,
     join_code,
@@ -19,7 +22,6 @@ from atproto.codegen import (
 )
 from atproto.codegen import get_code_intent as _
 from atproto.codegen.models import builder
-from atproto.exceptions import InvalidNsidError
 from atproto.lexicon import models
 from atproto.nsid import NSID
 
@@ -32,14 +34,6 @@ class ModelType(Enum):
     RESPONSE = 'Output data'
     DEF = 'Definition'
     RECORD = 'Record'
-
-
-def get_def_model_name(method_name: str) -> str:
-    return f'{capitalize_first_symbol(method_name)}'
-
-
-def get_model_path(nsid: NSID, method_name: str) -> str:
-    return f'models.{get_import_path(nsid)}.{get_def_model_name(method_name)}'
 
 
 def save_code(nsid: NSID, code: str) -> None:
@@ -55,16 +49,18 @@ def save_code_part(nsid: NSID, code: str) -> None:
 def _get_model_imports() -> str:
     # we are using ruff with F401 autofix to delete unused imports
     lines = [
-        'from dataclasses import dataclass',
         'import typing as t',
         '',
         'import typing_extensions as te',
-        'from atproto.xrpc_client import models',
-        'from atproto.xrpc_client.models import base',
-        'from atproto.xrpc_client.models import unknown_type',
-        'from atproto.xrpc_client.models.blob_ref import BlobRef',
+        'from pydantic import Field',
         '',
-        'from atproto import CID',
+        'if t.TYPE_CHECKING:',
+        f'{_(1)}from atproto.xrpc_client import models',
+        f'{_(1)}from atproto.xrpc_client.models.unknown_type import UnknownType',
+        f'{_(1)}from atproto.xrpc_client.models.blob_ref import BlobRef',
+        f'{_(1)}from atproto import CIDType',
+        'from atproto.xrpc_client.models import base',
+        '',
         '',
     ]
 
@@ -82,7 +78,7 @@ def _save_code_import_if_not_exist(nsid: NSID) -> None:
 
 
 def _get_model_class_def(name: str, model_type: ModelType) -> str:
-    lines = ['@dataclass']
+    lines = []
 
     if model_type is ModelType.PARAMS:
         lines.append(f'class {PARAMS_MODEL}(base.ParamsModelBase):')
@@ -109,37 +105,13 @@ _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT = {
 
 def _get_optional_typehint(type_hint, *, optional: bool) -> str:
     if optional:
-        return f't.Optional[{type_hint}] = None'
+        return f't.Optional[{type_hint}]'
     return type_hint
 
 
 def _get_ref_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
     model_path, _ = _resolve_nsid_ref(nsid, field_type_def.ref)
     return _get_optional_typehint(f"'{model_path}'", optional=optional)
-
-
-def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> t.Tuple[str, str]:
-    """Returns path to the model and model name"""
-    if '#' in ref:
-        ref_nsid_str, def_name = ref.split('#', 1)
-        def_name = get_def_model_name(def_name)
-
-        try:
-            ref_nsid = NSID.from_str(ref_nsid_str)
-            return get_model_path(ref_nsid, def_name), def_name
-        except InvalidNsidError:
-            if local:
-                return def_name, def_name
-            return get_model_path(nsid, def_name), def_name
-    else:
-        ref_nsid = NSID.from_str(ref)
-        def_name = get_def_model_name(nsid.name)
-
-        if local:
-            return def_name, def_name
-
-        # FIXME(MarshalX): Is it works well? ;d
-        return get_model_path(ref_nsid, 'Main'), def_name
 
 
 def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
@@ -154,25 +126,28 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     # ref: https://github.com/bluesky-social/atproto/blob/b01e47b61730d05a780f7a42667b91ccaa192e8e/packages/lex-cli/src/codegen/lex-gen.ts#L325
     # grep by "{$type: string; [k: string]: unknown}" string
     # TODO(MarshalX): use 'base.UnknownDict' and convert to DotDict
-    def_names.append('t.Dict[str, t.Any]')
+    # append 't.Dict[str, t.Any]' to def_names  # FIXME(MarshalX): support pydantic
 
     def_names = ', '.join([f"'{name}'" for name in def_names])
-    return _get_optional_typehint(f't.Union[{def_names}]', optional=optional)
+    def_field_meta = 'Field(default=None, discriminator="py_type")' if optional else 'Field(discriminator="py_type")'
+
+    annotated_union = f'te.Annotated[t.Union[{def_names}], {def_field_meta}]'
+    return _get_optional_typehint(annotated_union, optional=optional)
 
 
-def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, optional: bool) -> str:
+def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
-        # unknown type is a generic response with records or any not described type in the lexicon. for example didDoc
-        return _get_optional_typehint("'base.UnknownDict'", optional=optional)
+        # unknown type is a generic response with records or any not described type in the lexicon. for example, didDoc
+        return _get_optional_typehint("'UnknownType'", optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
     if type_hint:
         return _get_optional_typehint(type_hint, optional=optional)
 
     if field_type is models.LexArray:
-        items_type_hint = _get_model_field_typehint(nsid, field_name, field_type_def.items, optional=False)
+        items_type_hint = _get_model_field_typehint(nsid, field_type_def.items, optional=False)
         return _get_optional_typehint(f't.List[{items_type_hint}]', optional=optional)
 
     if field_type is models.LexRef:
@@ -182,7 +157,7 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
         return _get_ref_union_typehint(nsid, field_type_def, optional=optional)
 
     if field_type is models.LexCidLink:
-        return _get_optional_typehint('CID', optional=optional)
+        return _get_optional_typehint("'CIDType'", optional=optional)
 
     if field_type is models.LexBytes:
         # CAR file containing relevant blocks
@@ -190,9 +165,96 @@ def _get_model_field_typehint(nsid: NSID, field_name: str, field_type_def, *, op
 
     if field_type is models.LexBlob:
         # yes, it returns blob,but actually it's blob ref here
-        return _get_optional_typehint('BlobRef', optional=optional)
+        return _get_optional_typehint("'BlobRef'", optional=optional)
 
     raise ValueError(f'Unknown field type {field_type.__name__}')
+
+
+def _get_model_field_value(field_type_def, alias_name: t.Optional[str] = None, *, optional: bool) -> str:  # noqa: C901
+    not_set = object()
+
+    default: t.Any = not_set
+    alias: t.Union[str, not_set] = alias_name or not_set
+    min_length: t.Union[int, not_set] = not_set
+    max_length: t.Union[int, not_set] = not_set
+    ge: t.Union[int, not_set] = not_set
+    le: t.Union[int, not_set] = not_set
+    frozen: t.Union[bool, not_set] = not_set
+
+    field_type = type(field_type_def)
+
+    if field_type == models.LexInteger:
+        if field_type_def.default is not None:
+            default = field_type_def.default
+        if field_type_def.minimum is not None:
+            ge = field_type_def.minimum
+        if field_type_def.maximum is not None:
+            le = field_type_def.maximum
+        if field_type_def.const is not None:
+            frozen = field_type_def.const
+
+    elif field_type == models.LexString:
+        if field_type_def.default is not None:
+            default = field_type_def.default
+        if field_type_def.const is not None:
+            frozen = field_type_def.const
+        if field_type_def.minLength is not None:
+            min_length = field_type_def.minLength
+        if field_type_def.maxLength is not None:
+            max_length = field_type_def.maxLength
+
+    elif field_type == models.LexBoolean:
+        if field_type_def.default is not None:
+            default = field_type_def.default
+        if field_type_def.const is not None:
+            frozen = field_type_def.const
+
+    elif field_type is models.LexArray:
+        if field_type_def.minLength is not None:
+            min_length = field_type_def.minLength
+        if field_type_def.maxLength is not None:
+            max_length = field_type_def.maxLength
+
+    if default is not_set and optional:
+        default = None
+
+    field_params = {
+        'default': default,
+        'alias': alias,
+        'min_length': min_length,
+        'max_length': max_length,
+        'ge': ge,
+        'le': le,
+        'frozen': frozen,
+    }
+
+    values = []
+    only_default = default is not not_set
+    for name, value in field_params.items():
+        if value is not_set:
+            continue
+
+        if name != 'default':
+            only_default = False
+
+        value_str = f'{name}='
+        if isinstance(value, str):
+            value_str += f"'{value}'"
+        elif isinstance(value, bool):
+            value_str += 'True' if value else 'False'
+        else:
+            value_str += str(value)
+
+        values.append(value_str)
+
+    if only_default:
+        return 'None'
+
+    if not values:
+        return ''
+
+    field_params_str = ', '.join(values)
+    return f'Field({field_params_str})'
 
 
 def _get_req_fields_set(lex_obj: t.Union[models.LexObject, models.LexXrpcParameters]) -> set:
@@ -230,19 +292,50 @@ def _get_model_docstring(
     return join_code(doc_string)
 
 
+@lru_cache(maxsize=None)
+def _get_pydantic_reserved_names() -> t.Set[str]:
+    from pydantic import BaseModel
+
+    class Model(BaseModel):
+        pass
+
+    instance = Model()
+
+    return {name for name in dir(instance) if not name.startswith('_')}
+
+
+def _is_reserved_pydantic_name(name: str) -> bool:
+    return name in _get_pydantic_reserved_names()
+
+
 def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters]) -> str:
     required_fields = _get_req_fields_set(lex_object)
 
     fields = []
     optional_fields = []
 
-    for field_name, field_type in lex_object.properties.items():
+    for field_name, field_type_def in lex_object.properties.items():
         is_optional = field_name not in required_fields
-        type_hint = _get_model_field_typehint(nsid, field_name, field_type, optional=is_optional)
-        description = _get_field_docstring(field_name, field_type)
 
-        # TODO(MarshalX): Add default values. for bool, etc..
-        field_def = f'{_(1)}{field_name}: {type_hint} #: {description}'
+        alias_name = None
+        snake_cased_field_name = convert_camel_case_to_snake_case(field_name)
+
+        if snake_cased_field_name != field_name:
+            # make aliases for fields with camel case names
+            alias_name = field_name
+
+        if _is_reserved_pydantic_name(snake_cased_field_name):
+            # make aliases for fields with reserved names
+            snake_cased_field_name += '_'  # add underscore to the end
+            alias_name = field_name
+
+        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional)
+        value = _get_model_field_value(field_type_def, alias_name, optional=is_optional)
+        description = _get_field_docstring(field_name, field_type_def)
+
+        value_def = f' = {value}' if value else ''
+        field_def = f'{_(1)}{snake_cased_field_name}: {type_hint}{value_def} #: {description}'
+
         if is_optional:
             optional_fields.append(field_def)
         else:
@@ -256,21 +349,6 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
     fields.append('')
 
     return join_code(fields)
-
-
-def _get_model_ref(nsid: NSID, ref: models.LexRef) -> str:
-    # FIXME(MarshalX): "local=True" Is it works well? ;d
-    ref_class, _ = _resolve_nsid_ref(nsid, ref.ref, local=True)
-
-    # "Ref" suffix required to fix name collisions from different namespaces
-    lines = [
-        f'#: {OUTPUT_MODEL} reference to :obj:`{ref_class}` model.',
-        f'{OUTPUT_MODEL}Ref = {ref_class}',
-        '',
-        '',
-    ]
-
-    return join_code(lines)
 
 
 def _get_model_raw_data(name: str) -> str:
@@ -327,16 +405,19 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
     if def_name == 'main':
         def_type = str(nsid)
 
-    lines.append(f"{_(1)}_type: str = '{def_type}'")
-
+    lines.append(f"{_(1)}py_type: te.Literal['{def_type}'] = Field(default='{def_type}', alias='$type', frozen=True)")
     lines.append('')
 
     return join_code(lines)
 
 
-def _generate_def_token(def_name: str) -> str:
+def _generate_def_token(nsid: NSID, def_name: str, def_model: models.LexToken) -> str:
+    description = def_model.description
+    if not description:
+        description = gen_description_by_camel_case_name(def_name)
+
     lines = [
-        f"{get_def_model_name(def_name)}: te.Literal['{def_name}'] = '{def_name}'",
+        f"{get_def_model_name(def_name)} = te.Literal['{nsid}#{def_name}'] #: {description}",
         '',
         '',
     ]
@@ -344,23 +425,36 @@ def _generate_def_token(def_name: str) -> str:
 
 
 def _generate_def_array(nsid: NSID, def_name: str, def_model: models.LexArray) -> str:
-    return f'{get_def_model_name(def_name)} = {_get_model_field_typehint(nsid, def_name, def_model, optional=False)}\n'
+    return f'{get_def_model_name(def_name)} = {_get_model_field_typehint(nsid, def_model, optional=False)}\n'
 
 
-def _generate_def_string(def_name: str, def_model: models.LexString) -> str:
-    # FIXME(MarshalX): Doesn't support all fields
+def _generate_def_string(nsid: NSID, def_name: str, def_model: models.LexString) -> str:
+    # FIXME(MarshalX): support more fields. only knownValues field is supported for now
 
     if not def_model.knownValues:
         return ''
 
-    # FIXME(MarshalX): Use ref resolver
-    known_values_list = ["'" + get_def_model_name(v.split('#', 1)[1]) + "'" for v in def_model.knownValues]
-    known_values = ', '.join(known_values_list)
+    union_types = []
+    for known_value in def_model.knownValues:
+        if '#' in known_value:
+            # reference to literal (token)
+            model_path, _ = _resolve_nsid_ref(nsid, known_value)
+            type_ = f"'{model_path}'"
+        else:
+            # literal
+            # FIXME(MarshalX): not used for now
+            type_ = f"te.Literal['{known_value}']"
 
-    type_ = f'te.Literal[{known_values}]'
+        union_types.append(type_)
+
+    final_type = f"t.Union[{', '.join(union_types)}]"
+
+    description = def_model.description
+    if not description:
+        description = gen_description_by_camel_case_name(def_name)
 
     lines = [
-        f'{get_def_model_name(def_name)} = {type_}',
+        f'{get_def_model_name(def_name)} = {final_type} #: {description}',
         '',
         '',
     ]
@@ -405,9 +499,9 @@ def _generate_def_models(lex_db: builder.BuiltDefModels) -> None:
 
         for def_name, def_model in defs.items():
             if isinstance(def_model, models.LexToken):
-                save_code_part(nsid, _generate_def_token(def_name))
+                save_code_part(nsid, _generate_def_token(nsid, def_name, def_model))
             elif isinstance(def_model, models.LexString):
-                save_code_part(nsid, _generate_def_string(def_name, def_model))
+                save_code_part(nsid, _generate_def_string(nsid, def_name, def_model))
             elif isinstance(def_model, models.LexObject):
                 save_code_part(nsid, _generate_def_model(nsid, def_name, def_model, ModelType.DEF))
             elif isinstance(def_model, models.LexArray):
@@ -428,21 +522,26 @@ def _generate_record_models(lex_db: builder.BuiltRecordModels) -> None:
 
 def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     type_conversion_lines = ['from atproto.xrpc_client import models', 'RECORD_TYPE_TO_MODEL_CLASS = {']
-    unknown_record_type_hint_lines = [
+
+    import_lines = [
         'import typing as t',
         'import typing_extensions as te',
+        'from pydantic import Field',
         'if t.TYPE_CHECKING:',
+        f'{_(4)}from atproto.xrpc_client.models import base',
         f'{_(4)}from atproto.xrpc_client import models',
+        f'{_(4)}from atproto.xrpc_client.models import dot_dict',
         '',
-        'UnknownRecordType: te.TypeAlias = t.Union[',
     ]
+    unknown_record_type_hint_lines = ['UnknownRecordType: te.TypeAlias = t.Union[']
+    unknown_record_type_pydantic_lines = ['UnknownRecordTypePydantic = te.Annotated[t.Union[']
 
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
 
         for def_name, def_record in defs.items():
-            # for now there are records only in under "main" definition name.
-            # need to rework a bit if this behaviour will be changed
+            # for now, there are records only in under "main" definition name.
+            # need to rework a bit if this behavior is changed
             if isinstance(def_record, models.LexRecord):
                 class_name = get_def_model_name(def_name)
                 record_type = str(nsid)
@@ -450,33 +549,21 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
                 path_to_class = f'models.{get_import_path(nsid)}.{class_name}'
 
                 type_conversion_lines.append(f"'{record_type}': {path_to_class},")
+
                 unknown_record_type_hint_lines.append(f"{_(4)}'{path_to_class}',")
+                unknown_record_type_pydantic_lines.append(f"{_(4)}'{path_to_class}',")
 
     type_conversion_lines.append('}')
+
     unknown_record_type_hint_lines.append(']')
+    unknown_record_type_pydantic_lines.append('], Field(discriminator="py_type")]')
+    unknown_record_type_pydantic_lines.append(
+        "UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType']"
+    )
+    unknown_type_lines = [*import_lines, *unknown_record_type_hint_lines, *unknown_record_type_pydantic_lines]
 
     write_code(_MODELS_OUTPUT_DIR.joinpath('type_conversion.py'), join_code(type_conversion_lines))
-    write_code(_MODELS_OUTPUT_DIR.joinpath('unknown_type.py'), join_code(unknown_record_type_hint_lines))
-
-
-def _generate_ref_models(lex_db: builder.BuiltRefsModels) -> None:
-    for nsid, defs in lex_db.items():
-        definition = defs['main']
-        if (
-            hasattr(definition, 'input')
-            and definition.input
-            and definition.input.schema
-            and isinstance(definition.input.schema, models.LexRef)
-        ):
-            save_code_part(nsid, _get_model_ref(nsid, definition.input.schema))
-
-        if (
-            hasattr(definition, 'output')
-            and definition.output
-            and definition.output.schema
-            and isinstance(definition.output.schema, models.LexRef)
-        ):
-            save_code_part(nsid, _get_model_ref(nsid, definition.output.schema))
+    write_code(_MODELS_OUTPUT_DIR.joinpath('unknown_type.py'), join_code(unknown_type_lines))
 
 
 def _generate_init_files(root_package_path: Path) -> None:
@@ -574,14 +661,18 @@ def _generate_import_aliases(root_package_path: Path) -> None:
 
     import_lines.append(
         'from atproto.xrpc_client.models.utils import '
+        'create_strong_ref, '
         'get_model_as_dict, '
         'get_model_as_json, '
         'get_or_create, '
         'is_record_type'
     )
+    import_lines.append('from atproto.xrpc_client.models.models_loader import load_models')
 
     ids_db.append('ids = _Ids()')
     import_lines.extend(ids_db)
+
+    import_lines.append('load_models()')
 
     write_code(_MODELS_OUTPUT_DIR.joinpath('__init__.py'), join_code(import_lines))
 
@@ -602,9 +693,6 @@ def generate_models(lexicon_dir: t.Optional[Path] = None, output_dir: t.Optional
 
     _generate_record_models(builder.build_record_models())
     _generate_record_type_database(builder.build_record_models())
-
-    # refs should be generated at the end!
-    _generate_ref_models(builder.build_refs_models())
 
     _generate_empty_init_files(_MODELS_OUTPUT_DIR)
     _generate_import_aliases(_MODELS_OUTPUT_DIR)
