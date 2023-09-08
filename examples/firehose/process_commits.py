@@ -38,15 +38,19 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict
                 operation_by_type['likes']['created'].append({'record': record, **create_info})
             elif uri.collection == ids.AppBskyFeedPost and is_record_type(record, ids.AppBskyFeedPost):
                 operation_by_type['posts']['created'].append({'record': record, **create_info})
+            elif uri.collection == ids.AppBskyFeedRepost and is_record_type(record, ids.AppBskyFeedRepost):
+                operation_by_type['reposts']['created'].append({'record': record, **create_info})
             elif uri.collection == ids.AppBskyGraphFollow and is_record_type(record, ids.AppBskyGraphFollow):
                 operation_by_type['follows']['created'].append({'record': record, **create_info})
 
         if op.action == 'delete':
             if uri.collection == ids.AppBskyFeedLike:
                 operation_by_type['likes']['deleted'].append({'uri': str(uri)})
-            if uri.collection == ids.AppBskyFeedPost:
+            elif uri.collection == ids.AppBskyFeedPost:
                 operation_by_type['posts']['deleted'].append({'uri': str(uri)})
-            if uri.collection == ids.AppBskyGraphFollow:
+            elif uri.collection == ids.AppBskyFeedRepost:
+                operation_by_type['reposts']['deleted'].append({'uri': str(uri)})
+            elif uri.collection == ids.AppBskyGraphFollow:
                 operation_by_type['follows']['deleted'].append({'uri': str(uri)})
 
     return operation_by_type
