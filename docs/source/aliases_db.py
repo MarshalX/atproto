@@ -38,10 +38,12 @@ ALIASES_DB = {
     'models.AppBskyGraphGetFollowers': 'atproto.xrpc_client.models.app.bsky.graph.get_followers',
     'models.AppBskyGraphGetFollows': 'atproto.xrpc_client.models.app.bsky.graph.get_follows',
     'models.AppBskyGraphGetList': 'atproto.xrpc_client.models.app.bsky.graph.get_list',
+    'models.AppBskyGraphGetListBlocks': 'atproto.xrpc_client.models.app.bsky.graph.get_list_blocks',
     'models.AppBskyGraphGetListMutes': 'atproto.xrpc_client.models.app.bsky.graph.get_list_mutes',
     'models.AppBskyGraphGetLists': 'atproto.xrpc_client.models.app.bsky.graph.get_lists',
     'models.AppBskyGraphGetMutes': 'atproto.xrpc_client.models.app.bsky.graph.get_mutes',
     'models.AppBskyGraphList': 'atproto.xrpc_client.models.app.bsky.graph.list',
+    'models.AppBskyGraphListblock': 'atproto.xrpc_client.models.app.bsky.graph.listblock',
     'models.AppBskyGraphListitem': 'atproto.xrpc_client.models.app.bsky.graph.listitem',
     'models.AppBskyGraphMuteActor': 'atproto.xrpc_client.models.app.bsky.graph.mute_actor',
     'models.AppBskyGraphMuteActorList': 'atproto.xrpc_client.models.app.bsky.graph.mute_actor_list',
@@ -119,5 +121,4 @@ ALIASES_DB = {
     'models.ComAtprotoSyncNotifyOfUpdate': 'atproto.xrpc_client.models.com.atproto.sync.notify_of_update',
     'models.ComAtprotoSyncRequestCrawl': 'atproto.xrpc_client.models.com.atproto.sync.request_crawl',
     'models.ComAtprotoSyncSubscribeRepos': 'atproto.xrpc_client.models.com.atproto.sync.subscribe_repos',
-    'models.ComAtprotoTempUpgradeRepoVersion': 'atproto.xrpc_client.models.com.atproto.temp.upgrade_repo_version',
 }

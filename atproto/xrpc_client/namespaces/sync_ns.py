@@ -580,6 +580,28 @@ class GraphNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyGraphGetList.Response)
 
+    def get_list_blocks(
+        self, params: t.Optional[t.Union[dict, 'models.AppBskyGraphGetListBlocks.Params']] = None, **kwargs
+    ) -> 'models.AppBskyGraphGetListBlocks.Response':
+        """Which lists is the requester's account blocking?
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetListBlocks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.AppBskyGraphGetListBlocks.Params)
+        response = self._client.invoke_query(
+            'app.bsky.graph.getListBlocks', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetListBlocks.Response)
+
     def get_list_mutes(
         self, params: t.Optional[t.Union[dict, 'models.AppBskyGraphGetListMutes.Params']] = None, **kwargs
     ) -> 'models.AppBskyGraphGetListMutes.Response':
@@ -922,7 +944,6 @@ class AtprotoNamespace(NamespaceBase):
         self.repo = RepoNamespace(self._client)
         self.server = ServerNamespace(self._client)
         self.sync = SyncNamespace(self._client)
-        self.temp = TempNamespace(self._client)
 
 
 class SyncNamespace(NamespaceBase):
@@ -2177,27 +2198,3 @@ class LabelNamespace(NamespaceBase):
             'com.atproto.label.queryLabels', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoLabelQueryLabels.Response)
-
-
-class TempNamespace(NamespaceBase):
-    def upgrade_repo_version(
-        self, data: t.Union[dict, 'models.ComAtprotoTempUpgradeRepoVersion.Data'], **kwargs
-    ) -> bool:
-        """Upgrade a repo to v3.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.ComAtprotoTempUpgradeRepoVersion.Data)
-        response = self._client.invoke_procedure(
-            'com.atproto.temp.upgradeRepoVersion', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)

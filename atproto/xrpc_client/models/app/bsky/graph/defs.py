@@ -76,6 +76,7 @@ class ListViewerState(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
+    blocked: t.Optional[str] = None  #: Blocked.
     muted: t.Optional[bool] = None  #: Muted.
 
     py_type: te.Literal['app.bsky.graph.defs#listViewerState'] = Field(
