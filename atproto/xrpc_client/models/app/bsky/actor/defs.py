@@ -95,6 +95,7 @@ Preferences = t.List[
             'models.AppBskyActorDefs.AdultContentPref',
             'models.AppBskyActorDefs.ContentLabelPref',
             'models.AppBskyActorDefs.SavedFeedsPref',
+            'models.AppBskyActorDefs.PersonalDetailsPref',
         ],
         Field(discriminator='py_type'),
     ]
@@ -133,4 +134,15 @@ class SavedFeedsPref(base.ModelBase):
 
     py_type: te.Literal['app.bsky.actor.defs#savedFeedsPref'] = Field(
         default='app.bsky.actor.defs#savedFeedsPref', alias='$type', frozen=True
+    )
+
+
+class PersonalDetailsPref(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    birth_date: t.Optional[str] = Field(default=None, alias='birthDate')  #: The birth date of the owner of the account.
+
+    py_type: te.Literal['app.bsky.actor.defs#personalDetailsPref'] = Field(
+        default='app.bsky.actor.defs#personalDetailsPref', alias='$type', frozen=True
     )

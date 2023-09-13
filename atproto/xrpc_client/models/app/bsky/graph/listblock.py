@@ -7,14 +7,21 @@
 
 import typing as t
 
+import typing_extensions as te
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
 
 
-class Data(base.DataModelBase):
+class Main(base.RecordModelBase):
 
-    """Input data model for :obj:`com.atproto.temp.upgradeRepoVersion`."""
+    """Record model for :obj:`app.bsky.graph.listblock`."""
 
-    did: str  #: Did.
-    force: t.Optional[bool] = None  #: Force.
+    created_at: str = Field(alias='createdAt')  #: Created at.
+    subject: str  #: Subject.
+
+    py_type: te.Literal['app.bsky.graph.listblock'] = Field(
+        default='app.bsky.graph.listblock', alias='$type', frozen=True
+    )

@@ -15,6 +15,7 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyFeedLike.Main',
     'models.AppBskyGraphFollow.Main',
     'models.AppBskyGraphList.Main',
+    'models.AppBskyGraphListblock.Main',
     'models.AppBskyGraphBlock.Main',
     'models.AppBskyFeedPost.Main',
 ]
@@ -27,6 +28,7 @@ UnknownRecordTypePydantic = te.Annotated[
         'models.AppBskyFeedLike.Main',
         'models.AppBskyGraphFollow.Main',
         'models.AppBskyGraphList.Main',
+        'models.AppBskyGraphListblock.Main',
         'models.AppBskyGraphBlock.Main',
         'models.AppBskyFeedPost.Main',
     ],

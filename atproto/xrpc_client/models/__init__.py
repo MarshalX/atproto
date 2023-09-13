@@ -37,10 +37,12 @@ from atproto.xrpc_client.models.app.bsky.graph import get_blocks as AppBskyGraph
 from atproto.xrpc_client.models.app.bsky.graph import get_followers as AppBskyGraphGetFollowers
 from atproto.xrpc_client.models.app.bsky.graph import get_follows as AppBskyGraphGetFollows
 from atproto.xrpc_client.models.app.bsky.graph import get_list as AppBskyGraphGetList
+from atproto.xrpc_client.models.app.bsky.graph import get_list_blocks as AppBskyGraphGetListBlocks
 from atproto.xrpc_client.models.app.bsky.graph import get_list_mutes as AppBskyGraphGetListMutes
 from atproto.xrpc_client.models.app.bsky.graph import get_lists as AppBskyGraphGetLists
 from atproto.xrpc_client.models.app.bsky.graph import get_mutes as AppBskyGraphGetMutes
 from atproto.xrpc_client.models.app.bsky.graph import list as AppBskyGraphList
+from atproto.xrpc_client.models.app.bsky.graph import listblock as AppBskyGraphListblock
 from atproto.xrpc_client.models.app.bsky.graph import listitem as AppBskyGraphListitem
 from atproto.xrpc_client.models.app.bsky.graph import mute_actor as AppBskyGraphMuteActor
 from atproto.xrpc_client.models.app.bsky.graph import mute_actor_list as AppBskyGraphMuteActorList
@@ -126,7 +128,6 @@ from atproto.xrpc_client.models.com.atproto.sync import list_repos as ComAtproto
 from atproto.xrpc_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
 from atproto.xrpc_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto.xrpc_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
-from atproto.xrpc_client.models.com.atproto.temp import upgrade_repo_version as ComAtprotoTempUpgradeRepoVersion
 from atproto.xrpc_client.models.models_loader import load_models
 from atproto.xrpc_client.models.utils import (
     create_strong_ref,
@@ -158,8 +159,10 @@ class _Ids:
     AppBskyGraphList: str = 'app.bsky.graph.list'
     AppBskyGraphFollow: str = 'app.bsky.graph.follow'
     AppBskyGraphGetListMutes: str = 'app.bsky.graph.getListMutes'
+    AppBskyGraphGetListBlocks: str = 'app.bsky.graph.getListBlocks'
     AppBskyGraphMuteActor: str = 'app.bsky.graph.muteActor'
     AppBskyGraphUnmuteActor: str = 'app.bsky.graph.unmuteActor'
+    AppBskyGraphListblock: str = 'app.bsky.graph.listblock'
     AppBskyGraphGetList: str = 'app.bsky.graph.getList'
     AppBskyGraphGetMutes: str = 'app.bsky.graph.getMutes'
     AppBskyGraphGetFollows: str = 'app.bsky.graph.getFollows'
@@ -195,7 +198,6 @@ class _Ids:
     AppBskyActorGetProfiles: str = 'app.bsky.actor.getProfiles'
     AppBskyActorSearchActorsTypeahead: str = 'app.bsky.actor.searchActorsTypeahead'
     AppBskyActorGetProfile: str = 'app.bsky.actor.getProfile'
-    ComAtprotoTempUpgradeRepoVersion: str = 'com.atproto.temp.upgradeRepoVersion'
     ComAtprotoIdentityResolveHandle: str = 'com.atproto.identity.resolveHandle'
     ComAtprotoIdentityUpdateHandle: str = 'com.atproto.identity.updateHandle'
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'

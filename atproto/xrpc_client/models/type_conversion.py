@@ -8,6 +8,7 @@ RECORD_TYPE_TO_MODEL_CLASS = {
     'app.bsky.feed.like': models.AppBskyFeedLike.Main,
     'app.bsky.graph.follow': models.AppBskyGraphFollow.Main,
     'app.bsky.graph.list': models.AppBskyGraphList.Main,
+    'app.bsky.graph.listblock': models.AppBskyGraphListblock.Main,
     'app.bsky.graph.block': models.AppBskyGraphBlock.Main,
     'app.bsky.feed.post': models.AppBskyFeedPost.Main,
 }
