@@ -1,3 +1,4 @@
+import re
 import typing as t
 from copy import deepcopy
 
@@ -7,6 +8,26 @@ from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 
 from atproto.xrpc_client.models.base import UnknownDict
+
+
+def _convert_camel_case_to_snake_case(string: str) -> str:
+    s = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', string)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s).lower()
+
+
+def _convert_snake_case_to_camel_case(string: str) -> str:
+    s = ''.join([w.capitalize() for w in string.split('_')])
+    return s[0].lower() + s[1:]
+
+
+def _is_snake_case(string: str) -> bool:
+    return string == _convert_camel_case_to_snake_case(string)
+
+
+def _convert_to_opposite_case(string: str) -> str:
+    if _is_snake_case(string):
+        return _convert_snake_case_to_camel_case(string)
+    return _convert_camel_case_to_snake_case(string)
 
 
 class DotDict(UnknownDict):
@@ -50,7 +71,11 @@ class DotDict(UnknownDict):
         return deepcopy(self._data)
 
     def __getitem__(self, item: str) -> t.Optional[t.Any]:
-        return self._data.get(item)
+        value = self._data.get(item)
+        if value is not None:
+            return value
+
+        return self._data.get(_convert_to_opposite_case(item))
 
     __getattr__ = __getitem__
 
@@ -58,6 +83,10 @@ class DotDict(UnknownDict):
         if key == '_data':
             super().__setattr__(key, value)
             return
+
+        # we store the field in case that was firstly meet to not create duplicates
+        if key not in self._data and _is_snake_case(key):
+            key = _convert_snake_case_to_camel_case(key)
 
         self._data.__setitem__(key, DotDict.__convert(value))
 
