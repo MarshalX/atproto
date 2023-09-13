@@ -1,5 +1,14 @@
 # Change Log
 
+## Version 0.0.27
+
+**13.09.2023**
+
+* Add reposts support to the firehose process commits example by @MarshalX in https://github.com/MarshalX/atproto/pull/140
+* Add snake to camel and camel to snake case conversion support for DotDict wrapper by @MarshalX in https://github.com/MarshalX/atproto/pull/143
+* Update lexicons fetched from 07bb0da committed 2023-09-12T17:37:57Z by @MarshalX in https://github.com/MarshalX/atproto/pull/144
+* Update dependencies by @MarshalX in https://github.com/MarshalX/atproto/pull/145
+
 ## Version 0.0.26
 
 **08.09.2023**
