@@ -28,8 +28,9 @@ classifiers = [
 
 [tool.poetry.urls]
 "Documentation" = "https://atproto.blue"
-"Author" = "https://github.com/MarshalX"
+"Changes" = "https://github.com/MarshalX/atproto/blob/main/CHANGES.md"
 "Tracker" = "https://github.com/MarshalX/atproto/issues"
+"Author" = "https://github.com/MarshalX"
 
 [tool.poetry.scripts]
 atp = "atproto.cli:atproto_cli"
@@ -37,10 +38,10 @@ atproto = "atproto.cli:atproto_cli"
 
 [tool.poetry.dependencies]
 python = ">=3.7.1,<3.12"
-httpx = ">=0.24.0,<0.25.0"
+httpx = ">=0.24.0,<0.26.0"
 dacite = ">=1.8.0,<1.9.0"
-typing-extensions = ">=3.10.0.0,<4.7.1"
-pyjwt = ">=2.7.0,<2.8.0"
+typing-extensions = ">=4.6.1,<4.8.0"
+pyjwt = ">=2.7.0,<2.9.0"
 click = ">=8.1.3,<8.2.0"
 websockets = ">=11.0.3,<11.1.0"
 pydantic = ">=2.0,<3.0"
@@ -137,7 +138,7 @@ inline-quotes = "single"
 [tool.black]
 line-length = 120
 skip-string-normalization=true
-target-version = ['py37']
+target-version = ['py37', 'py38', 'py39', 'py310']
 include = '\.pyi?$'
 exclude = '''
 (
