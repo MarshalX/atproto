@@ -22,6 +22,7 @@ from atproto.xrpc_client.models.app.bsky.feed import get_feed_generator as AppBs
 from atproto.xrpc_client.models.app.bsky.feed import get_feed_generators as AppBskyFeedGetFeedGenerators
 from atproto.xrpc_client.models.app.bsky.feed import get_feed_skeleton as AppBskyFeedGetFeedSkeleton
 from atproto.xrpc_client.models.app.bsky.feed import get_likes as AppBskyFeedGetLikes
+from atproto.xrpc_client.models.app.bsky.feed import get_list_feed as AppBskyFeedGetListFeed
 from atproto.xrpc_client.models.app.bsky.feed import get_post_thread as AppBskyFeedGetPostThread
 from atproto.xrpc_client.models.app.bsky.feed import get_posts as AppBskyFeedGetPosts
 from atproto.xrpc_client.models.app.bsky.feed import get_reposted_by as AppBskyFeedGetRepostedBy
@@ -30,6 +31,7 @@ from atproto.xrpc_client.models.app.bsky.feed import get_timeline as AppBskyFeed
 from atproto.xrpc_client.models.app.bsky.feed import like as AppBskyFeedLike
 from atproto.xrpc_client.models.app.bsky.feed import post as AppBskyFeedPost
 from atproto.xrpc_client.models.app.bsky.feed import repost as AppBskyFeedRepost
+from atproto.xrpc_client.models.app.bsky.feed import threadgate as AppBskyFeedThreadgate
 from atproto.xrpc_client.models.app.bsky.graph import block as AppBskyGraphBlock
 from atproto.xrpc_client.models.app.bsky.graph import defs as AppBskyGraphDefs
 from atproto.xrpc_client.models.app.bsky.graph import follow as AppBskyGraphFollow
@@ -41,6 +43,9 @@ from atproto.xrpc_client.models.app.bsky.graph import get_list_blocks as AppBsky
 from atproto.xrpc_client.models.app.bsky.graph import get_list_mutes as AppBskyGraphGetListMutes
 from atproto.xrpc_client.models.app.bsky.graph import get_lists as AppBskyGraphGetLists
 from atproto.xrpc_client.models.app.bsky.graph import get_mutes as AppBskyGraphGetMutes
+from atproto.xrpc_client.models.app.bsky.graph import (
+    get_suggested_follows_by_actor as AppBskyGraphGetSuggestedFollowsByActor,
+)
 from atproto.xrpc_client.models.app.bsky.graph import list as AppBskyGraphList
 from atproto.xrpc_client.models.app.bsky.graph import listblock as AppBskyGraphListblock
 from atproto.xrpc_client.models.app.bsky.graph import listitem as AppBskyGraphListitem
@@ -165,6 +170,7 @@ class _Ids:
     AppBskyGraphListblock: str = 'app.bsky.graph.listblock'
     AppBskyGraphGetList: str = 'app.bsky.graph.getList'
     AppBskyGraphGetMutes: str = 'app.bsky.graph.getMutes'
+    AppBskyGraphGetSuggestedFollowsByActor: str = 'app.bsky.graph.getSuggestedFollowsByActor'
     AppBskyGraphGetFollows: str = 'app.bsky.graph.getFollows'
     AppBskyGraphMuteActorList: str = 'app.bsky.graph.muteActorList'
     AppBskyGraphBlock: str = 'app.bsky.graph.block'
@@ -172,10 +178,12 @@ class _Ids:
     AppBskyFeedGetLikes: str = 'app.bsky.feed.getLikes'
     AppBskyFeedPost: str = 'app.bsky.feed.post'
     AppBskyFeedDefs: str = 'app.bsky.feed.defs'
+    AppBskyFeedGetListFeed: str = 'app.bsky.feed.getListFeed'
     AppBskyFeedGetActorFeeds: str = 'app.bsky.feed.getActorFeeds'
     AppBskyFeedGetFeedGenerators: str = 'app.bsky.feed.getFeedGenerators'
     AppBskyFeedGetPostThread: str = 'app.bsky.feed.getPostThread'
     AppBskyFeedGetAuthorFeed: str = 'app.bsky.feed.getAuthorFeed'
+    AppBskyFeedThreadgate: str = 'app.bsky.feed.threadgate'
     AppBskyFeedGetPosts: str = 'app.bsky.feed.getPosts'
     AppBskyFeedGetSuggestedFeeds: str = 'app.bsky.feed.getSuggestedFeeds'
     AppBskyFeedGetActorLikes: str = 'app.bsky.feed.getActorLikes'
