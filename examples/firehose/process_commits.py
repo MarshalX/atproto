@@ -56,13 +56,16 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict
     return operation_by_type
 
 
-def worker_main(pool_queue) -> None:
+def worker_main(cursor_value, pool_queue) -> None:
     while True:
         message = pool_queue.get()
 
         commit = parse_subscribe_repos_message(message)
         if not isinstance(commit, models.ComAtprotoSyncSubscribeRepos.Commit):
             continue
+
+        if commit.seq % 20 == 0:
+            cursor_value.value = commit.seq
 
         ops = _get_ops_by_type(commit)
         for post in ops['posts']['created']:
@@ -71,16 +74,33 @@ def worker_main(pool_queue) -> None:
             print(f'New post in the network! Langs: {post_langs}. Text: {post_msg}')
 
 
+def get_firehose_params(cursor_value) -> models.ComAtprotoSyncSubscribeRepos.Params:
+    return models.ComAtprotoSyncSubscribeRepos.Params(cursor=cursor_value.value)
+
+
 if __name__ == '__main__':
-    client = FirehoseSubscribeReposClient()
+    start_cursor = None
+
+    params = None
+    cursor = multiprocessing.Value('i', 0)
+    if start_cursor is not None:
+        cursor = multiprocessing.Value('i', start_cursor)
+        params = get_firehose_params(cursor)
+
+    client = FirehoseSubscribeReposClient(params)
 
     workers_count = multiprocessing.cpu_count() * 2 - 1
     max_queue_size = 500
 
     queue = multiprocessing.Queue(maxsize=max_queue_size)
-    pool = multiprocessing.Pool(workers_count, worker_main, (queue,))
+    pool = multiprocessing.Pool(workers_count, worker_main, (cursor, queue))
 
     def on_message_handler(message: MessageFrame) -> None:
+        if cursor.value:
+            # we are using updating the cursor state here because of multiprocessing
+            # typically you can call client.update_params() directly on commit processing
+            client.update_params(get_firehose_params(cursor))
+
         queue.put(message)
 
     client.start(on_message_handler)

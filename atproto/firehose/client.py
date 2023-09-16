@@ -5,6 +5,7 @@ import threading
 import time
 import traceback
 import typing as t
+from copy import deepcopy
 from urllib.parse import urlencode
 
 from websockets.client import connect as aconnect
@@ -19,6 +20,8 @@ from websockets.sync.client import connect
 
 from atproto.exceptions import DAGCBORDecodingError, FirehoseDecodingError, FirehoseError
 from atproto.firehose.models import ErrorFrame, Frame, MessageFrame
+from atproto.xrpc_client.models import get_model_as_dict
+from atproto.xrpc_client.models.base import ParamsModelBase
 from atproto.xrpc_client.models.common import XrpcError
 
 _BASE_WEBSOCKET_URI = 'wss://bsky.social/xrpc'
@@ -76,7 +79,9 @@ class _WebsocketClientBase:
         base_url: t.Optional[str] = None,
         params: t.Optional[t.Dict[str, t.Any]] = None,
     ) -> None:
-        self._url = _build_websocket_uri(method, base_url, params)
+        self._method = method
+        self._base_uri = base_url  # FIXME(MarshalX): rename arg to base_uri? backward uncompatible, but no one uses it?
+        self._params = params
 
         self._reconnect_no = 0
         self._max_reconnect_delay_sec = 64
@@ -84,11 +89,28 @@ class _WebsocketClientBase:
         self._on_message_callback: t.Optional[t.Union[OnMessageCallback, AsyncOnMessageCallback]] = None
         self._on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None
 
+    def update_params(self, params: t.Union[ParamsModelBase, t.Dict[str, t.Any]]) -> None:
+        """Update params.
+
+        Warning:
+            If you are using `params` arg at the client start, you must care about keeping params up to date.
+            Otherwise, your client will be rolled back to the previous state (cursor) on reconnecting.
+        """
+        if isinstance(params, ParamsModelBase):
+            self._params = get_model_as_dict(params)
+        else:
+            self._params = deepcopy(params)
+
+    @property
+    def _websocket_uri(self) -> str:
+        # the user should care about updated params by himself
+        return _build_websocket_uri(self._method, self._base_uri, self._params)
+
     def _get_client(self):
-        return connect(self._url, max_size=_MAX_MESSAGE_SIZE_BYTES)
+        return connect(self._websocket_uri, max_size=_MAX_MESSAGE_SIZE_BYTES)
 
     def _get_async_client(self):
-        return aconnect(self._url, max_size=_MAX_MESSAGE_SIZE_BYTES)
+        return aconnect(self._websocket_uri, max_size=_MAX_MESSAGE_SIZE_BYTES)
 
     def _get_reconnection_delay(self) -> int:
         base_sec = 2**self._reconnect_no
