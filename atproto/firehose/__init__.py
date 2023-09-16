@@ -66,17 +66,18 @@ def parse_subscribe_labels_message(message: 'MessageFrame') -> SubscribeLabelsMe
 
 
 class FirehoseSubscribeReposClient(FirehoseClient):
+    """Firehose subscribe repos client.
+
+    Args:
+        params: Parameters model.
+        base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
+    """
+
     def __init__(
         self,
         params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None,
         base_uri: t.Optional[str] = None,
     ) -> None:
-        """Firehose subscribe repos client.
-
-        Args:
-            params: Parameters model.
-            base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
-        """
         params_model = get_or_create(params, models.ComAtprotoSyncSubscribeRepos.Params)
 
         params_dict = None
@@ -87,17 +88,18 @@ class FirehoseSubscribeReposClient(FirehoseClient):
 
 
 class AsyncFirehoseSubscribeReposClient(AsyncFirehoseClient):
+    """Async firehose subscribe repos client.
+
+    Args:
+        params: Parameters model.
+        base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
+    """
+
     def __init__(
         self,
         params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None,
         base_uri: t.Optional[str] = None,
     ) -> None:
-        """Async firehose subscribe repos client.
-
-        Args:
-            params: Parameters model.
-            base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
-        """
         params_model = get_or_create(params, models.ComAtprotoSyncSubscribeRepos.Params)
 
         params_dict = None
@@ -111,17 +113,18 @@ class AsyncFirehoseSubscribeReposClient(AsyncFirehoseClient):
 
 
 class FirehoseSubscribeLabelsClient(FirehoseClient):
+    """Firehose subscribe labels client.
+
+    Args:
+        params: Parameters model.
+        base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
+    """
+
     def __init__(
         self,
         params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None,
         base_uri: t.Optional[str] = None,
     ) -> None:
-        """Firehose subscribe labels client.
-
-        Args:
-            params: Parameters model.
-            base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
-        """
         params_model = get_or_create(params, models.ComAtprotoLabelSubscribeLabels.Params)
 
         params_dict = None
@@ -132,17 +135,18 @@ class FirehoseSubscribeLabelsClient(FirehoseClient):
 
 
 class AsyncFirehoseSubscribeLabelsClient(AsyncFirehoseClient):
+    """Async firehose subscribe labels client.
+
+    Args:
+        params: Parameters model.
+        base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
+    """
+
     def __init__(
         self,
         params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None,
         base_uri: t.Optional[str] = None,
     ) -> None:
-        """Async firehose subscribe labels client.
-
-        Args:
-            params: Parameters model.
-            base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
-        """
         params_model = get_or_create(params, models.ComAtprotoLabelSubscribeLabels.Params)
 
         params_dict = None
