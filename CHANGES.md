@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 0.0.28
+
+**16.09.2023**
+
+* Add `update_params` method to firehose clients to fix utilizing the old state on reconnecting by @MarshalX in https://github.com/MarshalX/atproto/pull/149
+* Add the ability to export and import session string by @MarshalX in https://github.com/MarshalX/atproto/pull/154
+* Add the ability to pass `base_uri` to Firehose clients by @MarshalX in https://github.com/MarshalX/atproto/pull/155
+* Update lexicons fetched from 9879ca9 committed 2023-09-14T20:24:48Z by @MarshalX in https://github.com/MarshalX/atproto/pull/150
+* Update changelog for v0.0.27 by @MarshalX in https://github.com/MarshalX/atproto/pull/146
+
 ## Version 0.0.27
 
 **13.09.2023**
