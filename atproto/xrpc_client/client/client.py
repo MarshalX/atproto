@@ -49,13 +49,18 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
 
         return refresh_session
 
-    def login(self, login: str, password: str) -> models.AppBskyActorDefs.ProfileViewDetailed:
+    def login(
+        self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
+    ) -> models.AppBskyActorDefs.ProfileViewDetailed:
         """Authorize a client and get profile info.
 
         Args:
             login: Handle/username of the account.
-            password: Password of the account.
-            Could be an app-specific one.
+            password: Main or app-specific password of the account.
+            session_string: Session string (use `export_session_string` to obtain it).
+
+        Note:
+            Either `session_string` or `login` and `password` should be provided.
 
         Returns:
             :obj:`models.AppBskyActorDefs.ProfileViewDetailed`: Profile information.
@@ -63,10 +68,14 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
+        if session_string:
+            session = self._import_session_string(session_string)
+        elif login and password:
+            session = self._get_and_set_session(login, password)
+        else:
+            raise ValueError('Either session_string or login and password should be provided.')
 
-        session = self._get_and_set_session(login, password)
         self.me = self.app.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=session.handle))
-
         return self.me
 
     def send_post(
