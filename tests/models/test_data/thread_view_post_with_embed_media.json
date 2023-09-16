@@ -8,7 +8,7 @@
                 "did": "did:plc:hbtuqflamm5j2i7yahtzsnue",
                 "handle": "raven.corvids.club",
                 "displayName": "raven",
-                "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:hbtuqflamm5j2i7yahtzsnue/bafkreiflgjysr2jrq7a22iptzj56x7bkp5wsgqncs4oepvxnnunndzzrhe@jpeg",
+                "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:hbtuqflamm5j2i7yahtzsnue/bafkreihuti6ufyyrhsozy42humvywvrfqtmz63whkfeavtsvhrfbz6rqr4@jpeg",
                 "viewer": {
                     "muted": false,
                     "blockedBy": false
@@ -125,6 +125,9 @@
             "viewer": {},
             "labels": []
         },
-        "replies": []
+        "replies": [],
+        "viewer": {
+            "canReply": true
+        }
     }
 }

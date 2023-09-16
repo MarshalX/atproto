@@ -23,6 +23,7 @@ Submodules
    atproto.xrpc_client.models.app.bsky.feed.get_feed_generators
    atproto.xrpc_client.models.app.bsky.feed.get_feed_skeleton
    atproto.xrpc_client.models.app.bsky.feed.get_likes
+   atproto.xrpc_client.models.app.bsky.feed.get_list_feed
    atproto.xrpc_client.models.app.bsky.feed.get_post_thread
    atproto.xrpc_client.models.app.bsky.feed.get_posts
    atproto.xrpc_client.models.app.bsky.feed.get_reposted_by
@@ -31,3 +32,4 @@ Submodules
    atproto.xrpc_client.models.app.bsky.feed.like
    atproto.xrpc_client.models.app.bsky.feed.post
    atproto.xrpc_client.models.app.bsky.feed.repost
+   atproto.xrpc_client.models.app.bsky.feed.threadgate

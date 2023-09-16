@@ -1,17 +1,4 @@
 {
-    "subject": {
-        "did": "did:plc:kvwvcn5iqfooopmyzvb4qzba",
-        "handle": "test.marshal.dev",
-        "displayName": "I love Python 3",
-        "description": "test",
-        "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
-        "indexedAt": "2023-07-28T18:17:15.466Z",
-        "viewer": {
-            "muted": false,
-            "blockedBy": false
-        },
-        "labels": []
-    },
     "follows": [
         {
             "did": "did:plc:vpkhqolt662uhesyj6nxm7ys",
@@ -41,7 +28,7 @@
                     "cid": "bafyreigk3kmjipz5emav5vqmvdtivwz757tfpg5lnsbfoscnqx7wpjjime",
                     "name": "test mute list",
                     "purpose": "app.bsky.graph.defs#modlist",
-                    "indexedAt": "2023-08-31T22:20:16.322Z",
+                    "indexedAt": "2023-08-28T10:08:27.442Z",
                     "viewer": {
                         "muted": true
                     }
@@ -108,26 +95,12 @@
             "labels": []
         },
         {
-            "did": "did:plc:6fktaamhhxdqb2ypum33kbkj",
-            "handle": "jack.bsky.social",
-            "displayName": "jack",
-            "description": "Dog, artist-reader, and avid lover.",
-            "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:6fktaamhhxdqb2ypum33kbkj/bafkreiddtepilrl35fkksahtvieg5tnhfltcuafktvc6c44ppvkqcvowaa@jpeg",
-            "indexedAt": "2023-07-02T23:59:30.711Z",
-            "viewer": {
-                "muted": false,
-                "blockedBy": false,
-                "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3jucc7isp2s2z"
-            },
-            "labels": []
-        },
-        {
             "did": "did:plc:s6jnht6koorxz7trghirytmf",
             "handle": "marshal.dev",
             "displayName": "Ilya (Marshal)",
-            "description": "Software Engineer\n\n\ud83d\udc0d The AT Protocol SDK for Python: https://atproto.blue/\n\ud83c\udf7f Custom Feed in Python: https://github.com/MarshalX/bluesky-feed-generator\n\nhttps://marshal.dev & https://github.com/MarshalX",
+            "description": "Software Engineer\n\n\ud83d\udc0d The AT Protocol SDK for Python: https://atproto.blue/\n\ud83c\udf7f Custom Feed in Python: https://github.com/MarshalX/bluesky-feed-generator\n\ud83c\udfce\ufe0f Fast DAG-CBOR decoder for Python: https://github.com/MarshalX/python-libipld\n\nhttps://marshal.dev",
             "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:s6jnht6koorxz7trghirytmf/bafkreihyuxbogcsrarso2ulwvjzq2spezopsgnt26uface5zwyiy5yhyje@jpeg",
-            "indexedAt": "2023-07-07T16:47:11.813Z",
+            "indexedAt": "2023-09-07T23:54:36.539Z",
             "viewer": {
                 "muted": false,
                 "blockedBy": false,
@@ -137,5 +110,18 @@
             "labels": []
         }
     ],
+    "subject": {
+        "did": "did:plc:kvwvcn5iqfooopmyzvb4qzba",
+        "handle": "test.marshal.dev",
+        "displayName": "I love Python 3",
+        "description": "test",
+        "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
+        "indexedAt": "2023-07-28T18:17:15.466Z",
+        "viewer": {
+            "muted": false,
+            "blockedBy": false
+        },
+        "labels": []
+    },
     "cursor": "1682536253184::bafyreicbazjbm65mgbs2s25qmlqpe2betv7vssid32q5ckidy4js6dctve"
 }

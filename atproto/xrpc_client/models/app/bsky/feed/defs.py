@@ -40,6 +40,7 @@ class PostView(base.ModelBase):
     like_count: t.Optional[int] = Field(default=None, alias='likeCount')  #: Like count.
     reply_count: t.Optional[int] = Field(default=None, alias='replyCount')  #: Reply count.
     repost_count: t.Optional[int] = Field(default=None, alias='repostCount')  #: Repost count.
+    threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.
     viewer: t.Optional['models.AppBskyFeedDefs.ViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.feed.defs#postView'] = Field(
@@ -139,6 +140,7 @@ class ThreadViewPost(base.ModelBase):
             ]
         ]
     ] = None  #: Replies.
+    viewer: t.Optional['models.AppBskyFeedDefs.ViewerThreadState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.feed.defs#threadViewPost'] = Field(
         default='app.bsky.feed.defs#threadViewPost', alias='$type', frozen=True
@@ -179,6 +181,17 @@ class BlockedAuthor(base.ModelBase):
 
     py_type: te.Literal['app.bsky.feed.defs#blockedAuthor'] = Field(
         default='app.bsky.feed.defs#blockedAuthor', alias='$type', frozen=True
+    )
+
+
+class ViewerThreadState(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.feed.defs`."""
+
+    can_reply: t.Optional[bool] = Field(default=None, alias='canReply')  #: Can reply.
+
+    py_type: te.Literal['app.bsky.feed.defs#viewerThreadState'] = Field(
+        default='app.bsky.feed.defs#viewerThreadState', alias='$type', frozen=True
     )
 
 
@@ -240,4 +253,18 @@ class SkeletonReasonRepost(base.ModelBase):
 
     py_type: te.Literal['app.bsky.feed.defs#skeletonReasonRepost'] = Field(
         default='app.bsky.feed.defs#skeletonReasonRepost', alias='$type', frozen=True
+    )
+
+
+class ThreadgateView(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.feed.defs`."""
+
+    cid: t.Optional[str] = None  #: Cid.
+    lists: t.Optional[t.List['models.AppBskyGraphDefs.ListViewBasic']] = None  #: Lists.
+    record: t.Optional['UnknownType'] = None  #: Record.
+    uri: t.Optional[str] = None  #: Uri.
+
+    py_type: te.Literal['app.bsky.feed.defs#threadgateView'] = Field(
+        default='app.bsky.feed.defs#threadgateView', alias='$type', frozen=True
     )

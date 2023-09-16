@@ -23,6 +23,7 @@ Submodules
    atproto.xrpc_client.models.app.bsky.graph.get_list_mutes
    atproto.xrpc_client.models.app.bsky.graph.get_lists
    atproto.xrpc_client.models.app.bsky.graph.get_mutes
+   atproto.xrpc_client.models.app.bsky.graph.get_suggested_follows_by_actor
    atproto.xrpc_client.models.app.bsky.graph.list
    atproto.xrpc_client.models.app.bsky.graph.listblock
    atproto.xrpc_client.models.app.bsky.graph.listitem

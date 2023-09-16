@@ -65,11 +65,15 @@ class ListItemView(base.ModelBase):
     )
 
 
-ListPurpose = t.Union['models.AppBskyGraphDefs.Modlist']  #: List purpose
+ListPurpose = t.Union['models.AppBskyGraphDefs.Modlist', 'models.AppBskyGraphDefs.Curatelist']  #: List purpose
 
 Modlist = te.Literal[
     'app.bsky.graph.defs#modlist'
 ]  #: A list of actors to apply an aggregate moderation action (mute/block) on
+
+Curatelist = te.Literal[
+    'app.bsky.graph.defs#curatelist'
+]  #: A list of actors used for curation purposes such as list feeds or interaction gating
 
 
 class ListViewerState(base.ModelBase):
