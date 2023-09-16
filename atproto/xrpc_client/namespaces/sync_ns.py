@@ -380,6 +380,28 @@ class FeedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyFeedGetLikes.Response)
 
+    def get_list_feed(
+        self, params: t.Union[dict, 'models.AppBskyFeedGetListFeed.Params'], **kwargs
+    ) -> 'models.AppBskyFeedGetListFeed.Response':
+        """A view of a recent posts from actors in a list.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetListFeed.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.AppBskyFeedGetListFeed.Params)
+        response = self._client.invoke_query(
+            'app.bsky.feed.getListFeed', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedGetListFeed.Response)
+
     def get_post_thread(
         self, params: t.Union[dict, 'models.AppBskyFeedGetPostThread.Params'], **kwargs
     ) -> 'models.AppBskyFeedGetPostThread.Response':
@@ -667,6 +689,31 @@ class GraphNamespace(NamespaceBase):
             'app.bsky.graph.getMutes', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetMutes.Response)
+
+    def get_suggested_follows_by_actor(
+        self, params: t.Union[dict, 'models.AppBskyGraphGetSuggestedFollowsByActor.Params'], **kwargs
+    ) -> 'models.AppBskyGraphGetSuggestedFollowsByActor.Response':
+        """Get suggested follows related to a given actor.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetSuggestedFollowsByActor.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.AppBskyGraphGetSuggestedFollowsByActor.Params)
+        response = self._client.invoke_query(
+            'app.bsky.graph.getSuggestedFollowsByActor',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyGraphGetSuggestedFollowsByActor.Response)
 
     def mute_actor(self, data: t.Union[dict, 'models.AppBskyGraphMuteActor.Data'], **kwargs) -> bool:
         """Mute an actor by did or handle.
