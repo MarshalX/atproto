@@ -37,8 +37,14 @@ def convert_uri_to_url():
 
 
 def sync_main():
+    # client = Client()
+    # client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+
+    # session_string = client.export_session_string()
+    # print(session_string)
+
     client = Client()
-    client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+    client.login(session_string=os.environ['SESSION_STRING'])
 
     params = models.AppBskyGraphGetFollows.Params(actor='test.marshal.dev')
     # followers = client.app.bsky.graph.get_followers(params=params)
