@@ -76,11 +76,11 @@ class _WebsocketClientBase:
     def __init__(
         self,
         method: str,
-        base_url: t.Optional[str] = None,
+        base_uri: t.Optional[str] = None,
         params: t.Optional[t.Dict[str, t.Any]] = None,
     ) -> None:
         self._method = method
-        self._base_uri = base_url  # FIXME(MarshalX): rename arg to base_uri? backward uncompatible, but no one uses it?
+        self._base_uri = base_uri
         self._params = params
 
         self._reconnect_no = 0
@@ -158,9 +158,9 @@ class _WebsocketClientBase:
 
 class _WebsocketClient(_WebsocketClientBase):
     def __init__(
-        self, method: str, base_url: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
+        self, method: str, base_uri: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
     ) -> None:
-        super().__init__(method, base_url, params)
+        super().__init__(method, base_uri, params)
 
         self._stop_lock = threading.Lock()
 
@@ -214,9 +214,9 @@ class _WebsocketClient(_WebsocketClientBase):
 
 class _AsyncWebsocketClient(_WebsocketClientBase):
     def __init__(
-        self, method: str, base_url: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
+        self, method: str, base_uri: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
     ) -> None:
-        super().__init__(method, base_url, params)
+        super().__init__(method, base_uri, params)
 
         self._loop = asyncio.get_event_loop()
         self._on_message_tasks: t.Set[asyncio.Task] = set()
