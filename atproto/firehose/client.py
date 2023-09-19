@@ -229,7 +229,7 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
         try:
             if self._on_message_callback is not None:
                 await self._on_message_callback(frame)
-        except Exception as exception:
+        except Exception as exception: # noqa: BLE001
             if not self._on_callback_error_callback:
                 _print_exception(exception)
                 return
