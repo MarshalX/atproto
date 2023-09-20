@@ -92,8 +92,8 @@ def lexicon_parse_dir(
 
     parsed_lexicons = []
 
-    for _, _, lexicons in os.walk(lexicon_dir_path):
-        for lexicon in lexicons:
+    for _, _, lexicons in sorted(os.walk(lexicon_dir_path)):
+        for lexicon in sorted(lexicons):
             if not lexicon.endswith(_LEXICON_FILE_EXT):
                 continue
 
