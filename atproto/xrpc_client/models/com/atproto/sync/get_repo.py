@@ -22,5 +22,13 @@ class Params(base.ParamsModelBase):
     since: t.Optional[str] = None  #: The revision of the repo to catch up from.
 
 
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`com.atproto.sync.getRepo`."""
+
+    did: str  #: The DID of the repo.
+    since: te.NotRequired[t.Optional[str]]  #: The revision of the repo to catch up from.
+
+
 #: Response raw data type.
 Response: te.TypeAlias = bytes

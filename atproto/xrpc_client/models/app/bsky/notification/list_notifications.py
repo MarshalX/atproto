@@ -25,6 +25,15 @@ class Params(base.ParamsModelBase):
     seen_at: t.Optional[str] = Field(default=None, alias='seenAt')  #: Seen at.
 
 
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`app.bsky.notification.listNotifications`."""
+
+    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    seen_at: te.NotRequired[t.Optional[str]]  #: Seen at.
+
+
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.notification.listNotifications`."""

@@ -21,5 +21,12 @@ class Params(base.ParamsModelBase):
     did: str  #: The DID of the repo.
 
 
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`com.atproto.sync.getCheckout`."""
+
+    did: str  #: The DID of the repo.
+
+
 #: Response raw data type.
 Response: te.TypeAlias = bytes

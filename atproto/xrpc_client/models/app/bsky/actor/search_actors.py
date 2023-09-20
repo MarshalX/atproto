@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -21,6 +22,15 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     term: t.Optional[str] = None  #: Term.
+
+
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`app.bsky.actor.searchActors`."""
+
+    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    term: te.NotRequired[t.Optional[str]]  #: Term.
 
 
 class Response(base.ResponseModelBase):

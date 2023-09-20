@@ -23,6 +23,14 @@ class Params(base.ParamsModelBase):
     limit: t.Optional[int] = Field(default=500, ge=1, le=1000)  #: Limit.
 
 
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`com.atproto.sync.listRepos`."""
+
+    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    limit: te.NotRequired[t.Optional[int]]  #: Limit.
+
+
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.sync.listRepos`."""

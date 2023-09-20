@@ -25,6 +25,16 @@ class Params(base.ParamsModelBase):
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`app.bsky.feed.getLikes`."""
+
+    uri: str  #: Uri.
+    cid: te.NotRequired[t.Optional[str]]  #: Cid.
+    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    limit: te.NotRequired[t.Optional[int]]  #: Limit.
+
+
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.feed.getLikes`."""

@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -18,3 +20,11 @@ class Params(base.ParamsModelBase):
 
     uri: str  #: Uri.
     cid: t.Optional[str] = None  #: Cid.
+
+
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`com.atproto.admin.getRecord`."""
+
+    uri: str  #: Uri.
+    cid: te.NotRequired[t.Optional[str]]  #: Cid.

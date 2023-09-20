@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -19,6 +20,13 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.actor.getProfiles`."""
 
     actors: t.List[str] = Field(max_length=25)  #: Actors.
+
+
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`app.bsky.actor.getProfiles`."""
+
+    actors: t.List[str]  #: Actors.
 
 
 class Response(base.ResponseModelBase):

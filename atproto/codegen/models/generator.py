@@ -8,6 +8,7 @@ from atproto.codegen import (
     DISCLAIMER,
     INPUT_MODEL,
     OUTPUT_MODEL,
+    PARAMS_DICT,
     PARAMS_MODEL,
     _resolve_nsid_ref,
     append_code,
@@ -351,6 +352,43 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
     return join_code(fields)
 
 
+def _get_typeddict(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters]) -> str:
+    required_fields = _get_req_fields_set(lex_object)
+
+    fields: t.List[str] = []
+    optional_fields: t.List[str] = []
+
+    for field_name, field_type_def in lex_object.properties.items():
+        is_optional = field_name not in required_fields
+
+        snake_cased_field_name = convert_camel_case_to_snake_case(field_name)
+
+        if _is_reserved_pydantic_name(snake_cased_field_name):
+            # make aliases for fields with reserved names
+            snake_cased_field_name += '_'  # add underscore to the end
+
+        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional)
+        description = _get_field_docstring(field_name, field_type_def)
+
+        # Allow optional params to actually be ommitted from the dict entirely
+        type_hint_defaulting = f'te.NotRequired[{type_hint}]' if is_optional else type_hint
+        field_def = f'{_(1)}{snake_cased_field_name}: {type_hint_defaulting} #: {description}'
+
+        if is_optional:
+            optional_fields.append(field_def)
+        else:
+            fields.append(field_def)
+
+    optional_fields.sort()
+    fields.sort()
+
+    fields.extend(optional_fields)
+
+    fields.append('')
+
+    return join_code(fields)
+
+
 def _get_model_raw_data(name: str) -> str:
     lines = [f'#: {name} raw data type.', f'{name}: te.TypeAlias = bytes\n\n']
     return join_code(lines)
@@ -362,6 +400,13 @@ def _generate_params_model(nsid: NSID, definition: t.Union[models.LexXrpcQuery, 
     if definition.parameters:
         lines.append(_get_model_docstring(nsid, definition.parameters, ModelType.PARAMS))
         lines.append(_get_model(nsid, definition.parameters))
+
+    lines.append(f'class {PARAMS_DICT}(te.TypedDict):')
+    lines.append('')
+
+    if definition.parameters:
+        lines.append(_get_model_docstring(nsid, definition.parameters, ModelType.PARAMS))
+        lines.append(_get_typeddict(nsid, definition.parameters))
 
     return join_code(lines)
 

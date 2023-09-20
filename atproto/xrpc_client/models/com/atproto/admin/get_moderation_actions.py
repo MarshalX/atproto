@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -21,6 +22,15 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     subject: t.Optional[str] = None  #: Subject.
+
+
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`com.atproto.admin.getModerationActions`."""
+
+    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    subject: te.NotRequired[t.Optional[str]]  #: Subject.
 
 
 class Response(base.ResponseModelBase):

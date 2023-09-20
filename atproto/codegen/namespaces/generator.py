@@ -5,6 +5,7 @@ from atproto.codegen import (
     DISCLAIMER,
     INPUT_MODEL,
     OUTPUT_MODEL,
+    PARAMS_DICT,
     PARAMS_MODEL,
     _resolve_nsid_ref,
     convert_camel_case_to_snake_case,
@@ -175,13 +176,17 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
 
 
 def _get_namespace_method_signature_arg(
-    name: str, nsid: NSID, model_name: str, *, optional: bool, alias: bool = False
+    name: str, nsid: NSID, model_name: t.Union[t.List[str], str], *, optional: bool, alias: bool = False
 ) -> str:
     if alias:
         return f"{name}: 'models.{get_import_path(nsid)}.{model_name}'"
 
     default_value = ''
-    type_hint = f"t.Union[dict, 'models.{get_import_path(nsid)}.{model_name}']"
+    type_hint = (
+        f"t.Union[dict, 'models.{get_import_path(nsid)}.{model_name}']"
+        if isinstance(model_name, str)
+        else 't.Union[' + ', '.join(f'models.{get_import_path(nsid)}.{i}' for i in model_name) + ']'
+    )
     if optional:
         type_hint = f't.Optional[{type_hint}]'
         default_value = ' = None'
@@ -226,7 +231,9 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
         params = method_info.definition.parameters
         is_optional = is_optional_arg(params)
 
-        arg = _get_namespace_method_signature_arg('params', method_info.nsid, PARAMS_MODEL, optional=is_optional)
+        arg = _get_namespace_method_signature_arg(
+            'params', method_info.nsid, [PARAMS_MODEL, PARAMS_DICT], optional=is_optional
+        )
         _add_arg(arg, optional=is_optional)
 
     if isinstance(method_info, ProcedureInfo) and method_info.definition.input:

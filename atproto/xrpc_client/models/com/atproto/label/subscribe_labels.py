@@ -22,6 +22,13 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[int] = None  #: The last known event to backfill from.
 
 
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`com.atproto.label.subscribeLabels`."""
+
+    cursor: te.NotRequired[t.Optional[int]]  #: The last known event to backfill from.
+
+
 class Labels(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.label.subscribeLabels`."""

@@ -24,5 +24,15 @@ class Params(base.ParamsModelBase):
     commit: t.Optional[str] = None  #: An optional past commit CID.
 
 
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`com.atproto.sync.getRecord`."""
+
+    collection: str  #: Collection.
+    did: str  #: The DID of the repo.
+    rkey: str  #: Rkey.
+    commit: te.NotRequired[t.Optional[str]]  #: An optional past commit CID.
+
+
 #: Response raw data type.
 Response: te.TypeAlias = bytes

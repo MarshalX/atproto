@@ -24,6 +24,15 @@ class Params(base.ParamsModelBase):
     parent_height: t.Optional[int] = Field(default=80, alias='parentHeight', ge=0, le=1000)  #: Parent height.
 
 
+class ParamsDict(te.TypedDict):
+
+    """Parameters model for :obj:`app.bsky.feed.getPostThread`."""
+
+    uri: str  #: Uri.
+    depth: te.NotRequired[t.Optional[int]]  #: Depth.
+    parent_height: te.NotRequired[t.Optional[int]]  #: Parent height.
+
+
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`app.bsky.feed.getPostThread`."""
