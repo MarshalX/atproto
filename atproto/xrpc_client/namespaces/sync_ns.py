@@ -33,7 +33,11 @@ class BskyNamespace(NamespaceBase):
 
 class ActorNamespace(NamespaceBase):
     def get_preferences(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyActorGetPreferences.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.AppBskyActorGetPreferences.Params', 'models.AppBskyActorGetPreferences.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyActorGetPreferences.Response':
         """Get private preferences attached to the account.
 
@@ -55,7 +59,9 @@ class ActorNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyActorGetPreferences.Response)
 
     def get_profile(
-        self, params: t.Union[dict, 'models.AppBskyActorGetProfile.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyActorGetProfile.Params', 'models.AppBskyActorGetProfile.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
         """Get profile.
 
@@ -77,7 +83,9 @@ class ActorNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyActorDefs.ProfileViewDetailed)
 
     def get_profiles(
-        self, params: t.Union[dict, 'models.AppBskyActorGetProfiles.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyActorGetProfiles.Params', 'models.AppBskyActorGetProfiles.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyActorGetProfiles.Response':
         """Get profiles.
 
@@ -99,7 +107,11 @@ class ActorNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyActorGetProfiles.Response)
 
     def get_suggestions(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyActorGetSuggestions.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.AppBskyActorGetSuggestions.Params', 'models.AppBskyActorGetSuggestions.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyActorGetSuggestions.Response':
         """Get a list of actors suggested for following. Used in discovery UIs.
 
@@ -141,7 +153,11 @@ class ActorNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
     def search_actors(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyActorSearchActors.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.AppBskyActorSearchActors.Params', 'models.AppBskyActorSearchActors.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyActorSearchActors.Response':
         """Find actors matching search criteria.
 
@@ -163,7 +179,13 @@ class ActorNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyActorSearchActors.Response)
 
     def search_actors_typeahead(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyActorSearchActorsTypeahead.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union[
+                'models.AppBskyActorSearchActorsTypeahead.Params', 'models.AppBskyActorSearchActorsTypeahead.ParamsDict'
+            ]
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyActorSearchActorsTypeahead.Response':
         """Find actor suggestions for a search term.
 
@@ -205,7 +227,9 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedDescribeFeedGenerator.Response)
 
     def get_actor_feeds(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetActorFeeds.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyFeedGetActorFeeds.Params', 'models.AppBskyFeedGetActorFeeds.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyFeedGetActorFeeds.Response':
         """Retrieve a list of feeds created by a given actor.
 
@@ -227,7 +251,9 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetActorFeeds.Response)
 
     def get_actor_likes(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetActorLikes.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyFeedGetActorLikes.Params', 'models.AppBskyFeedGetActorLikes.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyFeedGetActorLikes.Response':
         """A view of the posts liked by an actor.
 
@@ -249,7 +275,9 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetActorLikes.Response)
 
     def get_author_feed(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetAuthorFeed.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyFeedGetAuthorFeed.Params', 'models.AppBskyFeedGetAuthorFeed.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyFeedGetAuthorFeed.Response':
         """A view of an actor's feed.
 
@@ -271,7 +299,7 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetAuthorFeed.Response)
 
     def get_feed(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetFeed.Params'], **kwargs
+        self, params: t.Union['models.AppBskyFeedGetFeed.Params', 'models.AppBskyFeedGetFeed.ParamsDict'], **kwargs
     ) -> 'models.AppBskyFeedGetFeed.Response':
         """Compose and hydrate a feed from a user's selected feed generator.
 
@@ -293,7 +321,9 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetFeed.Response)
 
     def get_feed_generator(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetFeedGenerator.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyFeedGetFeedGenerator.Params', 'models.AppBskyFeedGetFeedGenerator.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyFeedGetFeedGenerator.Response':
         """Get information about a specific feed offered by a feed generator, such as its online status.
 
@@ -315,7 +345,9 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetFeedGenerator.Response)
 
     def get_feed_generators(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetFeedGenerators.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyFeedGetFeedGenerators.Params', 'models.AppBskyFeedGetFeedGenerators.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyFeedGetFeedGenerators.Response':
         """Get information about a list of feed generators.
 
@@ -337,7 +369,9 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetFeedGenerators.Response)
 
     def get_feed_skeleton(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetFeedSkeleton.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyFeedGetFeedSkeleton.Params', 'models.AppBskyFeedGetFeedSkeleton.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyFeedGetFeedSkeleton.Response':
         """A skeleton of a feed provided by a feed generator.
 
@@ -359,7 +393,7 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetFeedSkeleton.Response)
 
     def get_likes(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetLikes.Params'], **kwargs
+        self, params: t.Union['models.AppBskyFeedGetLikes.Params', 'models.AppBskyFeedGetLikes.ParamsDict'], **kwargs
     ) -> 'models.AppBskyFeedGetLikes.Response':
         """Get likes.
 
@@ -381,7 +415,9 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetLikes.Response)
 
     def get_list_feed(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetListFeed.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyFeedGetListFeed.Params', 'models.AppBskyFeedGetListFeed.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyFeedGetListFeed.Response':
         """A view of a recent posts from actors in a list.
 
@@ -403,7 +439,9 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetListFeed.Response)
 
     def get_post_thread(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetPostThread.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyFeedGetPostThread.Params', 'models.AppBskyFeedGetPostThread.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyFeedGetPostThread.Response':
         """Get post thread.
 
@@ -425,7 +463,7 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetPostThread.Response)
 
     def get_posts(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetPosts.Params'], **kwargs
+        self, params: t.Union['models.AppBskyFeedGetPosts.Params', 'models.AppBskyFeedGetPosts.ParamsDict'], **kwargs
     ) -> 'models.AppBskyFeedGetPosts.Response':
         """A view of an actor's feed.
 
@@ -447,7 +485,9 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetPosts.Response)
 
     def get_reposted_by(
-        self, params: t.Union[dict, 'models.AppBskyFeedGetRepostedBy.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyFeedGetRepostedBy.Params', 'models.AppBskyFeedGetRepostedBy.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyFeedGetRepostedBy.Response':
         """Get reposted by.
 
@@ -469,7 +509,11 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetRepostedBy.Response)
 
     def get_suggested_feeds(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyFeedGetSuggestedFeeds.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.AppBskyFeedGetSuggestedFeeds.Params', 'models.AppBskyFeedGetSuggestedFeeds.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyFeedGetSuggestedFeeds.Response':
         """Get a list of suggested feeds for the viewer.
 
@@ -491,7 +535,11 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedGetSuggestedFeeds.Response)
 
     def get_timeline(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyFeedGetTimeline.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.AppBskyFeedGetTimeline.Params', 'models.AppBskyFeedGetTimeline.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyFeedGetTimeline.Response':
         """A view of the user's home timeline.
 
@@ -515,7 +563,11 @@ class FeedNamespace(NamespaceBase):
 
 class GraphNamespace(NamespaceBase):
     def get_blocks(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyGraphGetBlocks.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.AppBskyGraphGetBlocks.Params', 'models.AppBskyGraphGetBlocks.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyGraphGetBlocks.Response':
         """Who is the requester's account blocking?
 
@@ -537,7 +589,9 @@ class GraphNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyGraphGetBlocks.Response)
 
     def get_followers(
-        self, params: t.Union[dict, 'models.AppBskyGraphGetFollowers.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyGraphGetFollowers.Params', 'models.AppBskyGraphGetFollowers.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyGraphGetFollowers.Response':
         """Who is following an actor?
 
@@ -559,7 +613,9 @@ class GraphNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyGraphGetFollowers.Response)
 
     def get_follows(
-        self, params: t.Union[dict, 'models.AppBskyGraphGetFollows.Params'], **kwargs
+        self,
+        params: t.Union['models.AppBskyGraphGetFollows.Params', 'models.AppBskyGraphGetFollows.ParamsDict'],
+        **kwargs,
     ) -> 'models.AppBskyGraphGetFollows.Response':
         """Who is an actor following?
 
@@ -581,7 +637,7 @@ class GraphNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyGraphGetFollows.Response)
 
     def get_list(
-        self, params: t.Union[dict, 'models.AppBskyGraphGetList.Params'], **kwargs
+        self, params: t.Union['models.AppBskyGraphGetList.Params', 'models.AppBskyGraphGetList.ParamsDict'], **kwargs
     ) -> 'models.AppBskyGraphGetList.Response':
         """Fetch a list of actors.
 
@@ -603,7 +659,11 @@ class GraphNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyGraphGetList.Response)
 
     def get_list_blocks(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyGraphGetListBlocks.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.AppBskyGraphGetListBlocks.Params', 'models.AppBskyGraphGetListBlocks.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyGraphGetListBlocks.Response':
         """Which lists is the requester's account blocking?
 
@@ -625,7 +685,11 @@ class GraphNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyGraphGetListBlocks.Response)
 
     def get_list_mutes(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyGraphGetListMutes.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.AppBskyGraphGetListMutes.Params', 'models.AppBskyGraphGetListMutes.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyGraphGetListMutes.Response':
         """Which lists is the requester's account muting?
 
@@ -647,7 +711,7 @@ class GraphNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyGraphGetListMutes.Response)
 
     def get_lists(
-        self, params: t.Union[dict, 'models.AppBskyGraphGetLists.Params'], **kwargs
+        self, params: t.Union['models.AppBskyGraphGetLists.Params', 'models.AppBskyGraphGetLists.ParamsDict'], **kwargs
     ) -> 'models.AppBskyGraphGetLists.Response':
         """Fetch a list of lists that belong to an actor.
 
@@ -669,7 +733,11 @@ class GraphNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyGraphGetLists.Response)
 
     def get_mutes(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyGraphGetMutes.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.AppBskyGraphGetMutes.Params', 'models.AppBskyGraphGetMutes.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyGraphGetMutes.Response':
         """Who does the viewer mute?
 
@@ -691,7 +759,12 @@ class GraphNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyGraphGetMutes.Response)
 
     def get_suggested_follows_by_actor(
-        self, params: t.Union[dict, 'models.AppBskyGraphGetSuggestedFollowsByActor.Params'], **kwargs
+        self,
+        params: t.Union[
+            'models.AppBskyGraphGetSuggestedFollowsByActor.Params',
+            'models.AppBskyGraphGetSuggestedFollowsByActor.ParamsDict',
+        ],
+        **kwargs,
     ) -> 'models.AppBskyGraphGetSuggestedFollowsByActor.Response':
         """Get suggested follows related to a given actor.
 
@@ -818,7 +891,11 @@ class UnspeccedNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
     def get_popular(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyUnspeccedGetPopular.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.AppBskyUnspeccedGetPopular.Params', 'models.AppBskyUnspeccedGetPopular.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyUnspeccedGetPopular.Response':
         """An unspecced view of globally popular items.
 
@@ -841,7 +918,12 @@ class UnspeccedNamespace(NamespaceBase):
 
     def get_popular_feed_generators(
         self,
-        params: t.Optional[t.Union[dict, 'models.AppBskyUnspeccedGetPopularFeedGenerators.Params']] = None,
+        params: t.Optional[
+            t.Union[
+                'models.AppBskyUnspeccedGetPopularFeedGenerators.Params',
+                'models.AppBskyUnspeccedGetPopularFeedGenerators.ParamsDict',
+            ]
+        ] = None,
         **kwargs,
     ) -> 'models.AppBskyUnspeccedGetPopularFeedGenerators.Response':
         """An unspecced view of globally popular feed generators.
@@ -867,7 +949,14 @@ class UnspeccedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyUnspeccedGetPopularFeedGenerators.Response)
 
     def get_timeline_skeleton(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyUnspeccedGetTimelineSkeleton.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union[
+                'models.AppBskyUnspeccedGetTimelineSkeleton.Params',
+                'models.AppBskyUnspeccedGetTimelineSkeleton.ParamsDict',
+            ]
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyUnspeccedGetTimelineSkeleton.Response':
         """A skeleton of a timeline - UNSPECCED & WILL GO AWAY SOON.
 
@@ -891,7 +980,13 @@ class UnspeccedNamespace(NamespaceBase):
 
 class NotificationNamespace(NamespaceBase):
     def get_unread_count(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyNotificationGetUnreadCount.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union[
+                'models.AppBskyNotificationGetUnreadCount.Params', 'models.AppBskyNotificationGetUnreadCount.ParamsDict'
+            ]
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyNotificationGetUnreadCount.Response':
         """Get unread count.
 
@@ -913,7 +1008,14 @@ class NotificationNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyNotificationGetUnreadCount.Response)
 
     def list_notifications(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyNotificationListNotifications.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union[
+                'models.AppBskyNotificationListNotifications.Params',
+                'models.AppBskyNotificationListNotifications.ParamsDict',
+            ]
+        ] = None,
+        **kwargs,
     ) -> 'models.AppBskyNotificationListNotifications.Response':
         """List notifications.
 
@@ -995,7 +1097,9 @@ class AtprotoNamespace(NamespaceBase):
 
 class SyncNamespace(NamespaceBase):
     def get_blob(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetBlob.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoSyncGetBlob.Params', 'models.ComAtprotoSyncGetBlob.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoSyncGetBlob.Response':
         """Get a blob associated with a given repo.
 
@@ -1017,7 +1121,9 @@ class SyncNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoSyncGetBlob.Response)
 
     def get_blocks(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetBlocks.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoSyncGetBlocks.Params', 'models.ComAtprotoSyncGetBlocks.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoSyncGetBlocks.Response':
         """Gets blocks from a given repo.
 
@@ -1039,7 +1145,9 @@ class SyncNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoSyncGetBlocks.Response)
 
     def get_checkout(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetCheckout.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoSyncGetCheckout.Params', 'models.ComAtprotoSyncGetCheckout.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoSyncGetCheckout.Response':
         """DEPRECATED - please use com.atproto.sync.getRepo instead.
 
@@ -1061,7 +1169,9 @@ class SyncNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoSyncGetCheckout.Response)
 
     def get_head(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetHead.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoSyncGetHead.Params', 'models.ComAtprotoSyncGetHead.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoSyncGetHead.Response':
         """DEPRECATED - please use com.atproto.sync.getLatestCommit instead.
 
@@ -1083,7 +1193,11 @@ class SyncNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoSyncGetHead.Response)
 
     def get_latest_commit(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetLatestCommit.Params'], **kwargs
+        self,
+        params: t.Union[
+            'models.ComAtprotoSyncGetLatestCommit.Params', 'models.ComAtprotoSyncGetLatestCommit.ParamsDict'
+        ],
+        **kwargs,
     ) -> 'models.ComAtprotoSyncGetLatestCommit.Response':
         """Gets the current commit CID & revision of the repo.
 
@@ -1105,7 +1219,9 @@ class SyncNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoSyncGetLatestCommit.Response)
 
     def get_record(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetRecord.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoSyncGetRecord.Params', 'models.ComAtprotoSyncGetRecord.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoSyncGetRecord.Response':
         """Gets blocks needed for existence or non-existence of record.
 
@@ -1127,7 +1243,9 @@ class SyncNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoSyncGetRecord.Response)
 
     def get_repo(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetRepo.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoSyncGetRepo.Params', 'models.ComAtprotoSyncGetRepo.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoSyncGetRepo.Response':
         """Gets the did's repo, optionally catching up from a specific revision.
 
@@ -1149,7 +1267,9 @@ class SyncNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoSyncGetRepo.Response)
 
     def list_blobs(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncListBlobs.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoSyncListBlobs.Params', 'models.ComAtprotoSyncListBlobs.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoSyncListBlobs.Response':
         """List blob cids since some revision.
 
@@ -1171,7 +1291,11 @@ class SyncNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoSyncListBlobs.Response)
 
     def list_repos(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncListRepos.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.ComAtprotoSyncListRepos.Params', 'models.ComAtprotoSyncListRepos.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.ComAtprotoSyncListRepos.Response':
         """List dids and root cids of hosted repos.
 
@@ -1301,7 +1425,11 @@ class AdminNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
     def get_invite_codes(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetInviteCodes.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.ComAtprotoAdminGetInviteCodes.Params', 'models.ComAtprotoAdminGetInviteCodes.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.ComAtprotoAdminGetInviteCodes.Response':
         """Admin view of invite codes.
 
@@ -1323,7 +1451,11 @@ class AdminNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminGetInviteCodes.Response)
 
     def get_moderation_action(
-        self, params: t.Union[dict, 'models.ComAtprotoAdminGetModerationAction.Params'], **kwargs
+        self,
+        params: t.Union[
+            'models.ComAtprotoAdminGetModerationAction.Params', 'models.ComAtprotoAdminGetModerationAction.ParamsDict'
+        ],
+        **kwargs,
     ) -> 'models.ComAtprotoAdminDefs.ActionViewDetail':
         """View details about a moderation action.
 
@@ -1345,7 +1477,14 @@ class AdminNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminDefs.ActionViewDetail)
 
     def get_moderation_actions(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetModerationActions.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union[
+                'models.ComAtprotoAdminGetModerationActions.Params',
+                'models.ComAtprotoAdminGetModerationActions.ParamsDict',
+            ]
+        ] = None,
+        **kwargs,
     ) -> 'models.ComAtprotoAdminGetModerationActions.Response':
         """List moderation actions related to a subject.
 
@@ -1367,7 +1506,11 @@ class AdminNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminGetModerationActions.Response)
 
     def get_moderation_report(
-        self, params: t.Union[dict, 'models.ComAtprotoAdminGetModerationReport.Params'], **kwargs
+        self,
+        params: t.Union[
+            'models.ComAtprotoAdminGetModerationReport.Params', 'models.ComAtprotoAdminGetModerationReport.ParamsDict'
+        ],
+        **kwargs,
     ) -> 'models.ComAtprotoAdminDefs.ReportViewDetail':
         """View details about a moderation report.
 
@@ -1389,7 +1532,14 @@ class AdminNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminDefs.ReportViewDetail)
 
     def get_moderation_reports(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminGetModerationReports.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union[
+                'models.ComAtprotoAdminGetModerationReports.Params',
+                'models.ComAtprotoAdminGetModerationReports.ParamsDict',
+            ]
+        ] = None,
+        **kwargs,
     ) -> 'models.ComAtprotoAdminGetModerationReports.Response':
         """List moderation reports related to a subject.
 
@@ -1411,7 +1561,9 @@ class AdminNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminGetModerationReports.Response)
 
     def get_record(
-        self, params: t.Union[dict, 'models.ComAtprotoAdminGetRecord.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoAdminGetRecord.Params', 'models.ComAtprotoAdminGetRecord.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoAdminDefs.RecordViewDetail':
         """View details about a record.
 
@@ -1433,7 +1585,9 @@ class AdminNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminDefs.RecordViewDetail)
 
     def get_repo(
-        self, params: t.Union[dict, 'models.ComAtprotoAdminGetRepo.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoAdminGetRepo.Params', 'models.ComAtprotoAdminGetRepo.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoAdminDefs.RepoViewDetail':
         """View details about a repository.
 
@@ -1507,7 +1661,11 @@ class AdminNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminDefs.ActionView)
 
     def search_repos(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoAdminSearchRepos.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union['models.ComAtprotoAdminSearchRepos.Params', 'models.ComAtprotoAdminSearchRepos.ParamsDict']
+        ] = None,
+        **kwargs,
     ) -> 'models.ComAtprotoAdminSearchRepos.Response':
         """Find repositories based on a search term.
 
@@ -1811,7 +1969,14 @@ class ServerNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoServerDescribeServer.Response)
 
     def get_account_invite_codes(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoServerGetAccountInviteCodes.Params']] = None, **kwargs
+        self,
+        params: t.Optional[
+            t.Union[
+                'models.ComAtprotoServerGetAccountInviteCodes.Params',
+                'models.ComAtprotoServerGetAccountInviteCodes.ParamsDict',
+            ]
+        ] = None,
+        **kwargs,
     ) -> 'models.ComAtprotoServerGetAccountInviteCodes.Response':
         """Get all invite codes for a given account.
 
@@ -2038,7 +2203,9 @@ class RepoNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
     def describe_repo(
-        self, params: t.Union[dict, 'models.ComAtprotoRepoDescribeRepo.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoRepoDescribeRepo.Params', 'models.ComAtprotoRepoDescribeRepo.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoRepoDescribeRepo.Response':
         """Get information about the repo, including the list of collections.
 
@@ -2060,7 +2227,9 @@ class RepoNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoRepoDescribeRepo.Response)
 
     def get_record(
-        self, params: t.Union[dict, 'models.ComAtprotoRepoGetRecord.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoRepoGetRecord.Params', 'models.ComAtprotoRepoGetRecord.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoRepoGetRecord.Response':
         """Get a record.
 
@@ -2082,7 +2251,9 @@ class RepoNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
 
     def list_records(
-        self, params: t.Union[dict, 'models.ComAtprotoRepoListRecords.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoRepoListRecords.Params', 'models.ComAtprotoRepoListRecords.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoRepoListRecords.Response':
         """List a range of records in a collection.
 
@@ -2153,7 +2324,11 @@ class RepoNamespace(NamespaceBase):
 
 class IdentityNamespace(NamespaceBase):
     def resolve_handle(
-        self, params: t.Union[dict, 'models.ComAtprotoIdentityResolveHandle.Params'], **kwargs
+        self,
+        params: t.Union[
+            'models.ComAtprotoIdentityResolveHandle.Params', 'models.ComAtprotoIdentityResolveHandle.ParamsDict'
+        ],
+        **kwargs,
     ) -> 'models.ComAtprotoIdentityResolveHandle.Response':
         """Provides the DID of a repo.
 
@@ -2225,7 +2400,9 @@ class ModerationNamespace(NamespaceBase):
 
 class LabelNamespace(NamespaceBase):
     def query_labels(
-        self, params: t.Union[dict, 'models.ComAtprotoLabelQueryLabels.Params'], **kwargs
+        self,
+        params: t.Union['models.ComAtprotoLabelQueryLabels.Params', 'models.ComAtprotoLabelQueryLabels.ParamsDict'],
+        **kwargs,
     ) -> 'models.ComAtprotoLabelQueryLabels.Response':
         """Find labels relevant to the provided URI patterns.
 
