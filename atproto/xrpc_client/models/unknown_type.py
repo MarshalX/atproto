@@ -8,31 +8,31 @@ if t.TYPE_CHECKING:
     from atproto.xrpc_client.models import dot_dict
 
 UnknownRecordType: te.TypeAlias = t.Union[
-    'models.AppBskyFeedGenerator.Main',
     'models.AppBskyActorProfile.Main',
-    'models.AppBskyFeedRepost.Main',
-    'models.AppBskyGraphListitem.Main',
+    'models.AppBskyFeedGenerator.Main',
     'models.AppBskyFeedLike.Main',
+    'models.AppBskyFeedPost.Main',
+    'models.AppBskyFeedRepost.Main',
     'models.AppBskyFeedThreadgate.Main',
+    'models.AppBskyGraphBlock.Main',
     'models.AppBskyGraphFollow.Main',
     'models.AppBskyGraphList.Main',
     'models.AppBskyGraphListblock.Main',
-    'models.AppBskyGraphBlock.Main',
-    'models.AppBskyFeedPost.Main',
+    'models.AppBskyGraphListitem.Main',
 ]
 UnknownRecordTypePydantic = te.Annotated[
     t.Union[
-        'models.AppBskyFeedGenerator.Main',
         'models.AppBskyActorProfile.Main',
-        'models.AppBskyFeedRepost.Main',
-        'models.AppBskyGraphListitem.Main',
+        'models.AppBskyFeedGenerator.Main',
         'models.AppBskyFeedLike.Main',
+        'models.AppBskyFeedPost.Main',
+        'models.AppBskyFeedRepost.Main',
         'models.AppBskyFeedThreadgate.Main',
+        'models.AppBskyGraphBlock.Main',
         'models.AppBskyGraphFollow.Main',
         'models.AppBskyGraphList.Main',
         'models.AppBskyGraphListblock.Main',
-        'models.AppBskyGraphBlock.Main',
-        'models.AppBskyFeedPost.Main',
+        'models.AppBskyGraphListitem.Main',
     ],
     Field(discriminator='py_type'),
 ]
