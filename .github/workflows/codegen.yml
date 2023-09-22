@@ -3,12 +3,16 @@ name: Codegen Check
 on: [ pull_request, push ]
 
 jobs:
-  unit_tests:
+  codegen_check:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Run Cimon (eBPF).
@@ -36,7 +40,7 @@ jobs:
           version: 1.5.1
 
       - name: Install dependencies.
-        run: poetry install
+        run: poetry install --no-interaction
 
       - name: Run codegen.
         run: poetry run atproto gen all
