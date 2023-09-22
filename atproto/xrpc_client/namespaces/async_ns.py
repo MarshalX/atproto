@@ -796,6 +796,92 @@ class GraphNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
 
+class NotificationNamespace(AsyncNamespaceBase):
+    async def get_unread_count(
+        self, params: t.Optional[t.Union[dict, 'models.AppBskyNotificationGetUnreadCount.Params']] = None, **kwargs
+    ) -> 'models.AppBskyNotificationGetUnreadCount.Response':
+        """Get unread count.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationGetUnreadCount.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.AppBskyNotificationGetUnreadCount.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.notification.getUnreadCount', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyNotificationGetUnreadCount.Response)
+
+    async def list_notifications(
+        self, params: t.Optional[t.Union[dict, 'models.AppBskyNotificationListNotifications.Params']] = None, **kwargs
+    ) -> 'models.AppBskyNotificationListNotifications.Response':
+        """List notifications.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationListNotifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.AppBskyNotificationListNotifications.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.notification.listNotifications', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyNotificationListNotifications.Response)
+
+    async def register_push(self, data: t.Union[dict, 'models.AppBskyNotificationRegisterPush.Data'], **kwargs) -> bool:
+        """Register for push notifications with a service.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.AppBskyNotificationRegisterPush.Data)
+        response = await self._client.invoke_procedure(
+            'app.bsky.notification.registerPush', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def update_seen(self, data: t.Union[dict, 'models.AppBskyNotificationUpdateSeen.Data'], **kwargs) -> bool:
+        """Notify server that the user has seen notifications.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.AppBskyNotificationUpdateSeen.Data)
+        response = await self._client.invoke_procedure(
+            'app.bsky.notification.updateSeen', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class UnspeccedNamespace(AsyncNamespaceBase):
     async def apply_labels(self, data: t.Union[dict, 'models.AppBskyUnspeccedApplyLabels.Data'], **kwargs) -> bool:
         """Allow a labeler to apply labels directly.
@@ -889,92 +975,6 @@ class UnspeccedNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.AppBskyUnspeccedGetTimelineSkeleton.Response)
 
 
-class NotificationNamespace(AsyncNamespaceBase):
-    async def get_unread_count(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyNotificationGetUnreadCount.Params']] = None, **kwargs
-    ) -> 'models.AppBskyNotificationGetUnreadCount.Response':
-        """Get unread count.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyNotificationGetUnreadCount.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.AppBskyNotificationGetUnreadCount.Params)
-        response = await self._client.invoke_query(
-            'app.bsky.notification.getUnreadCount', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyNotificationGetUnreadCount.Response)
-
-    async def list_notifications(
-        self, params: t.Optional[t.Union[dict, 'models.AppBskyNotificationListNotifications.Params']] = None, **kwargs
-    ) -> 'models.AppBskyNotificationListNotifications.Response':
-        """List notifications.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyNotificationListNotifications.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.AppBskyNotificationListNotifications.Params)
-        response = await self._client.invoke_query(
-            'app.bsky.notification.listNotifications', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyNotificationListNotifications.Response)
-
-    async def register_push(self, data: t.Union[dict, 'models.AppBskyNotificationRegisterPush.Data'], **kwargs) -> bool:
-        """Register for push notifications with a service.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.AppBskyNotificationRegisterPush.Data)
-        response = await self._client.invoke_procedure(
-            'app.bsky.notification.registerPush', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    async def update_seen(self, data: t.Union[dict, 'models.AppBskyNotificationUpdateSeen.Data'], **kwargs) -> bool:
-        """Notify server that the user has seen notifications.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.AppBskyNotificationUpdateSeen.Data)
-        response = await self._client.invoke_procedure(
-            'app.bsky.notification.updateSeen', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-
 class ComNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
@@ -991,246 +991,6 @@ class AtprotoNamespace(AsyncNamespaceBase):
         self.repo = RepoNamespace(self._client)
         self.server = ServerNamespace(self._client)
         self.sync = SyncNamespace(self._client)
-
-
-class SyncNamespace(AsyncNamespaceBase):
-    async def get_blob(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetBlob.Params'], **kwargs
-    ) -> 'models.ComAtprotoSyncGetBlob.Response':
-        """Get a blob associated with a given repo.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoSyncGetBlob.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoSyncGetBlob.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.sync.getBlob', params=params_model, output_encoding='*/*', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoSyncGetBlob.Response)
-
-    async def get_blocks(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetBlocks.Params'], **kwargs
-    ) -> 'models.ComAtprotoSyncGetBlocks.Response':
-        """Gets blocks from a given repo.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoSyncGetBlocks.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoSyncGetBlocks.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.sync.getBlocks', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoSyncGetBlocks.Response)
-
-    async def get_checkout(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetCheckout.Params'], **kwargs
-    ) -> 'models.ComAtprotoSyncGetCheckout.Response':
-        """DEPRECATED - please use com.atproto.sync.getRepo instead.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoSyncGetCheckout.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoSyncGetCheckout.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.sync.getCheckout', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoSyncGetCheckout.Response)
-
-    async def get_head(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetHead.Params'], **kwargs
-    ) -> 'models.ComAtprotoSyncGetHead.Response':
-        """DEPRECATED - please use com.atproto.sync.getLatestCommit instead.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoSyncGetHead.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoSyncGetHead.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.sync.getHead', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoSyncGetHead.Response)
-
-    async def get_latest_commit(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetLatestCommit.Params'], **kwargs
-    ) -> 'models.ComAtprotoSyncGetLatestCommit.Response':
-        """Gets the current commit CID & revision of the repo.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoSyncGetLatestCommit.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoSyncGetLatestCommit.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.sync.getLatestCommit', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoSyncGetLatestCommit.Response)
-
-    async def get_record(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetRecord.Params'], **kwargs
-    ) -> 'models.ComAtprotoSyncGetRecord.Response':
-        """Gets blocks needed for existence or non-existence of record.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoSyncGetRecord.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoSyncGetRecord.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.sync.getRecord', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoSyncGetRecord.Response)
-
-    async def get_repo(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncGetRepo.Params'], **kwargs
-    ) -> 'models.ComAtprotoSyncGetRepo.Response':
-        """Gets the did's repo, optionally catching up from a specific revision.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoSyncGetRepo.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoSyncGetRepo.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.sync.getRepo', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoSyncGetRepo.Response)
-
-    async def list_blobs(
-        self, params: t.Union[dict, 'models.ComAtprotoSyncListBlobs.Params'], **kwargs
-    ) -> 'models.ComAtprotoSyncListBlobs.Response':
-        """List blob cids since some revision.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoSyncListBlobs.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoSyncListBlobs.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.sync.listBlobs', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoSyncListBlobs.Response)
-
-    async def list_repos(
-        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncListRepos.Params']] = None, **kwargs
-    ) -> 'models.ComAtprotoSyncListRepos.Response':
-        """List dids and root cids of hosted repos.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoSyncListRepos.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoSyncListRepos.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.sync.listRepos', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoSyncListRepos.Response)
-
-    async def notify_of_update(self, data: t.Union[dict, 'models.ComAtprotoSyncNotifyOfUpdate.Data'], **kwargs) -> bool:
-        """Notify a crawling service of a recent update. Often when a long break between updates causes the connection with the crawling service to break.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.ComAtprotoSyncNotifyOfUpdate.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.sync.notifyOfUpdate', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    async def request_crawl(self, data: t.Union[dict, 'models.ComAtprotoSyncRequestCrawl.Data'], **kwargs) -> bool:
-        """Request a service to persistently crawl hosted repos.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.ComAtprotoSyncRequestCrawl.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.sync.requestCrawl', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
 
 
 class AdminNamespace(AsyncNamespaceBase):
@@ -1625,6 +1385,283 @@ class AdminNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
 
+class IdentityNamespace(AsyncNamespaceBase):
+    async def resolve_handle(
+        self, params: t.Union[dict, 'models.ComAtprotoIdentityResolveHandle.Params'], **kwargs
+    ) -> 'models.ComAtprotoIdentityResolveHandle.Response':
+        """Provides the DID of a repo.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoIdentityResolveHandle.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoIdentityResolveHandle.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.identity.resolveHandle', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoIdentityResolveHandle.Response)
+
+    async def update_handle(self, data: t.Union[dict, 'models.ComAtprotoIdentityUpdateHandle.Data'], **kwargs) -> bool:
+        """Updates the handle of the account.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoIdentityUpdateHandle.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.identity.updateHandle', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class LabelNamespace(AsyncNamespaceBase):
+    async def query_labels(
+        self, params: t.Union[dict, 'models.ComAtprotoLabelQueryLabels.Params'], **kwargs
+    ) -> 'models.ComAtprotoLabelQueryLabels.Response':
+        """Find labels relevant to the provided URI patterns.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoLabelQueryLabels.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoLabelQueryLabels.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.label.queryLabels', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoLabelQueryLabels.Response)
+
+
+class ModerationNamespace(AsyncNamespaceBase):
+    async def create_report(
+        self, data: t.Union[dict, 'models.ComAtprotoModerationCreateReport.Data'], **kwargs
+    ) -> 'models.ComAtprotoModerationCreateReport.Response':
+        """Report a repo or a record.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoModerationCreateReport.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoModerationCreateReport.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.moderation.createReport',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoModerationCreateReport.Response)
+
+
+class RepoNamespace(AsyncNamespaceBase):
+    async def apply_writes(self, data: t.Union[dict, 'models.ComAtprotoRepoApplyWrites.Data'], **kwargs) -> bool:
+        """Apply a batch transaction of creates, updates, and deletes.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoRepoApplyWrites.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.applyWrites', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def create_record(
+        self, data: t.Union[dict, 'models.ComAtprotoRepoCreateRecord.Data'], **kwargs
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        """Create a new record.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoRepoCreateRecord.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete_record(self, data: t.Union[dict, 'models.ComAtprotoRepoDeleteRecord.Data'], **kwargs) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoRepoDeleteRecord.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def describe_repo(
+        self, params: t.Union[dict, 'models.ComAtprotoRepoDescribeRepo.Params'], **kwargs
+    ) -> 'models.ComAtprotoRepoDescribeRepo.Response':
+        """Get information about the repo, including the list of collections.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoDescribeRepo.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoRepoDescribeRepo.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.repo.describeRepo', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoRepoDescribeRepo.Response)
+
+    async def get_record(
+        self, params: t.Union[dict, 'models.ComAtprotoRepoGetRecord.Params'], **kwargs
+    ) -> 'models.ComAtprotoRepoGetRecord.Response':
+        """Get a record.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoGetRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoRepoGetRecord.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+
+    async def list_records(
+        self, params: t.Union[dict, 'models.ComAtprotoRepoListRecords.Params'], **kwargs
+    ) -> 'models.ComAtprotoRepoListRecords.Response':
+        """List a range of records in a collection.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoListRecords.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoRepoListRecords.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+
+    async def put_record(
+        self, data: t.Union[dict, 'models.ComAtprotoRepoPutRecord.Data'], **kwargs
+    ) -> 'models.ComAtprotoRepoPutRecord.Response':
+        """Write a record, creating or updating it as needed.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoPutRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoRepoPutRecord.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.putRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoPutRecord.Response)
+
+    async def upload_blob(
+        self, data: 'models.ComAtprotoRepoUploadBlob.Data', **kwargs
+    ) -> 'models.ComAtprotoRepoUploadBlob.Response':
+        """Upload a new blob to be added to repo in a later request.
+
+        Args:
+            data: Input data alias.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoUploadBlob.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.uploadBlob', data=data, input_encoding='*/*', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoRepoUploadBlob.Response)
+
+
 class ServerNamespace(AsyncNamespaceBase):
     async def create_account(
         self, data: t.Union[dict, 'models.ComAtprotoServerCreateAccount.Data'], **kwargs
@@ -1970,212 +2007,207 @@ class ServerNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
 
-class RepoNamespace(AsyncNamespaceBase):
-    async def apply_writes(self, data: t.Union[dict, 'models.ComAtprotoRepoApplyWrites.Data'], **kwargs) -> bool:
-        """Apply a batch transaction of creates, updates, and deletes.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.ComAtprotoRepoApplyWrites.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.repo.applyWrites', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    async def create_record(
-        self, data: t.Union[dict, 'models.ComAtprotoRepoCreateRecord.Data'], **kwargs
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
-        """Create a new record.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.ComAtprotoRepoCreateRecord.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.repo.createRecord',
-            data=data_model,
-            input_encoding='application/json',
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-
-    async def delete_record(self, data: t.Union[dict, 'models.ComAtprotoRepoDeleteRecord.Data'], **kwargs) -> bool:
-        """Delete a record, or ensure it doesn't exist.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.ComAtprotoRepoDeleteRecord.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    async def describe_repo(
-        self, params: t.Union[dict, 'models.ComAtprotoRepoDescribeRepo.Params'], **kwargs
-    ) -> 'models.ComAtprotoRepoDescribeRepo.Response':
-        """Get information about the repo, including the list of collections.
+class SyncNamespace(AsyncNamespaceBase):
+    async def get_blob(
+        self, params: t.Union[dict, 'models.ComAtprotoSyncGetBlob.Params'], **kwargs
+    ) -> 'models.ComAtprotoSyncGetBlob.Response':
+        """Get a blob associated with a given repo.
 
         Args:
             params: Parameters.
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoRepoDescribeRepo.Response`: Output model.
+            :obj:`models.ComAtprotoSyncGetBlob.Response`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params_model = get_or_create(params, models.ComAtprotoRepoDescribeRepo.Params)
+        params_model = get_or_create(params, models.ComAtprotoSyncGetBlob.Params)
         response = await self._client.invoke_query(
-            'com.atproto.repo.describeRepo', params=params_model, output_encoding='application/json', **kwargs
+            'com.atproto.sync.getBlob', params=params_model, output_encoding='*/*', **kwargs
         )
-        return get_response_model(response, models.ComAtprotoRepoDescribeRepo.Response)
+        return get_response_model(response, models.ComAtprotoSyncGetBlob.Response)
+
+    async def get_blocks(
+        self, params: t.Union[dict, 'models.ComAtprotoSyncGetBlocks.Params'], **kwargs
+    ) -> 'models.ComAtprotoSyncGetBlocks.Response':
+        """Gets blocks from a given repo.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSyncGetBlocks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoSyncGetBlocks.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.sync.getBlocks', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSyncGetBlocks.Response)
+
+    async def get_checkout(
+        self, params: t.Union[dict, 'models.ComAtprotoSyncGetCheckout.Params'], **kwargs
+    ) -> 'models.ComAtprotoSyncGetCheckout.Response':
+        """DEPRECATED - please use com.atproto.sync.getRepo instead.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSyncGetCheckout.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoSyncGetCheckout.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.sync.getCheckout', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSyncGetCheckout.Response)
+
+    async def get_head(
+        self, params: t.Union[dict, 'models.ComAtprotoSyncGetHead.Params'], **kwargs
+    ) -> 'models.ComAtprotoSyncGetHead.Response':
+        """DEPRECATED - please use com.atproto.sync.getLatestCommit instead.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSyncGetHead.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoSyncGetHead.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.sync.getHead', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSyncGetHead.Response)
+
+    async def get_latest_commit(
+        self, params: t.Union[dict, 'models.ComAtprotoSyncGetLatestCommit.Params'], **kwargs
+    ) -> 'models.ComAtprotoSyncGetLatestCommit.Response':
+        """Gets the current commit CID & revision of the repo.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSyncGetLatestCommit.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoSyncGetLatestCommit.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.sync.getLatestCommit', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSyncGetLatestCommit.Response)
 
     async def get_record(
-        self, params: t.Union[dict, 'models.ComAtprotoRepoGetRecord.Params'], **kwargs
-    ) -> 'models.ComAtprotoRepoGetRecord.Response':
-        """Get a record.
+        self, params: t.Union[dict, 'models.ComAtprotoSyncGetRecord.Params'], **kwargs
+    ) -> 'models.ComAtprotoSyncGetRecord.Response':
+        """Gets blocks needed for existence or non-existence of record.
 
         Args:
             params: Parameters.
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoRepoGetRecord.Response`: Output model.
+            :obj:`models.ComAtprotoSyncGetRecord.Response`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params_model = get_or_create(params, models.ComAtprotoRepoGetRecord.Params)
+        params_model = get_or_create(params, models.ComAtprotoSyncGetRecord.Params)
         response = await self._client.invoke_query(
-            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+            'com.atproto.sync.getRecord', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
         )
-        return get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return get_response_model(response, models.ComAtprotoSyncGetRecord.Response)
 
-    async def list_records(
-        self, params: t.Union[dict, 'models.ComAtprotoRepoListRecords.Params'], **kwargs
-    ) -> 'models.ComAtprotoRepoListRecords.Response':
-        """List a range of records in a collection.
+    async def get_repo(
+        self, params: t.Union[dict, 'models.ComAtprotoSyncGetRepo.Params'], **kwargs
+    ) -> 'models.ComAtprotoSyncGetRepo.Response':
+        """Gets the did's repo, optionally catching up from a specific revision.
 
         Args:
             params: Parameters.
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoRepoListRecords.Response`: Output model.
+            :obj:`models.ComAtprotoSyncGetRepo.Response`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params_model = get_or_create(params, models.ComAtprotoRepoListRecords.Params)
+        params_model = get_or_create(params, models.ComAtprotoSyncGetRepo.Params)
         response = await self._client.invoke_query(
-            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+            'com.atproto.sync.getRepo', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
         )
-        return get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return get_response_model(response, models.ComAtprotoSyncGetRepo.Response)
 
-    async def put_record(
-        self, data: t.Union[dict, 'models.ComAtprotoRepoPutRecord.Data'], **kwargs
-    ) -> 'models.ComAtprotoRepoPutRecord.Response':
-        """Write a record, creating or updating it as needed.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoRepoPutRecord.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        data_model = get_or_create(data, models.ComAtprotoRepoPutRecord.Data)
-        response = await self._client.invoke_procedure(
-            'com.atproto.repo.putRecord',
-            data=data_model,
-            input_encoding='application/json',
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoRepoPutRecord.Response)
-
-    async def upload_blob(
-        self, data: 'models.ComAtprotoRepoUploadBlob.Data', **kwargs
-    ) -> 'models.ComAtprotoRepoUploadBlob.Response':
-        """Upload a new blob to be added to repo in a later request.
-
-        Args:
-            data: Input data alias.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoRepoUploadBlob.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        response = await self._client.invoke_procedure(
-            'com.atproto.repo.uploadBlob', data=data, input_encoding='*/*', output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoRepoUploadBlob.Response)
-
-
-class IdentityNamespace(AsyncNamespaceBase):
-    async def resolve_handle(
-        self, params: t.Union[dict, 'models.ComAtprotoIdentityResolveHandle.Params'], **kwargs
-    ) -> 'models.ComAtprotoIdentityResolveHandle.Response':
-        """Provides the DID of a repo.
+    async def list_blobs(
+        self, params: t.Union[dict, 'models.ComAtprotoSyncListBlobs.Params'], **kwargs
+    ) -> 'models.ComAtprotoSyncListBlobs.Response':
+        """List blob cids since some revision.
 
         Args:
             params: Parameters.
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoIdentityResolveHandle.Response`: Output model.
+            :obj:`models.ComAtprotoSyncListBlobs.Response`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        params_model = get_or_create(params, models.ComAtprotoIdentityResolveHandle.Params)
+        params_model = get_or_create(params, models.ComAtprotoSyncListBlobs.Params)
         response = await self._client.invoke_query(
-            'com.atproto.identity.resolveHandle', params=params_model, output_encoding='application/json', **kwargs
+            'com.atproto.sync.listBlobs', params=params_model, output_encoding='application/json', **kwargs
         )
-        return get_response_model(response, models.ComAtprotoIdentityResolveHandle.Response)
+        return get_response_model(response, models.ComAtprotoSyncListBlobs.Response)
 
-    async def update_handle(self, data: t.Union[dict, 'models.ComAtprotoIdentityUpdateHandle.Data'], **kwargs) -> bool:
-        """Updates the handle of the account.
+    async def list_repos(
+        self, params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncListRepos.Params']] = None, **kwargs
+    ) -> 'models.ComAtprotoSyncListRepos.Response':
+        """List dids and root cids of hosted repos.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSyncListRepos.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoSyncListRepos.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.sync.listRepos', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSyncListRepos.Response)
+
+    async def notify_of_update(self, data: t.Union[dict, 'models.ComAtprotoSyncNotifyOfUpdate.Data'], **kwargs) -> bool:
+        """Notify a crawling service of a recent update. Often when a long break between updates causes the connection with the crawling service to break.
 
         Args:
             data: Input data.
@@ -2188,60 +2220,28 @@ class IdentityNamespace(AsyncNamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data_model = get_or_create(data, models.ComAtprotoIdentityUpdateHandle.Data)
+        data_model = get_or_create(data, models.ComAtprotoSyncNotifyOfUpdate.Data)
         response = await self._client.invoke_procedure(
-            'com.atproto.identity.updateHandle', data=data_model, input_encoding='application/json', **kwargs
+            'com.atproto.sync.notifyOfUpdate', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
-
-class ModerationNamespace(AsyncNamespaceBase):
-    async def create_report(
-        self, data: t.Union[dict, 'models.ComAtprotoModerationCreateReport.Data'], **kwargs
-    ) -> 'models.ComAtprotoModerationCreateReport.Response':
-        """Report a repo or a record.
+    async def request_crawl(self, data: t.Union[dict, 'models.ComAtprotoSyncRequestCrawl.Data'], **kwargs) -> bool:
+        """Request a service to persistently crawl hosted repos.
 
         Args:
             data: Input data.
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ComAtprotoModerationCreateReport.Response`: Output model.
+            :obj:`bool`: Success status.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        data_model = get_or_create(data, models.ComAtprotoModerationCreateReport.Data)
+        data_model = get_or_create(data, models.ComAtprotoSyncRequestCrawl.Data)
         response = await self._client.invoke_procedure(
-            'com.atproto.moderation.createReport',
-            data=data_model,
-            input_encoding='application/json',
-            output_encoding='application/json',
-            **kwargs,
+            'com.atproto.sync.requestCrawl', data=data_model, input_encoding='application/json', **kwargs
         )
-        return get_response_model(response, models.ComAtprotoModerationCreateReport.Response)
-
-
-class LabelNamespace(AsyncNamespaceBase):
-    async def query_labels(
-        self, params: t.Union[dict, 'models.ComAtprotoLabelQueryLabels.Params'], **kwargs
-    ) -> 'models.ComAtprotoLabelQueryLabels.Response':
-        """Find labels relevant to the provided URI patterns.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoLabelQueryLabels.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-
-        params_model = get_or_create(params, models.ComAtprotoLabelQueryLabels.Params)
-        response = await self._client.invoke_query(
-            'com.atproto.label.queryLabels', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoLabelQueryLabels.Response)
+        return get_response_model(response, bool)
