@@ -1,0 +1,49 @@
+name: Codegen Check
+
+on: [ pull_request, push ]
+
+jobs:
+  codegen_check:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Run Cimon (eBPF).
+        uses: cycodelabs/cimon-action@v0
+        with:
+          client-id: ${{ secrets.CIMON_CLIENT_ID }}
+          secret: ${{ secrets.CIMON_SECRET }}
+          prevent: true
+          allowed-hosts: >
+            files.pythonhosted.org
+            install.python-poetry.org
+            pypi.org
+
+      - name: Checkout repository.
+        uses: actions/checkout@v3
+
+      - name: Set up Python.
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Setup Poetry.
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+
+      - name: Install dependencies.
+        run: poetry install --no-interaction
+
+      - name: Run codegen.
+        run: poetry run atproto gen all
+
+      - name: Check working directory is clean.
+        run: git diff --exit-code

@@ -568,11 +568,11 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
 
 def _generate_init_files(root_package_path: Path) -> None:
     # One of the ways that I tried. Doesn't work well due to circular imports
-    for root, dirs, files in os.walk(root_package_path):
+    for root, dirs, files in sorted(os.walk(root_package_path)):
         root_path = Path(root)
 
         import_lines = []
-        for dir_name in dirs:
+        for dir_name in sorted(dirs):
             if dir_name.startswith('__'):
                 continue
 
@@ -584,7 +584,7 @@ def _generate_init_files(root_package_path: Path) -> None:
 
             import_lines.append(f'from {from_import} import {dir_name}')
 
-        for file_name in files:
+        for file_name in sorted(files):
             if file_name.startswith('__'):
                 continue
 
@@ -634,13 +634,13 @@ def _generate_import_aliases(root_package_path: Path) -> None:
 
     import_lines = []
     ids_db = ['class _Ids:']
-    for root, __, files in os.walk(root_package_path):
+    for root, __, files in sorted(os.walk(root_package_path)):
         root_path = Path(root)
 
         if root_path == root_package_path:
             continue
 
-        for file in files:
+        for file in sorted(files):
             if file.startswith(('.', '__', '.pyc')):
                 continue
             if '.cpython-' in file:
