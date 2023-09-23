@@ -254,7 +254,7 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
             _add_arg(arg, optional=False)
 
     args.extend(optional_args)
-    args.append('**kwargs')
+    args.append('**kwargs: t.Any')
     return ', '.join(args)
 
 
