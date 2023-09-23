@@ -28,9 +28,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.label.queryLabels`."""
-
     uri_patterns: t.List[
         str
     ]  #: List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI.

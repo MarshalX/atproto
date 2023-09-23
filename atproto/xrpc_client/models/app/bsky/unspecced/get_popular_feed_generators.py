@@ -25,9 +25,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.unspecced.getPopularFeedGenerators`."""
-
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     query: te.NotRequired[t.Optional[str]]  #: Query.

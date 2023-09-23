@@ -25,9 +25,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.admin.getModerationActions`."""
-
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     subject: te.NotRequired[t.Optional[str]]  #: Subject.

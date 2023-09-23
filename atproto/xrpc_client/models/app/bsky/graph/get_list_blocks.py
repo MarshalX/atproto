@@ -24,9 +24,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.graph.getListBlocks`."""
-
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 

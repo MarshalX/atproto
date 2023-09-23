@@ -35,6 +35,22 @@ class Data(base.DataModelBase):
     validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Validate the records?
 
 
+class DataDict(te.TypedDict):
+    repo: str  #: The handle or DID of the repo.
+    writes: t.List[
+        te.Annotated[
+            t.Union[
+                'models.ComAtprotoRepoApplyWrites.Create',
+                'models.ComAtprotoRepoApplyWrites.Update',
+                'models.ComAtprotoRepoApplyWrites.Delete',
+            ],
+            Field(discriminator='py_type'),
+        ]
+    ]  #: Writes.
+    swap_commit: te.NotRequired[t.Optional[str]]  #: Swap commit.
+    validate_: te.NotRequired[t.Optional[bool]]  #: Validate the records?
+
+
 class Create(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record."""

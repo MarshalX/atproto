@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -16,4 +18,8 @@ class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.requestPasswordReset`."""
 
+    email: str  #: Email.
+
+
+class DataDict(te.TypedDict):
     email: str  #: Email.

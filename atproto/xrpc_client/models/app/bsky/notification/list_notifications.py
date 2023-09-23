@@ -26,9 +26,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.notification.listNotifications`."""
-
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     seen_at: te.NotRequired[t.Optional[str]]  #: Seen at.

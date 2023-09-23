@@ -23,9 +23,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.repo.describeRepo`."""
-
     repo: str  #: The handle or DID of the repo.
 
 

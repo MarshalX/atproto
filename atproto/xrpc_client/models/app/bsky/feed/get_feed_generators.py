@@ -22,9 +22,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.feed.getFeedGenerators`."""
-
     feeds: t.List[str]  #: Feeds.
 
 

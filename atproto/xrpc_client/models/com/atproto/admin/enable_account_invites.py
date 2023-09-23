@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -18,3 +20,8 @@ class Data(base.DataModelBase):
 
     account: str  #: Account.
     note: t.Optional[str] = None  #: Additionally add a note describing why the invites were enabled.
+
+
+class DataDict(te.TypedDict):
+    account: str  #: Account.
+    note: te.NotRequired[t.Optional[str]]  #: Additionally add a note describing why the invites were enabled.

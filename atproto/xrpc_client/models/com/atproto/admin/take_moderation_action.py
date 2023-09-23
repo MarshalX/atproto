@@ -32,3 +32,19 @@ class Data(base.DataModelBase):
     )  #: Indicates how long this action was meant to be in effect before automatically expiring.
     negate_label_vals: t.Optional[t.List[str]] = Field(default=None, alias='negateLabelVals')  #: Negate label vals.
     subject_blob_cids: t.Optional[t.List[str]] = Field(default=None, alias='subjectBlobCids')  #: Subject blob cids.
+
+
+class DataDict(te.TypedDict):
+    action: str  #: Action.
+    created_by: str  #: Created by.
+    reason: str  #: Reason.
+    subject: te.Annotated[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        Field(discriminator='py_type'),
+    ]  #: Subject.
+    create_label_vals: te.NotRequired[t.Optional[t.List[str]]]  #: Create label vals.
+    duration_in_hours: te.NotRequired[
+        t.Optional[int]
+    ]  #: Indicates how long this action was meant to be in effect before automatically expiring.
+    negate_label_vals: te.NotRequired[t.Optional[t.List[str]]]  #: Negate label vals.
+    subject_blob_cids: te.NotRequired[t.Optional[t.List[str]]]  #: Subject blob cids.

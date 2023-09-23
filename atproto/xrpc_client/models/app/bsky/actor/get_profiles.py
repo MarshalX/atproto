@@ -23,9 +23,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.actor.getProfiles`."""
-
     actors: t.List[str]  #: Actors.
 
 

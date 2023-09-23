@@ -22,9 +22,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.identity.resolveHandle`."""
-
     handle: str  #: The handle to resolve.
 
 

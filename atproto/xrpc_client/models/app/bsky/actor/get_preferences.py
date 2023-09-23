@@ -20,8 +20,7 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.actor.getPreferences`."""
+    pass
 
 
 class Response(base.ResponseModelBase):

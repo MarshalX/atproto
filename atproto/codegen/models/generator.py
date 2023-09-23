@@ -6,6 +6,7 @@ from pathlib import Path
 
 from atproto.codegen import (
     DISCLAIMER,
+    INPUT_DICT,
     INPUT_MODEL,
     OUTPUT_MODEL,
     PARAMS_DICT,
@@ -35,6 +36,11 @@ class ModelType(Enum):
     RESPONSE = 'Output data'
     DEF = 'Definition'
     RECORD = 'Record'
+
+
+class TypedDictType(Enum):
+    PARAMS = 'Parameters'
+    DATA = 'Input data'
 
 
 def save_code(nsid: NSID, code: str) -> None:
@@ -79,7 +85,7 @@ def _save_code_import_if_not_exist(nsid: NSID) -> None:
 
 
 def _get_model_class_def(name: str, model_type: ModelType) -> str:
-    lines = []
+    lines: t.List[str] = []
 
     if model_type is ModelType.PARAMS:
         lines.append(f'class {PARAMS_MODEL}(base.ParamsModelBase):')
@@ -91,6 +97,19 @@ def _get_model_class_def(name: str, model_type: ModelType) -> str:
         lines.append(f'class {get_def_model_name(name)}(base.RecordModelBase):')
     elif model_type is ModelType.DEF:
         lines.append(f'class {get_def_model_name(name)}(base.ModelBase):')
+
+    lines.append('')
+
+    return join_code(lines)
+
+
+def _get_typeddict_class_def(name: str, model_type: TypedDictType) -> str:
+    lines: t.List[str] = []
+
+    if model_type is TypedDictType.PARAMS:
+        lines.append(f'class {PARAMS_DICT}(te.TypedDict):')
+    elif model_type is TypedDictType.DATA:
+        lines.append(f'class {INPUT_DICT}(te.TypedDict):')
 
     lines.append('')
 
@@ -384,6 +403,9 @@ def _get_typeddict(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexX
 
     fields.extend(optional_fields)
 
+    if len(fields) == 0:
+        fields.append(f'{_(1)}pass')
+
     fields.append('')
 
     return join_code(fields)
@@ -401,11 +423,9 @@ def _generate_params_model(nsid: NSID, definition: t.Union[models.LexXrpcQuery, 
         lines.append(_get_model_docstring(nsid, definition.parameters, ModelType.PARAMS))
         lines.append(_get_model(nsid, definition.parameters))
 
-    lines.append(f'class {PARAMS_DICT}(te.TypedDict):')
-    lines.append('')
+    lines.append(_get_typeddict_class_def(nsid.name, TypedDictType.PARAMS))
 
     if definition.parameters:
-        lines.append(_get_model_docstring(nsid, definition.parameters, ModelType.PARAMS))
         lines.append(_get_typeddict(nsid, definition.parameters))
 
     return join_code(lines)
@@ -431,8 +451,18 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
     return join_code(lines)
 
 
+def _generate_data_typedict(nsid: NSID, body: models.LexXrpcBody) -> str:
+    lines: t.List[str] = []
+    if isinstance(body.schema, models.LexObject):
+        lines.append(_get_typeddict_class_def(nsid.name, TypedDictType.DATA))
+        lines.append(_get_typeddict(nsid, body.schema))
+    return join_code(lines)
+
+
 def _generate_data_model(nsid: NSID, input_body: models.LexXrpcBody) -> str:
-    return _generate_xrpc_body_model(nsid, input_body, ModelType.DATA)
+    return join_code(
+        [_generate_xrpc_body_model(nsid, input_body, ModelType.DATA), _generate_data_typedict(nsid, input_body)]
+    )
 
 
 def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str:

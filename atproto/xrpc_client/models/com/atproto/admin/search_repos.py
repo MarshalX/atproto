@@ -26,9 +26,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.admin.searchRepos`."""
-
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     invited_by: te.NotRequired[t.Optional[str]]  #: Invited by.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.

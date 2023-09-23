@@ -26,9 +26,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.feed.getAuthorFeed`."""
-
     actor: str  #: Actor.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     filter: te.NotRequired[t.Optional[str]]  #: Filter.

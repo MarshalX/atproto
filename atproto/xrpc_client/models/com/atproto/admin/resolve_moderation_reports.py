@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -21,3 +22,9 @@ class Data(base.DataModelBase):
     action_id: int = Field(alias='actionId')  #: Action id.
     created_by: str = Field(alias='createdBy')  #: Created by.
     report_ids: t.List[int] = Field(alias='reportIds')  #: Report ids.
+
+
+class DataDict(te.TypedDict):
+    action_id: int  #: Action id.
+    created_by: str  #: Created by.
+    report_ids: t.List[int]  #: Report ids.

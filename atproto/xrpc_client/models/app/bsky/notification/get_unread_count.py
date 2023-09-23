@@ -23,9 +23,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.notification.getUnreadCount`."""
-
     seen_at: te.NotRequired[t.Optional[str]]  #: Seen at.
 
 

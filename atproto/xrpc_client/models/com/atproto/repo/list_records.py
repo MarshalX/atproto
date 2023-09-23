@@ -34,9 +34,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.repo.listRecords`."""
-
     collection: str  #: The NSID of the record type.
     repo: str  #: The handle or DID of the repo.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.

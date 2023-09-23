@@ -22,7 +22,4 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.admin.getModerationAction`."""
-
     id: int  #: Id.

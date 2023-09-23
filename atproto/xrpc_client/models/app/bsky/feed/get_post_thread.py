@@ -25,9 +25,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.feed.getPostThread`."""
-
     uri: str  #: Uri.
     depth: te.NotRequired[t.Optional[int]]  #: Depth.
     parent_height: te.NotRequired[t.Optional[int]]  #: Parent height.

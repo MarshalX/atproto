@@ -22,9 +22,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.sync.getCheckout`."""
-
     did: str  #: The DID of the repo.
 
 

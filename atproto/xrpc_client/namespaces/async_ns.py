@@ -130,7 +130,11 @@ class ActorNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyActorGetSuggestions.Response)
 
-    async def put_preferences(self, data: t.Union[dict, 'models.AppBskyActorPutPreferences.Data'], **kwargs) -> bool:
+    async def put_preferences(
+        self,
+        data: t.Union[models.AppBskyActorPutPreferences.Data, models.AppBskyActorPutPreferences.DataDict],
+        **kwargs,
+    ) -> bool:
         """Sets the private preferences attached to the account.
 
         Args:
@@ -780,7 +784,9 @@ class GraphNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyGraphGetSuggestedFollowsByActor.Response)
 
-    async def mute_actor(self, data: t.Union[dict, 'models.AppBskyGraphMuteActor.Data'], **kwargs) -> bool:
+    async def mute_actor(
+        self, data: t.Union[models.AppBskyGraphMuteActor.Data, models.AppBskyGraphMuteActor.DataDict], **kwargs
+    ) -> bool:
         """Mute an actor by did or handle.
 
         Args:
@@ -800,7 +806,9 @@ class GraphNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
-    async def mute_actor_list(self, data: t.Union[dict, 'models.AppBskyGraphMuteActorList.Data'], **kwargs) -> bool:
+    async def mute_actor_list(
+        self, data: t.Union[models.AppBskyGraphMuteActorList.Data, models.AppBskyGraphMuteActorList.DataDict], **kwargs
+    ) -> bool:
         """Mute a list of actors.
 
         Args:
@@ -820,7 +828,9 @@ class GraphNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
-    async def unmute_actor(self, data: t.Union[dict, 'models.AppBskyGraphUnmuteActor.Data'], **kwargs) -> bool:
+    async def unmute_actor(
+        self, data: t.Union[models.AppBskyGraphUnmuteActor.Data, models.AppBskyGraphUnmuteActor.DataDict], **kwargs
+    ) -> bool:
         """Unmute an actor by did or handle.
 
         Args:
@@ -840,7 +850,11 @@ class GraphNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
-    async def unmute_actor_list(self, data: t.Union[dict, 'models.AppBskyGraphUnmuteActorList.Data'], **kwargs) -> bool:
+    async def unmute_actor_list(
+        self,
+        data: t.Union[models.AppBskyGraphUnmuteActorList.Data, models.AppBskyGraphUnmuteActorList.DataDict],
+        **kwargs,
+    ) -> bool:
         """Unmute a list of actors.
 
         Args:
@@ -919,7 +933,11 @@ class NotificationNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyNotificationListNotifications.Response)
 
-    async def register_push(self, data: t.Union[dict, 'models.AppBskyNotificationRegisterPush.Data'], **kwargs) -> bool:
+    async def register_push(
+        self,
+        data: t.Union[models.AppBskyNotificationRegisterPush.Data, models.AppBskyNotificationRegisterPush.DataDict],
+        **kwargs,
+    ) -> bool:
         """Register for push notifications with a service.
 
         Args:
@@ -939,7 +957,11 @@ class NotificationNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
-    async def update_seen(self, data: t.Union[dict, 'models.AppBskyNotificationUpdateSeen.Data'], **kwargs) -> bool:
+    async def update_seen(
+        self,
+        data: t.Union[models.AppBskyNotificationUpdateSeen.Data, models.AppBskyNotificationUpdateSeen.DataDict],
+        **kwargs,
+    ) -> bool:
         """Notify server that the user has seen notifications.
 
         Args:
@@ -961,7 +983,11 @@ class NotificationNamespace(AsyncNamespaceBase):
 
 
 class UnspeccedNamespace(AsyncNamespaceBase):
-    async def apply_labels(self, data: t.Union[dict, 'models.AppBskyUnspeccedApplyLabels.Data'], **kwargs) -> bool:
+    async def apply_labels(
+        self,
+        data: t.Union[models.AppBskyUnspeccedApplyLabels.Data, models.AppBskyUnspeccedApplyLabels.DataDict],
+        **kwargs,
+    ) -> bool:
         """Allow a labeler to apply labels directly.
 
         Args:
@@ -1088,7 +1114,11 @@ class AtprotoNamespace(AsyncNamespaceBase):
 
 class AdminNamespace(AsyncNamespaceBase):
     async def disable_account_invites(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminDisableAccountInvites.Data'], **kwargs
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminDisableAccountInvites.Data, models.ComAtprotoAdminDisableAccountInvites.DataDict
+        ],
+        **kwargs,
     ) -> bool:
         """Disable an account from receiving new invite codes, but does not invalidate existing codes.
 
@@ -1110,7 +1140,11 @@ class AdminNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
     async def disable_invite_codes(
-        self, data: t.Optional[t.Union[dict, 'models.ComAtprotoAdminDisableInviteCodes.Data']] = None, **kwargs
+        self,
+        data: t.Optional[
+            t.Union[models.ComAtprotoAdminDisableInviteCodes.Data, models.ComAtprotoAdminDisableInviteCodes.DataDict]
+        ] = None,
+        **kwargs,
     ) -> bool:
         """Disable some set of codes and/or all codes associated with a set of users.
 
@@ -1132,7 +1166,11 @@ class AdminNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
     async def enable_account_invites(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminEnableAccountInvites.Data'], **kwargs
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminEnableAccountInvites.Data, models.ComAtprotoAdminEnableAccountInvites.DataDict
+        ],
+        **kwargs,
     ) -> bool:
         """Re-enable an accounts ability to receive invite codes.
 
@@ -1334,7 +1372,11 @@ class AdminNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminDefs.RepoViewDetail)
 
     async def resolve_moderation_reports(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminResolveModerationReports.Data'], **kwargs
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminResolveModerationReports.Data, models.ComAtprotoAdminResolveModerationReports.DataDict
+        ],
+        **kwargs,
     ) -> 'models.ComAtprotoAdminDefs.ActionView':
         """Resolve moderation reports by an action.
 
@@ -1360,7 +1402,11 @@ class AdminNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminDefs.ActionView)
 
     async def reverse_moderation_action(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminReverseModerationAction.Data'], **kwargs
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminReverseModerationAction.Data, models.ComAtprotoAdminReverseModerationAction.DataDict
+        ],
+        **kwargs,
     ) -> 'models.ComAtprotoAdminDefs.ActionView':
         """Reverse a moderation action.
 
@@ -1412,7 +1458,7 @@ class AdminNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminSearchRepos.Response)
 
     async def send_email(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminSendEmail.Data'], **kwargs
+        self, data: t.Union[models.ComAtprotoAdminSendEmail.Data, models.ComAtprotoAdminSendEmail.DataDict], **kwargs
     ) -> 'models.ComAtprotoAdminSendEmail.Response':
         """Send email to a user's primary email address.
 
@@ -1438,7 +1484,11 @@ class AdminNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminSendEmail.Response)
 
     async def take_moderation_action(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminTakeModerationAction.Data'], **kwargs
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminTakeModerationAction.Data, models.ComAtprotoAdminTakeModerationAction.DataDict
+        ],
+        **kwargs,
     ) -> 'models.ComAtprotoAdminDefs.ActionView':
         """Take a moderation action on a repo.
 
@@ -1464,7 +1514,9 @@ class AdminNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminDefs.ActionView)
 
     async def update_account_email(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminUpdateAccountEmail.Data'], **kwargs
+        self,
+        data: t.Union[models.ComAtprotoAdminUpdateAccountEmail.Data, models.ComAtprotoAdminUpdateAccountEmail.DataDict],
+        **kwargs,
     ) -> bool:
         """Administrative action to update an account's email.
 
@@ -1486,7 +1538,11 @@ class AdminNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
     async def update_account_handle(
-        self, data: t.Union[dict, 'models.ComAtprotoAdminUpdateAccountHandle.Data'], **kwargs
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminUpdateAccountHandle.Data, models.ComAtprotoAdminUpdateAccountHandle.DataDict
+        ],
+        **kwargs,
     ) -> bool:
         """Administrative action to update an account's handle.
 
@@ -1535,7 +1591,11 @@ class IdentityNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoIdentityResolveHandle.Response)
 
-    async def update_handle(self, data: t.Union[dict, 'models.ComAtprotoIdentityUpdateHandle.Data'], **kwargs) -> bool:
+    async def update_handle(
+        self,
+        data: t.Union[models.ComAtprotoIdentityUpdateHandle.Data, models.ComAtprotoIdentityUpdateHandle.DataDict],
+        **kwargs,
+    ) -> bool:
         """Updates the handle of the account.
 
         Args:
@@ -1584,7 +1644,9 @@ class LabelNamespace(AsyncNamespaceBase):
 
 class ModerationNamespace(AsyncNamespaceBase):
     async def create_report(
-        self, data: t.Union[dict, 'models.ComAtprotoModerationCreateReport.Data'], **kwargs
+        self,
+        data: t.Union[models.ComAtprotoModerationCreateReport.Data, models.ComAtprotoModerationCreateReport.DataDict],
+        **kwargs,
     ) -> 'models.ComAtprotoModerationCreateReport.Response':
         """Report a repo or a record.
 
@@ -1611,7 +1673,9 @@ class ModerationNamespace(AsyncNamespaceBase):
 
 
 class RepoNamespace(AsyncNamespaceBase):
-    async def apply_writes(self, data: t.Union[dict, 'models.ComAtprotoRepoApplyWrites.Data'], **kwargs) -> bool:
+    async def apply_writes(
+        self, data: t.Union[models.ComAtprotoRepoApplyWrites.Data, models.ComAtprotoRepoApplyWrites.DataDict], **kwargs
+    ) -> bool:
         """Apply a batch transaction of creates, updates, and deletes.
 
         Args:
@@ -1632,7 +1696,9 @@ class RepoNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
     async def create_record(
-        self, data: t.Union[dict, 'models.ComAtprotoRepoCreateRecord.Data'], **kwargs
+        self,
+        data: t.Union[models.ComAtprotoRepoCreateRecord.Data, models.ComAtprotoRepoCreateRecord.DataDict],
+        **kwargs,
     ) -> 'models.ComAtprotoRepoCreateRecord.Response':
         """Create a new record.
 
@@ -1657,7 +1723,11 @@ class RepoNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
 
-    async def delete_record(self, data: t.Union[dict, 'models.ComAtprotoRepoDeleteRecord.Data'], **kwargs) -> bool:
+    async def delete_record(
+        self,
+        data: t.Union[models.ComAtprotoRepoDeleteRecord.Data, models.ComAtprotoRepoDeleteRecord.DataDict],
+        **kwargs,
+    ) -> bool:
         """Delete a record, or ensure it doesn't exist.
 
         Args:
@@ -1750,7 +1820,7 @@ class RepoNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoRepoListRecords.Response)
 
     async def put_record(
-        self, data: t.Union[dict, 'models.ComAtprotoRepoPutRecord.Data'], **kwargs
+        self, data: t.Union[models.ComAtprotoRepoPutRecord.Data, models.ComAtprotoRepoPutRecord.DataDict], **kwargs
     ) -> 'models.ComAtprotoRepoPutRecord.Response':
         """Write a record, creating or updating it as needed.
 
@@ -1799,7 +1869,9 @@ class RepoNamespace(AsyncNamespaceBase):
 
 class ServerNamespace(AsyncNamespaceBase):
     async def create_account(
-        self, data: t.Union[dict, 'models.ComAtprotoServerCreateAccount.Data'], **kwargs
+        self,
+        data: t.Union[models.ComAtprotoServerCreateAccount.Data, models.ComAtprotoServerCreateAccount.DataDict],
+        **kwargs,
     ) -> 'models.ComAtprotoServerCreateAccount.Response':
         """Create an account.
 
@@ -1825,7 +1897,9 @@ class ServerNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoServerCreateAccount.Response)
 
     async def create_app_password(
-        self, data: t.Union[dict, 'models.ComAtprotoServerCreateAppPassword.Data'], **kwargs
+        self,
+        data: t.Union[models.ComAtprotoServerCreateAppPassword.Data, models.ComAtprotoServerCreateAppPassword.DataDict],
+        **kwargs,
     ) -> 'models.ComAtprotoServerCreateAppPassword.AppPassword':
         """Create an app-specific password.
 
@@ -1851,7 +1925,9 @@ class ServerNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoServerCreateAppPassword.AppPassword)
 
     async def create_invite_code(
-        self, data: t.Union[dict, 'models.ComAtprotoServerCreateInviteCode.Data'], **kwargs
+        self,
+        data: t.Union[models.ComAtprotoServerCreateInviteCode.Data, models.ComAtprotoServerCreateInviteCode.DataDict],
+        **kwargs,
     ) -> 'models.ComAtprotoServerCreateInviteCode.Response':
         """Create an invite code.
 
@@ -1877,7 +1953,9 @@ class ServerNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoServerCreateInviteCode.Response)
 
     async def create_invite_codes(
-        self, data: t.Union[dict, 'models.ComAtprotoServerCreateInviteCodes.Data'], **kwargs
+        self,
+        data: t.Union[models.ComAtprotoServerCreateInviteCodes.Data, models.ComAtprotoServerCreateInviteCodes.DataDict],
+        **kwargs,
     ) -> 'models.ComAtprotoServerCreateInviteCodes.Response':
         """Create an invite code.
 
@@ -1903,7 +1981,9 @@ class ServerNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoServerCreateInviteCodes.Response)
 
     async def create_session(
-        self, data: t.Union[dict, 'models.ComAtprotoServerCreateSession.Data'], **kwargs
+        self,
+        data: t.Union[models.ComAtprotoServerCreateSession.Data, models.ComAtprotoServerCreateSession.DataDict],
+        **kwargs,
     ) -> 'models.ComAtprotoServerCreateSession.Response':
         """Create an authentication session.
 
@@ -1928,7 +2008,11 @@ class ServerNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoServerCreateSession.Response)
 
-    async def delete_account(self, data: t.Union[dict, 'models.ComAtprotoServerDeleteAccount.Data'], **kwargs) -> bool:
+    async def delete_account(
+        self,
+        data: t.Union[models.ComAtprotoServerDeleteAccount.Data, models.ComAtprotoServerDeleteAccount.DataDict],
+        **kwargs,
+    ) -> bool:
         """Delete a user account with a token and password.
 
         Args:
@@ -2085,7 +2169,11 @@ class ServerNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
     async def request_password_reset(
-        self, data: t.Union[dict, 'models.ComAtprotoServerRequestPasswordReset.Data'], **kwargs
+        self,
+        data: t.Union[
+            models.ComAtprotoServerRequestPasswordReset.Data, models.ComAtprotoServerRequestPasswordReset.DataDict
+        ],
+        **kwargs,
     ) -> bool:
         """Initiate a user account password reset via email.
 
@@ -2106,7 +2194,11 @@ class ServerNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
-    async def reset_password(self, data: t.Union[dict, 'models.ComAtprotoServerResetPassword.Data'], **kwargs) -> bool:
+    async def reset_password(
+        self,
+        data: t.Union[models.ComAtprotoServerResetPassword.Data, models.ComAtprotoServerResetPassword.DataDict],
+        **kwargs,
+    ) -> bool:
         """Reset a user account password using a token.
 
         Args:
@@ -2127,7 +2219,9 @@ class ServerNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
     async def revoke_app_password(
-        self, data: t.Union[dict, 'models.ComAtprotoServerRevokeAppPassword.Data'], **kwargs
+        self,
+        data: t.Union[models.ComAtprotoServerRevokeAppPassword.Data, models.ComAtprotoServerRevokeAppPassword.DataDict],
+        **kwargs,
     ) -> bool:
         """Revoke an app-specific password by name.
 
@@ -2362,7 +2456,11 @@ class SyncNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoSyncListRepos.Response)
 
-    async def notify_of_update(self, data: t.Union[dict, 'models.ComAtprotoSyncNotifyOfUpdate.Data'], **kwargs) -> bool:
+    async def notify_of_update(
+        self,
+        data: t.Union[models.ComAtprotoSyncNotifyOfUpdate.Data, models.ComAtprotoSyncNotifyOfUpdate.DataDict],
+        **kwargs,
+    ) -> bool:
         """Notify a crawling service of a recent update. Often when a long break between updates causes the connection with the crawling service to break.
 
         Args:
@@ -2382,7 +2480,11 @@ class SyncNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
-    async def request_crawl(self, data: t.Union[dict, 'models.ComAtprotoSyncRequestCrawl.Data'], **kwargs) -> bool:
+    async def request_crawl(
+        self,
+        data: t.Union[models.ComAtprotoSyncRequestCrawl.Data, models.ComAtprotoSyncRequestCrawl.DataDict],
+        **kwargs,
+    ) -> bool:
         """Request a service to persistently crawl hosted repos.
 
         Args:

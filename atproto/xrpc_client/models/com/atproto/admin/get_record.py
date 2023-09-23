@@ -23,8 +23,5 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.admin.getRecord`."""
-
     uri: str  #: Uri.
     cid: te.NotRequired[t.Optional[str]]  #: Cid.

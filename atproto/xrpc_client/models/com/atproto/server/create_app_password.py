@@ -22,6 +22,10 @@ class Data(base.DataModelBase):
     name: str  #: Name.
 
 
+class DataDict(te.TypedDict):
+    name: str  #: Name.
+
+
 class AppPassword(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.server.createAppPassword`."""

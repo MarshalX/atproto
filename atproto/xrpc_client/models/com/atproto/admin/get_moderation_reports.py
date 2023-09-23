@@ -35,9 +35,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.admin.getModerationReports`."""
-
     action_type: te.NotRequired[t.Optional[str]]  #: Action type.
     actioned_by: te.NotRequired[t.Optional[str]]  #: Get all reports that were actioned by a specific moderator.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.

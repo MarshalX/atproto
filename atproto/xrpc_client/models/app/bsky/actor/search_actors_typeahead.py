@@ -24,9 +24,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.actor.searchActorsTypeahead`."""
-
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     term: te.NotRequired[t.Optional[str]]  #: Term.
 

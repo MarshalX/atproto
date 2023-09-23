@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -19,3 +20,7 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`app.bsky.notification.updateSeen`."""
 
     seen_at: str = Field(alias='seenAt')  #: Seen at.
+
+
+class DataDict(te.TypedDict):
+    seen_at: str  #: Seen at.

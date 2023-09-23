@@ -24,9 +24,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.server.getAccountInviteCodes`."""
-
     create_available: te.NotRequired[t.Optional[bool]]  #: Create available.
     include_used: te.NotRequired[t.Optional[bool]]  #: Include used.
 

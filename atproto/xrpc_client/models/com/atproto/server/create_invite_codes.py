@@ -24,6 +24,12 @@ class Data(base.DataModelBase):
     for_accounts: t.Optional[t.List[str]] = Field(default=None, alias='forAccounts')  #: For accounts.
 
 
+class DataDict(te.TypedDict):
+    code_count: int  #: Code count.
+    use_count: int  #: Use count.
+    for_accounts: te.NotRequired[t.Optional[t.List[str]]]  #: For accounts.
+
+
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.server.createInviteCodes`."""

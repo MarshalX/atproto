@@ -27,9 +27,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.repo.getRecord`."""
-
     collection: str  #: The NSID of the record collection.
     repo: str  #: The handle or DID of the repo.
     rkey: str  #: The key of the record.

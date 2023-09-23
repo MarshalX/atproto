@@ -25,9 +25,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.unspecced.getPopular`."""
-
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     include_nsfw: te.NotRequired[t.Optional[bool]]  #: Include nsfw.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.

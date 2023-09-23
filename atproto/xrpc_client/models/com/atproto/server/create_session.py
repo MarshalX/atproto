@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -18,6 +19,11 @@ class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.createSession`."""
 
+    identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
+    password: str  #: Password.
+
+
+class DataDict(te.TypedDict):
     identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
     password: str  #: Password.
 

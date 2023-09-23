@@ -26,9 +26,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`app.bsky.feed.getLikes`."""
-
     uri: str  #: Uri.
     cid: te.NotRequired[t.Optional[str]]  #: Cid.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.

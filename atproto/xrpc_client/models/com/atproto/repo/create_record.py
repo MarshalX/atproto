@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -26,6 +27,15 @@ class Data(base.DataModelBase):
         default=None, alias='swapCommit'
     )  #: Compare and swap with the previous commit by cid.
     validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Validate the record?
+
+
+class DataDict(te.TypedDict):
+    collection: str  #: The NSID of the record collection.
+    record: 'UnknownType'  #: The record to create.
+    repo: str  #: The handle or DID of the repo.
+    rkey: te.NotRequired[t.Optional[str]]  #: The key of the record.
+    swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by cid.
+    validate_: te.NotRequired[t.Optional[bool]]  #: Validate the record?
 
 
 class Response(base.ResponseModelBase):

@@ -3,6 +3,7 @@ from pathlib import Path
 
 from atproto.codegen import (
     DISCLAIMER,
+    INPUT_DICT,
     INPUT_MODEL,
     OUTPUT_MODEL,
     PARAMS_DICT,
@@ -242,7 +243,9 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
             is_optional = is_optional_arg(schema)
 
             if schema and isinstance(schema, LexObject):
-                arg = _get_namespace_method_signature_arg('data', method_info.nsid, INPUT_MODEL, optional=is_optional)
+                arg = _get_namespace_method_signature_arg(
+                    'data', method_info.nsid, [INPUT_MODEL, INPUT_DICT], optional=is_optional
+                )
                 _add_arg(arg, optional=is_optional)
             else:
                 raise ValueError(f'Bad type {type(schema)}')  # probably LexRefVariant

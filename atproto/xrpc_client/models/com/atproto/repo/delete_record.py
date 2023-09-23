@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -27,3 +28,11 @@ class Data(base.DataModelBase):
     swap_record: t.Optional[str] = Field(
         default=None, alias='swapRecord'
     )  #: Compare and swap with the previous record by cid.
+
+
+class DataDict(te.TypedDict):
+    collection: str  #: The NSID of the record collection.
+    repo: str  #: The handle or DID of the repo.
+    rkey: str  #: The key of the record.
+    swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by cid.
+    swap_record: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous record by cid.

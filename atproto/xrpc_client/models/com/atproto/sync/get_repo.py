@@ -23,9 +23,6 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
-
-    """Parameters model for :obj:`com.atproto.sync.getRepo`."""
-
     did: str  #: The DID of the repo.
     since: te.NotRequired[t.Optional[str]]  #: The revision of the repo to catch up from.
 

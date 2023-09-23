@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -16,4 +18,8 @@ class Data(base.DataModelBase):
 
     """Input data model for :obj:`app.bsky.graph.unmuteActor`."""
 
+    actor: str  #: Actor.
+
+
+class DataDict(te.TypedDict):
     actor: str  #: Actor.
