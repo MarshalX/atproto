@@ -28,9 +28,10 @@ _BASE_WEBSOCKET_URI = 'wss://bsky.social/xrpc'
 _MAX_MESSAGE_SIZE_BYTES = 1024 * 1024 * 5  # 5MB
 
 OnMessageCallback = t.Callable[['MessageFrame'], t.Generator[t.Any, None, t.Any]]
-AsyncOnMessageCallback = t.Callable[['MessageFrame'], t.Coroutine[t.Any, t.Any, t.Any]]
+AsyncOnMessageCallback = t.Callable[['MessageFrame'], t.Coroutine[t.Any, t.Any, None]]
 
 OnCallbackErrorCallback = t.Callable[[BaseException], None]
+AsyncOnCallbackErrorCallback = t.Callable[[BaseException], t.Coroutine[t.Any, t.Any, None]]
 
 
 def _build_websocket_uri(
@@ -56,10 +57,6 @@ def _handle_frame_decoding_error(exception: Exception) -> None:
     raise exception
 
 
-def _print_exception(exception: BaseException) -> None:
-    traceback.print_exception(type(exception), exception, exception.__traceback__)
-
-
 def _handle_websocket_error_or_stop(exception: Exception) -> bool:
     """Returns if the connection should be properly being closed or reraise exception."""
     if isinstance(exception, (ConnectionClosedOK,)):
@@ -70,6 +67,15 @@ def _handle_websocket_error_or_stop(exception: Exception) -> bool:
         raise exception
 
     raise FirehoseError from exception
+
+
+def _get_messageframe_from_bytes(data: bytes) -> MessageFrame:
+    frame = Frame.from_bytes(data)
+    if isinstance(frame, ErrorFrame):
+        raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
+    if isinstance(frame, MessageFrame):
+        return frame
+    raise FirehoseDecodingError('Unknown frame type')
 
 
 class _WebsocketClientBase:
@@ -130,15 +136,6 @@ class _WebsocketClient(_WebsocketClientBase):
         self._on_message_callback: t.Optional[OnMessageCallback] = None
         self._on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None
 
-    def _process_raw_frame(self, data: bytes) -> None:
-        frame = Frame.from_bytes(data)
-        if isinstance(frame, ErrorFrame):
-            raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
-        if isinstance(frame, MessageFrame):
-            self._process_message_frame(frame)
-        else:
-            raise FirehoseDecodingError('Unknown frame type')
-
     def _process_message_frame(self, frame: 'MessageFrame') -> None:
         try:
             if self._on_message_callback is not None:
@@ -184,7 +181,8 @@ class _WebsocketClient(_WebsocketClientBase):
                             continue
 
                         try:
-                            self._process_raw_frame(raw_frame)
+                            frame = _get_messageframe_from_bytes(raw_frame)
+                            self._process_message_frame(frame)
                         except Exception as e:  # noqa: BLE001
                             _handle_frame_decoding_error(e)
             except Exception as e:  # noqa: BLE001
@@ -214,34 +212,25 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
         super().__init__(method, base_uri, params)
         self._stop_event = asyncio.Event()
         self._on_message_callback: t.Optional[AsyncOnMessageCallback] = None
-        self._on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None
-
-    async def _process_raw_frame(self, data: bytes) -> None:
-        frame = Frame.from_bytes(data)
-        if isinstance(frame, ErrorFrame):
-            raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
-        if isinstance(frame, MessageFrame):
-            await self._process_message_frame(frame)
-        else:
-            raise FirehoseDecodingError('Unknown frame type')
+        self._on_callback_error_callback: t.Optional[AsyncOnCallbackErrorCallback] = None
 
     async def _process_message_frame(self, frame: 'MessageFrame') -> None:
         try:
             if self._on_message_callback is not None:
                 await self._on_message_callback(frame)
-        except Exception as exception:  # noqa: BLE001
-            if not self._on_callback_error_callback:
-                _print_exception(exception)
-                return
-            try:
-                self._on_callback_error_callback(exception)
-            except:  # noqa
+        except Exception as e:  # noqa: BLE001
+            if self._on_callback_error_callback:
+                try:
+                    await self._on_callback_error_callback(e)
+                except:  # noqa
+                    traceback.print_exc()
+            else:
                 traceback.print_exc()
 
     async def start(
         self,
         on_message_callback: AsyncOnMessageCallback,
-        on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None,
+        on_callback_error_callback: t.Optional[AsyncOnCallbackErrorCallback] = None,
     ) -> None:
         """Subscribe to Firehose and start client.
 
@@ -274,7 +263,8 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
                             continue
 
                         try:
-                            await self._process_raw_frame(raw_frame)
+                            frame = _get_messageframe_from_bytes(raw_frame)
+                            await self._process_message_frame(frame)
                         except Exception as e:  # noqa: BLE001
                             _handle_frame_decoding_error(e)
             except Exception as e:  # noqa: BLE001
