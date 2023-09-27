@@ -249,9 +249,13 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
         while not self._stop_event.is_set():
             try:
                 if self._reconnect_no != 0:
-                    # TODO: This sleep can potentially get pretty long,
-                    # allow it to be interrupted by stop()?
-                    await asyncio.sleep(self._get_reconnection_delay())
+                    try:
+                        await asyncio.wait_for(self._stop_event.wait(), self._get_reconnection_delay())
+                        # Did not time out, therefore the stop event was set and we break out of the loop
+                        break
+                    except asyncio.TimeoutError:
+                        # Waited the entire delay without the stop event being set, so we continue as usual
+                        pass
 
                 async with self._get_async_client() as client:
                     self._reconnect_no = 0
