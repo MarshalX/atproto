@@ -16,7 +16,9 @@ DISCLAIMER = '\n'.join(_DISCLAIMER_LINES)
 DISCLAIMER = f'{"#" * _MAX_DISCLAIMER_LEN}\n{DISCLAIMER}\n{"#" * _MAX_DISCLAIMER_LEN}\n\n'
 
 PARAMS_MODEL = 'Params'
+PARAMS_DICT = 'ParamsDict'
 INPUT_MODEL = 'Data'
+INPUT_DICT = 'DataDict'
 OUTPUT_MODEL = 'Response'
 
 

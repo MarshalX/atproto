@@ -6,8 +6,10 @@ from pathlib import Path
 
 from atproto.codegen import (
     DISCLAIMER,
+    INPUT_DICT,
     INPUT_MODEL,
     OUTPUT_MODEL,
+    PARAMS_DICT,
     PARAMS_MODEL,
     _resolve_nsid_ref,
     append_code,
@@ -36,6 +38,11 @@ class ModelType(Enum):
     RECORD = 'Record'
 
 
+class TypedDictType(Enum):
+    PARAMS = 'Parameters'
+    DATA = 'Input data'
+
+
 def save_code(nsid: NSID, code: str) -> None:
     path_to_file = _MODELS_OUTPUT_DIR.joinpath(*get_file_path_parts(nsid))
     write_code(_MODELS_OUTPUT_DIR.joinpath(path_to_file), code)
@@ -57,6 +64,7 @@ def _get_model_imports() -> str:
         'if t.TYPE_CHECKING:',
         f'{_(1)}from atproto.xrpc_client import models',
         f'{_(1)}from atproto.xrpc_client.models.unknown_type import UnknownType',
+        f'{_(1)}from atproto.xrpc_client.models.unknown_type import UnknownInputType',
         f'{_(1)}from atproto.xrpc_client.models.blob_ref import BlobRef',
         f'{_(1)}from atproto import CIDType',
         'from atproto.xrpc_client.models import base',
@@ -78,7 +86,7 @@ def _save_code_import_if_not_exist(nsid: NSID) -> None:
 
 
 def _get_model_class_def(name: str, model_type: ModelType) -> str:
-    lines = []
+    lines: t.List[str] = []
 
     if model_type is ModelType.PARAMS:
         lines.append(f'class {PARAMS_MODEL}(base.ParamsModelBase):')
@@ -90,6 +98,19 @@ def _get_model_class_def(name: str, model_type: ModelType) -> str:
         lines.append(f'class {get_def_model_name(name)}(base.RecordModelBase):')
     elif model_type is ModelType.DEF:
         lines.append(f'class {get_def_model_name(name)}(base.ModelBase):')
+
+    lines.append('')
+
+    return join_code(lines)
+
+
+def _get_typeddict_class_def(name: str, model_type: TypedDictType) -> str:
+    lines: t.List[str] = []
+
+    if model_type is TypedDictType.PARAMS:
+        lines.append(f'class {PARAMS_DICT}(te.TypedDict):')
+    elif model_type is TypedDictType.DATA:
+        lines.append(f'class {INPUT_DICT}(te.TypedDict):')
 
     lines.append('')
 
@@ -135,11 +156,13 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     return _get_optional_typehint(annotated_union, optional=optional)
 
 
-def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
+def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool, is_input_type: bool = False) -> str:
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
         # unknown type is a generic response with records or any not described type in the lexicon. for example, didDoc
+        if is_input_type:
+            return _get_optional_typehint("'UnknownInputType'", optional=optional)
         return _get_optional_typehint("'UnknownType'", optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
@@ -147,7 +170,9 @@ def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool) -> 
         return _get_optional_typehint(type_hint, optional=optional)
 
     if field_type is models.LexArray:
-        items_type_hint = _get_model_field_typehint(nsid, field_type_def.items, optional=False)
+        items_type_hint = _get_model_field_typehint(
+            nsid, field_type_def.items, optional=False, is_input_type=is_input_type
+        )
         return _get_optional_typehint(f't.List[{items_type_hint}]', optional=optional)
 
     if field_type is models.LexRef:
@@ -308,7 +333,9 @@ def _is_reserved_pydantic_name(name: str) -> bool:
     return name in _get_pydantic_reserved_names()
 
 
-def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters]) -> str:
+def _get_model(
+    nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters], *, is_input_type: bool = False
+) -> str:
     required_fields = _get_req_fields_set(lex_object)
 
     fields = []
@@ -329,7 +356,7 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
             snake_cased_field_name += '_'  # add underscore to the end
             alias_name = field_name
 
-        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional)
+        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional, is_input_type=is_input_type)
         value = _get_model_field_value(field_type_def, alias_name, optional=is_optional)
         description = _get_field_docstring(field_name, field_type_def)
 
@@ -351,6 +378,44 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
     return join_code(fields)
 
 
+def _get_typeddict(
+    nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters], *, is_input_type: bool = False
+) -> str:
+    required_fields = _get_req_fields_set(lex_object)
+
+    fields: t.List[str] = []
+    optional_fields: t.List[str] = []
+
+    for field_name, field_type_def in lex_object.properties.items():
+        is_optional = field_name not in required_fields
+
+        snake_cased_field_name = convert_camel_case_to_snake_case(field_name)
+
+        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional, is_input_type=is_input_type)
+        description = _get_field_docstring(field_name, field_type_def)
+
+        # Allow optional params to actually be ommitted from the dict entirely
+        type_hint_defaulting = f'te.NotRequired[{type_hint}]' if is_optional else type_hint
+        field_def = f'{_(1)}{snake_cased_field_name}: {type_hint_defaulting} #: {description}'
+
+        if is_optional:
+            optional_fields.append(field_def)
+        else:
+            fields.append(field_def)
+
+    optional_fields.sort()
+    fields.sort()
+
+    fields.extend(optional_fields)
+
+    if len(fields) == 0:
+        fields.append(f'{_(1)}pass')
+
+    fields.append('')
+
+    return join_code(fields)
+
+
 def _get_model_raw_data(name: str) -> str:
     lines = [f'#: {name} raw data type.', f'{name}: te.TypeAlias = bytes\n\n']
     return join_code(lines)
@@ -361,7 +426,12 @@ def _generate_params_model(nsid: NSID, definition: t.Union[models.LexXrpcQuery, 
 
     if definition.parameters:
         lines.append(_get_model_docstring(nsid, definition.parameters, ModelType.PARAMS))
-        lines.append(_get_model(nsid, definition.parameters))
+        lines.append(_get_model(nsid, definition.parameters, is_input_type=True))
+
+    lines.append(_get_typeddict_class_def(nsid.name, TypedDictType.PARAMS))
+
+    if definition.parameters:
+        lines.append(_get_typeddict(nsid, definition.parameters, is_input_type=True))
 
     return join_code(lines)
 
@@ -372,7 +442,7 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
         if isinstance(body.schema, models.LexObject):
             lines.append(_get_model_class_def(nsid.name, model_type))
             lines.append(_get_model_docstring(nsid, body.schema, model_type))
-            lines.append(_get_model(nsid, body.schema))
+            lines.append(_get_model(nsid, body.schema, is_input_type=(model_type is ModelType.DATA)))
     else:
         if model_type is ModelType.DATA:
             model_name = INPUT_MODEL
@@ -386,8 +456,18 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
     return join_code(lines)
 
 
+def _generate_data_typedict(nsid: NSID, body: models.LexXrpcBody) -> str:
+    lines: t.List[str] = []
+    if isinstance(body.schema, models.LexObject):
+        lines.append(_get_typeddict_class_def(nsid.name, TypedDictType.DATA))
+        lines.append(_get_typeddict(nsid, body.schema, is_input_type=True))
+    return join_code(lines)
+
+
 def _generate_data_model(nsid: NSID, input_body: models.LexXrpcBody) -> str:
-    return _generate_xrpc_body_model(nsid, input_body, ModelType.DATA)
+    return join_code(
+        [_generate_xrpc_body_model(nsid, input_body, ModelType.DATA), _generate_data_typedict(nsid, input_body)]
+    )
 
 
 def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str:
@@ -559,6 +639,9 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     unknown_record_type_pydantic_lines.append('], Field(discriminator="py_type")]')
     unknown_record_type_pydantic_lines.append(
         "UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType']"
+    )
+    unknown_record_type_pydantic_lines.append(
+        'UnknownInputType: te.TypeAlias = t.Union[UnknownType, t.Dict[str, t.Any]]'
     )
     unknown_type_lines = [*import_lines, *unknown_record_type_hint_lines, *unknown_record_type_pydantic_lines]
 

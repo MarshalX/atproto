@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -19,6 +20,10 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.notification.getUnreadCount`."""
 
     seen_at: t.Optional[str] = Field(default=None, alias='seenAt')  #: Seen at.
+
+
+class ParamsDict(te.TypedDict):
+    seen_at: te.NotRequired[t.Optional[str]]  #: Seen at.
 
 
 class Response(base.ResponseModelBase):

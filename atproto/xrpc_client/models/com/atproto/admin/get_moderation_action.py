@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -16,4 +18,8 @@ class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.admin.getModerationAction`."""
 
+    id: int  #: Id.
+
+
+class ParamsDict(te.TypedDict):
     id: int  #: Id.

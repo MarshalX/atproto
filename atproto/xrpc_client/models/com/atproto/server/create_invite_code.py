@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -20,6 +21,11 @@ class Data(base.DataModelBase):
 
     use_count: int = Field(alias='useCount')  #: Use count.
     for_account: t.Optional[str] = Field(default=None, alias='forAccount')  #: For account.
+
+
+class DataDict(te.TypedDict):
+    use_count: int  #: Use count.
+    for_account: te.NotRequired[t.Optional[str]]  #: For account.
 
 
 class Response(base.ResponseModelBase):

@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -20,6 +21,11 @@ class Params(base.ParamsModelBase):
 
     create_available: t.Optional[bool] = Field(default=True, alias='createAvailable')  #: Create available.
     include_used: t.Optional[bool] = Field(default=True, alias='includeUsed')  #: Include used.
+
+
+class ParamsDict(te.TypedDict):
+    create_available: te.NotRequired[t.Optional[bool]]  #: Create available.
+    include_used: te.NotRequired[t.Optional[bool]]  #: Include used.
 
 
 class Response(base.ResponseModelBase):

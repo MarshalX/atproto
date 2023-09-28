@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -18,3 +20,8 @@ class Data(base.DataModelBase):
 
     accounts: t.Optional[t.List[str]] = None  #: Accounts.
     codes: t.Optional[t.List[str]] = None  #: Codes.
+
+
+class DataDict(te.TypedDict):
+    accounts: te.NotRequired[t.Optional[t.List[str]]]  #: Accounts.
+    codes: te.NotRequired[t.Optional[t.List[str]]]  #: Codes.

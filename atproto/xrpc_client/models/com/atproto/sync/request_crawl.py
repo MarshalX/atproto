@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
@@ -16,4 +18,8 @@ class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.sync.requestCrawl`."""
 
+    hostname: str  #: Hostname of the service that is requesting to be crawled.
+
+
+class DataDict(te.TypedDict):
     hostname: str  #: Hostname of the service that is requesting to be crawled.

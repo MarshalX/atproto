@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -15,6 +17,10 @@ from atproto.xrpc_client.models import base
 class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`app.bsky.actor.getPreferences`."""
+
+
+class ParamsDict(te.TypedDict):
+    pass
 
 
 class Response(base.ResponseModelBase):
