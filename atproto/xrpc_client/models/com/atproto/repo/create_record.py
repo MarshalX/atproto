@@ -11,7 +11,7 @@ import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
-    from atproto.xrpc_client.models.unknown_type import UnknownType
+    from atproto.xrpc_client.models.unknown_type import UnknownInputType
 from atproto.xrpc_client.models import base
 
 
@@ -20,7 +20,7 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.repo.createRecord`."""
 
     collection: str  #: The NSID of the record collection.
-    record: 'UnknownType'  #: The record to create.
+    record: 'UnknownInputType'  #: The record to create.
     repo: str  #: The handle or DID of the repo.
     rkey: t.Optional[str] = Field(default=None, max_length=15)  #: The key of the record.
     swap_commit: t.Optional[str] = Field(
@@ -31,7 +31,7 @@ class Data(base.DataModelBase):
 
 class DataDict(te.TypedDict):
     collection: str  #: The NSID of the record collection.
-    record: 'UnknownType'  #: The record to create.
+    record: 'UnknownInputType'  #: The record to create.
     repo: str  #: The handle or DID of the repo.
     rkey: te.NotRequired[t.Optional[str]]  #: The key of the record.
     swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by cid.

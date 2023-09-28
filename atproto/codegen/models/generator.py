@@ -64,6 +64,7 @@ def _get_model_imports() -> str:
         'if t.TYPE_CHECKING:',
         f'{_(1)}from atproto.xrpc_client import models',
         f'{_(1)}from atproto.xrpc_client.models.unknown_type import UnknownType',
+        f'{_(1)}from atproto.xrpc_client.models.unknown_type import UnknownInputType',
         f'{_(1)}from atproto.xrpc_client.models.blob_ref import BlobRef',
         f'{_(1)}from atproto import CIDType',
         'from atproto.xrpc_client.models import base',
@@ -155,11 +156,13 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     return _get_optional_typehint(annotated_union, optional=optional)
 
 
-def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
+def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool, is_input_type: bool = False) -> str:
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
         # unknown type is a generic response with records or any not described type in the lexicon. for example, didDoc
+        if is_input_type:
+            return _get_optional_typehint("'UnknownInputType'", optional=optional)
         return _get_optional_typehint("'UnknownType'", optional=optional)
 
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
@@ -167,7 +170,9 @@ def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool) -> 
         return _get_optional_typehint(type_hint, optional=optional)
 
     if field_type is models.LexArray:
-        items_type_hint = _get_model_field_typehint(nsid, field_type_def.items, optional=False)
+        items_type_hint = _get_model_field_typehint(
+            nsid, field_type_def.items, optional=False, is_input_type=is_input_type
+        )
         return _get_optional_typehint(f't.List[{items_type_hint}]', optional=optional)
 
     if field_type is models.LexRef:
@@ -328,7 +333,9 @@ def _is_reserved_pydantic_name(name: str) -> bool:
     return name in _get_pydantic_reserved_names()
 
 
-def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters]) -> str:
+def _get_model(
+    nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters], *, is_input_type: bool = False
+) -> str:
     required_fields = _get_req_fields_set(lex_object)
 
     fields = []
@@ -349,7 +356,7 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
             snake_cased_field_name += '_'  # add underscore to the end
             alias_name = field_name
 
-        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional)
+        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional, is_input_type=is_input_type)
         value = _get_model_field_value(field_type_def, alias_name, optional=is_optional)
         description = _get_field_docstring(field_name, field_type_def)
 
@@ -371,7 +378,9 @@ def _get_model(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcP
     return join_code(fields)
 
 
-def _get_typeddict(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters]) -> str:
+def _get_typeddict(
+    nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters], *, is_input_type: bool = False
+) -> str:
     required_fields = _get_req_fields_set(lex_object)
 
     fields: t.List[str] = []
@@ -386,7 +395,7 @@ def _get_typeddict(nsid: NSID, lex_object: t.Union[models.LexObject, models.LexX
             # make aliases for fields with reserved names
             snake_cased_field_name += '_'  # add underscore to the end
 
-        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional)
+        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional, is_input_type=is_input_type)
         description = _get_field_docstring(field_name, field_type_def)
 
         # Allow optional params to actually be ommitted from the dict entirely
@@ -421,12 +430,12 @@ def _generate_params_model(nsid: NSID, definition: t.Union[models.LexXrpcQuery, 
 
     if definition.parameters:
         lines.append(_get_model_docstring(nsid, definition.parameters, ModelType.PARAMS))
-        lines.append(_get_model(nsid, definition.parameters))
+        lines.append(_get_model(nsid, definition.parameters, is_input_type=True))
 
     lines.append(_get_typeddict_class_def(nsid.name, TypedDictType.PARAMS))
 
     if definition.parameters:
-        lines.append(_get_typeddict(nsid, definition.parameters))
+        lines.append(_get_typeddict(nsid, definition.parameters, is_input_type=True))
 
     return join_code(lines)
 
@@ -437,7 +446,7 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
         if isinstance(body.schema, models.LexObject):
             lines.append(_get_model_class_def(nsid.name, model_type))
             lines.append(_get_model_docstring(nsid, body.schema, model_type))
-            lines.append(_get_model(nsid, body.schema))
+            lines.append(_get_model(nsid, body.schema, is_input_type=(model_type is ModelType.DATA)))
     else:
         if model_type is ModelType.DATA:
             model_name = INPUT_MODEL
@@ -455,7 +464,7 @@ def _generate_data_typedict(nsid: NSID, body: models.LexXrpcBody) -> str:
     lines: t.List[str] = []
     if isinstance(body.schema, models.LexObject):
         lines.append(_get_typeddict_class_def(nsid.name, TypedDictType.DATA))
-        lines.append(_get_typeddict(nsid, body.schema))
+        lines.append(_get_typeddict(nsid, body.schema, is_input_type=True))
     return join_code(lines)
 
 
@@ -634,6 +643,9 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     unknown_record_type_pydantic_lines.append('], Field(discriminator="py_type")]')
     unknown_record_type_pydantic_lines.append(
         "UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType']"
+    )
+    unknown_record_type_pydantic_lines.append(
+        "UnknownInputType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType', t.Dict[str, t.Any]]"
     )
     unknown_type_lines = [*import_lines, *unknown_record_type_hint_lines, *unknown_record_type_pydantic_lines]
 
