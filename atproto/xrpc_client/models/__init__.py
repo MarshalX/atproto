@@ -31,6 +31,7 @@ from atproto.xrpc_client.models.app.bsky.feed import get_timeline as AppBskyFeed
 from atproto.xrpc_client.models.app.bsky.feed import like as AppBskyFeedLike
 from atproto.xrpc_client.models.app.bsky.feed import post as AppBskyFeedPost
 from atproto.xrpc_client.models.app.bsky.feed import repost as AppBskyFeedRepost
+from atproto.xrpc_client.models.app.bsky.feed import search_posts as AppBskyFeedSearchPosts
 from atproto.xrpc_client.models.app.bsky.feed import threadgate as AppBskyFeedThreadgate
 from atproto.xrpc_client.models.app.bsky.graph import block as AppBskyGraphBlock
 from atproto.xrpc_client.models.app.bsky.graph import defs as AppBskyGraphDefs
@@ -59,11 +60,14 @@ from atproto.xrpc_client.models.app.bsky.notification import register_push as Ap
 from atproto.xrpc_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto.xrpc_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
 from atproto.xrpc_client.models.app.bsky.unspecced import apply_labels as AppBskyUnspeccedApplyLabels
+from atproto.xrpc_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
 from atproto.xrpc_client.models.app.bsky.unspecced import get_popular as AppBskyUnspeccedGetPopular
 from atproto.xrpc_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
 )
 from atproto.xrpc_client.models.app.bsky.unspecced import get_timeline_skeleton as AppBskyUnspeccedGetTimelineSkeleton
+from atproto.xrpc_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
+from atproto.xrpc_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
 from atproto.xrpc_client.models.com.atproto.admin import defs as ComAtprotoAdminDefs
 from atproto.xrpc_client.models.com.atproto.admin import disable_account_invites as ComAtprotoAdminDisableAccountInvites
 from atproto.xrpc_client.models.com.atproto.admin import disable_invite_codes as ComAtprotoAdminDisableInviteCodes
@@ -102,6 +106,7 @@ from atproto.xrpc_client.models.com.atproto.repo import list_records as ComAtpro
 from atproto.xrpc_client.models.com.atproto.repo import put_record as ComAtprotoRepoPutRecord
 from atproto.xrpc_client.models.com.atproto.repo import strong_ref as ComAtprotoRepoStrongRef
 from atproto.xrpc_client.models.com.atproto.repo import upload_blob as ComAtprotoRepoUploadBlob
+from atproto.xrpc_client.models.com.atproto.server import confirm_email as ComAtprotoServerConfirmEmail
 from atproto.xrpc_client.models.com.atproto.server import create_account as ComAtprotoServerCreateAccount
 from atproto.xrpc_client.models.com.atproto.server import create_app_password as ComAtprotoServerCreateAppPassword
 from atproto.xrpc_client.models.com.atproto.server import create_invite_code as ComAtprotoServerCreateInviteCode
@@ -118,9 +123,14 @@ from atproto.xrpc_client.models.com.atproto.server import get_session as ComAtpr
 from atproto.xrpc_client.models.com.atproto.server import list_app_passwords as ComAtprotoServerListAppPasswords
 from atproto.xrpc_client.models.com.atproto.server import refresh_session as ComAtprotoServerRefreshSession
 from atproto.xrpc_client.models.com.atproto.server import request_account_delete as ComAtprotoServerRequestAccountDelete
+from atproto.xrpc_client.models.com.atproto.server import (
+    request_email_confirmation as ComAtprotoServerRequestEmailConfirmation,
+)
+from atproto.xrpc_client.models.com.atproto.server import request_email_update as ComAtprotoServerRequestEmailUpdate
 from atproto.xrpc_client.models.com.atproto.server import request_password_reset as ComAtprotoServerRequestPasswordReset
 from atproto.xrpc_client.models.com.atproto.server import reset_password as ComAtprotoServerResetPassword
 from atproto.xrpc_client.models.com.atproto.server import revoke_app_password as ComAtprotoServerRevokeAppPassword
+from atproto.xrpc_client.models.com.atproto.server import update_email as ComAtprotoServerUpdateEmail
 from atproto.xrpc_client.models.com.atproto.sync import get_blob as ComAtprotoSyncGetBlob
 from atproto.xrpc_client.models.com.atproto.sync import get_blocks as ComAtprotoSyncGetBlocks
 from atproto.xrpc_client.models.com.atproto.sync import get_checkout as ComAtprotoSyncGetCheckout
@@ -177,6 +187,7 @@ class _Ids:
     AppBskyFeedLike: str = 'app.bsky.feed.like'
     AppBskyFeedPost: str = 'app.bsky.feed.post'
     AppBskyFeedRepost: str = 'app.bsky.feed.repost'
+    AppBskyFeedSearchPosts: str = 'app.bsky.feed.searchPosts'
     AppBskyFeedThreadgate: str = 'app.bsky.feed.threadgate'
     AppBskyGraphBlock: str = 'app.bsky.graph.block'
     AppBskyGraphDefs: str = 'app.bsky.graph.defs'
@@ -203,9 +214,12 @@ class _Ids:
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedApplyLabels: str = 'app.bsky.unspecced.applyLabels'
+    AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetPopular: str = 'app.bsky.unspecced.getPopular'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
     AppBskyUnspeccedGetTimelineSkeleton: str = 'app.bsky.unspecced.getTimelineSkeleton'
+    AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
+    AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
     ComAtprotoAdminDefs: str = 'com.atproto.admin.defs'
     ComAtprotoAdminDisableAccountInvites: str = 'com.atproto.admin.disableAccountInvites'
     ComAtprotoAdminDisableInviteCodes: str = 'com.atproto.admin.disableInviteCodes'
@@ -240,6 +254,7 @@ class _Ids:
     ComAtprotoRepoPutRecord: str = 'com.atproto.repo.putRecord'
     ComAtprotoRepoStrongRef: str = 'com.atproto.repo.strongRef'
     ComAtprotoRepoUploadBlob: str = 'com.atproto.repo.uploadBlob'
+    ComAtprotoServerConfirmEmail: str = 'com.atproto.server.confirmEmail'
     ComAtprotoServerCreateAccount: str = 'com.atproto.server.createAccount'
     ComAtprotoServerCreateAppPassword: str = 'com.atproto.server.createAppPassword'
     ComAtprotoServerCreateInviteCode: str = 'com.atproto.server.createInviteCode'
@@ -254,9 +269,12 @@ class _Ids:
     ComAtprotoServerListAppPasswords: str = 'com.atproto.server.listAppPasswords'
     ComAtprotoServerRefreshSession: str = 'com.atproto.server.refreshSession'
     ComAtprotoServerRequestAccountDelete: str = 'com.atproto.server.requestAccountDelete'
+    ComAtprotoServerRequestEmailConfirmation: str = 'com.atproto.server.requestEmailConfirmation'
+    ComAtprotoServerRequestEmailUpdate: str = 'com.atproto.server.requestEmailUpdate'
     ComAtprotoServerRequestPasswordReset: str = 'com.atproto.server.requestPasswordReset'
     ComAtprotoServerResetPassword: str = 'com.atproto.server.resetPassword'
     ComAtprotoServerRevokeAppPassword: str = 'com.atproto.server.revokeAppPassword'
+    ComAtprotoServerUpdateEmail: str = 'com.atproto.server.updateEmail'
     ComAtprotoSyncGetBlob: str = 'com.atproto.sync.getBlob'
     ComAtprotoSyncGetBlocks: str = 'com.atproto.sync.getBlocks'
     ComAtprotoSyncGetCheckout: str = 'com.atproto.sync.getCheckout'

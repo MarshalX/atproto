@@ -32,4 +32,5 @@ Submodules
    atproto.xrpc_client.models.app.bsky.feed.like
    atproto.xrpc_client.models.app.bsky.feed.post
    atproto.xrpc_client.models.app.bsky.feed.repost
+   atproto.xrpc_client.models.app.bsky.feed.search_posts
    atproto.xrpc_client.models.app.bsky.feed.threadgate
