@@ -645,7 +645,7 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
         "UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType']"
     )
     unknown_record_type_pydantic_lines.append(
-        "UnknownInputType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType', t.Dict[str, t.Any]]"
+        "UnknownInputType: te.TypeAlias = t.Union[UnknownType, t.Dict[str, t.Any]]"
     )
     unknown_type_lines = [*import_lines, *unknown_record_type_hint_lines, *unknown_record_type_pydantic_lines]
 
