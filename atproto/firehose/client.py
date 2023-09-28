@@ -69,7 +69,7 @@ def _handle_websocket_error_or_stop(exception: Exception) -> bool:
     raise FirehoseError from exception
 
 
-def _get_messageframe_from_bytes(data: bytes) -> MessageFrame:
+def _get_messageframe_from_bytes_or_raise(data: bytes) -> MessageFrame:
     frame = Frame.from_bytes(data)
     if isinstance(frame, ErrorFrame):
         raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
@@ -181,7 +181,7 @@ class _WebsocketClient(_WebsocketClientBase):
                             continue
 
                         try:
-                            frame = _get_messageframe_from_bytes(raw_frame)
+                            frame = _get_messageframe_from_bytes_or_raise(raw_frame)
                             self._process_message_frame(frame)
                         except Exception as e:  # noqa: BLE001
                             _handle_frame_decoding_error(e)
@@ -261,16 +261,26 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
                     self._reconnect_no = 0
 
                     while not self._stop_event.is_set():
-                        raw_frame = await client.recv()
-                        if isinstance(raw_frame, str):
-                            # skip text frames (should not be occurred)
-                            continue
+                        recv_task = asyncio.create_task(client.recv())
+                        wait_task = asyncio.create_task(self._stop_event.wait())
+                        await asyncio.wait([recv_task, wait_task], return_when='FIRST_COMPLETED')
 
-                        try:
-                            frame = _get_messageframe_from_bytes(raw_frame)
-                            await self._process_message_frame(frame)
-                        except Exception as e:  # noqa: BLE001
-                            _handle_frame_decoding_error(e)
+                        if wait_task.cancel():
+                            await asyncio.gather(wait_task, return_exceptions=True)
+
+                        if recv_task.cancel():
+                            await asyncio.gather(recv_task, return_exceptions=True)
+                        else:
+                            raw_frame = recv_task.result()
+                            if isinstance(raw_frame, str):
+                                # skip text frames (should not be occurred)
+                                continue
+
+                            try:
+                                frame = _get_messageframe_from_bytes_or_raise(raw_frame)
+                                await self._process_message_frame(frame)
+                            except Exception as e:  # noqa: BLE001
+                                _handle_frame_decoding_error(e)
             except Exception as e:  # noqa: BLE001
                 self._reconnect_no += 1
 
