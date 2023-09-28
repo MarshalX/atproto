@@ -7,18 +7,21 @@
 
 import typing as t
 
-from pydantic import Field
+import typing_extensions as te
 
 if t.TYPE_CHECKING:
     pass
 from atproto.xrpc_client.models import base
 
 
-class Response(base.ResponseModelBase):
+class Data(base.DataModelBase):
 
-    """Output data model for :obj:`com.atproto.server.getSession`."""
+    """Input data model for :obj:`com.atproto.server.confirmEmail`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
-    email: t.Optional[str] = None  #: Email.
-    email_confirmed: t.Optional[bool] = Field(default=None, alias='emailConfirmed')  #: Email confirmed.
+    email: str  #: Email.
+    token: str  #: Token.
+
+
+class DataDict(te.TypedDict):
+    email: str  #: Email.
+    token: str  #: Token.

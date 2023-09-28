@@ -78,5 +78,8 @@ class Main(base.RecordModelBase):
     ] = None  #: Labels.
     langs: t.Optional[t.List[str]] = Field(default=None, max_length=3)  #: Langs.
     reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None  #: Reply.
+    tags: t.Optional[t.List[str]] = Field(
+        default=None, max_length=8
+    )  #: Additional non-inline tags describing this post.
 
     py_type: te.Literal['app.bsky.feed.post'] = Field(default='app.bsky.feed.post', alias='$type', frozen=True)

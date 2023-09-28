@@ -12,6 +12,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   atproto.xrpc_client.models.com.atproto.server.confirm_email
    atproto.xrpc_client.models.com.atproto.server.create_account
    atproto.xrpc_client.models.com.atproto.server.create_app_password
    atproto.xrpc_client.models.com.atproto.server.create_invite_code
@@ -26,6 +27,9 @@ Submodules
    atproto.xrpc_client.models.com.atproto.server.list_app_passwords
    atproto.xrpc_client.models.com.atproto.server.refresh_session
    atproto.xrpc_client.models.com.atproto.server.request_account_delete
+   atproto.xrpc_client.models.com.atproto.server.request_email_confirmation
+   atproto.xrpc_client.models.com.atproto.server.request_email_update
    atproto.xrpc_client.models.com.atproto.server.request_password_reset
    atproto.xrpc_client.models.com.atproto.server.reset_password
    atproto.xrpc_client.models.com.atproto.server.revoke_app_password
+   atproto.xrpc_client.models.com.atproto.server.update_email

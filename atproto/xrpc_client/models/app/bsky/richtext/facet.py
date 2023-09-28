@@ -21,7 +21,11 @@ class Main(base.ModelBase):
 
     features: t.List[
         te.Annotated[
-            t.Union['models.AppBskyRichtextFacet.Mention', 'models.AppBskyRichtextFacet.Link'],
+            t.Union[
+                'models.AppBskyRichtextFacet.Mention',
+                'models.AppBskyRichtextFacet.Link',
+                'models.AppBskyRichtextFacet.Tag',
+            ],
             Field(discriminator='py_type'),
         ]
     ]  #: Features.
@@ -51,6 +55,17 @@ class Link(base.ModelBase):
 
     py_type: te.Literal['app.bsky.richtext.facet#link'] = Field(
         default='app.bsky.richtext.facet#link', alias='$type', frozen=True
+    )
+
+
+class Tag(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.richtext.facet`. A hashtag."""
+
+    tag: str = Field(max_length=640)  #: Tag.
+
+    py_type: te.Literal['app.bsky.richtext.facet#tag'] = Field(
+        default='app.bsky.richtext.facet#tag', alias='$type', frozen=True
     )
 
 

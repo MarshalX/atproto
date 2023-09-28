@@ -163,7 +163,7 @@ class ActorNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyActorSearchActors.Response':
-        """Find actors matching search criteria.
+        """Find actors (profiles) matching search criteria.
 
         Args:
             params: Parameters.
@@ -563,6 +563,30 @@ class FeedNamespace(NamespaceBase):
             'app.bsky.feed.getTimeline', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyFeedGetTimeline.Response)
+
+    def search_posts(
+        self,
+        params: t.Union[models.AppBskyFeedSearchPosts.Params, models.AppBskyFeedSearchPosts.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyFeedSearchPosts.Response':
+        """Find posts matching search criteria.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedSearchPosts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.AppBskyFeedSearchPosts.Params)
+        response = self._client.invoke_query(
+            'app.bsky.feed.searchPosts', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedSearchPosts.Response)
 
 
 class GraphNamespace(NamespaceBase):
@@ -1026,7 +1050,7 @@ class UnspeccedNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyUnspeccedGetPopular.Response':
-        """An unspecced view of globally popular items.
+        """DEPRECATED: will be removed soon, please find a feed generator alternative.
 
         Args:
             params: Parameters.
@@ -1104,6 +1128,58 @@ class UnspeccedNamespace(NamespaceBase):
             'app.bsky.unspecced.getTimelineSkeleton', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyUnspeccedGetTimelineSkeleton.Response)
+
+    def search_actors_skeleton(
+        self,
+        params: t.Union[
+            models.AppBskyUnspeccedSearchActorsSkeleton.Params, models.AppBskyUnspeccedSearchActorsSkeleton.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedSearchActorsSkeleton.Response':
+        """Backend Actors (profile) search, returning only skeleton.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedSearchActorsSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.AppBskyUnspeccedSearchActorsSkeleton.Params)
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.searchActorsSkeleton', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedSearchActorsSkeleton.Response)
+
+    def search_posts_skeleton(
+        self,
+        params: t.Union[
+            models.AppBskyUnspeccedSearchPostsSkeleton.Params, models.AppBskyUnspeccedSearchPostsSkeleton.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedSearchPostsSkeleton.Response':
+        """Backend Posts search, returning only skeleton.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedSearchPostsSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.AppBskyUnspeccedSearchPostsSkeleton.Params)
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.searchPostsSkeleton', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedSearchPostsSkeleton.Response)
 
 
 class ComNamespace(NamespaceBase):
@@ -1888,6 +1964,30 @@ class RepoNamespace(NamespaceBase):
 
 
 class ServerNamespace(NamespaceBase):
+    def confirm_email(
+        self,
+        data: t.Union[models.ComAtprotoServerConfirmEmail.Data, models.ComAtprotoServerConfirmEmail.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Confirm an email using a token from com.atproto.server.requestEmailConfirmation.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoServerConfirmEmail.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.server.confirmEmail', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     def create_account(
         self,
         data: t.Union[models.ComAtprotoServerCreateAccount.Data, models.ComAtprotoServerCreateAccount.DataDict],
@@ -2188,6 +2288,40 @@ class ServerNamespace(NamespaceBase):
         response = self._client.invoke_procedure('com.atproto.server.requestAccountDelete', **kwargs)
         return get_response_model(response, bool)
 
+    def request_email_confirmation(self, **kwargs: t.Any) -> bool:
+        """Request an email with a code to confirm ownership of email.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        response = self._client.invoke_procedure('com.atproto.server.requestEmailConfirmation', **kwargs)
+        return get_response_model(response, bool)
+
+    def request_email_update(self, **kwargs: t.Any) -> 'models.ComAtprotoServerRequestEmailUpdate.Response':
+        """Request a token in order to update email.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoServerRequestEmailUpdate.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        response = self._client.invoke_procedure(
+            'com.atproto.server.requestEmailUpdate', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoServerRequestEmailUpdate.Response)
+
     def request_password_reset(
         self,
         data: t.Union[
@@ -2259,6 +2393,30 @@ class ServerNamespace(NamespaceBase):
         data_model = get_or_create(data, models.ComAtprotoServerRevokeAppPassword.Data)
         response = self._client.invoke_procedure(
             'com.atproto.server.revokeAppPassword', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def update_email(
+        self,
+        data: t.Union[models.ComAtprotoServerUpdateEmail.Data, models.ComAtprotoServerUpdateEmail.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Update an account's email.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoServerUpdateEmail.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.server.updateEmail', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 

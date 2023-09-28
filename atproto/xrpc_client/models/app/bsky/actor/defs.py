@@ -96,6 +96,8 @@ Preferences = t.List[
             'models.AppBskyActorDefs.ContentLabelPref',
             'models.AppBskyActorDefs.SavedFeedsPref',
             'models.AppBskyActorDefs.PersonalDetailsPref',
+            'models.AppBskyActorDefs.FeedViewPref',
+            'models.AppBskyActorDefs.ThreadViewPref',
         ],
         Field(discriminator='py_type'),
     ]
@@ -145,4 +147,38 @@ class PersonalDetailsPref(base.ModelBase):
 
     py_type: te.Literal['app.bsky.actor.defs#personalDetailsPref'] = Field(
         default='app.bsky.actor.defs#personalDetailsPref', alias='$type', frozen=True
+    )
+
+
+class FeedViewPref(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    feed: str  #: The URI of the feed, or an identifier which describes the feed.
+    hide_quote_posts: t.Optional[bool] = Field(default=None, alias='hideQuotePosts')  #: Hide quote posts in the feed.
+    hide_replies: t.Optional[bool] = Field(default=None, alias='hideReplies')  #: Hide replies in the feed.
+    hide_replies_by_like_count: t.Optional[int] = Field(
+        default=None, alias='hideRepliesByLikeCount'
+    )  #: Hide replies in the feed if they do not have this number of likes.
+    hide_replies_by_unfollowed: t.Optional[bool] = Field(
+        default=None, alias='hideRepliesByUnfollowed'
+    )  #: Hide replies in the feed if they are not by followed users.
+    hide_reposts: t.Optional[bool] = Field(default=None, alias='hideReposts')  #: Hide reposts in the feed.
+
+    py_type: te.Literal['app.bsky.actor.defs#feedViewPref'] = Field(
+        default='app.bsky.actor.defs#feedViewPref', alias='$type', frozen=True
+    )
+
+
+class ThreadViewPref(base.ModelBase):
+
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    prioritize_followed_users: t.Optional[bool] = Field(
+        default=None, alias='prioritizeFollowedUsers'
+    )  #: Show followed users at the top of all replies.
+    sort: t.Optional[str] = None  #: Sorting mode.
+
+    py_type: te.Literal['app.bsky.actor.defs#threadViewPref'] = Field(
+        default='app.bsky.actor.defs#threadViewPref', alias='$type', frozen=True
     )

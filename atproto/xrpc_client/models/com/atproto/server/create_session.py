@@ -37,3 +37,4 @@ class Response(base.ResponseModelBase):
     handle: str  #: Handle.
     refresh_jwt: str = Field(alias='refreshJwt')  #: Refresh jwt.
     email: t.Optional[str] = None  #: Email.
+    email_confirmed: t.Optional[bool] = Field(default=None, alias='emailConfirmed')  #: Email confirmed.

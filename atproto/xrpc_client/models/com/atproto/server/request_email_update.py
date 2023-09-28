@@ -16,9 +16,6 @@ from atproto.xrpc_client.models import base
 
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.server.getSession`."""
+    """Output data model for :obj:`com.atproto.server.requestEmailUpdate`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
-    email: t.Optional[str] = None  #: Email.
-    email_confirmed: t.Optional[bool] = Field(default=None, alias='emailConfirmed')  #: Email confirmed.
+    token_required: bool = Field(alias='tokenRequired')  #: Token required.
