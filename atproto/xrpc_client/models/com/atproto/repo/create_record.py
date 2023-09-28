@@ -35,7 +35,7 @@ class DataDict(te.TypedDict):
     repo: str  #: The handle or DID of the repo.
     rkey: te.NotRequired[t.Optional[str]]  #: The key of the record.
     swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by cid.
-    validate_: te.NotRequired[t.Optional[bool]]  #: Validate the record?
+    validate: te.NotRequired[t.Optional[bool]]  #: Validate the record?
 
 
 class Response(base.ResponseModelBase):

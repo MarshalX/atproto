@@ -391,10 +391,6 @@ def _get_typeddict(
 
         snake_cased_field_name = convert_camel_case_to_snake_case(field_name)
 
-        if _is_reserved_pydantic_name(snake_cased_field_name):
-            # make aliases for fields with reserved names
-            snake_cased_field_name += '_'  # add underscore to the end
-
         type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional, is_input_type=is_input_type)
         description = _get_field_docstring(field_name, field_type_def)
 
@@ -645,7 +641,7 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
         "UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType']"
     )
     unknown_record_type_pydantic_lines.append(
-        "UnknownInputType: te.TypeAlias = t.Union[UnknownType, t.Dict[str, t.Any]]"
+        'UnknownInputType: te.TypeAlias = t.Union[UnknownType, t.Dict[str, t.Any]]'
     )
     unknown_type_lines = [*import_lines, *unknown_record_type_hint_lines, *unknown_record_type_pydantic_lines]
 

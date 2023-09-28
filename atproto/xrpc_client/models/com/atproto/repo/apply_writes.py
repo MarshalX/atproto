@@ -48,7 +48,7 @@ class DataDict(te.TypedDict):
         ]
     ]  #: Writes.
     swap_commit: te.NotRequired[t.Optional[str]]  #: Swap commit.
-    validate_: te.NotRequired[t.Optional[bool]]  #: Validate the records?
+    validate: te.NotRequired[t.Optional[bool]]  #: Validate the records?
 
 
 class Create(base.ModelBase):
