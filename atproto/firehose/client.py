@@ -249,38 +249,23 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
         while not self._stop_event.is_set():
             try:
                 if self._reconnect_no != 0:
-                    try:
-                        await asyncio.wait_for(self._stop_event.wait(), self._get_reconnection_delay())
-                        # Did not time out, therefore the stop event was set and we break out of the loop
-                        break
-                    except asyncio.TimeoutError:
-                        # Waited the entire delay without the stop event being set, so we continue as usual
-                        pass
+                    await asyncio.sleep(self._get_reconnection_delay())
 
                 async with self._get_async_client() as client:
                     self._reconnect_no = 0
 
                     while not self._stop_event.is_set():
-                        recv_task = asyncio.create_task(client.recv())
-                        wait_task = asyncio.create_task(self._stop_event.wait())
-                        await asyncio.wait([recv_task, wait_task], return_when='FIRST_COMPLETED')
+                        raw_frame = await client.recv()
+                        if isinstance(raw_frame, str):
+                            # skip text frames (should not be occurred)
+                            continue
 
-                        if wait_task.cancel():
-                            await asyncio.gather(wait_task, return_exceptions=True)
+                        try:
+                            frame = _get_messageframe_from_bytes_or_raise(raw_frame)
+                            await self._process_message_frame(frame)
+                        except Exception as e:  # noqa: BLE001
+                            _handle_frame_decoding_error(e)
 
-                        if recv_task.cancel():
-                            await asyncio.gather(recv_task, return_exceptions=True)
-                        else:
-                            raw_frame = recv_task.result()
-                            if isinstance(raw_frame, str):
-                                # skip text frames (should not be occurred)
-                                continue
-
-                            try:
-                                frame = _get_messageframe_from_bytes_or_raise(raw_frame)
-                                await self._process_message_frame(frame)
-                            except Exception as e:  # noqa: BLE001
-                                _handle_frame_decoding_error(e)
             except Exception as e:  # noqa: BLE001
                 self._reconnect_no += 1
 
