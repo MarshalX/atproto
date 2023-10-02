@@ -26,7 +26,7 @@ _TYPE_SERVICE_FIELD = '$type'
 
 
 def get_or_create(
-    model_data: ModelData, model: t.Optional[t.Type[M]] = None, *, strict: bool = True
+    model_data: ModelData[M], model: t.Optional[t.Type[M]] = None, *, strict: bool = True
 ) -> t.Optional[t.Union[M, UnknownRecordType, DotDict]]:
     """Get model instance from raw data.
 
@@ -67,7 +67,7 @@ def get_or_create(
 
 
 def _get_or_create(
-    model_data: ModelData, model: t.Type[M], *, strict: bool
+    model_data: ModelData[M], model: t.Type[M], *, strict: bool
 ) -> t.Optional[t.Union[M, UnknownRecordType, DotDict]]:
     if model_data is None:
         return None
