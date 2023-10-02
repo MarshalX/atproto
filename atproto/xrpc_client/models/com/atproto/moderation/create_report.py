@@ -27,6 +27,15 @@ class Data(base.DataModelBase):
     reason: t.Optional[str] = None  #: Reason.
 
 
+class DataDict(te.TypedDict):
+    reason_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
+    subject: te.Annotated[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        Field(discriminator='py_type'),
+    ]  #: Subject.
+    reason: te.NotRequired[t.Optional[str]]  #: Reason.
+
+
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.moderation.createReport`."""

@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -19,6 +20,10 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getPosts`."""
 
     uris: t.List[str] = Field(max_length=25)  #: Uris.
+
+
+class ParamsDict(te.TypedDict):
+    uris: t.List[str]  #: Uris.
 
 
 class Response(base.ResponseModelBase):

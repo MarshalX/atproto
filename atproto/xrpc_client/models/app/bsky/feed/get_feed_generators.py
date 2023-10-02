@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client import models
 from atproto.xrpc_client.models import base
@@ -16,6 +18,10 @@ class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`app.bsky.feed.getFeedGenerators`."""
 
+    feeds: t.List[str]  #: Feeds.
+
+
+class ParamsDict(te.TypedDict):
     feeds: t.List[str]  #: Feeds.
 
 

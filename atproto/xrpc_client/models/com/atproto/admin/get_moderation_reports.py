@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -31,6 +32,20 @@ class Params(base.ParamsModelBase):
         bool
     ] = None  #: Reverse the order of the returned records? when true, returns reports in chronological order.
     subject: t.Optional[str] = None  #: Subject.
+
+
+class ParamsDict(te.TypedDict):
+    action_type: te.NotRequired[t.Optional[str]]  #: Action type.
+    actioned_by: te.NotRequired[t.Optional[str]]  #: Get all reports that were actioned by a specific moderator.
+    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    ignore_subjects: te.NotRequired[t.Optional[t.List[str]]]  #: Ignore subjects.
+    limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    reporters: te.NotRequired[t.Optional[t.List[str]]]  #: Filter reports made by one or more DIDs.
+    resolved: te.NotRequired[t.Optional[bool]]  #: Resolved.
+    reverse: te.NotRequired[
+        t.Optional[bool]
+    ]  #: Reverse the order of the returned records? when true, returns reports in chronological order.
+    subject: te.NotRequired[t.Optional[str]]  #: Subject.
 
 
 class Response(base.ResponseModelBase):

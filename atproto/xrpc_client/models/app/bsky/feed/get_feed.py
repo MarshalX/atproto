@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -21,6 +22,12 @@ class Params(base.ParamsModelBase):
     feed: str  #: Feed.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+
+
+class ParamsDict(te.TypedDict):
+    feed: str  #: Feed.
+    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    limit: te.NotRequired[t.Optional[int]]  #: Limit.
 
 
 class Response(base.ResponseModelBase):

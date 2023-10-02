@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     from atproto.xrpc_client.models.unknown_type import UnknownType
 from atproto.xrpc_client.models import base
@@ -22,6 +24,15 @@ class Params(base.ParamsModelBase):
     cid: t.Optional[
         str
     ] = None  #: The CID of the version of the record. If not specified, then return the most recent version.
+
+
+class ParamsDict(te.TypedDict):
+    collection: str  #: The NSID of the record collection.
+    repo: str  #: The handle or DID of the repo.
+    rkey: str  #: The key of the record.
+    cid: te.NotRequired[
+        t.Optional[str]
+    ]  #: The CID of the version of the record. If not specified, then return the most recent version.
 
 
 class Response(base.ResponseModelBase):

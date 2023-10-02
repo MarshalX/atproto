@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -18,6 +19,10 @@ class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`com.atproto.repo.describeRepo`."""
 
+    repo: str  #: The handle or DID of the repo.
+
+
+class ParamsDict(te.TypedDict):
     repo: str  #: The handle or DID of the repo.
 
 

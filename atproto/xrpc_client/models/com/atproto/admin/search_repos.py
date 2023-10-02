@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -21,7 +22,16 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     invited_by: t.Optional[str] = Field(default=None, alias='invitedBy')  #: Invited by.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
-    term: t.Optional[str] = None  #: Term.
+    q: t.Optional[str] = None  #: Q.
+    term: t.Optional[str] = None  #: DEPRECATED: use 'q' instead.
+
+
+class ParamsDict(te.TypedDict):
+    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    invited_by: te.NotRequired[t.Optional[str]]  #: Invited by.
+    limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    q: te.NotRequired[t.Optional[str]]  #: Q.
+    term: te.NotRequired[t.Optional[str]]  #: DEPRECATED: use 'q' instead.
 
 
 class Response(base.ResponseModelBase):

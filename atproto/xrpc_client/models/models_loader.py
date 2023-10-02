@@ -38,12 +38,12 @@ def __get_models_to_rebuild_set() -> set:
 def __rebuild_all_models():
     # load models to the scope
     from atproto.xrpc_client import models  # noqa
-    from atproto.xrpc_client.models.unknown_type import UnknownType
+    from atproto.xrpc_client.models.unknown_type import UnknownType, UnknownInputType
     from atproto.xrpc_client.models.blob_ref import BlobRef
     from atproto.xrpc_client.models import dot_dict
     from atproto import CIDType
 
-    UnknownType, CIDType, dot_dict  # noqa: B018
+    UnknownType, UnknownInputType, CIDType, dot_dict  # noqa: B018
 
     BlobRef.model_rebuild()
     for __model in __get_models_to_rebuild_set():

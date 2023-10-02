@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -22,6 +23,13 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=500, ge=1, le=1000)  #: Limit.
     since: t.Optional[str] = None  #: Optional revision of the repo to list blobs since.
+
+
+class ParamsDict(te.TypedDict):
+    did: str  #: The DID of the repo.
+    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    since: te.NotRequired[t.Optional[str]]  #: Optional revision of the repo to list blobs since.
 
 
 class Response(base.ResponseModelBase):

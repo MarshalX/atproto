@@ -1,5 +1,14 @@
 # Change Log
 
+## Version 0.0.29
+
+**28.09.2023**
+
+* Make codegen deterministic by @DXsmiley in https://github.com/MarshalX/atproto/pull/162
+* Add TypedDict for params and data arguments; add type hint for kwargs by @DXsmiley in https://github.com/MarshalX/atproto/pull/166
+* Update lexicons fetched from 41ee177 committed 2023-09-27T21:08:58Z by @MarshalX in https://github.com/MarshalX/atproto/pull/172
+* Update changelog for v0.0.28 by @MarshalX in https://github.com/MarshalX/atproto/pull/156
+
 ## Version 0.0.28
 
 **16.09.2023**

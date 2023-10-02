@@ -22,5 +22,10 @@ class Params(base.ParamsModelBase):
     did: str  #: The DID of the repo.
 
 
+class ParamsDict(te.TypedDict):
+    cid: str  #: The CID of the blob to fetch.
+    did: str  #: The DID of the repo.
+
+
 #: Response raw data type.
 Response: te.TypeAlias = bytes

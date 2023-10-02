@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -18,6 +19,10 @@ class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`app.bsky.feed.getFeedGenerator`."""
 
+    feed: str  #: Feed.
+
+
+class ParamsDict(te.TypedDict):
     feed: str  #: Feed.
 
 

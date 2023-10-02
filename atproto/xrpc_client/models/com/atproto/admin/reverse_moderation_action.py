@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -19,5 +20,11 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.reverseModerationAction`."""
 
     created_by: str = Field(alias='createdBy')  #: Created by.
+    id: int  #: Id.
+    reason: str  #: Reason.
+
+
+class DataDict(te.TypedDict):
+    created_by: str  #: Created by.
     id: int  #: Id.
     reason: str  #: Reason.

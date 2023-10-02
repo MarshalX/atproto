@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -21,4 +22,11 @@ class Data(base.DataModelBase):
     app_id: str = Field(alias='appId')  #: App id.
     platform: str  #: Platform.
     service_did: str = Field(alias='serviceDid')  #: Service did.
+    token: str  #: Token.
+
+
+class DataDict(te.TypedDict):
+    app_id: str  #: App id.
+    platform: str  #: Platform.
+    service_did: str  #: Service did.
     token: str  #: Token.

@@ -33,6 +33,16 @@ class Params(base.ParamsModelBase):
     )  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).
 
 
+class ParamsDict(te.TypedDict):
+    collection: str  #: The NSID of the record type.
+    repo: str  #: The handle or DID of the repo.
+    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    limit: te.NotRequired[t.Optional[int]]  #: The number of records to return.
+    reverse: te.NotRequired[t.Optional[bool]]  #: Reverse the order of the returned records?
+    rkey_end: te.NotRequired[t.Optional[str]]  #: DEPRECATED: The highest sort-ordered rkey to stop at (exclusive).
+    rkey_start: te.NotRequired[t.Optional[str]]  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).
+
+
 class Response(base.ResponseModelBase):
 
     """Output data model for :obj:`com.atproto.repo.listRecords`."""
