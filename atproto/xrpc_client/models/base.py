@@ -13,7 +13,7 @@ class ModelBase(BaseModel, AtProtocolBase):
     Provides square brackets [] notation to get attributes like in a dictionary.
     """
 
-    model_config = ConfigDict(extra='allow', populate_by_name=True, strict=True)
+    model_config = ConfigDict(extra='ignore', populate_by_name=True, strict=True)
 
     def __getitem__(self, item: str):
         if hasattr(self, item):
