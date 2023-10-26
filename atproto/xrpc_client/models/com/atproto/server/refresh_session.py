@@ -5,7 +5,6 @@
 ##################################################################
 
 
-
 from pydantic import Field
 
 from atproto.xrpc_client.models import base

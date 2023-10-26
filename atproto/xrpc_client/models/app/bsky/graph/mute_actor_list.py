@@ -5,7 +5,6 @@
 ##################################################################
 
 
-
 import typing_extensions as te
 
 from atproto.xrpc_client.models import base
