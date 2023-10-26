@@ -31,8 +31,8 @@ def format_code(filepath: Path, quiet: bool = True) -> None:
         quiet_option = ''
 
     # FIXME(MarshalX): doesn't work well with not-project dir
+    subprocess.run(['ruff', 'format', quiet_option, filepath])  # noqa: S603, S607
     subprocess.run(['ruff', quiet_option, '--fix', filepath])  # noqa: S603, S607
-    subprocess.run(['black', quiet_option, filepath])  # noqa: S603, S607
 
 
 def append_code(filepath: Path, code: str) -> None:

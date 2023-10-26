@@ -112,7 +112,7 @@ def main():
     print('- Run codegen (poetry run atp gen all)')
 
     print('- Run ruff (poetry run ruff .)')
-    print('- Run black (poetry run black .)')
+    print('- Run ruff format (poetry run ruff format .)')
 
     print('- Gen docs (cd docs && make gen)')
 
