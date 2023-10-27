@@ -128,6 +128,7 @@ from atproto.xrpc_client.models.com.atproto.server import (
 )
 from atproto.xrpc_client.models.com.atproto.server import request_email_update as ComAtprotoServerRequestEmailUpdate
 from atproto.xrpc_client.models.com.atproto.server import request_password_reset as ComAtprotoServerRequestPasswordReset
+from atproto.xrpc_client.models.com.atproto.server import reserve_signing_key as ComAtprotoServerReserveSigningKey
 from atproto.xrpc_client.models.com.atproto.server import reset_password as ComAtprotoServerResetPassword
 from atproto.xrpc_client.models.com.atproto.server import revoke_app_password as ComAtprotoServerRevokeAppPassword
 from atproto.xrpc_client.models.com.atproto.server import update_email as ComAtprotoServerUpdateEmail
@@ -272,6 +273,7 @@ class _Ids:
     ComAtprotoServerRequestEmailConfirmation: str = 'com.atproto.server.requestEmailConfirmation'
     ComAtprotoServerRequestEmailUpdate: str = 'com.atproto.server.requestEmailUpdate'
     ComAtprotoServerRequestPasswordReset: str = 'com.atproto.server.requestPasswordReset'
+    ComAtprotoServerReserveSigningKey: str = 'com.atproto.server.reserveSigningKey'
     ComAtprotoServerResetPassword: str = 'com.atproto.server.resetPassword'
     ComAtprotoServerRevokeAppPassword: str = 'com.atproto.server.revokeAppPassword'
     ComAtprotoServerUpdateEmail: str = 'com.atproto.server.updateEmail'

@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+if t.TYPE_CHECKING:
+    from atproto.xrpc_client.models.unknown_type import UnknownType
 from atproto.xrpc_client.models import base
 
 
@@ -34,5 +36,6 @@ class Response(base.ResponseModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     refresh_jwt: str = Field(alias='refreshJwt')  #: Refresh jwt.
+    did_doc: t.Optional['UnknownType'] = Field(default=None, alias='didDoc')  #: Did doc.
     email: t.Optional[str] = None  #: Email.
     email_confirmed: t.Optional[bool] = Field(default=None, alias='emailConfirmed')  #: Email confirmed.

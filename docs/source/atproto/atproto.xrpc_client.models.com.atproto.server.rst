@@ -30,6 +30,7 @@ Submodules
    atproto.xrpc_client.models.com.atproto.server.request_email_confirmation
    atproto.xrpc_client.models.com.atproto.server.request_email_update
    atproto.xrpc_client.models.com.atproto.server.request_password_reset
+   atproto.xrpc_client.models.com.atproto.server.reserve_signing_key
    atproto.xrpc_client.models.com.atproto.server.reset_password
    atproto.xrpc_client.models.com.atproto.server.revoke_app_password
    atproto.xrpc_client.models.com.atproto.server.update_email

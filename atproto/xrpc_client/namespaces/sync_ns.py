@@ -2348,6 +2348,24 @@ class ServerNamespace(NamespaceBase):
         )
         return get_response_model(response, bool)
 
+    def reserve_signing_key(self, **kwargs: t.Any) -> 'models.ComAtprotoServerReserveSigningKey.Response':
+        """Reserve a repo signing key for account creation.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoServerReserveSigningKey.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        response = self._client.invoke_procedure(
+            'com.atproto.server.reserveSigningKey', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoServerReserveSigningKey.Response)
+
     def reset_password(
         self,
         data: t.Union[models.ComAtprotoServerResetPassword.Data, models.ComAtprotoServerResetPassword.DataDict],
