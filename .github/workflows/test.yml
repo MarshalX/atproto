@@ -20,6 +20,7 @@ jobs:
 
     steps:
       - name: Run Cimon (eBPF).
+        if: runner.os == 'Linux'
         uses: cycodelabs/cimon-action@v0
         with:
           client-id: ${{ secrets.CIMON_CLIENT_ID }}
