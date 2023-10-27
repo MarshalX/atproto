@@ -211,7 +211,9 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
         self, method: str, base_uri: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
     ) -> None:
         super().__init__(method, base_uri, params)
+
         self._stop_event = asyncio.Event()
+
         self._on_message_callback: t.Optional[AsyncOnMessageCallback] = None
         self._on_callback_error_callback: t.Optional[AsyncOnCallbackErrorCallback] = None
 
@@ -244,8 +246,6 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
         """
         self._on_message_callback = on_message_callback
         self._on_callback_error_callback = on_callback_error_callback
-
-        self._stop_event = asyncio.Event()
 
         while not self._stop_event.is_set():
             try:
