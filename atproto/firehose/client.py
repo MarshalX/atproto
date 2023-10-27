@@ -69,7 +69,7 @@ def _handle_websocket_error_or_stop(exception: Exception) -> bool:
     raise FirehoseError from exception
 
 
-def _get_messageframe_from_bytes_or_raise(data: bytes) -> MessageFrame:
+def _get_message_frame_from_bytes_or_raise(data: bytes) -> MessageFrame:
     frame = Frame.from_bytes(data)
     if isinstance(frame, ErrorFrame):
         raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
@@ -113,8 +113,9 @@ class _WebsocketClientBase:
         return connect(self._websocket_uri, max_size=_MAX_MESSAGE_SIZE_BYTES)
 
     def _get_async_client(self):
-        # NOTE: I've noticed that the close operation often takes the entire timeout for some reason
-        # By default this is 10 seconds, which is pretty long. Maybe shorten it?
+        # FIXME(DXsmiley): I've noticed that the close operation often takes the entire timeout for some reason
+        #   By default, this is 10 seconds, which is pretty long.
+        #   Maybe shorten it?
         return aconnect(self._websocket_uri, max_size=_MAX_MESSAGE_SIZE_BYTES)
 
     def _get_reconnection_delay(self) -> int:
@@ -130,7 +131,7 @@ class _WebsocketClient(_WebsocketClientBase):
     ) -> None:
         super().__init__(method, base_uri, params)
 
-        # TODO: Not sure if this should be a Lock or not, the async is using an Event now
+        # TODO(DXsmiley): Not sure if this should be a Lock or not, the async is using an Event now
         self._stop_lock = threading.Lock()
 
         self._on_message_callback: t.Optional[OnMessageCallback] = None
@@ -181,7 +182,7 @@ class _WebsocketClient(_WebsocketClientBase):
                             continue
 
                         try:
-                            frame = _get_messageframe_from_bytes_or_raise(raw_frame)
+                            frame = _get_message_frame_from_bytes_or_raise(raw_frame)
                             self._process_message_frame(frame)
                         except Exception as e:  # noqa: BLE001
                             _handle_frame_decoding_error(e)
@@ -261,7 +262,7 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
                             continue
 
                         try:
-                            frame = _get_messageframe_from_bytes_or_raise(raw_frame)
+                            frame = _get_message_frame_from_bytes_or_raise(raw_frame)
                             await self._process_message_frame(frame)
                         except Exception as e:  # noqa: BLE001
                             _handle_frame_decoding_error(e)
