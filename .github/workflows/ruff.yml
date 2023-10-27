@@ -1,6 +1,9 @@
-name: Ruff
+name: Linter and code style check
 
-on: [ pull_request, push ]
+on: [ pull_request ]
+
+permissions:
+  contents: read
 
 jobs:
   ruff:
@@ -18,7 +21,7 @@ jobs:
             pypi.org
 
       - name: Checkout repository.
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python.
         uses: actions/setup-python@v4

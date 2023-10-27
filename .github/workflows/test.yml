@@ -1,10 +1,22 @@
-name: Unit Tests
+name: Unit tests
 
-on: [ pull_request, push ]
+on: [ pull_request ]
+
+permissions:
+  contents: read
 
 jobs:
   unit_tests:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ macos-latest, ubuntu-latest, windows-latest ]
+        python-version: [ "3.7", "3.8", "3.9", "3.10", "3.11", "3.12" ]
+
+    runs-on: ${{matrix.os}}
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Run Cimon (eBPF).
@@ -19,12 +31,12 @@ jobs:
             pypi.org
 
       - name: Checkout repository.
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python.
         uses: actions/setup-python@v4
         with:
-          python-version: '3.7'
+          python-version: ${{ matrix.python-version }}
 
       - name: Setup Poetry.
         uses: snok/install-poetry@v1
