@@ -44,7 +44,7 @@ jobs:
           version: 1.5.1
 
       - name: Install dependencies.
-        run: poetry install
+        run: poetry install --without docs
 
       - name: Run Tests.
         run: poetry run pytest
