@@ -61,9 +61,7 @@ class Main(base.RecordModelBase):
                 Field(discriminator='py_type'),
             ]
         ]
-    ] = Field(
-        default=None, max_length=5
-    )  #: Allow.
+    ] = Field(default=None, max_length=5)  #: Allow.
 
     py_type: te.Literal['app.bsky.feed.threadgate'] = Field(
         default='app.bsky.feed.threadgate', alias='$type', frozen=True

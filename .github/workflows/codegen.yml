@@ -1,6 +1,9 @@
-name: Codegen Check
+name: Codegen check
 
-on: [ pull_request, push ]
+on: [ pull_request ]
+
+permissions:
+  contents: read
 
 jobs:
   codegen_check:
@@ -16,6 +19,7 @@ jobs:
 
     steps:
       - name: Run Cimon (eBPF).
+        if: runner.os == 'Linux'
         uses: cycodelabs/cimon-action@v0
         with:
           client-id: ${{ secrets.CIMON_CLIENT_ID }}
@@ -27,7 +31,7 @@ jobs:
             pypi.org
 
       - name: Checkout repository.
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python.
         uses: actions/setup-python@v4

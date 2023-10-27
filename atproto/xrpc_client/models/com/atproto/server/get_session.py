@@ -9,8 +9,6 @@ import typing as t
 
 from pydantic import Field
 
-if t.TYPE_CHECKING:
-    pass
 from atproto.xrpc_client.models import base
 
 
