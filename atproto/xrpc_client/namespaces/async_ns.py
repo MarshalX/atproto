@@ -1279,6 +1279,30 @@ class AdminNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
+    async def get_account_info(
+        self,
+        params: t.Union[models.ComAtprotoAdminGetAccountInfo.Params, models.ComAtprotoAdminGetAccountInfo.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoAdminDefs.AccountView':
+        """View details about an account.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminDefs.AccountView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoAdminGetAccountInfo.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.admin.getAccountInfo', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminDefs.AccountView)
+
     async def get_invite_codes(
         self,
         params: t.Optional[
@@ -1460,6 +1484,32 @@ class AdminNamespace(AsyncNamespaceBase):
             'com.atproto.admin.getRepo', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminDefs.RepoViewDetail)
+
+    async def get_subject_status(
+        self,
+        params: t.Optional[
+            t.Union[models.ComAtprotoAdminGetSubjectStatus.Params, models.ComAtprotoAdminGetSubjectStatus.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoAdminGetSubjectStatus.Response':
+        """Fetch the service-specific the admin status of a subject (account, record, or blob).
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminGetSubjectStatus.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoAdminGetSubjectStatus.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.admin.getSubjectStatus', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminGetSubjectStatus.Response)
 
     async def resolve_moderation_reports(
         self,
@@ -1654,6 +1704,36 @@ class AdminNamespace(AsyncNamespaceBase):
             'com.atproto.admin.updateAccountHandle', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
+
+    async def update_subject_status(
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminUpdateSubjectStatus.Data, models.ComAtprotoAdminUpdateSubjectStatus.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoAdminUpdateSubjectStatus.Response':
+        """Update the service-specific admin status of a subject (account, record, or blob).
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminUpdateSubjectStatus.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoAdminUpdateSubjectStatus.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.updateSubjectStatus',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoAdminUpdateSubjectStatus.Response)
 
 
 class IdentityNamespace(AsyncNamespaceBase):
@@ -2348,10 +2428,17 @@ class ServerNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
-    async def reserve_signing_key(self, **kwargs: t.Any) -> 'models.ComAtprotoServerReserveSigningKey.Response':
+    async def reserve_signing_key(
+        self,
+        data: t.Optional[
+            t.Union[models.ComAtprotoServerReserveSigningKey.Data, models.ComAtprotoServerReserveSigningKey.DataDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoServerReserveSigningKey.Response':
         """Reserve a repo signing key for account creation.
 
         Args:
+            data: Input data.
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
@@ -2361,8 +2448,13 @@ class ServerNamespace(AsyncNamespaceBase):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
+        data_model = get_or_create(data, models.ComAtprotoServerReserveSigningKey.Data)
         response = await self._client.invoke_procedure(
-            'com.atproto.server.reserveSigningKey', output_encoding='application/json', **kwargs
+            'com.atproto.server.reserveSigningKey',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
         )
         return get_response_model(response, models.ComAtprotoServerReserveSigningKey.Response)
 

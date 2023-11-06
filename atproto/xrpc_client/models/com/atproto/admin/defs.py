@@ -16,6 +16,18 @@ if t.TYPE_CHECKING:
 from atproto.xrpc_client.models import base
 
 
+class StatusAttr(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`."""
+
+    applied: bool  #: Applied.
+    ref: t.Optional[str] = None  #: Ref.
+
+    py_type: te.Literal['com.atproto.admin.defs#statusAttr'] = Field(
+        default='com.atproto.admin.defs#statusAttr', alias='$type', frozen=True
+    )
+
+
 class ActionView(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -221,6 +233,26 @@ class RepoViewDetail(base.ModelBase):
     )
 
 
+class AccountView(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`."""
+
+    did: str  #: Did.
+    handle: str  #: Handle.
+    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
+    email: t.Optional[str] = None  #: Email.
+    invite_note: t.Optional[str] = Field(default=None, alias='inviteNote')  #: Invite note.
+    invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = Field(
+        default=None, alias='invitedBy'
+    )  #: Invited by.
+    invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
+    invites_disabled: t.Optional[bool] = Field(default=None, alias='invitesDisabled')  #: Invites disabled.
+
+    py_type: te.Literal['com.atproto.admin.defs#accountView'] = Field(
+        default='com.atproto.admin.defs#accountView', alias='$type', frozen=True
+    )
+
+
 class RepoViewNotFound(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
@@ -240,6 +272,19 @@ class RepoRef(base.ModelBase):
 
     py_type: te.Literal['com.atproto.admin.defs#repoRef'] = Field(
         default='com.atproto.admin.defs#repoRef', alias='$type', frozen=True
+    )
+
+
+class RepoBlobRef(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`."""
+
+    cid: str  #: Cid.
+    did: str  #: Did.
+    record_uri: t.Optional[str] = Field(default=None, alias='recordUri')  #: Record uri.
+
+    py_type: te.Literal['com.atproto.admin.defs#repoBlobRef'] = Field(
+        default='com.atproto.admin.defs#repoBlobRef', alias='$type', frozen=True
     )
 
 

@@ -20,7 +20,6 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.admin.searchRepos`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    invited_by: t.Optional[str] = Field(default=None, alias='invitedBy')  #: Invited by.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     q: t.Optional[str] = None  #: Q.
     term: t.Optional[str] = None  #: DEPRECATED: use 'q' instead.
@@ -28,7 +27,6 @@ class Params(base.ParamsModelBase):
 
 class ParamsDict(te.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
-    invited_by: te.NotRequired[t.Optional[str]]  #: Invited by.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     q: te.NotRequired[t.Optional[str]]  #: Q.
     term: te.NotRequired[t.Optional[str]]  #: DEPRECATED: use 'q' instead.
