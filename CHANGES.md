@@ -1,5 +1,18 @@
 # Change Log
 
+## Version 0.0.30
+
+**06.11.2023**
+
+* Add Python 3.12; migrate from black to ruff format by @MarshalX in https://github.com/MarshalX/atproto/pull/177
+* Async Firehose Client: block on make message handler call, add on error callback by @DXsmiley in https://github.com/MarshalX/atproto/pull/157
+* Downgrade sphinxext-opengraph to clean up the tree of dependencies (including vulnerable) by @MarshalX in https://github.com/MarshalX/atproto/pull/179
+* Update lexicons fetched from 46b108c committed 2023-10-26T22:29:51Z by @MarshalX in https://github.com/MarshalX/atproto/pull/178
+* Update lexicons fetched from 772736a committed 2023-11-02T20:16:26Z by @MarshalX in https://github.com/MarshalX/atproto/pull/182
+* Update changelog for v0.0.29 by @MarshalX in https://github.com/MarshalX/atproto/pull/173
+* Fix type hint of OnMessageCallback (Firehose client) by @MarshalX in https://github.com/MarshalX/atproto/pull/183
+* Fix dependency groups by @MarshalX in https://github.com/MarshalX/atproto/pull/180
+
 ## Version 0.0.29
 
 **28.09.2023**
