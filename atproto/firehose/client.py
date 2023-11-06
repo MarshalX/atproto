@@ -27,7 +27,7 @@ from atproto.xrpc_client.models.common import XrpcError
 _BASE_WEBSOCKET_URI = 'wss://bsky.social/xrpc'
 _MAX_MESSAGE_SIZE_BYTES = 1024 * 1024 * 5  # 5MB
 
-OnMessageCallback = t.Callable[['MessageFrame'], t.Generator[t.Any, None, t.Any]]
+OnMessageCallback = t.Callable[['MessageFrame'], None]
 AsyncOnMessageCallback = t.Callable[['MessageFrame'], t.Coroutine[t.Any, t.Any, None]]
 
 OnCallbackErrorCallback = t.Callable[[BaseException], None]
