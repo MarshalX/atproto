@@ -48,4 +48,4 @@ class Response(base.ResponseModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    reason: t.Optional[str] = None  #: Reason.
+    reason: t.Optional[str] = Field(default=None, max_length=20000)  #: Reason.

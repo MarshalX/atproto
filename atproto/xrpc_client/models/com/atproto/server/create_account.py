@@ -11,7 +11,7 @@ import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
-    from atproto.xrpc_client.models.unknown_type import UnknownType
+    from atproto.xrpc_client.models.unknown_type import UnknownInputType, UnknownType
 from atproto.xrpc_client.models import base
 
 
@@ -19,22 +19,22 @@ class Data(base.DataModelBase):
 
     """Input data model for :obj:`com.atproto.server.createAccount`."""
 
-    email: str  #: Email.
     handle: str  #: Handle.
-    password: str  #: Password.
     did: t.Optional[str] = None  #: Did.
+    email: t.Optional[str] = None  #: Email.
     invite_code: t.Optional[str] = Field(default=None, alias='inviteCode')  #: Invite code.
-    plc_op: t.Optional[t.Union[str, bytes]] = Field(default=None, alias='plcOp')  #: Plc op.
+    password: t.Optional[str] = None  #: Password.
+    plc_op: t.Optional['UnknownInputType'] = Field(default=None, alias='plcOp')  #: Plc op.
     recovery_key: t.Optional[str] = Field(default=None, alias='recoveryKey')  #: Recovery key.
 
 
 class DataDict(te.TypedDict):
-    email: str  #: Email.
     handle: str  #: Handle.
-    password: str  #: Password.
     did: te.NotRequired[t.Optional[str]]  #: Did.
+    email: te.NotRequired[t.Optional[str]]  #: Email.
     invite_code: te.NotRequired[t.Optional[str]]  #: Invite code.
-    plc_op: te.NotRequired[t.Optional[t.Union[str, bytes]]]  #: Plc op.
+    password: te.NotRequired[t.Optional[str]]  #: Password.
+    plc_op: te.NotRequired[t.Optional['UnknownInputType']]  #: Plc op.
     recovery_key: te.NotRequired[t.Optional[str]]  #: Recovery key.
 
 

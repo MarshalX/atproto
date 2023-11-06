@@ -77,6 +77,9 @@ class ViewerState(base.ModelBase):
 
     blocked_by: t.Optional[bool] = Field(default=None, alias='blockedBy')  #: Blocked by.
     blocking: t.Optional[str] = None  #: Blocking.
+    blocking_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = Field(
+        default=None, alias='blockingByList'
+    )  #: Blocking by list.
     followed_by: t.Optional[str] = Field(default=None, alias='followedBy')  #: Followed by.
     following: t.Optional[str] = None  #: Following.
     muted: t.Optional[bool] = None  #: Muted.

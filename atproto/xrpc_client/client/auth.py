@@ -10,6 +10,7 @@ class JwtPayload:
     iat: int  # created at
     scope: str
     sub: str  # DID
+    aud: t.Optional[str] = None  # DID
     jti: t.Optional[str] = None  # in refresh token only
 
 

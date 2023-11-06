@@ -5,9 +5,23 @@
 ##################################################################
 
 
+import typing as t
+
+import typing_extensions as te
 from pydantic import Field
 
 from atproto.xrpc_client.models import base
+
+
+class Data(base.DataModelBase):
+
+    """Input data model for :obj:`com.atproto.server.reserveSigningKey`."""
+
+    did: t.Optional[str] = None  #: The did to reserve a new did:key for.
+
+
+class DataDict(te.TypedDict):
+    did: te.NotRequired[t.Optional[str]]  #: The did to reserve a new did:key for.
 
 
 class Response(base.ResponseModelBase):

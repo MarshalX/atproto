@@ -72,6 +72,7 @@ from atproto.xrpc_client.models.com.atproto.admin import defs as ComAtprotoAdmin
 from atproto.xrpc_client.models.com.atproto.admin import disable_account_invites as ComAtprotoAdminDisableAccountInvites
 from atproto.xrpc_client.models.com.atproto.admin import disable_invite_codes as ComAtprotoAdminDisableInviteCodes
 from atproto.xrpc_client.models.com.atproto.admin import enable_account_invites as ComAtprotoAdminEnableAccountInvites
+from atproto.xrpc_client.models.com.atproto.admin import get_account_info as ComAtprotoAdminGetAccountInfo
 from atproto.xrpc_client.models.com.atproto.admin import get_invite_codes as ComAtprotoAdminGetInviteCodes
 from atproto.xrpc_client.models.com.atproto.admin import get_moderation_action as ComAtprotoAdminGetModerationAction
 from atproto.xrpc_client.models.com.atproto.admin import get_moderation_actions as ComAtprotoAdminGetModerationActions
@@ -79,6 +80,7 @@ from atproto.xrpc_client.models.com.atproto.admin import get_moderation_report a
 from atproto.xrpc_client.models.com.atproto.admin import get_moderation_reports as ComAtprotoAdminGetModerationReports
 from atproto.xrpc_client.models.com.atproto.admin import get_record as ComAtprotoAdminGetRecord
 from atproto.xrpc_client.models.com.atproto.admin import get_repo as ComAtprotoAdminGetRepo
+from atproto.xrpc_client.models.com.atproto.admin import get_subject_status as ComAtprotoAdminGetSubjectStatus
 from atproto.xrpc_client.models.com.atproto.admin import (
     resolve_moderation_reports as ComAtprotoAdminResolveModerationReports,
 )
@@ -90,6 +92,7 @@ from atproto.xrpc_client.models.com.atproto.admin import send_email as ComAtprot
 from atproto.xrpc_client.models.com.atproto.admin import take_moderation_action as ComAtprotoAdminTakeModerationAction
 from atproto.xrpc_client.models.com.atproto.admin import update_account_email as ComAtprotoAdminUpdateAccountEmail
 from atproto.xrpc_client.models.com.atproto.admin import update_account_handle as ComAtprotoAdminUpdateAccountHandle
+from atproto.xrpc_client.models.com.atproto.admin import update_subject_status as ComAtprotoAdminUpdateSubjectStatus
 from atproto.xrpc_client.models.com.atproto.identity import resolve_handle as ComAtprotoIdentityResolveHandle
 from atproto.xrpc_client.models.com.atproto.identity import update_handle as ComAtprotoIdentityUpdateHandle
 from atproto.xrpc_client.models.com.atproto.label import defs as ComAtprotoLabelDefs
@@ -225,6 +228,7 @@ class _Ids:
     ComAtprotoAdminDisableAccountInvites: str = 'com.atproto.admin.disableAccountInvites'
     ComAtprotoAdminDisableInviteCodes: str = 'com.atproto.admin.disableInviteCodes'
     ComAtprotoAdminEnableAccountInvites: str = 'com.atproto.admin.enableAccountInvites'
+    ComAtprotoAdminGetAccountInfo: str = 'com.atproto.admin.getAccountInfo'
     ComAtprotoAdminGetInviteCodes: str = 'com.atproto.admin.getInviteCodes'
     ComAtprotoAdminGetModerationAction: str = 'com.atproto.admin.getModerationAction'
     ComAtprotoAdminGetModerationActions: str = 'com.atproto.admin.getModerationActions'
@@ -232,6 +236,7 @@ class _Ids:
     ComAtprotoAdminGetModerationReports: str = 'com.atproto.admin.getModerationReports'
     ComAtprotoAdminGetRecord: str = 'com.atproto.admin.getRecord'
     ComAtprotoAdminGetRepo: str = 'com.atproto.admin.getRepo'
+    ComAtprotoAdminGetSubjectStatus: str = 'com.atproto.admin.getSubjectStatus'
     ComAtprotoAdminResolveModerationReports: str = 'com.atproto.admin.resolveModerationReports'
     ComAtprotoAdminReverseModerationAction: str = 'com.atproto.admin.reverseModerationAction'
     ComAtprotoAdminSearchRepos: str = 'com.atproto.admin.searchRepos'
@@ -239,6 +244,7 @@ class _Ids:
     ComAtprotoAdminTakeModerationAction: str = 'com.atproto.admin.takeModerationAction'
     ComAtprotoAdminUpdateAccountEmail: str = 'com.atproto.admin.updateAccountEmail'
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'
+    ComAtprotoAdminUpdateSubjectStatus: str = 'com.atproto.admin.updateSubjectStatus'
     ComAtprotoIdentityResolveHandle: str = 'com.atproto.identity.resolveHandle'
     ComAtprotoIdentityUpdateHandle: str = 'com.atproto.identity.updateHandle'
     ComAtprotoLabelDefs: str = 'com.atproto.label.defs'
