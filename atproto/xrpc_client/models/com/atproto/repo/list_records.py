@@ -24,7 +24,7 @@ class Params(base.ParamsModelBase):
     repo: str  #: The handle or DID of the repo.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: The number of records to return.
-    reverse: t.Optional[bool] = None  #: Reverse the order of the returned records?
+    reverse: t.Optional[bool] = None  #: Flag to reverse the order of the returned records.
     rkey_end: t.Optional[str] = Field(
         default=None, alias='rkeyEnd'
     )  #: DEPRECATED: The highest sort-ordered rkey to stop at (exclusive).
@@ -38,7 +38,7 @@ class ParamsDict(te.TypedDict):
     repo: str  #: The handle or DID of the repo.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: The number of records to return.
-    reverse: te.NotRequired[t.Optional[bool]]  #: Reverse the order of the returned records?
+    reverse: te.NotRequired[t.Optional[bool]]  #: Flag to reverse the order of the returned records.
     rkey_end: te.NotRequired[t.Optional[str]]  #: DEPRECATED: The highest sort-ordered rkey to stop at (exclusive).
     rkey_start: te.NotRequired[t.Optional[str]]  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).
 

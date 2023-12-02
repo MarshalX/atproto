@@ -25,11 +25,11 @@ class Data(base.DataModelBase):
     rkey: str = Field(max_length=15)  #: The key of the record.
     swap_commit: t.Optional[str] = Field(
         default=None, alias='swapCommit'
-    )  #: Compare and swap with the previous commit by cid.
+    )  #: Compare and swap with the previous commit by CID.
     swap_record: t.Optional[str] = Field(
         default=None, alias='swapRecord'
-    )  #: Compare and swap with the previous record by cid.
-    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Validate the record?
+    )  #: Compare and swap with the previous record by CID.
+    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Flag for validating the record.
 
 
 class DataDict(te.TypedDict):
@@ -37,9 +37,9 @@ class DataDict(te.TypedDict):
     record: 'UnknownInputType'  #: The record to write.
     repo: str  #: The handle or DID of the repo.
     rkey: str  #: The key of the record.
-    swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by cid.
-    swap_record: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous record by cid.
-    validate: te.NotRequired[t.Optional[bool]]  #: Validate the record?
+    swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by CID.
+    swap_record: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous record by CID.
+    validate: te.NotRequired[t.Optional[bool]]  #: Flag for validating the record.
 
 
 class Response(base.ResponseModelBase):

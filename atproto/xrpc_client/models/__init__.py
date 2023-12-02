@@ -59,7 +59,6 @@ from atproto.xrpc_client.models.app.bsky.notification import list_notifications 
 from atproto.xrpc_client.models.app.bsky.notification import register_push as AppBskyNotificationRegisterPush
 from atproto.xrpc_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto.xrpc_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
-from atproto.xrpc_client.models.app.bsky.unspecced import apply_labels as AppBskyUnspeccedApplyLabels
 from atproto.xrpc_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
 from atproto.xrpc_client.models.app.bsky.unspecced import get_popular as AppBskyUnspeccedGetPopular
 from atproto.xrpc_client.models.app.bsky.unspecced import (
@@ -71,25 +70,20 @@ from atproto.xrpc_client.models.app.bsky.unspecced import search_posts_skeleton 
 from atproto.xrpc_client.models.com.atproto.admin import defs as ComAtprotoAdminDefs
 from atproto.xrpc_client.models.com.atproto.admin import disable_account_invites as ComAtprotoAdminDisableAccountInvites
 from atproto.xrpc_client.models.com.atproto.admin import disable_invite_codes as ComAtprotoAdminDisableInviteCodes
+from atproto.xrpc_client.models.com.atproto.admin import emit_moderation_event as ComAtprotoAdminEmitModerationEvent
 from atproto.xrpc_client.models.com.atproto.admin import enable_account_invites as ComAtprotoAdminEnableAccountInvites
 from atproto.xrpc_client.models.com.atproto.admin import get_account_info as ComAtprotoAdminGetAccountInfo
 from atproto.xrpc_client.models.com.atproto.admin import get_invite_codes as ComAtprotoAdminGetInviteCodes
-from atproto.xrpc_client.models.com.atproto.admin import get_moderation_action as ComAtprotoAdminGetModerationAction
-from atproto.xrpc_client.models.com.atproto.admin import get_moderation_actions as ComAtprotoAdminGetModerationActions
-from atproto.xrpc_client.models.com.atproto.admin import get_moderation_report as ComAtprotoAdminGetModerationReport
-from atproto.xrpc_client.models.com.atproto.admin import get_moderation_reports as ComAtprotoAdminGetModerationReports
+from atproto.xrpc_client.models.com.atproto.admin import get_moderation_event as ComAtprotoAdminGetModerationEvent
 from atproto.xrpc_client.models.com.atproto.admin import get_record as ComAtprotoAdminGetRecord
 from atproto.xrpc_client.models.com.atproto.admin import get_repo as ComAtprotoAdminGetRepo
 from atproto.xrpc_client.models.com.atproto.admin import get_subject_status as ComAtprotoAdminGetSubjectStatus
+from atproto.xrpc_client.models.com.atproto.admin import query_moderation_events as ComAtprotoAdminQueryModerationEvents
 from atproto.xrpc_client.models.com.atproto.admin import (
-    resolve_moderation_reports as ComAtprotoAdminResolveModerationReports,
-)
-from atproto.xrpc_client.models.com.atproto.admin import (
-    reverse_moderation_action as ComAtprotoAdminReverseModerationAction,
+    query_moderation_statuses as ComAtprotoAdminQueryModerationStatuses,
 )
 from atproto.xrpc_client.models.com.atproto.admin import search_repos as ComAtprotoAdminSearchRepos
 from atproto.xrpc_client.models.com.atproto.admin import send_email as ComAtprotoAdminSendEmail
-from atproto.xrpc_client.models.com.atproto.admin import take_moderation_action as ComAtprotoAdminTakeModerationAction
 from atproto.xrpc_client.models.com.atproto.admin import update_account_email as ComAtprotoAdminUpdateAccountEmail
 from atproto.xrpc_client.models.com.atproto.admin import update_account_handle as ComAtprotoAdminUpdateAccountHandle
 from atproto.xrpc_client.models.com.atproto.admin import update_subject_status as ComAtprotoAdminUpdateSubjectStatus
@@ -147,6 +141,7 @@ from atproto.xrpc_client.models.com.atproto.sync import list_repos as ComAtproto
 from atproto.xrpc_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
 from atproto.xrpc_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto.xrpc_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
+from atproto.xrpc_client.models.com.atproto.temp import fetch_labels as ComAtprotoTempFetchLabels
 from atproto.xrpc_client.models.models_loader import load_models
 from atproto.xrpc_client.models.utils import (
     create_strong_ref,
@@ -217,7 +212,6 @@ class _Ids:
     AppBskyNotificationRegisterPush: str = 'app.bsky.notification.registerPush'
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
-    AppBskyUnspeccedApplyLabels: str = 'app.bsky.unspecced.applyLabels'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetPopular: str = 'app.bsky.unspecced.getPopular'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
@@ -227,21 +221,18 @@ class _Ids:
     ComAtprotoAdminDefs: str = 'com.atproto.admin.defs'
     ComAtprotoAdminDisableAccountInvites: str = 'com.atproto.admin.disableAccountInvites'
     ComAtprotoAdminDisableInviteCodes: str = 'com.atproto.admin.disableInviteCodes'
+    ComAtprotoAdminEmitModerationEvent: str = 'com.atproto.admin.emitModerationEvent'
     ComAtprotoAdminEnableAccountInvites: str = 'com.atproto.admin.enableAccountInvites'
     ComAtprotoAdminGetAccountInfo: str = 'com.atproto.admin.getAccountInfo'
     ComAtprotoAdminGetInviteCodes: str = 'com.atproto.admin.getInviteCodes'
-    ComAtprotoAdminGetModerationAction: str = 'com.atproto.admin.getModerationAction'
-    ComAtprotoAdminGetModerationActions: str = 'com.atproto.admin.getModerationActions'
-    ComAtprotoAdminGetModerationReport: str = 'com.atproto.admin.getModerationReport'
-    ComAtprotoAdminGetModerationReports: str = 'com.atproto.admin.getModerationReports'
+    ComAtprotoAdminGetModerationEvent: str = 'com.atproto.admin.getModerationEvent'
     ComAtprotoAdminGetRecord: str = 'com.atproto.admin.getRecord'
     ComAtprotoAdminGetRepo: str = 'com.atproto.admin.getRepo'
     ComAtprotoAdminGetSubjectStatus: str = 'com.atproto.admin.getSubjectStatus'
-    ComAtprotoAdminResolveModerationReports: str = 'com.atproto.admin.resolveModerationReports'
-    ComAtprotoAdminReverseModerationAction: str = 'com.atproto.admin.reverseModerationAction'
+    ComAtprotoAdminQueryModerationEvents: str = 'com.atproto.admin.queryModerationEvents'
+    ComAtprotoAdminQueryModerationStatuses: str = 'com.atproto.admin.queryModerationStatuses'
     ComAtprotoAdminSearchRepos: str = 'com.atproto.admin.searchRepos'
     ComAtprotoAdminSendEmail: str = 'com.atproto.admin.sendEmail'
-    ComAtprotoAdminTakeModerationAction: str = 'com.atproto.admin.takeModerationAction'
     ComAtprotoAdminUpdateAccountEmail: str = 'com.atproto.admin.updateAccountEmail'
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'
     ComAtprotoAdminUpdateSubjectStatus: str = 'com.atproto.admin.updateSubjectStatus'
@@ -295,6 +286,7 @@ class _Ids:
     ComAtprotoSyncNotifyOfUpdate: str = 'com.atproto.sync.notifyOfUpdate'
     ComAtprotoSyncRequestCrawl: str = 'com.atproto.sync.requestCrawl'
     ComAtprotoSyncSubscribeRepos: str = 'com.atproto.sync.subscribeRepos'
+    ComAtprotoTempFetchLabels: str = 'com.atproto.temp.fetchLabels'
 
 
 ids = _Ids()

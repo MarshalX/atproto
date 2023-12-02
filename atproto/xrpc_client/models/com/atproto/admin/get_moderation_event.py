@@ -6,21 +6,16 @@
 
 
 import typing_extensions as te
-from pydantic import Field
 
 from atproto.xrpc_client.models import base
 
 
-class Data(base.DataModelBase):
+class Params(base.ParamsModelBase):
 
-    """Input data model for :obj:`com.atproto.admin.reverseModerationAction`."""
+    """Parameters model for :obj:`com.atproto.admin.getModerationEvent`."""
 
-    created_by: str = Field(alias='createdBy')  #: Created by.
     id: int  #: Id.
-    reason: str  #: Reason.
 
 
-class DataDict(te.TypedDict):
-    created_by: str  #: Created by.
+class ParamsDict(te.TypedDict):
     id: int  #: Id.
-    reason: str  #: Reason.

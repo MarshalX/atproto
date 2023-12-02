@@ -28,45 +28,60 @@ class StatusAttr(base.ModelBase):
     )
 
 
-class ActionView(base.ModelBase):
+class ModEventView(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    action: 'models.ComAtprotoAdminDefs.ActionType'  #: Action.
     created_at: str = Field(alias='createdAt')  #: Created at.
     created_by: str = Field(alias='createdBy')  #: Created by.
+    event: te.Annotated[
+        t.Union[
+            'models.ComAtprotoAdminDefs.ModEventTakedown',
+            'models.ComAtprotoAdminDefs.ModEventReverseTakedown',
+            'models.ComAtprotoAdminDefs.ModEventComment',
+            'models.ComAtprotoAdminDefs.ModEventReport',
+            'models.ComAtprotoAdminDefs.ModEventLabel',
+            'models.ComAtprotoAdminDefs.ModEventAcknowledge',
+            'models.ComAtprotoAdminDefs.ModEventEscalate',
+            'models.ComAtprotoAdminDefs.ModEventMute',
+            'models.ComAtprotoAdminDefs.ModEventEmail',
+        ],
+        Field(discriminator='py_type'),
+    ]  #: Event.
     id: int  #: Id.
-    reason: str  #: Reason.
-    resolved_report_ids: t.List[int] = Field(alias='resolvedReportIds')  #: Resolved report ids.
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
     subject_blob_cids: t.List[str] = Field(alias='subjectBlobCids')  #: Subject blob cids.
-    create_label_vals: t.Optional[t.List[str]] = Field(default=None, alias='createLabelVals')  #: Create label vals.
-    duration_in_hours: t.Optional[int] = Field(
-        default=None, alias='durationInHours'
-    )  #: Indicates how long this action was meant to be in effect before automatically expiring.
-    negate_label_vals: t.Optional[t.List[str]] = Field(default=None, alias='negateLabelVals')  #: Negate label vals.
-    reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None  #: Reversal.
+    creator_handle: t.Optional[str] = Field(default=None, alias='creatorHandle')  #: Creator handle.
+    subject_handle: t.Optional[str] = Field(default=None, alias='subjectHandle')  #: Subject handle.
 
-    py_type: te.Literal['com.atproto.admin.defs#actionView'] = Field(
-        default='com.atproto.admin.defs#actionView', alias='$type', frozen=True
+    py_type: te.Literal['com.atproto.admin.defs#modEventView'] = Field(
+        default='com.atproto.admin.defs#modEventView', alias='$type', frozen=True
     )
 
 
-class ActionViewDetail(base.ModelBase):
+class ModEventViewDetail(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    action: 'models.ComAtprotoAdminDefs.ActionType'  #: Action.
     created_at: str = Field(alias='createdAt')  #: Created at.
     created_by: str = Field(alias='createdBy')  #: Created by.
+    event: te.Annotated[
+        t.Union[
+            'models.ComAtprotoAdminDefs.ModEventTakedown',
+            'models.ComAtprotoAdminDefs.ModEventReverseTakedown',
+            'models.ComAtprotoAdminDefs.ModEventComment',
+            'models.ComAtprotoAdminDefs.ModEventReport',
+            'models.ComAtprotoAdminDefs.ModEventLabel',
+            'models.ComAtprotoAdminDefs.ModEventAcknowledge',
+            'models.ComAtprotoAdminDefs.ModEventEscalate',
+            'models.ComAtprotoAdminDefs.ModEventMute',
+        ],
+        Field(discriminator='py_type'),
+    ]  #: Event.
     id: int  #: Id.
-    reason: str  #: Reason.
-    resolved_reports: t.List['models.ComAtprotoAdminDefs.ReportView'] = Field(
-        alias='resolvedReports'
-    )  #: Resolved reports.
     subject: te.Annotated[
         t.Union[
             'models.ComAtprotoAdminDefs.RepoView',
@@ -77,68 +92,10 @@ class ActionViewDetail(base.ModelBase):
         Field(discriminator='py_type'),
     ]  #: Subject.
     subject_blobs: t.List['models.ComAtprotoAdminDefs.BlobView'] = Field(alias='subjectBlobs')  #: Subject blobs.
-    create_label_vals: t.Optional[t.List[str]] = Field(default=None, alias='createLabelVals')  #: Create label vals.
-    duration_in_hours: t.Optional[int] = Field(
-        default=None, alias='durationInHours'
-    )  #: Indicates how long this action was meant to be in effect before automatically expiring.
-    negate_label_vals: t.Optional[t.List[str]] = Field(default=None, alias='negateLabelVals')  #: Negate label vals.
-    reversal: t.Optional['models.ComAtprotoAdminDefs.ActionReversal'] = None  #: Reversal.
 
-    py_type: te.Literal['com.atproto.admin.defs#actionViewDetail'] = Field(
-        default='com.atproto.admin.defs#actionViewDetail', alias='$type', frozen=True
+    py_type: te.Literal['com.atproto.admin.defs#modEventViewDetail'] = Field(
+        default='com.atproto.admin.defs#modEventViewDetail', alias='$type', frozen=True
     )
-
-
-class ActionViewCurrent(base.ModelBase):
-
-    """Definition model for :obj:`com.atproto.admin.defs`."""
-
-    action: 'models.ComAtprotoAdminDefs.ActionType'  #: Action.
-    id: int  #: Id.
-    duration_in_hours: t.Optional[int] = Field(
-        default=None, alias='durationInHours'
-    )  #: Indicates how long this action was meant to be in effect before automatically expiring.
-
-    py_type: te.Literal['com.atproto.admin.defs#actionViewCurrent'] = Field(
-        default='com.atproto.admin.defs#actionViewCurrent', alias='$type', frozen=True
-    )
-
-
-class ActionReversal(base.ModelBase):
-
-    """Definition model for :obj:`com.atproto.admin.defs`."""
-
-    created_at: str = Field(alias='createdAt')  #: Created at.
-    created_by: str = Field(alias='createdBy')  #: Created by.
-    reason: str  #: Reason.
-
-    py_type: te.Literal['com.atproto.admin.defs#actionReversal'] = Field(
-        default='com.atproto.admin.defs#actionReversal', alias='$type', frozen=True
-    )
-
-
-ActionType = t.Union[
-    'models.ComAtprotoAdminDefs.Takedown',
-    'models.ComAtprotoAdminDefs.Flag',
-    'models.ComAtprotoAdminDefs.Acknowledge',
-    'models.ComAtprotoAdminDefs.Escalate',
-]  #: Action type
-
-Takedown = te.Literal[
-    'com.atproto.admin.defs#takedown'
-]  #: Moderation action type: Takedown. Indicates that content should not be served by the PDS.
-
-Flag = te.Literal[
-    'com.atproto.admin.defs#flag'
-]  #: Moderation action type: Flag. Indicates that the content was reviewed and considered to violate PDS rules, but may still be served.
-
-Acknowledge = te.Literal[
-    'com.atproto.admin.defs#acknowledge'
-]  #: Moderation action type: Acknowledge. Indicates that the content was reviewed and not considered to violate PDS rules.
-
-Escalate = te.Literal[
-    'com.atproto.admin.defs#escalate'
-]  #: Moderation action type: Escalate. Indicates that the content has been flagged for additional review.
 
 
 class ReportView(base.ModelBase):
@@ -154,11 +111,42 @@ class ReportView(base.ModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    reason: t.Optional[str] = None  #: Reason.
+    comment: t.Optional[str] = None  #: Comment.
     subject_repo_handle: t.Optional[str] = Field(default=None, alias='subjectRepoHandle')  #: Subject repo handle.
 
     py_type: te.Literal['com.atproto.admin.defs#reportView'] = Field(
         default='com.atproto.admin.defs#reportView', alias='$type', frozen=True
+    )
+
+
+class SubjectStatusView(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`."""
+
+    created_at: str = Field(
+        alias='createdAt'
+    )  #: Timestamp referencing the first moderation status impacting event was emitted on the subject.
+    id: int  #: Id.
+    review_state: 'models.ComAtprotoAdminDefs.SubjectReviewState' = Field(alias='reviewState')  #: Review state.
+    subject: te.Annotated[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        Field(discriminator='py_type'),
+    ]  #: Subject.
+    updated_at: str = Field(
+        alias='updatedAt'
+    )  #: Timestamp referencing when the last update was made to the moderation status of the subject.
+    comment: t.Optional[str] = None  #: Sticky comment on the subject.
+    last_reported_at: t.Optional[str] = Field(default=None, alias='lastReportedAt')  #: Last reported at.
+    last_reviewed_at: t.Optional[str] = Field(default=None, alias='lastReviewedAt')  #: Last reviewed at.
+    last_reviewed_by: t.Optional[str] = Field(default=None, alias='lastReviewedBy')  #: Last reviewed by.
+    mute_until: t.Optional[str] = Field(default=None, alias='muteUntil')  #: Mute until.
+    subject_blob_cids: t.Optional[t.List[str]] = Field(default=None, alias='subjectBlobCids')  #: Subject blob cids.
+    subject_repo_handle: t.Optional[str] = Field(default=None, alias='subjectRepoHandle')  #: Subject repo handle.
+    suspend_until: t.Optional[str] = Field(default=None, alias='suspendUntil')  #: Suspend until.
+    takendown: t.Optional[bool] = None  #: Takendown.
+
+    py_type: te.Literal['com.atproto.admin.defs#subjectStatusView'] = Field(
+        default='com.atproto.admin.defs#subjectStatusView', alias='$type', frozen=True
     )
 
 
@@ -170,7 +158,7 @@ class ReportViewDetail(base.ModelBase):
     id: int  #: Id.
     reason_type: 'models.ComAtprotoModerationDefs.ReasonType' = Field(alias='reasonType')  #: Reason type.
     reported_by: str = Field(alias='reportedBy')  #: Reported by.
-    resolved_by_actions: t.List['models.ComAtprotoAdminDefs.ActionView'] = Field(
+    resolved_by_actions: t.List['models.ComAtprotoAdminDefs.ModEventView'] = Field(
         alias='resolvedByActions'
     )  #: Resolved by actions.
     subject: te.Annotated[
@@ -182,7 +170,10 @@ class ReportViewDetail(base.ModelBase):
         ],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    reason: t.Optional[str] = None  #: Reason.
+    comment: t.Optional[str] = None  #: Comment.
+    subject_status: t.Optional['models.ComAtprotoAdminDefs.SubjectStatusView'] = Field(
+        default=None, alias='subjectStatus'
+    )  #: Subject status.
 
     py_type: te.Literal['com.atproto.admin.defs#reportViewDetail'] = Field(
         default='com.atproto.admin.defs#reportViewDetail', alias='$type', frozen=True
@@ -220,6 +211,7 @@ class RepoViewDetail(base.ModelBase):
     moderation: 'models.ComAtprotoAdminDefs.ModerationDetail'  #: Moderation.
     related_records: t.List['UnknownType'] = Field(alias='relatedRecords')  #: Related records.
     email: t.Optional[str] = None  #: Email.
+    email_confirmed_at: t.Optional[str] = Field(default=None, alias='emailConfirmedAt')  #: Email confirmed at.
     invite_note: t.Optional[str] = Field(default=None, alias='inviteNote')  #: Invite note.
     invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = Field(
         default=None, alias='invitedBy'
@@ -241,6 +233,7 @@ class AccountView(base.ModelBase):
     handle: str  #: Handle.
     indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
     email: t.Optional[str] = None  #: Email.
+    email_confirmed_at: t.Optional[str] = Field(default=None, alias='emailConfirmedAt')  #: Email confirmed at.
     invite_note: t.Optional[str] = Field(default=None, alias='inviteNote')  #: Invite note.
     invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = Field(
         default=None, alias='invitedBy'
@@ -338,9 +331,9 @@ class Moderation(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    current_action: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = Field(
-        default=None, alias='currentAction'
-    )  #: Current action.
+    subject_status: t.Optional['models.ComAtprotoAdminDefs.SubjectStatusView'] = Field(
+        default=None, alias='subjectStatus'
+    )  #: Subject status.
 
     py_type: te.Literal['com.atproto.admin.defs#moderation'] = Field(
         default='com.atproto.admin.defs#moderation', alias='$type', frozen=True
@@ -351,11 +344,9 @@ class ModerationDetail(base.ModelBase):
 
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    actions: t.List['models.ComAtprotoAdminDefs.ActionView']  #: Actions.
-    reports: t.List['models.ComAtprotoAdminDefs.ReportView']  #: Reports.
-    current_action: t.Optional['models.ComAtprotoAdminDefs.ActionViewCurrent'] = Field(
-        default=None, alias='currentAction'
-    )  #: Current action.
+    subject_status: t.Optional['models.ComAtprotoAdminDefs.SubjectStatusView'] = Field(
+        default=None, alias='subjectStatus'
+    )  #: Subject status.
 
     py_type: te.Literal['com.atproto.admin.defs#moderationDetail'] = Field(
         default='com.atproto.admin.defs#moderationDetail', alias='$type', frozen=True
@@ -405,4 +396,141 @@ class VideoDetails(base.ModelBase):
 
     py_type: te.Literal['com.atproto.admin.defs#videoDetails'] = Field(
         default='com.atproto.admin.defs#videoDetails', alias='$type', frozen=True
+    )
+
+
+SubjectReviewState = t.Union[
+    'models.ComAtprotoAdminDefs.ReviewOpen',
+    'models.ComAtprotoAdminDefs.ReviewEscalated',
+    'models.ComAtprotoAdminDefs.ReviewClosed',
+]  #: Subject review state
+
+ReviewOpen = te.Literal[
+    'com.atproto.admin.defs#reviewOpen'
+]  #: Moderator review status of a subject: Open. Indicates that the subject needs to be reviewed by a moderator
+
+ReviewEscalated = te.Literal[
+    'com.atproto.admin.defs#reviewEscalated'
+]  #: Moderator review status of a subject: Escalated. Indicates that the subject was escalated for review by a moderator
+
+ReviewClosed = te.Literal[
+    'com.atproto.admin.defs#reviewClosed'
+]  #: Moderator review status of a subject: Closed. Indicates that the subject was already reviewed and resolved by a moderator
+
+
+class ModEventTakedown(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`. Take down a subject permanently or temporarily"""
+
+    comment: t.Optional[str] = None  #: Comment.
+    duration_in_hours: t.Optional[int] = Field(
+        default=None, alias='durationInHours'
+    )  #: Indicates how long the takedown should be in effect before automatically expiring.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventTakedown'] = Field(
+        default='com.atproto.admin.defs#modEventTakedown', alias='$type', frozen=True
+    )
+
+
+class ModEventReverseTakedown(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`. Revert take down action on a subject"""
+
+    comment: t.Optional[str] = None  #: Describe reasoning behind the reversal.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventReverseTakedown'] = Field(
+        default='com.atproto.admin.defs#modEventReverseTakedown', alias='$type', frozen=True
+    )
+
+
+class ModEventComment(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`. Add a comment to a subject"""
+
+    comment: str  #: Comment.
+    sticky: t.Optional[bool] = None  #: Make the comment persistent on the subject.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventComment'] = Field(
+        default='com.atproto.admin.defs#modEventComment', alias='$type', frozen=True
+    )
+
+
+class ModEventReport(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`. Report a subject"""
+
+    report_type: 'models.ComAtprotoModerationDefs.ReasonType' = Field(alias='reportType')  #: Report type.
+    comment: t.Optional[str] = None  #: Comment.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventReport'] = Field(
+        default='com.atproto.admin.defs#modEventReport', alias='$type', frozen=True
+    )
+
+
+class ModEventLabel(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`. Apply/Negate labels on a subject"""
+
+    create_label_vals: t.List[str] = Field(alias='createLabelVals')  #: Create label vals.
+    negate_label_vals: t.List[str] = Field(alias='negateLabelVals')  #: Negate label vals.
+    comment: t.Optional[str] = None  #: Comment.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventLabel'] = Field(
+        default='com.atproto.admin.defs#modEventLabel', alias='$type', frozen=True
+    )
+
+
+class ModEventAcknowledge(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`."""
+
+    comment: t.Optional[str] = None  #: Comment.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventAcknowledge'] = Field(
+        default='com.atproto.admin.defs#modEventAcknowledge', alias='$type', frozen=True
+    )
+
+
+class ModEventEscalate(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`."""
+
+    comment: t.Optional[str] = None  #: Comment.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventEscalate'] = Field(
+        default='com.atproto.admin.defs#modEventEscalate', alias='$type', frozen=True
+    )
+
+
+class ModEventMute(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`. Mute incoming reports on a subject"""
+
+    duration_in_hours: int = Field(alias='durationInHours')  #: Indicates how long the subject should remain muted.
+    comment: t.Optional[str] = None  #: Comment.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventMute'] = Field(
+        default='com.atproto.admin.defs#modEventMute', alias='$type', frozen=True
+    )
+
+
+class ModEventUnmute(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`. Unmute action on a subject"""
+
+    comment: t.Optional[str] = None  #: Describe reasoning behind the reversal.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventUnmute'] = Field(
+        default='com.atproto.admin.defs#modEventUnmute', alias='$type', frozen=True
+    )
+
+
+class ModEventEmail(base.ModelBase):
+
+    """Definition model for :obj:`com.atproto.admin.defs`. Keep a log of outgoing email to a user"""
+
+    subject_line: str = Field(alias='subjectLine')  #: The subject line of the email sent to the user.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventEmail'] = Field(
+        default='com.atproto.admin.defs#modEventEmail', alias='$type', frozen=True
     )

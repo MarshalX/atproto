@@ -32,7 +32,7 @@ class Data(base.DataModelBase):
         ]
     ]  #: Writes.
     swap_commit: t.Optional[str] = Field(default=None, alias='swapCommit')  #: Swap commit.
-    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Validate the records?
+    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Flag for validating the records.
 
 
 class DataDict(te.TypedDict):
@@ -48,7 +48,7 @@ class DataDict(te.TypedDict):
         ]
     ]  #: Writes.
     swap_commit: te.NotRequired[t.Optional[str]]  #: Swap commit.
-    validate: te.NotRequired[t.Optional[bool]]  #: Validate the records?
+    validate: te.NotRequired[t.Optional[bool]]  #: Flag for validating the records.
 
 
 class Create(base.ModelBase):

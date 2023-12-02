@@ -17,22 +17,19 @@ from atproto.xrpc_client.models import base
 
 class Params(base.ParamsModelBase):
 
-    """Parameters model for :obj:`com.atproto.admin.getModerationActions`."""
+    """Parameters model for :obj:`com.atproto.temp.fetchLabels`."""
 
-    cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
-    subject: t.Optional[str] = None  #: Subject.
+    limit: t.Optional[int] = Field(default=50, ge=1, le=250)  #: Limit.
+    since: t.Optional[int] = None  #: Since.
 
 
 class ParamsDict(te.TypedDict):
-    cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
-    subject: te.NotRequired[t.Optional[str]]  #: Subject.
+    since: te.NotRequired[t.Optional[int]]  #: Since.
 
 
 class Response(base.ResponseModelBase):
 
-    """Output data model for :obj:`com.atproto.admin.getModerationActions`."""
+    """Output data model for :obj:`com.atproto.temp.fetchLabels`."""
 
-    actions: t.List['models.ComAtprotoAdminDefs.ActionView']  #: Actions.
-    cursor: t.Optional[str] = None  #: Cursor.
+    labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.

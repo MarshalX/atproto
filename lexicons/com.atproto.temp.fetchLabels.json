@@ -1,36 +1,31 @@
 {
   "lexicon": 1,
-  "id": "com.atproto.admin.getModerationActions",
+  "id": "com.atproto.temp.fetchLabels",
   "defs": {
     "main": {
       "type": "query",
-      "description": "List moderation actions related to a subject.",
+      "description": "Fetch all labels from a labeler created after a certain date.",
       "parameters": {
         "type": "params",
         "properties": {
-          "subject": { "type": "string" },
+          "since": { "type": "integer" },
           "limit": {
             "type": "integer",
             "minimum": 1,
-            "maximum": 100,
+            "maximum": 250,
             "default": 50
-          },
-          "cursor": { "type": "string" }
+          }
         }
       },
       "output": {
         "encoding": "application/json",
         "schema": {
           "type": "object",
-          "required": ["actions"],
+          "required": ["labels"],
           "properties": {
-            "cursor": { "type": "string" },
-            "actions": {
+            "labels": {
               "type": "array",
-              "items": {
-                "type": "ref",
-                "ref": "com.atproto.admin.defs#actionView"
-              }
+              "items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
             }
           }
         }

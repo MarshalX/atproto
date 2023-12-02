@@ -19,18 +19,18 @@ class Params(base.ParamsModelBase):
 
     """Parameters model for :obj:`app.bsky.unspecced.searchPostsSkeleton`."""
 
-    q: str  #: search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
+    q: str  #: Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
     cursor: t.Optional[
         str
-    ] = None  #: optional pagination mechanism; may not necessarily allow scrolling through entire result set.
+    ] = None  #: Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
     limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
 
 
 class ParamsDict(te.TypedDict):
-    q: str  #: search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
+    q: str  #: Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
     cursor: te.NotRequired[
         t.Optional[str]
-    ]  #: optional pagination mechanism; may not necessarily allow scrolling through entire result set.
+    ]  #: Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 
 
@@ -42,4 +42,4 @@ class Response(base.ResponseModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     hits_total: t.Optional[int] = Field(
         default=None, alias='hitsTotal'
-    )  #: count of search hits. optional, may be rounded/truncated, and may not be possible to paginate through all hits.
+    )  #: Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits.
