@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.0.31
+
+**02.12.2023**
+
+* Migrate firehose to new relay URI by @MarshalX in https://github.com/MarshalX/atproto/pull/190
+* Update lexicons fetched from 8d9b1f7 committed 2023-12-01T20:28:54Z by @MarshalX in https://github.com/MarshalX/atproto/pull/189
+* Update changelog for v0.0.30 by @MarshalX in https://github.com/MarshalX/atproto/pull/184
+
 ## Version 0.0.30
 
 **06.11.2023**
