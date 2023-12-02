@@ -23,7 +23,7 @@ class Params(base.ParamsModelBase):
     limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
     q: t.Optional[
         str
-    ] = None  #: search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
+    ] = None  #: Search query string. Syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
     term: t.Optional[str] = None  #: DEPRECATED: use 'q' instead.
 
 
@@ -32,7 +32,7 @@ class ParamsDict(te.TypedDict):
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     q: te.NotRequired[
         t.Optional[str]
-    ]  #: search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
+    ]  #: Search query string. Syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
     term: te.NotRequired[t.Optional[str]]  #: DEPRECATED: use 'q' instead.
 
 

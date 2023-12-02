@@ -53,6 +53,7 @@ class ViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     like: t.Optional[str] = None  #: Like.
+    reply_disabled: t.Optional[bool] = Field(default=None, alias='replyDisabled')  #: Reply disabled.
     repost: t.Optional[str] = None  #: Repost.
 
     py_type: te.Literal['app.bsky.feed.defs#viewerState'] = Field(
@@ -140,7 +141,6 @@ class ThreadViewPost(base.ModelBase):
             ]
         ]
     ] = None  #: Replies.
-    viewer: t.Optional['models.AppBskyFeedDefs.ViewerThreadState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.feed.defs#threadViewPost'] = Field(
         default='app.bsky.feed.defs#threadViewPost', alias='$type', frozen=True
@@ -181,17 +181,6 @@ class BlockedAuthor(base.ModelBase):
 
     py_type: te.Literal['app.bsky.feed.defs#blockedAuthor'] = Field(
         default='app.bsky.feed.defs#blockedAuthor', alias='$type', frozen=True
-    )
-
-
-class ViewerThreadState(base.ModelBase):
-
-    """Definition model for :obj:`app.bsky.feed.defs`."""
-
-    can_reply: t.Optional[bool] = Field(default=None, alias='canReply')  #: Can reply.
-
-    py_type: te.Literal['app.bsky.feed.defs#viewerThreadState'] = Field(
-        default='app.bsky.feed.defs#viewerThreadState', alias='$type', frozen=True
     )
 
 

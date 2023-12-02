@@ -11,9 +11,19 @@ def test_did_doc_deserialization():
 
     assert isinstance(model, models.ComAtprotoRepoDescribeRepo.Response)
 
-    context = ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1-2019/v1']
-    service = [{'id': '#atproto_pds', 'type': 'AtprotoPersonalDataServer', 'serviceEndpoint': 'https://bsky.social'}]
-    verification_method_id = '#atproto'
+    context = [
+        'https://www.w3.org/ns/did/v1',
+        'https://w3id.org/security/multikey/v1',
+        'https://w3id.org/security/suites/secp256k1-2019/v1',
+    ]
+    service = [
+        {
+            'id': '#atproto_pds',
+            'type': 'AtprotoPersonalDataServer',
+            'serviceEndpoint': 'https://shimeji.us-east.host.bsky.network',
+        }
+    ]
+    verification_method_id = 'did:plc:kvwvcn5iqfooopmyzvb4qzba#atproto'
 
     assert isinstance(model.did_doc, DotDict)
     assert model.did_doc['@context'] == context

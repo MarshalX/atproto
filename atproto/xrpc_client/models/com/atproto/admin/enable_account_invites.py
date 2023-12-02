@@ -17,9 +17,9 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.enableAccountInvites`."""
 
     account: str  #: Account.
-    note: t.Optional[str] = None  #: Additionally add a note describing why the invites were enabled.
+    note: t.Optional[str] = None  #: Optional reason for enabled invites.
 
 
 class DataDict(te.TypedDict):
     account: str  #: Account.
-    note: te.NotRequired[t.Optional[str]]  #: Additionally add a note describing why the invites were enabled.
+    note: te.NotRequired[t.Optional[str]]  #: Optional reason for enabled invites.

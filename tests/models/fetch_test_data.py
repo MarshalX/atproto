@@ -131,7 +131,7 @@ def main() -> None:
             params={'collection': 'app.bsky.feed.like', 'repo': 'test.marshal.dev', 'rkey': '3k5u5ammyg72r'},
         ),
         Call(
-            name='did_doc', method='com.atproto.repo.describe_repo', params={'repo': 'did:plc:ze3uieyyns7prike7itbdjiy'}
+            name='did_doc', method='com.atproto.repo.describe_repo', params={'repo': 'did:plc:kvwvcn5iqfooopmyzvb4qzba'}
         ),
         Call(
             name='thread_view_post_with_embed_media',

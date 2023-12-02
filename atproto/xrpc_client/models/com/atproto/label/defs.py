@@ -17,16 +17,16 @@ from atproto.xrpc_client.models import base
 
 class Label(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto resource (eg, repo or record)"""
+    """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto resource (eg, repo or record)."""
 
-    cts: str  #: timestamp when this label was created.
+    cts: str  #: Timestamp when this label was created.
     src: str  #: DID of the actor who created this label.
-    uri: str  #: AT URI of the record, repository (account), or other resource which this label applies to.
-    val: str = Field(max_length=128)  #: the short string name of the value or type of this label.
+    uri: str  #: AT URI of the record, repository (account), or other resource that this label applies to.
+    val: str = Field(max_length=128)  #: The short string name of the value or type of this label.
     cid: t.Optional[
         str
-    ] = None  #: optionally, CID specifying the specific version of 'uri' resource this label applies to.
-    neg: t.Optional[bool] = None  #: if true, this is a negation label, overwriting a previous label.
+    ] = None  #: Optionally, CID specifying the specific version of 'uri' resource this label applies to.
+    neg: t.Optional[bool] = None  #: If true, this is a negation label, overwriting a previous label.
 
     py_type: te.Literal['com.atproto.label.defs#label'] = Field(
         default='com.atproto.label.defs#label', alias='$type', frozen=True
@@ -46,9 +46,9 @@ class SelfLabels(base.ModelBase):
 
 class SelfLabel(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto record, published by the author within the record. Note -- schemas should use #selfLabels, not #selfLabel."""
+    """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto record, published by the author within the record. Note that schemas should use #selfLabels, not #selfLabel."""
 
-    val: str = Field(max_length=128)  #: the short string name of the value or type of this label.
+    val: str = Field(max_length=128)  #: The short string name of the value or type of this label.
 
     py_type: te.Literal['com.atproto.label.defs#selfLabel'] = Field(
         default='com.atproto.label.defs#selfLabel', alias='$type', frozen=True

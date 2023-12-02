@@ -104,7 +104,7 @@ class Info(base.ModelBase):
 
 class RepoOp(base.ModelBase):
 
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. A repo operation, ie a write of a single record. For creates and updates, cid is the record's CID as of this operation. For deletes, it's null."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. A repo operation, ie a write of a single record. For creates and updates, CID is the record's CID as of this operation. For deletes, it's null."""
 
     action: str  #: Action.
     path: str  #: Path.

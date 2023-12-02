@@ -20,13 +20,13 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.actor.searchActorsTypeahead`."""
 
     limit: t.Optional[int] = Field(default=10, ge=1, le=100)  #: Limit.
-    q: t.Optional[str] = None  #: search query prefix; not a full query string.
+    q: t.Optional[str] = None  #: Search query prefix; not a full query string.
     term: t.Optional[str] = None  #: DEPRECATED: use 'q' instead.
 
 
 class ParamsDict(te.TypedDict):
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
-    q: te.NotRequired[t.Optional[str]]  #: search query prefix; not a full query string.
+    q: te.NotRequired[t.Optional[str]]  #: Search query prefix; not a full query string.
     term: te.NotRequired[t.Optional[str]]  #: DEPRECATED: use 'q' instead.
 
 

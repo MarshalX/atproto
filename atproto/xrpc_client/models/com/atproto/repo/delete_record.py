@@ -22,15 +22,15 @@ class Data(base.DataModelBase):
     rkey: str  #: The key of the record.
     swap_commit: t.Optional[str] = Field(
         default=None, alias='swapCommit'
-    )  #: Compare and swap with the previous commit by cid.
+    )  #: Compare and swap with the previous commit by CID.
     swap_record: t.Optional[str] = Field(
         default=None, alias='swapRecord'
-    )  #: Compare and swap with the previous record by cid.
+    )  #: Compare and swap with the previous record by CID.
 
 
 class DataDict(te.TypedDict):
     collection: str  #: The NSID of the record collection.
     repo: str  #: The handle or DID of the repo.
     rkey: str  #: The key of the record.
-    swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by cid.
-    swap_record: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous record by cid.
+    swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by CID.
+    swap_record: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous record by CID.

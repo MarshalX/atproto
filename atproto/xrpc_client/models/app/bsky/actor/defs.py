@@ -146,7 +146,7 @@ class PersonalDetailsPref(base.ModelBase):
 
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    birth_date: t.Optional[str] = Field(default=None, alias='birthDate')  #: The birth date of the owner of the account.
+    birth_date: t.Optional[str] = Field(default=None, alias='birthDate')  #: The birth date of account owner.
 
     py_type: te.Literal['app.bsky.actor.defs#personalDetailsPref'] = Field(
         default='app.bsky.actor.defs#personalDetailsPref', alias='$type', frozen=True
@@ -180,7 +180,7 @@ class ThreadViewPref(base.ModelBase):
     prioritize_followed_users: t.Optional[bool] = Field(
         default=None, alias='prioritizeFollowedUsers'
     )  #: Show followed users at the top of all replies.
-    sort: t.Optional[str] = None  #: Sorting mode.
+    sort: t.Optional[str] = None  #: Sorting mode for threads.
 
     py_type: te.Literal['app.bsky.actor.defs#threadViewPref'] = Field(
         default='app.bsky.actor.defs#threadViewPref', alias='$type', frozen=True

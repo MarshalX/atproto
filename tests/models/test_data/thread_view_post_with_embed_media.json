@@ -8,7 +8,7 @@
                 "did": "did:plc:kvwvcn5iqfooopmyzvb4qzba",
                 "handle": "test.marshal.dev",
                 "displayName": "I love Python 3",
-                "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
+                "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
                 "viewer": {
                     "muted": false,
                     "blockedBy": false
@@ -60,7 +60,7 @@
                             "did": "did:plc:kvwvcn5iqfooopmyzvb4qzba",
                             "handle": "test.marshal.dev",
                             "displayName": "I love Python 3",
-                            "avatar": "https://av-cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
+                            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
                             "viewer": {
                                 "muted": false,
                                 "blockedBy": false
@@ -84,8 +84,8 @@
                     "$type": "app.bsky.embed.images#view",
                     "images": [
                         {
-                            "thumb": "https://av-cdn.bsky.app/img/feed_thumbnail/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreic3cp5ky525vsukjvrzxsc2h3jka2gud74l2hgeatw2rhj2qycnmq@jpeg",
-                            "fullsize": "https://av-cdn.bsky.app/img/feed_fullsize/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreic3cp5ky525vsukjvrzxsc2h3jka2gud74l2hgeatw2rhj2qycnmq@jpeg",
+                            "thumb": "https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreic3cp5ky525vsukjvrzxsc2h3jka2gud74l2hgeatw2rhj2qycnmq@jpeg",
+                            "fullsize": "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreic3cp5ky525vsukjvrzxsc2h3jka2gud74l2hgeatw2rhj2qycnmq@jpeg",
                             "alt": ""
                         }
                     ]
@@ -98,9 +98,6 @@
             "viewer": {},
             "labels": []
         },
-        "replies": [],
-        "viewer": {
-            "canReply": true
-        }
+        "replies": []
     }
 }

@@ -19,12 +19,14 @@ class Data(base.DataModelBase):
 
     content: str  #: Content.
     recipient_did: str = Field(alias='recipientDid')  #: Recipient did.
+    sender_did: str = Field(alias='senderDid')  #: Sender did.
     subject: t.Optional[str] = None  #: Subject.
 
 
 class DataDict(te.TypedDict):
     content: str  #: Content.
     recipient_did: str  #: Recipient did.
+    sender_did: str  #: Sender did.
     subject: te.NotRequired[t.Optional[str]]  #: Subject.
 
 

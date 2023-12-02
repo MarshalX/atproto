@@ -59,6 +59,7 @@ class ListItemView(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
     subject: 'models.AppBskyActorDefs.ProfileView'  #: Subject.
+    uri: str  #: Uri.
 
     py_type: te.Literal['app.bsky.graph.defs#listItemView'] = Field(
         default='app.bsky.graph.defs#listItemView', alias='$type', frozen=True
@@ -69,11 +70,11 @@ ListPurpose = t.Union['models.AppBskyGraphDefs.Modlist', 'models.AppBskyGraphDef
 
 Modlist = te.Literal[
     'app.bsky.graph.defs#modlist'
-]  #: A list of actors to apply an aggregate moderation action (mute/block) on
+]  #: A list of actors to apply an aggregate moderation action (mute/block) on.
 
 Curatelist = te.Literal[
     'app.bsky.graph.defs#curatelist'
-]  #: A list of actors used for curation purposes such as list feeds or interaction gating
+]  #: A list of actors used for curation purposes such as list feeds or interaction gating.
 
 
 class ListViewerState(base.ModelBase):
