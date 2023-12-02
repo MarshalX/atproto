@@ -24,7 +24,7 @@ from atproto.xrpc_client.models import get_model_as_dict
 from atproto.xrpc_client.models.base import ParamsModelBase
 from atproto.xrpc_client.models.common import XrpcError
 
-_BASE_WEBSOCKET_URI = 'wss://bsky.social/xrpc'
+_BASE_WEBSOCKET_URI = 'wss://bsky.network/xrpc'
 _MAX_MESSAGE_SIZE_BYTES = 1024 * 1024 * 5  # 5MB
 
 OnMessageCallback = t.Callable[['MessageFrame'], None]
