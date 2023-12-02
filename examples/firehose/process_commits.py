@@ -67,6 +67,9 @@ def worker_main(cursor_value, pool_queue) -> None:
         if commit.seq % 20 == 0:
             cursor_value.value = commit.seq
 
+        if not commit.blocks:
+            continue
+
         ops = _get_ops_by_type(commit)
         for post in ops['posts']['created']:
             post_msg = post['record'].text
