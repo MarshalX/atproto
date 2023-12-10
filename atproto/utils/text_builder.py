@@ -16,7 +16,9 @@ class TextBuilder:
     """Helper that helps construct rich text.
 
     There are three facets: link, mention, tag.
+
     Each facet could be linked to text segment.
+
     This helper provides chained API.
 
     Example:
@@ -39,8 +41,9 @@ class TextBuilder:
         >>> from atproto import Client
         >>> from atproto.utils import TextBuilder
         >>> client = Client()
-        >>> # You can pass instance of TextBuilder instead of string.
+        >>> # You can pass instance of TextBuilder instead of str to the "text" argument.
         >>> client.send_post(TextBuilder().link('Python SDK', 'https://atproto.blue/'))
+        >>> # Same with send_image method
 
     Note:
         This helper doesn't support overlapped features (features at the same byte range).
@@ -88,15 +91,20 @@ class TextBuilder:
         return self._buffer.getvalue().decode()
 
     def text(self, text: str) -> 'TextBuilder':
-        """Add text to the builder."""
+        """Add text to the builder.
+
+        Args:
+            text: Text.
+        """
         self._write_text(text)
         return self
 
     def link(self, text: str, url: str) -> 'TextBuilder':
         """Add link to the builder.
 
-        Note:
-            Link is a valid URL. For example, https://atproto.blue/
+        Args:
+            text: Text of the link.
+            url: Valid URL. For example, https://atproto.blue/
         """
         self._add_facet(self._create_facet(text, [models.AppBskyRichtextFacet.Link(uri=url)]))
         return self
@@ -104,8 +112,9 @@ class TextBuilder:
     def mention(self, text: str, did: str) -> 'TextBuilder':
         """Add mention to the builder.
 
-        Note:
-            Mention is a valid DID. For example, did:plc:kvwvcn5iqfooopmyzvb4qzba
+        Args:
+            text: Text of the mention.
+            did: Valid DID. For example, did:plc:kvwvcn5iqfooopmyzvb4qzba
         """
         self._add_facet(self._create_facet(text, [models.AppBskyRichtextFacet.Mention(did=did)]))
         return self
@@ -113,8 +122,9 @@ class TextBuilder:
     def tag(self, text: str, tag: str) -> 'TextBuilder':
         """Add tag to the builder.
 
-        Note:
-            Tag is a hashtag.
+        Args:
+            text: Text of the tag.
+            tag: Hashtag.
         """
         self._add_facet(self._create_facet(text, [models.AppBskyRichtextFacet.Tag(tag=tag)]))
         return self
