@@ -7,6 +7,7 @@
 import typing as t
 from asyncio import Lock
 
+from atproto.utils import TextBuilder
 from atproto.xrpc_client import models
 from atproto.xrpc_client.client.async_raw import AsyncClientRaw
 from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
@@ -86,7 +87,7 @@ class AsyncClient(SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
 
     async def send_post(
         self,
-        text: str,
+        text: t.Union[str, TextBuilder],
         profile_identify: t.Optional[str] = None,
         reply_to: t.Optional[t.Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
         embed: t.Optional[
@@ -98,6 +99,7 @@ class AsyncClient(SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
             ]
         ] = None,
         langs: t.Optional[t.List[str]] = None,
+        facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
     ) -> models.ComAtprotoRepoCreateRecord.Response:
         """Send post.
 
@@ -113,6 +115,7 @@ class AsyncClient(SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
             reply_to: Root and parent of the post to reply to.
             embed: Embed models that should be attached to the post.
             langs: List of used languages in the post.
+            facets: List of facets (rich text items).
 
         Returns:
             :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created post record.
@@ -120,6 +123,9 @@ class AsyncClient(SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
+        if isinstance(text, TextBuilder):
+            facets = text.build_facets()
+            text = text.build_text()
 
         repo = self.me.did
         if profile_identify:
@@ -133,18 +139,25 @@ class AsyncClient(SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
                 repo=repo,
                 collection=ids.AppBskyFeedPost,
                 record=models.AppBskyFeedPost.Main(
-                    created_at=self.get_current_time_iso(), text=text, reply=reply_to, embed=embed, langs=langs
+                    created_at=self.get_current_time_iso(),
+                    text=text,
+                    reply=reply_to,
+                    embed=embed,
+                    langs=langs,
+                    facets=facets,
                 ),
             )
         )
 
     async def send_image(
         self,
-        text: str,
+        text: t.Union[str, TextBuilder],
         image: bytes,
         image_alt: str,
         profile_identify: t.Optional[str] = None,
         reply_to: t.Optional[t.Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
+        langs: t.Optional[t.List[str]] = None,
+        facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
     ) -> models.ComAtprotoRepoCreateRecord.Response:
         """Send post with attached image.
 
@@ -157,6 +170,8 @@ class AsyncClient(SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
             image_alt: Text version of the image
             profile_identify: Handle or DID. Where to send post.
             reply_to: Root and parent of the post to reply to.
+            langs: List of used languages in the post.
+            facets: List of facets (rich text items).
 
         Returns:
             :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created post record.
@@ -172,6 +187,8 @@ class AsyncClient(SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
             profile_identify=profile_identify,
             reply_to=reply_to,
             embed=models.AppBskyEmbedImages.Main(images=images),
+            langs=langs,
+            facets=facets,
         )
 
     async def like(self, subject: models.ComAtprotoRepoStrongRef.Main) -> models.ComAtprotoRepoCreateRecord.Response:
