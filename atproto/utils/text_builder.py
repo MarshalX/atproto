@@ -30,10 +30,12 @@ class TextBuilder:
         >>> text_builder.link('link', 'https://atproto.blue/')
 
         With chaining:
+
         >>> from atproto.utils import TextBuilder
         >>> text_builder = TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/')
 
         Later you can use this builder in the Client:
+
         >>> from atproto import Client
         >>> from atproto.utils import TextBuilder
         >>> client = Client()
