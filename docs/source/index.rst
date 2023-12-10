@@ -32,6 +32,7 @@ Documentation
    uri
    car
    cbor
+   text_builder
 
 .. toctree::
    :caption: Exceptions

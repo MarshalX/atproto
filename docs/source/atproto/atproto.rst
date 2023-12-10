@@ -21,6 +21,7 @@ Subpackages
    atproto.lexicon
    atproto.nsid
    atproto.uri
+   atproto.utils
    atproto.xrpc_client
    atproto.xrpc_server
 
