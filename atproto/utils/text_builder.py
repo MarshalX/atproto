@@ -25,6 +25,7 @@ class TextBuilder:
         Without chaining:
 
         >>> from atproto.utils import TextBuilder
+        >>> text_builder = TextBuilder()
         >>> text_builder.tag('This is a rich message. ', 'atproto')
         >>> text_builder.text('I can mention ')
         >>> text_builder.mention('account', 'did:plc:kvwvcn5iqfooopmyzvb4qzba')
