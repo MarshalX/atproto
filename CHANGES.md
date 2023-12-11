@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 0.0.32
+
+**11.12.2023**
+
+* Add text builder as helper for constructing rich text by @MarshalX in https://github.com/MarshalX/atproto/pull/194
+* Lock dependencies by major version only by @MarshalX in https://github.com/MarshalX/atproto/pull/195
+* Fix parsing of lexicon procedure parameters by @MarshalX in https://github.com/MarshalX/atproto/pull/196
+* Update lexicons fetched from ffe39aa committed 2023-12-08T21:32:06Z by @MarshalX in https://github.com/MarshalX/atproto/pull/197
+* Update code snippets in README by @MarshalX in https://github.com/MarshalX/atproto/pull/198
+* Update changelog for v0.0.31 by @MarshalX in https://github.com/MarshalX/atproto/pull/191
+
 ## Version 0.0.31
 
 **02.12.2023**
