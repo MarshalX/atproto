@@ -13,6 +13,7 @@ Submodules
    :maxdepth: 4
 
    atproto.xrpc_client.models.com.atproto.admin.defs
+   atproto.xrpc_client.models.com.atproto.admin.delete_account
    atproto.xrpc_client.models.com.atproto.admin.disable_account_invites
    atproto.xrpc_client.models.com.atproto.admin.disable_invite_codes
    atproto.xrpc_client.models.com.atproto.admin.emit_moderation_event

@@ -68,6 +68,7 @@ from atproto.xrpc_client.models.app.bsky.unspecced import get_timeline_skeleton 
 from atproto.xrpc_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto.xrpc_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
 from atproto.xrpc_client.models.com.atproto.admin import defs as ComAtprotoAdminDefs
+from atproto.xrpc_client.models.com.atproto.admin import delete_account as ComAtprotoAdminDeleteAccount
 from atproto.xrpc_client.models.com.atproto.admin import disable_account_invites as ComAtprotoAdminDisableAccountInvites
 from atproto.xrpc_client.models.com.atproto.admin import disable_invite_codes as ComAtprotoAdminDisableInviteCodes
 from atproto.xrpc_client.models.com.atproto.admin import emit_moderation_event as ComAtprotoAdminEmitModerationEvent
@@ -142,6 +143,9 @@ from atproto.xrpc_client.models.com.atproto.sync import notify_of_update as ComA
 from atproto.xrpc_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto.xrpc_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
 from atproto.xrpc_client.models.com.atproto.temp import fetch_labels as ComAtprotoTempFetchLabels
+from atproto.xrpc_client.models.com.atproto.temp import import_repo as ComAtprotoTempImportRepo
+from atproto.xrpc_client.models.com.atproto.temp import push_blob as ComAtprotoTempPushBlob
+from atproto.xrpc_client.models.com.atproto.temp import transfer_account as ComAtprotoTempTransferAccount
 from atproto.xrpc_client.models.models_loader import load_models
 from atproto.xrpc_client.models.utils import (
     create_strong_ref,
@@ -219,6 +223,7 @@ class _Ids:
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
     ComAtprotoAdminDefs: str = 'com.atproto.admin.defs'
+    ComAtprotoAdminDeleteAccount: str = 'com.atproto.admin.deleteAccount'
     ComAtprotoAdminDisableAccountInvites: str = 'com.atproto.admin.disableAccountInvites'
     ComAtprotoAdminDisableInviteCodes: str = 'com.atproto.admin.disableInviteCodes'
     ComAtprotoAdminEmitModerationEvent: str = 'com.atproto.admin.emitModerationEvent'
@@ -287,6 +292,9 @@ class _Ids:
     ComAtprotoSyncRequestCrawl: str = 'com.atproto.sync.requestCrawl'
     ComAtprotoSyncSubscribeRepos: str = 'com.atproto.sync.subscribeRepos'
     ComAtprotoTempFetchLabels: str = 'com.atproto.temp.fetchLabels'
+    ComAtprotoTempImportRepo: str = 'com.atproto.temp.importRepo'
+    ComAtprotoTempPushBlob: str = 'com.atproto.temp.pushBlob'
+    ComAtprotoTempTransferAccount: str = 'com.atproto.temp.transferAccount'
 
 
 ids = _Ids()

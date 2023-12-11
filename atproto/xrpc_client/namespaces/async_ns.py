@@ -1178,6 +1178,30 @@ class AtprotoNamespace(AsyncNamespaceBase):
 
 
 class AdminNamespace(AsyncNamespaceBase):
+    async def delete_account(
+        self,
+        data: t.Union[models.ComAtprotoAdminDeleteAccount.Data, models.ComAtprotoAdminDeleteAccount.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a user account as an administrator.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoAdminDeleteAccount.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.admin.deleteAccount', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     async def disable_account_invites(
         self,
         data: t.Union[
@@ -2721,3 +2745,88 @@ class TempNamespace(AsyncNamespaceBase):
             'com.atproto.temp.fetchLabels', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoTempFetchLabels.Response)
+
+    async def import_repo(
+        self,
+        params: t.Union[models.ComAtprotoTempImportRepo.Params, models.ComAtprotoTempImportRepo.ParamsDict],
+        data: 'models.ComAtprotoTempImportRepo.Data',
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoTempImportRepo.Response':
+        """Gets the did's repo, optionally catching up from a specific revision.
+
+        Args:
+            params: Parameters.
+            data: Input data alias.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoTempImportRepo.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoTempImportRepo.Params)
+        response = await self._client.invoke_procedure(
+            'com.atproto.temp.importRepo',
+            params=params_model,
+            data=data,
+            input_encoding='application/vnd.ipld.car',
+            output_encoding='text/plain',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoTempImportRepo.Response)
+
+    async def push_blob(
+        self,
+        params: t.Union[models.ComAtprotoTempPushBlob.Params, models.ComAtprotoTempPushBlob.ParamsDict],
+        data: 'models.ComAtprotoTempPushBlob.Data',
+        **kwargs: t.Any,
+    ) -> bool:
+        """Gets the did's repo, optionally catching up from a specific revision.
+
+        Args:
+            params: Parameters.
+            data: Input data alias.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        params_model = get_or_create(params, models.ComAtprotoTempPushBlob.Params)
+        response = await self._client.invoke_procedure(
+            'com.atproto.temp.pushBlob', params=params_model, data=data, input_encoding='*/*', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def transfer_account(
+        self,
+        data: t.Union[models.ComAtprotoTempTransferAccount.Data, models.ComAtprotoTempTransferAccount.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoTempTransferAccount.Response':
+        """Transfer an account.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoTempTransferAccount.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        data_model = get_or_create(data, models.ComAtprotoTempTransferAccount.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.temp.transferAccount',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoTempTransferAccount.Response)
