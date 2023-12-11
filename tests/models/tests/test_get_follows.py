@@ -4,7 +4,9 @@ from atproto.xrpc_client import models
 from atproto.xrpc_client.models import get_model_as_dict, get_or_create
 from tests.models.tests.utils import load_data_from_file
 
-TEST_DATA = load_data_from_file('get_follows')
+
+def load_test_data() -> dict:
+    return load_data_from_file('get_follows')
 
 
 def _find_muted_follow(
@@ -23,7 +25,7 @@ def test_get_follows_deserialization():
     Note:
         The response must contain at least one mutedByList follow.
     """
-    model = get_or_create(TEST_DATA, models.AppBskyGraphGetFollows.Response)
+    model = get_or_create(load_test_data(), models.AppBskyGraphGetFollows.Response)
 
     assert isinstance(model, models.AppBskyGraphGetFollows.Response)
 
@@ -42,7 +44,7 @@ def test_get_follows_serialization():
     Note:
         The response must contain at least one mutedByList follow.
     """
-    model = get_or_create(TEST_DATA, models.AppBskyGraphGetFollows.Response)
+    model = get_or_create(load_test_data(), models.AppBskyGraphGetFollows.Response)
 
     model_dict = get_model_as_dict(model)
     restored_model = get_or_create(model_dict, models.AppBskyGraphGetFollows.Response)

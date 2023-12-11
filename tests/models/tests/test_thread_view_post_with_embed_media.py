@@ -2,11 +2,13 @@ from atproto.xrpc_client import models
 from atproto.xrpc_client.models import get_model_as_dict, get_or_create
 from tests.models.tests.utils import load_data_from_file
 
-TEST_DATA = load_data_from_file('thread_view_post_with_embed_media')
+
+def load_test_data() -> dict:
+    return load_data_from_file('thread_view_post_with_embed_media')
 
 
 def test_thread_view_post_with_embed_media_deserialization():
-    model = get_or_create(TEST_DATA, models.AppBskyFeedGetPostThread.Response)
+    model = get_or_create(load_test_data(), models.AppBskyFeedGetPostThread.Response)
 
     assert isinstance(model, models.AppBskyFeedGetPostThread.Response)
     assert isinstance(model.thread, models.AppBskyFeedDefs.ThreadViewPost)
@@ -23,7 +25,7 @@ def test_thread_view_post_with_embed_media_deserialization():
 
 
 def test_thread_view_post_with_embed_media_serialization():
-    model = get_or_create(TEST_DATA, models.AppBskyFeedGetPostThread.Response)
+    model = get_or_create(load_test_data(), models.AppBskyFeedGetPostThread.Response)
     model_dict = get_model_as_dict(model)
 
     restored_model = get_or_create(model_dict, models.AppBskyFeedGetPostThread.Response)
