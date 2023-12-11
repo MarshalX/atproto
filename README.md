@@ -25,6 +25,7 @@
 Code snippet:
 ```python
 from atproto import Client, models
+from atproto.utils import TextBuilder
 
 
 def main():
@@ -32,10 +33,11 @@ def main():
     profile = client.login('my-handle', 'my-password')
     print('Welcome,', profile.display_name)
     
-    response = client.send_post(text='Hello World from Python!')
-    client.like(models.create_strong_ref(response))
+    text = TextBuilder().text('Hello World from ').link('Python SDK', 'https://atproto.blue')
+    post = client.send_post(text)
+    client.like(models.create_strong_ref(post))
 
-    
+
 if __name__ == '__main__':
     main()
 
@@ -48,15 +50,17 @@ if __name__ == '__main__':
 import asyncio
 
 from atproto import AsyncClient, models
+from atproto.utils import TextBuilder
 
 
 async def main():
     client = AsyncClient()
     profile = await client.login('my-handle', 'my-password')
     print('Welcome,', profile.display_name)
-    
-    response = await client.send_post(text='Hello World from Python!')
-    await client.like(models.create_strong_ref(response))
+
+    text = TextBuilder().text('Hello World from ').link('Python SDK', 'https://atproto.blue')
+    post = await client.send_post(text)
+    await client.like(models.create_strong_ref(post))
 
     
 if __name__ == '__main__':
