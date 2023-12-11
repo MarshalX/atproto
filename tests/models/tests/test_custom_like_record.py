@@ -3,11 +3,13 @@ from atproto.xrpc_client.models import get_model_as_dict, get_or_create
 from atproto.xrpc_client.models.dot_dict import DotDict
 from tests.models.tests.utils import load_data_from_file
 
-TEST_DATA = load_data_from_file('custom_like_record')
+
+def load_test_data() -> dict:
+    return load_data_from_file('custom_like_record')
 
 
 def test_custom_like_record_deserialization():
-    model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
+    model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
     assert isinstance(model.value, DotDict)
@@ -19,7 +21,7 @@ def test_custom_like_record_deserialization():
 
 
 def test_custom_like_record_serialization():
-    model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
+    model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     model_dict = get_model_as_dict(model)
     restored_model = get_or_create(model_dict, models.ComAtprotoRepoGetRecord.Response)

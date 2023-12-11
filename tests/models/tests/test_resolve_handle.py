@@ -2,11 +2,13 @@ from atproto.xrpc_client import models
 from atproto.xrpc_client.models import get_model_as_dict, get_or_create
 from tests.models.tests.utils import load_data_from_file
 
-TEST_DATA = load_data_from_file('resolve_handle')
+
+def load_test_data() -> dict:
+    return load_data_from_file('resolve_handle')
 
 
 def test_resolve_handle_deserialization():
-    model = get_or_create(TEST_DATA, models.ComAtprotoIdentityResolveHandle.Response)
+    model = get_or_create(load_test_data(), models.ComAtprotoIdentityResolveHandle.Response)
 
     assert isinstance(model, models.ComAtprotoIdentityResolveHandle.Response)
     assert isinstance(model.did, str)
@@ -18,7 +20,7 @@ def test_resolve_handle_deserialization():
 
 
 def test_resolve_handle_serialization():
-    model = get_or_create(TEST_DATA, models.ComAtprotoIdentityResolveHandle.Response)
+    model = get_or_create(load_test_data(), models.ComAtprotoIdentityResolveHandle.Response)
 
     model_dict = get_model_as_dict(model)
     restored_model = get_or_create(model_dict, models.ComAtprotoIdentityResolveHandle.Response)

@@ -6,11 +6,13 @@ from atproto.xrpc_client.models import dot_dict, get_model_as_dict, get_or_creat
 from atproto.xrpc_client.models.blob_ref import BlobRef
 from tests.models.tests.utils import load_data_from_file
 
-TEST_DATA = load_data_from_file('feed_record')
+
+def load_test_data() -> dict:
+    return load_data_from_file('feed_record')
 
 
 def test_feed_record_deserialization():
-    model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
+    model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
     assert isinstance(model.value, models.AppBskyFeedGenerator.Main)
@@ -22,7 +24,7 @@ def test_feed_record_deserialization():
 
 
 def test_feed_record_serialization():
-    model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
+    model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     model_dict = get_model_as_dict(model)
     restored_model = get_or_create(model_dict, models.ComAtprotoRepoGetRecord.Response)
@@ -43,7 +45,7 @@ def test_feed_record_serialization():
 
 
 def test_feed_record_avatar_deserialization():
-    model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
+    model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
     assert isinstance(model.value.avatar, BlobRef)
@@ -53,7 +55,7 @@ def test_feed_record_avatar_deserialization():
 
 
 def test_feed_record_avatar_serialization():
-    model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
+    model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     avatar = model.value.avatar
     avatar_dict = get_model_as_dict(avatar)
@@ -69,14 +71,14 @@ def test_feed_record_avatar_serialization():
 
 
 def test_feed_record_py_type_frozen():
-    model = get_or_create(TEST_DATA, models.ComAtprotoRepoGetRecord.Response)
+    model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     with pytest.raises(ValidationError):
         model.value.py_type = 'app.bsky.feed.generator'
 
 
 def test_feed_record_model_strict_mode():
-    test_data = load_data_from_file('feed_record')
+    test_data = load_test_data()
 
     non_str_did = 123
     test_data['value']['did'] = non_str_did
