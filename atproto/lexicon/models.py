@@ -212,7 +212,7 @@ class LexXrpcQuery(LexDefinition):
 @dataclass
 class LexXrpcProcedure(LexDefinition):
     type = LexDefinitionType.PROCEDURE
-    parameters: t.Optional[t.Dict[str, LexPrimitive]]
+    parameters: t.Optional[LexXrpcParameters]
     input: t.Optional[LexXrpcBody]
     output: t.Optional[LexXrpcBody]
     errors: t.Optional[t.List[LexXrpcError]]
