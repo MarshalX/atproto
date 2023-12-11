@@ -227,6 +227,7 @@ def _get_model_field_value(field_type_def, alias_name: t.Optional[str] = None, *
             min_length = field_type_def.minLength
         if field_type_def.maxLength is not None:
             max_length = field_type_def.maxLength
+        # TODO (MarshalX): support knownValue, format, enum?
 
     elif field_type == models.LexBoolean:
         if field_type_def.default is not None:

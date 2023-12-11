@@ -65,6 +65,7 @@ ALIASES_DB = {
     'models.AppBskyUnspeccedSearchActorsSkeleton': 'atproto.xrpc_client.models.app.bsky.unspecced.search_actors_skeleton',
     'models.AppBskyUnspeccedSearchPostsSkeleton': 'atproto.xrpc_client.models.app.bsky.unspecced.search_posts_skeleton',
     'models.ComAtprotoAdminDefs': 'atproto.xrpc_client.models.com.atproto.admin.defs',
+    'models.ComAtprotoAdminDeleteAccount': 'atproto.xrpc_client.models.com.atproto.admin.delete_account',
     'models.ComAtprotoAdminDisableAccountInvites': 'atproto.xrpc_client.models.com.atproto.admin.disable_account_invites',
     'models.ComAtprotoAdminDisableInviteCodes': 'atproto.xrpc_client.models.com.atproto.admin.disable_invite_codes',
     'models.ComAtprotoAdminEmitModerationEvent': 'atproto.xrpc_client.models.com.atproto.admin.emit_moderation_event',
@@ -133,4 +134,7 @@ ALIASES_DB = {
     'models.ComAtprotoSyncRequestCrawl': 'atproto.xrpc_client.models.com.atproto.sync.request_crawl',
     'models.ComAtprotoSyncSubscribeRepos': 'atproto.xrpc_client.models.com.atproto.sync.subscribe_repos',
     'models.ComAtprotoTempFetchLabels': 'atproto.xrpc_client.models.com.atproto.temp.fetch_labels',
+    'models.ComAtprotoTempImportRepo': 'atproto.xrpc_client.models.com.atproto.temp.import_repo',
+    'models.ComAtprotoTempPushBlob': 'atproto.xrpc_client.models.com.atproto.temp.push_blob',
+    'models.ComAtprotoTempTransferAccount': 'atproto.xrpc_client.models.com.atproto.temp.transfer_account',
 }
