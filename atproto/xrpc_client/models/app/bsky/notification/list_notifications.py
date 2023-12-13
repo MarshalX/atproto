@@ -37,6 +37,7 @@ class Response(base.ResponseModelBase):
 
     notifications: t.List['models.AppBskyNotificationListNotifications.Notification']  #: Notifications.
     cursor: t.Optional[str] = None  #: Cursor.
+    seen_at: t.Optional[str] = Field(default=None, alias='seenAt')  #: Seen at.
 
 
 class Notification(base.ModelBase):
