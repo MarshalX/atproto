@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 0.0.33
+
+**13.12.2023**
+
+* Update lexicons fetched from 0c54951 committed 2023-12-12T21:37:06Z by @MarshalX in https://github.com/MarshalX/atproto/pull/202
+* Update changelog for v0.0.32 by @MarshalX in https://github.com/MarshalX/atproto/pull/199
+
 ## Version 0.0.32
 
 **11.12.2023**
