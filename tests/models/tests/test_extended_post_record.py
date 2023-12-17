@@ -1,26 +1,30 @@
 from atproto.xrpc_client import models
 from atproto.xrpc_client.models import get_model_as_dict, get_or_create
-from atproto.xrpc_client.models.dot_dict import DotDict
 from tests.models.tests.utils import load_data_from_file
 
 
 def load_test_data() -> dict:
-    return load_data_from_file('custom_post_record')
+    return load_data_from_file('extended_post_record')
 
 
-def test_custom_post_record_deserialization() -> None:
+def test_extended_post_record_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
-    assert isinstance(model.value, DotDict)
+    assert isinstance(model.value, models.AppBskyFeedPost.Main)
 
-    assert model.value['$type'] == models.ids.AppBskyFeedPost
-    # lol is the custom field out of lexicon
+    assert model.value['py_type'] == models.ids.AppBskyFeedPost
+    assert model.value.py_type == models.ids.AppBskyFeedPost
+
+    # lol is the additional field out of lexicon
+
+    assert 'lol' in model.value.model_extra
+
     assert model.value.lol == 'kek'
     assert model.value['lol'] == 'kek'
 
 
-def test_custom_post_record_serialization() -> None:
+def test_extended_post_record_serialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     model_dict = get_model_as_dict(model)
@@ -29,8 +33,12 @@ def test_custom_post_record_serialization() -> None:
     assert isinstance(get_model_as_dict(model.value), dict)
     assert model_dict == get_model_as_dict(restored_model)
 
-    assert restored_model.value['$type'] == models.ids.AppBskyFeedPost
-    # lol is the custom field out of lexicon
+    assert restored_model.value['py_type'] == models.ids.AppBskyFeedPost
+
+    # lol is the additional field out of lexicon
+
+    assert 'lol' in restored_model.value.model_extra
+
     assert restored_model.value.lol == 'kek'
     assert restored_model.value['lol'] == 'kek'
 

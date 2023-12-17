@@ -116,7 +116,7 @@ def main() -> None:
             params={'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yihcrp6f2c'},
         ),
         Call(
-            name='custom_post_record',
+            name='extended_post_record',
             method='com.atproto.repo.get_record',
             params={'collection': 'app.bsky.feed.post', 'repo': 'test.marshal.dev', 'rkey': '3k2yinh52ne2x'},
         ),
@@ -126,7 +126,7 @@ def main() -> None:
             params={'collection': 'app.bsky.feed.like', 'repo': 'test.marshal.dev', 'rkey': '3k5u7c7j7a52v'},
         ),
         Call(
-            name='custom_like_record',
+            name='extended_like_record',
             method='com.atproto.repo.get_record',
             params={'collection': 'app.bsky.feed.like', 'repo': 'test.marshal.dev', 'rkey': '3k5u5ammyg72r'},
         ),

@@ -8,13 +8,14 @@ def load_test_correct_data() -> dict:
     return load_data_from_file('post_record')
 
 
-def load_test_extended_data() -> dict:
-    return load_data_from_file('custom_post_record')
+def load_test_custom_data() -> dict:
+    return load_data_from_file('custom_record')
 
 
 def test_is_record_type() -> None:
     lexicon_correct_post_record = get_or_create(load_test_correct_data(), models.ComAtprotoRepoGetRecord.Response)
-    extended_post_record = get_or_create(load_test_extended_data(), models.ComAtprotoRepoGetRecord.Response)
+    custom_record = get_or_create(load_test_custom_data(), models.ComAtprotoRepoGetRecord.Response)
+    expected_custom_record_id = 'app.bsky.feed.pythonSdkCustomRecordPost'
 
     assert isinstance(lexicon_correct_post_record.value, models.AppBskyFeedPost.Main)
     assert is_record_type(lexicon_correct_post_record.value, models.ids.AppBskyFeedPost) is True
@@ -22,8 +23,7 @@ def test_is_record_type() -> None:
     assert is_record_type(lexicon_correct_post_record.value, models.AppBskyFeedPost) is True
     assert is_record_type(lexicon_correct_post_record.value, models.AppBskyFeedGenerator) is False
 
-    assert isinstance(extended_post_record.value, DotDict)
-    assert is_record_type(extended_post_record.value, models.ids.AppBskyFeedPost) is True
-    assert is_record_type(extended_post_record.value, models.ids.AppBskyFeedGenerator) is False
-    assert is_record_type(extended_post_record.value, models.AppBskyFeedPost) is True
-    assert is_record_type(extended_post_record.value, models.AppBskyFeedGenerator) is False
+    assert isinstance(custom_record.value, DotDict)
+    assert is_record_type(custom_record.value, expected_custom_record_id) is True
+    assert is_record_type(custom_record.value, models.ids.AppBskyFeedPost) is False
+    assert is_record_type(custom_record.value, models.AppBskyFeedPost) is False

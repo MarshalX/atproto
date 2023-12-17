@@ -1,6 +1,8 @@
+import os
 import typing as t
+import warnings
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, model_validator
 
 from atproto.exceptions import ModelFieldNotFoundError
 
@@ -15,13 +17,28 @@ class ModelBase(BaseModel, AtProtocolBase):
     Provides square brackets [] notation to get attributes like in a dictionary.
     """
 
-    model_config = ConfigDict(extra='forbid', populate_by_name=True, strict=True)
+    model_config = ConfigDict(extra='allow', populate_by_name=True, strict=True)
 
     def __getitem__(self, item: str) -> t.Any:
         if hasattr(self, item):
             return getattr(self, item)
 
         raise ModelFieldNotFoundError(f"Can't find field '{item}' in the object of type {type(self)}.")
+
+    @model_validator(mode='after')
+    def __alert_about_extra_fields(self) -> 'ModelBase':
+        if self.model_extra and os.environ.get('ATPROTO_LEXICON_WARN', '1') == '1':
+            warnings.warn(
+                f'Extra fields found in the object of type {type(self)}: {self.model_extra}. '  # noqa: S608
+                f'Probably you are using the old version of SDK. '
+                f'Please update it using `pip install -U atproto`. '
+                f'In case you are working with custom lexicon ignore this warning. '
+                f'It is also possible that you are working with extended record. '
+                f'To disable this warning set `ATPROTO_LEXICON_WARN` to `0` in the environment variables.',
+                stacklevel=0,
+            )
+
+        return self
 
 
 class ParamsModelBase(ModelBase):
