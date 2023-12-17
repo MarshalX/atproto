@@ -27,7 +27,9 @@ class ModelBase(BaseModel, AtProtocolBase):
 
     @model_validator(mode='after')
     def __alert_about_extra_fields(self) -> 'ModelBase':
-        if self.model_extra and os.environ.get('ATPROTO_LEXICON_WARN', '1') == '1':
+        # used for debugging purposes because gives false positives due to the way pydantic works
+
+        if self.model_extra and os.environ.get('ATPROTO_LEXICON_WARN', '0') == '1':
             warnings.warn(
                 f'Extra fields found in the object of type {type(self)}: {self.model_extra}. '  # noqa: S608
                 f'Probably you are using the old version of SDK. '
