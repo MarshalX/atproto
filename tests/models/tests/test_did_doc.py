@@ -8,7 +8,7 @@ def load_test_data() -> dict:
     return load_data_from_file('did_doc')
 
 
-def test_did_doc_deserialization():
+def test_did_doc_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoDescribeRepo.Response)
 
     assert isinstance(model, models.ComAtprotoRepoDescribeRepo.Response)

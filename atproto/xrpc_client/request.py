@@ -92,7 +92,7 @@ class Request(RequestBase):
         super().__init__()
         self._client = httpx.Client()
 
-    def _send_request(self, method: str, url: str, **kwargs) -> httpx.Response:
+    def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers', None))
 
         try:
@@ -105,10 +105,10 @@ class Request(RequestBase):
     def close(self) -> None:
         self._client.close()
 
-    def get(self, *args, **kwargs) -> Response:
+    def get(self, *args, **kwargs: t.Any) -> Response:
         return _parse_response(self._send_request('GET', *args, **kwargs))
 
-    def post(self, *args, **kwargs) -> Response:
+    def post(self, *args, **kwargs: t.Any) -> Response:
         return _parse_response(self._send_request('POST', *args, **kwargs))
 
 
@@ -119,7 +119,7 @@ class AsyncRequest(RequestBase):
         super().__init__()
         self._client = httpx.AsyncClient()
 
-    async def _send_request(self, method: str, url: str, **kwargs) -> httpx.Response:
+    async def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers', None))
 
         try:
@@ -132,8 +132,8 @@ class AsyncRequest(RequestBase):
     async def close(self) -> None:
         await self._client.aclose()
 
-    async def get(self, *args, **kwargs) -> Response:
+    async def get(self, *args, **kwargs: t.Any) -> Response:
         return _parse_response(await self._send_request('GET', *args, **kwargs))
 
-    async def post(self, *args, **kwargs) -> Response:
+    async def post(self, *args, **kwargs: t.Any) -> Response:
         return _parse_response(await self._send_request('POST', *args, **kwargs))

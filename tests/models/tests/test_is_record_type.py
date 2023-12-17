@@ -12,7 +12,7 @@ def load_test_extended_data() -> dict:
     return load_data_from_file('custom_post_record')
 
 
-def test_is_record_type():
+def test_is_record_type() -> None:
     lexicon_correct_post_record = get_or_create(load_test_correct_data(), models.ComAtprotoRepoGetRecord.Response)
     extended_post_record = get_or_create(load_test_extended_data(), models.ComAtprotoRepoGetRecord.Response)
 

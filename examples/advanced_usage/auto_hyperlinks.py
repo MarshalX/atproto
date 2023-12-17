@@ -1,9 +1,12 @@
 import re
+import typing as t
 
 from atproto import Client, models
 
 
-def extract_url_byte_positions(text, *, aggressive: bool, encoding='UTF-8'):
+def extract_url_byte_positions(
+    text: str, *, aggressive: bool, encoding: str = 'UTF-8'
+) -> t.List[t.Tuple[str, int, int]]:
     """
     If aggressive is False, only links beginning http or https will be detected
     """
@@ -24,7 +27,7 @@ def extract_url_byte_positions(text, *, aggressive: bool, encoding='UTF-8'):
     return url_byte_positions
 
 
-def main():
+def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 

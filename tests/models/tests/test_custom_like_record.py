@@ -8,7 +8,7 @@ def load_test_data() -> dict:
     return load_data_from_file('custom_like_record')
 
 
-def test_custom_like_record_deserialization():
+def test_custom_like_record_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
@@ -20,7 +20,7 @@ def test_custom_like_record_deserialization():
     assert model.value['record_type'] == 'app.bsky.feed.like'
 
 
-def test_custom_like_record_serialization():
+def test_custom_like_record_serialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     model_dict = get_model_as_dict(model)

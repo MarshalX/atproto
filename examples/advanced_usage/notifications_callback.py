@@ -1,20 +1,25 @@
 import asyncio
+import typing as t
 
-from atproto import AsyncClient
+from atproto import AsyncClient, models
 
 # how often we should check for new notifications
 FETCH_NOTIFICATIONS_DELAY_SEC = 3.0
 
+Notification = models.AppBskyNotificationListNotifications.Notification
 
-async def main():
+
+async def main() -> None:
     async_client = AsyncClient()
     await async_client.login('my-handle', 'my-password')
 
-    async def on_notification_callback(notification):
+    async def on_notification_callback(notification: Notification) -> None:
         print(f'Got new notification! Type: {notification.reason}; from: {notification.author.did}')
         # example: "Got new notification! Type: like; from: did:plc:hlorqa2iqfooopmyzvb4byaz"
 
-    async def listen_for_notifications(on_notification):
+    async def listen_for_notifications(
+        on_notification: t.Callable[[Notification], t.Coroutine[t.Any, t.Any, None]]
+    ) -> None:
         print('Start listening for notifications...')
         while True:
             # save the time in UTC when we fetch notifications

@@ -7,7 +7,7 @@ def load_test_data() -> dict:
     return load_data_from_file('thread_view_post_with_embed_media')
 
 
-def test_thread_view_post_with_embed_media_deserialization():
+def test_thread_view_post_with_embed_media_deserialization() -> None:
     model = get_or_create(load_test_data(), models.AppBskyFeedGetPostThread.Response)
 
     assert isinstance(model, models.AppBskyFeedGetPostThread.Response)
@@ -24,7 +24,7 @@ def test_thread_view_post_with_embed_media_deserialization():
     assert len(model.thread.post.embed.media.images) == 1
 
 
-def test_thread_view_post_with_embed_media_serialization():
+def test_thread_view_post_with_embed_media_serialization() -> None:
     model = get_or_create(load_test_data(), models.AppBskyFeedGetPostThread.Response)
     model_dict = get_model_as_dict(model)
 

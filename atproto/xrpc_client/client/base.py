@@ -68,7 +68,7 @@ class ClientBase:
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
         data: t.Optional[t.Union['DataModelBase', bytes]] = None,
-        **kwargs,
+        **kwargs: t.Any,
     ) -> Response:
         return self._invoke(InvokeType.QUERY, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
@@ -77,11 +77,11 @@ class ClientBase:
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
         data: t.Optional[t.Union['DataModelBase', bytes]] = None,
-        **kwargs,
+        **kwargs: t.Any,
     ) -> Response:
         return self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
-    def _invoke(self, invoke_type: InvokeType, **kwargs) -> Response:
+    def _invoke(self, invoke_type: InvokeType, **kwargs: t.Any) -> Response:
         _handle_kwagrs(kwargs)
 
         if invoke_type is InvokeType.QUERY:
@@ -113,7 +113,7 @@ class AsyncClientBase:
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
         data: t.Optional[t.Union['DataModelBase', bytes]] = None,
-        **kwargs,
+        **kwargs: t.Any,
     ) -> Response:
         return await self._invoke(InvokeType.QUERY, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
@@ -122,11 +122,11 @@ class AsyncClientBase:
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
         data: t.Optional[t.Union['DataModelBase', bytes]] = None,
-        **kwargs,
+        **kwargs: t.Any,
     ) -> Response:
         return await self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
-    async def _invoke(self, invoke_type: InvokeType, **kwargs) -> Response:
+    async def _invoke(self, invoke_type: InvokeType, **kwargs: t.Any) -> Response:
         _handle_kwagrs(kwargs)
 
         if invoke_type is InvokeType.QUERY:

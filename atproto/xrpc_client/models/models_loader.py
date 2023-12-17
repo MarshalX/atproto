@@ -35,7 +35,7 @@ def __get_models_to_rebuild_set() -> set:
     return models_to_rebuild
 
 
-def __rebuild_all_models():
+def __rebuild_all_models() -> None:
     # load models to the scope
     from atproto.xrpc_client import models  # noqa
     from atproto.xrpc_client.models.unknown_type import UnknownType, UnknownInputType
@@ -50,9 +50,9 @@ def __rebuild_all_models():
         __model.model_rebuild()
 
 
-def __on_load():
+def __on_load() -> None:
     __rebuild_all_models()
 
 
-def load_models():
+def load_models() -> None:
     __on_load()

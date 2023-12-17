@@ -6,7 +6,7 @@ from atproto import Client
 FETCH_NOTIFICATIONS_DELAY_SEC = 3
 
 
-def main():
+def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 

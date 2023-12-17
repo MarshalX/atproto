@@ -7,7 +7,7 @@ def load_test_data() -> dict:
     return load_data_from_file('resolve_handle')
 
 
-def test_resolve_handle_deserialization():
+def test_resolve_handle_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoIdentityResolveHandle.Response)
 
     assert isinstance(model, models.ComAtprotoIdentityResolveHandle.Response)
@@ -19,7 +19,7 @@ def test_resolve_handle_deserialization():
     assert model['did'] == expected_did
 
 
-def test_resolve_handle_serialization():
+def test_resolve_handle_serialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoIdentityResolveHandle.Response)
 
     model_dict = get_model_as_dict(model)

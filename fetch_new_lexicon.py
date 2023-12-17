@@ -102,7 +102,7 @@ def _write_extracted_lexicons(extracted_files: ExtractedFiles) -> None:
         _write_to_file(_format_lexicon_filename(filename), content)
 
 
-def main():
+def main() -> None:
     sha, commit_date, _ = _get_last_commit_info()
 
     # FIXME(MarshalX): the script doesn't care about deleted lexicons

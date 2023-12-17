@@ -19,7 +19,7 @@ def _find_muted_follow(
     return None
 
 
-def test_get_follows_deserialization():
+def test_get_follows_deserialization() -> None:
     """Test deserialization of literals and tokens from get_follows response.
 
     Note:
@@ -38,7 +38,7 @@ def test_get_follows_deserialization():
     assert muted_by_list_follow.viewer.muted is True
 
 
-def test_get_follows_serialization():
+def test_get_follows_serialization() -> None:
     """Test serialization of literals and tokens from get_follows response.
 
     Note:

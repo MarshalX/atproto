@@ -1,3 +1,5 @@
+import typing as t
+
 from pydantic import BaseModel, ConfigDict
 
 from atproto.exceptions import ModelFieldNotFoundError
@@ -15,7 +17,7 @@ class ModelBase(BaseModel, AtProtocolBase):
 
     model_config = ConfigDict(extra='forbid', populate_by_name=True, strict=True)
 
-    def __getitem__(self, item: str):
+    def __getitem__(self, item: str) -> t.Any:
         if hasattr(self, item):
             return getattr(self, item)
 

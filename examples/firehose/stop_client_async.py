@@ -2,19 +2,20 @@ import asyncio
 
 from atproto.firehose import (
     AsyncFirehoseSubscribeReposClient,
+    MessageFrame,
     parse_subscribe_repos_message,
 )
 
 _STOP_AFTER_SECONDS = 3
 
 
-async def main():
+async def main() -> None:
     client = AsyncFirehoseSubscribeReposClient()
 
-    async def on_message_handler(message):
+    async def on_message_handler(message: MessageFrame) -> None:
         print(message.header, parse_subscribe_repos_message(message))
 
-    async def _stop_after_n_sec():
+    async def _stop_after_n_sec() -> None:
         await asyncio.sleep(_STOP_AFTER_SECONDS)
         await client.stop()
 

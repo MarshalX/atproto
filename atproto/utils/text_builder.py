@@ -50,7 +50,7 @@ class TextBuilder:
         This helper doesn't support overlapped features (features at the same byte range).
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._buffer = BytesIO()
         self._facets: t.List[models.AppBskyRichtextFacet.Main] = []
 
@@ -83,7 +83,7 @@ class TextBuilder:
             index=self._create_byte_slice(text),
         )
 
-    def build_facets(self):
+    def build_facets(self) -> t.List[models.AppBskyRichtextFacet.Main]:
         """Build facets from the current state of the builder."""
         return self._facets.copy()
 

@@ -16,10 +16,10 @@ OUTPUT_DIR = os.path.join(os.path.dirname(__file__), 'test_data')
 
 
 class LatestResponse:
-    def __init__(self, response: Response = None):
+    def __init__(self, response: Response = None) -> None:
         self._response = response
 
-    def set(self, response: Response):
+    def set(self, response: Response) -> None:
         self._response = response
 
     @property
@@ -35,12 +35,12 @@ LATEST_RESPONSE = LatestResponse()
 
 
 class ProxyRequest(Request):
-    def get(self, *args, **kwargs) -> Response:
+    def get(self, *args, **kwargs: t.Any) -> Response:
         response = super().get(*args, **kwargs)
         LATEST_RESPONSE.set(response)
         return response
 
-    def post(self, *args, **kwargs) -> Response:
+    def post(self, *args, **kwargs: t.Any) -> Response:
         response = super().post(*args, **kwargs)
         LATEST_RESPONSE.set(response)
         return response
