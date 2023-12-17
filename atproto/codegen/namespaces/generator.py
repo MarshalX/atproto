@@ -23,6 +23,7 @@ from atproto.codegen.namespaces.builder import MethodInfo, ProcedureInfo, QueryI
 from atproto.lexicon.models import (
     LexObject,
     LexRef,
+    LexXrpcParameters,
     LexXrpcProcedure,
     LexXrpcQuery,
 )
@@ -201,7 +202,7 @@ def _get_namespace_method_signature_args_names(definition: t.Union[LexXrpcProced
         args.add('params')
 
     if isinstance(definition, LexXrpcProcedure) and definition.input:
-        if definition.input.schema:
+        if definition.input.schema_:
             args.add('data_schema')
         else:
             args.add('data_alias')
@@ -225,7 +226,7 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
         else:
             args.append(arg_def)
 
-    def is_optional_arg(lex_obj) -> bool:
+    def is_optional_arg(lex_obj: t.Union[LexObject, LexXrpcParameters]) -> bool:
         return lex_obj.required is None or len(lex_obj.required) == 0
 
     if method_info.definition.parameters:
@@ -238,7 +239,7 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
         _add_arg(arg, optional=is_optional)
 
     if isinstance(method_info, ProcedureInfo) and method_info.definition.input:
-        schema = method_info.definition.input.schema
+        schema = method_info.definition.input.schema_
         if schema:
             is_optional = is_optional_arg(schema)
 
@@ -259,8 +260,8 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
 
 
 def _get_namespace_method_return_type(method_info: MethodInfo) -> t.Tuple[str, bool]:
-    if method_info.definition.output and isinstance(method_info.definition.output.schema, LexRef):
-        ref_class, _ = _resolve_nsid_ref(method_info.nsid, method_info.definition.output.schema.ref)
+    if method_info.definition.output and isinstance(method_info.definition.output.schema_, LexRef):
+        ref_class, _ = _resolve_nsid_ref(method_info.nsid, method_info.definition.output.schema_.ref)
         return ref_class, True
 
     is_model = False

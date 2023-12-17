@@ -4,7 +4,7 @@ from atproto import Client
 from atproto.xrpc_client import models
 
 
-def main():
+def main() -> None:
     # This is an example for get_follows method.
     client = Client()
     client.login('my-handle', 'my-password')

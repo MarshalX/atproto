@@ -10,6 +10,7 @@ from atproto.firehose import (
     FirehoseSubscribeReposClient,
     parse_subscribe_repos_message,
 )
+from atproto.utils import TextBuilder
 from atproto.xrpc_client.models import get_model_as_dict, get_model_as_json, get_or_create, ids, is_record_type
 
 if t.TYPE_CHECKING:
@@ -19,7 +20,7 @@ if t.TYPE_CHECKING:
 logging.basicConfig(level=logging.INFO)
 
 
-def convert_uri_to_url():
+def convert_uri_to_url() -> None:
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
@@ -36,15 +37,45 @@ def convert_uri_to_url():
     # https://staging.bsky.app/profile/test.marshal.dev/post/3juce2ym7dt2g
 
 
-def sync_main():
-    # client = Client()
-    # client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+def sync_main() -> None:
+    client = Client()
+    client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+
+    params = models.AppBskyGraphGetSuggestedFollowsByActor.Params(actor='test.marshal.dev')
+    result = client.app.bsky.graph.get_suggested_follows_by_actor(params)
+    print(result)
+
+    # client.send_post(TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/'))
+    # text = TextBuilder().text('Hello World from ').link('atpoto SDK', 'https://atproto.blue')
+    # post = client.send_post(text)
+    # print(post)
+    exit(0)
+
+    text_builder = TextBuilder()
+    text_builder.tag('This is a rich message. ', 'atproto')
+    text_builder.text('I can mention ')
+    text_builder.mention('account', 'did:plc:kvwvcn5iqfooopmyzvb4qzba')
+    text_builder.text(' and add clickable ')
+    text_builder.link('link', 'https://atproto.blue/')
+
+    text_builder = TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/')
+
+    client.send_post(text_builder)
+
+    # with open('cat.png', 'rb') as f:
+    #     cat_data = f.read()
+    #     client.send_image(text_builder, cat_data, 'cat alt')
+
+    # client.send_post(text_builder)
+
+    # client.send_post('test timestamp')
+    exit(0)
 
     # session_string = client.export_session_string()
     # print(session_string)
 
-    client = Client()
-    client.login(session_string=os.environ['SESSION_STRING'])
+    # client = Client()
+    # client.login(session_string=os.environ['SESSION_STRING'])
 
     params = models.AppBskyGraphGetFollows.Params(actor='test.marshal.dev')
     # followers = client.app.bsky.graph.get_followers(params=params)
@@ -105,10 +136,13 @@ def sync_main():
             print('Error message:', e.response.content.message)
 
 
-async def main():
+async def main() -> None:
     async_client = AsyncClient()
     profile = await async_client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
     print(profile)
+
+    text = TextBuilder().text('Hello World from ').link('Python SDK', 'https://atproto.blue')
+    await async_client.send_post(text)
 
     # should be async open
     # with open('cat.png', 'rb') as f:
@@ -122,7 +156,7 @@ async def main():
     # assert resolve.did == profile.did
 
 
-def _main_firehose_test():
+def _main_firehose_test() -> None:
     client = FirehoseSubscribeReposClient()
 
     def on_message_handler(message: 'MessageFrame') -> None:
@@ -137,7 +171,7 @@ def _main_firehose_test():
         print('got error', e)
         # raise RuntimeError('rofl')
 
-    def _stop_after_n_sec():
+    def _stop_after_n_sec() -> None:
         from time import sleep
 
         sleep(3)
@@ -150,7 +184,7 @@ def _main_firehose_test():
     # client.start(on_message_handler, on_callback_error_handler)
 
 
-async def _main_async_firehose_test():
+async def _main_async_firehose_test() -> None:
     client = AsyncFirehoseSubscribeReposClient()
 
     async def on_message_handler(message: 'MessageFrame') -> None:
@@ -161,7 +195,7 @@ async def _main_async_firehose_test():
         print('got error', e)
         # raise RuntimeError('rofl')
 
-    async def _stop_after_n_sec():
+    async def _stop_after_n_sec() -> None:
         await asyncio.sleep(3)
         await client.stop()
 

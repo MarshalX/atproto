@@ -4,7 +4,7 @@ from atproto import Client, models
 # There is a helper class TextBuilder that helps construct rich text: https://atproto.blue/en/latest/text_builder.html
 
 
-def main():
+def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 

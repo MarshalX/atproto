@@ -1,5 +1,6 @@
 import typing as t
 from dataclasses import dataclass
+from pathlib import Path
 
 from atproto.lexicon.models import (
     LexDefinition,
@@ -104,7 +105,7 @@ def build_namespace_tree(lexicons: t.List[LexiconDoc]) -> dict:
     return namespace_tree
 
 
-def build_namespaces(lexicon_dir=None) -> dict:
+def build_namespaces(lexicon_dir: t.Optional[Path] = None) -> dict:
     lexicons = lexicon_parse_dir(lexicon_dir)
     return build_namespace_tree(lexicons)
 

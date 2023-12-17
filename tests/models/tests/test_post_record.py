@@ -7,7 +7,7 @@ def load_test_data() -> dict:
     return load_data_from_file('post_record')
 
 
-def test_post_record_deserialization():
+def test_post_record_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
@@ -33,7 +33,7 @@ def test_post_record_deserialization():
     assert model['value'].created_at == expected_created_at
 
 
-def test_post_record_serialization():
+def test_post_record_serialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     model_dict = get_model_as_dict(model)

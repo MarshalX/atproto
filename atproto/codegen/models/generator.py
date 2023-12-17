@@ -124,18 +124,18 @@ _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT = {
 }
 
 
-def _get_optional_typehint(type_hint, *, optional: bool) -> str:
+def _get_optional_typehint(type_hint: str, *, optional: bool) -> str:
     if optional:
         return f't.Optional[{type_hint}]'
     return type_hint
 
 
-def _get_ref_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
+def _get_ref_typehint(nsid: NSID, field_type_def: models.LexRef, *, optional: bool) -> str:
     model_path, _ = _resolve_nsid_ref(nsid, field_type_def.ref)
     return _get_optional_typehint(f"'{model_path}'", optional=optional)
 
 
-def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> str:
+def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, optional: bool) -> str:
     def_names = []
     for ref in field_type_def.refs:
         import_path, _ = _resolve_nsid_ref(nsid, ref)
@@ -156,7 +156,13 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def, *, optional: bool) -> st
     return _get_optional_typehint(annotated_union, optional=optional)
 
 
-def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool, is_input_type: bool = False) -> str:
+def _get_model_field_typehint(
+    nsid: NSID,
+    field_type_def: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob],
+    *,
+    optional: bool,
+    is_input_type: bool = False,
+) -> str:
     field_type = type(field_type_def)
 
     if field_type == models.LexUnknown:
@@ -195,7 +201,12 @@ def _get_model_field_typehint(nsid: NSID, field_type_def, *, optional: bool, is_
     raise ValueError(f'Unknown field type {field_type.__name__}')
 
 
-def _get_model_field_value(field_type_def, alias_name: t.Optional[str] = None, *, optional: bool) -> str:  # noqa: C901
+def _get_model_field_value(  # noqa: C901
+    field_type_def: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob],
+    alias_name: t.Optional[str] = None,
+    *,
+    optional: bool,
+) -> str:
     not_set = object()
 
     default: t.Any = not_set
@@ -223,10 +234,10 @@ def _get_model_field_value(field_type_def, alias_name: t.Optional[str] = None, *
             default = field_type_def.default
         if field_type_def.const is not None:
             frozen = field_type_def.const
-        if field_type_def.minLength is not None:
-            min_length = field_type_def.minLength
-        if field_type_def.maxLength is not None:
-            max_length = field_type_def.maxLength
+        if field_type_def.min_length is not None:
+            min_length = field_type_def.min_length
+        if field_type_def.max_length is not None:
+            max_length = field_type_def.max_length
         # TODO (MarshalX): support knownValue, format, enum?
 
     elif field_type == models.LexBoolean:
@@ -236,10 +247,10 @@ def _get_model_field_value(field_type_def, alias_name: t.Optional[str] = None, *
             frozen = field_type_def.const
 
     elif field_type is models.LexArray:
-        if field_type_def.minLength is not None:
-            min_length = field_type_def.minLength
-        if field_type_def.maxLength is not None:
-            max_length = field_type_def.maxLength
+        if field_type_def.min_length is not None:
+            min_length = field_type_def.min_length
+        if field_type_def.max_length is not None:
+            max_length = field_type_def.max_length
 
     if default is not_set and optional:
         default = None
@@ -295,7 +306,9 @@ def _get_req_fields_set(lex_obj: t.Union[models.LexObject, models.LexXrpcParamet
     return required_fields
 
 
-def _get_field_docstring(field_name: str, field_type) -> str:
+def _get_field_docstring(
+    field_name: str, field_type: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob]
+) -> str:
     field_desc = field_type.description
     if field_desc is None:
         field_desc = gen_description_by_camel_case_name(field_name)
@@ -395,7 +408,7 @@ def _get_typeddict(
         type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional, is_input_type=is_input_type)
         description = _get_field_docstring(field_name, field_type_def)
 
-        # Allow optional params to actually be ommitted from the dict entirely
+        # Allow optional params to actually be omitted from the dict entirely
         type_hint_defaulting = f'te.NotRequired[{type_hint}]' if is_optional else type_hint
         field_def = f'{_(1)}{snake_cased_field_name}: {type_hint_defaulting} #: {description}'
 
@@ -439,11 +452,11 @@ def _generate_params_model(nsid: NSID, definition: t.Union[models.LexXrpcQuery, 
 
 def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: ModelType) -> str:
     lines = []
-    if body.schema:
-        if isinstance(body.schema, models.LexObject):
+    if body.schema_:
+        if isinstance(body.schema_, models.LexObject):
             lines.append(_get_model_class_def(nsid.name, model_type))
-            lines.append(_get_model_docstring(nsid, body.schema, model_type))
-            lines.append(_get_model(nsid, body.schema, is_input_type=(model_type is ModelType.DATA)))
+            lines.append(_get_model_docstring(nsid, body.schema_, model_type))
+            lines.append(_get_model(nsid, body.schema_, is_input_type=(model_type is ModelType.DATA)))
     else:
         if model_type is ModelType.DATA:
             model_name = INPUT_MODEL
@@ -459,9 +472,9 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
 
 def _generate_data_typedict(nsid: NSID, body: models.LexXrpcBody) -> str:
     lines: t.List[str] = []
-    if isinstance(body.schema, models.LexObject):
+    if isinstance(body.schema_, models.LexObject):
         lines.append(_get_typeddict_class_def(nsid.name, TypedDictType.DATA))
-        lines.append(_get_typeddict(nsid, body.schema, is_input_type=True))
+        lines.append(_get_typeddict(nsid, body.schema_, is_input_type=True))
     return join_code(lines)
 
 
@@ -510,13 +523,13 @@ def _generate_def_array(nsid: NSID, def_name: str, def_model: models.LexArray) -
 
 
 def _generate_def_string(nsid: NSID, def_name: str, def_model: models.LexString) -> str:
-    # FIXME(MarshalX): support more fields. only knownValues field is supported for now
+    # FIXME(MarshalX): support more fields. only known_values field is supported for now
 
-    if not def_model.knownValues:
+    if not def_model.known_values:
         return ''
 
     union_types = []
-    for known_value in def_model.knownValues:
+    for known_value in def_model.known_values:
         if '#' in known_value:
             # reference to literal (token)
             model_path, _ = _resolve_nsid_ref(nsid, known_value)
@@ -687,7 +700,7 @@ def _generate_init_files(root_package_path: Path) -> None:
         write_code(root_path.joinpath('__init__.py'), join_code(import_lines))
 
 
-def _generate_empty_init_files(root_package_path: Path):
+def _generate_empty_init_files(root_package_path: Path) -> None:
     for root, dirs, files in os.walk(root_package_path):
         root_path = Path(root)
 

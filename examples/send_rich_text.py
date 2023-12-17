@@ -5,7 +5,7 @@ from atproto.utils import TextBuilder
 # There is a more advanced way to send rich text without helper class in the advanced_usage/send_rich_text.py example.
 
 
-def main():
+def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 

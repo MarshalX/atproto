@@ -1,7 +1,7 @@
 from atproto.xrpc_client.models.dot_dict import DotDict
 
 
-def test_dot_dict():
+def test_dot_dict() -> None:
     expected_created_at = '2021-03-30T12:00:00Z'
     expected_snake_case = 'test'
 

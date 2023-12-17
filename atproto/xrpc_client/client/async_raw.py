@@ -1,3 +1,5 @@
+import typing as t
+
 from atproto.xrpc_client.client.base import AsyncClientBase
 from atproto.xrpc_client.namespaces import async_ns
 
@@ -10,7 +12,7 @@ class AsyncClientRaw(AsyncClientBase):
     com: 'async_ns.ComNamespace'
     app: 'async_ns.AppNamespace'
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self.com = async_ns.ComNamespace(self)

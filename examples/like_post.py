@@ -1,7 +1,7 @@
 from atproto import Client, models
 
 
-def main():
+def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 

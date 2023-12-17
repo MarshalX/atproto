@@ -1,7 +1,7 @@
 from atproto import AtUri, Client, models
 
 
-def main():
+def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 

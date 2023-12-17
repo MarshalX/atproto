@@ -39,7 +39,6 @@ atproto = "atproto.cli:atproto_cli"
 [tool.poetry.dependencies]
 python = ">=3.7.1,<3.13"
 httpx = ">=0.24.0,<0.26.0"
-dacite = ">=1.8.0,<2"
 typing-extensions = ">=4.6.1,<5"
 pyjwt = ">=2.7.0,<3"
 click = ">=8.1.3,<9"
@@ -92,7 +91,7 @@ extend-select = [
     "Q",  # flake8-quotes
     "S",  # flake8-bandit
     "ASYNC", # flake8-async
-#    "ANN", # flake8-annotations. Not all resolved yet
+    "ANN", # flake8-annotations
     "C",
     "BLE",
     "ERA",
@@ -115,8 +114,8 @@ line-length = 120
 target-version = "py37"
 ignore = [
     "PGH004", # use specific rule code with noqa; works bad with JetBrains IDE Warnings
+    "ANN401", # t.Any in **kwargs
     "ANN002", # Missing type annotation for `*args`
-    "ANN003", # Missing type annotation for `**kwargs`
     "ANN101", # Missing type annotation for `self` in method
     "ANN102", # Missing type annotation for `cls` in classmethod
 ]

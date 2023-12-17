@@ -56,7 +56,7 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict
     return operation_by_type
 
 
-def worker_main(cursor_value, pool_queue) -> None:
+def worker_main(cursor_value: multiprocessing.Value, pool_queue: multiprocessing.Queue) -> None:
     while True:
         message = pool_queue.get()
 
@@ -77,7 +77,7 @@ def worker_main(cursor_value, pool_queue) -> None:
             print(f'New post in the network! Langs: {post_langs}. Text: {post_msg}')
 
 
-def get_firehose_params(cursor_value) -> models.ComAtprotoSyncSubscribeRepos.Params:
+def get_firehose_params(cursor_value: multiprocessing.Value) -> models.ComAtprotoSyncSubscribeRepos.Params:
     return models.ComAtprotoSyncSubscribeRepos.Params(cursor=cursor_value.value)
 
 

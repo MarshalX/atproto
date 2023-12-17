@@ -11,7 +11,7 @@ def load_test_data() -> dict:
     return load_data_from_file('feed_record')
 
 
-def test_feed_record_deserialization():
+def test_feed_record_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
@@ -23,7 +23,7 @@ def test_feed_record_deserialization():
     assert model.value['created_at'] == '2023-07-20T10:17:40.298101'
 
 
-def test_feed_record_serialization():
+def test_feed_record_serialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     model_dict = get_model_as_dict(model)
@@ -44,7 +44,7 @@ def test_feed_record_serialization():
     assert model_dict['value']['$type'] == models.ids.AppBskyFeedGenerator
 
 
-def test_feed_record_avatar_deserialization():
+def test_feed_record_avatar_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
@@ -54,7 +54,7 @@ def test_feed_record_avatar_deserialization():
     assert model.value.avatar.py_type == 'blob'
 
 
-def test_feed_record_avatar_serialization():
+def test_feed_record_avatar_serialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     avatar = model.value.avatar
@@ -70,14 +70,14 @@ def test_feed_record_avatar_serialization():
     assert restored_avatar.cid == avatar.cid
 
 
-def test_feed_record_py_type_frozen():
+def test_feed_record_py_type_frozen() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     with pytest.raises(ValidationError):
         model.value.py_type = 'app.bsky.feed.generator'
 
 
-def test_feed_record_model_strict_mode():
+def test_feed_record_model_strict_mode() -> None:
     test_data = load_test_data()
 
     non_str_did = 123

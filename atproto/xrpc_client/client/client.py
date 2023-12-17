@@ -16,14 +16,14 @@ if t.TYPE_CHECKING:
 class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
     """High-level client for XRPC of ATProto."""
 
-    def __init__(self, base_url: t.Optional[str] = None, *args, **kwargs) -> None:
+    def __init__(self, base_url: t.Optional[str] = None, *args, **kwargs: t.Any) -> None:
         super().__init__(base_url, *args, **kwargs)
 
         self._refresh_lock = Lock()
 
         self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
-    def _invoke(self, invoke_type: 'InvokeType', **kwargs) -> 'Response':
+    def _invoke(self, invoke_type: 'InvokeType', **kwargs: t.Any) -> 'Response':
         session_refreshing = kwargs.pop('session_refreshing', False)
         if session_refreshing:
             return super()._invoke(invoke_type, **kwargs)

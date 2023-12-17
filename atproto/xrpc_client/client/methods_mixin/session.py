@@ -43,7 +43,7 @@ SessionResponse: te.TypeAlias = t.Union[
 
 
 class SessionMethodsMixin:
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self._access_jwt: t.Optional[str] = None

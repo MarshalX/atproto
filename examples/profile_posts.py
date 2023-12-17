@@ -1,7 +1,7 @@
 from atproto import Client
 
 
-def main(client: Client, handle: str):
+def main(client: Client, handle: str) -> None:
     print(f'\nProfile Posts of {handle}:\n\n')
 
     # Get profile's posts. Use pagination (cursor + limit) to fetch all

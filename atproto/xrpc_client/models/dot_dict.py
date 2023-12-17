@@ -106,10 +106,10 @@ class DotDict(UnknownDict):
     def __repr__(self) -> str:
         return repr(self._data)
 
-    def __reduce_ex__(self, protocol: int):
+    def __reduce_ex__(self, protocol: int):  # noqa: ANN204
         return getattr(self._data, '__reduce_ex__', None)(protocol)
 
-    def __reduce__(self):
+    def __reduce__(self):  # noqa: ANN204
         return getattr(self._data, '__reduce__', None)()
 
     @staticmethod

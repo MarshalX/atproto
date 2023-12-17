@@ -34,6 +34,11 @@ OnCallbackErrorCallback = t.Callable[[BaseException], None]
 AsyncOnCallbackErrorCallback = t.Callable[[BaseException], t.Coroutine[t.Any, t.Any, None]]
 
 
+if t.TYPE_CHECKING:
+    from websockets.client import ClientConnection as SyncWebSocketClient
+    from websockets.legacy.client import Connect as AsyncConnect
+
+
 def _build_websocket_uri(
     method: str, base_uri: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
 ) -> str:
@@ -109,10 +114,10 @@ class _WebsocketClientBase:
         # the user should care about updated params by himself
         return _build_websocket_uri(self._method, self._base_uri, self._params)
 
-    def _get_client(self):
+    def _get_client(self) -> 'SyncWebSocketClient':
         return connect(self._websocket_uri, max_size=_MAX_MESSAGE_SIZE_BYTES)
 
-    def _get_async_client(self):
+    def _get_async_client(self) -> 'AsyncConnect':
         # FIXME(DXsmiley): I've noticed that the close operation often takes the entire timeout for some reason
         #   By default, this is 10 seconds, which is pretty long.
         #   Maybe shorten it?

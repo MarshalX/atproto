@@ -45,7 +45,7 @@ class CID:
     def __str__(self) -> str:
         return self.encode()
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.encode())
 
 

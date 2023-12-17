@@ -1,7 +1,7 @@
 from atproto import AtUri
 
 
-def test_at_uri_from_str():
+def test_at_uri_from_str() -> None:
     test_uri = 'at://did:plc:poqvcn9iqfkgukdvqvb2qzba/app.bsky.feed.post/1jlmwihiomm9m'
 
     at_uri = AtUri.from_str(test_uri)

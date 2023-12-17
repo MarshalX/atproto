@@ -1,3 +1,5 @@
+import typing as t
+
 from atproto.xrpc_client.client.base import ClientBase
 from atproto.xrpc_client.namespaces import sync_ns
 
@@ -10,7 +12,7 @@ class ClientRaw(ClientBase):
     com: 'sync_ns.ComNamespace'
     app: 'sync_ns.AppNamespace'
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self.com = sync_ns.ComNamespace(self)

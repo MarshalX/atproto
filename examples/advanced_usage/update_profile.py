@@ -4,7 +4,7 @@ from atproto import Client, models
 from atproto.exceptions import BadRequestError
 
 
-def main():
+def main() -> None:
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 

@@ -1,18 +1,18 @@
 import threading
 import time
 
-from atproto.firehose import FirehoseSubscribeReposClient, parse_subscribe_repos_message
+from atproto.firehose import FirehoseSubscribeReposClient, MessageFrame, parse_subscribe_repos_message
 
 _STOP_AFTER_SECONDS = 3
 
 client = FirehoseSubscribeReposClient()
 
 
-def on_message_handler(message):
+def on_message_handler(message: MessageFrame) -> None:
     print(message.header, parse_subscribe_repos_message(message))
 
 
-def _stop_after_n_sec():
+def _stop_after_n_sec() -> None:
     time.sleep(_STOP_AFTER_SECONDS)
     client.stop()
 
