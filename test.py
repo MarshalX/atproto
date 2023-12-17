@@ -41,15 +41,35 @@ def sync_main() -> None:
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
-    params = models.AppBskyGraphGetSuggestedFollowsByActor.Params(actor='test.marshal.dev')
-    result = client.app.bsky.graph.get_suggested_follows_by_actor(params)
-    print(result)
+    post = client.get_post('3k2yihcrp6f2c')
+    # print(client.get_posts(['at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k2yihcrp6f2c']))
+    # print(client.get_post_thread('at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k2yihcrp6f2c'))
+    # print(client.get_likes('at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k2yihcrp6f2c'))
+    # print(client.get_reposted_by('at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k2yihcrp6f2c'))
+    # print(client.get_timeline())
+    # print(client.get_author_feed('test.marshal.dev'))
+    # repost = client.repost(models.create_strong_ref(post))
+    # print(client.unrepost(repost.uri))
+    # print(client.follow('did:plc:kvwvcn5iqfooopmyzvb4qzba'))
+    # print(client.unfollow('at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3kgqtrsry3u2y'))
+
+    # params = models.AppBskyGraphGetSuggestedFollowsByActor.Params(actor='test.marshal.dev')
+    # result = client.app.bsky.graph.get_suggested_follows_by_actor(params)
+    # print(result)
+    # print(client.get_follows('test.marshal.dev'))
+    # print(client.get_followers('test.marshal.dev'))
+    # print(client.get_profile('test.marshal.dev'))
+    # print(client.get_profiles(['test.marshal.dev', 'marshal.dev']))
+    # client.mute('test.marshal.dev')
+    # client.unmute('test.marshal.dev'))
+    print(client.resolve_handle('bsky.app'))
+    print(client.upload_blob(b'lol'))
+    exit(0)
 
     # client.send_post(TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/'))
     # text = TextBuilder().text('Hello World from ').link('atpoto SDK', 'https://atproto.blue')
     # post = client.send_post(text)
     # print(post)
-    exit(0)
 
     text_builder = TextBuilder()
     text_builder.tag('This is a rich message. ', 'atproto')
@@ -69,7 +89,6 @@ def sync_main() -> None:
     # client.send_post(text_builder)
 
     # client.send_post('test timestamp')
-    exit(0)
 
     # session_string = client.export_session_string()
     # print(session_string)
@@ -110,6 +129,8 @@ def sync_main() -> None:
     print(extended_record.value.text)
     print(extended_record.value.lol)  # custom (out of lexicon) attribute
     print(type(extended_record.value))
+
+    exit(0)
 
     # client.com.atproto.admin.get_moderation_actions()
 
