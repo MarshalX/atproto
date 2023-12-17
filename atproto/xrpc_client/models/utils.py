@@ -31,10 +31,13 @@ def get_or_create(
     """Get model instance from raw data.
 
     Note:
-        The record could have custom fields and be completely custom.
-        For example, custom bsky clients add a "via" field to indicate that it was posted using a not official client.
-        Such custom types can't be decoded into proper models,
-        and will be decoded to :obj:`atproto.xrpc_client.models.base.DotDict`.
+        The record could have additional fields and be completely custom.
+        For example, third-party bsky clients add a "via"
+        field to indicate that it was posted using a not official client.
+        Such records are corresponding to the lexicon, but have additional fields.
+        This is called "extended record".
+        Extended records will be decoded to proper models with extra, non-typehinted fields.
+        Unknown record types will be decoded to :obj:`atproto.xrpc_client.models.base.DotDict`.
 
     Note:
         By default, the method raises an exception on custom models.
