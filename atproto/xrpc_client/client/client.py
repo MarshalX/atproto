@@ -1,6 +1,7 @@
 import typing as t
 from threading import Lock
 
+from atproto import AtUri
 from atproto.utils import TextBuilder
 from atproto.xrpc_client import models
 from atproto.xrpc_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
@@ -143,6 +144,28 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
             )
         )
 
+    def delete_post(self, post_uri: str) -> bool:
+        """Delete post.
+
+        Args:
+            post_uri: AT URI of the post.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        uri = AtUri.from_str(post_uri)
+        return self.com.atproto.repo.delete_record(
+            models.ComAtprotoRepoDeleteRecord.Data(
+                collection=ids.AppBskyFeedPost,
+                repo=uri.hostname,
+                rkey=uri.rkey,
+            )
+        )
+
     def send_image(
         self,
         text: t.Union[str, TextBuilder],
@@ -185,6 +208,170 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
             facets=facets,
         )
 
+    def get_post(
+        self, post_rkey: str, profile_identify: t.Optional[str] = None, cid: t.Optional[str] = None
+    ) -> models.ComAtprotoRepoGetRecord.Response:
+        """Get post.
+
+        Args:
+            post_rkey: ID (slug) of the post.
+            profile_identify: Handler or DID. Who created the post.
+            cid: The CID of the version of the post.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoGetRecord.Response`: Post.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        repo = self.me.did
+        if profile_identify:
+            repo = profile_identify
+
+        return self.com.atproto.repo.get_record(
+            models.ComAtprotoRepoGetRecord.Params(
+                collection=ids.AppBskyFeedPost,
+                repo=repo,
+                rkey=post_rkey,
+                cid=cid,
+            )
+        )
+
+    def get_posts(self, uris: t.List[str]) -> models.AppBskyFeedGetPosts.Response:
+        """Get posts.
+
+        Args:
+            uris: Uris (AT URI).
+
+        Example:
+            .. code-block:: python
+
+                client.get_posts(['at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k2yihcrp6f2c'])
+
+        Returns:
+            :obj:`models.AppBskyFeedGetPosts.Response`: Posts.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.feed.get_posts(
+            models.AppBskyFeedGetPosts.Params(
+                uris=uris,
+            )
+        )
+
+    def get_post_thread(
+        self, uri: str, depth: t.Optional[int] = None, parent_height: t.Optional[int] = None
+    ) -> models.AppBskyFeedGetPostThread.Response:
+        """Get post thread.
+
+        Args:
+            uri: AT URI.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetPostThread.Response`: Post thread.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.feed.get_post_thread(
+            models.AppBskyFeedGetPostThread.Params(
+                uri=uri,
+                depth=depth,
+                parent_height=parent_height,
+            )
+        )
+
+    def get_likes(
+        self, uri: str, cid: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
+    ) -> models.AppBskyFeedGetLikes.Response:
+        """Get likes.
+
+        Args:
+            uri: AT URI.
+            cid: CID.
+            cursor: Cursor of the last like in the previous page.
+            limit: Limit count of likes to return.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetLikes.Response`: Likes.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.feed.get_likes(
+            models.AppBskyFeedGetLikes.Params(uri=uri, cid=cid, cursor=cursor, limit=limit)
+        )
+
+    def get_reposted_by(
+        self, uri: str, cid: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
+    ) -> models.AppBskyFeedGetRepostedBy.Response:
+        """Get reposted by (reposts).
+
+        Args:
+            uri: AT URI.
+            cid: CID.
+            cursor: Cursor of the last like in the previous page.
+            limit: Limit count of likes to return.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetRepostedBy.Response`: Reposts.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.feed.get_reposted_by(
+            models.AppBskyFeedGetRepostedBy.Params(uri=uri, cid=cid, cursor=cursor, limit=limit)
+        )
+
+    def get_timeline(
+        self, algorithm: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
+    ) -> models.AppBskyFeedGetTimeline.Response:
+        """Get home timeline.
+
+        Args:
+            algorithm: Algorithm.
+            cursor: Cursor of the last like in the previous page.
+            limit: Limit count of likes to return.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetTimeline.Response`: Home timeline.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.feed.get_timeline(
+            models.AppBskyFeedGetTimeline.Params(algorithm=algorithm, cursor=cursor, limit=limit)
+        )
+
+    def get_author_feed(
+        self, actor: str, cursor: t.Optional[str] = None, filter: t.Optional[str] = None, limit: t.Optional[int] = None
+    ) -> models.AppBskyFeedGetAuthorFeed.Response:
+        """Get author (profile) feed.
+
+        Args:
+            actor: Actor (handle or DID).
+            cursor: Cursor of the last like in the previous page.
+            filter: Filter.
+            limit: Limit count of likes to return.
+
+        Returns:
+            :obj:`models.AppBskyFeedGetAuthorFeed.Response`: Feed.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.feed.get_author_feed(
+            models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, fitler=filter, limit=limit)
+        )
+
     def like(self, subject: models.ComAtprotoRepoStrongRef.Main) -> models.ComAtprotoRepoCreateRecord.Response:
         """Like the post.
 
@@ -206,12 +393,11 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
             )
         )
 
-    def unlike(self, record_key: str, profile_identify: t.Optional[str] = None) -> bool:
+    def unlike(self, like_uri: str) -> bool:
         """Unlike the post.
 
         Args:
-            record_key: ID (slog) of the post.
-            profile_identify: Handler or DID. Who did the like.
+            like_uri: AT URI of the like.
 
         Returns:
             :obj:`bool`: Success status.
@@ -220,31 +406,23 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        repo = self.me.did
-        if profile_identify:
-            repo = profile_identify
-
+        uri = AtUri.from_str(like_uri)
         return self.com.atproto.repo.delete_record(
             models.ComAtprotoRepoDeleteRecord.Data(
                 collection=ids.AppBskyFeedLike,
-                repo=repo,
-                rkey=record_key,
+                repo=uri.hostname,
+                rkey=uri.rkey,
             )
         )
 
     def repost(
         self,
         subject: models.ComAtprotoRepoStrongRef.Main,
-        profile_identify: t.Optional[str] = None,
     ) -> models.ComAtprotoRepoCreateRecord.Response:
         """Repost post.
 
-        Note:
-            If `profile_identify` is not provided will be sent to the current profile.
-
         Args:
             subject: Reference to the post that should be reposted.
-            profile_identify: Handle or DID. Where to make repost.
 
         Returns:
             :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the reposted post record.
@@ -253,13 +431,9 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        repo = self.me.did
-        if profile_identify:
-            repo = profile_identify
-
         return self.com.atproto.repo.create_record(
             models.ComAtprotoRepoCreateRecord.Data(
-                repo=repo,
+                repo=self.me.did,
                 collection=ids.AppBskyFeedRepost,
                 record=models.AppBskyFeedRepost.Main(
                     created_at=self.get_current_time_iso(),
@@ -268,12 +442,11 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
             )
         )
 
-    def delete_post(self, post_rkey: str, profile_identify: t.Optional[str] = None) -> bool:
-        """Delete post.
+    def unrepost(self, repost_uri: str) -> bool:
+        """Unrepost the post (delete repost).
 
         Args:
-            post_rkey: ID (slug) of the post.
-            profile_identify: Handler or DID. Who created the post.
+            repost_uri: AT URI of the repost.
 
         Returns:
             :obj:`bool`: Success status.
@@ -282,14 +455,212 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
 
-        repo = self.me.did
-        if profile_identify:
-            repo = profile_identify
-
+        uri = AtUri.from_str(repost_uri)
         return self.com.atproto.repo.delete_record(
             models.ComAtprotoRepoDeleteRecord.Data(
-                collection=ids.AppBskyFeedPost,
-                repo=repo,
-                rkey=post_rkey,
+                collection=ids.AppBskyFeedRepost,
+                repo=uri.hostname,
+                rkey=uri.rkey,
             )
         )
+
+    def follow(self, subject: str) -> models.ComAtprotoRepoCreateRecord.Response:
+        """Follow the profile.
+
+        Args:
+            subject: DID of the profile.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created follow record.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.com.atproto.repo.create_record(
+            models.ComAtprotoRepoCreateRecord.Data(
+                repo=self.me.did,
+                collection=ids.AppBskyGraphFollow,
+                record=models.AppBskyGraphFollow.Main(created_at=self.get_current_time_iso(), subject=subject),
+            )
+        )
+
+    def unfollow(self, follow_uri: str) -> bool:
+        """Unfollow the profile.
+
+        Args:
+            follow_uri: AT URI of the follow.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        uri = AtUri.from_str(follow_uri)
+        return self.com.atproto.repo.delete_record(
+            models.ComAtprotoRepoDeleteRecord.Data(
+                collection=ids.AppBskyGraphFollow,
+                repo=uri.hostname,
+                rkey=uri.rkey,
+            )
+        )
+
+    def get_follows(
+        self, actor: str, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
+    ) -> models.AppBskyGraphGetFollows.Response:
+        """Get follows of the profile.
+
+        Args:
+            actor: Actor (handle or DID).
+            cursor: Cursor of the last like in the previous page.
+            limit: Limit count of likes to return.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetFollows.Response`: Follows.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.graph.get_follows(
+            models.AppBskyGraphGetFollows.Params(actor=actor, cursor=cursor, limit=limit)
+        )
+
+    def get_followers(
+        self, actor: str, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
+    ) -> models.AppBskyGraphGetFollowers.Response:
+        """Get followers of the profile.
+
+        Args:
+            actor: Actor (handle or DID).
+            cursor: Cursor of the last like in the previous page.
+            limit: Limit count of likes to return.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetFollowers.Response`: Followers.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.graph.get_followers(
+            models.AppBskyGraphGetFollowers.Params(actor=actor, cursor=cursor, limit=limit)
+        )
+
+    def get_profile(self, actor: str) -> models.AppBskyActorDefs.ProfileViewDetailed:
+        """Get profile.
+
+        Args:
+            actor: Actor (handle or DID).
+
+        Returns:
+            :obj:`models.AppBskyActorDefs.ProfileViewDetailed`: Profile.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=actor))
+
+    def get_profiles(self, actors: t.List[str]) -> models.AppBskyActorGetProfiles.Response:
+        """Get profiles.
+
+        Args:
+            actors: List of actors (handles or DIDs).
+
+        Returns:
+            :obj:`models.AppBskyActorGetProfiles.Response`: Profiles.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.actor.get_profiles(models.AppBskyActorGetProfiles.Params(actors=actors))
+
+    def mute(self, actor: str) -> bool:
+        """Mute actor (profile).
+
+        Args:
+            actor: Actor (handle or DID).
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.graph.mute_actor(models.AppBskyGraphMuteActor.Data(actor=actor))
+
+    def unmute(self, actor: str) -> bool:
+        """Unmute actor (profile).
+
+        Args:
+            actor: Actor (handle or DID).
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.app.bsky.graph.unmute_actor(models.AppBskyGraphUnmuteActor.Data(actor=actor))
+
+    def resolve_handle(self, handle: str) -> models.ComAtprotoIdentityResolveHandle.Response:
+        """Resolve the handle.
+
+        Args:
+            handle: Handle.
+
+        Returns:
+            :obj:`models.ComAtprotoIdentityResolveHandle.Response`: Resolved handle (DID).
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.com.atproto.identity.resolve_handle(models.ComAtprotoIdentityResolveHandle.Params(handle=handle))
+
+    def update_handle(self, handle: str) -> bool:
+        """Update the handle.
+
+        Args:
+            handle: New handle.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.com.atproto.identity.update_handle(models.ComAtprotoIdentityUpdateHandle.Data(handle=handle))
+
+    def upload_blob(self, data: bytes) -> models.ComAtprotoRepoUploadBlob.Response:
+        """Upload blob.
+
+        Args:
+            data: Binary data.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoUploadBlob.Response`: Uploaded blob reference.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+
+        return self.com.atproto.repo.upload_blob(data)
+
+    #: Alias for :attr:`unfollow`
+    delete_follow = unfollow
+    #: Alias for :attr:`unlike`
+    delete_like = unlike
+    #: Alias for :attr:`unrepost`
+    delete_repost = unrepost
+    #: Alias for :attr:`send_post`
+    post = send_post
+    #: Alias for :attr:`delete_post`
+    unsend = delete_post
