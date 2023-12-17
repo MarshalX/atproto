@@ -1,5 +1,42 @@
 # Change Log
 
+## Version 0.0.34
+
+**17.12.2023**
+
+* Make SDK more backward and forward-compatible with protocol by @MarshalX in https://github.com/MarshalX/atproto/pull/207
+* Add plenty of new high-level methods by @MarshalX in https://github.com/MarshalX/atproto/pull/208
+  * Breaking changes:
+    * `unlike` now accepts AT URI instead of `record_key` and `profile_identify`
+  * New methods:
+    * `get_post`
+    * `get_posts`
+    * `get_post_thread`
+    * `get_likes`
+    * `get_reposted_by`
+    * `get_timeline`
+    * `get_author_feed`
+    * `unrepost` AKA `delete_report`
+    * `follow`
+    * `unfollow` AKA `delete_follow`
+    * `get_follows`
+    * `get_followers`
+    * `get_profile`
+    * `get_profiles`
+    * `mute`
+    * `unmute`
+    * `resolve_handle`
+    * `update_handle`
+    * `upload_blob`
+* Migrate lexicon parser from dacite to pydantic; enable ruff ANN by @MarshalX in https://github.com/MarshalX/atproto/pull/206
+  * Removed exceptions:
+    * `UnknownPrimitiveTypeError`
+    * `UnknownDefinitionTypeError`
+  * Renamed fields:
+    * `schema` -> `schema_`
+    * `maxLength` -> `max_length`
+    * ... and all other camelCase names now in snake_case
+
 ## Version 0.0.33
 
 **13.12.2023**
