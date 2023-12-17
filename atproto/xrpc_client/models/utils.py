@@ -36,11 +36,11 @@ def get_or_create(
         field to indicate that it was posted using a not official client.
         Such records are corresponding to the lexicon, but have additional fields.
         This is called "extended record".
-        Extended records will be decoded to proper models with extra, non-typehinted fields.
+        Extended records will be decoded to proper models with extra, non-typehinted fields available only in runtime.
         Unknown record types will be decoded to :obj:`atproto.xrpc_client.models.base.DotDict`.
 
     Note:
-        By default, the method raises an exception on custom models.
+        By default, the method raises an exception on custom models if you have passed the expected model.
         To fall back to a :obj:`atproto.xrpc_client.models.base.DotDict` type, disable strict mode using the argument.
 
     Note:
@@ -50,7 +50,7 @@ def get_or_create(
         model_data: Raw data.
         model: Class of the model or any another type. If None, it will be resolved automatically.
         strict: Disable fallback to dictionary (:obj:`atproto.xrpc_client.models.base.DotDict`)
-            if can't be properly deserialized. Will raise the exception instead.
+            if it can't be properly deserialized in provided `model`. Will raise the exception instead.
 
     Returns:
         Instance of :obj:`model` or :obj:`None` or
@@ -155,7 +155,7 @@ def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[st
 
         expected_type = expected_type.Main.model_fields['py_type'].default
 
-    if isinstance(model, DotDict):  # custom (extended) record
+    if isinstance(model, DotDict):  # custom record
         try:
             return expected_type == model[_TYPE_SERVICE_FIELD]
         except ModelFieldNotFoundError:
