@@ -25,6 +25,16 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Pre-processors",
 ]
+packages = [
+    { include = "atproto", from = "packages" },
+    { include = "atproto_cli", from = "packages" },
+    { include = "atproto_client", from = "packages" },
+    { include = "atproto_codegen", from = "packages" },
+    { include = "atproto_core", from = "packages" },
+    { include = "atproto_firehose", from = "packages" },
+    { include = "atproto_lexicon", from = "packages" },
+    { include = "atproto_server", from = "packages" },
+]
 
 [tool.poetry.urls]
 "Documentation" = "https://atproto.blue"
@@ -33,8 +43,8 @@ classifiers = [
 "Author" = "https://github.com/MarshalX"
 
 [tool.poetry.scripts]
-atp = "atproto.cli:atproto_cli"
-atproto = "atproto.cli:atproto_cli"
+atp = "atproto_cli:atproto_cli"
+atproto = "atproto_cli:atproto_cli"
 
 [tool.poetry.dependencies]
 python = ">=3.7.1,<3.13"
@@ -124,11 +134,12 @@ ignore = [
 "tests/*.py" = ["S101"]
 "docs/*.py" = ["T201", "INP001", "ERA001", "E501"]
 "examples/*.py" = ["T201", "INP001", "ERA001"]
-"atproto/xrpc_client/models/__init__.py" = ["F401", "F811"]
-"atproto/xrpc_client/models/app/*.py" = ["E501"]
-"atproto/xrpc_client/models/com/*.py" = ["E501"]
-"atproto/xrpc_client/namespaces/async_ns.py" = ["E501"]
-"atproto/xrpc_client/namespaces/sync_ns.py" = ["E501"]
+"packages/atproto/exceptions.py" = ["F403"]
+"packages/atproto_client/models/__init__.py" = ["F401", "F811"]
+"packages/atproto_client/models/app/*.py" = ["E501"]
+"packages/atproto_client/models/com/*.py" = ["E501"]
+"packages/atproto_client/namespaces/async_ns.py" = ["E501"]
+"packages/atproto_client/namespaces/sync_ns.py" = ["E501"]
 "fetch_new_lexicon.py" = ["T201"]
 "test.py" = ["S101", "ERA001", "T201", "E501", "F401"]
 

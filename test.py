@@ -4,17 +4,22 @@ import os
 import threading
 import typing as t
 
-from atproto import CAR, AsyncClient, AtUri, Client, exceptions, models
-from atproto.firehose import (
+from atproto import (
+    CAR,
+    AsyncClient,
     AsyncFirehoseSubscribeReposClient,
+    AtUri,
+    Client,
     FirehoseSubscribeReposClient,
+    exceptions,
+    models,
     parse_subscribe_repos_message,
 )
-from atproto.utils import TextBuilder
-from atproto.xrpc_client.models import get_model_as_dict, get_model_as_json, get_or_create, ids, is_record_type
+from atproto_client.models import get_model_as_dict, get_model_as_json, get_or_create, ids, is_record_type
+from atproto_client.utils import TextBuilder
 
 if t.TYPE_CHECKING:
-    from atproto.firehose import MessageFrame
+    from atproto_firehose.models import MessageFrame
 
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
@@ -41,6 +46,28 @@ def sync_main() -> None:
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
+
+    post = client.get_post('3k2yihcrp6f2c')
+    print(post)
+    exit(0)
+
+    with open('cat2.jpg', 'rb') as f:
+        cat_data = f.read()
+
+    upload = client.upload_blob(cat_data)
+    embed_external = models.AppBskyEmbedExternal.Main(
+        external=models.AppBskyEmbedExternal.External(
+            title='Test title',
+            description='Test description',
+            uri='https://atproto.blue',
+            thumb=upload.blob,
+        )
+    )
+
+    client.send_post('test external with thumb', embed=embed_external)
+
+    exit(0)
+
     post = client.get_post('3k2yihcrp6f2c')
     # print(client.get_posts(['at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k2yihcrp6f2c']))
     # print(client.get_post_thread('at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k2yihcrp6f2c'))
@@ -53,17 +80,17 @@ def sync_main() -> None:
     # print(client.follow('did:plc:kvwvcn5iqfooopmyzvb4qzba'))
     # print(client.unfollow('at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3kgqtrsry3u2y'))
 
-    # params = models.AppBskyGraphGetSuggestedFollowsByActor.Params(actor='test.marshal.dev')
-    # result = client.app.bsky.graph.get_suggested_follows_by_actor(params)
-    # print(result)
+    params = models.AppBskyGraphGetSuggestedFollowsByActor.Params(actor='test.marshal.dev')
+    result = client.app.bsky.graph.get_suggested_follows_by_actor(params)
+    print(result)
     # print(client.get_follows('test.marshal.dev'))
     # print(client.get_followers('test.marshal.dev'))
     # print(client.get_profile('test.marshal.dev'))
     # print(client.get_profiles(['test.marshal.dev', 'marshal.dev']))
     # client.mute('test.marshal.dev')
     # client.unmute('test.marshal.dev'))
-    print(client.resolve_handle('bsky.app'))
-    print(client.upload_blob(b'lol'))
+    # print(client.resolve_handle('bsky.app'))
+    # print(client.upload_blob(b'lol'))
     exit(0)
 
     # client.send_post(TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/'))
@@ -162,8 +189,8 @@ async def main() -> None:
     profile = await async_client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
     print(profile)
 
-    text = TextBuilder().text('Hello World from ').link('Python SDK', 'https://atproto.blue')
-    await async_client.send_post(text)
+    # text = TextBuilder().text('Hello World from ').link('Python SDK', 'https://atproto.blue')
+    # await async_client.send_post(text)
 
     # should be async open
     # with open('cat.png', 'rb') as f:
@@ -171,10 +198,10 @@ async def main() -> None:
 
     # await async_client.send_image('Cat', cat_data, 'async cat alt')
 
-    # resolve = await async_client.com.atproto.identity.resolve_handle(
-    #     models.ComAtprotoIdentityResolveHandle.Params(profile.handle)
-    # )
-    # assert resolve.did == profile.did
+    resolve = await async_client.com.atproto.identity.resolve_handle(
+        models.ComAtprotoIdentityResolveHandle.Params(handle=profile.handle)
+    )
+    assert resolve.did == profile.did
 
 
 def _main_firehose_test() -> None:

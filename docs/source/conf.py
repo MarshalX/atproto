@@ -19,7 +19,7 @@ from docs.source.alias_resolver import resolve_internal_aliases, resolve_intersp
 if t.TYPE_CHECKING:
     from sphinx.application import Sphinx
 
-sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('../../packages'))
 
 master_doc = 'index'
 

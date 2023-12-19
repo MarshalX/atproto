@@ -1,9 +1,9 @@
 import pytest
+from atproto_client import models
+from atproto_client.models import dot_dict, get_model_as_dict, get_or_create
+from atproto_client.models.blob_ref import BlobRef
 from pydantic import ValidationError
 
-from atproto.xrpc_client import models
-from atproto.xrpc_client.models import dot_dict, get_model_as_dict, get_or_create
-from atproto.xrpc_client.models.blob_ref import BlobRef
 from tests.models.tests.utils import load_data_from_file
 
 

@@ -3,7 +3,7 @@
 SPHINXOPTS ?=
 SPHINXBUILD ?= sphinx-build
 SPHINXGENERATE ?= sphinx-apidoc
-MODULEPATH = ../atproto
+MODULEPATH = ../packages
 SOURCEDIR = source
 GENDIR = source/atproto
 BUILDDIR = build

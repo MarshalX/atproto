@@ -1,6 +1,7 @@
-from atproto.xrpc_client import models
-from atproto.xrpc_client.models import get_model_as_dict, get_or_create
-from atproto.xrpc_client.models.dot_dict import DotDict
+from atproto_client import models
+from atproto_client.models import get_model_as_dict, get_or_create
+from atproto_client.models.dot_dict import DotDict
+
 from tests.models.tests.utils import load_data_from_file
 
 

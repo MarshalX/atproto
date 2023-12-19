@@ -19,7 +19,7 @@ Documentation
    :maxdepth: 4
 
    firehose
-   xrpc_clients/clients
+   atproto_client/clients
    namespace
    models
 
