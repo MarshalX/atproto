@@ -52,7 +52,10 @@ class CAR:
 
         roots = header.get('roots')
         if isinstance(roots, list) and len(roots):
-            root: CID = roots[0]
+            # The first element of the CAR roots metadata array must be the CID of the most relevant Commit object.
+            # For a generic export, this is the current (most recent) commit.
+            # Additional CIDs may also be present in the roots array, with (for now) undefined meaning or order.
+            root: CID = CID.decode(roots[0])
         else:
             raise InvalidCARFile('Invalid CAR file. Expected at least one root.')
 
