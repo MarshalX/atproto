@@ -7,7 +7,7 @@ All clients present in two variants: sync and async. As a developer, you should 
 
 ..  code-block:: python
 
-    from atproto_firehose import FirehoseSubscribeReposClient, parse_subscribe_repos_message
+    from atproto import FirehoseSubscribeReposClient, parse_subscribe_repos_message
 
     client = FirehoseSubscribeReposClient()
 
@@ -48,4 +48,4 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   atproto_firehose.models
+   firehose.models

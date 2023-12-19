@@ -14,8 +14,6 @@ import os
 import sys
 import typing as t
 
-from docs.source.alias_resolver import resolve_internal_aliases, resolve_intersphinx_aliases
-
 if t.TYPE_CHECKING:
     from sphinx.application import Sphinx
 
@@ -132,5 +130,7 @@ autodoc_pydantic_model_show_config_summary = False
 
 
 def setup(app: 'Sphinx') -> None:
+    from docs.source.alias_resolver import resolve_internal_aliases, resolve_intersphinx_aliases
+
     app.connect('doctree-read', resolve_internal_aliases)
     app.connect('missing-reference', resolve_intersphinx_aliases)
