@@ -30,7 +30,7 @@ from atproto_codegen.utils import (
 )
 from atproto_codegen.utils import get_code_intent as _
 
-_MODELS_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath( 'atproto_client', 'models')
+_MODELS_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('atproto_client', 'models')
 
 
 class ModelType(Enum):

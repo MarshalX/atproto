@@ -46,7 +46,6 @@ def sync_main() -> None:
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
-
     post = client.get_post('3k2yihcrp6f2c')
     print(post)
     exit(0)

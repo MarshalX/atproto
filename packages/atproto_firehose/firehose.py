@@ -75,9 +75,9 @@ class FirehoseSubscribeReposClient(FirehoseClient):
     """
 
     def __init__(
-            self,
-            params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None,
-            base_uri: t.Optional[str] = None,
+        self,
+        params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None,
+        base_uri: t.Optional[str] = None,
     ) -> None:
         params_model = get_or_create(params, models.ComAtprotoSyncSubscribeRepos.Params)
 
@@ -97,9 +97,9 @@ class AsyncFirehoseSubscribeReposClient(AsyncFirehoseClient):
     """
 
     def __init__(
-            self,
-            params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None,
-            base_uri: t.Optional[str] = None,
+        self,
+        params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None,
+        base_uri: t.Optional[str] = None,
     ) -> None:
         params_model = get_or_create(params, models.ComAtprotoSyncSubscribeRepos.Params)
 
@@ -122,9 +122,9 @@ class FirehoseSubscribeLabelsClient(FirehoseClient):
     """
 
     def __init__(
-            self,
-            params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None,
-            base_uri: t.Optional[str] = None,
+        self,
+        params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None,
+        base_uri: t.Optional[str] = None,
     ) -> None:
         params_model = get_or_create(params, models.ComAtprotoLabelSubscribeLabels.Params)
 
@@ -144,9 +144,9 @@ class AsyncFirehoseSubscribeLabelsClient(AsyncFirehoseClient):
     """
 
     def __init__(
-            self,
-            params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None,
-            base_uri: t.Optional[str] = None,
+        self,
+        params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None,
+        base_uri: t.Optional[str] = None,
     ) -> None:
         params_model = get_or_create(params, models.ComAtprotoLabelSubscribeLabels.Params)
 
