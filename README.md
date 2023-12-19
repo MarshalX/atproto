@@ -25,7 +25,7 @@
 Code snippet:
 ```python
 from atproto import Client, models
-from atproto.utils import TextBuilder
+from atproto_client.utils import TextBuilder
 
 
 def main():
@@ -50,7 +50,7 @@ if __name__ == '__main__':
 import asyncio
 
 from atproto import AsyncClient, models
-from atproto.utils import TextBuilder
+from atproto_client.utils import TextBuilder
 
 
 async def main():

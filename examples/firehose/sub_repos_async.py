@@ -1,8 +1,8 @@
 import asyncio
 
-from atproto.firehose import (
+from atproto import (
     AsyncFirehoseSubscribeReposClient,
-    MessageFrame,
+    firehose_models,
     parse_subscribe_repos_message,
 )
 
@@ -10,7 +10,7 @@ from atproto.firehose import (
 async def main() -> None:
     client = AsyncFirehoseSubscribeReposClient()
 
-    async def on_message_handler(message: MessageFrame) -> None:
+    async def on_message_handler(message: firehose_models.MessageFrame) -> None:
         print(message.header, parse_subscribe_repos_message(message))
 
     await client.start(on_message_handler)
