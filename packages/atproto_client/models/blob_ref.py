@@ -1,16 +1,14 @@
 import typing as t
 
 import typing_extensions as te
+from atproto_core.cid import CID
 from pydantic import BaseModel, ConfigDict, Field
 
-if t.TYPE_CHECKING:
-    from atproto_core.cid import CID
 
+class IpldLink(BaseModel):
+    """CID representation in JSON."""
 
-class BlobRefLink(BaseModel):
-    """Blob reference link."""
-
-    link: str = Field(alias='$link')
+    link: str = Field(alias='$link')  #: CID.
 
 
 class BlobRef(BaseModel):
@@ -20,13 +18,14 @@ class BlobRef(BaseModel):
 
     mime_type: str = Field(alias='mimeType')  #: Mime type.
     size: int  #: Size in bytes.
-    ref: BlobRefLink  #: Reference to link.
+    ref: t.Union[str, IpldLink]  #: CID.
 
     py_type: te.Literal['blob'] = Field(default='blob', alias='$type')
 
     @property
     def cid(self) -> 'CID':
         """Get CID."""
-        from atproto_core.cid import CID
+        if isinstance(self.ref, str):
+            return CID.decode(self.ref)
 
         return CID.decode(self.ref.link)

@@ -15,7 +15,7 @@ class Multihash:
     digest: bytes
 
 
-@dataclass
+@dataclass(eq=False)
 class CID:
     _cid: str
     version: int
@@ -47,6 +47,15 @@ class CID:
 
     def __hash__(self) -> int:
         return hash(self.encode())
+
+    def __eq__(self, other: t.Any) -> bool:
+        if isinstance(other, str):
+            return self.encode() == other
+
+        if isinstance(other, CID):
+            return self.encode() == other.encode()
+
+        return False
 
 
 class _CIDPydanticAnnotation:
