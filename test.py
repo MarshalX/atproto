@@ -49,7 +49,6 @@ def sync_main() -> None:
     post = client.get_post('3k2yihcrp6f2c')
     print(post)
 
-
     # with open('cat2.jpg', 'rb') as f:
     #     cat_data = f.read()
     #
