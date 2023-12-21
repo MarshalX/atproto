@@ -1,5 +1,19 @@
 # Change Log
 
+## Version 0.0.35
+
+**21.12.2023**
+
+# ❗Breaking changes
+
+SDK was split into many packages. This affects imports in your codebase. [Read more](https://atproto.blue/en/latest/readme.content.html#sdk-structure)
+
+## What's Changed
+* New SDK structure by @MarshalX in https://github.com/MarshalX/atproto/pull/214 and https://github.com/MarshalX/atproto/pull/216
+* Fix decoding of CAR root by @MarshalX in https://github.com/MarshalX/atproto/pull/213
+* Fix parsing of BlobRef in CBOR by @MarshalX in https://github.com/MarshalX/atproto/pull/215
+* Update lexicons fetched from 905743d committed 2023-12-20T14:49:21Z by @MarshalX in https://github.com/MarshalX/atproto/pull/217
+
 ## Version 0.0.34
 
 **17.12.2023**
