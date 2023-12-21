@@ -20,6 +20,9 @@ class Data(base.DataModelBase):
     content: str  #: Content.
     recipient_did: str = Field(alias='recipientDid')  #: Recipient did.
     sender_did: str = Field(alias='senderDid')  #: Sender did.
+    comment: t.Optional[
+        str
+    ] = None  #: Additional comment by the sender that won't be used in the email itself but helpful to provide more context for moderators/reviewers.
     subject: t.Optional[str] = None  #: Subject.
 
 
@@ -27,6 +30,9 @@ class DataDict(te.TypedDict):
     content: str  #: Content.
     recipient_did: str  #: Recipient did.
     sender_did: str  #: Sender did.
+    comment: te.NotRequired[
+        t.Optional[str]
+    ]  #: Additional comment by the sender that won't be used in the email itself but helpful to provide more context for moderators/reviewers.
     subject: te.NotRequired[t.Optional[str]]  #: Subject.
 
 
