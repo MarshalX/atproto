@@ -24,8 +24,8 @@ class TextBuilder:
     Example:
         Without chaining:
 
-        >>> from atproto_client.utils import TextBuilder
-        >>> text_builder = TextBuilder()
+        >>> from atproto import client_utils
+        >>> text_builder = client_utils.TextBuilder()
         >>> text_builder.tag('This is a rich message. ', 'atproto')
         >>> text_builder.text('I can mention ')
         >>> text_builder.mention('account', 'did:plc:kvwvcn5iqfooopmyzvb4qzba')
@@ -34,16 +34,15 @@ class TextBuilder:
 
         With chaining:
 
-        >>> from atproto_client.utils import TextBuilder
-        >>> text_builder = TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/')
+        >>> from atproto import client_utils
+        >>> text_builder = client_utils.TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/')
 
         Later you can use this builder in the Client:
 
-        >>> from atproto import Client
-        >>> from atproto_client.utils import TextBuilder
+        >>> from atproto import Client, client_utils
         >>> client = Client()
         >>> # You can pass instance of TextBuilder instead of str to the "text" argument.
-        >>> client.send_post(TextBuilder().link('Python SDK', 'https://atproto.blue/'))
+        >>> client.send_post(client_utils.TextBuilder().link('Python SDK', 'https://atproto.blue/'))
         >>> # Same with send_image method
 
     Note:

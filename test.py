@@ -11,12 +11,12 @@ from atproto import (
     AtUri,
     Client,
     FirehoseSubscribeReposClient,
+    client_utils,
     exceptions,
     models,
     parse_subscribe_repos_message,
 )
 from atproto_client.models import get_model_as_dict, get_model_as_json, get_or_create, ids, is_record_type
-from atproto_client.utils import TextBuilder
 
 if t.TYPE_CHECKING:
     from atproto_firehose.models import MessageFrame
@@ -48,24 +48,24 @@ def sync_main() -> None:
 
     post = client.get_post('3k2yihcrp6f2c')
     print(post)
-    exit(0)
 
-    with open('cat2.jpg', 'rb') as f:
-        cat_data = f.read()
 
-    upload = client.upload_blob(cat_data)
-    embed_external = models.AppBskyEmbedExternal.Main(
-        external=models.AppBskyEmbedExternal.External(
-            title='Test title',
-            description='Test description',
-            uri='https://atproto.blue',
-            thumb=upload.blob,
-        )
-    )
-
-    client.send_post('test external with thumb', embed=embed_external)
-
-    exit(0)
+    # with open('cat2.jpg', 'rb') as f:
+    #     cat_data = f.read()
+    #
+    # upload = client.upload_blob(cat_data)
+    # embed_external = models.AppBskyEmbedExternal.Main(
+    #     external=models.AppBskyEmbedExternal.External(
+    #         title='Test title',
+    #         description='Test description',
+    #         uri='https://atproto.blue',
+    #         thumb=upload.blob,
+    #     )
+    # )
+    #
+    # client.send_post('test external with thumb', embed=embed_external)
+    #
+    # exit(0)
 
     post = client.get_post('3k2yihcrp6f2c')
     # print(client.get_posts(['at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k2yihcrp6f2c']))
@@ -90,21 +90,21 @@ def sync_main() -> None:
     # client.unmute('test.marshal.dev'))
     # print(client.resolve_handle('bsky.app'))
     # print(client.upload_blob(b'lol'))
-    exit(0)
+    # exit(0)
 
-    # client.send_post(TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/'))
-    # text = TextBuilder().text('Hello World from ').link('atpoto SDK', 'https://atproto.blue')
+    # client.send_post(client_utils.TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/'))
+    # text = client_utils.TextBuilder().text('Hello World from ').link('atpoto SDK', 'https://atproto.blue')
     # post = client.send_post(text)
     # print(post)
 
-    text_builder = TextBuilder()
+    text_builder = client_utils.TextBuilder()
     text_builder.tag('This is a rich message. ', 'atproto')
     text_builder.text('I can mention ')
     text_builder.mention('account', 'did:plc:kvwvcn5iqfooopmyzvb4qzba')
     text_builder.text(' and add clickable ')
     text_builder.link('link', 'https://atproto.blue/')
 
-    text_builder = TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/')
+    text_builder = client_utils.TextBuilder().text('Test msg using ').link('Python SDK', 'https://atproto.blue/')
 
     client.send_post(text_builder)
 
@@ -188,7 +188,7 @@ async def main() -> None:
     profile = await async_client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
     print(profile)
 
-    # text = TextBuilder().text('Hello World from ').link('Python SDK', 'https://atproto.blue')
+    # text = client_utils.TextBuilder().text('Hello World from ').link('Python SDK', 'https://atproto.blue')
     # await async_client.send_post(text)
 
     # should be async open
