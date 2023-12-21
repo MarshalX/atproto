@@ -61,6 +61,21 @@ Useful links to continue:
 - [List of all methods with documentation](https://atproto.readthedocs.io/en/latest/xrpc_clients/client.html).
 - [Examples of using the methods](https://github.com/MarshalX/atproto/tree/main/examples).
 
+### SDK structure
+
+The SDK is built upon the following components:
+- `atproto` — the package that contains import shortcuts to other packages.
+- `atproto_cli` — the package that contains the CLI tool to generate code.
+- `atproto_client` — the package that contains the XRPC Client, data models, and utils like rich text helper.
+- `atproto_codegen` — the package that contains the code generator of models, clients, and namespaces.
+- `atproto_core` — the package that contains the core of the SDK. Base class of exceptions, tools to work with NSID, AT URI Schemes, CID, and CAR files.
+- `atproto_firehose` — the package that contains the Firehose (data streaming) client and models.
+- `atproto_lexicon` — the package that contains the lexicon parser.
+
+I highly recommend you to use the `atproto` package to import everything that you need.
+It contains shortcuts to all other packages.
+
+
 ### Documentation
 
 The documentation is live at [atproto.blue](https://atproto.blue/).

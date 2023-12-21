@@ -1,4 +1,5 @@
 from atproto_client import AsyncClient, Client, models
+from atproto_client import utils as client_utils
 from atproto_core.car import CAR
 from atproto_core.cid import CID, CIDType
 from atproto_core.nsid import NSID
@@ -13,11 +14,10 @@ from atproto_firehose import (
 )
 from atproto_firehose import models as firehose_models
 
-__version__ = '0.0.0'  # placeholder. Dynamic version from Git Tag
 __all__ = [
-    '__version__',
     'AsyncClient',
     'Client',
+    'client_utils',
     'models',
     'CAR',
     'CID',
