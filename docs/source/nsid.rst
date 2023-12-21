@@ -7,7 +7,7 @@ NSIDs use Reverse Domain-Name Notation with the additional constraint that the s
 
 More info: https://atproto.com/specs/nsid
 
-.. automodule:: atproto.nsid
+.. automodule:: atproto_core.nsid
    :members:
    :undoc-members:
    :show-inheritance:

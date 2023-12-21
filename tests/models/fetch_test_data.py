@@ -3,11 +3,11 @@ import logging
 import os
 import typing as t
 
-from atproto import Client
-from atproto.xrpc_client.request import Request, Response
+from atproto_client import Client
+from atproto_client.request import Request, Response
 
 if t.TYPE_CHECKING:
-    from atproto.xrpc_client.models.common import XrpcError
+    from atproto_client.models.common import XrpcError
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

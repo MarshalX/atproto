@@ -1,7 +1,7 @@
 CID decoder
 ===========
 
-.. autoclass:: atproto.cid.CID
+.. autoclass:: atproto_core.cid.CID
    :members:
    :undoc-members:
    :show-inheritance:

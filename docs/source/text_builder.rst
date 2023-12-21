@@ -1,7 +1,7 @@
 Text Builder (rich text)
 ========================
 
-.. automodule:: atproto.utils.text_builder
+.. automodule:: atproto_client.utils.text_builder
    :members:
    :undoc-members:
    :show-inheritance:

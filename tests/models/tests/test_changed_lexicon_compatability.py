@@ -1,8 +1,7 @@
 import pytest
-
-from atproto.exceptions import ModelError
-from atproto.xrpc_client import models
-from atproto.xrpc_client.models import get_or_create
+from atproto_client import models
+from atproto_client.exceptions import ModelError
+from atproto_client.models import get_or_create
 
 """These tests are based on the following statements:
 

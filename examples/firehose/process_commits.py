@@ -1,10 +1,6 @@
 import multiprocessing
 
-from atproto import CAR, AtUri
-from atproto.firehose import FirehoseSubscribeReposClient, parse_subscribe_repos_message
-from atproto.firehose.models import MessageFrame
-from atproto.xrpc_client import models
-from atproto.xrpc_client.models import get_or_create, ids, is_record_type
+from atproto import CAR, AtUri, FirehoseSubscribeReposClient, firehose_models, models, parse_subscribe_repos_message
 
 
 def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict:  # noqa: C901
@@ -33,24 +29,32 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> dict
             if not record_raw_data:
                 continue
 
-            record = get_or_create(record_raw_data, strict=False)
-            if uri.collection == ids.AppBskyFeedLike and is_record_type(record, ids.AppBskyFeedLike):
+            record = models.get_or_create(record_raw_data, strict=False)
+            if uri.collection == models.ids.AppBskyFeedLike and models.is_record_type(
+                record, models.ids.AppBskyFeedLike
+            ):
                 operation_by_type['likes']['created'].append({'record': record, **create_info})
-            elif uri.collection == ids.AppBskyFeedPost and is_record_type(record, ids.AppBskyFeedPost):
+            elif uri.collection == models.ids.AppBskyFeedPost and models.is_record_type(
+                record, models.ids.AppBskyFeedPost
+            ):
                 operation_by_type['posts']['created'].append({'record': record, **create_info})
-            elif uri.collection == ids.AppBskyFeedRepost and is_record_type(record, ids.AppBskyFeedRepost):
+            elif uri.collection == models.ids.AppBskyFeedRepost and models.is_record_type(
+                record, models.ids.AppBskyFeedRepost
+            ):
                 operation_by_type['reposts']['created'].append({'record': record, **create_info})
-            elif uri.collection == ids.AppBskyGraphFollow and is_record_type(record, ids.AppBskyGraphFollow):
+            elif uri.collection == models.ids.AppBskyGraphFollow and models.is_record_type(
+                record, models.ids.AppBskyGraphFollow
+            ):
                 operation_by_type['follows']['created'].append({'record': record, **create_info})
 
         if op.action == 'delete':
-            if uri.collection == ids.AppBskyFeedLike:
+            if uri.collection == models.ids.AppBskyFeedLike:
                 operation_by_type['likes']['deleted'].append({'uri': str(uri)})
-            elif uri.collection == ids.AppBskyFeedPost:
+            elif uri.collection == models.ids.AppBskyFeedPost:
                 operation_by_type['posts']['deleted'].append({'uri': str(uri)})
-            elif uri.collection == ids.AppBskyFeedRepost:
+            elif uri.collection == models.ids.AppBskyFeedRepost:
                 operation_by_type['reposts']['deleted'].append({'uri': str(uri)})
-            elif uri.collection == ids.AppBskyGraphFollow:
+            elif uri.collection == models.ids.AppBskyGraphFollow:
                 operation_by_type['follows']['deleted'].append({'uri': str(uri)})
 
     return operation_by_type
@@ -98,7 +102,7 @@ if __name__ == '__main__':
     queue = multiprocessing.Queue(maxsize=max_queue_size)
     pool = multiprocessing.Pool(workers_count, worker_main, (cursor, queue))
 
-    def on_message_handler(message: MessageFrame) -> None:
+    def on_message_handler(message: firehose_models.MessageFrame) -> None:
         if cursor.value:
             # we are using updating the cursor state here because of multiprocessing
             # typically you can call client.update_params() directly on commit processing

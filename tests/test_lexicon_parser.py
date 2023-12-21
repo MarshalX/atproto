@@ -1,4 +1,4 @@
-from atproto.lexicon.parser import _PATH_TO_LEXICONS, lexicon_parse_file, lexicon_parse_dir  # noqa
+from atproto_lexicon.parser import _PATH_TO_LEXICONS, lexicon_parse_file, lexicon_parse_dir  # noqa
 
 
 def test_lexicon_parse_file() -> None:

@@ -1,4 +1,4 @@
-from atproto.xrpc_client.models.dot_dict import DotDict
+from atproto_client.models.dot_dict import DotDict
 
 
 def test_dot_dict() -> None:

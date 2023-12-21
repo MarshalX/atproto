@@ -1,4 +1,4 @@
-from atproto import AtUri
+from atproto_core.uri import AtUri
 
 
 def test_at_uri_from_str() -> None:

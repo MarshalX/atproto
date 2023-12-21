@@ -7,7 +7,7 @@ More info: https://ipld.io/docs/codecs/known/dag-cbor/
 
 About CBOR: https://en.wikipedia.org/wiki/CBOR
 
-.. automodule:: atproto.cbor
+.. automodule:: atproto_core.cbor
    :members:
    :undoc-members:
    :show-inheritance:

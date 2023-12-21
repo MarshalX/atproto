@@ -1,7 +1,6 @@
 import typing as t
 
-from atproto import Client
-from atproto.xrpc_client import models
+from atproto import Client, models
 
 
 def main() -> None:

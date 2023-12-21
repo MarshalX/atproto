@@ -7,7 +7,7 @@ The CAR format is intended as a serialized representation of any IPLD DAG (graph
 
 Specification for v1: https://ipld.io/specs/transport/car/carv1/
 
-.. automodule:: atproto.car
+.. automodule:: atproto_core.car
    :members:
    :undoc-members:
    :show-inheritance:

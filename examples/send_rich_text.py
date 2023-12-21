@@ -1,5 +1,5 @@
 from atproto import Client
-from atproto.utils import TextBuilder
+from atproto_client.utils import TextBuilder
 
 # To send links as "link card" or "quote post" look at the advanced_usage/send_embed.py example.
 # There is a more advanced way to send rich text without helper class in the advanced_usage/send_rich_text.py example.
