@@ -530,6 +530,7 @@ class ModEventEmail(base.ModelBase):
     """Definition model for :obj:`com.atproto.admin.defs`. Keep a log of outgoing email to a user"""
 
     subject_line: str = Field(alias='subjectLine')  #: The subject line of the email sent to the user.
+    comment: t.Optional[str] = None  #: Additional comment about the outgoing comm.
 
     py_type: te.Literal['com.atproto.admin.defs#modEventEmail'] = Field(
         default='com.atproto.admin.defs#modEventEmail', alias='$type', frozen=True

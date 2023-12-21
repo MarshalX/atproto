@@ -102,6 +102,11 @@ def _write_extracted_lexicons(extracted_files: ExtractedFiles) -> None:
         _write_to_file(_format_lexicon_filename(filename), content)
 
 
+def _remove_all_files_from_lexicons_folder() -> None:
+    for file in _FOLDER_TO_WRITE_LEXICONS.iterdir():
+        file.unlink()
+
+
 def main() -> None:
     sha, commit_date, _ = _get_last_commit_info()
 
@@ -120,6 +125,11 @@ def main() -> None:
     print('- Commit with the message below:', end='\n\n')
 
     print(f'Update lexicons fetched from {sha[:7]} committed {commit_date}')
+
+    # in case if some lexicons were deleted
+    _remove_all_files_from_lexicons_folder()
+    # TODO(MarshalX): remove generated files likes models, etc.
+
     _write_extracted_lexicons(_extract_zip(_download_zip_with_code()))
 
 
