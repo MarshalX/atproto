@@ -1,8 +1,7 @@
 import typing as t
 from abc import ABC, abstractmethod
 
-from atproto_core.did_doc import is_valid_did_doc
-from did_doc import parse_did_doc
+from atproto_core.did_doc import is_valid_did_doc, parse_did_doc
 
 from atproto_identity.did.atproto_data import ensure_atproto_document, ensure_atproto_key
 from atproto_identity.exceptions import DidNotFoundError, PoorlyFormattedDidDocumentError
@@ -84,7 +83,9 @@ class BaseResolver(ABC):
 
             return None
 
-        self._cache.set(did, did_doc)
+        if self._cache:
+            self._cache.set(did, did_doc)
+
         return did_doc
 
     async def resolve_async(self, did: str, force_refresh: bool = False) -> t.Optional['DidDocument']:
@@ -104,7 +105,9 @@ class BaseResolver(ABC):
 
             return None
 
-        self._cache.set(did, did_doc)
+        if self._cache:
+            self._cache.set(did, did_doc)
+
         return did_doc
 
     def ensure_resolve(self, did: str, force_refresh: bool = False) -> 'DidDocument':

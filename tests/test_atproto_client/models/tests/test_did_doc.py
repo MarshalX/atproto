@@ -2,7 +2,7 @@ from atproto_client import models
 from atproto_client.models import get_or_create
 from atproto_client.models.dot_dict import DotDict
 
-from tests.models.tests.utils import load_data_from_file
+from tests.test_atproto_client.models.tests.utils import load_data_from_file
 
 
 def load_test_data() -> dict:

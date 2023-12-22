@@ -4,7 +4,7 @@ from atproto_client.models import dot_dict, get_model_as_dict, get_or_create
 from atproto_client.models.blob_ref import BlobRef
 from pydantic import ValidationError
 
-from tests.models.tests.utils import load_data_from_file
+from tests.test_atproto_client.models.tests.utils import load_data_from_file
 
 
 def load_test_data() -> dict:
