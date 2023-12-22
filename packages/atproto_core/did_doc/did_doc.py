@@ -23,9 +23,13 @@ class DidDocument(BaseModel):
     service: t.Optional[t.List['Service']] = None
 
 
-def is_valid_did_doc(doc: dict) -> bool:
+def is_valid_did_doc(did_doc: dict) -> bool:
     try:
-        DidDocument(**doc)
+        parse_did_doc(did_doc)
         return True
     except ValidationError:
         return False
+
+
+def parse_did_doc(did_doc: dict) -> DidDocument:
+    return DidDocument(**did_doc)

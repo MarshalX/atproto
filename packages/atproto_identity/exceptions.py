@@ -19,3 +19,11 @@ class UnsupportedDidWebPathError(AtProtocolError):
 
 class UnsupportedDidMethodError(AtProtocolError):
     ...
+
+
+class PoorlyFormattedDidDocumentError(AtProtocolError):
+    ...
+
+
+class DidNotFoundError(AtProtocolError):
+    ...
