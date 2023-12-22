@@ -30,6 +30,8 @@ jobs:
             files.pythonhosted.org
             install.python-poetry.org
             pypi.org
+            feed.atproto.blue
+            plc.directory
 
       - name: Checkout repository.
         uses: actions/checkout@v4
