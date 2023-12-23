@@ -39,9 +39,9 @@ class DidInMemoryCache(DidBaseCache):
         if not val:
             return None
 
-        now = _datetime_now()
-        expired = now > val.updated_at + self.max_ttl
-        stale = now > val.updated_at + self.stale_ttl
+        now = _datetime_now().timestamp()
+        expired = now > val.updated_at.timestamp() + self.max_ttl
+        stale = now > val.updated_at.timestamp() + self.stale_ttl
 
         return CachedDidResult(did, val.document, val.updated_at, stale, expired)
 
