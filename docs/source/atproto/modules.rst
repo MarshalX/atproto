@@ -10,5 +10,6 @@ packages
    atproto_codegen
    atproto_core
    atproto_firehose
+   atproto_identity
    atproto_lexicon
    atproto_server

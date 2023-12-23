@@ -4,11 +4,8 @@
 
 **21.12.2023**
 
-# ❗Breaking changes
+**❗Breaking changes:** SDK was split into many packages. This affects imports in your codebase. [Read more](https://atproto.blue/en/latest/readme.content.html#sdk-structure)
 
-SDK was split into many packages. This affects imports in your codebase. [Read more](https://atproto.blue/en/latest/readme.content.html#sdk-structure)
-
-## What's Changed
 * New SDK structure by @MarshalX in https://github.com/MarshalX/atproto/pull/214 and https://github.com/MarshalX/atproto/pull/216
 * Fix decoding of CAR root by @MarshalX in https://github.com/MarshalX/atproto/pull/213
 * Fix parsing of BlobRef in CBOR by @MarshalX in https://github.com/MarshalX/atproto/pull/215

@@ -13,6 +13,7 @@ from atproto_firehose import (
     parse_subscribe_repos_message,
 )
 from atproto_firehose import models as firehose_models
+from atproto_identity.resolver import IdResolver
 
 __all__ = [
     'AsyncClient',
@@ -31,4 +32,5 @@ __all__ = [
     'parse_subscribe_labels_message',
     'parse_subscribe_repos_message',
     'firehose_models',
+    'IdResolver',
 ]

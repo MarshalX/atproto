@@ -22,9 +22,10 @@ Documentation
    atproto_client/clients
    namespace
    models
+   atproto_identity/identity
 
 .. toctree::
-   :caption: Utils
+   :caption: Core
    :maxdepth: 4
 
    nsid
@@ -32,6 +33,12 @@ Documentation
    uri
    car
    cbor
+   did_doc
+
+.. toctree::
+   :caption: Utils
+   :maxdepth: 4
+
    text_builder
 
 .. toctree::
