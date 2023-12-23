@@ -13,8 +13,15 @@ def test_handle_resolver() -> None:
     assert did_plc == expected_did_plc
 
 
-def test_handle_resolver_with_invalid_handle() -> None:
+def test_handle_resolver_with_invalid_handle_url() -> None:
     expected_handle = 'test123.marshal.dev'
+
+    with pytest.raises(DidNotFoundError):
+        HandleResolver().ensure_resolve(expected_handle)
+
+
+def test_handle_resolver_with_not_existing_well_know() -> None:
+    expected_handle = 'feed.atproto.blue'
 
     with pytest.raises(DidNotFoundError):
         HandleResolver().ensure_resolve(expected_handle)
