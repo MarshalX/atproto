@@ -1,26 +1,16 @@
 Identity (DID and Handle resolvers)
 ===================================
 
-.. automodule:: atproto_identity
+.. automodule:: atproto_identity.resolver
    :members:
    :undoc-members:
    :show-inheritance:
-
-Subpackages
------------
+   :inherited-members:
 
 .. toctree::
    :maxdepth: 4
 
-   ../atproto/atproto_identity.cache
-   ../atproto/atproto_identity.did
-   ../atproto/atproto_identity.handle
-
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   ../atproto/atproto_identity.exceptions
-   ../atproto/atproto_identity.resolver
+   id_resolver
+   handle_resolver
+   did_resolver
+   cache
