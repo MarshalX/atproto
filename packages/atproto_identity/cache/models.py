@@ -8,12 +8,16 @@ if t.TYPE_CHECKING:
 
 @dataclass
 class CachedDid:
+    """Cached DID."""
+
     document: 'DidDocument'
     updated_at: datetime
 
 
 @dataclass
 class CachedDidResult:
+    """Cached DID result."""
+
     did: str
     document: 'DidDocument'
     updated_at: datetime

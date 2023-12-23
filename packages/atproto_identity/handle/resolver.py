@@ -44,6 +44,13 @@ class _HandleResolverBase:
 
 
 class HandleResolver(_HandleResolverBase):
+    """Handle Resolver.
+
+    Args:
+        timeout: Request timeout.
+        backup_nameservers: Backup nameservers (for DNS resolve).
+    """
+
     def __init__(
         self,
         timeout: t.Optional[float] = None,
@@ -56,6 +63,18 @@ class HandleResolver(_HandleResolverBase):
         self._http_client = httpx.Client()
 
     def resolve(self, handle: str) -> t.Optional[str]:
+        """Resolve handle to DID.
+
+        Uses DNS and HTTP to resolve handle to DID. The first successful result will be returned.
+
+        Resolve order: DNS -> HTTP.
+
+        Args:
+            handle: Handle.
+
+        Returns:
+            :obj:`str`: DID or ``None`` if handle not found.
+        """
         dns_resolve = self.resolve_dns(handle)
         if dns_resolve:
             return dns_resolve
@@ -68,6 +87,17 @@ class HandleResolver(_HandleResolverBase):
         return None
 
     def ensure_resolve(self, handle: str) -> str:
+        """Ensure handle is resolved to DID.
+
+        Args:
+            handle: Handle.
+
+        Returns:
+            :obj:`str`: DID.
+
+        Raises:
+            :obj:`DidNotFoundError`: Handle not found.
+        """
         did = self.resolve(handle)
         if not did:
             raise DidNotFoundError(f'Unable to resolve handle: {handle}')
@@ -75,6 +105,14 @@ class HandleResolver(_HandleResolverBase):
         return did
 
     def resolve_dns(self, handle: str) -> t.Optional[str]:
+        """Resolve handle to DID using DNS.
+
+        Args:
+            handle: Handle.
+
+        Returns:
+            :obj:`str`: DID or ``None`` if handle not found.
+        """
         try:
             answers = self._dns_resolver.resolve(self._get_qname(handle), _ATPROTO_RECORD_TYPE, lifetime=self._timeout)
         except DNSException:
@@ -83,6 +121,14 @@ class HandleResolver(_HandleResolverBase):
         return self._find_text_record(answers)
 
     def resolve_http(self, handle: str) -> t.Optional[str]:
+        """Resolve handle to DID using HTTP.
+
+        Args:
+            handle: Handle.
+
+        Returns:
+            :obj:`str`: DID or ``None`` if handle not found.
+        """
         try:
             response = self._http_client.get(f'https://{handle}{_ATPROTO_WELL_KNOWN_PATH}', timeout=self._timeout)
             response.raise_for_status()
@@ -92,6 +138,13 @@ class HandleResolver(_HandleResolverBase):
 
 
 class AsyncHandleResolver(_HandleResolverBase):
+    """Asynchronous Handle Resolver.
+
+    Args:
+        timeout: Request timeout.
+        backup_nameservers: Backup nameservers (for DNS resolve).
+    """
+
     def __init__(
         self,
         timeout: t.Optional[float] = None,
@@ -104,6 +157,18 @@ class AsyncHandleResolver(_HandleResolverBase):
         self._http_client = httpx.AsyncClient()
 
     async def resolve(self, handle: str) -> t.Optional[str]:
+        """Resolve handle to DID.
+
+        Uses DNS and HTTP to resolve handle to DID. The first successful result will be returned.
+
+        Resolve order: DNS -> HTTP.
+
+        Args:
+            handle: Handle.
+
+        Returns:
+            :obj:`str`: DID or ``None`` if handle not found.
+        """
         dns_resolve = await self.resolve_dns(handle)
         if dns_resolve:
             return dns_resolve
@@ -116,6 +181,17 @@ class AsyncHandleResolver(_HandleResolverBase):
         return None
 
     async def ensure_resolve(self, handle: str) -> str:
+        """Ensure handle is resolved to DID.
+
+        Args:
+            handle: Handle.
+
+        Returns:
+            :obj:`str`: DID.
+
+        Raises:
+            :obj:`DidNotFoundError`: Handle not found.
+        """
         did = await self.resolve(handle)
         if not did:
             raise DidNotFoundError(f'Unable to resolve handle: {handle}')
@@ -123,6 +199,14 @@ class AsyncHandleResolver(_HandleResolverBase):
         return did
 
     async def resolve_dns(self, handle: str) -> t.Optional[str]:
+        """Resolve handle to DID using DNS.
+
+        Args:
+            handle: Handle.
+
+        Returns:
+            :obj:`str`: DID or ``None`` if handle not found.
+        """
         try:
             answers = await self._dns_resolver.resolve(
                 self._get_qname(handle), _ATPROTO_RECORD_TYPE, lifetime=self._timeout
@@ -133,6 +217,14 @@ class AsyncHandleResolver(_HandleResolverBase):
         return self._find_text_record(answers)
 
     async def resolve_http(self, handle: str) -> t.Optional[str]:
+        """Resolve handle to DID using HTTP.
+
+        Args:
+            handle: Handle.
+
+        Returns:
+            :obj:`str`: DID or ``None`` if handle not found.
+        """
         try:
             response = await self._http_client.get(f'https://{handle}{_ATPROTO_WELL_KNOWN_PATH}', timeout=self._timeout)
             response.raise_for_status()

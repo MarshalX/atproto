@@ -38,6 +38,14 @@ class BaseResolver(_BaseResolver, ABC):
         raise NotImplementedError
 
     def resolve_no_cache(self, did: str) -> t.Optional['DidDocument']:
+        """Resolve DID without cache.
+
+        Args:
+            did: DID.
+
+        Returns:
+            :obj:`DidDocument`: DID document or ``None`` if not found.
+        """
         value = self.resolve_without_validation(did)
         if value is None:
             return None
@@ -45,12 +53,26 @@ class BaseResolver(_BaseResolver, ABC):
         return self.validate_did_doc(did, value)
 
     def refresh_cache(self, did: str) -> None:
+        """Refresh cached DID.
+
+        Args:
+            did: DID.
+        """
         if self._cache is None:
             return
 
         self._cache.refresh(did, lambda: self.resolve_no_cache(did))
 
     def resolve(self, did: str, force_refresh: bool = False) -> t.Optional['DidDocument']:
+        """Resolve DID.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`DidDocument`: DID document or ``None`` if not found.
+        """
         if self._cache and not force_refresh:
             cached_result = self._cache.get(did)
             if cached_result is not None and not cached_result.expired:
@@ -73,6 +95,18 @@ class BaseResolver(_BaseResolver, ABC):
         return did_doc
 
     def ensure_resolve(self, did: str, force_refresh: bool = False) -> 'DidDocument':
+        """Ensure DID is resolved.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`DidDocument`: DID document.
+
+        Raises:
+            :obj:`DidNotFoundError`: DID not found.
+        """
         did_doc = self.resolve(did, force_refresh)
         if did_doc is None:
             raise DidNotFoundError(f'Unable to resolve DID {did}')
@@ -80,10 +114,12 @@ class BaseResolver(_BaseResolver, ABC):
         return did_doc
 
     def resolve_atproto_data(self, did: str, force_refresh: bool = False) -> 'AtprotoData':
+        """Not implemented yet."""
         did_doc = self.ensure_resolve(did, force_refresh)
         return ensure_atproto_document(did_doc)
 
     def resolve_atproto_key(self, did: str, force_refresh: bool = False) -> str:
+        """Not implemented yet."""
         if did.startswith(_DID_KEY_PREFIX):
             return did
 
@@ -100,6 +136,14 @@ class AsyncBaseResolver(_BaseResolver, ABC):
         raise NotImplementedError
 
     async def resolve_no_cache(self, did: str) -> t.Optional['DidDocument']:
+        """Resolve DID without cache.
+
+        Args:
+            did: DID.
+
+        Returns:
+            :obj:`DidDocument`: DID document or ``None`` if not found.
+        """
         value = await self.resolve_without_validation(did)
         if value is None:
             return None
@@ -107,12 +151,26 @@ class AsyncBaseResolver(_BaseResolver, ABC):
         return self.validate_did_doc(did, value)
 
     async def refresh_cache(self, did: str) -> None:
+        """Refresh cached DID.
+
+        Args:
+            did: DID.
+        """
         if self._cache is None:
             return
 
         await self._cache.refresh(did, lambda: self.resolve_no_cache(did))
 
     async def resolve(self, did: str, force_refresh: bool = False) -> t.Optional['DidDocument']:
+        """Resolve DID.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`DidDocument`: DID document or ``None`` if not found.
+        """
         if self._cache and not force_refresh:
             cached_result = await self._cache.get(did)
             if cached_result is not None and not cached_result.expired:
@@ -135,6 +193,18 @@ class AsyncBaseResolver(_BaseResolver, ABC):
         return did_doc
 
     async def ensure_resolve(self, did: str, force_refresh: bool = False) -> 'DidDocument':
+        """Ensure DID is resolved.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`DidDocument`: DID document.
+
+        Raises:
+            :obj:`DidNotFoundError`: DID not found.
+        """
         did_doc = await self.resolve(did, force_refresh)
         if did_doc is None:
             raise DidNotFoundError(f'Unable to resolve DID {did}')
@@ -142,10 +212,12 @@ class AsyncBaseResolver(_BaseResolver, ABC):
         return did_doc
 
     async def resolve_atproto_data(self, did: str, force_refresh: bool = False) -> 'AtprotoData':
+        """Not implemented yet."""
         did_doc = await self.ensure_resolve(did, force_refresh)
         return ensure_atproto_document(did_doc)
 
     async def resolve_atproto_key(self, did: str, force_refresh: bool = False) -> str:
+        """Not implemented yet."""
         if did.startswith(_DID_KEY_PREFIX):
             return did
 

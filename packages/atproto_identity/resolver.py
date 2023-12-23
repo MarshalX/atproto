@@ -12,6 +12,15 @@ class IdResolver:
 
     This resolver is used to resolve identities.
     DID and Handle identifies are supported.
+
+    Note:
+        Default PLC directory URL is https://plc.directory.
+        Default request timeout is 3 seconds.
+
+    Args:
+        plc_url: PLC directory URL.
+        timeout: Request timeout.
+        cache: DID cache.
     """
 
     def __init__(
@@ -43,10 +52,19 @@ class IdResolver:
 
 
 class AsyncIdResolver:
-    """Identity Resolver.
+    """Asynchronous Identity Resolver.
 
     This resolver is used to resolve identities.
     DID and Handle identifies are supported.
+
+    Note:
+        Default PLC directory URL is https://plc.directory.
+        Default request timeout is 3 seconds.
+
+    Args:
+        plc_url: PLC directory URL.
+        timeout: Request timeout.
+        cache: DID cache.
     """
 
     def __init__(

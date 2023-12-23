@@ -42,6 +42,7 @@ language = 'en'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
+    'sphinx.ext.autosectionlabel',
     'sphinxext.opengraph',
     'sphinx_copybutton',
     'sphinx_favicon',
@@ -127,6 +128,9 @@ autodoc_pydantic_model_undoc_members = True
 autodoc_pydantic_model_show_json = True
 autodoc_pydantic_settings_show_json = False
 autodoc_pydantic_model_show_config_summary = False
+
+
+autosectionlabel_prefix_document = True
 
 
 def setup(app: 'Sphinx') -> None:

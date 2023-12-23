@@ -37,6 +37,16 @@ class _DidResolverBase:
 
 
 class DidResolver(_DidResolverBase, BaseResolver):
+    """DID Resolver.
+
+    Supported DID methods: PLC, Web.
+
+    Args:
+        plc_url: PLC directory URL.
+        timeout: Request timeout.
+        cache: DID cache.
+    """
+
     def __init__(
         self,
         plc_url: t.Optional[str] = None,
@@ -55,10 +65,28 @@ class DidResolver(_DidResolverBase, BaseResolver):
         self._methods = {'plc': DidPlcResolver(plc_url, timeout, cache), 'web': DidWebResolver(timeout)}
 
     def resolve_without_validation(self, did: str) -> t.Optional[dict]:
+        """Resolve DID without validation.
+
+        Args:
+            did: DID.
+
+        Returns:
+            :obj:`dict`: DID document or ``None`` if DID not found.
+        """
         return self._get_resolver_method(did).resolve_without_validation(did)
 
 
 class AsyncDidResolver(_DidResolverBase, AsyncBaseResolver):
+    """Asynchronous DID Resolver.
+
+    Supported DID methods: PLC, Web.
+
+    Args:
+        plc_url: PLC directory URL.
+        timeout: Request timeout.
+        cache: DID cache.
+    """
+
     def __init__(
         self,
         plc_url: t.Optional[str] = None,
@@ -77,4 +105,12 @@ class AsyncDidResolver(_DidResolverBase, AsyncBaseResolver):
         self._methods = {'plc': AsyncDidPlcResolver(plc_url, timeout, cache), 'web': AsyncDidWebResolver(timeout)}
 
     async def resolve_without_validation(self, did: str) -> t.Optional[dict]:
+        """Resolve DID without validation.
+
+        Args:
+            did: DID.
+
+        Returns:
+            :obj:`dict`: DID document or ``None`` if DID not found.
+        """
         return await self._get_resolver_method(did).resolve_without_validation(did)
