@@ -32,6 +32,7 @@ packages = [
     { include = "atproto_codegen", from = "packages" },
     { include = "atproto_core", from = "packages" },
     { include = "atproto_firehose", from = "packages" },
+    { include = "atproto_identity", from = "packages" },
     { include = "atproto_lexicon", from = "packages" },
     { include = "atproto_server", from = "packages" },
 ]
@@ -55,6 +56,7 @@ click = ">=8.1.3,<9"
 websockets = ">=11.0.3,<13"
 pydantic = ">=2.0,<3.0"
 libipld = ">=1.0.0,<2.0.0"
+dnspython = ">=2.3.0,<3"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "0.1.2"
@@ -71,6 +73,8 @@ sphinxext-opengraph = "0.7.5"
 
 [tool.poetry.group.test.dependencies]
 pytest = ">=7.3.1,<7.4.0"
+pytest-asyncio = ">=0.21.0"
+coverage = ">=7.2.7"
 
 [tool.poetry-dynamic-versioning]
 # poetry self add "poetry-dynamic-versioning[plugin]"

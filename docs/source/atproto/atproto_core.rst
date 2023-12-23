@@ -15,6 +15,7 @@ Subpackages
    atproto_core.car
    atproto_core.cbor
    atproto_core.cid
+   atproto_core.did_doc
    atproto_core.nsid
    atproto_core.uri
 

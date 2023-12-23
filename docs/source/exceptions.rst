@@ -28,6 +28,15 @@ Firehose
    :show-inheritance:
 
 
+Identity
+########
+
+.. automodule:: atproto_identity.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 Lexicon
 #######
 
