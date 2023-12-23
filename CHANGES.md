@@ -1,5 +1,17 @@
 # Change Log
 
+## Version 0.0.36
+
+**23.12.2023**
+
+The AT Protocol Identity package has been implemented! 
+It allows the resolution of DIDs and Handles using various techniques like DNS, HTTP, and PLC directory. 
+Abstract and in-memory caching has been brought too. 
+And as always, it provides both sync and async interfaces.
+Check the docs below!
+
+**🌐 [Identity resolvers for DID and Handle](https://atproto.blue/en/latest/atproto_identity/identity.html)**
+
 ## Version 0.0.35
 
 **21.12.2023**
