@@ -138,13 +138,17 @@ Useful links to continue:
 ### SDK structure
 
 The SDK is built upon the following components:
-- `atproto` — the package that contains import shortcuts to other packages.
-- `atproto_cli` — the package that contains the CLI tool to generate code.
-- `atproto_client` — the package that contains the XRPC Client, data models, and utils like rich text helper.
-- `atproto_codegen` — the package that contains the code generator of models, clients, and namespaces.
-- `atproto_core` — the package that contains the core of the SDK. Base class of exceptions, tools to work with NSID, AT URI Schemes, CID, and CAR files.
-- `atproto_firehose` — the package that contains the Firehose (data streaming) client and models.
-- `atproto_lexicon` — the package that contains the lexicon parser.
+
+| Package            | Description                                                                                                                           |
+|--------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| `atproto`          | The package that contains import shortcuts to other packages.                                                                         |
+| `atproto_cli`      | The package that contains the CLI tool to generate code.                                                                              |
+| `atproto_client`   | The package that contains the XRPC Client, data models, and utils like rich text helper.                                              |
+| `atproto_codegen`  | The package that contains the code generator of models, clients, and namespaces.                                                      |
+| `atproto_core`     | The package that contains the core of the SDK. Base class of exceptions, tools to work with NSID, AT URI Schemes, CID, and CAR files. |
+| `atproto_firehose` | The package that contains the Firehose (data streaming) client and models.                                                            |
+| `atproto_identity` | The package that contains the identity resolvers for DID and Handle.                                                                  |
+| `atproto_lexicon`  | The package that contains the lexicon parser.                                                                                         |
 
 I highly recommend you to use the `atproto` package to import everything that you need. 
 It contains shortcuts to all other packages.
