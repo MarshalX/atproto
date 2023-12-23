@@ -15,10 +15,15 @@ GetDocCallback = t.Callable[[], t.Optional['DidDocument']]
 AsyncGetDocCallback = t.Callable[[], t.Coroutine[t.Any, t.Any, t.Optional['DidDocument']]]
 
 
-class DidBaseCache(ABC):
+class _DidBaseCache:
     def __init__(self, stale_ttl: t.Optional[int] = None, max_ttl: t.Optional[int] = None) -> None:
         self.stale_ttl = stale_ttl or _DEFAULT_STALE_TTL
         self.max_ttl = max_ttl or _DEFAULT_MAX_TTL
+
+
+class DidBaseCache(_DidBaseCache, ABC):
+    def __init__(self, stale_ttl: t.Optional[int] = None, max_ttl: t.Optional[int] = None) -> None:
+        super().__init__(stale_ttl, max_ttl)
 
     @abstractmethod
     def get(self, did: str) -> t.Optional['CachedDidResult']:
@@ -33,13 +38,34 @@ class DidBaseCache(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def refresh_async(self, did: str, get_doc_callback: AsyncGetDocCallback) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
     def delete(self, did: str) -> None:
         raise NotImplementedError
 
     @abstractmethod
     def clear(self) -> None:
+        raise NotImplementedError
+
+
+class AsyncDidBaseCache(_DidBaseCache, ABC):
+    def __init__(self, stale_ttl: t.Optional[int] = None, max_ttl: t.Optional[int] = None) -> None:
+        super().__init__(stale_ttl, max_ttl)
+
+    @abstractmethod
+    async def get(self, did: str) -> t.Optional['CachedDidResult']:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def set(self, did: str, document: 'DidDocument') -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def refresh(self, did: str, get_doc_callback: AsyncGetDocCallback) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def delete(self, did: str) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def clear(self) -> None:
         raise NotImplementedError

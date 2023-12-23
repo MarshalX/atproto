@@ -1,10 +1,10 @@
 import typing as t
 
-from atproto_identity.did.resolver import DidResolver
-from atproto_identity.handle.resolver import HandleResolver
+from atproto_identity.did.resolver import AsyncDidResolver, DidResolver
+from atproto_identity.handle.resolver import AsyncHandleResolver, HandleResolver
 
 if t.TYPE_CHECKING:
-    from atproto_identity.cache.base_cache import DidBaseCache
+    from atproto_identity.cache.base_cache import AsyncDidBaseCache, DidBaseCache
 
 
 class IdResolver:
@@ -34,6 +34,41 @@ class IdResolver:
 
     @property
     def did(self) -> DidResolver:
+        """DID Resolver.
+
+        This resolver is used to resolve DIDs.
+        PLC and Web DID methods are supported.
+        """
+        return self._did
+
+
+class AsyncIdResolver:
+    """Identity Resolver.
+
+    This resolver is used to resolve identities.
+    DID and Handle identifies are supported.
+    """
+
+    def __init__(
+        self,
+        plc_url: t.Optional[str] = None,
+        timeout: t.Optional[float] = None,
+        cache: t.Optional['AsyncDidBaseCache'] = None,
+        backup_nameservers: t.Optional[t.List[str]] = None,
+    ) -> None:
+        self._handle = AsyncHandleResolver(timeout, backup_nameservers)
+        self._did = AsyncDidResolver(plc_url, timeout, cache)
+
+    @property
+    def handle(self) -> AsyncHandleResolver:
+        """Handle Resolver.
+
+        This resolver is used to resolve handles.
+        """
+        return self._handle
+
+    @property
+    def did(self) -> AsyncDidResolver:
         """DID Resolver.
 
         This resolver is used to resolve DIDs.
