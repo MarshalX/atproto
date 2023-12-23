@@ -30,7 +30,8 @@ jobs:
             files.pythonhosted.org
             install.python-poetry.org
             pypi.org
-            feed.atproto.blue
+            *.atproto.blue
+            *.marshal.dev
             plc.directory
 
       - name: Checkout repository.
