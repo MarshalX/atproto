@@ -70,7 +70,9 @@ if __name__ == '__main__':
 
 🍿 [Example project with custom feed generator](https://github.com/MarshalX/bluesky-feed-generator)
 
-🔥 [Firehose data streaming is available!](https://atproto.blue/en/latest/firehose.html)
+🔥 [Firehose data streaming is available](https://atproto.blue/en/latest/firehose.html)
+
+🌐 [Identity resolvers for DID and Handle](https://atproto.blue/en/latest/atproto_identity/identity.html)
 
 ### Introduction
 
