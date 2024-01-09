@@ -3,12 +3,12 @@ from dataclasses import dataclass
 from datetime import timedelta
 
 import typing_extensions as te
-
-from atproto_client.client.auth import get_jwt_payload
+from atproto_server.auth.jwt import get_jwt_payload
 
 if t.TYPE_CHECKING:
+    from atproto_server.auth.jwt import JwtPayload
+
     from atproto_client import models
-    from atproto_client.client.auth import JwtPayload
 
 
 @dataclass
