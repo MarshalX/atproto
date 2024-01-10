@@ -23,6 +23,7 @@ Documentation
    namespace
    models
    atproto_identity/identity
+   atproto_server/index
 
 .. toctree::
    :caption: Core

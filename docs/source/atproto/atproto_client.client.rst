@@ -22,7 +22,6 @@ Submodules
 
    atproto_client.client.async_client
    atproto_client.client.async_raw
-   atproto_client.client.auth
    atproto_client.client.base
    atproto_client.client.client
    atproto_client.client.raw

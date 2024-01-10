@@ -9,6 +9,7 @@ packages
    atproto_client
    atproto_codegen
    atproto_core
+   atproto_crypto
    atproto_firehose
    atproto_identity
    atproto_lexicon

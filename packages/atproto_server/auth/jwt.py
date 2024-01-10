@@ -22,6 +22,9 @@ GetSigningKeyCallbackAsync = t.Callable[[str, bool], t.Coroutine[t.Any, t.Any, s
 
 @dataclass
 class JwtPayload:
+    """The payload of the JWT."""
+
+    # TODO(MarshalX): separate service and user tokens to different classes?
     exp: int  # expired at
     iat: t.Optional[int] = None  # created at
     scope: t.Optional[str] = None
@@ -32,6 +35,15 @@ class JwtPayload:
 
 
 def parse_jwt(jwt: t.Union[str, bytes]) -> t.Tuple[bytes, bytes, t.Dict[str, t.Any], bytes]:
+    """Parse the given JWT.
+
+    Args:
+        jwt: The JWT to parse.
+
+    Returns:
+        :obj:`tuple` of :obj:`bytes`, :obj:`bytes`, :obj:`dict`, :obj:`bytes`:
+        The parsed JWT: payload, signing input, header, signature.
+    """
     if isinstance(jwt, str):
         jwt = jwt.encode('UTF-8')
 
@@ -71,6 +83,14 @@ def parse_jwt(jwt: t.Union[str, bytes]) -> t.Tuple[bytes, bytes, t.Dict[str, t.A
 
 
 def decode_jwt_payload(payload: t.Union[str, bytes]) -> JwtPayload:
+    """Decode the given JWT payload.
+
+    Args:
+        payload: The JWT payload to decode.
+
+    Returns:
+        :obj:`JwtPayload`: The decoded payload of the given JWT.
+    """
     try:
         plain_payload = json.loads(payload)
     except ValueError as e:
@@ -82,6 +102,14 @@ def decode_jwt_payload(payload: t.Union[str, bytes]) -> JwtPayload:
 
 
 def get_jwt_payload(jwt: str) -> JwtPayload:
+    """Return the payload of the given JWT.
+
+    Args:
+        jwt: The JWT to get the payload from.
+
+    Returns:
+        :obj:`JwtPayload`: The payload of the given JWT.
+    """
     payload, *_ = parse_jwt(jwt)
     return decode_jwt_payload(payload)
 
@@ -114,10 +142,27 @@ def _validate_iat(
 
 
 def validate_jwt_payload(payload: JwtPayload, leeway: int = 0) -> None:
+    """Validate the given JWT payload.
+
+    Args:
+        payload: The JWT payload to validate.
+        leeway: The leeway in seconds to accept when verifying time claims (exp, iat).
+
+    Returns:
+        :obj:`None`: The payload is valid.
+
+    Raises:
+        TokenDecodeError: If the given JWT is invalid.
+        TokenExpiredSignatureError: If the given JWT is expired.
+        TokenImmatureSignatureError: If the given JWT is immature.
+        TokenInvalidIssuedAtError: If the given JWT has invalid issued at.
+    """
     now = datetime.now(tz=timezone.utc).timestamp()
 
-    _validate_exp(payload.exp, now, leeway)
-    _validate_iat(payload.iat, now, leeway)
+    if payload.exp is not None:
+        _validate_exp(payload.exp, now, leeway)
+    if payload.iat is not None:
+        _validate_iat(payload.iat, now, leeway)
 
 
 def _verify_signature(signing_key: str, signing_input: bytes, signature: bytes) -> bool:
@@ -130,6 +175,24 @@ def _verify_signature(signing_key: str, signing_input: bytes, signature: bytes) 
 def verify_jwt(
     jwt: str, get_signing_key_callback: GetSigningKeyCallback, own_did: t.Optional[str] = None
 ) -> JwtPayload:
+    """Verify the given JWT.
+
+    Args:
+        jwt: The JWT to verify.
+        get_signing_key_callback: The callback to get the signing key.
+        own_did: The DID of the service (aud).
+
+    Returns:
+        :obj:`JwtPayload`: The payload of the given JWT.
+
+    Raises:
+        TokenDecodeError: If the given JWT is invalid.
+        TokenExpiredSignatureError: If the given JWT is expired.
+        TokenImmatureSignatureError: If the given JWT is immature.
+        TokenInvalidAudienceError: If the given JWT has invalid audience.
+        TokenInvalidIssuedAtError: If the given JWT has invalid issued at.
+        TokenInvalidSignatureError: If the given JWT has invalid signature.
+    """
     plain_payload, signing_input, header, signature = parse_jwt(jwt)
 
     payload = decode_jwt_payload(plain_payload)
@@ -157,6 +220,24 @@ def verify_jwt(
 async def verify_jwt_async(
     jwt: str, get_signing_key_callback: GetSigningKeyCallbackAsync, own_did: t.Optional[str] = None
 ) -> JwtPayload:
+    """Asynchronously verifies the given JWT.
+
+    Args:
+        jwt: The JWT to verify.
+        get_signing_key_callback: The callback to get the signing key.
+        own_did: The DID of the service (aud).
+
+    Returns:
+        :obj:`JwtPayload`: The payload of the given JWT.
+
+    Raises:
+        TokenDecodeError: If the given JWT is invalid.
+        TokenExpiredSignatureError: If the given JWT is expired.
+        TokenImmatureSignatureError: If the given JWT is immature.
+        TokenInvalidAudienceError: If the given JWT has invalid audience.
+        TokenInvalidIssuedAtError: If the given JWT has invalid issued at.
+        TokenInvalidSignatureError: If the given JWT has invalid signature.
+    """
     plain_payload, signing_input, header, signature = parse_jwt(jwt)
 
     payload = decode_jwt_payload(plain_payload)
