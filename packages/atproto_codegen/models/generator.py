@@ -309,16 +309,20 @@ def _get_req_fields_set(lex_obj: t.Union[models.LexObject, models.LexXrpcParamet
     return required_fields
 
 
+def _add_dot_to_end_if_not_exist(description: str) -> str:
+    if description[-1] not in {'.', '?', '!'}:
+        description += '.'
+    return description
+
+
 def _get_field_docstring(
     field_name: str, field_type: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob]
 ) -> str:
     field_desc = field_type.description
     if field_desc is None:
         field_desc = gen_description_by_camel_case_name(field_name)
-    if field_desc[-1] not in {'.', '?', '!'}:
-        field_desc += '.'
 
-    return field_desc
+    return _add_dot_to_end_if_not_exist(field_desc)
 
 
 def _get_model_docstring(
@@ -326,8 +330,9 @@ def _get_model_docstring(
     lex_object: t.Union[models.LexXrpcQuery, models.LexSubscription, models.LexObject, models.LexXrpcParameters],
     model_type: ModelType,
 ) -> str:
-    model_desc = lex_object.description or ''
-    model_desc = f'{model_type.value} model for :obj:`{nsid}`. {model_desc}'
+    model_desc = f' {lex_object.description}' if lex_object.description else ''
+    model_desc = f'{model_type.value} model for :obj:`{nsid}`.{model_desc}'
+    model_desc = _add_dot_to_end_if_not_exist(model_desc)
 
     doc_string = [f'{_(1)}"""{model_desc}"""', '']
 

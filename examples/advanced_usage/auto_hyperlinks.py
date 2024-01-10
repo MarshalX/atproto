@@ -7,9 +7,7 @@ from atproto import Client, models
 def extract_url_byte_positions(
     text: str, *, aggressive: bool, encoding: str = 'UTF-8'
 ) -> t.List[t.Tuple[str, int, int]]:
-    """
-    If aggressive is False, only links beginning http or https will be detected
-    """
+    """If aggressive is False, only links beginning http or https will be detected"""
     encoded_text = text.encode(encoding)
 
     if aggressive:

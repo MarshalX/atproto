@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.unspecced.searchActorsSkeleton`."""
 
     q: str  #: Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended. For typeahead search, only simple term match is supported, not full syntax.
@@ -37,7 +36,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.unspecced.searchActorsSkeleton`."""
 
     actors: t.List['models.AppBskyUnspeccedDefs.SkeletonSearchActor']  #: Actors.

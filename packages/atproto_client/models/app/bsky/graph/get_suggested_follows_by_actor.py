@@ -15,7 +15,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.graph.getSuggestedFollowsByActor`."""
 
     actor: str  #: Actor.
@@ -26,7 +25,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.graph.getSuggestedFollowsByActor`."""
 
     suggestions: t.List['models.AppBskyActorDefs.ProfileView']  #: Suggestions.

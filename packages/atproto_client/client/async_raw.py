@@ -7,7 +7,7 @@ from atproto_client.namespaces import async_ns
 
 
 class AsyncClientRaw(AsyncClientBase):
-    """Group all root namespaces"""
+    """Group all root namespaces."""
 
     com: 'async_ns.ComNamespace'
     app: 'async_ns.AppNamespace'

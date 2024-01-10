@@ -11,7 +11,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`app.bsky.graph.unmuteActor`."""
 
     actor: str  #: Actor.

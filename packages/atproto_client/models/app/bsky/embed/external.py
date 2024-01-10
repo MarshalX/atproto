@@ -17,7 +17,6 @@ from atproto_client.models import base
 
 
 class Main(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.external`."""
 
     external: 'models.AppBskyEmbedExternal.External'  #: External.
@@ -28,7 +27,6 @@ class Main(base.ModelBase):
 
 
 class External(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.external`."""
 
     description: str  #: Description.
@@ -42,7 +40,6 @@ class External(base.ModelBase):
 
 
 class View(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.external`."""
 
     external: 'models.AppBskyEmbedExternal.ViewExternal'  #: External.
@@ -53,7 +50,6 @@ class View(base.ModelBase):
 
 
 class ViewExternal(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.external`."""
 
     description: str  #: Description.

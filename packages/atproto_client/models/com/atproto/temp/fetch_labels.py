@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.temp.fetchLabels`."""
 
     limit: t.Optional[int] = Field(default=50, ge=1, le=250)  #: Limit.
@@ -29,7 +28,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.temp.fetchLabels`."""
 
     labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.

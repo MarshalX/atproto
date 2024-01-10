@@ -14,7 +14,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.notification.getUnreadCount`."""
 
     seen_at: t.Optional[str] = Field(default=None, alias='seenAt')  #: Seen at.
@@ -25,7 +24,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.notification.getUnreadCount`."""
 
     count: int  #: Count.

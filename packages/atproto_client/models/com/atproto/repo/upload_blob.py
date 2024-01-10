@@ -18,7 +18,6 @@ Data: te.TypeAlias = bytes
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.repo.uploadBlob`."""
 
     blob: 'BlobRef'  #: Blob.

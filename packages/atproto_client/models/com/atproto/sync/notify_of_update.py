@@ -11,7 +11,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.sync.notifyOfUpdate`."""
 
     hostname: str  #: Hostname of the service that is notifying of update.

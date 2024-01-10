@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.feed.getFeedGenerator`."""
 
     feed: str  #: Feed.
@@ -27,7 +26,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.feed.getFeedGenerator`."""
 
     is_online: bool = Field(alias='isOnline')  #: Is online.

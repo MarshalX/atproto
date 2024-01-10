@@ -18,7 +18,7 @@ class SigningKey:
 
 
 def get_did(did_doc: 'DidDocument') -> str:
-    """Returns the DID of the given DID document.
+    """Return the DID of the given DID document.
 
     Returns:
         :obj:`str`: The DID of the given DID document.
@@ -27,7 +27,7 @@ def get_did(did_doc: 'DidDocument') -> str:
 
 
 def get_handle(did_doc: 'DidDocument') -> t.Optional[str]:
-    """Returns the handle of the given DID document.
+    """Return the handle of the given DID document.
 
     Returns:
         :obj:`str`: The handle of the given DID document, or ``None`` if not found.
@@ -44,7 +44,7 @@ def get_handle(did_doc: 'DidDocument') -> t.Optional[str]:
 
 
 def get_signing_key(did_doc: 'DidDocument') -> t.Optional['SigningKey']:
-    """Returns the signing key of the given DID document.
+    """Return the signing key of the given DID document.
 
     Returns:
         :obj:`SigningKey`: The signing key of the given DID document, or ``None`` if not found.
@@ -77,7 +77,7 @@ def _validate_url(url: str) -> t.Optional[str]:
 
 
 def get_service_endpoint(did_doc: 'DidDocument', id_: str, type_: str) -> t.Optional[str]:
-    """Returns the service endpoint of the given DID document.
+    """Return the service endpoint of the given DID document.
 
     Args:
         did_doc: The DID document.
@@ -101,7 +101,7 @@ def get_service_endpoint(did_doc: 'DidDocument', id_: str, type_: str) -> t.Opti
 
 
 def get_pds_endpoint(did_doc: 'DidDocument') -> t.Optional[str]:
-    """Returns the personal data server endpoint of the given DID document.
+    """Return the personal data server endpoint of the given DID document.
 
     Returns:
         :obj:`str`: The personal data server endpoint of the given DID document, or ``None`` if not found.
@@ -110,7 +110,7 @@ def get_pds_endpoint(did_doc: 'DidDocument') -> t.Optional[str]:
 
 
 def get_feed_gen_endpoint(did_doc: 'DidDocument') -> t.Optional[str]:
-    """Returns the feed generator endpoint of the given DID document.
+    """Return the feed generator endpoint of the given DID document.
 
     Returns:
         :obj:`str`: The feed generator endpoint of the given DID document, or ``None`` if not found.
@@ -119,7 +119,7 @@ def get_feed_gen_endpoint(did_doc: 'DidDocument') -> t.Optional[str]:
 
 
 def get_notif_endpoint(did_doc: 'DidDocument') -> t.Optional[str]:
-    """Returns the notification endpoint of the given DID document.
+    """Return the notification endpoint of the given DID document.
 
     Returns:
         :obj:`str`: The notification endpoint of the given DID document, or ``None`` if not found.
@@ -128,7 +128,7 @@ def get_notif_endpoint(did_doc: 'DidDocument') -> t.Optional[str]:
 
 
 def is_valid_did_doc(did_doc: t.Union[dict, t.Any]) -> bool:
-    """Returns whether the given DID document is valid.
+    """Return whether the given DID document is valid.
 
     Args:
         did_doc: The raw DID document.
@@ -144,7 +144,7 @@ def is_valid_did_doc(did_doc: t.Union[dict, t.Any]) -> bool:
 
 
 def parse_did_doc(did_doc: t.Union[dict, t.Any]) -> 'DidDocument':
-    """Parses a DID document.
+    """Parse a DID document.
 
     Args:
         did_doc: The raw DID document.
@@ -192,5 +192,5 @@ class DidDocument(BaseModel):
 
     @classmethod
     def from_dict(cls, did_doc: t.Union[dict, t.Any]) -> 'DidDocument':
-        """Parses a DID document."""
+        """Parse a DID document."""
         return parse_did_doc(did_doc)

@@ -17,7 +17,6 @@ from atproto_client.models import base
 
 
 class Main(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     record: 'models.ComAtprotoRepoStrongRef.Main'  #: Record.
@@ -26,7 +25,6 @@ class Main(base.ModelBase):
 
 
 class View(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     record: te.Annotated[
@@ -46,7 +44,6 @@ class View(base.ModelBase):
 
 
 class ViewRecord(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
@@ -75,7 +72,6 @@ class ViewRecord(base.ModelBase):
 
 
 class ViewNotFound(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     not_found: bool = Field(alias='notFound', frozen=True)  #: Not found.
@@ -87,7 +83,6 @@ class ViewNotFound(base.ModelBase):
 
 
 class ViewBlocked(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.

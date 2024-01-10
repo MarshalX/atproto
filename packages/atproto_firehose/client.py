@@ -64,7 +64,7 @@ def _handle_frame_decoding_error(exception: Exception) -> None:
 
 
 def _handle_websocket_error_or_stop(exception: Exception) -> bool:
-    """Returns if the connection should be properly being closed or reraise exception."""
+    """Return if the connection should be properly being closed or reraise exception."""
     if isinstance(exception, (ConnectionClosedOK,)):
         return True
     if isinstance(exception, (ConnectionClosedError, InvalidHandshake, PayloadTooBig, ProtocolError, socket.gaierror)):

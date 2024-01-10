@@ -15,7 +15,6 @@ from atproto_client.models import base
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.server.refreshSession`."""
 
     access_jwt: str = Field(alias='accessJwt')  #: Access jwt.

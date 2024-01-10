@@ -11,7 +11,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.admin.getRepo`."""
 
     did: str  #: Did.

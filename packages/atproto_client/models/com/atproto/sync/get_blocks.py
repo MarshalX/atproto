@@ -13,7 +13,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.sync.getBlocks`."""
 
     cids: t.List[str]  #: Cids.

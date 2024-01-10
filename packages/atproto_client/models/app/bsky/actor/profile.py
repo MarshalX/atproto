@@ -17,7 +17,6 @@ from atproto_client.models import base
 
 
 class Main(base.RecordModelBase):
-
     """Record model for :obj:`app.bsky.actor.profile`."""
 
     avatar: t.Optional['BlobRef'] = None  #: Avatar.

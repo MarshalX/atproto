@@ -11,7 +11,6 @@ from atproto_client.models import base
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.server.requestEmailUpdate`."""
 
     token_required: bool = Field(alias='tokenRequired')  #: Token required.

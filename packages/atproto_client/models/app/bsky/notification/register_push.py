@@ -12,7 +12,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`app.bsky.notification.registerPush`."""
 
     app_id: str = Field(alias='appId')  #: App id.

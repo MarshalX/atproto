@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.feed.getSuggestedFeeds`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
@@ -29,7 +28,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.feed.getSuggestedFeeds`."""
 
     feeds: t.List['models.AppBskyFeedDefs.GeneratorView']  #: Feeds.

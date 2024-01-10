@@ -18,4 +18,4 @@ class AsyncNamespaceBase:
 
 @dataclass
 class DefaultNamespace:
-    """placeholder"""
+    """Placeholder."""

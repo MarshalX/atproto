@@ -13,7 +13,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.server.updateEmail`."""
 
     email: str  #: Email.

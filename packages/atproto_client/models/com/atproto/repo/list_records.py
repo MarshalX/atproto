@@ -17,7 +17,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.repo.listRecords`."""
 
     collection: str  #: The NSID of the record type.
@@ -44,7 +43,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.repo.listRecords`."""
 
     records: t.List['models.ComAtprotoRepoListRecords.Record']  #: Records.
@@ -52,7 +50,6 @@ class Response(base.ResponseModelBase):
 
 
 class Record(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.repo.listRecords`."""
 
     cid: str  #: Cid.

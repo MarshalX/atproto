@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.feed.describeFeedGenerator`."""
 
     did: str  #: Did.
@@ -25,7 +24,6 @@ class Response(base.ResponseModelBase):
 
 
 class Feed(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.describeFeedGenerator`."""
 
     uri: str  #: Uri.
@@ -36,7 +34,6 @@ class Feed(base.ModelBase):
 
 
 class Links(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.describeFeedGenerator`."""
 
     privacy_policy: t.Optional[str] = Field(default=None, alias='privacyPolicy')  #: Privacy policy.

@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.admin.emitModerationEvent`."""
 
     created_by: str = Field(alias='createdBy')  #: Created by.

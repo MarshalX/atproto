@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.server.describeServer`."""
 
     available_user_domains: t.List[str] = Field(alias='availableUserDomains')  #: Available user domains.
@@ -25,7 +24,6 @@ class Response(base.ResponseModelBase):
 
 
 class Links(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.server.describeServer`."""
 
     privacy_policy: t.Optional[str] = Field(default=None, alias='privacyPolicy')  #: Privacy policy.

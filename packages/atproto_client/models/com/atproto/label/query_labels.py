@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.label.queryLabels`."""
 
     uri_patterns: t.List[str] = Field(
@@ -37,7 +36,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.label.queryLabels`."""
 
     labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.

@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.repo.describeRepo`."""
 
     repo: str  #: The handle or DID of the repo.
@@ -27,7 +26,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.repo.describeRepo`."""
 
     collections: t.List[str]  #: Collections.

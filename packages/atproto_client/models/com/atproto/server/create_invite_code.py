@@ -14,7 +14,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.server.createInviteCode`."""
 
     use_count: int = Field(alias='useCount')  #: Use count.
@@ -27,7 +26,6 @@ class DataDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.server.createInviteCode`."""
 
     code: str  #: Code.

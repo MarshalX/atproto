@@ -12,7 +12,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.server.createAppPassword`."""
 
     name: str  #: Name.
@@ -23,7 +22,6 @@ class DataDict(te.TypedDict):
 
 
 class AppPassword(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.server.createAppPassword`."""
 
     created_at: str = Field(alias='createdAt')  #: Created at.

@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.feed.getLikes`."""
 
     uri: str  #: Uri.
@@ -33,7 +32,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.feed.getLikes`."""
 
     likes: t.List['models.AppBskyFeedGetLikes.Like']  #: Likes.
@@ -43,7 +41,6 @@ class Response(base.ResponseModelBase):
 
 
 class Like(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.getLikes`."""
 
     actor: 'models.AppBskyActorDefs.ProfileView'  #: Actor.

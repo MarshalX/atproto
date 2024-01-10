@@ -17,7 +17,6 @@ from atproto_client.models import base
 
 
 class PostView(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
@@ -49,7 +48,6 @@ class PostView(base.ModelBase):
 
 
 class ViewerState(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     like: t.Optional[str] = None  #: Like.
@@ -62,7 +60,6 @@ class ViewerState(base.ModelBase):
 
 
 class FeedViewPost(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     post: 'models.AppBskyFeedDefs.PostView'  #: Post.
@@ -77,7 +74,6 @@ class FeedViewPost(base.ModelBase):
 
 
 class ReplyRef(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     parent: te.Annotated[
@@ -103,7 +99,6 @@ class ReplyRef(base.ModelBase):
 
 
 class ReasonRepost(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     by: 'models.AppBskyActorDefs.ProfileViewBasic'  #: By.
@@ -115,7 +110,6 @@ class ReasonRepost(base.ModelBase):
 
 
 class ThreadViewPost(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     post: 'models.AppBskyFeedDefs.PostView'  #: Post.
@@ -148,7 +142,6 @@ class ThreadViewPost(base.ModelBase):
 
 
 class NotFoundPost(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     not_found: bool = Field(alias='notFound', frozen=True)  #: Not found.
@@ -160,7 +153,6 @@ class NotFoundPost(base.ModelBase):
 
 
 class BlockedPost(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.
@@ -173,7 +165,6 @@ class BlockedPost(base.ModelBase):
 
 
 class BlockedAuthor(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     did: str  #: Did.
@@ -185,7 +176,6 @@ class BlockedAuthor(base.ModelBase):
 
 
 class GeneratorView(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     cid: str  #: Cid.
@@ -208,7 +198,6 @@ class GeneratorView(base.ModelBase):
 
 
 class GeneratorViewerState(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     like: t.Optional[str] = None  #: Like.
@@ -219,7 +208,6 @@ class GeneratorViewerState(base.ModelBase):
 
 
 class SkeletonFeedPost(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     post: str  #: Post.
@@ -235,7 +223,6 @@ class SkeletonFeedPost(base.ModelBase):
 
 
 class SkeletonReasonRepost(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     repost: str  #: Repost.
@@ -246,7 +233,6 @@ class SkeletonReasonRepost(base.ModelBase):
 
 
 class ThreadgateView(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     cid: t.Optional[str] = None  #: Cid.

@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.feed.getPosts`."""
 
     uris: t.List[str] = Field(max_length=25)  #: Uris.
@@ -27,7 +26,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.feed.getPosts`."""
 
     posts: t.List['models.AppBskyFeedDefs.PostView']  #: Posts.

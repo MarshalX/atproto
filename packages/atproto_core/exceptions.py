@@ -1,5 +1,5 @@
 class AtProtocolError(Exception):
-    """Base exception"""
+    """Base exception."""
 
 
 class InvalidNsidError(AtProtocolError):

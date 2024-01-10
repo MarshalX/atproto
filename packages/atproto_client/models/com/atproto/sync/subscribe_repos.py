@@ -18,7 +18,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.sync.subscribeRepos`."""
 
     cursor: t.Optional[int] = None  #: The last known event to backfill from.
@@ -29,7 +28,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Commit(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
     blobs: t.List['CIDType']  #: Blobs.
@@ -51,7 +49,6 @@ class Commit(base.ModelBase):
 
 
 class Handle(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
     did: str  #: Did.
@@ -65,7 +62,6 @@ class Handle(base.ModelBase):
 
 
 class Migrate(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
     did: str  #: Did.
@@ -79,7 +75,6 @@ class Migrate(base.ModelBase):
 
 
 class Tombstone(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
     did: str  #: Did.
@@ -92,7 +87,6 @@ class Tombstone(base.ModelBase):
 
 
 class Info(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
     name: str  #: Name.
@@ -104,7 +98,6 @@ class Info(base.ModelBase):
 
 
 class RepoOp(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`. A repo operation, ie a write of a single record. For creates and updates, CID is the record's CID as of this operation. For deletes, it's null."""
 
     action: str  #: Action.

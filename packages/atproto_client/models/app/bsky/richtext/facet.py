@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Main(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.richtext.facet`."""
 
     features: t.List[
@@ -37,7 +36,6 @@ class Main(base.ModelBase):
 
 
 class Mention(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.richtext.facet`. A facet feature for actor mentions."""
 
     did: str  #: Did.
@@ -48,7 +46,6 @@ class Mention(base.ModelBase):
 
 
 class Link(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.richtext.facet`. A facet feature for links."""
 
     uri: str  #: Uri.
@@ -59,7 +56,6 @@ class Link(base.ModelBase):
 
 
 class Tag(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.richtext.facet`. A hashtag."""
 
     tag: str = Field(max_length=640)  #: Tag.
@@ -70,7 +66,6 @@ class Tag(base.ModelBase):
 
 
 class ByteSlice(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.richtext.facet`. A text segment. Start is inclusive, end is exclusive. Indices are for utf8-encoded strings."""
 
     byte_end: int = Field(alias='byteEnd', ge=0)  #: Byte end.

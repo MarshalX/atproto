@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.admin.getSubjectStatus`."""
 
     blob: t.Optional[str] = None  #: Blob.
@@ -31,7 +30,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.admin.getSubjectStatus`."""
 
     subject: te.Annotated[
