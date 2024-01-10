@@ -80,6 +80,7 @@ def get_service_endpoint(did_doc: 'DidDocument', id_: str, type_: str) -> t.Opti
     """Returns the service endpoint of the given DID document.
 
     Args:
+        did_doc: The DID document.
         id_: The service ID.
         type_: The service type.
 

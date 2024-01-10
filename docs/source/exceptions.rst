@@ -37,6 +37,14 @@ Identity
    :show-inheritance:
 
 
+Server
+######
+
+.. automodule:: atproto_server.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Lexicon
 #######
 
