@@ -51,10 +51,14 @@ def sync_main() -> None:
 
     cache = DidInMemoryCache()
     resolver = IdResolver(cache=cache)
-    r = resolver.handle.resolve('marshal.dev')
+    # r = resolver.handle.resolve('marshal.dev')
+    test_did = 'did:plc:s6jnht6koorxz7trghirytmf'
+    r = resolver.did.resolve_atproto_data(test_did)
+    print(r)
+    r = resolver.did.resolve_atproto_key(test_did)
     print(r)
 
-    print(client.get_post('3k2yihcrp6f2c'))
+    # print(client.get_post('3k2yihcrp6f2c'))
 
     exit(0)
 

@@ -10,7 +10,7 @@ if t.TYPE_CHECKING:
     from atproto_core.did_doc import DidDocument
 
     from atproto_identity.cache.base_cache import AsyncDidBaseCache, DidBaseCache
-    from atproto_identity.did.models import AtprotoData
+    from atproto_identity.did.atproto_data import AtprotoData
 
 _DID_KEY_PREFIX = 'did:key:'
 
