@@ -14,7 +14,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.sync.listBlobs`."""
 
     did: str  #: The DID of the repo.
@@ -31,7 +30,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.sync.listBlobs`."""
 
     cids: t.List[str]  #: Cids.

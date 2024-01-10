@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.feed.getFeedSkeleton`."""
 
     feed: str  #: Feed.
@@ -31,7 +30,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.feed.getFeedSkeleton`."""
 
     feed: t.List['models.AppBskyFeedDefs.SkeletonFeedPost']  #: Feed.

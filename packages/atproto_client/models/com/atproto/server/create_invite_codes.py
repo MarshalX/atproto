@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.server.createInviteCodes`."""
 
     code_count: int = Field(default=1, alias='codeCount')  #: Code count.
@@ -31,14 +30,12 @@ class DataDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.server.createInviteCodes`."""
 
     codes: t.List['models.ComAtprotoServerCreateInviteCodes.AccountCodes']  #: Codes.
 
 
 class AccountCodes(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.server.createInviteCodes`."""
 
     account: str  #: Account.

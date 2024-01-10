@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.sync.listRepos`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
@@ -29,7 +28,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.sync.listRepos`."""
 
     repos: t.List['models.ComAtprotoSyncListRepos.Repo']  #: Repos.
@@ -37,7 +35,6 @@ class Response(base.ResponseModelBase):
 
 
 class Repo(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.sync.listRepos`."""
 
     did: str  #: Did.

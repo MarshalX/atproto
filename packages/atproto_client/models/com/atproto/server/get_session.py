@@ -15,7 +15,6 @@ from atproto_client.models import base
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.server.getSession`."""
 
     did: str  #: Did.

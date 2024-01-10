@@ -17,7 +17,6 @@ from atproto_client.models import base
 
 
 class StatusAttr(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     applied: bool  #: Applied.
@@ -29,7 +28,6 @@ class StatusAttr(base.ModelBase):
 
 
 class ModEventView(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     created_at: str = Field(alias='createdAt')  #: Created at.
@@ -63,7 +61,6 @@ class ModEventView(base.ModelBase):
 
 
 class ModEventViewDetail(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     created_at: str = Field(alias='createdAt')  #: Created at.
@@ -99,7 +96,6 @@ class ModEventViewDetail(base.ModelBase):
 
 
 class ReportView(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     created_at: str = Field(alias='createdAt')  #: Created at.
@@ -120,7 +116,6 @@ class ReportView(base.ModelBase):
 
 
 class SubjectStatusView(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     created_at: str = Field(
@@ -151,7 +146,6 @@ class SubjectStatusView(base.ModelBase):
 
 
 class ReportViewDetail(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     created_at: str = Field(alias='createdAt')  #: Created at.
@@ -181,7 +175,6 @@ class ReportViewDetail(base.ModelBase):
 
 
 class RepoView(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     did: str  #: Did.
@@ -202,7 +195,6 @@ class RepoView(base.ModelBase):
 
 
 class RepoViewDetail(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     did: str  #: Did.
@@ -226,7 +218,6 @@ class RepoViewDetail(base.ModelBase):
 
 
 class AccountView(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     did: str  #: Did.
@@ -247,7 +238,6 @@ class AccountView(base.ModelBase):
 
 
 class RepoViewNotFound(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     did: str  #: Did.
@@ -258,7 +248,6 @@ class RepoViewNotFound(base.ModelBase):
 
 
 class RepoRef(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     did: str  #: Did.
@@ -269,7 +258,6 @@ class RepoRef(base.ModelBase):
 
 
 class RepoBlobRef(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     cid: str  #: Cid.
@@ -282,7 +270,6 @@ class RepoBlobRef(base.ModelBase):
 
 
 class RecordView(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     blob_cids: t.List[str] = Field(alias='blobCids')  #: Blob cids.
@@ -299,7 +286,6 @@ class RecordView(base.ModelBase):
 
 
 class RecordViewDetail(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     blobs: t.List['models.ComAtprotoAdminDefs.BlobView']  #: Blobs.
@@ -317,7 +303,6 @@ class RecordViewDetail(base.ModelBase):
 
 
 class RecordViewNotFound(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     uri: str  #: Uri.
@@ -328,7 +313,6 @@ class RecordViewNotFound(base.ModelBase):
 
 
 class Moderation(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     subject_status: t.Optional['models.ComAtprotoAdminDefs.SubjectStatusView'] = Field(
@@ -341,7 +325,6 @@ class Moderation(base.ModelBase):
 
 
 class ModerationDetail(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     subject_status: t.Optional['models.ComAtprotoAdminDefs.SubjectStatusView'] = Field(
@@ -354,7 +337,6 @@ class ModerationDetail(base.ModelBase):
 
 
 class BlobView(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     cid: str  #: Cid.
@@ -375,7 +357,6 @@ class BlobView(base.ModelBase):
 
 
 class ImageDetails(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     height: int  #: Height.
@@ -387,7 +368,6 @@ class ImageDetails(base.ModelBase):
 
 
 class VideoDetails(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     height: int  #: Height.
@@ -419,8 +399,7 @@ ReviewClosed = te.Literal[
 
 
 class ModEventTakedown(base.ModelBase):
-
-    """Definition model for :obj:`com.atproto.admin.defs`. Take down a subject permanently or temporarily"""
+    """Definition model for :obj:`com.atproto.admin.defs`. Take down a subject permanently or temporarily."""
 
     comment: t.Optional[str] = None  #: Comment.
     duration_in_hours: t.Optional[int] = Field(
@@ -433,8 +412,7 @@ class ModEventTakedown(base.ModelBase):
 
 
 class ModEventReverseTakedown(base.ModelBase):
-
-    """Definition model for :obj:`com.atproto.admin.defs`. Revert take down action on a subject"""
+    """Definition model for :obj:`com.atproto.admin.defs`. Revert take down action on a subject."""
 
     comment: t.Optional[str] = None  #: Describe reasoning behind the reversal.
 
@@ -444,8 +422,7 @@ class ModEventReverseTakedown(base.ModelBase):
 
 
 class ModEventComment(base.ModelBase):
-
-    """Definition model for :obj:`com.atproto.admin.defs`. Add a comment to a subject"""
+    """Definition model for :obj:`com.atproto.admin.defs`. Add a comment to a subject."""
 
     comment: str  #: Comment.
     sticky: t.Optional[bool] = None  #: Make the comment persistent on the subject.
@@ -456,8 +433,7 @@ class ModEventComment(base.ModelBase):
 
 
 class ModEventReport(base.ModelBase):
-
-    """Definition model for :obj:`com.atproto.admin.defs`. Report a subject"""
+    """Definition model for :obj:`com.atproto.admin.defs`. Report a subject."""
 
     report_type: 'models.ComAtprotoModerationDefs.ReasonType' = Field(alias='reportType')  #: Report type.
     comment: t.Optional[str] = None  #: Comment.
@@ -468,8 +444,7 @@ class ModEventReport(base.ModelBase):
 
 
 class ModEventLabel(base.ModelBase):
-
-    """Definition model for :obj:`com.atproto.admin.defs`. Apply/Negate labels on a subject"""
+    """Definition model for :obj:`com.atproto.admin.defs`. Apply/Negate labels on a subject."""
 
     create_label_vals: t.List[str] = Field(alias='createLabelVals')  #: Create label vals.
     negate_label_vals: t.List[str] = Field(alias='negateLabelVals')  #: Negate label vals.
@@ -481,7 +456,6 @@ class ModEventLabel(base.ModelBase):
 
 
 class ModEventAcknowledge(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     comment: t.Optional[str] = None  #: Comment.
@@ -492,7 +466,6 @@ class ModEventAcknowledge(base.ModelBase):
 
 
 class ModEventEscalate(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
     comment: t.Optional[str] = None  #: Comment.
@@ -503,8 +476,7 @@ class ModEventEscalate(base.ModelBase):
 
 
 class ModEventMute(base.ModelBase):
-
-    """Definition model for :obj:`com.atproto.admin.defs`. Mute incoming reports on a subject"""
+    """Definition model for :obj:`com.atproto.admin.defs`. Mute incoming reports on a subject."""
 
     duration_in_hours: int = Field(alias='durationInHours')  #: Indicates how long the subject should remain muted.
     comment: t.Optional[str] = None  #: Comment.
@@ -515,8 +487,7 @@ class ModEventMute(base.ModelBase):
 
 
 class ModEventUnmute(base.ModelBase):
-
-    """Definition model for :obj:`com.atproto.admin.defs`. Unmute action on a subject"""
+    """Definition model for :obj:`com.atproto.admin.defs`. Unmute action on a subject."""
 
     comment: t.Optional[str] = None  #: Describe reasoning behind the reversal.
 
@@ -526,8 +497,7 @@ class ModEventUnmute(base.ModelBase):
 
 
 class ModEventEmail(base.ModelBase):
-
-    """Definition model for :obj:`com.atproto.admin.defs`. Keep a log of outgoing email to a user"""
+    """Definition model for :obj:`com.atproto.admin.defs`. Keep a log of outgoing email to a user."""
 
     subject_line: str = Field(alias='subjectLine')  #: The subject line of the email sent to the user.
     comment: t.Optional[str] = None  #: Additional comment about the outgoing comm.

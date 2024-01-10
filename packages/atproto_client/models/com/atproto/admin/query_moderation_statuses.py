@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.admin.queryModerationStatuses`."""
 
     comment: t.Optional[str] = None  #: Search subjects by keyword from comments.
@@ -73,7 +72,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.admin.queryModerationStatuses`."""
 
     subject_statuses: t.List['models.ComAtprotoAdminDefs.SubjectStatusView'] = Field(

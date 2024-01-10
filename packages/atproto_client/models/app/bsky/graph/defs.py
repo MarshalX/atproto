@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class ListViewBasic(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
     cid: str  #: Cid.
@@ -33,7 +32,6 @@ class ListViewBasic(base.ModelBase):
 
 
 class ListView(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
     cid: str  #: Cid.
@@ -55,7 +53,6 @@ class ListView(base.ModelBase):
 
 
 class ListItemView(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
     subject: 'models.AppBskyActorDefs.ProfileView'  #: Subject.
@@ -78,7 +75,6 @@ Curatelist = te.Literal[
 
 
 class ListViewerState(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
     blocked: t.Optional[str] = None  #: Blocked.

@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.label.subscribeLabels`."""
 
     cursor: t.Optional[int] = None  #: The last known event to backfill from.
@@ -27,7 +26,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Labels(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.label.subscribeLabels`."""
 
     labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.
@@ -39,7 +37,6 @@ class Labels(base.ModelBase):
 
 
 class Info(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.label.subscribeLabels`."""
 
     name: str  #: Name.

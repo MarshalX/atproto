@@ -86,7 +86,7 @@ class RequestBase:
 
 
 class Request(RequestBase):
-    """Class for handling requests errors and working with httpx"""
+    """Class for handling requests errors and working with httpx."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -113,7 +113,7 @@ class Request(RequestBase):
 
 
 class AsyncRequest(RequestBase):
-    """Class for handling requests errors and working with httpx"""
+    """Class for handling requests errors and working with httpx."""
 
     def __init__(self) -> None:
         super().__init__()

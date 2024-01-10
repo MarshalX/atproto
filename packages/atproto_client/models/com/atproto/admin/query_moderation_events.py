@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.admin.queryModerationEvents`."""
 
     created_by: t.Optional[str] = Field(default=None, alias='createdBy')  #: Created by.
@@ -51,7 +50,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.admin.queryModerationEvents`."""
 
     events: t.List['models.ComAtprotoAdminDefs.ModEventView']  #: Events.

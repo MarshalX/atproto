@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Main(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
     media: te.Annotated[
@@ -30,7 +29,6 @@ class Main(base.ModelBase):
 
 
 class View(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
     media: te.Annotated[

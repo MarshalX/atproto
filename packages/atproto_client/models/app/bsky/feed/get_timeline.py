@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.feed.getTimeline`."""
 
     algorithm: t.Optional[str] = None  #: Algorithm.
@@ -31,7 +30,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.feed.getTimeline`."""
 
     feed: t.List['models.AppBskyFeedDefs.FeedViewPost']  #: Feed.

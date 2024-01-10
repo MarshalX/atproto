@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.server.createAccount`."""
 
     handle: str  #: Handle.
@@ -39,7 +38,6 @@ class DataDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.server.createAccount`."""
 
     access_jwt: str = Field(alias='accessJwt')  #: Access jwt.

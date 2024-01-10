@@ -132,8 +132,7 @@ class _DotDictPydanticAnnotation:
         _source_type: t.Any,
         _handler: t.Callable[[t.Any], core_schema.CoreSchema],
     ) -> core_schema.CoreSchema:
-        """
-        We return a pydantic_core.CoreSchema that behaves in the following ways:
+        """We return a pydantic_core.CoreSchema that behaves in the following ways below.
 
         * dicts will be parsed as `DotDict` instances with the int as the _data attribute
         * `DotDict` instances will be parsed as `DotDict` instances without any changes

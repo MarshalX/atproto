@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class ProfileViewBasic(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     did: str  #: Did.
@@ -32,7 +31,6 @@ class ProfileViewBasic(base.ModelBase):
 
 
 class ProfileView(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     did: str  #: Did.
@@ -50,7 +48,6 @@ class ProfileView(base.ModelBase):
 
 
 class ProfileViewDetailed(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     did: str  #: Did.
@@ -72,7 +69,6 @@ class ProfileViewDetailed(base.ModelBase):
 
 
 class ViewerState(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     blocked_by: t.Optional[bool] = Field(default=None, alias='blockedBy')  #: Blocked by.
@@ -108,7 +104,6 @@ Preferences = t.List[
 
 
 class AdultContentPref(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     enabled: bool = None  #: Enabled.
@@ -119,7 +114,6 @@ class AdultContentPref(base.ModelBase):
 
 
 class ContentLabelPref(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     label: str  #: Label.
@@ -131,7 +125,6 @@ class ContentLabelPref(base.ModelBase):
 
 
 class SavedFeedsPref(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     pinned: t.List[str]  #: Pinned.
@@ -143,7 +136,6 @@ class SavedFeedsPref(base.ModelBase):
 
 
 class PersonalDetailsPref(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     birth_date: t.Optional[str] = Field(default=None, alias='birthDate')  #: The birth date of account owner.
@@ -154,7 +146,6 @@ class PersonalDetailsPref(base.ModelBase):
 
 
 class FeedViewPref(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     feed: str  #: The URI of the feed, or an identifier which describes the feed.
@@ -174,7 +165,6 @@ class FeedViewPref(base.ModelBase):
 
 
 class ThreadViewPref(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     prioritize_followed_users: t.Optional[bool] = Field(

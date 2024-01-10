@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`com.atproto.server.getAccountInviteCodes`."""
 
     create_available: t.Optional[bool] = Field(default=True, alias='createAvailable')  #: Create available.
@@ -29,7 +28,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.server.getAccountInviteCodes`."""
 
     codes: t.List['models.ComAtprotoServerDefs.InviteCode']  #: Codes.

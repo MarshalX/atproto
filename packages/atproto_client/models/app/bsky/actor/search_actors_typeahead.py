@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.actor.searchActorsTypeahead`."""
 
     limit: t.Optional[int] = Field(default=10, ge=1, le=100)  #: Limit.
@@ -31,7 +30,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.actor.searchActorsTypeahead`."""
 
     actors: t.List['models.AppBskyActorDefs.ProfileViewBasic']  #: Actors.

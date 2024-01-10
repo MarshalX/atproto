@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class MentionRule(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.threadgate`. Allow replies from actors mentioned in your post."""
 
     py_type: te.Literal['app.bsky.feed.threadgate#mentionRule'] = Field(
@@ -25,7 +24,6 @@ class MentionRule(base.ModelBase):
 
 
 class FollowingRule(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.threadgate`. Allow replies from actors you follow."""
 
     py_type: te.Literal['app.bsky.feed.threadgate#followingRule'] = Field(
@@ -34,7 +32,6 @@ class FollowingRule(base.ModelBase):
 
 
 class ListRule(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.threadgate`. Allow replies from actors on a list."""
 
     list: str  #: List.
@@ -45,7 +42,6 @@ class ListRule(base.ModelBase):
 
 
 class Main(base.RecordModelBase):
-
     """Record model for :obj:`app.bsky.feed.threadgate`."""
 
     created_at: str = Field(alias='createdAt')  #: Created at.

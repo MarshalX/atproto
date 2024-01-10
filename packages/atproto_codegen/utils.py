@@ -108,7 +108,7 @@ def get_model_path(nsid: NSID, method_name: str) -> str:
 
 
 def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> t.Tuple[str, str]:
-    """Returns the path to the model and model name"""
+    """Return the path to the model and model name."""
     if '#' in ref:
         ref_nsid_str, def_name = ref.split('#', 1)
         def_name = get_def_model_name(def_name)

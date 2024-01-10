@@ -12,7 +12,6 @@ from atproto_client.models import base
 
 
 class SkeletonSearchPost(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.unspecced.defs`."""
 
     uri: str  #: Uri.
@@ -23,7 +22,6 @@ class SkeletonSearchPost(base.ModelBase):
 
 
 class SkeletonSearchActor(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.unspecced.defs`."""
 
     did: str  #: Did.

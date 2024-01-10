@@ -22,7 +22,7 @@ _DEFAULT_CONTENT_TYPE = _CONTENT_TYPE_JSON
 
 
 def _handle_kwagrs(kwargs: dict) -> None:
-    """Mutates input data"""
+    """Mutates input data."""
     content_type = _DEFAULT_CONTENT_TYPE
 
     if 'headers' not in kwargs:
@@ -45,7 +45,7 @@ def _handle_kwagrs(kwargs: dict) -> None:
 
 
 class ClientBase:
-    """Low-level methods are here"""
+    """Low-level methods are here."""
 
     def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None) -> None:
         if request is None:
@@ -90,7 +90,7 @@ class ClientBase:
 
 
 class AsyncClientBase:
-    """Low-level methods are here"""
+    """Low-level methods are here."""
 
     def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[AsyncRequest] = None) -> None:
         if request is None:

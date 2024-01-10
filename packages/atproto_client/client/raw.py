@@ -7,7 +7,7 @@ from atproto_client.namespaces import sync_ns
 
 
 class ClientRaw(ClientBase):
-    """Group all root namespaces"""
+    """Group all root namespaces."""
 
     com: 'sync_ns.ComNamespace'
     app: 'sync_ns.AppNamespace'

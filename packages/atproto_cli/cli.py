@@ -8,7 +8,7 @@ from atproto_codegen.namespaces.generator import generate_namespaces
 
 
 class AliasedGroup(click.Group):
-    """Ref: https://click.palletsprojects.com/en/8.1.x/advanced/"""
+    """Ref: https://click.palletsprojects.com/en/8.1.x/advanced/."""
 
     def get_command(self, ctx: click.Context, cmd_name: str) -> t.Optional[click.Command]:
         rv = click.Group.get_command(self, ctx, cmd_name)
@@ -40,7 +40,7 @@ class AliasedGroup(click.Group):
 @click.group(cls=AliasedGroup)
 @click.pass_context
 def atproto_cli(ctx: click.Context) -> None:
-    """CLI of AT Protocol SDK for Python"""
+    """CLI of AT Protocol SDK for Python."""
     ctx.ensure_object(dict)
 
 

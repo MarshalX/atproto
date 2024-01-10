@@ -11,7 +11,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.actor.getProfile`."""
 
     actor: str  #: Actor.

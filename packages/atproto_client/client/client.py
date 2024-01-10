@@ -157,7 +157,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         uri = AtUri.from_str(post_uri)
         return self.com.atproto.repo.delete_record(
             models.ComAtprotoRepoDeleteRecord.Data(
@@ -197,7 +196,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         upload = self.com.atproto.repo.upload_blob(image)
         images = [models.AppBskyEmbedImages.Image(alt=image_alt, image=upload.blob)]
         return self.send_post(
@@ -225,7 +223,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         repo = self.me.did
         if profile_identify:
             repo = profile_identify
@@ -256,7 +253,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.feed.get_posts(
             models.AppBskyFeedGetPosts.Params(
                 uris=uris,
@@ -270,6 +266,8 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
 
         Args:
             uri: AT URI.
+            depth: Depth of the thread.
+            parent_height: Height of the parent post.
 
         Returns:
             :obj:`models.AppBskyFeedGetPostThread.Response`: Post thread.
@@ -277,7 +275,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.feed.get_post_thread(
             models.AppBskyFeedGetPostThread.Params(
                 uri=uri,
@@ -303,7 +300,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.feed.get_likes(
             models.AppBskyFeedGetLikes.Params(uri=uri, cid=cid, cursor=cursor, limit=limit)
         )
@@ -325,7 +321,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.feed.get_reposted_by(
             models.AppBskyFeedGetRepostedBy.Params(uri=uri, cid=cid, cursor=cursor, limit=limit)
         )
@@ -346,7 +341,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.feed.get_timeline(
             models.AppBskyFeedGetTimeline.Params(algorithm=algorithm, cursor=cursor, limit=limit)
         )
@@ -368,7 +362,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.feed.get_author_feed(
             models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, fitler=filter, limit=limit)
         )
@@ -385,7 +378,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.com.atproto.repo.create_record(
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
@@ -406,7 +398,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         uri = AtUri.from_str(like_uri)
         return self.com.atproto.repo.delete_record(
             models.ComAtprotoRepoDeleteRecord.Data(
@@ -431,7 +422,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.com.atproto.repo.create_record(
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
@@ -455,7 +445,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         uri = AtUri.from_str(repost_uri)
         return self.com.atproto.repo.delete_record(
             models.ComAtprotoRepoDeleteRecord.Data(
@@ -477,7 +466,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.com.atproto.repo.create_record(
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
@@ -498,7 +486,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         uri = AtUri.from_str(follow_uri)
         return self.com.atproto.repo.delete_record(
             models.ComAtprotoRepoDeleteRecord.Data(
@@ -524,7 +511,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.graph.get_follows(
             models.AppBskyGraphGetFollows.Params(actor=actor, cursor=cursor, limit=limit)
         )
@@ -545,7 +531,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.graph.get_followers(
             models.AppBskyGraphGetFollowers.Params(actor=actor, cursor=cursor, limit=limit)
         )
@@ -562,7 +547,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=actor))
 
     def get_profiles(self, actors: t.List[str]) -> models.AppBskyActorGetProfiles.Response:
@@ -577,7 +561,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.actor.get_profiles(models.AppBskyActorGetProfiles.Params(actors=actors))
 
     def mute(self, actor: str) -> bool:
@@ -592,7 +575,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.graph.mute_actor(models.AppBskyGraphMuteActor.Data(actor=actor))
 
     def unmute(self, actor: str) -> bool:
@@ -607,7 +589,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.app.bsky.graph.unmute_actor(models.AppBskyGraphUnmuteActor.Data(actor=actor))
 
     def resolve_handle(self, handle: str) -> models.ComAtprotoIdentityResolveHandle.Response:
@@ -622,7 +603,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.com.atproto.identity.resolve_handle(models.ComAtprotoIdentityResolveHandle.Params(handle=handle))
 
     def update_handle(self, handle: str) -> bool:
@@ -637,7 +617,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.com.atproto.identity.update_handle(models.ComAtprotoIdentityUpdateHandle.Data(handle=handle))
 
     def upload_blob(self, data: bytes) -> models.ComAtprotoRepoUploadBlob.Response:
@@ -652,7 +631,6 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-
         return self.com.atproto.repo.upload_blob(data)
 
     #: Alias for :attr:`unfollow`

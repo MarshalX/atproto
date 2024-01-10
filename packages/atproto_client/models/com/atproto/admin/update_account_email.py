@@ -11,7 +11,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.admin.updateAccountEmail`."""
 
     account: str  #: The handle or DID of the repo.

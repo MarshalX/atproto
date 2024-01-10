@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class InviteCode(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.server.defs`."""
 
     available: int  #: Available.
@@ -33,7 +32,6 @@ class InviteCode(base.ModelBase):
 
 
 class InviteCodeUse(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.server.defs`."""
 
     used_at: str = Field(alias='usedAt')  #: Used at.

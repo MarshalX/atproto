@@ -15,7 +15,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`app.bsky.actor.putPreferences`."""
 
     preferences: 'models.AppBskyActorDefs.Preferences'  #: Preferences.

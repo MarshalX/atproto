@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class ReplyRef(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.post`."""
 
     parent: 'models.ComAtprotoRepoStrongRef.Main'  #: Parent.
@@ -28,7 +27,6 @@ class ReplyRef(base.ModelBase):
 
 
 class Entity(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.post`. Deprecated: use facets instead."""
 
     index: 'models.AppBskyFeedPost.TextSlice'  #: Index.
@@ -41,7 +39,6 @@ class Entity(base.ModelBase):
 
 
 class TextSlice(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.feed.post`. Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings."""
 
     end: int = Field(ge=0)  #: End.
@@ -53,7 +50,6 @@ class TextSlice(base.ModelBase):
 
 
 class Main(base.RecordModelBase):
-
     """Record model for :obj:`app.bsky.feed.post`."""
 
     created_at: str = Field(alias='createdAt')  #: Created at.

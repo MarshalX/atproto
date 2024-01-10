@@ -17,7 +17,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.notification.listNotifications`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
@@ -32,7 +31,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.notification.listNotifications`."""
 
     notifications: t.List['models.AppBskyNotificationListNotifications.Notification']  #: Notifications.
@@ -41,7 +39,6 @@ class Response(base.ResponseModelBase):
 
 
 class Notification(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.notification.listNotifications`."""
 
     author: 'models.AppBskyActorDefs.ProfileView'  #: Author.

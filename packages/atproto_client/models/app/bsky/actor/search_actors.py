@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-
     """Parameters model for :obj:`app.bsky.actor.searchActors`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
@@ -37,7 +36,6 @@ class ParamsDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`app.bsky.actor.searchActors`."""
 
     actors: t.List['models.AppBskyActorDefs.ProfileView']  #: Actors.

@@ -12,7 +12,6 @@ from atproto_client.models import base
 
 
 class Main(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.repo.strongRef`."""
 
     cid: str  #: Cid.

@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Label(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto resource (eg, repo or record)."""
 
     cts: str  #: Timestamp when this label was created.
@@ -34,7 +33,6 @@ class Label(base.ModelBase):
 
 
 class SelfLabels(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tags on an atproto record, published by the author within the record."""
 
     values: t.List['models.ComAtprotoLabelDefs.SelfLabel'] = Field(max_length=10)  #: Values.
@@ -45,7 +43,6 @@ class SelfLabels(base.ModelBase):
 
 
 class SelfLabel(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto record, published by the author within the record. Note that schemas should use #selfLabels, not #selfLabel."""
 
     val: str = Field(max_length=128)  #: The short string name of the value or type of this label.

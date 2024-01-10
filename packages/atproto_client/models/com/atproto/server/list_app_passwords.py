@@ -16,14 +16,12 @@ from atproto_client.models import base
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.server.listAppPasswords`."""
 
     passwords: t.List['models.ComAtprotoServerListAppPasswords.AppPassword']  #: Passwords.
 
 
 class AppPassword(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.server.listAppPasswords`."""
 
     created_at: str = Field(alias='createdAt')  #: Created at.

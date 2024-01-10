@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.repo.createRecord`."""
 
     collection: str  #: The NSID of the record collection.
@@ -39,7 +38,6 @@ class DataDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.repo.createRecord`."""
 
     cid: str  #: Cid.

@@ -17,7 +17,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.repo.applyWrites`."""
 
     repo: str  #: The handle or DID of the repo.
@@ -52,7 +51,6 @@ class DataDict(te.TypedDict):
 
 
 class Create(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record."""
 
     collection: str  #: Collection.
@@ -65,7 +63,6 @@ class Create(base.ModelBase):
 
 
 class Update(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Update an existing record."""
 
     collection: str  #: Collection.
@@ -78,7 +75,6 @@ class Update(base.ModelBase):
 
 
 class Delete(base.ModelBase):
-
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Delete an existing record."""
 
     collection: str  #: Collection.

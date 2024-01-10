@@ -10,7 +10,10 @@ from atproto import (
     AsyncFirehoseSubscribeReposClient,
     AtUri,
     Client,
+    DidDocument,
+    DidInMemoryCache,
     FirehoseSubscribeReposClient,
+    IdResolver,
     client_utils,
     exceptions,
     models,
@@ -46,8 +49,36 @@ def sync_main() -> None:
     client = Client()
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
-    post = client.get_post('3k2yihcrp6f2c')
-    print(post)
+    cache = DidInMemoryCache()
+    resolver = IdResolver(cache=cache)
+    r = resolver.handle.resolve('marshal.dev')
+    print(r)
+
+    print(client.get_post('3k2yihcrp6f2c'))
+
+    exit(0)
+
+    did_doc = resolver.did.resolve('did:web:feed.atproto.blue')
+
+    # Now did_document is cached and could be retrieved without network request
+    did_doc = resolver.did.resolve('did:web:feed.atproto.blue')
+
+    # Clear cache
+    cache.clear()
+
+    # Now did_document is not cached and will be retrieved with network request
+    did_doc = resolver.did.resolve('did:web:feed.atproto.blue')
+
+    print(did_doc)
+
+    # response = client.com.atproto.repo.describe_repo({'repo': 'did:plc:kvwvcn5iqfooopmyzvb4qzba'})
+    # did_doc = DidDocument.from_dict(response.did_doc)
+    # print(did_doc.get_pds_endpoint())
+    # print(did_doc.get_handle())
+
+    # post = client.get_post('3k2yihcrp6f2c')
+    # print(post)
+    exit(0)
 
     # with open('cat2.jpg', 'rb') as f:
     #     cat_data = f.read()
@@ -237,7 +268,7 @@ async def _main_async_firehose_test() -> None:
         print('Message', message.header, parse_subscribe_repos_message(message))
         # raise RuntimeError('kek')
 
-    def on_callback_error_handler(e: BaseException) -> None:
+    async def on_callback_error_handler(e: BaseException) -> None:
         print('got error', e)
         # raise RuntimeError('rofl')
 

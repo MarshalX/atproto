@@ -17,7 +17,6 @@ from atproto_client.models import base
 
 
 class Main(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.images`."""
 
     images: t.List['models.AppBskyEmbedImages.Image'] = Field(max_length=4)  #: Images.
@@ -26,7 +25,6 @@ class Main(base.ModelBase):
 
 
 class Image(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.images`."""
 
     alt: str  #: Alt.
@@ -41,7 +39,6 @@ class Image(base.ModelBase):
 
 
 class AspectRatio(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.images`. width:height represents an aspect ratio. It may be approximate, and may not correspond to absolute dimensions in any given unit."""
 
     height: int = Field(ge=1)  #: Height.
@@ -53,7 +50,6 @@ class AspectRatio(base.ModelBase):
 
 
 class View(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.images`."""
 
     images: t.List['models.AppBskyEmbedImages.ViewImage'] = Field(max_length=4)  #: Images.
@@ -64,7 +60,6 @@ class View(base.ModelBase):
 
 
 class ViewImage(base.ModelBase):
-
     """Definition model for :obj:`app.bsky.embed.images`."""
 
     alt: str  #: Alt.

@@ -99,7 +99,6 @@ def _validate_nsid_segment(segment: str, is_last_segment: bool) -> bool:
     Raises:
         :class:`atproto.exceptions.InvalidNsidError`: Invalid NSID exception.
     """
-
     segment_len = len(segment)
 
     if segment_len < _MIN_NSID_PART:
@@ -133,7 +132,6 @@ def _validate_nsid(nsid: str) -> bool:
     Raises:
         :class:`atproto.exceptions.InvalidNsidError`: Invalid NSID exception.
     """
-
     segments = get_nsid_segments(nsid)
     clean_nsid = _exclude_nsid_namespace_if_exists(segments)
     clean_segments = get_nsid_segments(clean_nsid)
@@ -168,7 +166,6 @@ def validate_nsid(nsid: str, *, soft_fail: bool = False) -> bool:
     Raises:
         :class:`atproto.exceptions.InvalidNsidError`: Invalid NSID exception.
     """
-
     try:
         return _validate_nsid(nsid)
     except InvalidNsidError as e:

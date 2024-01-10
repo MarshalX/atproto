@@ -14,7 +14,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.admin.sendEmail`."""
 
     content: str  #: Content.
@@ -37,7 +36,6 @@ class DataDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.admin.sendEmail`."""
 
     sent: bool  #: Sent.

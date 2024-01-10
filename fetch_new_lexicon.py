@@ -1,3 +1,4 @@
+"""Fetch lexicons from the latest commit and writes them to the lexicons folder."""
 import typing as t
 import zipfile
 from io import BytesIO
@@ -108,6 +109,7 @@ def _remove_all_files_from_lexicons_folder() -> None:
 
 
 def main() -> None:
+    """Fetch lexicons from the latest commit and writes them to the lexicons folder."""
     sha, commit_date, _ = _get_last_commit_info()
 
     # FIXME(MarshalX): the script doesn't care about deleted lexicons

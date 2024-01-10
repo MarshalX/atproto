@@ -16,7 +16,6 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-
     """Input data model for :obj:`com.atproto.server.createSession`."""
 
     identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
@@ -29,7 +28,6 @@ class DataDict(te.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-
     """Output data model for :obj:`com.atproto.server.createSession`."""
 
     access_jwt: str = Field(alias='accessJwt')  #: Access jwt.
