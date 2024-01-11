@@ -12,3 +12,11 @@ def test_at_uri_from_str() -> None:
     assert test_uri == str(at_uri)
     assert at_uri.rkey == '1jlmwihiomm9m'
     assert at_uri.collection == 'app.bsky.feed.post'
+
+
+def test_at_uri_hostname_with_digits() -> None:
+    test_uri = 'at://100ideas.bsky.social'
+    expected_hostname = '100ideas.bsky.social'
+
+    at_uri = AtUri.from_str(test_uri)
+    assert at_uri.hostname == expected_hostname
