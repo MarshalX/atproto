@@ -12,8 +12,9 @@ class AlgBase:
 
     NAME = None
 
-    def __init__(self, curve: EllipticCurve) -> None:
+    def __init__(self, curve: EllipticCurve, curve_order: hex) -> None:
         self.curve = curve
+        self.curve_order = curve_order
 
     def get_elliptic_curve_public_key(self, pubkey: bytes) -> EllipticCurvePublicKey:
         """Return the elliptic curve public key."""
@@ -34,11 +35,23 @@ class AlgBase:
             encoding=serialization.Encoding.X962, format=serialization.PublicFormat.UncompressedPoint
         )
 
-    @staticmethod
-    def _encode_signature(signature: bytes) -> bytes:
+    def _validate_dss_signature_s(self, s: int) -> None:
+        """Validate signature.
+
+        It prevents ECDSA signature malleability.
+
+        More info: https://atproto.com/specs/cryptography#ecdsa-signature-malleability
+        """
+        if s > self.curve_order // 2:
+            raise InvalidSignature('Invalid signature. Non low-S signature variant is denied.')
+
+    def _encode_signature(self, signature: bytes) -> bytes:
         """Encode signature."""
         r = int.from_bytes(signature[:32], 'big')
         s = int.from_bytes(signature[32:], 'big')
+
+        self._validate_dss_signature_s(s)
+
         return encode_dss_signature(r, s)
 
     def verify_signature(self, pubkey: bytes, signing_input: bytes, signature: bytes) -> bool:
