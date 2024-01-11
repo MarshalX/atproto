@@ -18,13 +18,13 @@ class AtprotoData:
 
     @classmethod
     def from_did_doc(cls, did_doc: 'DidDocument') -> 'AtprotoData':
-        """Create AtProtocol data from DID document.
+        """Create AT Protocol data from DID document.
 
         Args:
             did_doc: DID document.
 
         Returns:
-            :obj:`AtprotoData`: AtProtocol data.
+            :obj:`AtprotoData`: AT Protocol data.
         """
         return AtprotoData(
             did=did_doc.id,
@@ -35,16 +35,16 @@ class AtprotoData:
 
 
 def ensure_atproto_document(did_doc: 'DidDocument') -> AtprotoData:
-    """Ensure that the DID document is an AtProtocol DID document.
+    """Ensure that the DID document is an AT Protocol DID document.
 
     Args:
         did_doc: DID document.
 
     Returns:
-        :obj:`AtprotoData`: AtProtocol data.
+        :obj:`AtprotoData`: AT Protocol data.
 
     Raises:
-        :obj:`AtprotoDataParseError`: If the DID document is not an AtProtocol DID document.
+        :obj:`AtprotoDataParseError`: If the DID document is not an AT Protocol DID document.
     """
     atproto_data = AtprotoData.from_did_doc(did_doc)
 
@@ -61,16 +61,16 @@ def ensure_atproto_document(did_doc: 'DidDocument') -> AtprotoData:
 
 
 def ensure_atproto_key(did_doc: 'DidDocument') -> str:
-    """Ensure that the DID document has an AtProtocol signing key.
+    """Ensure that the DID document has an AT Protocol signing key.
 
     Args:
         did_doc: DID document.
 
     Returns:
-        :obj:`str`: AtProtocol signing key.
+        :obj:`str`: AT Protocol signing key.
 
     Raises:
-        :obj:`AtprotoDataParseError`: If the DID document does not have an AtProtocol signing key.
+        :obj:`AtprotoDataParseError`: If the DID document does not have an AT Protocol signing key.
     """
     atproto_data = AtprotoData.from_did_doc(did_doc)
 
