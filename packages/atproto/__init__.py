@@ -15,6 +15,7 @@ from atproto_firehose import (
 )
 from atproto_firehose import models as firehose_models
 from atproto_identity.cache.in_memory_cache import AsyncDidInMemoryCache, DidInMemoryCache
+from atproto_identity.did.atproto_data import AtprotoData
 from atproto_identity.resolver import AsyncIdResolver, IdResolver
 from atproto_server.auth.jwt import (
     JwtPayload,
@@ -48,6 +49,7 @@ __all__ = [
     'parse_subscribe_repos_message',
     'firehose_models',
     # identity
+    'AtprotoData',
     'AsyncDidInMemoryCache',
     'DidInMemoryCache',
     'AsyncIdResolver',

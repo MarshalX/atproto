@@ -1,14 +1,12 @@
 import typing as t
 from abc import ABC, abstractmethod
 
-from atproto_core.did_doc import is_valid_did_doc, parse_did_doc
+from atproto_core.did_doc import DidDocument, is_valid_did_doc
 
 from atproto_identity.did.atproto_data import ensure_atproto_document, ensure_atproto_key
 from atproto_identity.exceptions import DidNotFoundError, PoorlyFormattedDidDocumentError
 
 if t.TYPE_CHECKING:
-    from atproto_core.did_doc import DidDocument
-
     from atproto_identity.cache.base_cache import AsyncDidBaseCache, DidBaseCache
     from atproto_identity.did.atproto_data import AtprotoData
 
@@ -22,7 +20,7 @@ class _BaseResolver:
         if not is_valid_did_doc(value):
             raise PoorlyFormattedDidDocumentError(f'Invalid DID document for DID {did}')
 
-        did_doc = parse_did_doc(value)
+        did_doc = DidDocument.from_dict(value)
         if did_doc.id != did:
             raise PoorlyFormattedDidDocumentError(f'Invalid DID document for DID {did}')
 

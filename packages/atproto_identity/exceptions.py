@@ -27,3 +27,7 @@ class PoorlyFormattedDidDocumentError(AtProtocolError):
 
 class DidNotFoundError(AtProtocolError):
     ...
+
+
+class AtprotoDataParseError(AtProtocolError):
+    ...
