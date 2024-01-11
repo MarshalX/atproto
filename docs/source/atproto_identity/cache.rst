@@ -11,7 +11,7 @@ Here is an example of how to use ``DidInMemoryCache`` with ``IdResolver``:
 
 .. code-block:: python
 
-    from atproto import DidInMemoryCache, IdResolver  # for async AsyncDidInMemoryCache and AsyncIdResolver
+    from atproto import DidInMemoryCache, IdResolver  # for async use AsyncDidInMemoryCache and AsyncIdResolver
 
     cache = DidInMemoryCache()
     resolver = IdResolver(cache=cache)

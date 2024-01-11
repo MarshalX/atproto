@@ -112,12 +112,36 @@ class BaseResolver(_BaseResolver, ABC):
         return did_doc
 
     def resolve_atproto_data(self, did: str, force_refresh: bool = False) -> 'AtprotoData':
-        """Not implemented yet."""
+        """Resolve AtProtocol Data.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`AtprotoData`: AtProtocol data.
+
+        Raises:
+            :obj:`DidNotFoundError`: DID not find.
+            :obj:`AtprotoDataParseError`: If the DID document is not an AtProtocol DID document.
+        """
         did_doc = self.ensure_resolve(did, force_refresh)
         return ensure_atproto_document(did_doc)
 
     def resolve_atproto_key(self, did: str, force_refresh: bool = False) -> str:
-        """Not implemented yet."""
+        """Resolve AtProtocol signing key.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`str`: AtProtocol signing key.
+
+        Raises:
+            :obj:`DidNotFoundError`: DID not find.
+            :obj:`AtprotoDataParseError`: If the DID document does not have an AtProtocol signing key.
+        """
         if did.startswith(_DID_KEY_PREFIX):
             return did
 
@@ -210,12 +234,36 @@ class AsyncBaseResolver(_BaseResolver, ABC):
         return did_doc
 
     async def resolve_atproto_data(self, did: str, force_refresh: bool = False) -> 'AtprotoData':
-        """Not implemented yet."""
+        """Resolve AtProtocol Data.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`AtprotoData`: AtProtocol data.
+
+        Raises:
+            :obj:`DidNotFoundError`: DID not find.
+            :obj:`AtprotoDataParseError`: If the DID document is not an AtProtocol DID document.
+        """
         did_doc = await self.ensure_resolve(did, force_refresh)
         return ensure_atproto_document(did_doc)
 
     async def resolve_atproto_key(self, did: str, force_refresh: bool = False) -> str:
-        """Not implemented yet."""
+        """Resolve AtProtocol signing key.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`str`: AtProtocol signing key.
+
+        Raises:
+            :obj:`DidNotFoundError`: DID not find.
+            :obj:`AtprotoDataParseError`: If the DID document does not have an AtProtocol signing key.
+        """
         if did.startswith(_DID_KEY_PREFIX):
             return did
 

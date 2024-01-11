@@ -37,6 +37,15 @@ Identity
    :show-inheritance:
 
 
+Crypto
+######
+
+.. automodule:: atproto_crypto.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 Server
 ######
 

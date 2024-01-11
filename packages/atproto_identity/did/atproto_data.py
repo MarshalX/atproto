@@ -9,6 +9,8 @@ if t.TYPE_CHECKING:
 
 @dataclass
 class AtprotoData:
+    """Dataclass for atproto data."""
+
     did: str
     signing_key: t.Optional[str] = None
     handle: t.Optional[str] = None
@@ -16,6 +18,14 @@ class AtprotoData:
 
     @classmethod
     def from_did_doc(cls, did_doc: 'DidDocument') -> 'AtprotoData':
+        """Create AtProtocol data from DID document.
+
+        Args:
+            did_doc: DID document.
+
+        Returns:
+            :obj:`AtprotoData`: AtProtocol data.
+        """
         return AtprotoData(
             did=did_doc.id,
             signing_key=did_doc.get_did_key(),
@@ -25,6 +35,17 @@ class AtprotoData:
 
 
 def ensure_atproto_document(did_doc: 'DidDocument') -> AtprotoData:
+    """Ensure that the DID document is an AtProtocol DID document.
+
+    Args:
+        did_doc: DID document.
+
+    Returns:
+        :obj:`AtprotoData`: AtProtocol data.
+
+    Raises:
+        :obj:`AtprotoDataParseError`: If the DID document is not an AtProtocol DID document.
+    """
     atproto_data = AtprotoData.from_did_doc(did_doc)
 
     if atproto_data.did is None:
@@ -40,6 +61,17 @@ def ensure_atproto_document(did_doc: 'DidDocument') -> AtprotoData:
 
 
 def ensure_atproto_key(did_doc: 'DidDocument') -> str:
+    """Ensure that the DID document has an AtProtocol signing key.
+
+    Args:
+        did_doc: DID document.
+
+    Returns:
+        :obj:`str`: AtProtocol signing key.
+
+    Raises:
+        :obj:`AtprotoDataParseError`: If the DID document does not have an AtProtocol signing key.
+    """
     atproto_data = AtprotoData.from_did_doc(did_doc)
 
     if atproto_data.signing_key is None:

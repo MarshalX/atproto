@@ -37,3 +37,4 @@ Learn how to use cache to speed up the resolution process in the :doc:`cache` se
    handle_resolver
    did_resolver
    cache
+   atproto_data
