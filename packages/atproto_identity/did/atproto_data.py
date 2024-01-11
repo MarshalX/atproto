@@ -61,7 +61,7 @@ def ensure_atproto_document(did_doc: 'DidDocument') -> AtprotoData:
 
 
 def ensure_atproto_key(did_doc: 'DidDocument') -> str:
-    """Ensure that the DID document has an AT Protocol signing key.
+    """Ensure that the DID document has AT Protocol signing key.
 
     Args:
         did_doc: DID document.
