@@ -20,8 +20,45 @@ class Multikey:
     jwt_alg: str
     key_bytes: bytes
 
+    @staticmethod
+    def from_str(multikey: str) -> 'Multikey':
+        return parse_multikey(multikey)
+
+
+def get_multikey_alg(multikey: str) -> str:
+    """Get JWT alg for multikey.
+
+    Args:
+        multikey: Multikey.
+
+    Returns:
+        str: JWT alg.
+    """
+    if not multikey.startswith(BASE58_MULTIBASE_PREFIX):
+        raise IncorrectMultikeyPrefixError(f'Incorrect prefix for multikey {multikey}')
+
+    prefixed_bytes = multibase_to_bytes(multikey)
+    if prefixed_bytes.startswith(P256_DID_PREFIX):
+        return P256_JWT_ALG
+    if prefixed_bytes.startswith(SECP256K1_DID_PREFIX):
+        return SECP256K1_JWT_ALG
+
+    raise UnsupportedKeyTypeError('Unsupported key type')
+
 
 def parse_multikey(multikey: str) -> Multikey:
+    """Parse multikey.
+
+    Args:
+        multikey: Multikey.
+
+    Returns:
+        :obj:`Multikey`: Multikey.
+
+    Raises:
+        :obj:`IncorrectMultikeyPrefixError`: Incorrect prefix for multikey.
+        :obj:`UnsupportedKeyTypeError`: Unsupported key type.
+    """
     if not multikey.startswith(BASE58_MULTIBASE_PREFIX):
         raise IncorrectMultikeyPrefixError(f'Incorrect prefix for multikey {multikey}')
 
@@ -40,13 +77,27 @@ def parse_multikey(multikey: str) -> Multikey:
     return Multikey(jwt_alg, key_bytes)
 
 
-def format_multikey(jwt_alg: str, key_bytes: bytes) -> str:
+def format_multikey(jwt_alg: str, key: bytes) -> str:
+    """Format multikey to multibase.
+
+    Compress pubkey and encode with base58btc.
+
+    Args:
+        jwt_alg: JWT alg.
+        key: Key bytes.
+
+    Returns:
+        str: Multikey in multibase.
+
+    Raises:
+        :obj:`UnsupportedKeyTypeError`: Unsupported key type.
+    """
     if jwt_alg == P256_JWT_ALG:
         prefix = P256_DID_PREFIX
-        compressed_key_bytes = P256().compress_pubkey(key_bytes)
+        compressed_key_bytes = P256().compress_pubkey(key)
     elif jwt_alg == SECP256K1_JWT_ALG:
         prefix = SECP256K1_DID_PREFIX
-        compressed_key_bytes = Secp256k1().compress_pubkey(key_bytes)
+        compressed_key_bytes = Secp256k1().compress_pubkey(key)
     else:
         raise UnsupportedKeyTypeError('Unsupported key type')
 
@@ -54,11 +105,33 @@ def format_multikey(jwt_alg: str, key_bytes: bytes) -> str:
     return bytes_to_multibase(BASE58_MULTIBASE_PREFIX, prefixed_bytes)
 
 
-def format_did_key(jwt_alg: str, key_bytes: bytes) -> str:
-    return f'{DID_KEY_PREFIX}{format_multikey(jwt_alg, key_bytes)}'
+def format_did_key(jwt_alg: str, key: bytes) -> str:
+    """Format DID key.
+
+    Args:
+        jwt_alg: JWT alg.
+        key: Key bytes.
+
+    Returns:
+        str: DID key.
+    """
+    return f'{DID_KEY_PREFIX}{format_multikey(jwt_alg, key)}'
+
+
+def format_did_key_multikey(multikey: str) -> str:
+    return f'{DID_KEY_PREFIX}{multikey}'
 
 
 def get_did_key(key_type: str, key: str) -> t.Optional[str]:
+    """Get DID key.
+
+    Args:
+        key_type: Key type.
+        key: Key.
+
+    Returns:
+        :obj:`str`: DID key or ``None`` if a key type is not supported.
+    """
     did_key = None
     if key_type == 'EcdsaSecp256r1VerificationKey2019':
         key_bytes = multibase_to_bytes(key)
@@ -67,7 +140,7 @@ def get_did_key(key_type: str, key: str) -> t.Optional[str]:
         key_bytes = multibase_to_bytes(key)
         did_key = format_did_key(SECP256K1_JWT_ALG, key_bytes)
     elif key_type == 'Multikey':
-        parsed_key = parse_multikey(key)
-        did_key = format_did_key(parsed_key.jwt_alg, parsed_key.key_bytes)
+        # Multikey is compressed already
+        did_key = format_did_key_multikey(key)
 
     return did_key
