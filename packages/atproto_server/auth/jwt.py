@@ -207,7 +207,7 @@ def verify_jwt(
 
     fresh_signing_key = get_signing_key_callback(payload.iss, True)  # get signing key without a cache
     if fresh_signing_key == signing_key:
-        raise TokenInvalidSignatureError('Could not verify JWT signature. Fresh signing key is equal to the old one')
+        raise TokenInvalidSignatureError('Invalid signature even with fresh signing key it is equal to the old one)')
 
     if _verify_signature(fresh_signing_key, signing_input, signature):
         return payload
@@ -252,7 +252,7 @@ async def verify_jwt_async(
 
     fresh_signing_key = await get_signing_key_callback(payload.iss, True)  # get signing key without a cache
     if fresh_signing_key == signing_key:
-        raise TokenInvalidSignatureError('Could not verify JWT signature. Fresh signing key is equal to the old one')
+        raise TokenInvalidSignatureError('Invalid signature even with fresh signing key it is equal to the old one)')
 
     if _verify_signature(fresh_signing_key, signing_input, signature):
         return payload

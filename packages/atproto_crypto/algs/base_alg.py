@@ -1,11 +1,16 @@
+from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurve, EllipticCurvePublicKey
+from cryptography.hazmat.primitives.asymmetric.ec import ECDSA, EllipticCurve, EllipticCurvePublicKey
+from cryptography.hazmat.primitives.asymmetric.utils import encode_dss_signature
+from cryptography.hazmat.primitives.hashes import SHA256
 
 from atproto_crypto.exceptions import InvalidCompressedPubkeyError
 
 
 class AlgBase:
     """Base class for all algorithms."""
+
+    NAME = None
 
     def __init__(self, curve: EllipticCurve) -> None:
         self.curve = curve
@@ -28,3 +33,29 @@ class AlgBase:
         return self.get_elliptic_curve_public_key(pubkey).public_bytes(
             encoding=serialization.Encoding.X962, format=serialization.PublicFormat.UncompressedPoint
         )
+
+    @staticmethod
+    def _encode_signature(signature: bytes) -> bytes:
+        """Encode signature."""
+        r = int.from_bytes(signature[:32], 'big')
+        s = int.from_bytes(signature[32:], 'big')
+        return encode_dss_signature(r, s)
+
+    def verify_signature(self, pubkey: bytes, signing_input: bytes, signature: bytes) -> bool:
+        """Verify signature.
+
+        Args:
+            pubkey: Public key.
+            signing_input: Signing input (data).
+            signature: Signature.
+
+        Returns:
+            :obj:`bool`: True if signature is valid, False otherwise.
+        """
+        try:
+            self.get_elliptic_curve_public_key(pubkey).verify(
+                signature=self._encode_signature(signature), data=signing_input, signature_algorithm=ECDSA(SHA256())
+            )
+            return True
+        except InvalidSignature:
+            return False
