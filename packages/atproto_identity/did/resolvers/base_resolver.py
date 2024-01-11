@@ -1,16 +1,14 @@
 import typing as t
 from abc import ABC, abstractmethod
 
-from atproto_core.did_doc import is_valid_did_doc, parse_did_doc
+from atproto_core.did_doc import DidDocument, is_valid_did_doc
 
 from atproto_identity.did.atproto_data import ensure_atproto_document, ensure_atproto_key
 from atproto_identity.exceptions import DidNotFoundError, PoorlyFormattedDidDocumentError
 
 if t.TYPE_CHECKING:
-    from atproto_core.did_doc import DidDocument
-
     from atproto_identity.cache.base_cache import AsyncDidBaseCache, DidBaseCache
-    from atproto_identity.did.models import AtprotoData
+    from atproto_identity.did.atproto_data import AtprotoData
 
 _DID_KEY_PREFIX = 'did:key:'
 
@@ -22,7 +20,7 @@ class _BaseResolver:
         if not is_valid_did_doc(value):
             raise PoorlyFormattedDidDocumentError(f'Invalid DID document for DID {did}')
 
-        did_doc = parse_did_doc(value)
+        did_doc = DidDocument.from_dict(value)
         if did_doc.id != did:
             raise PoorlyFormattedDidDocumentError(f'Invalid DID document for DID {did}')
 
@@ -114,12 +112,36 @@ class BaseResolver(_BaseResolver, ABC):
         return did_doc
 
     def resolve_atproto_data(self, did: str, force_refresh: bool = False) -> 'AtprotoData':
-        """Not implemented yet."""
+        """Resolve AT Protocol Data.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`AtprotoData`: AT Protocol data.
+
+        Raises:
+            :obj:`DidNotFoundError`: DID not find.
+            :obj:`AtprotoDataParseError`: If the DID document is not an AT Protocol DID document.
+        """
         did_doc = self.ensure_resolve(did, force_refresh)
         return ensure_atproto_document(did_doc)
 
     def resolve_atproto_key(self, did: str, force_refresh: bool = False) -> str:
-        """Not implemented yet."""
+        """Resolve AT Protocol signing key.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`str`: AT Protocol signing key.
+
+        Raises:
+            :obj:`DidNotFoundError`: DID not find.
+            :obj:`AtprotoDataParseError`: If the DID document does not have an AT Protocol signing key.
+        """
         if did.startswith(_DID_KEY_PREFIX):
             return did
 
@@ -212,12 +234,36 @@ class AsyncBaseResolver(_BaseResolver, ABC):
         return did_doc
 
     async def resolve_atproto_data(self, did: str, force_refresh: bool = False) -> 'AtprotoData':
-        """Not implemented yet."""
+        """Resolve AT Protocol Data.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`AtprotoData`: AT Protocol data.
+
+        Raises:
+            :obj:`DidNotFoundError`: DID not find.
+            :obj:`AtprotoDataParseError`: If the DID document is not an AT Protocol DID document.
+        """
         did_doc = await self.ensure_resolve(did, force_refresh)
         return ensure_atproto_document(did_doc)
 
     async def resolve_atproto_key(self, did: str, force_refresh: bool = False) -> str:
-        """Not implemented yet."""
+        """Resolve AT Protocol signing key.
+
+        Args:
+            did: DID.
+            force_refresh: Force refresh cache.
+
+        Returns:
+            :obj:`str`: AT Protocol signing key.
+
+        Raises:
+            :obj:`DidNotFoundError`: DID not find.
+            :obj:`AtprotoDataParseError`: If the DID document does not have an AT Protocol signing key.
+        """
         if did.startswith(_DID_KEY_PREFIX):
             return did
 
