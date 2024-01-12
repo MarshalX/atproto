@@ -47,7 +47,7 @@ def test_custom_feed_auth_flow(monkeypatch: 'MonkeyPatch') -> None:
 
 @pytest.mark.asyncio
 async def test_custom_feed_auth_flow_async(monkeypatch: 'MonkeyPatch') -> None:
-    """THis is exactly custom feed auth flow."""
+    """This is exactly custom feed auth flow."""
 
     cache = AsyncDidInMemoryCache()
     resolver = AsyncIdResolver(cache=cache)
