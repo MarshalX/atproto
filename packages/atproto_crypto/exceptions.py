@@ -13,5 +13,13 @@ class IncorrectMultikeyPrefixError(DidKeyError):
     ...
 
 
+class IncorrectDidKeyPrefixError(DidKeyError):
+    ...
+
+
 class UnsupportedKeyTypeError(DidKeyError):
+    ...
+
+
+class UnsupportedSignatureAlgorithmError(AtProtocolError):
     ...

@@ -11,7 +11,7 @@ from atproto_crypto.consts import (
     SECP256K1_DID_PREFIX,
     SECP256K1_JWT_ALG,
 )
-from atproto_crypto.exceptions import IncorrectMultikeyPrefixError, UnsupportedKeyTypeError
+from atproto_crypto.exceptions import IncorrectDidKeyPrefixError, IncorrectMultikeyPrefixError, UnsupportedKeyTypeError
 from atproto_crypto.multibase import bytes_to_multibase, multibase_to_bytes
 
 
@@ -103,6 +103,24 @@ def format_multikey(jwt_alg: str, key: bytes) -> str:
 
     prefixed_bytes = prefix + compressed_key_bytes
     return bytes_to_multibase(BASE58_MULTIBASE_PREFIX, prefixed_bytes)
+
+
+def parse_did_key(did_key: str) -> Multikey:
+    """Parse DID key.
+
+    Args:
+        did_key: DID key.
+
+    Returns:
+        :obj:`Multikey`: Multikey.
+
+    Raises:
+        :obj:`IncorrectDidKeyPrefixError`: Incorrect prefix for DID key.
+    """
+    if not did_key.startswith(DID_KEY_PREFIX):
+        raise IncorrectDidKeyPrefixError(f'Incorrect prefix for DID key {did_key}')
+
+    return parse_multikey(did_key[len(DID_KEY_PREFIX) :])
 
 
 def format_did_key(jwt_alg: str, key: bytes) -> str:
