@@ -35,8 +35,8 @@ class AlgBase:
             encoding=serialization.Encoding.X962, format=serialization.PublicFormat.UncompressedPoint
         )
 
-    def _validate_dss_signature_s(self, s: int) -> None:
-        """Validate signature.
+    def _ensure_dss_signature_low_s(self, s: int) -> None:
+        """Ensure DSS signature is low-S.
 
         It prevents ECDSA signature malleability.
 
@@ -50,7 +50,7 @@ class AlgBase:
         r = int.from_bytes(signature[:32], 'big')
         s = int.from_bytes(signature[32:], 'big')
 
-        self._validate_dss_signature_s(s)
+        self._ensure_dss_signature_low_s(s)
 
         return encode_dss_signature(r, s)
 
