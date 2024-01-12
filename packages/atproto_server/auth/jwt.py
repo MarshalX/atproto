@@ -1,10 +1,10 @@
 import binascii
 import json
 import typing as t
-from dataclasses import dataclass
 from datetime import datetime, timezone
 
 from atproto_crypto.verify import verify_signature
+from pydantic import BaseModel, ConfigDict
 
 from atproto_server.auth.utils import base64url_decode
 from atproto_server.exceptions import (
@@ -20,18 +20,23 @@ GetSigningKeyCallback = t.Callable[[str, bool], str]
 GetSigningKeyCallbackAsync = t.Callable[[str, bool], t.Coroutine[t.Any, t.Any, str]]
 
 
-@dataclass
-class JwtPayload:
-    """The payload of the JWT."""
+class JwtPayload(BaseModel):
+    """The payload of the JWT.
 
-    # TODO(MarshalX): separate service and user tokens to different classes?
-    exp: int  # expired at
-    iat: t.Optional[int] = None  # created at
-    scope: t.Optional[str] = None
-    sub: t.Optional[str] = None  # DID
-    iss: t.Optional[str] = None  # DID. In service token
-    aud: t.Optional[str] = None  # DID
-    jti: t.Optional[str] = None  # in refresh token only
+    Based on https://www.rfc-editor.org/rfc/rfc7519#section-4.1
+    """
+
+    model_config = ConfigDict(extra='allow', strict=True)
+
+    iss: t.Optional[str] = None  #: Issuer (DID).
+    sub: t.Optional[str] = None  #: Subject (DID).
+    aud: t.Optional[t.Union[str, t.List[str]]] = None  #: Audience (DID).
+    jti: t.Optional[str] = None  #: JWT ID. Presented in Refresh Token.
+    nbf: t.Optional[int] = None  #: Not Before. Not used by ATProto.
+    exp: t.Optional[int] = None  #: Expiration Time.
+    iat: t.Optional[int] = None  #: Issued At.
+    scope: t.Optional[str] = None  #: Scope. ATProto specific.
+    # ... any other JWT Claim Set member.
 
 
 def parse_jwt(jwt: t.Union[str, bytes]) -> t.Tuple[bytes, bytes, t.Dict[str, t.Any], bytes]:
