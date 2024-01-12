@@ -979,31 +979,6 @@ class NotificationNamespace(NamespaceBase):
 
 
 class UnspeccedNamespace(NamespaceBase):
-    def get_popular(
-        self,
-        params: t.Optional[
-            t.Union[models.AppBskyUnspeccedGetPopular.Params, models.AppBskyUnspeccedGetPopular.ParamsDict]
-        ] = None,
-        **kwargs: t.Any,
-    ) -> 'models.AppBskyUnspeccedGetPopular.Response':
-        """DEPRECATED: will be removed soon. Use a feed generator alternative.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyUnspeccedGetPopular.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = get_or_create(params, models.AppBskyUnspeccedGetPopular.Params)
-        response = self._client.invoke_query(
-            'app.bsky.unspecced.getPopular', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyUnspeccedGetPopular.Response)
-
     def get_popular_feed_generators(
         self,
         params: t.Optional[
@@ -1282,6 +1257,29 @@ class AdminNamespace(NamespaceBase):
             'com.atproto.admin.getAccountInfo', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminDefs.AccountView)
+
+    def get_account_infos(
+        self,
+        params: t.Union[models.ComAtprotoAdminGetAccountInfos.Params, models.ComAtprotoAdminGetAccountInfos.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoAdminGetAccountInfos.Response':
+        """Get details about some accounts.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminGetAccountInfos.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoAdminGetAccountInfos.Params)
+        response = self._client.invoke_query(
+            'com.atproto.admin.getAccountInfos', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminGetAccountInfos.Response)
 
     def get_invite_codes(
         self,

@@ -19,6 +19,7 @@ ReasonType = t.Union[
     'models.ComAtprotoModerationDefs.ReasonSexual',
     'models.ComAtprotoModerationDefs.ReasonRude',
     'models.ComAtprotoModerationDefs.ReasonOther',
+    'models.ComAtprotoModerationDefs.ReasonAppeal',
 ]  #: Reason type
 
 ReasonSpam = te.Literal[
@@ -42,3 +43,7 @@ ReasonRude = te.Literal[
 ReasonOther = te.Literal[
     'com.atproto.moderation.defs#reasonOther'
 ]  #: Other: reports not falling under another report category
+
+ReasonAppeal = te.Literal[
+    'com.atproto.moderation.defs#reasonAppeal'
+]  #: Appeal: appeal a previously taken moderation action

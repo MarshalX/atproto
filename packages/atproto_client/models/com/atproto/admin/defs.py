@@ -75,6 +75,7 @@ class ModEventViewDetail(base.ModelBase):
             'models.ComAtprotoAdminDefs.ModEventAcknowledge',
             'models.ComAtprotoAdminDefs.ModEventEscalate',
             'models.ComAtprotoAdminDefs.ModEventMute',
+            'models.ComAtprotoAdminDefs.ModEventResolveAppeal',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -130,7 +131,13 @@ class SubjectStatusView(base.ModelBase):
     updated_at: str = Field(
         alias='updatedAt'
     )  #: Timestamp referencing when the last update was made to the moderation status of the subject.
+    appealed: t.Optional[
+        bool
+    ] = None  #: True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators.
     comment: t.Optional[str] = None  #: Sticky comment on the subject.
+    last_appealed_at: t.Optional[str] = Field(
+        default=None, alias='lastAppealedAt'
+    )  #: Timestamp referencing when the author of the subject appealed a moderation action.
     last_reported_at: t.Optional[str] = Field(default=None, alias='lastReportedAt')  #: Last reported at.
     last_reviewed_at: t.Optional[str] = Field(default=None, alias='lastReviewedAt')  #: Last reviewed at.
     last_reviewed_by: t.Optional[str] = Field(default=None, alias='lastReviewedBy')  #: Last reviewed by.
@@ -231,6 +238,9 @@ class AccountView(base.ModelBase):
     )  #: Invited by.
     invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
     invites_disabled: t.Optional[bool] = Field(default=None, alias='invitesDisabled')  #: Invites disabled.
+    related_records: t.Optional[t.List['UnknownType']] = Field(
+        default=None, alias='relatedRecords'
+    )  #: Related records.
 
     py_type: te.Literal['com.atproto.admin.defs#accountView'] = Field(
         default='com.atproto.admin.defs#accountView', alias='$type', frozen=True
@@ -418,6 +428,16 @@ class ModEventReverseTakedown(base.ModelBase):
 
     py_type: te.Literal['com.atproto.admin.defs#modEventReverseTakedown'] = Field(
         default='com.atproto.admin.defs#modEventReverseTakedown', alias='$type', frozen=True
+    )
+
+
+class ModEventResolveAppeal(base.ModelBase):
+    """Definition model for :obj:`com.atproto.admin.defs`. Resolve appeal on a subject."""
+
+    comment: t.Optional[str] = None  #: Describe resolution.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventResolveAppeal'] = Field(
+        default='com.atproto.admin.defs#modEventResolveAppeal', alias='$type', frozen=True
     )
 
 
