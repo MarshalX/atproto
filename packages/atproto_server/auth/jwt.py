@@ -28,14 +28,14 @@ class JwtPayload(BaseModel):
 
     model_config = ConfigDict(extra='allow', strict=True)
 
-    iss: t.Optional[str] = None  # Issuer (DID)
-    sub: t.Optional[str] = None  # Subject (DID)
-    aud: t.Optional[t.Union[str, t.List[str]]] = None  # Audience (DID)
-    jti: t.Optional[str] = None  # JWT ID
-    nbf: t.Optional[int] = None  # Not Before. Not used by ATProto
-    exp: t.Optional[int] = None  # Expiration Time
-    iat: t.Optional[int] = None  # Issued At
-    scope: t.Optional[str] = None  # Scope. ATProto specific
+    iss: t.Optional[str] = None  #: Issuer (DID).
+    sub: t.Optional[str] = None  #: Subject (DID).
+    aud: t.Optional[t.Union[str, t.List[str]]] = None  #: Audience (DID).
+    jti: t.Optional[str] = None  #: JWT ID. Presented in Refresh Token.
+    nbf: t.Optional[int] = None  #: Not Before. Not used by ATProto.
+    exp: t.Optional[int] = None  #: Expiration Time.
+    iat: t.Optional[int] = None  #: Issued At.
+    scope: t.Optional[str] = None  #: Scope. ATProto specific.
     # ... any other JWT Claim Set member.
 
 
