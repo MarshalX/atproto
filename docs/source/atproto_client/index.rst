@@ -1,7 +1,7 @@
-Server
-======
+Client (API)
+============
 
-.. automodule:: atproto_server
+.. automodule:: atproto_client
    :members:
    :undoc-members:
    :inherited-members:
@@ -12,4 +12,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   auth
+   clients
+   namespace
+   models
+   utils/index

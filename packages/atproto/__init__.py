@@ -5,6 +5,9 @@ from atproto_core.cid import CID, CIDType
 from atproto_core.did_doc import DidDocument
 from atproto_core.nsid import NSID
 from atproto_core.uri import AtUri
+from atproto_crypto.did import Multikey, get_did_key
+from atproto_crypto.multibase import bytes_to_multibase, multibase_to_bytes
+from atproto_crypto.verify import verify_signature
 from atproto_firehose import (
     AsyncFirehoseSubscribeLabelsClient,
     AsyncFirehoseSubscribeReposClient,
@@ -40,6 +43,12 @@ __all__ = [
     'DidDocument',
     'NSID',
     'AtUri',
+    # crypto
+    'bytes_to_multibase',
+    'get_did_key',
+    'multibase_to_bytes',
+    'Multikey',
+    'verify_signature',
     # firehose
     'AsyncFirehoseSubscribeLabelsClient',
     'AsyncFirehoseSubscribeReposClient',

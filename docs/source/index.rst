@@ -13,39 +13,19 @@ Documentation
 
    readme
    Examples <https://github.com/MarshalX/atproto/tree/main/examples>
+   ⭐️ Star <https://github.com/MarshalX/atproto>
 
 .. toctree::
    :caption: SDK
    :maxdepth: 4
 
-   firehose
-   atproto_client/clients
-   namespace
-   models
-   atproto_identity/identity
+   atproto_client/index
+   atproto_core/index
+   atproto_firehose/index
+   atproto_identity/index
+   atproto_crypto/index
    atproto_server/index
-
-.. toctree::
-   :caption: Core
-   :maxdepth: 4
-
-   nsid
-   cid
-   uri
-   car
-   cbor
-   did_doc
-
-.. toctree::
-   :caption: Utils
-   :maxdepth: 4
-
-   text_builder
-
-.. toctree::
-   :caption: Exceptions
-   :maxdepth: 4
-
+   atproto_lexicon/index
    exceptions
 
 .. toctree::
@@ -62,7 +42,7 @@ Documentation
 
    GitHub <https://github.com/MarshalX/atproto>
    PyPI <https://pypi.org/project/atproto/>
-   Author <https://github.com/MarshalX>
+   🦁 Author <https://github.com/MarshalX>
    AT Protocol Docs <https://atproto.com/docs>
    IPLD Data Model <https://ipld.io/>
    Discord Bluesky API <https://discord.gg/PCyVJXU9jN>

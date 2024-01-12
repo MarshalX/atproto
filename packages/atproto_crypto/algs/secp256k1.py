@@ -5,6 +5,8 @@ from atproto_crypto.consts import SECP256K1_CURVE_ORDER, SECP256K1_JWT_ALG
 
 
 class Secp256k1(AlgBase):
+    """K256 algorithm AKA secp256k1 AKA ES256K."""
+
     NAME = SECP256K1_JWT_ALG
 
     def __init__(self) -> None:

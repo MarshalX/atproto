@@ -1,7 +1,7 @@
 Identity (DID and Handle resolvers)
 ===================================
 
-Check out what is a DID Document in the :doc:`../did_doc`.
+Check out what is a DID Document in the :doc:`../atproto_core/did_doc`.
 
 AT Protocol uses two identifiers: DID and Handle. Handles are DNS names while DIDs are an emerging W3C standard which act as secure & stable IDs.
 
@@ -29,6 +29,9 @@ Learn how to use cache to speed up the resolution process in the :doc:`cache` se
    :members:
    :undoc-members:
    :inherited-members:
+
+Submodules
+----------
 
 .. toctree::
    :maxdepth: 4

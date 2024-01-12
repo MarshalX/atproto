@@ -1,7 +1,7 @@
-Clients
-=======
+Crypto
+======
 
-.. automodule:: atproto_client.client
+.. automodule:: atproto_crypto
    :members:
    :undoc-members:
    :show-inheritance:
@@ -12,7 +12,6 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   client
-   raw
-   base
-   http
+   did
+   multibase
+   verify
