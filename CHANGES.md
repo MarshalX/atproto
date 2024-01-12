@@ -1,5 +1,28 @@
 # Change Log
 
+## Version 0.0.37
+
+**12.01.2024**
+
+🎉 Welcome in 2024! User-specific custom feeds are here! This is a massive update with a lot of new implementations including Service JWT, signature validation, DID Keys, AtProtoData, and more! Huge docs restructuring is here too: https://atproto.blue
+
+Code snippet: [Authorized Custom Feed (user-specific results) ](https://github.com/MarshalX/bluesky-feed-generator/pull/10)
+
+SDK:
+* Implement Service JWT by @MarshalX in https://github.com/MarshalX/atproto/pull/225
+* Implement AtprotoData and DID key formatting and parsing by @MarshalX in https://github.com/MarshalX/atproto/pull/227
+* Implement signature verification by @MarshalX in https://github.com/MarshalX/atproto/pull/232
+* Add tests for auth flow in custom feeds by @MarshalX in https://github.com/MarshalX/atproto/pull/236
+* Describe JWT payload according to RFC 7519 by @MarshalX in https://github.com/MarshalX/atproto/pull/235
+* Update lexicons fetched from 51fcba7 committed 2024-01-09T23:29:07Z by @MarshalX in https://github.com/MarshalX/atproto/pull/238
+* Fix AtUri hostname parsing with digits by @MarshalX in https://github.com/MarshalX/atproto/pull/229
+
+Docs:
+* Enable pydocstyle rules by @MarshalX in https://github.com/MarshalX/atproto/pull/226
+* Cleanup docs of models by disabling aliases, schemes, validators, and list of fields by @MarshalX in https://github.com/MarshalX/atproto/pull/231
+* Improve documentation by @MarshalX in https://github.com/MarshalX/atproto/pull/234
+* Bump jinja2 from 3.1.2 to 3.1.3 by @dependabot in https://github.com/MarshalX/atproto/pull/230
+
 ## Version 0.0.36
 
 **23.12.2023**
