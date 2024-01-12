@@ -60,7 +60,6 @@ from atproto_client.models.app.bsky.notification import register_push as AppBsky
 from atproto_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
 from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
-from atproto_client.models.app.bsky.unspecced import get_popular as AppBskyUnspeccedGetPopular
 from atproto_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
 )
@@ -74,6 +73,7 @@ from atproto_client.models.com.atproto.admin import disable_invite_codes as ComA
 from atproto_client.models.com.atproto.admin import emit_moderation_event as ComAtprotoAdminEmitModerationEvent
 from atproto_client.models.com.atproto.admin import enable_account_invites as ComAtprotoAdminEnableAccountInvites
 from atproto_client.models.com.atproto.admin import get_account_info as ComAtprotoAdminGetAccountInfo
+from atproto_client.models.com.atproto.admin import get_account_infos as ComAtprotoAdminGetAccountInfos
 from atproto_client.models.com.atproto.admin import get_invite_codes as ComAtprotoAdminGetInviteCodes
 from atproto_client.models.com.atproto.admin import get_moderation_event as ComAtprotoAdminGetModerationEvent
 from atproto_client.models.com.atproto.admin import get_record as ComAtprotoAdminGetRecord
@@ -213,7 +213,6 @@ class _Ids:
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
-    AppBskyUnspeccedGetPopular: str = 'app.bsky.unspecced.getPopular'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
     AppBskyUnspeccedGetTimelineSkeleton: str = 'app.bsky.unspecced.getTimelineSkeleton'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
@@ -225,6 +224,7 @@ class _Ids:
     ComAtprotoAdminEmitModerationEvent: str = 'com.atproto.admin.emitModerationEvent'
     ComAtprotoAdminEnableAccountInvites: str = 'com.atproto.admin.enableAccountInvites'
     ComAtprotoAdminGetAccountInfo: str = 'com.atproto.admin.getAccountInfo'
+    ComAtprotoAdminGetAccountInfos: str = 'com.atproto.admin.getAccountInfos'
     ComAtprotoAdminGetInviteCodes: str = 'com.atproto.admin.getInviteCodes'
     ComAtprotoAdminGetModerationEvent: str = 'com.atproto.admin.getModerationEvent'
     ComAtprotoAdminGetRecord: str = 'com.atproto.admin.getRecord'

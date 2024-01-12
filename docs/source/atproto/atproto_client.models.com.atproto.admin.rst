@@ -19,6 +19,7 @@ Submodules
    atproto_client.models.com.atproto.admin.emit_moderation_event
    atproto_client.models.com.atproto.admin.enable_account_invites
    atproto_client.models.com.atproto.admin.get_account_info
+   atproto_client.models.com.atproto.admin.get_account_infos
    atproto_client.models.com.atproto.admin.get_invite_codes
    atproto_client.models.com.atproto.admin.get_moderation_event
    atproto_client.models.com.atproto.admin.get_record

@@ -18,6 +18,7 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.admin.queryModerationStatuses`."""
 
+    appealed: t.Optional[bool] = None  #: Get subjects in unresolved appealed status.
     comment: t.Optional[str] = None  #: Search subjects by keyword from comments.
     cursor: t.Optional[str] = None  #: Cursor.
     ignore_subjects: t.Optional[t.List[str]] = Field(default=None, alias='ignoreSubjects')  #: Ignore subjects.
@@ -50,6 +51,7 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(te.TypedDict):
+    appealed: te.NotRequired[t.Optional[bool]]  #: Get subjects in unresolved appealed status.
     comment: te.NotRequired[t.Optional[str]]  #: Search subjects by keyword from comments.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     ignore_subjects: te.NotRequired[t.Optional[t.List[str]]]  #: Ignore subjects.
