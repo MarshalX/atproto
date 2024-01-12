@@ -1,7 +1,7 @@
-Server
-======
+Core
+====
 
-.. automodule:: atproto_server
+.. automodule:: atproto_core
    :members:
    :undoc-members:
    :inherited-members:
@@ -12,4 +12,9 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   auth
+   nsid
+   cid
+   uri
+   car
+   cbor
+   did_doc

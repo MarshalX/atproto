@@ -48,4 +48,4 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   firehose.models
+   models

@@ -1,7 +1,7 @@
-Server
-======
+Lexicon
+=======
 
-.. automodule:: atproto_server
+.. automodule:: atproto_lexicon
    :members:
    :undoc-members:
    :inherited-members:
@@ -12,4 +12,5 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   auth
+   parser
+   models

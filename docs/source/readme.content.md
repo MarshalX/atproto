@@ -1,16 +1,15 @@
 ### Introduction
 
-This SDK attempts to implement everything that provides ATProto. Due to the unstable state of the protocol (it grows and changes fast) and a bit of outdated documentation, only the client side is supported for now. There is support for Lexicon Schemes, XRPC clients, and Firehose. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Schemes, DAG-CBOR, CAR files.
+This SDK attempts to implement everything that provides ATProto. There is support for Lexicon Schemes, XRPC clients, Firehose, Identity, DID keys, signatures, and more. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Schemes, DAG-CBOR, CAR files, DID Documents and more.
 
 ### Requirements
 
 - Python 3.7.1 or higher.
-- Access to Bsky if you don't have an own server.
 
 ### Installing
 
 ``` bash
-pip3 install -U atproto
+pip install -U atproto
 ```
 
 ### Quick start
@@ -58,23 +57,25 @@ client.send_post(text='Hello World!')
 ```
 
 Useful links to continue:
-- [List of all methods with documentation](https://atproto.readthedocs.io/en/latest/xrpc_clients/client.html).
+- [List of all methods with documentation](https://atproto.readthedocs.io/en/latest/atproto_client/index.html).
 - [Examples of using the methods](https://github.com/MarshalX/atproto/tree/main/examples).
 
 ### SDK structure
 
 The SDK is built upon the following components:
 
-| Package            | Description                                                                                                                           |
-|--------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| `atproto`          | The package that contains import shortcuts to other packages.                                                                         |
-| `atproto_cli`      | The package that contains the CLI tool to generate code.                                                                              |
-| `atproto_client`   | The package that contains the XRPC Client, data models, and utils like rich text helper.                                              |
-| `atproto_codegen`  | The package that contains the code generator of models, clients, and namespaces.                                                      |
-| `atproto_core`     | The package that contains the core of the SDK. Base class of exceptions, tools to work with NSID, AT URI Schemes, CID, and CAR files. |
-| `atproto_firehose` | The package that contains the Firehose (data streaming) client and models.                                                            |
-| `atproto_identity` | The package that contains the identity resolvers for DID and Handle.                                                                  |
-| `atproto_lexicon`  | The package that contains the lexicon parser.                                                                                         |
+| Package            | Description                                                                 |
+|--------------------|-----------------------------------------------------------------------------|
+| `atproto`          | Import shortcuts to other packages.                                         |
+| `atproto_cli`      | CLI tool to generate code.                                                  |
+| `atproto_client`   | XRPC Client, data models, and utils like rich text helper.                  |
+| `atproto_codegen`  | Code generator of models, clients, and namespaces.                          |
+| `atproto_core`     | Tools to work with NSID, AT URI Schemes, CID, CAR files, and DID Documents. |
+| `atproto_crypto`   | Crypto utils like multibase, signature verification, work with DID keys.    |
+| `atproto_firehose` | Firehose (data streaming) client and models.                                |
+| `atproto_identity` | Identity resolvers for DID, Handle, AT Protocol data, signing keys.         |
+| `atproto_lexicon`  | Lexicon parser.                                                             |
+| `atproro_server`   | Server-side utils like JWT.                                                 |
 
 I highly recommend you to use the `atproto` package to import everything that you need.
 It contains shortcuts to all other packages.
@@ -196,8 +197,3 @@ with open('cat.jpg', 'rb') as f:
 ```
 
 I hope you are not scared. May the Force be with you. Good luck!
-
-### Future changes
-
-Things that a want to do soon:
-- Provide autogenerated Record Namespaces with more high-level work with basic operations upon records (CRUD + list records)

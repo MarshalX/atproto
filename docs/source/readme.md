@@ -2,7 +2,7 @@
 
 ## The AT Protocol SDK
 
-> ⚠️ Under construction. Until the 1.0.0 release, I am not going to care about backward compatibility between versions.
+> ⚠️ Under construction. Until the 1.0.0 release compatibility between versions is not guaranteed.
 
 Code snippet:
 ```python

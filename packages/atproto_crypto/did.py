@@ -22,7 +22,23 @@ class Multikey:
 
     @staticmethod
     def from_str(multikey: str) -> 'Multikey':
+        """Create multikey from string.
+
+        Args:
+            multikey: Multikey.
+
+        Returns:
+            :obj:`Multikey`: Multikey.
+        """
         return parse_multikey(multikey)
+
+    def to_str(self) -> str:
+        """Format multikey.
+
+        Returns:
+            str: Multikey.
+        """
+        return format_multikey(self.jwt_alg, self.key_bytes)
 
 
 def get_multikey_alg(multikey: str) -> str:
@@ -137,6 +153,14 @@ def format_did_key(jwt_alg: str, key: bytes) -> str:
 
 
 def format_did_key_multikey(multikey: str) -> str:
+    """Format DID key from multikey.
+
+    Args:
+        multikey: Multikey.
+
+    Returns:
+        :obj:`str`: DID key.
+    """
     return f'{DID_KEY_PREFIX}{multikey}'
 
 

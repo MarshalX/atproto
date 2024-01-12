@@ -37,7 +37,9 @@ def test_multikey_p256_compress_decompress() -> None:
     assert multikey.jwt_alg == P256_JWT_ALG
 
     did_key = format_multikey(multikey.jwt_alg, multikey.key_bytes)
+    did_key2 = multikey.to_str()
     assert did_key == expected_pubkey_multibase
+    assert did_key2 == expected_pubkey_multibase
 
 
 def test_multikey_secp256k1_compress_decompress() -> None:
