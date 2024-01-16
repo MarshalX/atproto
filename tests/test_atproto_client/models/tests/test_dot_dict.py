@@ -43,6 +43,14 @@ def test_dot_dict() -> None:
         'createdAt': expected_created_at,
         'snake_case': expected_snake_case,
     }
+    expected_edited_test_data = {
+        'a': 1,
+        'b': {'c': 2},
+        'createdAt': 'blabla',
+        'd': [{'e': 6}, 4, 5],
+        'snake_case': 'test',
+    }
+
     model = DotDict(test_data)
 
     assert isinstance(model, DotDict)
@@ -88,4 +96,12 @@ def test_dot_dict() -> None:
     assert model['snakeCase'] == expected_snake_case
 
     assert DotDict(test_data) == DotDict(test_data)
-    assert model.to_dict() == test_data
+
+    assert isinstance(model.to_dict(), dict)
+    assert model.to_dict() == expected_edited_test_data
+    assert model.to_dict() == model.to_dict()
+
+    dict_model = model.to_dict()
+    assert dict_model['a'] == 1
+    assert dict_model['d'][0]['e'] == 6
+    assert dict_model['createdAt'] == 'blabla'
