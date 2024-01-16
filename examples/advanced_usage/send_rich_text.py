@@ -1,7 +1,8 @@
 from atproto import Client, models
 
 # To send links as "link card" or "quote post" look at the send_embed.py example.
-# There is a helper class TextBuilder that helps construct rich text: https://atproto.blue/en/latest/text_builder.html
+# There is a helper class TextBuilder
+# that helps construct rich text: https://atproto.blue/en/latest/atproto_client/utils/text_builder.html
 
 
 def main() -> None:

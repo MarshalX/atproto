@@ -33,7 +33,7 @@ Abstract and in-memory caching has been brought too.
 And as always, it provides both sync and async interfaces.
 Check the docs below!
 
-**🌐 [Identity resolvers for DID and Handle](https://atproto.blue/en/latest/atproto_identity/identity.html)**
+**🌐 [Identity resolvers for DID and Handle](https://atproto.blue/en/latest/atproto_identity/index.html)**
 
 ## Version 0.0.35
 
