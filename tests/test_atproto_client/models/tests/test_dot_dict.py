@@ -1,6 +1,37 @@
 from atproto_client.models.dot_dict import DotDict
 
 
+def test_dot_dict_input_mutation() -> None:
+    test_data = {'a': 1, 'b': {'c': 2}, 'd': [{'e': 3}, 4, 5]}
+    model = DotDict(test_data)
+
+    model['a'] = 2
+    assert model['a'] == 2
+    assert test_data['a'] == 1
+
+    model.b.c = 3
+    assert model.b.c == 3
+    assert test_data['b']['c'] == 2
+
+    model['d'][0]['e'] = 6
+    assert model['d'][0]['e'] == 6
+    assert test_data['d'][0]['e'] == 3
+
+
+def test_dot_dict_output_mutation() -> None:
+    model = DotDict({'a': 1, 'b': {'c': 2}, 'd': [{'e': 3}, 4, 5]})
+    output_dict = model.to_dict()
+
+    output_dict['a'] = 2
+    assert model['a'] == 1
+
+    output_dict['b']['c'] = 3
+    assert model.b.c == 2
+
+    output_dict['d'][0]['e'] = 6
+    assert model['d'][0]['e'] == 3
+
+
 def test_dot_dict() -> None:
     expected_created_at = '2021-03-30T12:00:00Z'
     expected_snake_case = 'test'

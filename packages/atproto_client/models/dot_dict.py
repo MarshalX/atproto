@@ -62,7 +62,7 @@ class DotDict(UnknownDict):
     """
 
     def __init__(self, data: dict) -> None:
-        self._data = data
+        self._data = deepcopy(data)
         for k, v in self._data.items():
             self.__setitem__(k, v)
 
