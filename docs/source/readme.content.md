@@ -181,7 +181,7 @@ client.login('my-username', 'my-password')
 with open('cat.jpg', 'rb') as f:
     img_data = f.read()
 
-    upload = client.com.atproto.repo.upload_blob(img_data)
+    upload = client.upload_blob(img_data)
     images = [models.AppBskyEmbedImages.Image(alt='Img alt', image=upload.blob)]
     embed = models.AppBskyEmbedImages.Main(images=images)
 
