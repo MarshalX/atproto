@@ -1,4 +1,7 @@
-"""Fetch lexicons from the latest commit and writes them to the lexicons folder."""
+#!/usr/bin/env python3
+"""Fetch new lexicons and regenerate code and docs. Used in CI/CD."""
+import os
+import subprocess
 import typing as t
 import zipfile
 from io import BytesIO
@@ -18,6 +21,12 @@ _LEXICONS_FOLDER_NAME = 'lexicons'
 _MANDATORY_REQUEST_HEADERS = {'Content-Type-': 'application/json'}
 
 _FOLDER_TO_WRITE_LEXICONS = Path(__file__).parent.joinpath('lexicons').absolute()
+
+_FOLDER_OF_GEN_DOCS = Path(__file__).parent.joinpath('docs', 'source', 'atproto').absolute()
+
+_FOLDER_OF_MODELS = Path(__file__).parent.joinpath('packages', 'atproto_client', 'models').absolute()
+_FOLDER_OF_GEN_MODELS_1 = _FOLDER_OF_MODELS.joinpath('com').absolute()
+_FOLDER_OF_GEN_MODELS_2 = _FOLDER_OF_MODELS.joinpath('app').absolute()
 
 
 def _build_last_commit_api_url() -> str:
@@ -103,36 +112,52 @@ def _write_extracted_lexicons(extracted_files: ExtractedFiles) -> None:
         _write_to_file(_format_lexicon_filename(filename), content)
 
 
-def _remove_all_files_from_lexicons_folder() -> None:
-    for file in _FOLDER_TO_WRITE_LEXICONS.iterdir():
-        file.unlink()
+def _remove_content_in_path(path: Path) -> None:
+    for child in path.iterdir():
+        if child.is_dir():
+            _remove_content_in_path(child)
+        else:
+            child.unlink()
 
 
-def main() -> None:
-    """Fetch lexicons from the latest commit and writes them to the lexicons folder."""
+def _run_subprocess(command: t.List[str]) -> None:
+    subprocess.run(command)  # noqa: S603
+
+
+def _print(*args) -> None:
+    if 'CI' in os.environ:
+        return
+
+    print(*args)  # noqa: T201
+
+
+def main() -> str:
+    """Fetch new lexicons and regenerate code and docs. Used in CI/CD."""
+    _print('- Fetching lexicons from the latest commit...')
     sha, commit_date, _ = _get_last_commit_info()
 
-    # FIXME(MarshalX): the script doesn't care about deleted lexicons
-
-    print('Successfully fetch lexicons! Next steps:')
-
-    print('- Run codegen (poetry run atp gen all)')
-
-    print('- Run ruff (poetry run ruff .)')
-    print('- Run ruff format (poetry run ruff format .)')
-
-    print('- Gen docs (cd docs && make gen)')
-
-    print('- Add all new files to Git (git add)')
-    print('- Commit with the message below:', end='\n\n')
-
-    print(f'Update lexicons fetched from {sha[:7]} committed {commit_date}')
-
-    # in case if some lexicons were deleted
-    _remove_all_files_from_lexicons_folder()
-    # TODO(MarshalX): remove generated files likes models, etc.
-
+    _remove_content_in_path(_FOLDER_TO_WRITE_LEXICONS)
     _write_extracted_lexicons(_extract_zip(_download_zip_with_code()))
+
+    _print('- Running codegen (poetry run atp gen all)...')
+    _remove_content_in_path(_FOLDER_OF_GEN_MODELS_1)
+    _remove_content_in_path(_FOLDER_OF_GEN_MODELS_2)
+    _run_subprocess(['poetry', 'run', 'atp', 'gen', 'all'])
+
+    _print('- Running ruff (poetry run ruff .)...')
+    _run_subprocess(['poetry', 'run', 'ruff', '.'])
+
+    _print('- Running ruff format (poetry run ruff format .)...')
+    _run_subprocess(['poetry', 'run', 'ruff', 'format', '.'])
+
+    _print('- Generating docs (make -s -C docs gen)...')
+    _remove_content_in_path(_FOLDER_OF_GEN_DOCS)
+    _run_subprocess(['make', '-s', '-C', 'docs', 'gen'])
+
+    commit_message = f'Update lexicons fetched from {sha[:7]} committed {commit_date}'
+    _print(f'Commit message: {commit_message}')
+
+    return commit_message
 
 
 if __name__ == '__main__':

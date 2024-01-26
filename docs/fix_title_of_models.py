@@ -12,9 +12,6 @@ def main(path: Path) -> None:
                     content = content.replace('atproto\\_client.models.', '')
                 with open(file_path, 'w', encoding='UTF-8') as f:
                     f.write(content)
-                print('Fix', file)
-
-    print('Fixed.')
 
 
 if __name__ == '__main__':
