@@ -23,6 +23,7 @@ Submodules
    atproto_client.models.app.bsky.graph.get_list_mutes
    atproto_client.models.app.bsky.graph.get_lists
    atproto_client.models.app.bsky.graph.get_mutes
+   atproto_client.models.app.bsky.graph.get_relationships
    atproto_client.models.app.bsky.graph.get_suggested_follows_by_actor
    atproto_client.models.app.bsky.graph.list
    atproto_client.models.app.bsky.graph.listblock

@@ -83,3 +83,28 @@ class ListViewerState(base.ModelBase):
     py_type: te.Literal['app.bsky.graph.defs#listViewerState'] = Field(
         default='app.bsky.graph.defs#listViewerState', alias='$type', frozen=True
     )
+
+
+class NotFoundActor(base.ModelBase):
+    """Definition model for :obj:`app.bsky.graph.defs`. indicates that a handle or DID could not be resolved."""
+
+    actor: str  #: Actor.
+    not_found: bool = Field(alias='notFound', frozen=True)  #: Not found.
+
+    py_type: te.Literal['app.bsky.graph.defs#notFoundActor'] = Field(
+        default='app.bsky.graph.defs#notFoundActor', alias='$type', frozen=True
+    )
+
+
+class Relationship(base.ModelBase):
+    """Definition model for :obj:`app.bsky.graph.defs`. lists the bi-directional graph relationships between one actor (not indicated in the object), and the target actors (the DID included in the object)."""
+
+    did: str  #: Did.
+    followed_by: t.Optional[str] = Field(
+        default=None, alias='followedBy'
+    )  #: if the actor is followed by this DID, contains the AT-URI of the follow record.
+    following: t.Optional[str] = None  #: if the actor follows this DID, this is the AT-URI of the follow record.
+
+    py_type: te.Literal['app.bsky.graph.defs#relationship'] = Field(
+        default='app.bsky.graph.defs#relationship', alias='$type', frozen=True
+    )
