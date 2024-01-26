@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 0.0.38
+
+**26.01.2024**
+
+* Add lexicons updating automation using GitHub Actions by @MarshalX in https://github.com/MarshalX/atproto/pull/248
+* Update lexicons fetched from 8994d36 committed 2024-01-25T20:16:30Z by @MarshalX in https://github.com/MarshalX/atproto/pull/249
+* Update code snippet in README by @MarshalX in https://github.com/MarshalX/atproto/pull/245
+* Fix input data mutation in DotDict by @MarshalX in https://github.com/MarshalX/atproto/pull/246
+* Fix links to documentation by @MarshalX in https://github.com/MarshalX/atproto/pull/244
+
 ## Version 0.0.37
 
 **12.01.2024**
