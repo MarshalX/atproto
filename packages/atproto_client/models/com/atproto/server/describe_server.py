@@ -21,6 +21,9 @@ class Response(base.ResponseModelBase):
     available_user_domains: t.List[str] = Field(alias='availableUserDomains')  #: Available user domains.
     invite_code_required: t.Optional[bool] = Field(default=None, alias='inviteCodeRequired')  #: Invite code required.
     links: t.Optional['models.ComAtprotoServerDescribeServer.Links'] = None  #: Links.
+    phone_verification_required: t.Optional[bool] = Field(
+        default=None, alias='phoneVerificationRequired'
+    )  #: Phone verification required.
 
 
 class Links(base.ModelBase):
