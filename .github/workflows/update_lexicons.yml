@@ -45,6 +45,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           committer: Ilya (Marshal) <ilya@marshal.dev>
+          author: Ilya (Marshal) <ilya@marshal.dev>
           commit-message: ${{ env.COMMIT_MESSAGE }}
           base: main
           branch: update-lexicons
