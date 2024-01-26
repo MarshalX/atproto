@@ -97,6 +97,7 @@ Preferences = t.List[
             'models.AppBskyActorDefs.PersonalDetailsPref',
             'models.AppBskyActorDefs.FeedViewPref',
             'models.AppBskyActorDefs.ThreadViewPref',
+            'models.AppBskyActorDefs.InterestsPref',
         ],
         Field(discriminator='py_type'),
     ]
@@ -174,4 +175,16 @@ class ThreadViewPref(base.ModelBase):
 
     py_type: te.Literal['app.bsky.actor.defs#threadViewPref'] = Field(
         default='app.bsky.actor.defs#threadViewPref', alias='$type', frozen=True
+    )
+
+
+class InterestsPref(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    tags: t.List[str] = Field(
+        max_length=100
+    )  #: A list of tags which describe the account owner's interests gathered during onboarding.
+
+    py_type: te.Literal['app.bsky.actor.defs#interestsPref'] = Field(
+        default='app.bsky.actor.defs#interestsPref', alias='$type', frozen=True
     )

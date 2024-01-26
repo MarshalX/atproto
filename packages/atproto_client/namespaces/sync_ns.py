@@ -755,6 +755,29 @@ class GraphNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyGraphGetMutes.Response)
 
+    def get_relationships(
+        self,
+        params: t.Union[models.AppBskyGraphGetRelationships.Params, models.AppBskyGraphGetRelationships.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphGetRelationships.Response':
+        """Enumerates public relationships between one account, and a list of other accounts.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetRelationships.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.AppBskyGraphGetRelationships.Params)
+        response = self._client.invoke_query(
+            'app.bsky.graph.getRelationships', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetRelationships.Response)
+
     def get_suggested_follows_by_actor(
         self,
         params: t.Union[
@@ -1010,6 +1033,34 @@ class UnspeccedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetPopularFeedGenerators.Response)
 
+    def get_tagged_suggestions(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetTaggedSuggestions.Params,
+                models.AppBskyUnspeccedGetTaggedSuggestions.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetTaggedSuggestions.Response':
+        """Get a list of suggestions (feeds and users) tagged with categories.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetTaggedSuggestions.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.AppBskyUnspeccedGetTaggedSuggestions.Params)
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getTaggedSuggestions', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetTaggedSuggestions.Response)
+
     def get_timeline_skeleton(
         self,
         params: t.Optional[
@@ -1108,6 +1159,36 @@ class AtprotoNamespace(NamespaceBase):
 
 
 class AdminNamespace(NamespaceBase):
+    def create_communication_template(
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminCreateCommunicationTemplate.Data,
+            models.ComAtprotoAdminCreateCommunicationTemplate.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoAdminDefs.CommunicationTemplateView':
+        """Administrative action to create a new, re-usable communication (email for now) template.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminDefs.CommunicationTemplateView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoAdminCreateCommunicationTemplate.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.admin.createCommunicationTemplate',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoAdminDefs.CommunicationTemplateView)
+
     def delete_account(
         self,
         data: t.Union[models.ComAtprotoAdminDeleteAccount.Data, models.ComAtprotoAdminDeleteAccount.DataDict],
@@ -1128,6 +1209,35 @@ class AdminNamespace(NamespaceBase):
         data_model = get_or_create(data, models.ComAtprotoAdminDeleteAccount.Data)
         response = self._client.invoke_procedure(
             'com.atproto.admin.deleteAccount', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def delete_communication_template(
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminDeleteCommunicationTemplate.Data,
+            models.ComAtprotoAdminDeleteCommunicationTemplate.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a communication template.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoAdminDeleteCommunicationTemplate.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.admin.deleteCommunicationTemplate',
+            data=data_model,
+            input_encoding='application/json',
+            **kwargs,
         )
         return get_response_model(response, bool)
 
@@ -1402,6 +1512,25 @@ class AdminNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoAdminGetSubjectStatus.Response)
 
+    def list_communication_templates(
+        self, **kwargs: t.Any
+    ) -> 'models.ComAtprotoAdminListCommunicationTemplates.Response':
+        """Get list of all communication templates.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminListCommunicationTemplates.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = self._client.invoke_query(
+            'com.atproto.admin.listCommunicationTemplates', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminListCommunicationTemplates.Response)
+
     def query_moderation_events(
         self,
         params: t.Optional[
@@ -1560,6 +1689,36 @@ class AdminNamespace(NamespaceBase):
             'com.atproto.admin.updateAccountHandle', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
+
+    def update_communication_template(
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminUpdateCommunicationTemplate.Data,
+            models.ComAtprotoAdminUpdateCommunicationTemplate.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoAdminDefs.CommunicationTemplateView':
+        """Administrative action to update an existing communication template. Allows passing partial fields to patch specific fields only.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminDefs.CommunicationTemplateView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoAdminUpdateCommunicationTemplate.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.admin.updateCommunicationTemplate',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoAdminDefs.CommunicationTemplateView)
 
     def update_subject_status(
         self,
@@ -2611,6 +2770,23 @@ class SyncNamespace(NamespaceBase):
 
 
 class TempNamespace(NamespaceBase):
+    def check_signup_queue(self, **kwargs: t.Any) -> 'models.ComAtprotoTempCheckSignupQueue.Response':
+        """Check accounts location in signup queue.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoTempCheckSignupQueue.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = self._client.invoke_query(
+            'com.atproto.temp.checkSignupQueue', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoTempCheckSignupQueue.Response)
+
     def fetch_labels(
         self,
         params: t.Optional[
@@ -2688,6 +2864,31 @@ class TempNamespace(NamespaceBase):
         params_model = get_or_create(params, models.ComAtprotoTempPushBlob.Params)
         response = self._client.invoke_procedure(
             'com.atproto.temp.pushBlob', params=params_model, data=data, input_encoding='*/*', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def request_phone_verification(
+        self,
+        data: t.Union[
+            models.ComAtprotoTempRequestPhoneVerification.Data, models.ComAtprotoTempRequestPhoneVerification.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Request a verification code to be sent to the supplied phone number.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoTempRequestPhoneVerification.Data)
+        response = self._client.invoke_procedure(
+            'com.atproto.temp.requestPhoneVerification', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 

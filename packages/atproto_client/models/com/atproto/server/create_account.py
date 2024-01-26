@@ -25,6 +25,8 @@ class Data(base.DataModelBase):
     password: t.Optional[str] = None  #: Password.
     plc_op: t.Optional['UnknownInputType'] = Field(default=None, alias='plcOp')  #: Plc op.
     recovery_key: t.Optional[str] = Field(default=None, alias='recoveryKey')  #: Recovery key.
+    verification_code: t.Optional[str] = Field(default=None, alias='verificationCode')  #: Verification code.
+    verification_phone: t.Optional[str] = Field(default=None, alias='verificationPhone')  #: Verification phone.
 
 
 class DataDict(te.TypedDict):
@@ -35,6 +37,8 @@ class DataDict(te.TypedDict):
     password: te.NotRequired[t.Optional[str]]  #: Password.
     plc_op: te.NotRequired[t.Optional['UnknownInputType']]  #: Plc op.
     recovery_key: te.NotRequired[t.Optional[str]]  #: Recovery key.
+    verification_code: te.NotRequired[t.Optional[str]]  #: Verification code.
+    verification_phone: te.NotRequired[t.Optional[str]]  #: Verification phone.
 
 
 class Response(base.ResponseModelBase):

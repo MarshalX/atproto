@@ -44,6 +44,7 @@ from atproto_client.models.app.bsky.graph import get_list_blocks as AppBskyGraph
 from atproto_client.models.app.bsky.graph import get_list_mutes as AppBskyGraphGetListMutes
 from atproto_client.models.app.bsky.graph import get_lists as AppBskyGraphGetLists
 from atproto_client.models.app.bsky.graph import get_mutes as AppBskyGraphGetMutes
+from atproto_client.models.app.bsky.graph import get_relationships as AppBskyGraphGetRelationships
 from atproto_client.models.app.bsky.graph import (
     get_suggested_follows_by_actor as AppBskyGraphGetSuggestedFollowsByActor,
 )
@@ -63,11 +64,18 @@ from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDef
 from atproto_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
 )
+from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as AppBskyUnspeccedGetTaggedSuggestions
 from atproto_client.models.app.bsky.unspecced import get_timeline_skeleton as AppBskyUnspeccedGetTimelineSkeleton
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
+from atproto_client.models.com.atproto.admin import (
+    create_communication_template as ComAtprotoAdminCreateCommunicationTemplate,
+)
 from atproto_client.models.com.atproto.admin import defs as ComAtprotoAdminDefs
 from atproto_client.models.com.atproto.admin import delete_account as ComAtprotoAdminDeleteAccount
+from atproto_client.models.com.atproto.admin import (
+    delete_communication_template as ComAtprotoAdminDeleteCommunicationTemplate,
+)
 from atproto_client.models.com.atproto.admin import disable_account_invites as ComAtprotoAdminDisableAccountInvites
 from atproto_client.models.com.atproto.admin import disable_invite_codes as ComAtprotoAdminDisableInviteCodes
 from atproto_client.models.com.atproto.admin import emit_moderation_event as ComAtprotoAdminEmitModerationEvent
@@ -79,12 +87,18 @@ from atproto_client.models.com.atproto.admin import get_moderation_event as ComA
 from atproto_client.models.com.atproto.admin import get_record as ComAtprotoAdminGetRecord
 from atproto_client.models.com.atproto.admin import get_repo as ComAtprotoAdminGetRepo
 from atproto_client.models.com.atproto.admin import get_subject_status as ComAtprotoAdminGetSubjectStatus
+from atproto_client.models.com.atproto.admin import (
+    list_communication_templates as ComAtprotoAdminListCommunicationTemplates,
+)
 from atproto_client.models.com.atproto.admin import query_moderation_events as ComAtprotoAdminQueryModerationEvents
 from atproto_client.models.com.atproto.admin import query_moderation_statuses as ComAtprotoAdminQueryModerationStatuses
 from atproto_client.models.com.atproto.admin import search_repos as ComAtprotoAdminSearchRepos
 from atproto_client.models.com.atproto.admin import send_email as ComAtprotoAdminSendEmail
 from atproto_client.models.com.atproto.admin import update_account_email as ComAtprotoAdminUpdateAccountEmail
 from atproto_client.models.com.atproto.admin import update_account_handle as ComAtprotoAdminUpdateAccountHandle
+from atproto_client.models.com.atproto.admin import (
+    update_communication_template as ComAtprotoAdminUpdateCommunicationTemplate,
+)
 from atproto_client.models.com.atproto.admin import update_subject_status as ComAtprotoAdminUpdateSubjectStatus
 from atproto_client.models.com.atproto.identity import resolve_handle as ComAtprotoIdentityResolveHandle
 from atproto_client.models.com.atproto.identity import update_handle as ComAtprotoIdentityUpdateHandle
@@ -138,9 +152,11 @@ from atproto_client.models.com.atproto.sync import list_repos as ComAtprotoSyncL
 from atproto_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
 from atproto_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
+from atproto_client.models.com.atproto.temp import check_signup_queue as ComAtprotoTempCheckSignupQueue
 from atproto_client.models.com.atproto.temp import fetch_labels as ComAtprotoTempFetchLabels
 from atproto_client.models.com.atproto.temp import import_repo as ComAtprotoTempImportRepo
 from atproto_client.models.com.atproto.temp import push_blob as ComAtprotoTempPushBlob
+from atproto_client.models.com.atproto.temp import request_phone_verification as ComAtprotoTempRequestPhoneVerification
 from atproto_client.models.com.atproto.temp import transfer_account as ComAtprotoTempTransferAccount
 from atproto_client.models.models_loader import load_models
 from atproto_client.models.utils import (
@@ -199,6 +215,7 @@ class _Ids:
     AppBskyGraphGetListMutes: str = 'app.bsky.graph.getListMutes'
     AppBskyGraphGetLists: str = 'app.bsky.graph.getLists'
     AppBskyGraphGetMutes: str = 'app.bsky.graph.getMutes'
+    AppBskyGraphGetRelationships: str = 'app.bsky.graph.getRelationships'
     AppBskyGraphGetSuggestedFollowsByActor: str = 'app.bsky.graph.getSuggestedFollowsByActor'
     AppBskyGraphList: str = 'app.bsky.graph.list'
     AppBskyGraphListblock: str = 'app.bsky.graph.listblock'
@@ -214,11 +231,14 @@ class _Ids:
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
+    AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
     AppBskyUnspeccedGetTimelineSkeleton: str = 'app.bsky.unspecced.getTimelineSkeleton'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
+    ComAtprotoAdminCreateCommunicationTemplate: str = 'com.atproto.admin.createCommunicationTemplate'
     ComAtprotoAdminDefs: str = 'com.atproto.admin.defs'
     ComAtprotoAdminDeleteAccount: str = 'com.atproto.admin.deleteAccount'
+    ComAtprotoAdminDeleteCommunicationTemplate: str = 'com.atproto.admin.deleteCommunicationTemplate'
     ComAtprotoAdminDisableAccountInvites: str = 'com.atproto.admin.disableAccountInvites'
     ComAtprotoAdminDisableInviteCodes: str = 'com.atproto.admin.disableInviteCodes'
     ComAtprotoAdminEmitModerationEvent: str = 'com.atproto.admin.emitModerationEvent'
@@ -230,12 +250,14 @@ class _Ids:
     ComAtprotoAdminGetRecord: str = 'com.atproto.admin.getRecord'
     ComAtprotoAdminGetRepo: str = 'com.atproto.admin.getRepo'
     ComAtprotoAdminGetSubjectStatus: str = 'com.atproto.admin.getSubjectStatus'
+    ComAtprotoAdminListCommunicationTemplates: str = 'com.atproto.admin.listCommunicationTemplates'
     ComAtprotoAdminQueryModerationEvents: str = 'com.atproto.admin.queryModerationEvents'
     ComAtprotoAdminQueryModerationStatuses: str = 'com.atproto.admin.queryModerationStatuses'
     ComAtprotoAdminSearchRepos: str = 'com.atproto.admin.searchRepos'
     ComAtprotoAdminSendEmail: str = 'com.atproto.admin.sendEmail'
     ComAtprotoAdminUpdateAccountEmail: str = 'com.atproto.admin.updateAccountEmail'
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'
+    ComAtprotoAdminUpdateCommunicationTemplate: str = 'com.atproto.admin.updateCommunicationTemplate'
     ComAtprotoAdminUpdateSubjectStatus: str = 'com.atproto.admin.updateSubjectStatus'
     ComAtprotoIdentityResolveHandle: str = 'com.atproto.identity.resolveHandle'
     ComAtprotoIdentityUpdateHandle: str = 'com.atproto.identity.updateHandle'
@@ -287,9 +309,11 @@ class _Ids:
     ComAtprotoSyncNotifyOfUpdate: str = 'com.atproto.sync.notifyOfUpdate'
     ComAtprotoSyncRequestCrawl: str = 'com.atproto.sync.requestCrawl'
     ComAtprotoSyncSubscribeRepos: str = 'com.atproto.sync.subscribeRepos'
+    ComAtprotoTempCheckSignupQueue: str = 'com.atproto.temp.checkSignupQueue'
     ComAtprotoTempFetchLabels: str = 'com.atproto.temp.fetchLabels'
     ComAtprotoTempImportRepo: str = 'com.atproto.temp.importRepo'
     ComAtprotoTempPushBlob: str = 'com.atproto.temp.pushBlob'
+    ComAtprotoTempRequestPhoneVerification: str = 'com.atproto.temp.requestPhoneVerification'
     ComAtprotoTempTransferAccount: str = 'com.atproto.temp.transferAccount'
 
 
