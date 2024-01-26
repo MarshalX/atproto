@@ -4,12 +4,12 @@ on:
   release:
     types: [ created ]
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  publish_release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
 
     steps:
       - name: Run Cimon (eBPF).
