@@ -6,8 +6,9 @@ on:
       - "v*.*.*"
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
+    if: github.event_name != 'release'
     permissions:
       contents: write
       id-token: write
