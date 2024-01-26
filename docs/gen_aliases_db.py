@@ -20,8 +20,6 @@ def main(init_path: Path, output_path: Path) -> None:
     with open(output_path, 'w', encoding='UTF-8') as f:
         f.write('\n'.join(aliases_db))
 
-    print('Model aliases have been generated.')
-
 
 if __name__ == '__main__':
     models_init_path = Path(__file__).absolute().parent.parent.joinpath('packages/atproto_client/models/__init__.py')

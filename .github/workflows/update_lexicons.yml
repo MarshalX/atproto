@@ -1,0 +1,56 @@
+name: Fetch new lexicons and regenerate code and docs
+
+on: [ workflow_dispatch ]
+
+permissions:
+  contents: read
+
+jobs:
+  update_lexicons:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Cimon (eBPF).
+        uses: cycodelabs/cimon-action@v0
+        with:
+          client-id: ${{ secrets.CIMON_CLIENT_ID }}
+          secret: ${{ secrets.CIMON_SECRET }}
+          prevent: true
+          allowed-hosts: >
+            files.pythonhosted.org
+            install.python-poetry.org
+            pypi.org
+
+      - name: Checkout repository.
+        uses: actions/checkout@v4
+
+      - name: Set up Python.
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Setup Poetry.
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+
+      - name: Install dependencies.
+        run: poetry install --no-interaction
+
+      - name: Update lexicons and regen.
+        run: |
+          source $(poetry env info -p)/bin/activate
+          echo "COMMIT_MESSAGE=$(python update_lexicons.py)" >> $GITHUB_ENV
+
+      - name: Create Pull Request.
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PAT }}
+          committer: Ilya (Marshal) <ilya@marshal.dev>
+          author: Ilya (Marshal) <ilya@marshal.dev>
+          commit-message: ${{ env.COMMIT_MESSAGE }}
+          body: This PR was automatically generated
+          base: main
+          branch: update-lexicons
+          title: ${{ env.COMMIT_MESSAGE }}
+          assignees: MarshalX
