@@ -3,6 +3,7 @@ import typing as t
 
 from atproto import Client, models
 
+
 def extract_url_byte_positions(
     text: str, *, aggressive: bool, encoding: str = 'UTF-8'
 ) -> t.List[t.Tuple[str, int, int]]:
