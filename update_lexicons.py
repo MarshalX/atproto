@@ -131,7 +131,7 @@ def _print(*args) -> None:
     print(*args)  # noqa: T201
 
 
-def main() -> str:
+def main() -> None:
     """Fetch new lexicons and regenerate code and docs. Used in CI/CD."""
     _print('- Fetching lexicons from the latest commit...')
     sha, commit_date, _ = _get_last_commit_info()
@@ -139,16 +139,16 @@ def main() -> str:
     _remove_content_in_path(_FOLDER_TO_WRITE_LEXICONS)
     _write_extracted_lexicons(_extract_zip(_download_zip_with_code()))
 
-    _print('- Running codegen (poetry run atp gen all)...')
+    _print('- Running codegen (poetry run atp -s gen all)...')
     _remove_content_in_path(_FOLDER_OF_GEN_MODELS_1)
     _remove_content_in_path(_FOLDER_OF_GEN_MODELS_2)
-    _run_subprocess(['poetry', 'run', 'atp', 'gen', 'all'])
+    _run_subprocess(['poetry', 'run', 'atp', '-s', 'gen', 'all'])
 
     _print('- Running ruff (poetry run ruff .)...')
     _run_subprocess(['poetry', 'run', 'ruff', '.'])
 
-    _print('- Running ruff format (poetry run ruff format .)...')
-    _run_subprocess(['poetry', 'run', 'ruff', 'format', '.'])
+    _print('- Running ruff format (poetry run ruff -q format .)...')
+    _run_subprocess(['poetry', 'run', 'ruff', 'format', '-q', '.'])
 
     _print('- Generating docs (make -s -C docs gen)...')
     _remove_content_in_path(_FOLDER_OF_GEN_DOCS)
@@ -157,7 +157,7 @@ def main() -> str:
     commit_message = f'Update lexicons fetched from {sha[:7]} committed {commit_date}'
     _print(f'Commit message: {commit_message}')
 
-    return commit_message
+    print(commit_message)  # noqa: T201
 
 
 if __name__ == '__main__':

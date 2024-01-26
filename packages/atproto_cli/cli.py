@@ -37,11 +37,18 @@ class AliasedGroup(click.Group):
         return name, cmd, args
 
 
+def echo(ctx: click.Context, *args) -> None:
+    if not ctx.obj.get('silent'):
+        click.echo(*args)
+
+
 @click.group(cls=AliasedGroup)
+@click.option('--silent', '-s', is_flag=True, default=False, help='Disable output.')
 @click.pass_context
-def atproto_cli(ctx: click.Context) -> None:
+def atproto_cli(ctx: click.Context, silent: bool) -> None:
     """CLI of AT Protocol SDK for Python."""
     ctx.ensure_object(dict)
+    ctx.obj['silent'] = silent
 
 
 @atproto_cli.group(cls=AliasedGroup)
@@ -54,17 +61,17 @@ def gen(ctx: click.Context, lexicon_dir: t.Optional[str]) -> None:
 
 @gen.command(name='all', help='Generated models, namespaces, and async clients with default configs.')
 @click.pass_context
-def gen_all(_: click.Context) -> None:
-    click.echo('Generating all:')
+def gen_all(ctx: click.Context) -> None:
+    echo(ctx, 'Generating all:')
 
-    click.echo('- models...')
+    echo(ctx, '- models...')
     _gen_models()
-    click.echo('- namespaces...')
+    echo(ctx, '- namespaces...')
     _gen_namespaces()
-    click.echo('- async clients...')
+    echo(ctx, '- async clients...')
     _gen_async_version()
 
-    click.echo('Done!')
+    echo(ctx, 'Done!')
 
 
 def _gen_models(*args) -> None:
@@ -83,7 +90,7 @@ def _gen_async_version() -> None:
 @click.option('--output-dir', type=click.Path(exists=True), default=None)
 @click.pass_context
 def gen_models(ctx: click.Context, output_dir: t.Optional[str]) -> None:
-    click.echo('Generating models...')
+    echo(ctx, 'Generating models...')
 
     if output_dir:
         # FIXME(MarshalX): remove hardcoded imports
@@ -95,7 +102,7 @@ def gen_models(ctx: click.Context, output_dir: t.Optional[str]) -> None:
     else:
         _gen_models(ctx.obj.get('lexicon_dir'))
 
-    click.echo('Done!')
+    echo(ctx, 'Done!')
 
 
 @gen.command(name='namespaces')
@@ -106,20 +113,20 @@ def gen_models(ctx: click.Context, output_dir: t.Optional[str]) -> None:
 def gen_namespaces(
     ctx: click.Context, output_dir: t.Optional[str], async_filename: t.Optional[str], sync_filename: t.Optional[str]
 ) -> None:
-    click.echo('Generating namespaces...')
+    echo(ctx, 'Generating namespaces...')
 
     output_dir_path = Path(output_dir) if output_dir else None
     _gen_namespaces(ctx.obj.get('lexicon_dir'), output_dir_path, async_filename, sync_filename)
 
-    click.echo('Done!')
+    echo(ctx, 'Done!')
 
 
 @gen.command(name='async')
 @click.pass_context
-def gen_async_version(_: click.Context) -> None:
-    click.echo('Generating async clients...')
+def gen_async_version(ctx: click.Context) -> None:
+    echo(ctx, 'Generating async clients...')
     _gen_async_version()
-    click.echo('Done!')
+    echo(ctx, 'Done!')
 
 
 if __name__ == '__main__':
