@@ -1,6 +1,6 @@
 name: Fetch new lexicons and regenerate code and docs
 
-on: [ push, workflow_dispatch ]
+on: [ workflow_dispatch ]
 
 permissions:
   contents: read
@@ -15,9 +15,11 @@ jobs:
         with:
           client-id: ${{ secrets.CIMON_CLIENT_ID }}
           secret: ${{ secrets.CIMON_SECRET }}
-          prevent: false
+          prevent: true
           allowed-hosts: >
-            github.com
+            files.pythonhosted.org
+            install.python-poetry.org
+            pypi.org
 
       - name: Checkout repository.
         uses: actions/checkout@v4
@@ -47,6 +49,7 @@ jobs:
           committer: Ilya (Marshal) <ilya@marshal.dev>
           author: Ilya (Marshal) <ilya@marshal.dev>
           commit-message: ${{ env.COMMIT_MESSAGE }}
+          body: This PR was automatically generated
           base: main
           branch: update-lexicons
           title: ${{ env.COMMIT_MESSAGE }}
