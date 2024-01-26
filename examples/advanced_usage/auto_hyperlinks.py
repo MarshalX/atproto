@@ -3,7 +3,6 @@ import typing as t
 
 from atproto import Client, models
 
-
 def extract_url_byte_positions(
     text: str, *, aggressive: bool, encoding: str = 'UTF-8'
 ) -> t.List[t.Tuple[str, int, int]]:
@@ -11,9 +10,9 @@ def extract_url_byte_positions(
     encoded_text = text.encode(encoding)
 
     if aggressive:
-        pattern = rb'(?:[\w+]+\:\/\/)?(?:[\w\d-]+\.)*[\w-]+[\.\:]\w+\/?(?:[\/\?\=\&\#\.]?[\w-]+)+\/?'
+        pattern = rb'(?:[\w+]+\:\/\/)?(?:[\w\d-]+\.)*[\w-]+[\.\:]\w+\/?(?:[\/\?\=\&\#\.]?[\w-]+)*[\(\)]*\/?'
     else:
-        pattern = rb'https?\:\/\/(?:[\w\d-]+\.)*[\w-]+[\.\:]\w+\/?(?:[\/\?\=\&\#\.]?[\w-]+)+\/?'
+        pattern = rb'https?\:\/\/(?:[\w\d-]+\.)*[\w-]+[\.\:]\w+\/?(?:[\/\?\=\&\#\.]?[\w-]+)*[\(\)]*\/?'
 
     matches = re.finditer(pattern, encoded_text)
     url_byte_positions = []
