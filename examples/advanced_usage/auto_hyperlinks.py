@@ -11,9 +11,9 @@ def extract_url_byte_positions(
     encoded_text = text.encode(encoding)
 
     if aggressive:
-        pattern = rb'(?:[\w+]+\:\/\/)?(?:[\w\d-]+\.)*[\w-]+[\.\:]\w+\/?(?:[\/\?\=\&\#\.]?[\w-]+)*[\(\)]*\/?'
+        pattern = rb'(?:[\w+]+\:\/\/)?(?:[\w\d-]+\.)*[\w-]+[\.\:]\w+\/?[^\s\/]*\/?'
     else:
-        pattern = rb'https?\:\/\/(?:[\w\d-]+\.)*[\w-]+[\.\:]\w+\/?(?:[\/\?\=\&\#\.]?[\w-]+)*[\(\)]*\/?'
+        pattern = rb'https?\:\/\/(?:[\w\d-]+\.)*[\w-]+[\.\:]\w+\/?[^\s\/]*\/?'
 
     matches = re.finditer(pattern, encoded_text)
     url_byte_positions = []
