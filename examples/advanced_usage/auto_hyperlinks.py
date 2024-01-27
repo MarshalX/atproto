@@ -3,11 +3,10 @@ import typing as t
 
 from atproto import Client, models
 
-
 def extract_url_byte_positions(
-    text: str, *, aggressive: bool, encoding: str = 'UTF-8'
+    text: str, *, encoding: str = 'UTF-8'
 ) -> t.List[t.Tuple[str, int, int]]:
-    """If aggressive is False, only links beginning http or https will be detected"""
+    """This function will detect any links beginning with http or https"""
     encoded_text = text.encode(encoding)
 
     # Adjusted URL matching pattern
@@ -23,20 +22,19 @@ def extract_url_byte_positions(
 
     return url_byte_positions
 
-
 def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 
-    text = 'Example post with automatic link detection https://github.com/MarshalX/atproto, google.com and apple.com'
+    text = 'Example post with automatic link detection https://github.com/MarshalX/atproto, http://google.com and https://apple.com'
 
     # Determine locations of URLs in the post's text
-    url_positions = extract_url_byte_positions(text, aggressive=True)
+    url_positions = extract_url_byte_positions(text)
     facets = []
 
-    # AT requires URL to include http or https when creating the facet. Appends to URL if not present
+    # AT requires URL to include http or https when creating the facet
     for link in url_positions:
-        uri = link[0] if link[0].startswith('http') else f'https://{link[0]}'
+        uri = link[0]
         facets.append(
             models.AppBskyRichtextFacet.Main(
                 features=[models.AppBskyRichtextFacet.Link(uri=uri)],
@@ -51,7 +49,6 @@ def main() -> None:
             record=models.AppBskyFeedPost.Main(created_at=client.get_current_time_iso(), text=text, facets=facets),
         )
     )
-
 
 if __name__ == '__main__':
     main()
