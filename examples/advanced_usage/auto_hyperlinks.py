@@ -10,13 +10,11 @@ def extract_url_byte_positions(
     """If aggressive is False, only links beginning http or https will be detected"""
     encoded_text = text.encode(encoding)
 
-    if aggressive:
-        pattern = rb'(?:[\w+]+\:\/\/)?(?:[\w\d-]+\.)*[\w-]+[\.\:]\w+\/?[^\s\/]*\/?'
-    else:
-        pattern = rb'https?\:\/\/(?:[\w\d-]+\.)*[\w-]+[\.\:]\w+\/?[^\s\/]*\/?'
+    pattern = rb'https?://[-\w.:/]+[\w/-]*\([-/\w]+\)?[-/\w]*\??[-/\w=]*'
 
     matches = re.finditer(pattern, encoded_text)
     url_byte_positions = []
+
     for match in matches:
         url_bytes = match.group(0)
         url = url_bytes.decode(encoding)
