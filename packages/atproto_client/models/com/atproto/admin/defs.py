@@ -525,3 +525,20 @@ class ModEventEmail(base.ModelBase):
     py_type: te.Literal['com.atproto.admin.defs#modEventEmail'] = Field(
         default='com.atproto.admin.defs#modEventEmail', alias='$type', frozen=True
     )
+
+
+class CommunicationTemplateView(base.ModelBase):
+    """Definition model for :obj:`com.atproto.admin.defs`."""
+
+    content_markdown: str = Field(alias='contentMarkdown')  #: Subject of the message, used in emails.
+    created_at: str = Field(alias='createdAt')  #: Created at.
+    disabled: bool  #: Disabled.
+    id: str  #: Id.
+    last_updated_by: str = Field(alias='lastUpdatedBy')  #: DID of the user who last updated the template.
+    name: str  #: Name of the template.
+    updated_at: str = Field(alias='updatedAt')  #: Updated at.
+    subject: t.Optional[str] = None  #: Content of the template, can contain markdown and variable placeholders.
+
+    py_type: te.Literal['com.atproto.admin.defs#communicationTemplateView'] = Field(
+        default='com.atproto.admin.defs#communicationTemplateView', alias='$type', frozen=True
+    )
