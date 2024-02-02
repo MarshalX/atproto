@@ -49,6 +49,7 @@ jobs:
       - name: Run codegen.
         run: |
           poetry run atproto gen all
+          source $(poetry env info -p)/bin/activate
           make -s -C docs gen
 
       - name: Check working directory is clean.
