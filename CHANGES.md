@@ -1,5 +1,19 @@
 # Change Log
 
+## Version 0.0.39
+
+**02.02.2024**
+
+**⚠️ Using strong references in `.like()` and `.repost()` methods are deprecated. Use URI and CID arguments instead.**
+
+* Use .like() and .repost() methods without strong reference by @MarshalX in https://github.com/MarshalX/atproto/pull/255
+* Allow Service URl as base URL by @MarshalX in https://github.com/MarshalX/atproto/pull/256
+* Improve URL detection in auto_hyperlinks example by @editor-syntax in https://github.com/MarshalX/atproto/pull/250
+* Simplify send_embed example by @MarshalX in https://github.com/MarshalX/atproto/pull/258
+* Update lexicons fetched from f023494 committed 2024-01-30T22:19:36Z by @MarshalX in https://github.com/MarshalX/atproto/pull/259
+* Delete release workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/252
+* Add docs codegen check to GitHub Actions Workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/260
+
 ## Version 0.0.38
 
 **26.01.2024**
