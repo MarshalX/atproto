@@ -136,7 +136,7 @@ def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[st
 
     Example:
         >>> from atproto import Client, models
-        >>> from atproto.xrpc_client.models import ids, is_record_type
+        >>> from atproto_client.models import ids, is_record_type
         >>> client = Client()
         >>> client.login('username', 'pass')
         >>> record = client.com.atproto.repo.get_record(...)
@@ -175,8 +175,7 @@ def create_strong_ref(model: ModelBase) -> models.ComAtprotoRepoStrongRef.Main:
         >>> client = Client()
         >>> client.login('my-handle', 'my-password')
         >>> response = client.send_post(text='Hello World from Python!')
-        >>> client.like(create_strong_ref(response))
-        >>> client.repost(create_strong_ref(response))
+        >>> strong_ref = create_strong_ref(response)
 
     Returns:
         :obj:`atproto.xrpc_client.models.com.atproto.repo.strong_ref.Main`: Strong ref.

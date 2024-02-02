@@ -6,7 +6,7 @@
 
 Code snippet:
 ```python
-from atproto import Client, models, client_utils
+from atproto import Client, client_utils
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
 
     text = client_utils.TextBuilder().text('Hello World from ').link('Python SDK', 'https://atproto.blue')
     post = client.send_post(text)
-    client.like(models.create_strong_ref(post))
+    client.like(post.uri, post.cid)
 
 
 if __name__ == '__main__':
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 ```python
 import asyncio
 
-from atproto import AsyncClient, models, client_utils
+from atproto import AsyncClient, client_utils
 
 
 async def main():
@@ -40,7 +40,7 @@ async def main():
 
     text = client_utils.TextBuilder().text('Hello World from ').link('Python SDK', 'https://atproto.blue')
     post = await client.send_post(text)
-    await client.like(models.create_strong_ref(post))
+    await client.like(post.uri, post.cid)
 
 
 if __name__ == '__main__':

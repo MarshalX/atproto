@@ -1,15 +1,14 @@
-from atproto import Client, models
+from atproto import Client
 
 
 def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 
-    response = client.send_post(text='Hello World from Python!')
-    print('Post response:', response)
+    post_ref = client.send_post(text='Hello World from Python!')
+    print('Post reference:', post_ref)
 
-    # As in the like_post.py example, we need to create a reference to the post to repost
-    print('Reposted post response:', client.repost(models.create_strong_ref(response)))
+    print('Reposted post reference:', client.repost(uri=post_ref.uri, cid=post_ref.cid))
 
 
 if __name__ == '__main__':
