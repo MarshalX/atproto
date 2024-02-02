@@ -47,7 +47,9 @@ jobs:
         run: poetry install --no-interaction
 
       - name: Run codegen.
-        run: poetry run atproto gen all
+        run: |
+          poetry run atproto gen all
+          make -s -C docs gen
 
       - name: Check working directory is clean.
         run: git diff --exit-code
