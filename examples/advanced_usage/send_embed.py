@@ -15,29 +15,13 @@ def main() -> None:
         )
     )
 
-    post_with_link_card = client.com.atproto.repo.create_record(
-        models.ComAtprotoRepoCreateRecord.Data(
-            repo=client.me.did,  # or any another DID
-            collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(
-                created_at=client.get_current_time_iso(), text=text, embed=embed_external
-            ),
-        )
-    )
+    post_with_link_card = client.send_post(text=text, embed=embed_external)
 
     text_quote = 'Example post with embed post and quote (quote post)'
     # AppBskyEmbedRecord is the same as "quote post" in the app
     embed_post = models.AppBskyEmbedRecord.Main(record=models.create_strong_ref(post_with_link_card))
 
-    client.com.atproto.repo.create_record(
-        models.ComAtprotoRepoCreateRecord.Data(
-            repo=client.me.did,  # or any another DID
-            collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(
-                created_at=client.get_current_time_iso(), text=text_quote, embed=embed_post
-            ),
-        )
-    )
+    client.send_post(text=text_quote, embed=embed_post)
 
 
 if __name__ == '__main__':
