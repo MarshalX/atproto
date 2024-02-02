@@ -6,6 +6,7 @@
 
 
 import typing as t
+from dataclasses import dataclass
 
 from atproto_client import models
 from atproto_client.models.utils import get_or_create, get_response_model
@@ -31,7 +32,107 @@ class BskyNamespace(AsyncNamespaceBase):
         self.unspecced = UnspeccedNamespace(self._client)
 
 
+class ProfileNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyActorProfile.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyActorProfile.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.actor.profile', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyActorProfile.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyActorProfile.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.actor.profile',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyActorProfile.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.actor.profile',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.actor.profile',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class ActorNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        super().__init__(client)
+        self.profile = ProfileNamespace(self._client)
+
     async def get_preferences(
         self,
         params: t.Optional[
@@ -204,7 +305,495 @@ class ActorNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.AppBskyActorSearchActorsTypeahead.Response)
 
 
+class GeneratorNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyFeedGenerator.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyFeedGenerator.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.feed.generator', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyFeedGenerator.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyFeedGenerator.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.feed.generator',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyFeedGenerator.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.feed.generator',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.feed.generator',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class LikeNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyFeedLike.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyFeedLike.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.feed.like', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyFeedLike.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyFeedLike.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.feed.like',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyFeedLike.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.feed.like',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.feed.like',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class PostNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyFeedPost.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyFeedPost.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.feed.post', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyFeedPost.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyFeedPost.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.feed.post',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyFeedPost.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.feed.post',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.feed.post',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class RepostNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyFeedRepost.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyFeedRepost.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.feed.repost', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyFeedRepost.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyFeedRepost.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.feed.repost',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyFeedRepost.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.feed.repost',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.feed.repost',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class ThreadgateNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyFeedThreadgate.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyFeedThreadgate.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.feed.threadgate', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyFeedThreadgate.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyFeedThreadgate.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.feed.threadgate',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyFeedThreadgate.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.feed.threadgate',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.feed.threadgate',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class FeedNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        super().__init__(client)
+        self.generator = GeneratorNamespace(self._client)
+        self.like = LikeNamespace(self._client)
+        self.post = PostNamespace(self._client)
+        self.repost = RepostNamespace(self._client)
+        self.threadgate = ThreadgateNamespace(self._client)
+
     async def describe_feed_generator(self, **kwargs: t.Any) -> 'models.AppBskyFeedDescribeFeedGenerator.Response':
         """Get information about a feed generator, including policies and offered feed URIs.
 
@@ -566,7 +1155,495 @@ class FeedNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.AppBskyFeedSearchPosts.Response)
 
 
+class BlockNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyGraphBlock.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyGraphBlock.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.graph.block', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyGraphBlock.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyGraphBlock.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.graph.block',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyGraphBlock.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.graph.block',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.graph.block',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class FollowNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyGraphFollow.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyGraphFollow.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.graph.follow', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyGraphFollow.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyGraphFollow.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.graph.follow',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyGraphFollow.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.graph.follow',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.graph.follow',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class ListNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyGraphList.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyGraphList.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.graph.list', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyGraphList.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyGraphList.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.graph.list',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyGraphList.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.graph.list',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.graph.list',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class ListblockNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyGraphListblock.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyGraphListblock.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.graph.listblock', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyGraphListblock.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyGraphListblock.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.graph.listblock',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyGraphListblock.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.graph.listblock',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.graph.listblock',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class ListitemNamespace(AsyncNamespaceBase):
+    @dataclass
+    class GetRecordResponse:
+        """Get record response for `models.AppBskyGraphListitem.Main` record."""
+
+        uri: str
+        cid: str
+        value: 'models.AppBskyGraphListitem.Main'
+
+    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.graph.listitem', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+
+    @dataclass
+    class ListRecordsResponse:
+        """List records response for `models.AppBskyGraphListitem.Main` record."""
+
+        records: t.Dict[str, 'models.AppBskyGraphListitem.Main']
+        cursor: t.Optional[str]
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> ListRecordsResponse:
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.graph.listitem',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return self.ListRecordsResponse(
+            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyGraphListitem.Main',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.graph.listitem',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.graph.listitem',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class GraphNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        super().__init__(client)
+        self.block = BlockNamespace(self._client)
+        self.follow = FollowNamespace(self._client)
+        self.list = ListNamespace(self._client)
+        self.listblock = ListblockNamespace(self._client)
+        self.listitem = ListitemNamespace(self._client)
+
     async def get_blocks(
         self,
         params: t.Optional[
