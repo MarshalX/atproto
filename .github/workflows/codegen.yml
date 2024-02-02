@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
 
     defaults:
       run:
@@ -47,8 +47,11 @@ jobs:
         run: poetry install --no-interaction
 
       - name: Run codegen.
+        run: poetry run atproto gen all
+
+      - name: Run docs gen.
+        if: runner.os == 'Linux'
         run: |
-          poetry run atproto gen all
           source $(poetry env info -p)/bin/activate
           make -s -C docs gen
 
