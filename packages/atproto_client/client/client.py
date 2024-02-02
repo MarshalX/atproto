@@ -5,6 +5,7 @@ from atproto_core.uri import AtUri
 
 from atproto_client import models
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
+from atproto_client.client.methods_mixin.strong_ref_arg_backward_compatibility import _StrongRefArgBackwardCompatibility
 from atproto_client.client.raw import ClientRaw
 from atproto_client.models import ids
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
@@ -15,7 +16,7 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
-class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
+class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args, **kwargs: t.Any) -> None:
@@ -366,11 +367,18 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
             models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, fitler=filter, limit=limit)
         )
 
-    def like(self, subject: models.ComAtprotoRepoStrongRef.Main) -> models.ComAtprotoRepoCreateRecord.Response:
+    def like(
+        self,
+        uri: t.Optional[str] = None,
+        cid: t.Optional[str] = None,
+        subject: t.Optional[models.ComAtprotoRepoStrongRef.Main] = None,
+    ) -> models.ComAtprotoRepoCreateRecord.Response:
         """Like the post.
 
         Args:
-            subject: Reference to the post that should be liked.
+            cid: The CID of the post.
+            uri: The URI of the post.
+            subject: DEPRECATED.
 
         Returns:
             :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created like record.
@@ -378,11 +386,13 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
+        subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
+
         return self.com.atproto.repo.create_record(
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
                 collection=ids.AppBskyFeedLike,
-                record=models.AppBskyFeedLike.Main(created_at=self.get_current_time_iso(), subject=subject),
+                record=models.AppBskyFeedLike.Main(created_at=self.get_current_time_iso(), subject=subject_obj),
             )
         )
 
@@ -409,26 +419,32 @@ class Client(SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
 
     def repost(
         self,
-        subject: models.ComAtprotoRepoStrongRef.Main,
+        uri: t.Optional[str] = None,
+        cid: t.Optional[str] = None,
+        subject: t.Optional[models.ComAtprotoRepoStrongRef.Main] = None,
     ) -> models.ComAtprotoRepoCreateRecord.Response:
         """Repost post.
 
         Args:
-            subject: Reference to the post that should be reposted.
+            cid: The CID of the post.
+            uri: The URI of the post.
+            subject: DEPRECATED.
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the reposted post record.
+            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the reposted record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
+        subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
+
         return self.com.atproto.repo.create_record(
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
                 collection=ids.AppBskyFeedRepost,
                 record=models.AppBskyFeedRepost.Main(
                     created_at=self.get_current_time_iso(),
-                    subject=subject,
+                    subject=subject_obj,
                 ),
             )
         )

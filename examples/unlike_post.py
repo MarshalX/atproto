@@ -1,19 +1,18 @@
-from atproto import Client, models
+from atproto import Client
 
 
 def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 
-    response = client.send_post('Test like-unlike from Python SDK')
-    print('Post response:', response)
+    post = client.send_post('Test like-unlike from Python SDK')
+    print('Post reference:', post)
 
-    # same with the like_post.py example, we need to work with references of posts and likes
-    like_ref = client.like(models.create_strong_ref(response))
-    print('Like reference:', like_ref)
+    like = client.like(uri=post.uri, cid=post.cid)
+    print('Like reference:', like)
 
     # this method return True/False depends on the response. could throw exceptions too
-    print(client.unlike(like_ref.uri))
+    print(client.unlike(like.uri))
 
 
 if __name__ == '__main__':

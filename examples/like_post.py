@@ -1,14 +1,14 @@
-from atproto import Client, models
+from atproto import Client
 
 
 def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 
-    response = client.send_post(text='Hello World from Python!')
+    post = client.send_post(text='Hello World from Python!')
+    print('Post reference:', post)
 
-    # We can put likes only with reference to the post. You need to create/get post first to be able to like it
-    client.like(models.create_strong_ref(response))
+    print('Like reference:', client.like(uri=post.uri, cid=post.cid))
 
 
 if __name__ == '__main__':
