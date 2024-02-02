@@ -44,17 +44,25 @@ def _handle_kwagrs(kwargs: dict) -> None:
     kwargs.pop('output_encoding', None)
 
 
+def _handle_base_url(base_url: t.Optional[str] = None) -> str:
+    if base_url is None:
+        return _BASE_API_URL
+
+    if not base_url.endswith('/xrpc'):
+        return f'{base_url.rstrip("/")}/xrpc'
+
+    return base_url
+
+
 class ClientBase:
     """Low-level methods are here."""
 
     def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None) -> None:
         if request is None:
             request = Request()
-        if base_url is None:
-            base_url = _BASE_API_URL
 
         self._request = request
-        self._base_url = base_url
+        self._base_url = _handle_base_url(base_url)
 
     @property
     def request(self) -> Request:
@@ -95,11 +103,9 @@ class AsyncClientBase:
     def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[AsyncRequest] = None) -> None:
         if request is None:
             request = AsyncRequest()
-        if base_url is None:
-            base_url = _BASE_API_URL
 
         self._request = request
-        self._base_url = base_url
+        self._base_url = _handle_base_url(base_url)
 
     @property
     def request(self) -> AsyncRequest:

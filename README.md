@@ -98,7 +98,7 @@ from atproto import Client
 
 client = Client()
 # By default, it uses the server of bsky.app. To change this behavior, pass the base api URL to constructor
-# Client('https://my.awesome.server/xrpc')
+# Client('https://example.com')
 ```
 
 For async:
@@ -107,7 +107,7 @@ from atproto import AsyncClient
 
 client = AsyncClient()
 # By default, it uses the server of bsky.app. To change this behavior, pass the base api URL to constructor
-# AsyncClient('https://my.awesome.server/xrpc')
+# AsyncClient('https://example.com')
 ```
 
 In the snippets below, only the sync version will be presented.
