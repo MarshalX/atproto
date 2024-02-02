@@ -62,7 +62,6 @@ ALIASES_DB = {
     'models.AppBskyUnspeccedDefs': 'atproto_client.models.app.bsky.unspecced.defs',
     'models.AppBskyUnspeccedGetPopularFeedGenerators': 'atproto_client.models.app.bsky.unspecced.get_popular_feed_generators',
     'models.AppBskyUnspeccedGetTaggedSuggestions': 'atproto_client.models.app.bsky.unspecced.get_tagged_suggestions',
-    'models.AppBskyUnspeccedGetTimelineSkeleton': 'atproto_client.models.app.bsky.unspecced.get_timeline_skeleton',
     'models.AppBskyUnspeccedSearchActorsSkeleton': 'atproto_client.models.app.bsky.unspecced.search_actors_skeleton',
     'models.AppBskyUnspeccedSearchPostsSkeleton': 'atproto_client.models.app.bsky.unspecced.search_posts_skeleton',
     'models.ComAtprotoAdminCreateCommunicationTemplate': 'atproto_client.models.com.atproto.admin.create_communication_template',

@@ -65,7 +65,6 @@ from atproto_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
 )
 from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as AppBskyUnspeccedGetTaggedSuggestions
-from atproto_client.models.app.bsky.unspecced import get_timeline_skeleton as AppBskyUnspeccedGetTimelineSkeleton
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
 from atproto_client.models.com.atproto.admin import (
@@ -232,7 +231,6 @@ class _Ids:
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
-    AppBskyUnspeccedGetTimelineSkeleton: str = 'app.bsky.unspecced.getTimelineSkeleton'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
     ComAtprotoAdminCreateCommunicationTemplate: str = 'com.atproto.admin.createCommunicationTemplate'
