@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
 
     defaults:
       run:
@@ -48,6 +48,12 @@ jobs:
 
       - name: Run codegen.
         run: poetry run atproto gen all
+
+      - name: Run docs gen.
+        if: runner.os == 'Linux'
+        run: |
+          source $(poetry env info -p)/bin/activate
+          make -s -C docs gen
 
       - name: Check working directory is clean.
         run: git diff --exit-code
