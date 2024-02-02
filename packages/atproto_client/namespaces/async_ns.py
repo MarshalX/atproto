@@ -1061,33 +1061,6 @@ class UnspeccedNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetTaggedSuggestions.Response)
 
-    async def get_timeline_skeleton(
-        self,
-        params: t.Optional[
-            t.Union[
-                models.AppBskyUnspeccedGetTimelineSkeleton.Params, models.AppBskyUnspeccedGetTimelineSkeleton.ParamsDict
-            ]
-        ] = None,
-        **kwargs: t.Any,
-    ) -> 'models.AppBskyUnspeccedGetTimelineSkeleton.Response':
-        """DEPRECATED: a skeleton of a timeline. Unspecced and will be unavailable soon.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyUnspeccedGetTimelineSkeleton.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = get_or_create(params, models.AppBskyUnspeccedGetTimelineSkeleton.Params)
-        response = await self._client.invoke_query(
-            'app.bsky.unspecced.getTimelineSkeleton', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.AppBskyUnspeccedGetTimelineSkeleton.Response)
-
     async def search_actors_skeleton(
         self,
         params: t.Union[
