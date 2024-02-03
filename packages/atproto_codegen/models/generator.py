@@ -25,6 +25,7 @@ from atproto_codegen.utils import (
     get_def_model_name,
     get_file_path_parts,
     get_import_path,
+    get_record_model_name,
     join_code,
     write_code,
 )
@@ -98,7 +99,7 @@ def _get_model_class_def(name: str, model_type: ModelType) -> str:
     elif model_type is ModelType.RESPONSE:
         lines.append(f'class {OUTPUT_MODEL}(base.ResponseModelBase):')
     elif model_type is ModelType.RECORD:
-        lines.append(f'class {get_def_model_name(name)}(base.RecordModelBase):')
+        lines.append(f'class {get_record_model_name(name)}(base.RecordModelBase):')
     elif model_type is ModelType.DEF:
         lines.append(f'class {get_def_model_name(name)}(base.ModelBase):')
 
@@ -496,6 +497,20 @@ def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str
     return _generate_xrpc_body_model(nsid, output_body, ModelType.RESPONSE)
 
 
+_MAIN_MODEL_BACKWARD_COMPATIBILITY = """
+class Main(Record):
+    def __init_subclass__(cls, **data: t.Any) -> None:
+        import warnings
+        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
+        super().__init_subclass__(**data)
+
+    def __init__(self, **data: t.Any) -> None:
+        import warnings
+        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
+        super().__init__(**data)
+"""
+
+
 def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, model_type: ModelType) -> str:
     lines = [
         _get_model_class_def(def_name, model_type),
@@ -509,6 +524,10 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
 
     lines.append(f"{_(1)}py_type: te.Literal['{def_type}'] = Field(default='{def_type}', alias='$type', frozen=True)")
     lines.append('')
+
+    # TODO(MarshalX): remove it
+    if model_type is ModelType.RECORD:
+        lines.append(_MAIN_MODEL_BACKWARD_COMPATIBILITY)
 
     return join_code(lines)
 
@@ -645,7 +664,7 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
             # for now, there are records only in under "main" definition name.
             # need to rework a bit if this behavior is changed
             if isinstance(def_record, models.LexRecord):
-                class_name = get_def_model_name(def_name)
+                class_name = get_record_model_name(def_name)
                 record_type = str(nsid)
 
                 path_to_class = f'models.{get_import_path(nsid)}.{class_name}'

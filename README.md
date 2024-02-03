@@ -264,7 +264,7 @@ with open('cat.jpg', 'rb') as f:
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,
             collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(
+            record=models.AppBskyFeedPost.Record(
                 created_at=client.get_current_time_iso(), text='Text of the post', embed=embed
             ),
         )

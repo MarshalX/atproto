@@ -12,7 +12,7 @@ def test_like_record_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
-    assert isinstance(model.value, models.AppBskyFeedLike.Main)
+    assert isinstance(model.value, models.AppBskyFeedLike.Record)
 
     expected_cid = 'bafyreiftg3snotlhlko2t7k4f6ic63slwwlrhva4mfm2ws2op2snsgyula'
     expected_uri = 'at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k5u7c7eis72y'

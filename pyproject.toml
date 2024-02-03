@@ -95,6 +95,9 @@ build-backend = "poetry_dynamic_versioning.backend"
 python_version = "3.7"
 disallow_untyped_defs = false # TODO(MarshalX) enable
 
+[tool.pyright]
+reportMissingTypeStubs = false
+
 [tool.ruff]
 extend-select = [
     "E",  # pycodestyle errors

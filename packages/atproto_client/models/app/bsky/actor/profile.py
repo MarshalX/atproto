@@ -16,7 +16,7 @@ if t.TYPE_CHECKING:
 from atproto_client.models import base
 
 
-class Main(base.RecordModelBase):
+class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.actor.profile`."""
 
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
@@ -28,3 +28,17 @@ class Main(base.RecordModelBase):
     ] = None  #: Labels.
 
     py_type: te.Literal['app.bsky.actor.profile'] = Field(default='app.bsky.actor.profile', alias='$type', frozen=True)
+
+
+class Main(Record):
+    def __init_subclass__(cls, **data: t.Any) -> None:
+        import warnings
+
+        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
+        super().__init_subclass__(**data)
+
+    def __init__(self, **data: t.Any) -> None:
+        import warnings
+
+        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
+        super().__init__(**data)

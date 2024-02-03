@@ -18,7 +18,7 @@ def test_is_record_type() -> None:
     custom_record = get_or_create(load_test_custom_data(), models.ComAtprotoRepoGetRecord.Response)
     expected_custom_record_id = 'app.bsky.feed.pythonSdkCustomRecordPost'
 
-    assert isinstance(lexicon_correct_post_record.value, models.AppBskyFeedPost.Main)
+    assert isinstance(lexicon_correct_post_record.value, models.AppBskyFeedPost.Record)
     assert is_record_type(lexicon_correct_post_record.value, models.ids.AppBskyFeedPost) is True
     assert is_record_type(lexicon_correct_post_record.value, models.ids.AppBskyFeedGenerator) is False
     assert is_record_type(lexicon_correct_post_record.value, models.AppBskyFeedPost) is True

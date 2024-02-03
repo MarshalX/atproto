@@ -25,7 +25,7 @@ def main() -> None:
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,  # or any another DID
             collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Main(created_at=client.get_current_time_iso(), text=text, facets=facets),
+            record=models.AppBskyFeedPost.Record(created_at=client.get_current_time_iso(), text=text, facets=facets),
         )
     )
 

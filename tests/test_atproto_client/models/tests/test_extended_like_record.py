@@ -12,7 +12,7 @@ def test_extended_like_record_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
-    assert isinstance(model.value, models.AppBskyFeedLike.Main)
+    assert isinstance(model.value, models.AppBskyFeedLike.Record)
 
     assert model.value.py_type == models.ids.AppBskyFeedLike
     # record_type is the custom field out of lexicon

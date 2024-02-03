@@ -36,7 +36,7 @@ def main() -> None:
             repo=client.me.did,
             rkey='self',
             swap_record=swap_record_cid,
-            record=models.AppBskyActorProfile.Main(
+            record=models.AppBskyActorProfile.Record(
                 avatar=current_profile.avatar,  # keep old avatar. to set a new one, you should upload blob first
                 banner=current_profile.banner,  # keep old banner. to set a new one, you should upload blob first
                 description=new_description or old_description,
