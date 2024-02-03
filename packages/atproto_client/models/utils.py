@@ -149,11 +149,16 @@ def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[st
         :obj:`bool`: Is record or not.
     """
     if isinstance(expected_type, types.ModuleType):
-        # for now, all records are defined in the Main class
-        if not hasattr(expected_type, 'Main'):
+        # for now, all records are defined in the Record class
+        # TODO(MarshalX): remove backward compatibility for Main
+        if not hasattr(expected_type, 'Main') or not hasattr(expected_type, 'Record'):
             return False
 
-        expected_type = expected_type.Main.model_fields['py_type'].default
+        if hasattr(expected_type, 'Main'):
+            expected_type = expected_type.Main.model_fields['py_type'].default
+
+        if hasattr(expected_type, 'Record'):
+            expected_type = expected_type.Record.model_fields['py_type'].default
 
     if isinstance(model, DotDict):  # custom record
         try:

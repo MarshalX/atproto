@@ -7,7 +7,7 @@
 RECORD_CREATE_METHOD_TEMPLATE = """
     @dataclass
     class CreateRecordResponse:
-        \"""Create record response for :obj:`models.{record_import}.Main`.\"""
+        \"""Create record response for :obj:`models.{record_import}.Record`.\"""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -15,7 +15,7 @@ RECORD_CREATE_METHOD_TEMPLATE = """
     {d}def create(
         self,
         repo: str,
-        record: 'models.{record_import}.Main',
+        record: 'models.{record_import}.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -59,10 +59,10 @@ RECORD_CREATE_METHOD_TEMPLATE = """
 RECORD_GET_METHOD_TEMPLATE = """
     @dataclass
     class GetRecordResponse:
-        \"""Get record response for :obj:`models.{record_import}.Main`.\"""
+        \"""Get record response for :obj:`models.{record_import}.Record`.\"""
 
         uri: str  #: The URI of the record.
-        value: 'models.{record_import}.Main'  #: The record.
+        value: 'models.{record_import}.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     {d}def get(
@@ -95,16 +95,16 @@ RECORD_GET_METHOD_TEMPLATE = """
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.{record_import}.Main', response_model.value),
+            value=t.cast('models.{record_import}.Record', response_model.value),
         )
 """
 
 RECORD_LIST_METHOD_TEMPLATE = """
     @dataclass
     class ListRecordsResponse:
-        \"""List records response for :obj:`models.{record_import}.Main`.\"""
+        \"""List records response for :obj:`models.{record_import}.Record`.\"""
 
-        records: t.Dict[str, 'models.{record_import}.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.{record_import}.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     {d}def list(
@@ -143,7 +143,7 @@ RECORD_LIST_METHOD_TEMPLATE = """
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={{
-                record.uri: t.cast('models.{record_import}.Main', record.value)
+                record.uri: t.cast('models.{record_import}.Record', record.value)
                 for record in response_model.records
             }},
             cursor=response_model.cursor,

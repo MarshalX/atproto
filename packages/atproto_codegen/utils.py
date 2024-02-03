@@ -103,6 +103,10 @@ def get_def_model_name(method_name: str) -> str:
     return f'{capitalize_first_symbol(method_name)}'
 
 
+def get_record_model_name(_: str) -> str:
+    return 'Record'
+
+
 def get_model_path(nsid: NSID, method_name: str) -> str:
     return f'models.{get_import_path(nsid)}.{get_def_model_name(method_name)}'
 

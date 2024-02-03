@@ -12,7 +12,7 @@ def test_post_record_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
-    assert isinstance(model.value, models.AppBskyFeedPost.Main)
+    assert isinstance(model.value, models.AppBskyFeedPost.Record)
 
     expected_text = 'regress test'
     expected_langs = ['en']

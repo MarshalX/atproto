@@ -15,7 +15,7 @@ def test_feed_record_deserialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
-    assert isinstance(model.value, models.AppBskyFeedGenerator.Main)
+    assert isinstance(model.value, models.AppBskyFeedGenerator.Record)
 
     assert model.value.did == 'did:web:feed.atproto.blue'
     assert model.value['did'] == 'did:web:feed.atproto.blue'
@@ -88,7 +88,7 @@ def test_feed_record_model_strict_mode() -> None:
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
 
     # we expect here to fall back into DotDict because strict validation is failed
-    assert not isinstance(model.value, models.AppBskyFeedGenerator.Main)
+    assert not isinstance(model.value, models.AppBskyFeedGenerator.Record)
     assert isinstance(model.value, dot_dict.DotDict)
 
     assert model.value.did == non_str_did

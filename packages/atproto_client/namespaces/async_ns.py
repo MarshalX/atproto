@@ -35,10 +35,10 @@ class BskyNamespace(AsyncNamespaceBase):
 class ProfileRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyActorProfile.Main`."""
+        """Get record response for :obj:`models.AppBskyActorProfile.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyActorProfile.Main'  #: The record.
+        value: 'models.AppBskyActorProfile.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -66,14 +66,14 @@ class ProfileRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyActorProfile.Main', response_model.value),
+            value=t.cast('models.AppBskyActorProfile.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyActorProfile.Main`."""
+        """List records response for :obj:`models.AppBskyActorProfile.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyActorProfile.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyActorProfile.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -112,14 +112,15 @@ class ProfileRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyActorProfile.Main', record.value) for record in response_model.records
+                record.uri: t.cast('models.AppBskyActorProfile.Record', record.value)
+                for record in response_model.records
             },
             cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyActorProfile.Main`."""
+        """Create record response for :obj:`models.AppBskyActorProfile.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -127,7 +128,7 @@ class ProfileRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyActorProfile.Main',
+        record: 'models.AppBskyActorProfile.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -398,10 +399,10 @@ class ActorNamespace(AsyncNamespaceBase):
 class GeneratorRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedGenerator.Main`."""
+        """Get record response for :obj:`models.AppBskyFeedGenerator.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyFeedGenerator.Main'  #: The record.
+        value: 'models.AppBskyFeedGenerator.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -429,14 +430,14 @@ class GeneratorRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyFeedGenerator.Main', response_model.value),
+            value=t.cast('models.AppBskyFeedGenerator.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedGenerator.Main`."""
+        """List records response for :obj:`models.AppBskyFeedGenerator.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyFeedGenerator.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyFeedGenerator.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -475,7 +476,7 @@ class GeneratorRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyFeedGenerator.Main', record.value)
+                record.uri: t.cast('models.AppBskyFeedGenerator.Record', record.value)
                 for record in response_model.records
             },
             cursor=response_model.cursor,
@@ -483,7 +484,7 @@ class GeneratorRecord(AsyncRecordBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedGenerator.Main`."""
+        """Create record response for :obj:`models.AppBskyFeedGenerator.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -491,7 +492,7 @@ class GeneratorRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyFeedGenerator.Main',
+        record: 'models.AppBskyFeedGenerator.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -570,10 +571,10 @@ class GeneratorRecord(AsyncRecordBase):
 class LikeRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedLike.Main`."""
+        """Get record response for :obj:`models.AppBskyFeedLike.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyFeedLike.Main'  #: The record.
+        value: 'models.AppBskyFeedLike.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -601,14 +602,14 @@ class LikeRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyFeedLike.Main', response_model.value),
+            value=t.cast('models.AppBskyFeedLike.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedLike.Main`."""
+        """List records response for :obj:`models.AppBskyFeedLike.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyFeedLike.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyFeedLike.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -647,14 +648,14 @@ class LikeRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyFeedLike.Main', record.value) for record in response_model.records
+                record.uri: t.cast('models.AppBskyFeedLike.Record', record.value) for record in response_model.records
             },
             cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedLike.Main`."""
+        """Create record response for :obj:`models.AppBskyFeedLike.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -662,7 +663,7 @@ class LikeRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyFeedLike.Main',
+        record: 'models.AppBskyFeedLike.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -741,10 +742,10 @@ class LikeRecord(AsyncRecordBase):
 class PostRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedPost.Main`."""
+        """Get record response for :obj:`models.AppBskyFeedPost.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyFeedPost.Main'  #: The record.
+        value: 'models.AppBskyFeedPost.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -772,14 +773,14 @@ class PostRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyFeedPost.Main', response_model.value),
+            value=t.cast('models.AppBskyFeedPost.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedPost.Main`."""
+        """List records response for :obj:`models.AppBskyFeedPost.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyFeedPost.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyFeedPost.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -818,14 +819,14 @@ class PostRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyFeedPost.Main', record.value) for record in response_model.records
+                record.uri: t.cast('models.AppBskyFeedPost.Record', record.value) for record in response_model.records
             },
             cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedPost.Main`."""
+        """Create record response for :obj:`models.AppBskyFeedPost.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -833,7 +834,7 @@ class PostRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyFeedPost.Main',
+        record: 'models.AppBskyFeedPost.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -912,10 +913,10 @@ class PostRecord(AsyncRecordBase):
 class RepostRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedRepost.Main`."""
+        """Get record response for :obj:`models.AppBskyFeedRepost.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyFeedRepost.Main'  #: The record.
+        value: 'models.AppBskyFeedRepost.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -943,14 +944,14 @@ class RepostRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyFeedRepost.Main', response_model.value),
+            value=t.cast('models.AppBskyFeedRepost.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedRepost.Main`."""
+        """List records response for :obj:`models.AppBskyFeedRepost.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyFeedRepost.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyFeedRepost.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -989,14 +990,14 @@ class RepostRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyFeedRepost.Main', record.value) for record in response_model.records
+                record.uri: t.cast('models.AppBskyFeedRepost.Record', record.value) for record in response_model.records
             },
             cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedRepost.Main`."""
+        """Create record response for :obj:`models.AppBskyFeedRepost.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -1004,7 +1005,7 @@ class RepostRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyFeedRepost.Main',
+        record: 'models.AppBskyFeedRepost.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -1083,10 +1084,10 @@ class RepostRecord(AsyncRecordBase):
 class ThreadgateRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedThreadgate.Main`."""
+        """Get record response for :obj:`models.AppBskyFeedThreadgate.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyFeedThreadgate.Main'  #: The record.
+        value: 'models.AppBskyFeedThreadgate.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -1114,14 +1115,14 @@ class ThreadgateRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyFeedThreadgate.Main', response_model.value),
+            value=t.cast('models.AppBskyFeedThreadgate.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedThreadgate.Main`."""
+        """List records response for :obj:`models.AppBskyFeedThreadgate.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyFeedThreadgate.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyFeedThreadgate.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -1160,7 +1161,7 @@ class ThreadgateRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyFeedThreadgate.Main', record.value)
+                record.uri: t.cast('models.AppBskyFeedThreadgate.Record', record.value)
                 for record in response_model.records
             },
             cursor=response_model.cursor,
@@ -1168,7 +1169,7 @@ class ThreadgateRecord(AsyncRecordBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedThreadgate.Main`."""
+        """Create record response for :obj:`models.AppBskyFeedThreadgate.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -1176,7 +1177,7 @@ class ThreadgateRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyFeedThreadgate.Main',
+        record: 'models.AppBskyFeedThreadgate.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -1658,10 +1659,10 @@ class FeedNamespace(AsyncNamespaceBase):
 class BlockRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphBlock.Main`."""
+        """Get record response for :obj:`models.AppBskyGraphBlock.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyGraphBlock.Main'  #: The record.
+        value: 'models.AppBskyGraphBlock.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -1689,14 +1690,14 @@ class BlockRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyGraphBlock.Main', response_model.value),
+            value=t.cast('models.AppBskyGraphBlock.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphBlock.Main`."""
+        """List records response for :obj:`models.AppBskyGraphBlock.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyGraphBlock.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyGraphBlock.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -1735,14 +1736,14 @@ class BlockRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyGraphBlock.Main', record.value) for record in response_model.records
+                record.uri: t.cast('models.AppBskyGraphBlock.Record', record.value) for record in response_model.records
             },
             cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphBlock.Main`."""
+        """Create record response for :obj:`models.AppBskyGraphBlock.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -1750,7 +1751,7 @@ class BlockRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyGraphBlock.Main',
+        record: 'models.AppBskyGraphBlock.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -1829,10 +1830,10 @@ class BlockRecord(AsyncRecordBase):
 class FollowRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphFollow.Main`."""
+        """Get record response for :obj:`models.AppBskyGraphFollow.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyGraphFollow.Main'  #: The record.
+        value: 'models.AppBskyGraphFollow.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -1860,14 +1861,14 @@ class FollowRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyGraphFollow.Main', response_model.value),
+            value=t.cast('models.AppBskyGraphFollow.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphFollow.Main`."""
+        """List records response for :obj:`models.AppBskyGraphFollow.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyGraphFollow.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyGraphFollow.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -1906,14 +1907,15 @@ class FollowRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyGraphFollow.Main', record.value) for record in response_model.records
+                record.uri: t.cast('models.AppBskyGraphFollow.Record', record.value)
+                for record in response_model.records
             },
             cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphFollow.Main`."""
+        """Create record response for :obj:`models.AppBskyGraphFollow.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -1921,7 +1923,7 @@ class FollowRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyGraphFollow.Main',
+        record: 'models.AppBskyGraphFollow.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -2000,10 +2002,10 @@ class FollowRecord(AsyncRecordBase):
 class ListRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphList.Main`."""
+        """Get record response for :obj:`models.AppBskyGraphList.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyGraphList.Main'  #: The record.
+        value: 'models.AppBskyGraphList.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -2031,14 +2033,14 @@ class ListRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyGraphList.Main', response_model.value),
+            value=t.cast('models.AppBskyGraphList.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphList.Main`."""
+        """List records response for :obj:`models.AppBskyGraphList.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyGraphList.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyGraphList.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -2077,14 +2079,14 @@ class ListRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyGraphList.Main', record.value) for record in response_model.records
+                record.uri: t.cast('models.AppBskyGraphList.Record', record.value) for record in response_model.records
             },
             cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphList.Main`."""
+        """Create record response for :obj:`models.AppBskyGraphList.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -2092,7 +2094,7 @@ class ListRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyGraphList.Main',
+        record: 'models.AppBskyGraphList.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -2171,10 +2173,10 @@ class ListRecord(AsyncRecordBase):
 class ListblockRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphListblock.Main`."""
+        """Get record response for :obj:`models.AppBskyGraphListblock.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyGraphListblock.Main'  #: The record.
+        value: 'models.AppBskyGraphListblock.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -2202,14 +2204,14 @@ class ListblockRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyGraphListblock.Main', response_model.value),
+            value=t.cast('models.AppBskyGraphListblock.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphListblock.Main`."""
+        """List records response for :obj:`models.AppBskyGraphListblock.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyGraphListblock.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyGraphListblock.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -2248,7 +2250,7 @@ class ListblockRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyGraphListblock.Main', record.value)
+                record.uri: t.cast('models.AppBskyGraphListblock.Record', record.value)
                 for record in response_model.records
             },
             cursor=response_model.cursor,
@@ -2256,7 +2258,7 @@ class ListblockRecord(AsyncRecordBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphListblock.Main`."""
+        """Create record response for :obj:`models.AppBskyGraphListblock.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -2264,7 +2266,7 @@ class ListblockRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyGraphListblock.Main',
+        record: 'models.AppBskyGraphListblock.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
@@ -2343,10 +2345,10 @@ class ListblockRecord(AsyncRecordBase):
 class ListitemRecord(AsyncRecordBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphListitem.Main`."""
+        """Get record response for :obj:`models.AppBskyGraphListitem.Record`."""
 
         uri: str  #: The URI of the record.
-        value: 'models.AppBskyGraphListitem.Main'  #: The record.
+        value: 'models.AppBskyGraphListitem.Record'  #: The record.
         cid: t.Optional[str] = None  #: The CID of the record.
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
@@ -2374,14 +2376,14 @@ class ListitemRecord(AsyncRecordBase):
         return self.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
-            value=t.cast('models.AppBskyGraphListitem.Main', response_model.value),
+            value=t.cast('models.AppBskyGraphListitem.Record', response_model.value),
         )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphListitem.Main`."""
+        """List records response for :obj:`models.AppBskyGraphListitem.Record`."""
 
-        records: t.Dict[str, 'models.AppBskyGraphListitem.Main']  #: Map of URIs to records.
+        records: t.Dict[str, 'models.AppBskyGraphListitem.Record']  #: Map of URIs to records.
         cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
@@ -2420,7 +2422,7 @@ class ListitemRecord(AsyncRecordBase):
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
             records={
-                record.uri: t.cast('models.AppBskyGraphListitem.Main', record.value)
+                record.uri: t.cast('models.AppBskyGraphListitem.Record', record.value)
                 for record in response_model.records
             },
             cursor=response_model.cursor,
@@ -2428,7 +2430,7 @@ class ListitemRecord(AsyncRecordBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphListitem.Main`."""
+        """Create record response for :obj:`models.AppBskyGraphListitem.Record`."""
 
         uri: str  #: The URI of the record.
         cid: str  #: The CID of the record.
@@ -2436,7 +2438,7 @@ class ListitemRecord(AsyncRecordBase):
     async def create(
         self,
         repo: str,
-        record: 'models.AppBskyGraphListitem.Main',
+        record: 'models.AppBskyGraphListitem.Record',
         rkey: t.Optional[str] = None,
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,

@@ -141,7 +141,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=repo,
                 collection=ids.AppBskyFeedPost,
-                record=models.AppBskyFeedPost.Main(
+                record=models.AppBskyFeedPost.Record(
                     created_at=self.get_current_time_iso(),
                     text=text,
                     reply=reply_to,
@@ -398,7 +398,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
                 collection=ids.AppBskyFeedLike,
-                record=models.AppBskyFeedLike.Main(created_at=self.get_current_time_iso(), subject=subject_obj),
+                record=models.AppBskyFeedLike.Record(created_at=self.get_current_time_iso(), subject=subject_obj),
             )
         )
 
@@ -448,7 +448,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
                 collection=ids.AppBskyFeedRepost,
-                record=models.AppBskyFeedRepost.Main(
+                record=models.AppBskyFeedRepost.Record(
                     created_at=self.get_current_time_iso(),
                     subject=subject_obj,
                 ),
@@ -492,7 +492,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             models.ComAtprotoRepoCreateRecord.Data(
                 repo=self.me.did,
                 collection=ids.AppBskyGraphFollow,
-                record=models.AppBskyGraphFollow.Main(created_at=self.get_current_time_iso(), subject=subject),
+                record=models.AppBskyGraphFollow.Record(created_at=self.get_current_time_iso(), subject=subject),
             )
         )
 
