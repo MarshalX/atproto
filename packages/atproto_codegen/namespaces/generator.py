@@ -19,6 +19,12 @@ from atproto_codegen.consts import (
     PARAMS_MODEL,
 )
 from atproto_codegen.namespaces.builder import MethodInfo, ProcedureInfo, QueryInfo, RecordInfo, build_namespaces
+from atproto_codegen.namespaces.record_templates import (
+    RECORD_CREATE_METHOD_TEMPLATE,
+    RECORD_DELETE_METHOD_TEMPLATE,
+    RECORD_GET_METHOD_TEMPLATE,
+    RECORD_LIST_METHOD_TEMPLATE,
+)
 from atproto_codegen.utils import (
     _resolve_nsid_ref,
     convert_camel_case_to_snake_case,
@@ -38,7 +44,7 @@ _NAMESPACES_SYNC_FILENAME = 'sync_ns.py'
 _NAMESPACES_ASYNC_FILENAME = 'async_ns.py'
 
 _NAMESPACE_SUFFIX = 'Namespace'
-_RECORD_SUFFIX = 'RecordNamespace'
+_RECORD_SUFFIX = 'Record'
 
 
 def get_namespace_name(path_part: str) -> str:
@@ -53,10 +59,11 @@ def _get_namespace_imports() -> str:
     lines = [
         DISCLAIMER,
         'import typing as t',
+        'from dataclasses import dataclass',
         '',
         'from atproto_client import models',
         'from atproto_client.models.utils import get_or_create, get_response_model',
-        'from atproto_client.namespaces.base import AsyncNamespaceBase, DefaultNamespace, NamespaceBase',
+        'from atproto_client.namespaces.base import AsyncRecordBase, AsyncNamespaceBase, NamespaceBase, RecordBase',
         '',
         'if t.TYPE_CHECKING:',
         f'{_(1)}from atproto_client.client.async_raw import AsyncClientRaw',
@@ -73,15 +80,26 @@ def _get_namespace_class_def(name: str, *, sync: bool) -> str:
     return join_code(lines)
 
 
-def _get_init_method(sub_namespaces: dict, *, sync: bool) -> str:
+def _get_record_class_def(name: str, *, sync: bool) -> str:
+    base_class = 'RecordBase' if sync else 'AsyncRecordBase'
+    lines = [f'class {get_record_name(name)}({base_class}):']
+
+    return join_code(lines)
+
+
+def _get_init_method(sub_items: t.List[str], *, sync: bool, for_record: bool = False) -> str:
+    if not sub_items:
+        return ''
+
     client_typehint = "'ClientRaw'" if sync else "'AsyncClientRaw'"
     lines = [f'{_(1)}def __init__(self, client: {client_typehint}) -> None:', f'{_(2)}super().__init__(client)']
 
-    sub_namespaces = sort_dict_by_key(sub_namespaces)
-    for sub_namespace in sub_namespaces:
-        lines.append(f'{_(2)}self.{sub_namespace} = {get_namespace_name(sub_namespace)}(self._client)')
+    get_name = get_namespace_name
+    if for_record:
+        get_name = get_record_name
 
-    # TODO(MarshalX): add support for records
+    for sub_item in sub_items:
+        lines.append(f'{_(2)}self.{sub_item} = {get_name(sub_item)}(self._client)')
 
     return join_code(lines)
 
@@ -146,7 +164,8 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
 
     def _override_arg_line(name: str, model_name: str) -> str:
         model_path = f'models.{get_import_path(method_info.nsid)}.{model_name}'
-        return f'{_(2)}{name}_model = get_or_create({name}, {model_path})'
+        # TODO(MarshalX): fix return type in get_or_create instead of casting
+        return f"{_(2)}{name}_model = t.cast('{model_path}', get_or_create({name}, {model_path}))"
 
     invoke_args = [f"'{method_info.nsid}'"]
 
@@ -301,12 +320,32 @@ def _get_namespace_methods_block(methods_info: t.List[MethodInfo], sync: bool) -
     return join_code(lines)
 
 
-def _get_namespace_records_block(records_info: t.List[RecordInfo]) -> str:
+def _get_record_methods_block(record_info: RecordInfo, sync: bool) -> str:
+    d, c = get_sync_async_keywords(sync=sync)
+
     lines = []
 
-    records_info.sort(key=lambda e: e.name)
+    for method_template in [
+        RECORD_GET_METHOD_TEMPLATE,
+        RECORD_LIST_METHOD_TEMPLATE,
+        RECORD_CREATE_METHOD_TEMPLATE,
+        RECORD_DELETE_METHOD_TEMPLATE,
+    ]:
+        lines.append(
+            method_template.format(
+                record_import=get_import_path(record_info.nsid), collection=record_info.nsid, d=d, c=c
+            )
+        )
+
+    return join_code(lines)
+
+
+def _get_record_class(records_info: t.List[RecordInfo], sync: bool) -> str:
+    lines = []
+
     for record_info in records_info:
-        lines.append(f"{_(1)}{record_info.name}: '{get_record_name(record_info.name)}' = DefaultNamespace()")
+        lines.append(_get_record_class_def(record_info.name, sync=sync))
+        lines.append(_get_record_methods_block(record_info, sync=sync))
 
     return join_code(lines)
 
@@ -315,17 +354,23 @@ def _generate_namespace_in_output(namespace_tree: dict, output: t.List[str], *, 
     for node_name, sub_node in namespace_tree.items():
         if isinstance(sub_node, dict):
             output.append(_get_namespace_class_def(node_name, sync=sync))
-            output.append(_get_init_method(sub_node, sync=sync))
+
+            sub_nodes_names = list(sort_dict_by_key(sub_node).keys())
+            output.append(_get_init_method(sub_nodes_names, sync=sync))
 
             _generate_namespace_in_output(sub_node, output, sync=sync)
 
         if isinstance(sub_node, list):
+            records = [info for info in sub_node if isinstance(info, RecordInfo)]
+            methods = [info for info in sub_node if isinstance(info, (ProcedureInfo, QueryInfo))]
+
+            output.append(_get_record_class(records, sync=sync))
+
             output.append(_get_namespace_class_def(node_name, sync=sync))
 
-            # TODO(MarshalX): gen namespace by RecordInfo later
-            # TODO(MarshalX): generate namespace record classes!
+            record_names = sorted([record.name for record in records])
+            output.append(_get_init_method(record_names, sync=sync, for_record=True))
 
-            methods = [info for info in sub_node if isinstance(info, (ProcedureInfo, QueryInfo))]
             output.append(_get_namespace_methods_block(methods, sync=sync))
 
 
