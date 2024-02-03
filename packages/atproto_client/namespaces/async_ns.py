@@ -35,11 +35,11 @@ class BskyNamespace(AsyncNamespaceBase):
 class ProfileNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyActorProfile.Main` record."""
+        """Get record response for :obj:`models.AppBskyActorProfile.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyActorProfile.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -49,14 +49,18 @@ class ProfileNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyActorProfile.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyActorProfile.Main` record."""
+        """List records response for :obj:`models.AppBskyActorProfile.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyActorProfile.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -78,12 +82,15 @@ class ProfileNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyActorProfile.Main', record.value) for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyActorProfile.Main` record."""
+        """Create record response for :obj:`models.AppBskyActorProfile.Main` record."""
 
         uri: str
         cid: str
@@ -102,7 +109,7 @@ class ProfileNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -127,8 +134,8 @@ class ProfileNamespace(AsyncNamespaceBase):
             collection='app.bsky.actor.profile',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -160,7 +167,9 @@ class ActorNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyActorGetPreferences.Params)
+        params_model = t.cast(
+            'models.AppBskyActorGetPreferences.Params', get_or_create(params, models.AppBskyActorGetPreferences.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.actor.getPreferences', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -183,7 +192,9 @@ class ActorNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyActorGetProfile.Params)
+        params_model = t.cast(
+            'models.AppBskyActorGetProfile.Params', get_or_create(params, models.AppBskyActorGetProfile.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.actor.getProfile', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -206,7 +217,9 @@ class ActorNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyActorGetProfiles.Params)
+        params_model = t.cast(
+            'models.AppBskyActorGetProfiles.Params', get_or_create(params, models.AppBskyActorGetProfiles.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.actor.getProfiles', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -231,7 +244,9 @@ class ActorNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyActorGetSuggestions.Params)
+        params_model = t.cast(
+            'models.AppBskyActorGetSuggestions.Params', get_or_create(params, models.AppBskyActorGetSuggestions.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.actor.getSuggestions', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -254,7 +269,9 @@ class ActorNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.AppBskyActorPutPreferences.Data)
+        data_model = t.cast(
+            'models.AppBskyActorPutPreferences.Data', get_or_create(data, models.AppBskyActorPutPreferences.Data)
+        )
         response = await self._client.invoke_procedure(
             'app.bsky.actor.putPreferences', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -279,7 +296,9 @@ class ActorNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyActorSearchActors.Params)
+        params_model = t.cast(
+            'models.AppBskyActorSearchActors.Params', get_or_create(params, models.AppBskyActorSearchActors.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.actor.searchActors', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -306,7 +325,10 @@ class ActorNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyActorSearchActorsTypeahead.Params)
+        params_model = t.cast(
+            'models.AppBskyActorSearchActorsTypeahead.Params',
+            get_or_create(params, models.AppBskyActorSearchActorsTypeahead.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.actor.searchActorsTypeahead', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -316,11 +338,11 @@ class ActorNamespace(AsyncNamespaceBase):
 class GeneratorNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyFeedGenerator.Main` record."""
+        """Get record response for :obj:`models.AppBskyFeedGenerator.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyFeedGenerator.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -330,14 +352,18 @@ class GeneratorNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyFeedGenerator.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyFeedGenerator.Main` record."""
+        """List records response for :obj:`models.AppBskyFeedGenerator.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyFeedGenerator.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -359,12 +385,16 @@ class GeneratorNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyFeedGenerator.Main', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyFeedGenerator.Main` record."""
+        """Create record response for :obj:`models.AppBskyFeedGenerator.Main` record."""
 
         uri: str
         cid: str
@@ -383,7 +413,7 @@ class GeneratorNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -408,8 +438,8 @@ class GeneratorNamespace(AsyncNamespaceBase):
             collection='app.bsky.feed.generator',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -420,11 +450,11 @@ class GeneratorNamespace(AsyncNamespaceBase):
 class LikeNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyFeedLike.Main` record."""
+        """Get record response for :obj:`models.AppBskyFeedLike.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyFeedLike.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -434,14 +464,18 @@ class LikeNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyFeedLike.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyFeedLike.Main` record."""
+        """List records response for :obj:`models.AppBskyFeedLike.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyFeedLike.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -463,12 +497,15 @@ class LikeNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyFeedLike.Main', record.value) for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyFeedLike.Main` record."""
+        """Create record response for :obj:`models.AppBskyFeedLike.Main` record."""
 
         uri: str
         cid: str
@@ -487,7 +524,7 @@ class LikeNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -512,8 +549,8 @@ class LikeNamespace(AsyncNamespaceBase):
             collection='app.bsky.feed.like',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -524,11 +561,11 @@ class LikeNamespace(AsyncNamespaceBase):
 class PostNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyFeedPost.Main` record."""
+        """Get record response for :obj:`models.AppBskyFeedPost.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyFeedPost.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -538,14 +575,18 @@ class PostNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyFeedPost.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyFeedPost.Main` record."""
+        """List records response for :obj:`models.AppBskyFeedPost.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyFeedPost.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -567,12 +608,15 @@ class PostNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyFeedPost.Main', record.value) for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyFeedPost.Main` record."""
+        """Create record response for :obj:`models.AppBskyFeedPost.Main` record."""
 
         uri: str
         cid: str
@@ -591,7 +635,7 @@ class PostNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -616,8 +660,8 @@ class PostNamespace(AsyncNamespaceBase):
             collection='app.bsky.feed.post',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -628,11 +672,11 @@ class PostNamespace(AsyncNamespaceBase):
 class RepostNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyFeedRepost.Main` record."""
+        """Get record response for :obj:`models.AppBskyFeedRepost.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyFeedRepost.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -642,14 +686,18 @@ class RepostNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyFeedRepost.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyFeedRepost.Main` record."""
+        """List records response for :obj:`models.AppBskyFeedRepost.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyFeedRepost.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -671,12 +719,15 @@ class RepostNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyFeedRepost.Main', record.value) for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyFeedRepost.Main` record."""
+        """Create record response for :obj:`models.AppBskyFeedRepost.Main` record."""
 
         uri: str
         cid: str
@@ -695,7 +746,7 @@ class RepostNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -720,8 +771,8 @@ class RepostNamespace(AsyncNamespaceBase):
             collection='app.bsky.feed.repost',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -732,11 +783,11 @@ class RepostNamespace(AsyncNamespaceBase):
 class ThreadgateNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyFeedThreadgate.Main` record."""
+        """Get record response for :obj:`models.AppBskyFeedThreadgate.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyFeedThreadgate.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -746,14 +797,18 @@ class ThreadgateNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyFeedThreadgate.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyFeedThreadgate.Main` record."""
+        """List records response for :obj:`models.AppBskyFeedThreadgate.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyFeedThreadgate.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -775,12 +830,16 @@ class ThreadgateNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyFeedThreadgate.Main', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyFeedThreadgate.Main` record."""
+        """Create record response for :obj:`models.AppBskyFeedThreadgate.Main` record."""
 
         uri: str
         cid: str
@@ -799,7 +858,7 @@ class ThreadgateNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -824,8 +883,8 @@ class ThreadgateNamespace(AsyncNamespaceBase):
             collection='app.bsky.feed.threadgate',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -876,7 +935,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetActorFeeds.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetActorFeeds.Params', get_or_create(params, models.AppBskyFeedGetActorFeeds.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getActorFeeds', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -899,7 +960,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetActorLikes.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetActorLikes.Params', get_or_create(params, models.AppBskyFeedGetActorLikes.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getActorLikes', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -922,7 +985,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetAuthorFeed.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetAuthorFeed.Params', get_or_create(params, models.AppBskyFeedGetAuthorFeed.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getAuthorFeed', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -943,7 +1008,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetFeed.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetFeed.Params', get_or_create(params, models.AppBskyFeedGetFeed.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getFeed', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -966,7 +1033,10 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetFeedGenerator.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetFeedGenerator.Params',
+            get_or_create(params, models.AppBskyFeedGetFeedGenerator.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getFeedGenerator', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -989,7 +1059,10 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetFeedGenerators.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetFeedGenerators.Params',
+            get_or_create(params, models.AppBskyFeedGetFeedGenerators.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getFeedGenerators', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1012,7 +1085,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetFeedSkeleton.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetFeedSkeleton.Params', get_or_create(params, models.AppBskyFeedGetFeedSkeleton.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getFeedSkeleton', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1033,7 +1108,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetLikes.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetLikes.Params', get_or_create(params, models.AppBskyFeedGetLikes.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getLikes', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1056,7 +1133,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetListFeed.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetListFeed.Params', get_or_create(params, models.AppBskyFeedGetListFeed.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getListFeed', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1079,7 +1158,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetPostThread.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetPostThread.Params', get_or_create(params, models.AppBskyFeedGetPostThread.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getPostThread', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1100,7 +1181,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetPosts.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetPosts.Params', get_or_create(params, models.AppBskyFeedGetPosts.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getPosts', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1123,7 +1206,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetRepostedBy.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetRepostedBy.Params', get_or_create(params, models.AppBskyFeedGetRepostedBy.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getRepostedBy', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1148,7 +1233,10 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetSuggestedFeeds.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetSuggestedFeeds.Params',
+            get_or_create(params, models.AppBskyFeedGetSuggestedFeeds.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getSuggestedFeeds', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1173,7 +1261,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedGetTimeline.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedGetTimeline.Params', get_or_create(params, models.AppBskyFeedGetTimeline.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.getTimeline', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1196,7 +1286,9 @@ class FeedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyFeedSearchPosts.Params)
+        params_model = t.cast(
+            'models.AppBskyFeedSearchPosts.Params', get_or_create(params, models.AppBskyFeedSearchPosts.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.feed.searchPosts', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1206,11 +1298,11 @@ class FeedNamespace(AsyncNamespaceBase):
 class BlockNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyGraphBlock.Main` record."""
+        """Get record response for :obj:`models.AppBskyGraphBlock.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyGraphBlock.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -1220,14 +1312,18 @@ class BlockNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyGraphBlock.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyGraphBlock.Main` record."""
+        """List records response for :obj:`models.AppBskyGraphBlock.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyGraphBlock.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -1249,12 +1345,15 @@ class BlockNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyGraphBlock.Main', record.value) for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyGraphBlock.Main` record."""
+        """Create record response for :obj:`models.AppBskyGraphBlock.Main` record."""
 
         uri: str
         cid: str
@@ -1273,7 +1372,7 @@ class BlockNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -1298,8 +1397,8 @@ class BlockNamespace(AsyncNamespaceBase):
             collection='app.bsky.graph.block',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -1310,11 +1409,11 @@ class BlockNamespace(AsyncNamespaceBase):
 class FollowNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyGraphFollow.Main` record."""
+        """Get record response for :obj:`models.AppBskyGraphFollow.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyGraphFollow.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -1324,14 +1423,18 @@ class FollowNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyGraphFollow.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyGraphFollow.Main` record."""
+        """List records response for :obj:`models.AppBskyGraphFollow.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyGraphFollow.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -1353,12 +1456,15 @@ class FollowNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyGraphFollow.Main', record.value) for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyGraphFollow.Main` record."""
+        """Create record response for :obj:`models.AppBskyGraphFollow.Main` record."""
 
         uri: str
         cid: str
@@ -1377,7 +1483,7 @@ class FollowNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -1402,8 +1508,8 @@ class FollowNamespace(AsyncNamespaceBase):
             collection='app.bsky.graph.follow',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -1414,11 +1520,11 @@ class FollowNamespace(AsyncNamespaceBase):
 class ListNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyGraphList.Main` record."""
+        """Get record response for :obj:`models.AppBskyGraphList.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyGraphList.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -1428,14 +1534,18 @@ class ListNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyGraphList.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyGraphList.Main` record."""
+        """List records response for :obj:`models.AppBskyGraphList.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyGraphList.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -1457,12 +1567,15 @@ class ListNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyGraphList.Main', record.value) for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyGraphList.Main` record."""
+        """Create record response for :obj:`models.AppBskyGraphList.Main` record."""
 
         uri: str
         cid: str
@@ -1481,7 +1594,7 @@ class ListNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -1506,8 +1619,8 @@ class ListNamespace(AsyncNamespaceBase):
             collection='app.bsky.graph.list',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -1518,11 +1631,11 @@ class ListNamespace(AsyncNamespaceBase):
 class ListblockNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyGraphListblock.Main` record."""
+        """Get record response for :obj:`models.AppBskyGraphListblock.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyGraphListblock.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -1532,14 +1645,18 @@ class ListblockNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyGraphListblock.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyGraphListblock.Main` record."""
+        """List records response for :obj:`models.AppBskyGraphListblock.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyGraphListblock.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -1561,12 +1678,16 @@ class ListblockNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyGraphListblock.Main', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyGraphListblock.Main` record."""
+        """Create record response for :obj:`models.AppBskyGraphListblock.Main` record."""
 
         uri: str
         cid: str
@@ -1585,7 +1706,7 @@ class ListblockNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -1610,8 +1731,8 @@ class ListblockNamespace(AsyncNamespaceBase):
             collection='app.bsky.graph.listblock',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -1622,11 +1743,11 @@ class ListblockNamespace(AsyncNamespaceBase):
 class ListitemNamespace(AsyncNamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for `models.AppBskyGraphListitem.Main` record."""
+        """Get record response for :obj:`models.AppBskyGraphListitem.Main` record."""
 
         uri: str
-        cid: str
         value: 'models.AppBskyGraphListitem.Main'
+        cid: t.Optional[str] = None
 
     async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
         params_model = models.ComAtprotoRepoGetRecord.Params(
@@ -1636,14 +1757,18 @@ class ListitemNamespace(AsyncNamespaceBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyGraphListitem.Main', response_model.value),
+        )
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for `models.AppBskyGraphListitem.Main` record."""
+        """List records response for :obj:`models.AppBskyGraphListitem.Main` record."""
 
         records: t.Dict[str, 'models.AppBskyGraphListitem.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     async def list(
         self,
@@ -1665,12 +1790,16 @@ class ListitemNamespace(AsyncNamespaceBase):
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
+            records={
+                record.uri: t.cast('models.AppBskyGraphListitem.Main', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
         )
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for `models.AppBskyGraphListitem.Main` record."""
+        """Create record response for :obj:`models.AppBskyGraphListitem.Main` record."""
 
         uri: str
         cid: str
@@ -1689,7 +1818,7 @@ class ListitemNamespace(AsyncNamespaceBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = await self._client.invoke_procedure(
@@ -1714,8 +1843,8 @@ class ListitemNamespace(AsyncNamespaceBase):
             collection='app.bsky.graph.listitem',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -1751,7 +1880,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyGraphGetBlocks.Params)
+        params_model = t.cast(
+            'models.AppBskyGraphGetBlocks.Params', get_or_create(params, models.AppBskyGraphGetBlocks.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.graph.getBlocks', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1774,7 +1905,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyGraphGetFollowers.Params)
+        params_model = t.cast(
+            'models.AppBskyGraphGetFollowers.Params', get_or_create(params, models.AppBskyGraphGetFollowers.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.graph.getFollowers', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1797,7 +1930,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyGraphGetFollows.Params)
+        params_model = t.cast(
+            'models.AppBskyGraphGetFollows.Params', get_or_create(params, models.AppBskyGraphGetFollows.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.graph.getFollows', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1818,7 +1953,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyGraphGetList.Params)
+        params_model = t.cast(
+            'models.AppBskyGraphGetList.Params', get_or_create(params, models.AppBskyGraphGetList.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.graph.getList', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1843,7 +1980,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyGraphGetListBlocks.Params)
+        params_model = t.cast(
+            'models.AppBskyGraphGetListBlocks.Params', get_or_create(params, models.AppBskyGraphGetListBlocks.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.graph.getListBlocks', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1868,7 +2007,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyGraphGetListMutes.Params)
+        params_model = t.cast(
+            'models.AppBskyGraphGetListMutes.Params', get_or_create(params, models.AppBskyGraphGetListMutes.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.graph.getListMutes', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1891,7 +2032,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyGraphGetLists.Params)
+        params_model = t.cast(
+            'models.AppBskyGraphGetLists.Params', get_or_create(params, models.AppBskyGraphGetLists.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.graph.getLists', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1914,7 +2057,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyGraphGetMutes.Params)
+        params_model = t.cast(
+            'models.AppBskyGraphGetMutes.Params', get_or_create(params, models.AppBskyGraphGetMutes.Params)
+        )
         response = await self._client.invoke_query(
             'app.bsky.graph.getMutes', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1937,7 +2082,10 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyGraphGetRelationships.Params)
+        params_model = t.cast(
+            'models.AppBskyGraphGetRelationships.Params',
+            get_or_create(params, models.AppBskyGraphGetRelationships.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.graph.getRelationships', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -1963,7 +2111,10 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyGraphGetSuggestedFollowsByActor.Params)
+        params_model = t.cast(
+            'models.AppBskyGraphGetSuggestedFollowsByActor.Params',
+            get_or_create(params, models.AppBskyGraphGetSuggestedFollowsByActor.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.graph.getSuggestedFollowsByActor',
             params=params_model,
@@ -1987,7 +2138,7 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.AppBskyGraphMuteActor.Data)
+        data_model = t.cast('models.AppBskyGraphMuteActor.Data', get_or_create(data, models.AppBskyGraphMuteActor.Data))
         response = await self._client.invoke_procedure(
             'app.bsky.graph.muteActor', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2010,7 +2161,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.AppBskyGraphMuteActorList.Data)
+        data_model = t.cast(
+            'models.AppBskyGraphMuteActorList.Data', get_or_create(data, models.AppBskyGraphMuteActorList.Data)
+        )
         response = await self._client.invoke_procedure(
             'app.bsky.graph.muteActorList', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2033,7 +2186,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.AppBskyGraphUnmuteActor.Data)
+        data_model = t.cast(
+            'models.AppBskyGraphUnmuteActor.Data', get_or_create(data, models.AppBskyGraphUnmuteActor.Data)
+        )
         response = await self._client.invoke_procedure(
             'app.bsky.graph.unmuteActor', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2056,7 +2211,9 @@ class GraphNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.AppBskyGraphUnmuteActorList.Data)
+        data_model = t.cast(
+            'models.AppBskyGraphUnmuteActorList.Data', get_or_create(data, models.AppBskyGraphUnmuteActorList.Data)
+        )
         response = await self._client.invoke_procedure(
             'app.bsky.graph.unmuteActorList', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2085,7 +2242,10 @@ class NotificationNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyNotificationGetUnreadCount.Params)
+        params_model = t.cast(
+            'models.AppBskyNotificationGetUnreadCount.Params',
+            get_or_create(params, models.AppBskyNotificationGetUnreadCount.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.notification.getUnreadCount', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2113,7 +2273,10 @@ class NotificationNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyNotificationListNotifications.Params)
+        params_model = t.cast(
+            'models.AppBskyNotificationListNotifications.Params',
+            get_or_create(params, models.AppBskyNotificationListNotifications.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.notification.listNotifications', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2136,7 +2299,10 @@ class NotificationNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.AppBskyNotificationRegisterPush.Data)
+        data_model = t.cast(
+            'models.AppBskyNotificationRegisterPush.Data',
+            get_or_create(data, models.AppBskyNotificationRegisterPush.Data),
+        )
         response = await self._client.invoke_procedure(
             'app.bsky.notification.registerPush', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2159,7 +2325,9 @@ class NotificationNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.AppBskyNotificationUpdateSeen.Data)
+        data_model = t.cast(
+            'models.AppBskyNotificationUpdateSeen.Data', get_or_create(data, models.AppBskyNotificationUpdateSeen.Data)
+        )
         response = await self._client.invoke_procedure(
             'app.bsky.notification.updateSeen', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2189,7 +2357,10 @@ class UnspeccedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyUnspeccedGetPopularFeedGenerators.Params)
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetPopularFeedGenerators.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetPopularFeedGenerators.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.unspecced.getPopularFeedGenerators',
             params=params_model,
@@ -2220,7 +2391,10 @@ class UnspeccedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyUnspeccedGetTaggedSuggestions.Params)
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetTaggedSuggestions.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetTaggedSuggestions.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.unspecced.getTaggedSuggestions', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2245,7 +2419,10 @@ class UnspeccedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyUnspeccedSearchActorsSkeleton.Params)
+        params_model = t.cast(
+            'models.AppBskyUnspeccedSearchActorsSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedSearchActorsSkeleton.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.unspecced.searchActorsSkeleton', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2270,7 +2447,10 @@ class UnspeccedNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.AppBskyUnspeccedSearchPostsSkeleton.Params)
+        params_model = t.cast(
+            'models.AppBskyUnspeccedSearchPostsSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedSearchPostsSkeleton.Params),
+        )
         response = await self._client.invoke_query(
             'app.bsky.unspecced.searchPostsSkeleton', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2317,7 +2497,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminCreateCommunicationTemplate.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminCreateCommunicationTemplate.Data',
+            get_or_create(data, models.ComAtprotoAdminCreateCommunicationTemplate.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.createCommunicationTemplate',
             data=data_model,
@@ -2344,7 +2527,9 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminDeleteAccount.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminDeleteAccount.Data', get_or_create(data, models.ComAtprotoAdminDeleteAccount.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.deleteAccount', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2370,7 +2555,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminDeleteCommunicationTemplate.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminDeleteCommunicationTemplate.Data',
+            get_or_create(data, models.ComAtprotoAdminDeleteCommunicationTemplate.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.deleteCommunicationTemplate',
             data=data_model,
@@ -2398,7 +2586,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminDisableAccountInvites.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminDisableAccountInvites.Data',
+            get_or_create(data, models.ComAtprotoAdminDisableAccountInvites.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.disableAccountInvites', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2423,7 +2614,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminDisableInviteCodes.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminDisableInviteCodes.Data',
+            get_or_create(data, models.ComAtprotoAdminDisableInviteCodes.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.disableInviteCodes', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2448,7 +2642,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminEmitModerationEvent.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminEmitModerationEvent.Data',
+            get_or_create(data, models.ComAtprotoAdminEmitModerationEvent.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.emitModerationEvent',
             data=data_model,
@@ -2477,7 +2674,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminEnableAccountInvites.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminEnableAccountInvites.Data',
+            get_or_create(data, models.ComAtprotoAdminEnableAccountInvites.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.enableAccountInvites', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2500,7 +2700,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoAdminGetAccountInfo.Params)
+        params_model = t.cast(
+            'models.ComAtprotoAdminGetAccountInfo.Params',
+            get_or_create(params, models.ComAtprotoAdminGetAccountInfo.Params),
+        )
         response = await self._client.invoke_query(
             'com.atproto.admin.getAccountInfo', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2523,7 +2726,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoAdminGetAccountInfos.Params)
+        params_model = t.cast(
+            'models.ComAtprotoAdminGetAccountInfos.Params',
+            get_or_create(params, models.ComAtprotoAdminGetAccountInfos.Params),
+        )
         response = await self._client.invoke_query(
             'com.atproto.admin.getAccountInfos', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2548,7 +2754,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoAdminGetInviteCodes.Params)
+        params_model = t.cast(
+            'models.ComAtprotoAdminGetInviteCodes.Params',
+            get_or_create(params, models.ComAtprotoAdminGetInviteCodes.Params),
+        )
         response = await self._client.invoke_query(
             'com.atproto.admin.getInviteCodes', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2573,7 +2782,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoAdminGetModerationEvent.Params)
+        params_model = t.cast(
+            'models.ComAtprotoAdminGetModerationEvent.Params',
+            get_or_create(params, models.ComAtprotoAdminGetModerationEvent.Params),
+        )
         response = await self._client.invoke_query(
             'com.atproto.admin.getModerationEvent', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2596,7 +2808,9 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoAdminGetRecord.Params)
+        params_model = t.cast(
+            'models.ComAtprotoAdminGetRecord.Params', get_or_create(params, models.ComAtprotoAdminGetRecord.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.admin.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2619,7 +2833,9 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoAdminGetRepo.Params)
+        params_model = t.cast(
+            'models.ComAtprotoAdminGetRepo.Params', get_or_create(params, models.ComAtprotoAdminGetRepo.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.admin.getRepo', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2644,7 +2860,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoAdminGetSubjectStatus.Params)
+        params_model = t.cast(
+            'models.ComAtprotoAdminGetSubjectStatus.Params',
+            get_or_create(params, models.ComAtprotoAdminGetSubjectStatus.Params),
+        )
         response = await self._client.invoke_query(
             'com.atproto.admin.getSubjectStatus', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2691,7 +2910,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoAdminQueryModerationEvents.Params)
+        params_model = t.cast(
+            'models.ComAtprotoAdminQueryModerationEvents.Params',
+            get_or_create(params, models.ComAtprotoAdminQueryModerationEvents.Params),
+        )
         response = await self._client.invoke_query(
             'com.atproto.admin.queryModerationEvents', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2719,7 +2941,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoAdminQueryModerationStatuses.Params)
+        params_model = t.cast(
+            'models.ComAtprotoAdminQueryModerationStatuses.Params',
+            get_or_create(params, models.ComAtprotoAdminQueryModerationStatuses.Params),
+        )
         response = await self._client.invoke_query(
             'com.atproto.admin.queryModerationStatuses',
             params=params_model,
@@ -2747,7 +2972,9 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoAdminSearchRepos.Params)
+        params_model = t.cast(
+            'models.ComAtprotoAdminSearchRepos.Params', get_or_create(params, models.ComAtprotoAdminSearchRepos.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.admin.searchRepos', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2770,7 +2997,9 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminSendEmail.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminSendEmail.Data', get_or_create(data, models.ComAtprotoAdminSendEmail.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.sendEmail',
             data=data_model,
@@ -2797,7 +3026,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminUpdateAccountEmail.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminUpdateAccountEmail.Data',
+            get_or_create(data, models.ComAtprotoAdminUpdateAccountEmail.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.updateAccountEmail', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2822,7 +3054,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminUpdateAccountHandle.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminUpdateAccountHandle.Data',
+            get_or_create(data, models.ComAtprotoAdminUpdateAccountHandle.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.updateAccountHandle', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2848,7 +3083,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminUpdateCommunicationTemplate.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminUpdateCommunicationTemplate.Data',
+            get_or_create(data, models.ComAtprotoAdminUpdateCommunicationTemplate.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.updateCommunicationTemplate',
             data=data_model,
@@ -2877,7 +3115,10 @@ class AdminNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoAdminUpdateSubjectStatus.Data)
+        data_model = t.cast(
+            'models.ComAtprotoAdminUpdateSubjectStatus.Data',
+            get_or_create(data, models.ComAtprotoAdminUpdateSubjectStatus.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.updateSubjectStatus',
             data=data_model,
@@ -2908,7 +3149,10 @@ class IdentityNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoIdentityResolveHandle.Params)
+        params_model = t.cast(
+            'models.ComAtprotoIdentityResolveHandle.Params',
+            get_or_create(params, models.ComAtprotoIdentityResolveHandle.Params),
+        )
         response = await self._client.invoke_query(
             'com.atproto.identity.resolveHandle', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2931,7 +3175,10 @@ class IdentityNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoIdentityUpdateHandle.Data)
+        data_model = t.cast(
+            'models.ComAtprotoIdentityUpdateHandle.Data',
+            get_or_create(data, models.ComAtprotoIdentityUpdateHandle.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.identity.updateHandle', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -2956,7 +3203,9 @@ class LabelNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoLabelQueryLabels.Params)
+        params_model = t.cast(
+            'models.ComAtprotoLabelQueryLabels.Params', get_or_create(params, models.ComAtprotoLabelQueryLabels.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.label.queryLabels', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -2981,7 +3230,10 @@ class ModerationNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoModerationCreateReport.Data)
+        data_model = t.cast(
+            'models.ComAtprotoModerationCreateReport.Data',
+            get_or_create(data, models.ComAtprotoModerationCreateReport.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.moderation.createReport',
             data=data_model,
@@ -3010,7 +3262,9 @@ class RepoNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoRepoApplyWrites.Data)
+        data_model = t.cast(
+            'models.ComAtprotoRepoApplyWrites.Data', get_or_create(data, models.ComAtprotoRepoApplyWrites.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.applyWrites', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -3033,7 +3287,9 @@ class RepoNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoRepoCreateRecord.Data)
+        data_model = t.cast(
+            'models.ComAtprotoRepoCreateRecord.Data', get_or_create(data, models.ComAtprotoRepoCreateRecord.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
             data=data_model,
@@ -3060,7 +3316,9 @@ class RepoNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoRepoDeleteRecord.Data)
+        data_model = t.cast(
+            'models.ComAtprotoRepoDeleteRecord.Data', get_or_create(data, models.ComAtprotoRepoDeleteRecord.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -3083,7 +3341,9 @@ class RepoNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoRepoDescribeRepo.Params)
+        params_model = t.cast(
+            'models.ComAtprotoRepoDescribeRepo.Params', get_or_create(params, models.ComAtprotoRepoDescribeRepo.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.repo.describeRepo', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -3106,7 +3366,9 @@ class RepoNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoRepoGetRecord.Params)
+        params_model = t.cast(
+            'models.ComAtprotoRepoGetRecord.Params', get_or_create(params, models.ComAtprotoRepoGetRecord.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -3129,7 +3391,9 @@ class RepoNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoRepoListRecords.Params)
+        params_model = t.cast(
+            'models.ComAtprotoRepoListRecords.Params', get_or_create(params, models.ComAtprotoRepoListRecords.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -3152,7 +3416,9 @@ class RepoNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoRepoPutRecord.Data)
+        data_model = t.cast(
+            'models.ComAtprotoRepoPutRecord.Data', get_or_create(data, models.ComAtprotoRepoPutRecord.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.putRecord',
             data=data_model,
@@ -3201,7 +3467,9 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerConfirmEmail.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerConfirmEmail.Data', get_or_create(data, models.ComAtprotoServerConfirmEmail.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.confirmEmail', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -3224,7 +3492,9 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerCreateAccount.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerCreateAccount.Data', get_or_create(data, models.ComAtprotoServerCreateAccount.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.createAccount',
             data=data_model,
@@ -3251,7 +3521,10 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerCreateAppPassword.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerCreateAppPassword.Data',
+            get_or_create(data, models.ComAtprotoServerCreateAppPassword.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.createAppPassword',
             data=data_model,
@@ -3278,7 +3551,10 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerCreateInviteCode.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerCreateInviteCode.Data',
+            get_or_create(data, models.ComAtprotoServerCreateInviteCode.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.createInviteCode',
             data=data_model,
@@ -3305,7 +3581,10 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerCreateInviteCodes.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerCreateInviteCodes.Data',
+            get_or_create(data, models.ComAtprotoServerCreateInviteCodes.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.createInviteCodes',
             data=data_model,
@@ -3332,7 +3611,9 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerCreateSession.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerCreateSession.Data', get_or_create(data, models.ComAtprotoServerCreateSession.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.createSession',
             data=data_model,
@@ -3359,7 +3640,9 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerDeleteAccount.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerDeleteAccount.Data', get_or_create(data, models.ComAtprotoServerDeleteAccount.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.deleteAccount', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -3419,7 +3702,10 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoServerGetAccountInviteCodes.Params)
+        params_model = t.cast(
+            'models.ComAtprotoServerGetAccountInviteCodes.Params',
+            get_or_create(params, models.ComAtprotoServerGetAccountInviteCodes.Params),
+        )
         response = await self._client.invoke_query(
             'com.atproto.server.getAccountInviteCodes',
             params=params_model,
@@ -3545,7 +3831,10 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerRequestPasswordReset.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerRequestPasswordReset.Data',
+            get_or_create(data, models.ComAtprotoServerRequestPasswordReset.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.requestPasswordReset', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -3570,7 +3859,10 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerReserveSigningKey.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerReserveSigningKey.Data',
+            get_or_create(data, models.ComAtprotoServerReserveSigningKey.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.reserveSigningKey',
             data=data_model,
@@ -3597,7 +3889,9 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerResetPassword.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerResetPassword.Data', get_or_create(data, models.ComAtprotoServerResetPassword.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.resetPassword', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -3620,7 +3914,10 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerRevokeAppPassword.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerRevokeAppPassword.Data',
+            get_or_create(data, models.ComAtprotoServerRevokeAppPassword.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.revokeAppPassword', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -3643,7 +3940,9 @@ class ServerNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoServerUpdateEmail.Data)
+        data_model = t.cast(
+            'models.ComAtprotoServerUpdateEmail.Data', get_or_create(data, models.ComAtprotoServerUpdateEmail.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.server.updateEmail', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -3668,7 +3967,9 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoSyncGetBlob.Params)
+        params_model = t.cast(
+            'models.ComAtprotoSyncGetBlob.Params', get_or_create(params, models.ComAtprotoSyncGetBlob.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.sync.getBlob', params=params_model, output_encoding='*/*', **kwargs
         )
@@ -3691,7 +3992,9 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoSyncGetBlocks.Params)
+        params_model = t.cast(
+            'models.ComAtprotoSyncGetBlocks.Params', get_or_create(params, models.ComAtprotoSyncGetBlocks.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.sync.getBlocks', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
         )
@@ -3714,7 +4017,9 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoSyncGetCheckout.Params)
+        params_model = t.cast(
+            'models.ComAtprotoSyncGetCheckout.Params', get_or_create(params, models.ComAtprotoSyncGetCheckout.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.sync.getCheckout', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
         )
@@ -3737,7 +4042,9 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoSyncGetHead.Params)
+        params_model = t.cast(
+            'models.ComAtprotoSyncGetHead.Params', get_or_create(params, models.ComAtprotoSyncGetHead.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.sync.getHead', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -3760,7 +4067,10 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoSyncGetLatestCommit.Params)
+        params_model = t.cast(
+            'models.ComAtprotoSyncGetLatestCommit.Params',
+            get_or_create(params, models.ComAtprotoSyncGetLatestCommit.Params),
+        )
         response = await self._client.invoke_query(
             'com.atproto.sync.getLatestCommit', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -3783,7 +4093,9 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoSyncGetRecord.Params)
+        params_model = t.cast(
+            'models.ComAtprotoSyncGetRecord.Params', get_or_create(params, models.ComAtprotoSyncGetRecord.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.sync.getRecord', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
         )
@@ -3806,7 +4118,9 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoSyncGetRepo.Params)
+        params_model = t.cast(
+            'models.ComAtprotoSyncGetRepo.Params', get_or_create(params, models.ComAtprotoSyncGetRepo.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.sync.getRepo', params=params_model, output_encoding='application/vnd.ipld.car', **kwargs
         )
@@ -3829,7 +4143,9 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoSyncListBlobs.Params)
+        params_model = t.cast(
+            'models.ComAtprotoSyncListBlobs.Params', get_or_create(params, models.ComAtprotoSyncListBlobs.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.sync.listBlobs', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -3854,7 +4170,9 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoSyncListRepos.Params)
+        params_model = t.cast(
+            'models.ComAtprotoSyncListRepos.Params', get_or_create(params, models.ComAtprotoSyncListRepos.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.sync.listRepos', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -3877,7 +4195,9 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoSyncNotifyOfUpdate.Data)
+        data_model = t.cast(
+            'models.ComAtprotoSyncNotifyOfUpdate.Data', get_or_create(data, models.ComAtprotoSyncNotifyOfUpdate.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.sync.notifyOfUpdate', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -3900,7 +4220,9 @@ class SyncNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoSyncRequestCrawl.Data)
+        data_model = t.cast(
+            'models.ComAtprotoSyncRequestCrawl.Data', get_or_create(data, models.ComAtprotoSyncRequestCrawl.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.sync.requestCrawl', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -3944,7 +4266,9 @@ class TempNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoTempFetchLabels.Params)
+        params_model = t.cast(
+            'models.ComAtprotoTempFetchLabels.Params', get_or_create(params, models.ComAtprotoTempFetchLabels.Params)
+        )
         response = await self._client.invoke_query(
             'com.atproto.temp.fetchLabels', params=params_model, output_encoding='application/json', **kwargs
         )
@@ -3969,7 +4293,9 @@ class TempNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoTempImportRepo.Params)
+        params_model = t.cast(
+            'models.ComAtprotoTempImportRepo.Params', get_or_create(params, models.ComAtprotoTempImportRepo.Params)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.temp.importRepo',
             params=params_model,
@@ -3999,7 +4325,9 @@ class TempNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        params_model = get_or_create(params, models.ComAtprotoTempPushBlob.Params)
+        params_model = t.cast(
+            'models.ComAtprotoTempPushBlob.Params', get_or_create(params, models.ComAtprotoTempPushBlob.Params)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.temp.pushBlob', params=params_model, data=data, input_encoding='*/*', **kwargs
         )
@@ -4024,7 +4352,10 @@ class TempNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoTempRequestPhoneVerification.Data)
+        data_model = t.cast(
+            'models.ComAtprotoTempRequestPhoneVerification.Data',
+            get_or_create(data, models.ComAtprotoTempRequestPhoneVerification.Data),
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.temp.requestPhoneVerification', data=data_model, input_encoding='application/json', **kwargs
         )
@@ -4047,7 +4378,9 @@ class TempNamespace(AsyncNamespaceBase):
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        data_model = get_or_create(data, models.ComAtprotoTempTransferAccount.Data)
+        data_model = t.cast(
+            'models.ComAtprotoTempTransferAccount.Data', get_or_create(data, models.ComAtprotoTempTransferAccount.Data)
+        )
         response = await self._client.invoke_procedure(
             'com.atproto.temp.transferAccount',
             data=data_model,

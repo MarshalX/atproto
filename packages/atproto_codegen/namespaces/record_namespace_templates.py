@@ -7,7 +7,7 @@
 RECORD_CREATE_METHOD_TEMPLATE = """
     @dataclass
     class CreateRecordResponse:
-        \"""Create record response for `models.{record_import}.Main` record.\"""
+        \"""Create record response for :obj:`models.{record_import}.Main` record.\"""
 
         uri: str
         cid: str
@@ -26,7 +26,7 @@ RECORD_CREATE_METHOD_TEMPLATE = """
             repo=repo,
             record=record,
             rkey=rkey,
-            swap_commit=swap_commit,
+            swapCommit=swap_commit,
             validate=validate,
         )
         response = {c}self._client.invoke_procedure(
@@ -43,11 +43,11 @@ RECORD_CREATE_METHOD_TEMPLATE = """
 RECORD_GET_METHOD_TEMPLATE = """
     @dataclass
     class GetRecordResponse:
-        \"""Get record response for `models.{record_import}.Main` record.\"""
+        \"""Get record response for :obj:`models.{record_import}.Main` record.\"""
 
         uri: str
-        cid: str
         value: 'models.{record_import}.Main'
+        cid: t.Optional[str] = None
 
     {d}def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
@@ -62,16 +62,20 @@ RECORD_GET_METHOD_TEMPLATE = """
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(uri=response_model.uri, cid=response_model.cid, value=response_model.value)
+        return self.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.{record_import}.Main', response_model.value),
+        )
 """
 
 RECORD_LIST_METHOD_TEMPLATE = """
     @dataclass
     class ListRecordsResponse:
-        \"""List records response for `models.{record_import}.Main` record.\"""
+        \"""List records response for :obj:`models.{record_import}.Main` record.\"""
 
         records: t.Dict[str, 'models.{record_import}.Main']
-        cursor: t.Optional[str]
+        cursor: t.Optional[str] = None
 
     {d}def list(
         self,
@@ -93,8 +97,11 @@ RECORD_LIST_METHOD_TEMPLATE = """
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
         return self.ListRecordsResponse(
-            records={{record.uri: record.value for record in response_model.records}},
-            cursor=response_model.cursor
+            records={{
+                record.uri: t.cast('models.{record_import}.Main', record.value)
+                for record in response_model.records
+            }},
+            cursor=response_model.cursor,
         )
 """
 
@@ -111,8 +118,8 @@ RECORD_DELETE_METHOD_TEMPLATE = """
             collection='{collection}',
             repo=repo,
             rkey=rkey,
-            swap_commit=swap_commit,
-            swap_record=swap_record,
+            swapCommit=swap_commit,
+            swapRecord=swap_record,
         )
         response = {c}self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs

@@ -153,7 +153,8 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
 
     def _override_arg_line(name: str, model_name: str) -> str:
         model_path = f'models.{get_import_path(method_info.nsid)}.{model_name}'
-        return f'{_(2)}{name}_model = get_or_create({name}, {model_path})'
+        # TODO(MarshalX): fix return type in get_or_create instead of casting
+        return f"{_(2)}{name}_model = t.cast('{model_path}', get_or_create({name}, {model_path}))"
 
     invoke_args = [f"'{method_info.nsid}'"]
 
