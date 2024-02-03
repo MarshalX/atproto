@@ -13,12 +13,12 @@ from atproto_client import models
 from atproto_client.client.async_raw import AsyncClientRaw
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
 from atproto_client.client.methods_mixin.strong_ref_arg_backward_compatibility import _StrongRefArgBackwardCompatibility
-from atproto_client.models import ids
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
 from atproto_client.utils import TextBuilder
 
 if t.TYPE_CHECKING:
     from atproto_client.client.base import InvokeType
+    from atproto_client.namespaces import async_ns
     from atproto_client.request import Response
 
 
@@ -103,7 +103,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         ] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
-    ) -> models.ComAtprotoRepoCreateRecord.Response:
+    ) -> 'async_ns.PostRecord.CreateRecordResponse':
         """Send post.
 
         Note:
@@ -121,7 +121,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             facets: List of facets (rich text items).
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created post record.
+            :obj:`namespaces.async_ns.PostRecord.CreateRecordResponse`: Reference to the created record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -137,20 +137,15 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         if not langs:
             langs = [DEFAULT_LANGUAGE_CODE1]
 
-        return await self.com.atproto.repo.create_record(
-            models.ComAtprotoRepoCreateRecord.Data(
-                repo=repo,
-                collection=ids.AppBskyFeedPost,
-                record=models.AppBskyFeedPost.Record(
-                    created_at=self.get_current_time_iso(),
-                    text=text,
-                    reply=reply_to,
-                    embed=embed,
-                    langs=langs,
-                    facets=facets,
-                ),
-            )
+        record = models.AppBskyFeedPost.Record(
+            created_at=self.get_current_time_iso(),
+            text=text,
+            reply=reply_to,
+            embed=embed,
+            langs=langs,
+            facets=facets,
         )
+        return await self.app.bsky.feed.post.create(repo, record)
 
     async def delete_post(self, post_uri: str) -> bool:
         """Delete post.
@@ -165,13 +160,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         uri = AtUri.from_str(post_uri)
-        return await self.com.atproto.repo.delete_record(
-            models.ComAtprotoRepoDeleteRecord.Data(
-                collection=ids.AppBskyFeedPost,
-                repo=uri.hostname,
-                rkey=uri.rkey,
-            )
-        )
+        return await self.app.bsky.feed.post.delete(uri.hostname, uri.rkey)
 
     async def send_image(
         self,
@@ -182,7 +171,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         reply_to: t.Optional[t.Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
-    ) -> models.ComAtprotoRepoCreateRecord.Response:
+    ) -> 'async_ns.PostRecord.CreateRecordResponse':
         """Send post with attached image.
 
         Note:
@@ -198,7 +187,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             facets: List of facets (rich text items).
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created post record.
+            :obj:`namespaces.async_ns.PostRecord.CreateRecordResponse`: Reference to the created record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -216,7 +205,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
     async def get_post(
         self, post_rkey: str, profile_identify: t.Optional[str] = None, cid: t.Optional[str] = None
-    ) -> models.ComAtprotoRepoGetRecord.Response:
+    ) -> 'async_ns.PostRecord.GetRecordResponse':
         """Get post.
 
         Args:
@@ -225,7 +214,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             cid: The CID of the version of the post.
 
         Returns:
-            :obj:`models.ComAtprotoRepoGetRecord.Response`: Post.
+            :obj:`namespaces.async_ns.PostRecord.GetRecordResponse`: Post.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -234,14 +223,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         if profile_identify:
             repo = profile_identify
 
-        return await self.com.atproto.repo.get_record(
-            models.ComAtprotoRepoGetRecord.Params(
-                collection=ids.AppBskyFeedPost,
-                repo=repo,
-                rkey=post_rkey,
-                cid=cid,
-            )
-        )
+        return await self.app.bsky.feed.post.get(repo, post_rkey, cid)
 
     async def get_posts(self, uris: t.List[str]) -> models.AppBskyFeedGetPosts.Response:
         """Get posts.
@@ -378,7 +360,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         uri: t.Optional[str] = None,
         cid: t.Optional[str] = None,
         subject: t.Optional[models.ComAtprotoRepoStrongRef.Main] = None,
-    ) -> models.ComAtprotoRepoCreateRecord.Response:
+    ) -> 'async_ns.LikeRecord.CreateRecordResponse':
         """Like the post.
 
         Args:
@@ -387,20 +369,15 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             subject: DEPRECATED.
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created like record.
+            :obj:`namespaces.async_ns.LikeRecord.CreateRecordResponse`: Reference to the created like record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
 
-        return await self.com.atproto.repo.create_record(
-            models.ComAtprotoRepoCreateRecord.Data(
-                repo=self.me.did,
-                collection=ids.AppBskyFeedLike,
-                record=models.AppBskyFeedLike.Record(created_at=self.get_current_time_iso(), subject=subject_obj),
-            )
-        )
+        record = models.AppBskyFeedLike.Record(created_at=self.get_current_time_iso(), subject=subject_obj)
+        return await self.app.bsky.feed.like.create(self.me.did, record)
 
     async def unlike(self, like_uri: str) -> bool:
         """Unlike the post.
@@ -415,20 +392,14 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         uri = AtUri.from_str(like_uri)
-        return await self.com.atproto.repo.delete_record(
-            models.ComAtprotoRepoDeleteRecord.Data(
-                collection=ids.AppBskyFeedLike,
-                repo=uri.hostname,
-                rkey=uri.rkey,
-            )
-        )
+        return await self.app.bsky.feed.like.delete(uri.hostname, uri.rkey)
 
     async def repost(
         self,
         uri: t.Optional[str] = None,
         cid: t.Optional[str] = None,
         subject: t.Optional[models.ComAtprotoRepoStrongRef.Main] = None,
-    ) -> models.ComAtprotoRepoCreateRecord.Response:
+    ) -> 'async_ns.RepostRecord.CreateRecordResponse':
         """Repost post.
 
         Args:
@@ -437,23 +408,15 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             subject: DEPRECATED.
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the reposted record.
+            :obj:`namespaces.async_ns.RepostRecord.CreateRecordResponse`: Reference to the reposted record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
 
-        return await self.com.atproto.repo.create_record(
-            models.ComAtprotoRepoCreateRecord.Data(
-                repo=self.me.did,
-                collection=ids.AppBskyFeedRepost,
-                record=models.AppBskyFeedRepost.Record(
-                    created_at=self.get_current_time_iso(),
-                    subject=subject_obj,
-                ),
-            )
-        )
+        record = models.AppBskyFeedRepost.Record(created_at=self.get_current_time_iso(), subject=subject_obj)
+        return await self.app.bsky.feed.repost.create(self.me.did, record)
 
     async def unrepost(self, repost_uri: str) -> bool:
         """Unrepost the post (delete repost).
@@ -468,33 +431,22 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         uri = AtUri.from_str(repost_uri)
-        return await self.com.atproto.repo.delete_record(
-            models.ComAtprotoRepoDeleteRecord.Data(
-                collection=ids.AppBskyFeedRepost,
-                repo=uri.hostname,
-                rkey=uri.rkey,
-            )
-        )
+        return await self.app.bsky.feed.repost.delete(uri.hostname, uri.rkey)
 
-    async def follow(self, subject: str) -> models.ComAtprotoRepoCreateRecord.Response:
+    async def follow(self, subject: str) -> 'async_ns.FollowRecord.CreateRecordResponse':
         """Follow the profile.
 
         Args:
             subject: DID of the profile.
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created follow record.
+            :obj:`namespaces.async_ns.FollowRecord.CreateRecordResponse`: Reference to the created follow record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        return await self.com.atproto.repo.create_record(
-            models.ComAtprotoRepoCreateRecord.Data(
-                repo=self.me.did,
-                collection=ids.AppBskyGraphFollow,
-                record=models.AppBskyGraphFollow.Record(created_at=self.get_current_time_iso(), subject=subject),
-            )
-        )
+        record = models.AppBskyGraphFollow.Record(created_at=self.get_current_time_iso(), subject=subject)
+        return await self.app.bsky.graph.follow.create(self.me.did, record)
 
     async def unfollow(self, follow_uri: str) -> bool:
         """Unfollow the profile.
@@ -509,13 +461,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         uri = AtUri.from_str(follow_uri)
-        return await self.com.atproto.repo.delete_record(
-            models.ComAtprotoRepoDeleteRecord.Data(
-                collection=ids.AppBskyGraphFollow,
-                repo=uri.hostname,
-                rkey=uri.rkey,
-            )
-        )
+        return await self.app.bsky.graph.follow.delete(uri.hostname, uri.rkey)
 
     async def get_follows(
         self, actor: str, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
