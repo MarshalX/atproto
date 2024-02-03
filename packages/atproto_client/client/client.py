@@ -518,8 +518,8 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
         Args:
             actor: Actor (handle or DID).
-            cursor: Cursor of the last like in the previous page.
-            limit: Limit count of likes to return.
+            cursor: Cursor of the next page.
+            limit: Limit count of follows to return.
 
         Returns:
             :obj:`models.AppBskyGraphGetFollows.Response`: Follows.
@@ -538,8 +538,8 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
         Args:
             actor: Actor (handle or DID).
-            cursor: Cursor of the last like in the previous page.
-            limit: Limit count of likes to return.
+            cursor: Cursor of the next page.
+            limit: Limit count of followers to return.
 
         Returns:
             :obj:`models.AppBskyGraphGetFollowers.Response`: Followers.

@@ -9,13 +9,7 @@ def main() -> None:
     client.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
     try:
-        current_profile_record = client.com.atproto.repo.get_record(
-            models.ComAtprotoRepoGetRecord.Params(
-                collection=models.ids.AppBskyActorProfile,
-                repo=client.me.did,
-                rkey='self',
-            )
-        )
+        current_profile_record = client.app.bsky.actor.profile.get(client.me.did, 'self')
         current_profile = current_profile_record.value
         swap_record_cid = current_profile_record.cid
     except BadRequestError:
