@@ -11,6 +11,7 @@ def test_record_model_name_backward_compatibility() -> None:
         assert issubclass(w[0].category, DeprecationWarning)
 
     with warnings.catch_warnings(record=True) as w:
+
         class MyModel(models.AppBskyFeedPost.Main):
             pass
 
@@ -26,6 +27,7 @@ def test_record_model_name_backward_compatibility() -> None:
         assert len(w) == 0
 
     with warnings.catch_warnings(record=True) as w:
+
         class MyModel(models.AppBskyFeedPost.Record):
             pass
 

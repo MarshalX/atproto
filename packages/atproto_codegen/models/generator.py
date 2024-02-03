@@ -25,7 +25,8 @@ from atproto_codegen.utils import (
     get_def_model_name,
     get_file_path_parts,
     get_import_path,
-    get_record_model_name, join_code,
+    get_record_model_name,
+    join_code,
     write_code,
 )
 from atproto_codegen.utils import get_code_intent as _
