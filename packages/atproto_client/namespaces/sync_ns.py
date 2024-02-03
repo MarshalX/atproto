@@ -35,13 +35,27 @@ class BskyNamespace(NamespaceBase):
 class ProfileNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyActorProfile.Main` record."""
+        """Get record response for :obj:`models.AppBskyActorProfile.Main`."""
 
-        uri: str
-        value: 'models.AppBskyActorProfile.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyActorProfile.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.actor.profile', repo=repo, rkey=rkey, cid=cid
         )
@@ -57,10 +71,10 @@ class ProfileNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyActorProfile.Main` record."""
+        """List records response for :obj:`models.AppBskyActorProfile.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyActorProfile.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyActorProfile.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -70,6 +84,21 @@ class ProfileNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.actor.profile',
             repo=repo,
@@ -90,10 +119,10 @@ class ProfileNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyActorProfile.Main` record."""
+        """Create record response for :obj:`models.AppBskyActorProfile.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -104,6 +133,22 @@ class ProfileNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.actor.profile',
             repo=repo,
@@ -130,6 +175,21 @@ class ProfileNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.actor.profile',
             repo=repo,
@@ -338,13 +398,27 @@ class ActorNamespace(NamespaceBase):
 class GeneratorNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedGenerator.Main` record."""
+        """Get record response for :obj:`models.AppBskyFeedGenerator.Main`."""
 
-        uri: str
-        value: 'models.AppBskyFeedGenerator.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyFeedGenerator.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.feed.generator', repo=repo, rkey=rkey, cid=cid
         )
@@ -360,10 +434,10 @@ class GeneratorNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedGenerator.Main` record."""
+        """List records response for :obj:`models.AppBskyFeedGenerator.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyFeedGenerator.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyFeedGenerator.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -373,6 +447,21 @@ class GeneratorNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.feed.generator',
             repo=repo,
@@ -394,10 +483,10 @@ class GeneratorNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedGenerator.Main` record."""
+        """Create record response for :obj:`models.AppBskyFeedGenerator.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -408,6 +497,22 @@ class GeneratorNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.feed.generator',
             repo=repo,
@@ -434,6 +539,21 @@ class GeneratorNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.feed.generator',
             repo=repo,
@@ -450,13 +570,27 @@ class GeneratorNamespace(NamespaceBase):
 class LikeNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedLike.Main` record."""
+        """Get record response for :obj:`models.AppBskyFeedLike.Main`."""
 
-        uri: str
-        value: 'models.AppBskyFeedLike.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyFeedLike.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.feed.like', repo=repo, rkey=rkey, cid=cid
         )
@@ -472,10 +606,10 @@ class LikeNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedLike.Main` record."""
+        """List records response for :obj:`models.AppBskyFeedLike.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyFeedLike.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyFeedLike.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -485,6 +619,21 @@ class LikeNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.feed.like',
             repo=repo,
@@ -505,10 +654,10 @@ class LikeNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedLike.Main` record."""
+        """Create record response for :obj:`models.AppBskyFeedLike.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -519,6 +668,22 @@ class LikeNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.feed.like',
             repo=repo,
@@ -545,6 +710,21 @@ class LikeNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.feed.like',
             repo=repo,
@@ -561,13 +741,27 @@ class LikeNamespace(NamespaceBase):
 class PostNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedPost.Main` record."""
+        """Get record response for :obj:`models.AppBskyFeedPost.Main`."""
 
-        uri: str
-        value: 'models.AppBskyFeedPost.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyFeedPost.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.feed.post', repo=repo, rkey=rkey, cid=cid
         )
@@ -583,10 +777,10 @@ class PostNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedPost.Main` record."""
+        """List records response for :obj:`models.AppBskyFeedPost.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyFeedPost.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyFeedPost.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -596,6 +790,21 @@ class PostNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.feed.post',
             repo=repo,
@@ -616,10 +825,10 @@ class PostNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedPost.Main` record."""
+        """Create record response for :obj:`models.AppBskyFeedPost.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -630,6 +839,22 @@ class PostNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.feed.post',
             repo=repo,
@@ -656,6 +881,21 @@ class PostNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.feed.post',
             repo=repo,
@@ -672,13 +912,27 @@ class PostNamespace(NamespaceBase):
 class RepostNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedRepost.Main` record."""
+        """Get record response for :obj:`models.AppBskyFeedRepost.Main`."""
 
-        uri: str
-        value: 'models.AppBskyFeedRepost.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyFeedRepost.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.feed.repost', repo=repo, rkey=rkey, cid=cid
         )
@@ -694,10 +948,10 @@ class RepostNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedRepost.Main` record."""
+        """List records response for :obj:`models.AppBskyFeedRepost.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyFeedRepost.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyFeedRepost.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -707,6 +961,21 @@ class RepostNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.feed.repost',
             repo=repo,
@@ -727,10 +996,10 @@ class RepostNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedRepost.Main` record."""
+        """Create record response for :obj:`models.AppBskyFeedRepost.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -741,6 +1010,22 @@ class RepostNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.feed.repost',
             repo=repo,
@@ -767,6 +1052,21 @@ class RepostNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.feed.repost',
             repo=repo,
@@ -783,13 +1083,27 @@ class RepostNamespace(NamespaceBase):
 class ThreadgateNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedThreadgate.Main` record."""
+        """Get record response for :obj:`models.AppBskyFeedThreadgate.Main`."""
 
-        uri: str
-        value: 'models.AppBskyFeedThreadgate.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyFeedThreadgate.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.feed.threadgate', repo=repo, rkey=rkey, cid=cid
         )
@@ -805,10 +1119,10 @@ class ThreadgateNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedThreadgate.Main` record."""
+        """List records response for :obj:`models.AppBskyFeedThreadgate.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyFeedThreadgate.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyFeedThreadgate.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -818,6 +1132,21 @@ class ThreadgateNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.feed.threadgate',
             repo=repo,
@@ -839,10 +1168,10 @@ class ThreadgateNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedThreadgate.Main` record."""
+        """Create record response for :obj:`models.AppBskyFeedThreadgate.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -853,6 +1182,22 @@ class ThreadgateNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.feed.threadgate',
             repo=repo,
@@ -879,6 +1224,21 @@ class ThreadgateNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.feed.threadgate',
             repo=repo,
@@ -1298,13 +1658,27 @@ class FeedNamespace(NamespaceBase):
 class BlockNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphBlock.Main` record."""
+        """Get record response for :obj:`models.AppBskyGraphBlock.Main`."""
 
-        uri: str
-        value: 'models.AppBskyGraphBlock.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyGraphBlock.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.graph.block', repo=repo, rkey=rkey, cid=cid
         )
@@ -1320,10 +1694,10 @@ class BlockNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphBlock.Main` record."""
+        """List records response for :obj:`models.AppBskyGraphBlock.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyGraphBlock.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyGraphBlock.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -1333,6 +1707,21 @@ class BlockNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.graph.block',
             repo=repo,
@@ -1353,10 +1742,10 @@ class BlockNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphBlock.Main` record."""
+        """Create record response for :obj:`models.AppBskyGraphBlock.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -1367,6 +1756,22 @@ class BlockNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.graph.block',
             repo=repo,
@@ -1393,6 +1798,21 @@ class BlockNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.graph.block',
             repo=repo,
@@ -1409,13 +1829,27 @@ class BlockNamespace(NamespaceBase):
 class FollowNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphFollow.Main` record."""
+        """Get record response for :obj:`models.AppBskyGraphFollow.Main`."""
 
-        uri: str
-        value: 'models.AppBskyGraphFollow.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyGraphFollow.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.graph.follow', repo=repo, rkey=rkey, cid=cid
         )
@@ -1431,10 +1865,10 @@ class FollowNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphFollow.Main` record."""
+        """List records response for :obj:`models.AppBskyGraphFollow.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyGraphFollow.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyGraphFollow.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -1444,6 +1878,21 @@ class FollowNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.graph.follow',
             repo=repo,
@@ -1464,10 +1913,10 @@ class FollowNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphFollow.Main` record."""
+        """Create record response for :obj:`models.AppBskyGraphFollow.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -1478,6 +1927,22 @@ class FollowNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.graph.follow',
             repo=repo,
@@ -1504,6 +1969,21 @@ class FollowNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.graph.follow',
             repo=repo,
@@ -1520,13 +2000,27 @@ class FollowNamespace(NamespaceBase):
 class ListNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphList.Main` record."""
+        """Get record response for :obj:`models.AppBskyGraphList.Main`."""
 
-        uri: str
-        value: 'models.AppBskyGraphList.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyGraphList.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.graph.list', repo=repo, rkey=rkey, cid=cid
         )
@@ -1542,10 +2036,10 @@ class ListNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphList.Main` record."""
+        """List records response for :obj:`models.AppBskyGraphList.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyGraphList.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyGraphList.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -1555,6 +2049,21 @@ class ListNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.graph.list',
             repo=repo,
@@ -1575,10 +2084,10 @@ class ListNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphList.Main` record."""
+        """Create record response for :obj:`models.AppBskyGraphList.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -1589,6 +2098,22 @@ class ListNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.graph.list',
             repo=repo,
@@ -1615,6 +2140,21 @@ class ListNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.graph.list',
             repo=repo,
@@ -1631,13 +2171,27 @@ class ListNamespace(NamespaceBase):
 class ListblockNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphListblock.Main` record."""
+        """Get record response for :obj:`models.AppBskyGraphListblock.Main`."""
 
-        uri: str
-        value: 'models.AppBskyGraphListblock.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyGraphListblock.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.graph.listblock', repo=repo, rkey=rkey, cid=cid
         )
@@ -1653,10 +2207,10 @@ class ListblockNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphListblock.Main` record."""
+        """List records response for :obj:`models.AppBskyGraphListblock.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyGraphListblock.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyGraphListblock.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -1666,6 +2220,21 @@ class ListblockNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.graph.listblock',
             repo=repo,
@@ -1687,10 +2256,10 @@ class ListblockNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphListblock.Main` record."""
+        """Create record response for :obj:`models.AppBskyGraphListblock.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -1701,6 +2270,22 @@ class ListblockNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.graph.listblock',
             repo=repo,
@@ -1727,6 +2312,21 @@ class ListblockNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.graph.listblock',
             repo=repo,
@@ -1743,13 +2343,27 @@ class ListblockNamespace(NamespaceBase):
 class ListitemNamespace(NamespaceBase):
     @dataclass
     class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphListitem.Main` record."""
+        """Get record response for :obj:`models.AppBskyGraphListitem.Main`."""
 
-        uri: str
-        value: 'models.AppBskyGraphListitem.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.AppBskyGraphListitem.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='app.bsky.graph.listitem', repo=repo, rkey=rkey, cid=cid
         )
@@ -1765,10 +2379,10 @@ class ListitemNamespace(NamespaceBase):
 
     @dataclass
     class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphListitem.Main` record."""
+        """List records response for :obj:`models.AppBskyGraphListitem.Main`."""
 
-        records: t.Dict[str, 'models.AppBskyGraphListitem.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.AppBskyGraphListitem.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     def list(
         self,
@@ -1778,6 +2392,21 @@ class ListitemNamespace(NamespaceBase):
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='app.bsky.graph.listitem',
             repo=repo,
@@ -1799,10 +2428,10 @@ class ListitemNamespace(NamespaceBase):
 
     @dataclass
     class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphListitem.Main` record."""
+        """Create record response for :obj:`models.AppBskyGraphListitem.Main`."""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     def create(
         self,
@@ -1813,6 +2442,22 @@ class ListitemNamespace(NamespaceBase):
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.graph.listitem',
             repo=repo,
@@ -1839,6 +2484,21 @@ class ListitemNamespace(NamespaceBase):
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='app.bsky.graph.listitem',
             repo=repo,

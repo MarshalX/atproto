@@ -7,10 +7,10 @@
 RECORD_CREATE_METHOD_TEMPLATE = """
     @dataclass
     class CreateRecordResponse:
-        \"""Create record response for :obj:`models.{record_import}.Main` record.\"""
+        \"""Create record response for :obj:`models.{record_import}.Main`.\"""
 
-        uri: str
-        cid: str
+        uri: str  #: The URI of the record.
+        cid: str  #: The CID of the record.
 
     {d}def create(
         self,
@@ -21,6 +21,22 @@ RECORD_CREATE_METHOD_TEMPLATE = """
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
     ) -> CreateRecordResponse:
+        \"""Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        \"""
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='{collection}',
             repo=repo,
@@ -43,15 +59,29 @@ RECORD_CREATE_METHOD_TEMPLATE = """
 RECORD_GET_METHOD_TEMPLATE = """
     @dataclass
     class GetRecordResponse:
-        \"""Get record response for :obj:`models.{record_import}.Main` record.\"""
+        \"""Get record response for :obj:`models.{record_import}.Main`.\"""
 
-        uri: str
-        value: 'models.{record_import}.Main'
-        cid: t.Optional[str] = None
+        uri: str  #: The URI of the record.
+        value: 'models.{record_import}.Main'  #: The record.
+        cid: t.Optional[str] = None  #: The CID of the record.
 
     {d}def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> GetRecordResponse:
+        \"""Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        \"""
         params_model = models.ComAtprotoRepoGetRecord.Params(
             collection='{collection}',
             repo=repo,
@@ -72,10 +102,10 @@ RECORD_GET_METHOD_TEMPLATE = """
 RECORD_LIST_METHOD_TEMPLATE = """
     @dataclass
     class ListRecordsResponse:
-        \"""List records response for :obj:`models.{record_import}.Main` record.\"""
+        \"""List records response for :obj:`models.{record_import}.Main`.\"""
 
-        records: t.Dict[str, 'models.{record_import}.Main']
-        cursor: t.Optional[str] = None
+        records: t.Dict[str, 'models.{record_import}.Main']  #: Map of URIs to records.
+        cursor: t.Optional[str] = None  #: Next page cursor.
 
     {d}def list(
         self,
@@ -85,6 +115,21 @@ RECORD_LIST_METHOD_TEMPLATE = """
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
     ) -> ListRecordsResponse:
+        \"""List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        \"""
         params_model = models.ComAtprotoRepoListRecords.Params(
             collection='{collection}',
             repo=repo,
@@ -114,6 +159,21 @@ RECORD_DELETE_METHOD_TEMPLATE = """
         swap_record: t.Optional[str] = None,
         **kwargs: t.Any,
     ) -> bool:
+        \"""Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        \"""
         data_model = models.ComAtprotoRepoDeleteRecord.Data(
             collection='{collection}',
             repo=repo,
