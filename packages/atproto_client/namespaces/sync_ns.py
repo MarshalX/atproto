@@ -81,6 +81,13 @@ class ProfileNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyActorProfile.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -89,7 +96,7 @@ class ProfileNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.actor.profile',
             repo=repo,
@@ -105,7 +112,8 @@ class ProfileNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,
@@ -354,6 +362,13 @@ class GeneratorNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyFeedGenerator.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -362,7 +377,7 @@ class GeneratorNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.feed.generator',
             repo=repo,
@@ -378,7 +393,8 @@ class GeneratorNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,
@@ -450,6 +466,13 @@ class LikeNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyFeedLike.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -458,7 +481,7 @@ class LikeNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.feed.like',
             repo=repo,
@@ -474,7 +497,8 @@ class LikeNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,
@@ -546,6 +570,13 @@ class PostNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyFeedPost.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -554,7 +585,7 @@ class PostNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.feed.post',
             repo=repo,
@@ -570,7 +601,8 @@ class PostNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,
@@ -642,6 +674,13 @@ class RepostNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyFeedRepost.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -650,7 +689,7 @@ class RepostNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.feed.repost',
             repo=repo,
@@ -666,7 +705,8 @@ class RepostNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,
@@ -738,6 +778,13 @@ class ThreadgateNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyFeedThreadgate.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -746,7 +793,7 @@ class ThreadgateNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.feed.threadgate',
             repo=repo,
@@ -762,7 +809,8 @@ class ThreadgateNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,
@@ -1204,6 +1252,13 @@ class BlockNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyGraphBlock.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -1212,7 +1267,7 @@ class BlockNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.graph.block',
             repo=repo,
@@ -1228,7 +1283,8 @@ class BlockNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,
@@ -1300,6 +1356,13 @@ class FollowNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyGraphFollow.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -1308,7 +1371,7 @@ class FollowNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.graph.follow',
             repo=repo,
@@ -1324,7 +1387,8 @@ class FollowNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,
@@ -1396,6 +1460,13 @@ class ListNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyGraphList.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -1404,7 +1475,7 @@ class ListNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.graph.list',
             repo=repo,
@@ -1420,7 +1491,8 @@ class ListNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,
@@ -1492,6 +1564,13 @@ class ListblockNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyGraphListblock.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -1500,7 +1579,7 @@ class ListblockNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.graph.listblock',
             repo=repo,
@@ -1516,7 +1595,8 @@ class ListblockNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,
@@ -1588,6 +1668,13 @@ class ListitemNamespace(NamespaceBase):
             records={record.uri: record.value for record in response_model.records}, cursor=response_model.cursor
         )
 
+    @dataclass
+    class CreateRecordResponse:
+        """Create record response for `models.AppBskyGraphListitem.Main` record."""
+
+        uri: str
+        cid: str
+
     def create(
         self,
         repo: str,
@@ -1596,7 +1683,7 @@ class ListitemNamespace(NamespaceBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='app.bsky.graph.listitem',
             repo=repo,
@@ -1612,7 +1699,8 @@ class ListitemNamespace(NamespaceBase):
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     def delete(
         self,

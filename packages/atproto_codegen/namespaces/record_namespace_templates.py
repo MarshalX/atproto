@@ -5,6 +5,13 @@
 # this approach provides more clean usage on the user side with type hints
 
 RECORD_CREATE_METHOD_TEMPLATE = """
+    @dataclass
+    class CreateRecordResponse:
+        \"""Create record response for `models.{record_import}.Main` record.\"""
+
+        uri: str
+        cid: str
+
     {d}def create(
         self,
         repo: str,
@@ -13,7 +20,7 @@ RECORD_CREATE_METHOD_TEMPLATE = """
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> 'models.ComAtprotoRepoCreateRecord.Response':
+    ) -> CreateRecordResponse:
         data_model = models.ComAtprotoRepoCreateRecord.Data(
             collection='{collection}',
             repo=repo,
@@ -29,7 +36,8 @@ RECORD_CREATE_METHOD_TEMPLATE = """
             output_encoding='application/json',
             **kwargs,
         )
-        return get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 """
 
 RECORD_GET_METHOD_TEMPLATE = """
