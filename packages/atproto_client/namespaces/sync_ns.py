@@ -10,7 +10,7 @@ from dataclasses import dataclass
 
 from atproto_client import models
 from atproto_client.models.utils import get_or_create, get_response_model
-from atproto_client.namespaces.base import NamespaceBase
+from atproto_client.namespaces.base import NamespaceBase, RecordBase
 
 if t.TYPE_CHECKING:
     from atproto_client.client.raw import ClientRaw
@@ -32,7 +32,7 @@ class BskyNamespace(NamespaceBase):
         self.unspecced = UnspeccedNamespace(self._client)
 
 
-class ProfileNamespace(NamespaceBase):
+class ProfileRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyActorProfile.Main`."""
@@ -206,7 +206,7 @@ class ProfileNamespace(NamespaceBase):
 class ActorNamespace(NamespaceBase):
     def __init__(self, client: 'ClientRaw') -> None:
         super().__init__(client)
-        self.profile = ProfileNamespace(self._client)
+        self.profile = ProfileRecord(self._client)
 
     def get_preferences(
         self,
@@ -395,7 +395,7 @@ class ActorNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyActorSearchActorsTypeahead.Response)
 
 
-class GeneratorNamespace(NamespaceBase):
+class GeneratorRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyFeedGenerator.Main`."""
@@ -567,7 +567,7 @@ class GeneratorNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
 
-class LikeNamespace(NamespaceBase):
+class LikeRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyFeedLike.Main`."""
@@ -738,7 +738,7 @@ class LikeNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
 
-class PostNamespace(NamespaceBase):
+class PostRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyFeedPost.Main`."""
@@ -909,7 +909,7 @@ class PostNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
 
-class RepostNamespace(NamespaceBase):
+class RepostRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyFeedRepost.Main`."""
@@ -1080,7 +1080,7 @@ class RepostNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
 
-class ThreadgateNamespace(NamespaceBase):
+class ThreadgateRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyFeedThreadgate.Main`."""
@@ -1255,11 +1255,11 @@ class ThreadgateNamespace(NamespaceBase):
 class FeedNamespace(NamespaceBase):
     def __init__(self, client: 'ClientRaw') -> None:
         super().__init__(client)
-        self.generator = GeneratorNamespace(self._client)
-        self.like = LikeNamespace(self._client)
-        self.post = PostNamespace(self._client)
-        self.repost = RepostNamespace(self._client)
-        self.threadgate = ThreadgateNamespace(self._client)
+        self.generator = GeneratorRecord(self._client)
+        self.like = LikeRecord(self._client)
+        self.post = PostRecord(self._client)
+        self.repost = RepostRecord(self._client)
+        self.threadgate = ThreadgateRecord(self._client)
 
     def describe_feed_generator(self, **kwargs: t.Any) -> 'models.AppBskyFeedDescribeFeedGenerator.Response':
         """Get information about a feed generator, including policies and offered feed URIs.
@@ -1655,7 +1655,7 @@ class FeedNamespace(NamespaceBase):
         return get_response_model(response, models.AppBskyFeedSearchPosts.Response)
 
 
-class BlockNamespace(NamespaceBase):
+class BlockRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyGraphBlock.Main`."""
@@ -1826,7 +1826,7 @@ class BlockNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
 
-class FollowNamespace(NamespaceBase):
+class FollowRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyGraphFollow.Main`."""
@@ -1997,7 +1997,7 @@ class FollowNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
 
-class ListNamespace(NamespaceBase):
+class ListRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyGraphList.Main`."""
@@ -2168,7 +2168,7 @@ class ListNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
 
-class ListblockNamespace(NamespaceBase):
+class ListblockRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyGraphListblock.Main`."""
@@ -2340,7 +2340,7 @@ class ListblockNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
 
-class ListitemNamespace(NamespaceBase):
+class ListitemRecord(RecordBase):
     @dataclass
     class GetRecordResponse:
         """Get record response for :obj:`models.AppBskyGraphListitem.Main`."""
@@ -2515,11 +2515,11 @@ class ListitemNamespace(NamespaceBase):
 class GraphNamespace(NamespaceBase):
     def __init__(self, client: 'ClientRaw') -> None:
         super().__init__(client)
-        self.block = BlockNamespace(self._client)
-        self.follow = FollowNamespace(self._client)
-        self.list = ListNamespace(self._client)
-        self.listblock = ListblockNamespace(self._client)
-        self.listitem = ListitemNamespace(self._client)
+        self.block = BlockRecord(self._client)
+        self.follow = FollowRecord(self._client)
+        self.list = ListRecord(self._client)
+        self.listblock = ListblockRecord(self._client)
+        self.listitem = ListitemRecord(self._client)
 
     def get_blocks(
         self,
