@@ -1,5 +1,42 @@
 # Change Log
 
+## Version 0.0.40
+
+**04.02.2024**
+
+Syntax sugar for records is here! Check out how simple work with basic operations is:
+```python
+from atproto import AtUri, Client, models
+
+client = Client()
+client.login('my-username', 'my-password')
+
+# get records list
+posts = client.app.bsky.feed.post.list(client.me.did, limit=10)
+for uri, post in posts.records.items():
+    print(uri, post.text)
+
+# get specific record
+post = client.app.bsky.feed.post.get(client.me.did, AtUri.from_str(uri).rkey)
+print(post.value.text)
+
+# create new  record
+post_record = models.AppBskyFeedPost.Record(text='test record namespaces', created_at=client.get_current_time_iso())
+new_post = client.app.bsky.feed.post.create(client.me.did, post_record)
+print(new_post)
+
+# delete record
+deleted_post = client.app.bsky.feed.post.delete(client.me.did, AtUri.from_str(new_post.uri).rkey)
+print(deleted_post)
+```
+
+**⚠️ Record models have been renamed from "Main" to "Record". Backward compatibility is provided but will be removed soon!**
+**⚠️ Internals of High-Level Clients have been migrated to new syntax sugar. It could affect you because returned models are changed but the fields are the same.**
+
+* Add record syntax sugar with get, list, create, and delete methods by @MarshalX in https://github.com/MarshalX/atproto/pull/263
+* Rename record models from "Main" to "Record" by @MarshalX in https://github.com/MarshalX/atproto/pull/264
+* Integrate syntax sugar for repo operations upon records by @MarshalX in https://github.com/MarshalX/atproto/pull/266
+
 ## Version 0.0.39
 
 **02.02.2024**

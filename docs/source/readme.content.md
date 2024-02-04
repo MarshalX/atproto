@@ -159,7 +159,7 @@ for uri, post in posts.records.items():
 post = client.app.bsky.feed.post.get(client.me.did, AtUri.from_str(uri).rkey)
 print(post.value.text)
 
-post_record = models.AppBskyFeedPost.Main(text='test record namespaces', created_at=client.get_current_time_iso())
+post_record = models.AppBskyFeedPost.Record(text='test record namespaces', created_at=client.get_current_time_iso())
 new_post = client.app.bsky.feed.post.create(client.me.did, post_record)
 print(new_post)
 
