@@ -29,7 +29,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
         self._refresh_lock = Lock()
 
-        self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
+        self.me: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed'] = None
 
     async def _invoke(self, invoke_type: 'InvokeType', **kwargs: t.Any) -> 'Response':
         session_refreshing = kwargs.pop('session_refreshing', False)
@@ -42,7 +42,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
         return await super()._invoke(invoke_type, **kwargs)
 
-    async def _get_and_set_session(self, login: str, password: str) -> models.ComAtprotoServerCreateSession.Response:
+    async def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
         session = await self.com.atproto.server.create_session(
             models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
         )
@@ -50,7 +50,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
         return session
 
-    async def _refresh_and_set_session(self) -> models.ComAtprotoServerRefreshSession.Response:
+    async def _refresh_and_set_session(self) -> 'models.ComAtprotoServerRefreshSession.Response':
         refresh_session = await self.com.atproto.server.refresh_session(
             headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
         )
@@ -60,7 +60,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
     async def login(
         self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
-    ) -> models.AppBskyActorDefs.ProfileViewDetailed:
+    ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
         """Authorize a client and get profile info.
 
         Args:
@@ -91,7 +91,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         self,
         text: t.Union[str, TextBuilder],
         profile_identify: t.Optional[str] = None,
-        reply_to: t.Optional[t.Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
+        reply_to: t.Optional[t.Union['models.AppBskyFeedPost.ReplyRef', 'models.AppBskyFeedDefs.ReplyRef']] = None,
         embed: t.Optional[
             t.Union[
                 'models.AppBskyEmbedImages.Main',
@@ -167,7 +167,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         image: bytes,
         image_alt: str,
         profile_identify: t.Optional[str] = None,
-        reply_to: t.Optional[t.Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
+        reply_to: t.Optional[t.Union['models.AppBskyFeedPost.ReplyRef', 'models.AppBskyFeedDefs.ReplyRef']] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
     ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
@@ -204,7 +204,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
     async def get_post(
         self, post_rkey: str, profile_identify: t.Optional[str] = None, cid: t.Optional[str] = None
-    ) -> models.AppBskyFeedPost.GetRecordResponse:
+    ) -> 'models.AppBskyFeedPost.GetRecordResponse':
         """Get post.
 
         Args:
@@ -224,7 +224,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
         return await self.app.bsky.feed.post.get(repo, post_rkey, cid)
 
-    async def get_posts(self, uris: t.List[str]) -> models.AppBskyFeedGetPosts.Response:
+    async def get_posts(self, uris: t.List[str]) -> 'models.AppBskyFeedGetPosts.Response':
         """Get posts.
 
         Args:
@@ -249,7 +249,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
     async def get_post_thread(
         self, uri: str, depth: t.Optional[int] = None, parent_height: t.Optional[int] = None
-    ) -> models.AppBskyFeedGetPostThread.Response:
+    ) -> 'models.AppBskyFeedGetPostThread.Response':
         """Get post thread.
 
         Args:
@@ -273,7 +273,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
     async def get_likes(
         self, uri: str, cid: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyFeedGetLikes.Response:
+    ) -> 'models.AppBskyFeedGetLikes.Response':
         """Get likes.
 
         Args:
@@ -294,7 +294,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
     async def get_reposted_by(
         self, uri: str, cid: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyFeedGetRepostedBy.Response:
+    ) -> 'models.AppBskyFeedGetRepostedBy.Response':
         """Get reposted by (reposts).
 
         Args:
@@ -315,7 +315,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
     async def get_timeline(
         self, algorithm: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyFeedGetTimeline.Response:
+    ) -> 'models.AppBskyFeedGetTimeline.Response':
         """Get home timeline.
 
         Args:
@@ -335,7 +335,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
     async def get_author_feed(
         self, actor: str, cursor: t.Optional[str] = None, filter: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyFeedGetAuthorFeed.Response:
+    ) -> 'models.AppBskyFeedGetAuthorFeed.Response':
         """Get author (profile) feed.
 
         Args:
@@ -358,7 +358,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         self,
         uri: t.Optional[str] = None,
         cid: t.Optional[str] = None,
-        subject: t.Optional[models.ComAtprotoRepoStrongRef.Main] = None,
+        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
     ) -> 'models.AppBskyFeedLike.CreateRecordResponse':
         """Like the post.
 
@@ -368,7 +368,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             subject: DEPRECATED.
 
         Returns:
-            :obj:`models.AppBskyFeedLike.CreateRecordResponse`: Reference to the created like record.
+            :obj:`models.AppBskyFeedLike.CreateRecordResponse`: Reference to the created record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -397,7 +397,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         self,
         uri: t.Optional[str] = None,
         cid: t.Optional[str] = None,
-        subject: t.Optional[models.ComAtprotoRepoStrongRef.Main] = None,
+        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
     ) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
         """Repost post.
 
@@ -439,7 +439,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             subject: DID of the profile.
 
         Returns:
-            :obj:`models.AppBskyGraphFollow.CreateRecordResponse`: Reference to the created follow record.
+            :obj:`models.AppBskyGraphFollow.CreateRecordResponse`: Reference to the created record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -464,7 +464,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
     async def get_follows(
         self, actor: str, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyGraphGetFollows.Response:
+    ) -> 'models.AppBskyGraphGetFollows.Response':
         """Get follows of the profile.
 
         Args:
@@ -484,7 +484,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
     async def get_followers(
         self, actor: str, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyGraphGetFollowers.Response:
+    ) -> 'models.AppBskyGraphGetFollowers.Response':
         """Get followers of the profile.
 
         Args:
@@ -502,7 +502,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             models.AppBskyGraphGetFollowers.Params(actor=actor, cursor=cursor, limit=limit)
         )
 
-    async def get_profile(self, actor: str) -> models.AppBskyActorDefs.ProfileViewDetailed:
+    async def get_profile(self, actor: str) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
         """Get profile.
 
         Args:
@@ -516,7 +516,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         """
         return await self.app.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=actor))
 
-    async def get_profiles(self, actors: t.List[str]) -> models.AppBskyActorGetProfiles.Response:
+    async def get_profiles(self, actors: t.List[str]) -> 'models.AppBskyActorGetProfiles.Response':
         """Get profiles.
 
         Args:
@@ -558,7 +558,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         """
         return await self.app.bsky.graph.unmute_actor(models.AppBskyGraphUnmuteActor.Data(actor=actor))
 
-    async def resolve_handle(self, handle: str) -> models.ComAtprotoIdentityResolveHandle.Response:
+    async def resolve_handle(self, handle: str) -> 'models.ComAtprotoIdentityResolveHandle.Response':
         """Resolve the handle.
 
         Args:
@@ -588,7 +588,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
         """
         return await self.com.atproto.identity.update_handle(models.ComAtprotoIdentityUpdateHandle.Data(handle=handle))
 
-    async def upload_blob(self, data: bytes) -> models.ComAtprotoRepoUploadBlob.Response:
+    async def upload_blob(self, data: bytes) -> 'models.ComAtprotoRepoUploadBlob.Response':
         """Upload blob.
 
         Args:
