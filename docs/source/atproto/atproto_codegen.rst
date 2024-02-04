@@ -23,4 +23,5 @@ Submodules
    :maxdepth: 4
 
    atproto_codegen.consts
+   atproto_codegen.record_templates
    atproto_codegen.utils

@@ -103,15 +103,15 @@ class GetRecordResponse(base.SugarResponseModelBase):
     cid: t.Optional[str] = None  #: The CID of the record.
 
 
-class CreateRecordResponse(base.SugarResponseModelBase):
-    """Create record response for :obj:`models.AppBskyFeedPost.Record`."""
-
-    uri: str  #: The URI of the record.
-    cid: str  #: The CID of the record.
-
-
 class ListRecordsResponse(base.SugarResponseModelBase):
     """List records response for :obj:`models.AppBskyFeedPost.Record`."""
 
     records: t.Dict[str, 'models.AppBskyFeedPost.Record']  #: Map of URIs to records.
     cursor: t.Optional[str] = None  #: Next page cursor.
+
+
+class CreateRecordResponse(base.SugarResponseModelBase):
+    """Create record response for :obj:`models.AppBskyFeedPost.Record`."""
+
+    uri: str  #: The URI of the record.
+    cid: str  #: The CID of the record.

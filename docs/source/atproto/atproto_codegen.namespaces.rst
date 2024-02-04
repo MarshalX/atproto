@@ -14,4 +14,3 @@ Submodules
 
    atproto_codegen.namespaces.builder
    atproto_codegen.namespaces.generator
-   atproto_codegen.namespaces.record_templates

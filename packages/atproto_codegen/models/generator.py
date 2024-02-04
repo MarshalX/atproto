@@ -638,11 +638,11 @@ def _generate_def_models(lex_db: builder.BuiltDefModels) -> None:
 
 def _generate_record_sugar_models(nsid: NSID) -> str:
     lines = []
-    for model in {
-        RECORD_CREATE_RESPONSE_MODEL_TEMPLATE,
-        RECORD_LIST_RESPONSE_MODEL_TEMPLATE,
+    for model in [
         RECORD_GET_RESPONSE_MODEL_TEMPLATE,
-    }:
+        RECORD_LIST_RESPONSE_MODEL_TEMPLATE,
+        RECORD_CREATE_RESPONSE_MODEL_TEMPLATE,
+    ]:
         lines.append(model.format(record_import=get_import_path(nsid)))
 
     return join_code(lines)
