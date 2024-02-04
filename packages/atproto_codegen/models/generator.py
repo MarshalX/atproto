@@ -16,6 +16,11 @@ from atproto_codegen.consts import (
     PARAMS_MODEL,
 )
 from atproto_codegen.models import builder
+from atproto_codegen.record_templates import (
+    RECORD_CREATE_RESPONSE_MODEL_TEMPLATE,
+    RECORD_GET_RESPONSE_MODEL_TEMPLATE,
+    RECORD_LIST_RESPONSE_MODEL_TEMPLATE,
+)
 from atproto_codegen.utils import (
     _resolve_nsid_ref,
     append_code,
@@ -631,6 +636,18 @@ def _generate_def_models(lex_db: builder.BuiltDefModels) -> None:
                 raise ValueError(f'Unhandled type {type(def_model)}')
 
 
+def _generate_record_sugar_models(nsid: NSID) -> str:
+    lines = []
+    for model in [
+        RECORD_GET_RESPONSE_MODEL_TEMPLATE,
+        RECORD_LIST_RESPONSE_MODEL_TEMPLATE,
+        RECORD_CREATE_RESPONSE_MODEL_TEMPLATE,
+    ]:
+        lines.append(model.format(record_import=get_import_path(nsid)))
+
+    return join_code(lines)
+
+
 def _generate_record_models(lex_db: builder.BuiltRecordModels) -> None:
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
@@ -639,6 +656,7 @@ def _generate_record_models(lex_db: builder.BuiltRecordModels) -> None:
             if isinstance(def_record, models.LexRecord):
                 # TODO(MarshalX): Process somehow def_record.key?
                 save_code_part(nsid, _generate_def_model(nsid, def_name, def_record.record, ModelType.RECORD))
+                save_code_part(nsid, _generate_record_sugar_models(nsid))
 
 
 def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:

@@ -21,13 +21,7 @@ def main() -> None:
         )
     ]
 
-    client.com.atproto.repo.create_record(
-        models.ComAtprotoRepoCreateRecord.Data(
-            repo=client.me.did,  # or any another DID
-            collection=models.ids.AppBskyFeedPost,
-            record=models.AppBskyFeedPost.Record(created_at=client.get_current_time_iso(), text=text, facets=facets),
-        )
-    )
+    client.send_post(text=text, facets=facets)
 
 
 if __name__ == '__main__':

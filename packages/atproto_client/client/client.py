@@ -7,7 +7,6 @@ from atproto_client import models
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
 from atproto_client.client.methods_mixin.strong_ref_arg_backward_compatibility import _StrongRefArgBackwardCompatibility
 from atproto_client.client.raw import ClientRaw
-from atproto_client.models import ids
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
 from atproto_client.utils import TextBuilder
 
@@ -24,7 +23,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
         self._refresh_lock = Lock()
 
-        self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
+        self.me: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed'] = None
 
     def _invoke(self, invoke_type: 'InvokeType', **kwargs: t.Any) -> 'Response':
         session_refreshing = kwargs.pop('session_refreshing', False)
@@ -37,7 +36,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
         return super()._invoke(invoke_type, **kwargs)
 
-    def _get_and_set_session(self, login: str, password: str) -> models.ComAtprotoServerCreateSession.Response:
+    def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
         session = self.com.atproto.server.create_session(
             models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
         )
@@ -45,7 +44,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
         return session
 
-    def _refresh_and_set_session(self) -> models.ComAtprotoServerRefreshSession.Response:
+    def _refresh_and_set_session(self) -> 'models.ComAtprotoServerRefreshSession.Response':
         refresh_session = self.com.atproto.server.refresh_session(
             headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
         )
@@ -55,7 +54,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
     def login(
         self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
-    ) -> models.AppBskyActorDefs.ProfileViewDetailed:
+    ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
         """Authorize a client and get profile info.
 
         Args:
@@ -86,7 +85,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
         self,
         text: t.Union[str, TextBuilder],
         profile_identify: t.Optional[str] = None,
-        reply_to: t.Optional[t.Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
+        reply_to: t.Optional[t.Union['models.AppBskyFeedPost.ReplyRef', 'models.AppBskyFeedDefs.ReplyRef']] = None,
         embed: t.Optional[
             t.Union[
                 'models.AppBskyEmbedImages.Main',
@@ -97,7 +96,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
         ] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
-    ) -> models.ComAtprotoRepoCreateRecord.Response:
+    ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
         """Send post.
 
         Note:
@@ -115,7 +114,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
             facets: List of facets (rich text items).
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created post record.
+            :obj:`models.AppBskyFeedPost.CreateRecordResponse`: Reference to the created record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -131,20 +130,15 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
         if not langs:
             langs = [DEFAULT_LANGUAGE_CODE1]
 
-        return self.com.atproto.repo.create_record(
-            models.ComAtprotoRepoCreateRecord.Data(
-                repo=repo,
-                collection=ids.AppBskyFeedPost,
-                record=models.AppBskyFeedPost.Record(
-                    created_at=self.get_current_time_iso(),
-                    text=text,
-                    reply=reply_to,
-                    embed=embed,
-                    langs=langs,
-                    facets=facets,
-                ),
-            )
+        record = models.AppBskyFeedPost.Record(
+            created_at=self.get_current_time_iso(),
+            text=text,
+            reply=reply_to,
+            embed=embed,
+            langs=langs,
+            facets=facets,
         )
+        return self.app.bsky.feed.post.create(repo, record)
 
     def delete_post(self, post_uri: str) -> bool:
         """Delete post.
@@ -159,13 +153,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         uri = AtUri.from_str(post_uri)
-        return self.com.atproto.repo.delete_record(
-            models.ComAtprotoRepoDeleteRecord.Data(
-                collection=ids.AppBskyFeedPost,
-                repo=uri.hostname,
-                rkey=uri.rkey,
-            )
-        )
+        return self.app.bsky.feed.post.delete(uri.hostname, uri.rkey)
 
     def send_image(
         self,
@@ -173,10 +161,10 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
         image: bytes,
         image_alt: str,
         profile_identify: t.Optional[str] = None,
-        reply_to: t.Optional[t.Union[models.AppBskyFeedPost.ReplyRef, models.AppBskyFeedDefs.ReplyRef]] = None,
+        reply_to: t.Optional[t.Union['models.AppBskyFeedPost.ReplyRef', 'models.AppBskyFeedDefs.ReplyRef']] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
-    ) -> models.ComAtprotoRepoCreateRecord.Response:
+    ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
         """Send post with attached image.
 
         Note:
@@ -192,7 +180,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
             facets: List of facets (rich text items).
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created post record.
+            :obj:`models.AppBskyFeedPost.CreateRecordResponse`: Reference to the created record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -210,7 +198,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
     def get_post(
         self, post_rkey: str, profile_identify: t.Optional[str] = None, cid: t.Optional[str] = None
-    ) -> models.ComAtprotoRepoGetRecord.Response:
+    ) -> 'models.AppBskyFeedPost.GetRecordResponse':
         """Get post.
 
         Args:
@@ -219,7 +207,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
             cid: The CID of the version of the post.
 
         Returns:
-            :obj:`models.ComAtprotoRepoGetRecord.Response`: Post.
+            :obj:`models.AppBskyFeedPost.GetRecordResponse`: Post.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -228,16 +216,9 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
         if profile_identify:
             repo = profile_identify
 
-        return self.com.atproto.repo.get_record(
-            models.ComAtprotoRepoGetRecord.Params(
-                collection=ids.AppBskyFeedPost,
-                repo=repo,
-                rkey=post_rkey,
-                cid=cid,
-            )
-        )
+        return self.app.bsky.feed.post.get(repo, post_rkey, cid)
 
-    def get_posts(self, uris: t.List[str]) -> models.AppBskyFeedGetPosts.Response:
+    def get_posts(self, uris: t.List[str]) -> 'models.AppBskyFeedGetPosts.Response':
         """Get posts.
 
         Args:
@@ -262,7 +243,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
     def get_post_thread(
         self, uri: str, depth: t.Optional[int] = None, parent_height: t.Optional[int] = None
-    ) -> models.AppBskyFeedGetPostThread.Response:
+    ) -> 'models.AppBskyFeedGetPostThread.Response':
         """Get post thread.
 
         Args:
@@ -286,7 +267,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
     def get_likes(
         self, uri: str, cid: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyFeedGetLikes.Response:
+    ) -> 'models.AppBskyFeedGetLikes.Response':
         """Get likes.
 
         Args:
@@ -307,7 +288,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
     def get_reposted_by(
         self, uri: str, cid: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyFeedGetRepostedBy.Response:
+    ) -> 'models.AppBskyFeedGetRepostedBy.Response':
         """Get reposted by (reposts).
 
         Args:
@@ -328,7 +309,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
     def get_timeline(
         self, algorithm: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyFeedGetTimeline.Response:
+    ) -> 'models.AppBskyFeedGetTimeline.Response':
         """Get home timeline.
 
         Args:
@@ -348,7 +329,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
     def get_author_feed(
         self, actor: str, cursor: t.Optional[str] = None, filter: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyFeedGetAuthorFeed.Response:
+    ) -> 'models.AppBskyFeedGetAuthorFeed.Response':
         """Get author (profile) feed.
 
         Args:
@@ -371,8 +352,8 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
         self,
         uri: t.Optional[str] = None,
         cid: t.Optional[str] = None,
-        subject: t.Optional[models.ComAtprotoRepoStrongRef.Main] = None,
-    ) -> models.ComAtprotoRepoCreateRecord.Response:
+        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
+    ) -> 'models.AppBskyFeedLike.CreateRecordResponse':
         """Like the post.
 
         Args:
@@ -381,20 +362,15 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
             subject: DEPRECATED.
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created like record.
+            :obj:`models.AppBskyFeedLike.CreateRecordResponse`: Reference to the created record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
 
-        return self.com.atproto.repo.create_record(
-            models.ComAtprotoRepoCreateRecord.Data(
-                repo=self.me.did,
-                collection=ids.AppBskyFeedLike,
-                record=models.AppBskyFeedLike.Record(created_at=self.get_current_time_iso(), subject=subject_obj),
-            )
-        )
+        record = models.AppBskyFeedLike.Record(created_at=self.get_current_time_iso(), subject=subject_obj)
+        return self.app.bsky.feed.like.create(self.me.did, record)
 
     def unlike(self, like_uri: str) -> bool:
         """Unlike the post.
@@ -409,20 +385,14 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         uri = AtUri.from_str(like_uri)
-        return self.com.atproto.repo.delete_record(
-            models.ComAtprotoRepoDeleteRecord.Data(
-                collection=ids.AppBskyFeedLike,
-                repo=uri.hostname,
-                rkey=uri.rkey,
-            )
-        )
+        return self.app.bsky.feed.like.delete(uri.hostname, uri.rkey)
 
     def repost(
         self,
         uri: t.Optional[str] = None,
         cid: t.Optional[str] = None,
-        subject: t.Optional[models.ComAtprotoRepoStrongRef.Main] = None,
-    ) -> models.ComAtprotoRepoCreateRecord.Response:
+        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
+    ) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
         """Repost post.
 
         Args:
@@ -431,23 +401,15 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
             subject: DEPRECATED.
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the reposted record.
+            :obj:`models.AppBskyFeedRepost.CreateRecordResponse`: Reference to the reposted record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
 
-        return self.com.atproto.repo.create_record(
-            models.ComAtprotoRepoCreateRecord.Data(
-                repo=self.me.did,
-                collection=ids.AppBskyFeedRepost,
-                record=models.AppBskyFeedRepost.Record(
-                    created_at=self.get_current_time_iso(),
-                    subject=subject_obj,
-                ),
-            )
-        )
+        record = models.AppBskyFeedRepost.Record(created_at=self.get_current_time_iso(), subject=subject_obj)
+        return self.app.bsky.feed.repost.create(self.me.did, record)
 
     def unrepost(self, repost_uri: str) -> bool:
         """Unrepost the post (delete repost).
@@ -462,33 +424,22 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         uri = AtUri.from_str(repost_uri)
-        return self.com.atproto.repo.delete_record(
-            models.ComAtprotoRepoDeleteRecord.Data(
-                collection=ids.AppBskyFeedRepost,
-                repo=uri.hostname,
-                rkey=uri.rkey,
-            )
-        )
+        return self.app.bsky.feed.repost.delete(uri.hostname, uri.rkey)
 
-    def follow(self, subject: str) -> models.ComAtprotoRepoCreateRecord.Response:
+    def follow(self, subject: str) -> 'models.AppBskyGraphFollow.CreateRecordResponse':
         """Follow the profile.
 
         Args:
             subject: DID of the profile.
 
         Returns:
-            :obj:`models.ComAtprotoRepoCreateRecord.Response`: Reference to the created follow record.
+            :obj:`models.AppBskyGraphFollow.CreateRecordResponse`: Reference to the created record.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        return self.com.atproto.repo.create_record(
-            models.ComAtprotoRepoCreateRecord.Data(
-                repo=self.me.did,
-                collection=ids.AppBskyGraphFollow,
-                record=models.AppBskyGraphFollow.Record(created_at=self.get_current_time_iso(), subject=subject),
-            )
-        )
+        record = models.AppBskyGraphFollow.Record(created_at=self.get_current_time_iso(), subject=subject)
+        return self.app.bsky.graph.follow.create(self.me.did, record)
 
     def unfollow(self, follow_uri: str) -> bool:
         """Unfollow the profile.
@@ -503,23 +454,17 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         uri = AtUri.from_str(follow_uri)
-        return self.com.atproto.repo.delete_record(
-            models.ComAtprotoRepoDeleteRecord.Data(
-                collection=ids.AppBskyGraphFollow,
-                repo=uri.hostname,
-                rkey=uri.rkey,
-            )
-        )
+        return self.app.bsky.graph.follow.delete(uri.hostname, uri.rkey)
 
     def get_follows(
         self, actor: str, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyGraphGetFollows.Response:
+    ) -> 'models.AppBskyGraphGetFollows.Response':
         """Get follows of the profile.
 
         Args:
             actor: Actor (handle or DID).
-            cursor: Cursor of the last like in the previous page.
-            limit: Limit count of likes to return.
+            cursor: Cursor of the next page.
+            limit: Limit count of follows to return.
 
         Returns:
             :obj:`models.AppBskyGraphGetFollows.Response`: Follows.
@@ -533,13 +478,13 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
     def get_followers(
         self, actor: str, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
-    ) -> models.AppBskyGraphGetFollowers.Response:
+    ) -> 'models.AppBskyGraphGetFollowers.Response':
         """Get followers of the profile.
 
         Args:
             actor: Actor (handle or DID).
-            cursor: Cursor of the last like in the previous page.
-            limit: Limit count of likes to return.
+            cursor: Cursor of the next page.
+            limit: Limit count of followers to return.
 
         Returns:
             :obj:`models.AppBskyGraphGetFollowers.Response`: Followers.
@@ -551,7 +496,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
             models.AppBskyGraphGetFollowers.Params(actor=actor, cursor=cursor, limit=limit)
         )
 
-    def get_profile(self, actor: str) -> models.AppBskyActorDefs.ProfileViewDetailed:
+    def get_profile(self, actor: str) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
         """Get profile.
 
         Args:
@@ -565,7 +510,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
         """
         return self.app.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=actor))
 
-    def get_profiles(self, actors: t.List[str]) -> models.AppBskyActorGetProfiles.Response:
+    def get_profiles(self, actors: t.List[str]) -> 'models.AppBskyActorGetProfiles.Response':
         """Get profiles.
 
         Args:
@@ -607,7 +552,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
         """
         return self.app.bsky.graph.unmute_actor(models.AppBskyGraphUnmuteActor.Data(actor=actor))
 
-    def resolve_handle(self, handle: str) -> models.ComAtprotoIdentityResolveHandle.Response:
+    def resolve_handle(self, handle: str) -> 'models.ComAtprotoIdentityResolveHandle.Response':
         """Resolve the handle.
 
         Args:
@@ -635,7 +580,7 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
         """
         return self.com.atproto.identity.update_handle(models.ComAtprotoIdentityUpdateHandle.Data(handle=handle))
 
-    def upload_blob(self, data: bytes) -> models.ComAtprotoRepoUploadBlob.Response:
+    def upload_blob(self, data: bytes) -> 'models.ComAtprotoRepoUploadBlob.Response':
         """Upload blob.
 
         Args:

@@ -1,6 +1,4 @@
-import typing as t
-
-from atproto import Client, models
+from atproto import Client
 
 
 def main() -> None:
@@ -9,22 +7,16 @@ def main() -> None:
     client.login('my-handle', 'my-password')
     handle = 'target-handle'
 
-    def _fetch(actor: str, cursor: t.Union[str, None]) -> models.AppBskyGraphGetFollows.Response:
-        params = models.AppBskyGraphGetFollows.Params(actor=actor, limit=100)
-        if cursor:
-            params.cursor = cursor
-
-        return client.app.bsky.graph.get_follows(params)
-
     cursor = None
     follows = []
 
     while True:
-        fetched = _fetch(handle, cursor)
+        fetched = client.get_follows(actor=handle, cursor=cursor)
+        follows = follows + fetched.follows
+
         if not fetched.cursor:
             break
 
-        follows = follows + fetched.follows
         cursor = fetched.cursor
 
     print(follows)

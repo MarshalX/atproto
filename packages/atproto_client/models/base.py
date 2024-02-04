@@ -55,6 +55,10 @@ class ResponseModelBase(ModelBase):
     pass
 
 
+class SugarResponseModelBase(ResponseModelBase):
+    pass
+
+
 class UnknownDict(AtProtocolBase):
     pass
 

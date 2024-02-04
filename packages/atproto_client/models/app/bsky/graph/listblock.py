@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+if t.TYPE_CHECKING:
+    from atproto_client import models
 from atproto_client.models import base
 
 
@@ -36,3 +38,25 @@ class Main(Record):
 
         warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
         super().__init__(**data)
+
+
+class GetRecordResponse(base.SugarResponseModelBase):
+    """Get record response for :obj:`models.AppBskyGraphListblock.Record`."""
+
+    uri: str  #: The URI of the record.
+    value: 'models.AppBskyGraphListblock.Record'  #: The record.
+    cid: t.Optional[str] = None  #: The CID of the record.
+
+
+class ListRecordsResponse(base.SugarResponseModelBase):
+    """List records response for :obj:`models.AppBskyGraphListblock.Record`."""
+
+    records: t.Dict[str, 'models.AppBskyGraphListblock.Record']  #: Map of URIs to records.
+    cursor: t.Optional[str] = None  #: Next page cursor.
+
+
+class CreateRecordResponse(base.SugarResponseModelBase):
+    """Create record response for :obj:`models.AppBskyGraphListblock.Record`."""
+
+    uri: str  #: The URI of the record.
+    cid: str  #: The CID of the record.
