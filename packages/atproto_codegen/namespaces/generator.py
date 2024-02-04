@@ -19,7 +19,7 @@ from atproto_codegen.consts import (
     PARAMS_MODEL,
 )
 from atproto_codegen.namespaces.builder import MethodInfo, ProcedureInfo, QueryInfo, RecordInfo, build_namespaces
-from atproto_codegen.namespaces.record_templates import (
+from atproto_codegen.record_templates import (
     RECORD_CREATE_METHOD_TEMPLATE,
     RECORD_DELETE_METHOD_TEMPLATE,
     RECORD_GET_METHOD_TEMPLATE,
@@ -59,7 +59,6 @@ def _get_namespace_imports() -> str:
     lines = [
         DISCLAIMER,
         'import typing as t',
-        'from dataclasses import dataclass',
         '',
         'from atproto_client import models',
         'from atproto_client.models.utils import get_or_create, get_response_model',

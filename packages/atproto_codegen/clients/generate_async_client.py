@@ -32,8 +32,6 @@ def gen_client(input_filename: str, output_filename: str) -> None:
     code = code.replace('self.com', 'await self.com')
     code = code.replace('self.app', 'await self.app')
 
-    code = code.replace('sync_ns', 'async_ns')
-
     for method in methods:
         code = code.replace(f'self.{method}', f'await self.{method}')
         code = code.replace(f'super().{method}', f'await super().{method}')

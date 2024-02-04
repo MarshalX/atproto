@@ -6,7 +6,6 @@
 
 
 import typing as t
-from dataclasses import dataclass
 
 from atproto_client import models
 from atproto_client.models.utils import get_or_create, get_response_model
@@ -33,15 +32,9 @@ class BskyNamespace(AsyncNamespaceBase):
 
 
 class ProfileRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyActorProfile.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyActorProfile.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyActorProfile.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -51,7 +44,7 @@ class ProfileRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyActorProfile.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -63,18 +56,11 @@ class ProfileRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyActorProfile.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyActorProfile.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyActorProfile.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyActorProfile.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -83,7 +69,7 @@ class ProfileRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyActorProfile.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -94,7 +80,7 @@ class ProfileRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyActorProfile.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -110,20 +96,13 @@ class ProfileRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyActorProfile.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyActorProfile.Record', record.value)
                 for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyActorProfile.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -133,7 +112,7 @@ class ProfileRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyActorProfile.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -145,7 +124,7 @@ class ProfileRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyActorProfile.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -166,7 +145,7 @@ class ProfileRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyActorProfile.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,
@@ -397,15 +376,9 @@ class ActorNamespace(AsyncNamespaceBase):
 
 
 class GeneratorRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedGenerator.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyFeedGenerator.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyFeedGenerator.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -415,7 +388,7 @@ class GeneratorRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyFeedGenerator.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -427,18 +400,11 @@ class GeneratorRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyFeedGenerator.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyFeedGenerator.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedGenerator.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyFeedGenerator.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -447,7 +413,7 @@ class GeneratorRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyFeedGenerator.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -458,7 +424,7 @@ class GeneratorRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyFeedGenerator.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -474,20 +440,13 @@ class GeneratorRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyFeedGenerator.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyFeedGenerator.Record', record.value)
                 for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedGenerator.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -497,7 +456,7 @@ class GeneratorRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyFeedGenerator.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -509,7 +468,7 @@ class GeneratorRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyFeedGenerator.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -530,7 +489,7 @@ class GeneratorRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyFeedGenerator.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,
@@ -569,15 +528,9 @@ class GeneratorRecord(AsyncRecordBase):
 
 
 class LikeRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedLike.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyFeedLike.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyFeedLike.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -587,7 +540,7 @@ class LikeRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyFeedLike.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -599,18 +552,11 @@ class LikeRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyFeedLike.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyFeedLike.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedLike.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyFeedLike.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -619,7 +565,7 @@ class LikeRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyFeedLike.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -630,7 +576,7 @@ class LikeRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyFeedLike.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -646,19 +592,12 @@ class LikeRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyFeedLike.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyFeedLike.Record', record.value) for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedLike.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -668,7 +607,7 @@ class LikeRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyFeedLike.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -680,7 +619,7 @@ class LikeRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyFeedLike.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -701,7 +640,7 @@ class LikeRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyFeedLike.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,
@@ -740,15 +679,9 @@ class LikeRecord(AsyncRecordBase):
 
 
 class PostRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedPost.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyFeedPost.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyFeedPost.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -758,7 +691,7 @@ class PostRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyFeedPost.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -770,18 +703,11 @@ class PostRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyFeedPost.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyFeedPost.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedPost.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyFeedPost.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -790,7 +716,7 @@ class PostRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyFeedPost.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -801,7 +727,7 @@ class PostRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyFeedPost.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -817,19 +743,12 @@ class PostRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyFeedPost.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyFeedPost.Record', record.value) for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedPost.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -839,7 +758,7 @@ class PostRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -851,7 +770,7 @@ class PostRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyFeedPost.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -872,7 +791,7 @@ class PostRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyFeedPost.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,
@@ -911,15 +830,9 @@ class PostRecord(AsyncRecordBase):
 
 
 class RepostRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedRepost.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyFeedRepost.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyFeedRepost.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -929,7 +842,7 @@ class RepostRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyFeedRepost.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -941,18 +854,11 @@ class RepostRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyFeedRepost.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyFeedRepost.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedRepost.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyFeedRepost.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -961,7 +867,7 @@ class RepostRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyFeedRepost.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -972,7 +878,7 @@ class RepostRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyFeedRepost.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -988,19 +894,12 @@ class RepostRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyFeedRepost.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyFeedRepost.Record', record.value) for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedRepost.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -1010,7 +909,7 @@ class RepostRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -1022,7 +921,7 @@ class RepostRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyFeedRepost.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1043,7 +942,7 @@ class RepostRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyFeedRepost.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,
@@ -1082,15 +981,9 @@ class RepostRecord(AsyncRecordBase):
 
 
 class ThreadgateRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyFeedThreadgate.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyFeedThreadgate.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyFeedThreadgate.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -1100,7 +993,7 @@ class ThreadgateRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyFeedThreadgate.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1112,18 +1005,11 @@ class ThreadgateRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyFeedThreadgate.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyFeedThreadgate.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyFeedThreadgate.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyFeedThreadgate.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -1132,7 +1018,7 @@ class ThreadgateRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyFeedThreadgate.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -1143,7 +1029,7 @@ class ThreadgateRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyFeedThreadgate.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1159,20 +1045,13 @@ class ThreadgateRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyFeedThreadgate.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyFeedThreadgate.Record', record.value)
                 for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyFeedThreadgate.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -1182,7 +1061,7 @@ class ThreadgateRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyFeedThreadgate.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -1194,7 +1073,7 @@ class ThreadgateRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyFeedThreadgate.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1215,7 +1094,7 @@ class ThreadgateRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyFeedThreadgate.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,
@@ -1657,15 +1536,9 @@ class FeedNamespace(AsyncNamespaceBase):
 
 
 class BlockRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphBlock.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyGraphBlock.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyGraphBlock.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -1675,7 +1548,7 @@ class BlockRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyGraphBlock.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1687,18 +1560,11 @@ class BlockRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyGraphBlock.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyGraphBlock.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphBlock.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyGraphBlock.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -1707,7 +1573,7 @@ class BlockRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyGraphBlock.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -1718,7 +1584,7 @@ class BlockRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyGraphBlock.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1734,19 +1600,12 @@ class BlockRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyGraphBlock.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyGraphBlock.Record', record.value) for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphBlock.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -1756,7 +1615,7 @@ class BlockRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyGraphBlock.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -1768,7 +1627,7 @@ class BlockRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyGraphBlock.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1789,7 +1648,7 @@ class BlockRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyGraphBlock.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,
@@ -1828,15 +1687,9 @@ class BlockRecord(AsyncRecordBase):
 
 
 class FollowRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphFollow.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyGraphFollow.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyGraphFollow.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -1846,7 +1699,7 @@ class FollowRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyGraphFollow.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1858,18 +1711,11 @@ class FollowRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyGraphFollow.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyGraphFollow.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphFollow.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyGraphFollow.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -1878,7 +1724,7 @@ class FollowRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyGraphFollow.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -1889,7 +1735,7 @@ class FollowRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyGraphFollow.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1905,20 +1751,13 @@ class FollowRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyGraphFollow.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyGraphFollow.Record', record.value)
                 for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphFollow.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -1928,7 +1767,7 @@ class FollowRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyGraphFollow.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -1940,7 +1779,7 @@ class FollowRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyGraphFollow.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -1961,7 +1800,7 @@ class FollowRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyGraphFollow.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,
@@ -2000,15 +1839,9 @@ class FollowRecord(AsyncRecordBase):
 
 
 class ListRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphList.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyGraphList.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyGraphList.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -2018,7 +1851,7 @@ class ListRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyGraphList.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -2030,18 +1863,11 @@ class ListRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyGraphList.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyGraphList.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphList.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyGraphList.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -2050,7 +1876,7 @@ class ListRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyGraphList.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -2061,7 +1887,7 @@ class ListRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyGraphList.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -2077,19 +1903,12 @@ class ListRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyGraphList.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyGraphList.Record', record.value) for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphList.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -2099,7 +1918,7 @@ class ListRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyGraphList.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -2111,7 +1930,7 @@ class ListRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyGraphList.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -2132,7 +1951,7 @@ class ListRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyGraphList.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,
@@ -2171,15 +1990,9 @@ class ListRecord(AsyncRecordBase):
 
 
 class ListblockRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphListblock.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyGraphListblock.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyGraphListblock.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -2189,7 +2002,7 @@ class ListblockRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyGraphListblock.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -2201,18 +2014,11 @@ class ListblockRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyGraphListblock.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyGraphListblock.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphListblock.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyGraphListblock.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -2221,7 +2027,7 @@ class ListblockRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyGraphListblock.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -2232,7 +2038,7 @@ class ListblockRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyGraphListblock.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -2248,20 +2054,13 @@ class ListblockRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyGraphListblock.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyGraphListblock.Record', record.value)
                 for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphListblock.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -2271,7 +2070,7 @@ class ListblockRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyGraphListblock.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -2283,7 +2082,7 @@ class ListblockRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyGraphListblock.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -2304,7 +2103,7 @@ class ListblockRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyGraphListblock.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,
@@ -2343,15 +2142,9 @@ class ListblockRecord(AsyncRecordBase):
 
 
 class ListitemRecord(AsyncRecordBase):
-    @dataclass
-    class GetRecordResponse:
-        """Get record response for :obj:`models.AppBskyGraphListitem.Record`."""
-
-        uri: str  #: The URI of the record.
-        value: 'models.AppBskyGraphListitem.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
-    async def get(self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any) -> GetRecordResponse:
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyGraphListitem.GetRecordResponse':
         """Get a record.
 
         Args:
@@ -2361,7 +2154,7 @@ class ListitemRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.AppBskyGraphListitem.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -2373,18 +2166,11 @@ class ListitemRecord(AsyncRecordBase):
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.AppBskyGraphListitem.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.AppBskyGraphListitem.Record', response_model.value),
         )
-
-    @dataclass
-    class ListRecordsResponse:
-        """List records response for :obj:`models.AppBskyGraphListitem.Record`."""
-
-        records: t.Dict[str, 'models.AppBskyGraphListitem.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
 
     async def list(
         self,
@@ -2393,7 +2179,7 @@ class ListitemRecord(AsyncRecordBase):
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.AppBskyGraphListitem.ListRecordsResponse':
         """List a range of records in a collection.
 
         Args:
@@ -2404,7 +2190,7 @@ class ListitemRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.AppBskyGraphListitem.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -2420,20 +2206,13 @@ class ListitemRecord(AsyncRecordBase):
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.AppBskyGraphListitem.ListRecordsResponse(
             records={
                 record.uri: t.cast('models.AppBskyGraphListitem.Record', record.value)
                 for record in response_model.records
             },
             cursor=response_model.cursor,
         )
-
-    @dataclass
-    class CreateRecordResponse:
-        """Create record response for :obj:`models.AppBskyGraphListitem.Record`."""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
 
     async def create(
         self,
@@ -2443,7 +2222,7 @@ class ListitemRecord(AsyncRecordBase):
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.AppBskyGraphListitem.CreateRecordResponse':
         """Create a new record.
 
         Args:
@@ -2455,7 +2234,7 @@ class ListitemRecord(AsyncRecordBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.AppBskyGraphListitem.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -2476,7 +2255,7 @@ class ListitemRecord(AsyncRecordBase):
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.AppBskyGraphListitem.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
 
     async def delete(
         self,

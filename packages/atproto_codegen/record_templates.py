@@ -4,14 +4,15 @@
 # in original code, TypeScript Omit<> is used for args instead of coping
 # this approach provides more clean usage on the user side with type hints
 
+RECORD_CREATE_RESPONSE_MODEL_TEMPLATE = """
+class CreateRecordResponse(base.SugarResponseModelBase):
+    \"""Create record response for :obj:`models.{record_import}.Record`.\"""
+
+    uri: str  #: The URI of the record.
+    cid: str  #: The CID of the record.
+"""
+
 RECORD_CREATE_METHOD_TEMPLATE = """
-    @dataclass
-    class CreateRecordResponse:
-        \"""Create record response for :obj:`models.{record_import}.Record`.\"""
-
-        uri: str  #: The URI of the record.
-        cid: str  #: The CID of the record.
-
     {d}def create(
         self,
         repo: str,
@@ -20,7 +21,7 @@ RECORD_CREATE_METHOD_TEMPLATE = """
         swap_commit: t.Optional[str] = None,
         validate: t.Optional[bool] = True,
         **kwargs: t.Any,
-    ) -> CreateRecordResponse:
+    ) -> 'models.{record_import}.CreateRecordResponse':
         \"""Create a new record.
 
         Args:
@@ -32,7 +33,7 @@ RECORD_CREATE_METHOD_TEMPLATE = """
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`CreateRecordResponse`: Create record response.
+            :obj:`models.{record_import}.CreateRecordResponse`: Create record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -53,21 +54,22 @@ RECORD_CREATE_METHOD_TEMPLATE = """
             **kwargs,
         )
         response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
-        return self.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+        return models.{record_import}.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+"""
+
+RECORD_GET_RESPONSE_MODEL_TEMPLATE = """
+class GetRecordResponse(base.SugarResponseModelBase):
+    \"""Get record response for :obj:`models.{record_import}.Record`.\"""
+
+    uri: str  #: The URI of the record.
+    value: 'models.{record_import}.Record'  #: The record.
+    cid: t.Optional[str] = None  #: The CID of the record.
 """
 
 RECORD_GET_METHOD_TEMPLATE = """
-    @dataclass
-    class GetRecordResponse:
-        \"""Get record response for :obj:`models.{record_import}.Record`.\"""
-
-        uri: str  #: The URI of the record.
-        value: 'models.{record_import}.Record'  #: The record.
-        cid: t.Optional[str] = None  #: The CID of the record.
-
     {d}def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
-    ) -> GetRecordResponse:
+    ) -> 'models.{record_import}.GetRecordResponse':
         \"""Get a record.
 
         Args:
@@ -77,7 +79,7 @@ RECORD_GET_METHOD_TEMPLATE = """
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`GetRecordResponse`: Get record response.
+            :obj:`models.{record_import}.GetRecordResponse`: Get record response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -92,21 +94,22 @@ RECORD_GET_METHOD_TEMPLATE = """
             'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
-        return self.GetRecordResponse(
+        return models.{record_import}.GetRecordResponse(
             uri=response_model.uri,
             cid=response_model.cid,
             value=t.cast('models.{record_import}.Record', response_model.value),
         )
 """
 
+RECORD_LIST_RESPONSE_MODEL_TEMPLATE = """
+class ListRecordsResponse(base.SugarResponseModelBase):
+    \"""List records response for :obj:`models.{record_import}.Record`.\"""
+
+    records: t.Dict[str, 'models.{record_import}.Record']  #: Map of URIs to records.
+    cursor: t.Optional[str] = None  #: Next page cursor.
+"""
+
 RECORD_LIST_METHOD_TEMPLATE = """
-    @dataclass
-    class ListRecordsResponse:
-        \"""List records response for :obj:`models.{record_import}.Record`.\"""
-
-        records: t.Dict[str, 'models.{record_import}.Record']  #: Map of URIs to records.
-        cursor: t.Optional[str] = None  #: Next page cursor.
-
     {d}def list(
         self,
         repo: str,
@@ -114,7 +117,7 @@ RECORD_LIST_METHOD_TEMPLATE = """
         limit: t.Optional[int] = None,
         reverse: t.Optional[bool] = None,
         **kwargs: t.Any,
-    ) -> ListRecordsResponse:
+    ) -> 'models.{record_import}.ListRecordsResponse':
         \"""List a range of records in a collection.
 
         Args:
@@ -125,7 +128,7 @@ RECORD_LIST_METHOD_TEMPLATE = """
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`ListRecordsResponse`: List records response.
+            :obj:`models.{record_import}.ListRecordsResponse`: List records response.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -141,7 +144,7 @@ RECORD_LIST_METHOD_TEMPLATE = """
             'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
         )
         response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
-        return self.ListRecordsResponse(
+        return models.{record_import}.ListRecordsResponse(
             records={{
                 record.uri: t.cast('models.{record_import}.Record', record.value)
                 for record in response_model.records
