@@ -264,6 +264,7 @@ The model classes in the "models" aliases could be:
 - Data model
 - Params model
 - Response model
+- Sugar response model
 - Record model
 - Type model
 
