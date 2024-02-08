@@ -25,3 +25,4 @@ Submodules
    atproto_client.client.base
    atproto_client.client.client
    atproto_client.client.raw
+   atproto_client.client.session
