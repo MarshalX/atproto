@@ -1,45 +1,51 @@
+import asyncio
 import typing as t
-from dataclasses import dataclass
 from datetime import timedelta
 
-import typing_extensions as te
 from atproto_server.auth.jwt import get_jwt_payload
+
+from atproto_client.client.session import (
+    AsyncSessionChangeCallback,
+    SessionChangeCallback,
+    SessionChangeEvent,
+    SessionResponse,
+    SessionString,
+)
 
 if t.TYPE_CHECKING:
     from atproto_server.auth.jwt import JwtPayload
 
-    from atproto_client import models
+
+class SessionDispatchMixin:
+    def __init__(self, *args, **kwargs: t.Any) -> None:
+        super().__init__(*args, **kwargs)
+
+        self._on_session_change_callbacks: t.List[SessionChangeCallback] = []
+        self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
+
+    def on_session_change(self, callback: SessionChangeCallback) -> None:
+        self._on_session_change_callbacks.append(callback)
+
+    def _call_on_session_change_callbacks(self, event: SessionChangeEvent, session: SessionString) -> None:
+        for on_session_change_callback in self._on_session_change_callbacks:
+            on_session_change_callback(event, session)
 
 
-@dataclass
-class SessionString:
-    access_jwt: str
-    refresh_jwt: str
-    did: str
-    handle: str
+class AsyncSessionDispatchMixin:
+    def __init__(self, *args, **kwargs: t.Any) -> None:
+        super().__init__(*args, **kwargs)
 
-    _SESSION_STRING_SEPARATOR: te.Final[te.Literal[':::']] = ':::'
+        self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
 
-    def encode(self) -> str:
-        payload = [
-            self.handle,
-            self.did,
-            self.access_jwt,
-            self.refresh_jwt,
-        ]
-        return self._SESSION_STRING_SEPARATOR.join(payload)
+    def on_session_change(self, callback: AsyncSessionChangeCallback) -> None:
+        self._on_session_change_async_callbacks.append(callback)
 
-    @classmethod
-    def decode(cls, string: str) -> 'SessionString':
-        handle, did, access_jwt, refresh_jwt = string.split(cls._SESSION_STRING_SEPARATOR)
-        return cls(access_jwt, refresh_jwt, did, handle)
+    async def _call_on_session_change_callbacks(self, event: SessionChangeEvent, session: SessionString) -> None:
+        coroutines = []
+        for on_session_change_async_callback in self._on_session_change_async_callbacks:
+            coroutines.append(on_session_change_async_callback(event, session))
 
-
-SessionResponse: te.TypeAlias = t.Union[
-    'models.ComAtprotoServerCreateSession.Response',
-    'models.ComAtprotoServerRefreshSession.Response',
-    'SessionString',
-]
+        await asyncio.gather(*coroutines)
 
 
 class SessionMethodsMixin:
@@ -56,11 +62,11 @@ class SessionMethodsMixin:
 
     def _should_refresh_session(self) -> bool:
         expired_at = self.get_time_from_timestamp(self._access_jwt_payload.exp)
-        expired_at = expired_at - timedelta(minutes=15)  # let's update the token a bit later than required
+        expired_at = expired_at - timedelta(minutes=15)  # let's update the token a bit earlier than required
 
         return self.get_current_time() > expired_at
 
-    def _set_session(self, session: SessionResponse) -> None:
+    def _set_session_common(self, session: SessionResponse) -> None:
         self._access_jwt = session.access_jwt
         self._access_jwt_payload = get_jwt_payload(session.access_jwt)
 
@@ -82,11 +88,6 @@ class SessionMethodsMixin:
 
     def _set_auth_headers(self, token: str) -> None:
         self.request.set_additional_headers(self._get_auth_headers(token))
-
-    def _import_session_string(self, string: str) -> SessionString:
-        session = SessionString.decode(string)
-        self._set_session(session)
-        return session
 
     def export_session_string(self) -> str:
         """Export session string.

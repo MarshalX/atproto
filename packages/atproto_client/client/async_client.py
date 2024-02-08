@@ -12,7 +12,9 @@ from atproto_core.uri import AtUri
 from atproto_client import models
 from atproto_client.client.async_raw import AsyncClientRaw
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
+from atproto_client.client.methods_mixin.session import AsyncSessionDispatchMixin
 from atproto_client.client.methods_mixin.strong_ref_arg_backward_compatibility import _StrongRefArgBackwardCompatibility
+from atproto_client.client.session import SessionChangeEvent, SessionResponse, SessionString
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
 from atproto_client.utils import TextBuilder
 
@@ -21,7 +23,9 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
-class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
+class AsyncClient(
+    _StrongRefArgBackwardCompatibility, AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw
+):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args, **kwargs: t.Any) -> None:
@@ -42,21 +46,30 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
 
         return await super()._invoke(invoke_type, **kwargs)
 
+    async def _set_session(self, event: SessionChangeEvent, session: SessionResponse) -> None:
+        self._set_session_common(session)
+        await self._call_on_session_change_callbacks(event, self._session.copy())
+
     async def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
         session = await self.com.atproto.server.create_session(
             models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
         )
-        self._set_session(session)
-
+        await self._set_session(SessionChangeEvent.CREATE, session)
         return session
 
     async def _refresh_and_set_session(self) -> 'models.ComAtprotoServerRefreshSession.Response':
         refresh_session = await self.com.atproto.server.refresh_session(
             headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
         )
-        self._set_session(refresh_session)
+        await self._set_session(SessionChangeEvent.REFRESH, refresh_session)
 
         return refresh_session
+
+    async def _import_session_string(self, session_string: str) -> SessionString:
+        import_session = SessionString.decode(session_string)
+        await self._set_session(SessionChangeEvent.IMPORT, import_session)
+
+        return import_session
 
     async def login(
         self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
@@ -78,7 +91,7 @@ class AsyncClient(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeM
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         if session_string:
-            session = self._import_session_string(session_string)
+            session = await self._import_session_string(session_string)
         elif login and password:
             session = await self._get_and_set_session(login, password)
         else:
