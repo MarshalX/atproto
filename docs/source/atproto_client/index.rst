@@ -15,4 +15,5 @@ Submodules
    clients
    namespace
    models
+   auth
    utils/index

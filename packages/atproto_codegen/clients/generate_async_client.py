@@ -14,8 +14,11 @@ def gen_client(input_filename: str, output_filename: str) -> None:
     methods = [
         'send_post',
         'send_image',
+        '_set_session',
         '_get_and_set_session',
         '_refresh_and_set_session',
+        '_import_session_string',
+        '_call_on_session_change_callbacks',
         '_invoke',
     ]
 
@@ -23,6 +26,7 @@ def gen_client(input_filename: str, output_filename: str) -> None:
     code = code.replace('client.raw', 'client.async_raw')
     code = code.replace('class Client', 'class AsyncClient')
     code = code.replace('ClientRaw', 'AsyncClientRaw')
+    code = code.replace('SessionDispatchMixin', 'AsyncSessionDispatchMixin')
 
     code = code.replace('with self', 'async with self')
 
@@ -33,8 +37,8 @@ def gen_client(input_filename: str, output_filename: str) -> None:
     code = code.replace('self.app', 'await self.app')
 
     for method in methods:
-        code = code.replace(f'self.{method}', f'await self.{method}')
-        code = code.replace(f'super().{method}', f'await super().{method}')
+        code = code.replace(f'self.{method}(', f'await self.{method}(')
+        code = code.replace(f'super().{method}(', f'await super().{method}(')
 
     code = DISCLAIMER + code
 

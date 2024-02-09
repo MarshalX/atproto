@@ -5,8 +5,10 @@ from atproto_core.uri import AtUri
 
 from atproto_client import models
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
+from atproto_client.client.methods_mixin.session import SessionDispatchMixin
 from atproto_client.client.methods_mixin.strong_ref_arg_backward_compatibility import _StrongRefArgBackwardCompatibility
 from atproto_client.client.raw import ClientRaw
+from atproto_client.client.session import Session, SessionEvent, SessionResponse
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
 from atproto_client.utils import TextBuilder
 
@@ -15,7 +17,9 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
-class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
+class Client(
+    _StrongRefArgBackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, ClientRaw
+):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args, **kwargs: t.Any) -> None:
@@ -36,21 +40,30 @@ class Client(_StrongRefArgBackwardCompatibility, SessionMethodsMixin, TimeMethod
 
         return super()._invoke(invoke_type, **kwargs)
 
+    def _set_session(self, event: SessionEvent, session: SessionResponse) -> None:
+        self._set_session_common(session)
+        self._call_on_session_change_callbacks(event, self._session.copy())
+
     def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
         session = self.com.atproto.server.create_session(
             models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
         )
-        self._set_session(session)
-
+        self._set_session(SessionEvent.CREATE, session)
         return session
 
     def _refresh_and_set_session(self) -> 'models.ComAtprotoServerRefreshSession.Response':
         refresh_session = self.com.atproto.server.refresh_session(
             headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
         )
-        self._set_session(refresh_session)
+        self._set_session(SessionEvent.REFRESH, refresh_session)
 
         return refresh_session
+
+    def _import_session_string(self, session_string: str) -> Session:
+        import_session = Session.decode(session_string)
+        self._set_session(SessionEvent.IMPORT, import_session)
+
+        return import_session
 
     def login(
         self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
