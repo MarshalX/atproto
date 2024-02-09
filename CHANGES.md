@@ -1,5 +1,14 @@
 # Change Log
 
+## Version 0.0.41
+
+**09.02.2024**
+
+**[🔥 New documentation page about auth and session reusing!](https://atproto.blue/en/latest/atproto_client/auth.html)**
+
+* Add on session change callback by @MarshalX in https://github.com/MarshalX/atproto/pull/269
+* Update lexicons fetched from e4ec7af committed 2024-02-06T00:10:44Z by @MarshalX in https://github.com/MarshalX/atproto/pull/271
+
 ## Version 0.0.40
 
 **04.02.2024**
