@@ -43,6 +43,7 @@ class ModEventView(base.ModelBase):
             'models.ComAtprotoAdminDefs.ModEventEscalate',
             'models.ComAtprotoAdminDefs.ModEventMute',
             'models.ComAtprotoAdminDefs.ModEventEmail',
+            'models.ComAtprotoAdminDefs.ModEventResolveAppeal',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -75,6 +76,7 @@ class ModEventViewDetail(base.ModelBase):
             'models.ComAtprotoAdminDefs.ModEventAcknowledge',
             'models.ComAtprotoAdminDefs.ModEventEscalate',
             'models.ComAtprotoAdminDefs.ModEventMute',
+            'models.ComAtprotoAdminDefs.ModEventEmail',
             'models.ComAtprotoAdminDefs.ModEventResolveAppeal',
         ],
         Field(discriminator='py_type'),
