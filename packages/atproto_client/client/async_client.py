@@ -14,7 +14,7 @@ from atproto_client.client.async_raw import AsyncClientRaw
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
 from atproto_client.client.methods_mixin.session import AsyncSessionDispatchMixin
 from atproto_client.client.methods_mixin.strong_ref_arg_backward_compatibility import _StrongRefArgBackwardCompatibility
-from atproto_client.client.session import SessionChangeEvent, SessionResponse, SessionString
+from atproto_client.client.session import Session, SessionEvent, SessionResponse
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
 from atproto_client.utils import TextBuilder
 
@@ -46,7 +46,7 @@ class AsyncClient(
 
         return await super()._invoke(invoke_type, **kwargs)
 
-    async def _set_session(self, event: SessionChangeEvent, session: SessionResponse) -> None:
+    async def _set_session(self, event: SessionEvent, session: SessionResponse) -> None:
         self._set_session_common(session)
         await self._call_on_session_change_callbacks(event, self._session.copy())
 
@@ -54,20 +54,20 @@ class AsyncClient(
         session = await self.com.atproto.server.create_session(
             models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
         )
-        await self._set_session(SessionChangeEvent.CREATE, session)
+        await self._set_session(SessionEvent.CREATE, session)
         return session
 
     async def _refresh_and_set_session(self) -> 'models.ComAtprotoServerRefreshSession.Response':
         refresh_session = await self.com.atproto.server.refresh_session(
             headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
         )
-        await self._set_session(SessionChangeEvent.REFRESH, refresh_session)
+        await self._set_session(SessionEvent.REFRESH, refresh_session)
 
         return refresh_session
 
-    async def _import_session_string(self, session_string: str) -> SessionString:
-        import_session = SessionString.decode(session_string)
-        await self._set_session(SessionChangeEvent.IMPORT, import_session)
+    async def _import_session_string(self, session_string: str) -> Session:
+        import_session = Session.decode(session_string)
+        await self._set_session(SessionEvent.IMPORT, import_session)
 
         return import_session
 

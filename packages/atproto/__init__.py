@@ -1,4 +1,4 @@
-from atproto_client import AsyncClient, Client, SessionChangeEvent, SessionString, models
+from atproto_client import AsyncClient, Client, Session, SessionEvent, models
 from atproto_client import utils as client_utils
 from atproto_core.car import CAR
 from atproto_core.cid import CID, CIDType
@@ -34,8 +34,8 @@ __all__ = [
     # client
     'AsyncClient',
     'Client',
-    'SessionChangeEvent',
-    'SessionString',
+    'SessionEvent',
+    'Session',
     'client_utils',
     'models',
     # core

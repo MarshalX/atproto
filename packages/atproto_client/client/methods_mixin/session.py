@@ -6,10 +6,10 @@ from atproto_server.auth.jwt import get_jwt_payload
 
 from atproto_client.client.session import (
     AsyncSessionChangeCallback,
+    Session,
     SessionChangeCallback,
-    SessionChangeEvent,
+    SessionEvent,
     SessionResponse,
-    SessionString,
 )
 
 if t.TYPE_CHECKING:
@@ -24,9 +24,28 @@ class SessionDispatchMixin:
         self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
 
     def on_session_change(self, callback: SessionChangeCallback) -> None:
+        """Register a callback for session change event.
+
+        Args:
+            callback: A callback to be called when the session changes.
+                The callback must accept two arguments: event and session.
+
+        Example:
+            >>> from atproto import Client, SessionEvent, Session
+            >>>
+            >>> client = Client()
+            >>>
+            >>> def on_session_change(event: SessionEvent, session: Session):
+            >>>     print(event, session)
+            >>>
+            >>> client.on_session_change(on_session_change)
+
+        Returns:
+            :obj:`None`
+        """
         self._on_session_change_callbacks.append(callback)
 
-    def _call_on_session_change_callbacks(self, event: SessionChangeEvent, session: SessionString) -> None:
+    def _call_on_session_change_callbacks(self, event: SessionEvent, session: Session) -> None:
         for on_session_change_callback in self._on_session_change_callbacks:
             on_session_change_callback(event, session)
 
@@ -38,9 +57,35 @@ class AsyncSessionDispatchMixin:
         self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
 
     def on_session_change(self, callback: AsyncSessionChangeCallback) -> None:
+        """Register a callback for session change event.
+
+        Args:
+            callback: A callback to be called when the session changes.
+                The callback must accept two arguments: event and session.
+
+        Note:
+            Possible events: `SessionEvent.IMPORT`, `SessionEvent.CREATE`, `SessionEvent.REFRESH`.
+
+        Tip:
+            You should save the session string to persistent storage
+            on `SessionEvent.CREATE` and `SessionEvent.REFRESN` event.
+
+        Example:
+            >>> from atproto import AsyncClient, SessionEvent, Session
+            >>>
+            >>> client = AsyncClient()
+            >>>
+            >>> async def on_session_change(event: SessionEvent, session: Session):
+            >>>     print(event, session)
+            >>>
+            >>> client.on_session_change(on_session_change)
+
+        Returns:
+            :obj:`None`
+        """
         self._on_session_change_async_callbacks.append(callback)
 
-    async def _call_on_session_change_callbacks(self, event: SessionChangeEvent, session: SessionString) -> None:
+    async def _call_on_session_change_callbacks(self, event: SessionEvent, session: Session) -> None:
         coroutines = []
         for on_session_change_async_callback in self._on_session_change_async_callbacks:
             coroutines.append(on_session_change_async_callback(event, session))
@@ -58,7 +103,7 @@ class SessionMethodsMixin:
         self._refresh_jwt: t.Optional[str] = None
         self._refresh_jwt_payload: t.Optional['JwtPayload'] = None
 
-        self._session: t.Optional[SessionString] = None
+        self._session: t.Optional[Session] = None
 
     def _should_refresh_session(self) -> bool:
         expired_at = self.get_time_from_timestamp(self._access_jwt_payload.exp)
@@ -73,7 +118,7 @@ class SessionMethodsMixin:
         self._refresh_jwt = session.refresh_jwt
         self._refresh_jwt_payload = get_jwt_payload(session.refresh_jwt)
 
-        self._session = SessionString(
+        self._session = Session(
             access_jwt=session.access_jwt,
             refresh_jwt=session.refresh_jwt,
             did=session.did,
@@ -101,6 +146,11 @@ class SessionMethodsMixin:
             Rate limited by handle.
             30/5 min, 300/day.
 
+        Attention:
+            You must export session at the end of the Client`s life cycle!
+            Alternatively, you can subscribe to the session change event.
+            Use :py:attr:`~on_session_change` to register handler.
+
         Example:
             >>> from atproto import Client
             >>> # the first time login with login and password
@@ -115,4 +165,4 @@ class SessionMethodsMixin:
         Returns:
             :obj:`str`: Session string.
         """
-        return self._session.encode()
+        return self._session.export()
