@@ -18,21 +18,25 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.moderation.createReport`."""
 
-    reason_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
+    reason_type: (
+        'models.ComAtprotoModerationDefs.ReasonType'
+    )  #: Indicates the broad category of violation the report is for.
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    reason: t.Optional[str] = None  #: Reason.
+    reason: t.Optional[str] = None  #: Additional context about the content and violation.
 
 
 class DataDict(te.TypedDict):
-    reason_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
+    reason_type: (
+        'models.ComAtprotoModerationDefs.ReasonType'
+    )  #: Indicates the broad category of violation the report is for.
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    reason: te.NotRequired[t.Optional[str]]  #: Reason.
+    reason: te.NotRequired[t.Optional[str]]  #: Additional context about the content and violation.
 
 
 class Response(base.ResponseModelBase):

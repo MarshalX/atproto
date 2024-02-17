@@ -27,7 +27,7 @@ class Record(base.RecordModelBase):
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
-    ] = None  #: Labels.
+    ] = None  #: Self-label values.
 
     py_type: te.Literal['app.bsky.feed.generator'] = Field(
         default='app.bsky.feed.generator', alias='$type', frozen=True

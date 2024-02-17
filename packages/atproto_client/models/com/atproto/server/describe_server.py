@@ -18,10 +18,14 @@ from atproto_client.models import base
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.server.describeServer`."""
 
-    available_user_domains: t.List[str]  #: Available user domains.
-    invite_code_required: t.Optional[bool] = None  #: Invite code required.
-    links: t.Optional['models.ComAtprotoServerDescribeServer.Links'] = None  #: Links.
-    phone_verification_required: t.Optional[bool] = None  #: Phone verification required.
+    available_user_domains: t.List[str]  #: List of domain suffixes that can be used in account handles.
+    invite_code_required: t.Optional[
+        bool
+    ] = None  #: If true, an invite code must be supplied to create an account on this instance.
+    links: t.Optional['models.ComAtprotoServerDescribeServer.Links'] = None  #: URLs of service policy documents.
+    phone_verification_required: t.Optional[
+        bool
+    ] = None  #: If true, a phone verification token must be supplied to create an account on this instance.
 
 
 class Links(base.ModelBase):

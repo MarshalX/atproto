@@ -18,15 +18,17 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getLikes`."""
 
-    uri: str  #: Uri.
-    cid: t.Optional[str] = None  #: Cid.
+    uri: str  #: AT-URI of the subject (eg, a post record).
+    cid: t.Optional[str] = None  #: CID of the subject record (aka, specific version of record), to filter likes.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
 class ParamsDict(te.TypedDict):
-    uri: str  #: Uri.
-    cid: te.NotRequired[t.Optional[str]]  #: Cid.
+    uri: str  #: AT-URI of the subject (eg, a post record).
+    cid: te.NotRequired[
+        t.Optional[str]
+    ]  #: CID of the subject record (aka, specific version of record), to filter likes.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 

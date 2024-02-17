@@ -48,7 +48,7 @@ class PostView(base.ModelBase):
 
 
 class ViewerState(base.ModelBase):
-    """Definition model for :obj:`app.bsky.feed.defs`."""
+    """Definition model for :obj:`app.bsky.feed.defs`. Metadata about the requesting account's relationship with the subject content. Only has meaningful content for authed requests."""
 
     like: t.Optional[str] = None  #: Like.
     reply_disabled: t.Optional[bool] = None  #: Reply disabled.

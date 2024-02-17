@@ -14,12 +14,12 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.getBlob`."""
 
     cid: str  #: The CID of the blob to fetch.
-    did: str  #: The DID of the repo.
+    did: str  #: The DID of the account.
 
 
 class ParamsDict(te.TypedDict):
     cid: str  #: The CID of the blob to fetch.
-    did: str  #: The DID of the repo.
+    did: str  #: The DID of the account.
 
 
 #: Response raw data type.

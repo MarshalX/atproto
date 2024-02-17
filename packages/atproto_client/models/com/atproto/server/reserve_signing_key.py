@@ -15,14 +15,14 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.reserveSigningKey`."""
 
-    did: t.Optional[str] = None  #: The did to reserve a new did:key for.
+    did: t.Optional[str] = None  #: The DID to reserve a key for.
 
 
 class DataDict(te.TypedDict):
-    did: te.NotRequired[t.Optional[str]]  #: The did to reserve a new did:key for.
+    did: te.NotRequired[t.Optional[str]]  #: The DID to reserve a key for.
 
 
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.server.reserveSigningKey`."""
 
-    signing_key: str  #: Public signing key in the form of a did:key.
+    signing_key: str  #: The public key for the reserved signing key, in did:key serialization.

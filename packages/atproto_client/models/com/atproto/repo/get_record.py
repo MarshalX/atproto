@@ -19,7 +19,7 @@ class Params(base.ParamsModelBase):
 
     collection: str  #: The NSID of the record collection.
     repo: str  #: The handle or DID of the repo.
-    rkey: str  #: The key of the record.
+    rkey: str  #: The Record Key.
     cid: t.Optional[
         str
     ] = None  #: The CID of the version of the record. If not specified, then return the most recent version.
@@ -28,7 +28,7 @@ class Params(base.ParamsModelBase):
 class ParamsDict(te.TypedDict):
     collection: str  #: The NSID of the record collection.
     repo: str  #: The handle or DID of the repo.
-    rkey: str  #: The key of the record.
+    rkey: str  #: The Record Key.
     cid: te.NotRequired[
         t.Optional[str]
     ]  #: The CID of the version of the record. If not specified, then return the most recent version.

@@ -19,7 +19,7 @@ class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.graph.listblock`."""
 
     created_at: str  #: Created at.
-    subject: str  #: Subject.
+    subject: str  #: Reference (AT-URI) to the mod list record.
 
     py_type: te.Literal['app.bsky.graph.listblock'] = Field(
         default='app.bsky.graph.listblock', alias='$type', frozen=True

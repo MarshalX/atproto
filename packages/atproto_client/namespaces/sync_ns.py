@@ -195,7 +195,7 @@ class ActorNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyActorGetPreferences.Response':
-        """Get private preferences attached to the account.
+        """Get private preferences attached to the current account. Expected use is synchronization between multiple devices, and import/export during account migration. Requires auth.
 
         Args:
             params: Parameters.
@@ -220,7 +220,7 @@ class ActorNamespace(NamespaceBase):
         params: t.Union[models.AppBskyActorGetProfile.Params, models.AppBskyActorGetProfile.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
-        """Get detailed profile view of an actor.
+        """Get detailed profile view of an actor. Does not require auth, but contains relevant metadata with auth.
 
         Args:
             params: Parameters.
@@ -272,7 +272,7 @@ class ActorNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyActorGetSuggestions.Response':
-        """Get a list of suggested actors, used for discovery.
+        """Get a list of suggested actors. Expected use is discovery of accounts to follow during new account onboarding.
 
         Args:
             params: Parameters.
@@ -324,7 +324,7 @@ class ActorNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyActorSearchActors.Response':
-        """Find actors (profiles) matching search criteria.
+        """Find actors (profiles) matching search criteria. Does not require auth.
 
         Args:
             params: Parameters.
@@ -353,7 +353,7 @@ class ActorNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyActorSearchActorsTypeahead.Response':
-        """Find actor suggestions for a prefix search term.
+        """Find actor suggestions for a prefix search term. Expected use is for auto-completion during text field entry. Does not require auth.
 
         Args:
             params: Parameters.
@@ -1142,7 +1142,7 @@ class FeedNamespace(NamespaceBase):
         self.threadgate = ThreadgateRecord(self._client)
 
     def describe_feed_generator(self, **kwargs: t.Any) -> 'models.AppBskyFeedDescribeFeedGenerator.Response':
-        """Get information about a feed generator, including policies and offered feed URIs.
+        """Get information about a feed generator, including policies and offered feed URIs. Does not require auth; implemented by Feed Generator services (not App View).
 
         Args:
             **kwargs: Arbitrary arguments to HTTP request.
@@ -1163,7 +1163,7 @@ class FeedNamespace(NamespaceBase):
         params: t.Union[models.AppBskyFeedGetActorFeeds.Params, models.AppBskyFeedGetActorFeeds.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedGetActorFeeds.Response':
-        """Get a list of feeds created by the actor.
+        """Get a list of feeds (feed generator records) created by the actor (in the actor's repo).
 
         Args:
             params: Parameters.
@@ -1188,7 +1188,7 @@ class FeedNamespace(NamespaceBase):
         params: t.Union[models.AppBskyFeedGetActorLikes.Params, models.AppBskyFeedGetActorLikes.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedGetActorLikes.Response':
-        """Get a list of posts liked by an actor.
+        """Get a list of posts liked by an actor. Does not require auth.
 
         Args:
             params: Parameters.
@@ -1213,7 +1213,7 @@ class FeedNamespace(NamespaceBase):
         params: t.Union[models.AppBskyFeedGetAuthorFeed.Params, models.AppBskyFeedGetAuthorFeed.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedGetAuthorFeed.Response':
-        """Get a view of an actor's feed.
+        """Get a view of an actor's 'author feed' (post and reposts by the author). Does not require auth.
 
         Args:
             params: Parameters.
@@ -1236,7 +1236,7 @@ class FeedNamespace(NamespaceBase):
     def get_feed(
         self, params: t.Union[models.AppBskyFeedGetFeed.Params, models.AppBskyFeedGetFeed.ParamsDict], **kwargs: t.Any
     ) -> 'models.AppBskyFeedGetFeed.Response':
-        """Get a hydrated feed from an actor's selected feed generator.
+        """Get a hydrated feed from an actor's selected feed generator. Implemented by App View.
 
         Args:
             params: Parameters.
@@ -1261,7 +1261,7 @@ class FeedNamespace(NamespaceBase):
         params: t.Union[models.AppBskyFeedGetFeedGenerator.Params, models.AppBskyFeedGetFeedGenerator.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedGetFeedGenerator.Response':
-        """Get information about a feed generator.
+        """Get information about a feed generator. Implemented by AppView.
 
         Args:
             params: Parameters.
@@ -1313,7 +1313,7 @@ class FeedNamespace(NamespaceBase):
         params: t.Union[models.AppBskyFeedGetFeedSkeleton.Params, models.AppBskyFeedGetFeedSkeleton.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedGetFeedSkeleton.Response':
-        """Get a skeleton of a feed provided by a feed generator.
+        """Get a skeleton of a feed provided by a feed generator. Auth is optional, depending on provider requirements, and provides the DID of the requester. Implemented by Feed Generator Service.
 
         Args:
             params: Parameters.
@@ -1336,7 +1336,7 @@ class FeedNamespace(NamespaceBase):
     def get_likes(
         self, params: t.Union[models.AppBskyFeedGetLikes.Params, models.AppBskyFeedGetLikes.ParamsDict], **kwargs: t.Any
     ) -> 'models.AppBskyFeedGetLikes.Response':
-        """Get the list of likes.
+        """Get like records which reference a subject (by AT-URI and CID).
 
         Args:
             params: Parameters.
@@ -1361,7 +1361,7 @@ class FeedNamespace(NamespaceBase):
         params: t.Union[models.AppBskyFeedGetListFeed.Params, models.AppBskyFeedGetListFeed.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedGetListFeed.Response':
-        """Get a view of a recent posts from actors in a list.
+        """Get a feed of recent posts from a list (posts and reposts from any actors on the list). Does not require auth.
 
         Args:
             params: Parameters.
@@ -1386,7 +1386,7 @@ class FeedNamespace(NamespaceBase):
         params: t.Union[models.AppBskyFeedGetPostThread.Params, models.AppBskyFeedGetPostThread.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedGetPostThread.Response':
-        """Get posts in a thread.
+        """Get posts in a thread. Does not require auth, but additional metadata and filtering will be applied for authed requests.
 
         Args:
             params: Parameters.
@@ -1409,7 +1409,7 @@ class FeedNamespace(NamespaceBase):
     def get_posts(
         self, params: t.Union[models.AppBskyFeedGetPosts.Params, models.AppBskyFeedGetPosts.ParamsDict], **kwargs: t.Any
     ) -> 'models.AppBskyFeedGetPosts.Response':
-        """Get a view of an actor's feed.
+        """Gets post views for a specified list of posts (by AT-URI). This is sometimes referred to as 'hydrating' a 'feed skeleton'.
 
         Args:
             params: Parameters.
@@ -1434,7 +1434,7 @@ class FeedNamespace(NamespaceBase):
         params: t.Union[models.AppBskyFeedGetRepostedBy.Params, models.AppBskyFeedGetRepostedBy.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedGetRepostedBy.Response':
-        """Get a list of reposts.
+        """Get a list of reposts for a given post.
 
         Args:
             params: Parameters.
@@ -1461,7 +1461,7 @@ class FeedNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedGetSuggestedFeeds.Response':
-        """Get a list of suggested feeds for the viewer.
+        """Get a list of suggested feeds (feed generators) for the requesting account.
 
         Args:
             params: Parameters.
@@ -1489,7 +1489,7 @@ class FeedNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedGetTimeline.Response':
-        """Get a view of the actor's home timeline.
+        """Get a view of the requesting account's home timeline. This is expected to be some form of reverse-chronological feed.
 
         Args:
             params: Parameters.
@@ -1514,7 +1514,7 @@ class FeedNamespace(NamespaceBase):
         params: t.Union[models.AppBskyFeedSearchPosts.Params, models.AppBskyFeedSearchPosts.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedSearchPosts.Response':
-        """Find posts matching search criteria.
+        """Find posts matching search criteria, returning views of those posts.
 
         Args:
             params: Parameters.
@@ -2309,7 +2309,7 @@ class GraphNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyGraphGetBlocks.Response':
-        """Get a list of who the actor is blocking.
+        """Enumerates which accounts the requesting account is currently blocking. Requires auth.
 
         Args:
             params: Parameters.
@@ -2334,7 +2334,7 @@ class GraphNamespace(NamespaceBase):
         params: t.Union[models.AppBskyGraphGetFollowers.Params, models.AppBskyGraphGetFollowers.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyGraphGetFollowers.Response':
-        """Get a list of an actor's followers.
+        """Enumerates accounts which follow a specified account (actor).
 
         Args:
             params: Parameters.
@@ -2359,7 +2359,7 @@ class GraphNamespace(NamespaceBase):
         params: t.Union[models.AppBskyGraphGetFollows.Params, models.AppBskyGraphGetFollows.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyGraphGetFollows.Response':
-        """Get a list of who the actor follows.
+        """Enumerates accounts which a specified account (actor) follows.
 
         Args:
             params: Parameters.
@@ -2382,7 +2382,7 @@ class GraphNamespace(NamespaceBase):
     def get_list(
         self, params: t.Union[models.AppBskyGraphGetList.Params, models.AppBskyGraphGetList.ParamsDict], **kwargs: t.Any
     ) -> 'models.AppBskyGraphGetList.Response':
-        """Get a list of actors.
+        """Gets a 'view' (with additional context) of a specified list.
 
         Args:
             params: Parameters.
@@ -2409,7 +2409,7 @@ class GraphNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyGraphGetListBlocks.Response':
-        """Get lists that the actor is blocking.
+        """Get mod lists that the requesting account (actor) is blocking. Requires auth.
 
         Args:
             params: Parameters.
@@ -2436,7 +2436,7 @@ class GraphNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyGraphGetListMutes.Response':
-        """Get lists that the actor is muting.
+        """Enumerates mod lists that the requesting account (actor) currently has muted. Requires auth.
 
         Args:
             params: Parameters.
@@ -2461,7 +2461,7 @@ class GraphNamespace(NamespaceBase):
         params: t.Union[models.AppBskyGraphGetLists.Params, models.AppBskyGraphGetLists.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyGraphGetLists.Response':
-        """Get a list of lists that belong to an actor.
+        """Enumerates the lists created by a specified account (actor).
 
         Args:
             params: Parameters.
@@ -2486,7 +2486,7 @@ class GraphNamespace(NamespaceBase):
         params: t.Optional[t.Union[models.AppBskyGraphGetMutes.Params, models.AppBskyGraphGetMutes.ParamsDict]] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyGraphGetMutes.Response':
-        """Get a list of who the actor mutes.
+        """Enumerates accounts that the requesting account (actor) currently has muted. Requires auth.
 
         Args:
             params: Parameters.
@@ -2511,7 +2511,7 @@ class GraphNamespace(NamespaceBase):
         params: t.Union[models.AppBskyGraphGetRelationships.Params, models.AppBskyGraphGetRelationships.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyGraphGetRelationships.Response':
-        """Enumerates public relationships between one account, and a list of other accounts.
+        """Enumerates public relationships between one account, and a list of other accounts. Does not require auth.
 
         Args:
             params: Parameters.
@@ -2540,7 +2540,7 @@ class GraphNamespace(NamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.AppBskyGraphGetSuggestedFollowsByActor.Response':
-        """Get suggested follows related to a given actor.
+        """Enumerates follows similar to a given account (actor). Expected use is to recommend additional accounts immediately after following one account.
 
         Args:
             params: Parameters.
@@ -2567,7 +2567,7 @@ class GraphNamespace(NamespaceBase):
     def mute_actor(
         self, data: t.Union[models.AppBskyGraphMuteActor.Data, models.AppBskyGraphMuteActor.DataDict], **kwargs: t.Any
     ) -> bool:
-        """Mute an actor by DID or handle.
+        """Creates a mute relationship for the specified account. Mutes are private in Bluesky. Requires auth.
 
         Args:
             data: Input data.
@@ -2590,7 +2590,7 @@ class GraphNamespace(NamespaceBase):
         data: t.Union[models.AppBskyGraphMuteActorList.Data, models.AppBskyGraphMuteActorList.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Mute a list of actors.
+        """Creates a mute relationship for the specified list of accounts. Mutes are private in Bluesky. Requires auth.
 
         Args:
             data: Input data.
@@ -2615,7 +2615,7 @@ class GraphNamespace(NamespaceBase):
         data: t.Union[models.AppBskyGraphUnmuteActor.Data, models.AppBskyGraphUnmuteActor.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Unmute an actor by DID or handle.
+        """Unmutes the specified account. Requires auth.
 
         Args:
             data: Input data.
@@ -2640,7 +2640,7 @@ class GraphNamespace(NamespaceBase):
         data: t.Union[models.AppBskyGraphUnmuteActorList.Data, models.AppBskyGraphUnmuteActorList.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Unmute a list of actors.
+        """Unmutes the specified list of accounts. Requires auth.
 
         Args:
             data: Input data.
@@ -2671,7 +2671,7 @@ class NotificationNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyNotificationGetUnreadCount.Response':
-        """Get the count of unread notifications.
+        """Count the number of unread notifications for the requesting account. Requires auth.
 
         Args:
             params: Parameters.
@@ -2702,7 +2702,7 @@ class NotificationNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyNotificationListNotifications.Response':
-        """Get a list of notifications.
+        """Enumerate notifications for the requesting account. Requires auth.
 
         Args:
             params: Parameters.
@@ -2728,7 +2728,7 @@ class NotificationNamespace(NamespaceBase):
         data: t.Union[models.AppBskyNotificationRegisterPush.Data, models.AppBskyNotificationRegisterPush.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Register for push notifications with a service.
+        """Register to receive push notifications, via a specified service, for the requesting account. Requires auth.
 
         Args:
             data: Input data.
@@ -2754,7 +2754,7 @@ class NotificationNamespace(NamespaceBase):
         data: t.Union[models.AppBskyNotificationUpdateSeen.Data, models.AppBskyNotificationUpdateSeen.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Notify server that the user has seen notifications.
+        """Notify server that the requesting account has seen notifications. Requires auth.
 
         Args:
             data: Input data.
@@ -3578,7 +3578,7 @@ class IdentityNamespace(NamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoIdentityResolveHandle.Response':
-        """Provides the DID of a repo.
+        """Resolves a handle (domain name) to a DID.
 
         Args:
             params: Parameters.
@@ -3604,7 +3604,7 @@ class IdentityNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoIdentityUpdateHandle.Data, models.ComAtprotoIdentityUpdateHandle.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Updates the handle of the account.
+        """Updates the current account's handle. Verifies handle validity, and updates did:plc document if necessary. Implemented by PDS, and requires auth.
 
         Args:
             data: Input data.
@@ -3632,7 +3632,7 @@ class LabelNamespace(NamespaceBase):
         params: t.Union[models.ComAtprotoLabelQueryLabels.Params, models.ComAtprotoLabelQueryLabels.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoLabelQueryLabels.Response':
-        """Find labels relevant to the provided URI patterns.
+        """Find labels relevant to the provided AT-URI patterns. Public endpoint for moderation services, though may return different or additional results with auth.
 
         Args:
             params: Parameters.
@@ -3659,7 +3659,7 @@ class ModerationNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoModerationCreateReport.Data, models.ComAtprotoModerationCreateReport.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoModerationCreateReport.Response':
-        """Report a repo or a record.
+        """Submit a moderation report regarding an atproto account or record. Implemented by moderation services (with PDS proxying), and requires auth.
 
         Args:
             data: Input data.
@@ -3691,7 +3691,7 @@ class RepoNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoRepoApplyWrites.Data, models.ComAtprotoRepoApplyWrites.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Apply a batch transaction of creates, updates, and deletes.
+        """Apply a batch transaction of repository creates, updates, and deletes. Requires auth, implemented by PDS.
 
         Args:
             data: Input data.
@@ -3716,7 +3716,7 @@ class RepoNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoRepoCreateRecord.Data, models.ComAtprotoRepoCreateRecord.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoRepoCreateRecord.Response':
-        """Create a new record.
+        """Create a single new repository record. Requires auth, implemented by PDS.
 
         Args:
             data: Input data.
@@ -3745,7 +3745,7 @@ class RepoNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoRepoDeleteRecord.Data, models.ComAtprotoRepoDeleteRecord.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Delete a record, or ensure it doesn't exist.
+        """Delete a repository record, or ensure it doesn't exist. Requires auth, implemented by PDS.
 
         Args:
             data: Input data.
@@ -3770,7 +3770,7 @@ class RepoNamespace(NamespaceBase):
         params: t.Union[models.ComAtprotoRepoDescribeRepo.Params, models.ComAtprotoRepoDescribeRepo.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoRepoDescribeRepo.Response':
-        """Get information about the repo, including the list of collections.
+        """Get information about an account and repository, including the list of collections. Does not require auth.
 
         Args:
             params: Parameters.
@@ -3795,7 +3795,7 @@ class RepoNamespace(NamespaceBase):
         params: t.Union[models.ComAtprotoRepoGetRecord.Params, models.ComAtprotoRepoGetRecord.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoRepoGetRecord.Response':
-        """Get a record.
+        """Get a single record from a repository. Does not require auth.
 
         Args:
             params: Parameters.
@@ -3820,7 +3820,7 @@ class RepoNamespace(NamespaceBase):
         params: t.Union[models.ComAtprotoRepoListRecords.Params, models.ComAtprotoRepoListRecords.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoRepoListRecords.Response':
-        """List a range of records in a collection.
+        """List a range of records in a repository, matching a specific collection. Does not require auth.
 
         Args:
             params: Parameters.
@@ -3845,7 +3845,7 @@ class RepoNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoRepoPutRecord.Data, models.ComAtprotoRepoPutRecord.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoRepoPutRecord.Response':
-        """Write a record, creating or updating it as needed.
+        """Write a repository record, creating or updating it as needed. Requires auth, implemented by PDS.
 
         Args:
             data: Input data.
@@ -3872,7 +3872,7 @@ class RepoNamespace(NamespaceBase):
     def upload_blob(
         self, data: 'models.ComAtprotoRepoUploadBlob.Data', **kwargs: t.Any
     ) -> 'models.ComAtprotoRepoUploadBlob.Response':
-        """Upload a new blob to be added to repo in a later request.
+        """Upload a new blob, to be referenced from a repository record. The blob will be deleted if it is not referenced within a time window (eg, minutes). Blob restrictions (mimetype, size, etc) are enforced when the reference is created. Requires auth, implemented by PDS.
 
         Args:
             data: Input data alias.
@@ -3921,7 +3921,7 @@ class ServerNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoServerCreateAccount.Data, models.ComAtprotoServerCreateAccount.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoServerCreateAccount.Response':
-        """Create an account.
+        """Create an account. Implemented by PDS.
 
         Args:
             data: Input data.
@@ -4069,7 +4069,7 @@ class ServerNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoServerDeleteAccount.Data, models.ComAtprotoServerDeleteAccount.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Delete an actor's account with a token and password.
+        """Delete an actor's account with a token and password. Can only be called after requesting a deletion token. Requires auth.
 
         Args:
             data: Input data.
@@ -4090,7 +4090,7 @@ class ServerNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
     def delete_session(self, **kwargs: t.Any) -> bool:
-        """Delete the current session.
+        """Delete the current session. Requires auth.
 
         Args:
             **kwargs: Arbitrary arguments to HTTP request.
@@ -4105,7 +4105,7 @@ class ServerNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
     def describe_server(self, **kwargs: t.Any) -> 'models.ComAtprotoServerDescribeServer.Response':
-        """Get a document describing the service's accounts configuration.
+        """Describes the server's account creation requirements and capabilities. Implemented by PDS.
 
         Args:
             **kwargs: Arbitrary arguments to HTTP request.
@@ -4131,7 +4131,7 @@ class ServerNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoServerGetAccountInviteCodes.Response':
-        """Get all invite codes for a given account.
+        """Get all invite codes for the current account. Requires auth.
 
         Args:
             params: Parameters.
@@ -4156,7 +4156,7 @@ class ServerNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoServerGetAccountInviteCodes.Response)
 
     def get_session(self, **kwargs: t.Any) -> 'models.ComAtprotoServerGetSession.Response':
-        """Get information about the current session.
+        """Get information about the current auth session. Requires auth.
 
         Args:
             **kwargs: Arbitrary arguments to HTTP request.
@@ -4190,7 +4190,7 @@ class ServerNamespace(NamespaceBase):
         return get_response_model(response, models.ComAtprotoServerListAppPasswords.Response)
 
     def refresh_session(self, **kwargs: t.Any) -> 'models.ComAtprotoServerRefreshSession.Response':
-        """Refresh an authentication session.
+        """Refresh an authentication session. Requires auth using the 'refreshJwt' (not the 'accessJwt').
 
         Args:
             **kwargs: Arbitrary arguments to HTTP request.
@@ -4288,7 +4288,7 @@ class ServerNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoServerReserveSigningKey.Response':
-        """Reserve a repo signing key for account creation.
+        """Reserve a repo signing key, for use with account creation. Necessary so that a DID PLC update operation can be constructed during an account migraiton. Public and does not require auth; implemented by PDS. NOTE: this endpoint may change when full account migration is implemented.
 
         Args:
             data: Input data.
@@ -4396,7 +4396,7 @@ class SyncNamespace(NamespaceBase):
         params: t.Union[models.ComAtprotoSyncGetBlob.Params, models.ComAtprotoSyncGetBlob.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoSyncGetBlob.Response':
-        """Get a blob associated with a given repo.
+        """Get a blob associated with a given account. Returns the full blob as originally uploaded. Does not require auth; implemented by PDS.
 
         Args:
             params: Parameters.
@@ -4421,7 +4421,7 @@ class SyncNamespace(NamespaceBase):
         params: t.Union[models.ComAtprotoSyncGetBlocks.Params, models.ComAtprotoSyncGetBlocks.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoSyncGetBlocks.Response':
-        """Get blocks from a given repo.
+        """Get data blocks from a given repo, by CID. For example, intermediate MST nodes, or records. Does not require auth; implemented by PDS.
 
         Args:
             params: Parameters.
@@ -4496,7 +4496,7 @@ class SyncNamespace(NamespaceBase):
         params: t.Union[models.ComAtprotoSyncGetLatestCommit.Params, models.ComAtprotoSyncGetLatestCommit.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoSyncGetLatestCommit.Response':
-        """Get the current commit CID & revision of the repo.
+        """Get the current commit CID & revision of the specified repo. Does not require auth.
 
         Args:
             params: Parameters.
@@ -4522,7 +4522,7 @@ class SyncNamespace(NamespaceBase):
         params: t.Union[models.ComAtprotoSyncGetRecord.Params, models.ComAtprotoSyncGetRecord.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoSyncGetRecord.Response':
-        """Get blocks needed for existence or non-existence of record.
+        """Get data blocks needed to prove the existence or non-existence of record in the current version of repo. Does not require auth.
 
         Args:
             params: Parameters.
@@ -4547,7 +4547,7 @@ class SyncNamespace(NamespaceBase):
         params: t.Union[models.ComAtprotoSyncGetRepo.Params, models.ComAtprotoSyncGetRepo.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoSyncGetRepo.Response':
-        """Gets the DID's repo, optionally catching up from a specific revision.
+        """Download a repository export as CAR file. Optionally only a 'diff' since a previous revision. Does not require auth; implemented by PDS.
 
         Args:
             params: Parameters.
@@ -4572,7 +4572,7 @@ class SyncNamespace(NamespaceBase):
         params: t.Union[models.ComAtprotoSyncListBlobs.Params, models.ComAtprotoSyncListBlobs.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoSyncListBlobs.Response':
-        """List blob CIDs since some revision.
+        """List blob CIDso for an account, since some repo revision. Does not require auth; implemented by PDS.
 
         Args:
             params: Parameters.
@@ -4599,7 +4599,7 @@ class SyncNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoSyncListRepos.Response':
-        """List DIDs and root CIDs of hosted repos.
+        """Enumerates all the DID, rev, and commit CID for all repos hosted by this service. Does not require auth; implemented by PDS and Relay.
 
         Args:
             params: Parameters.
@@ -4624,7 +4624,7 @@ class SyncNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoSyncNotifyOfUpdate.Data, models.ComAtprotoSyncNotifyOfUpdate.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Notify a crawling service of a recent update; often when a long break between updates causes the connection with the crawling service to break.
+        """Notify a crawling service of a recent update, and that crawling should resume. Intended use is after a gap between repo stream events caused the crawling service to disconnect. Does not require auth; implemented by Relay.
 
         Args:
             data: Input data.
@@ -4649,7 +4649,7 @@ class SyncNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoSyncRequestCrawl.Data, models.ComAtprotoSyncRequestCrawl.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Request a service to persistently crawl hosted repos.
+        """Request a service to persistently crawl hosted repos. Expected use is new PDS instances declaring their existence to Relays. Does not require auth.
 
         Args:
             data: Input data.
@@ -4695,7 +4695,7 @@ class TempNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoTempFetchLabels.Response':
-        """Fetch all labels from a labeler created after a certain date.
+        """Fetch all labels from a labeler created after a certain date. DEPRECATED: use queryLabels or subscribeLabels instead.
 
         Args:
             params: Parameters.
@@ -4807,7 +4807,7 @@ class TempNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoTempTransferAccount.Data, models.ComAtprotoTempTransferAccount.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoTempTransferAccount.Response':
-        """Transfer an account.
+        """Transfer an account. NOTE: temporary method, necessarily how account migration will be implemented.
 
         Args:
             data: Input data.

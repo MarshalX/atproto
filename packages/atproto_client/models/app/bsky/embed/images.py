@@ -27,7 +27,7 @@ class Main(base.ModelBase):
 class Image(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.images`."""
 
-    alt: str  #: Alt.
+    alt: str  #: Alt text description of the image, for accessibility.
     image: 'BlobRef'  #: Image.
     aspect_ratio: t.Optional['models.AppBskyEmbedImages.AspectRatio'] = None  #: Aspect ratio.
 
@@ -60,9 +60,9 @@ class View(base.ModelBase):
 class ViewImage(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.images`."""
 
-    alt: str  #: Alt.
-    fullsize: str  #: Fullsize.
-    thumb: str  #: Thumb.
+    alt: str  #: Alt text description of the image, for accessibility.
+    fullsize: str  #: Fully-qualified URL where a large version of the image can be fetched. May or may not be the exact original blob. For example, CDN location provided by the App View.
+    thumb: str  #: Fully-qualified URL where a thumbnail of the image can be fetched. For example, CDN location provided by the App View.
     aspect_ratio: t.Optional['models.AppBskyEmbedImages.AspectRatio'] = None  #: Aspect ratio.
 
     py_type: te.Literal['app.bsky.embed.images#viewImage'] = Field(

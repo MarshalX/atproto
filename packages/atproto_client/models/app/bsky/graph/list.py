@@ -20,8 +20,10 @@ class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.graph.list`."""
 
     created_at: str  #: Created at.
-    name: str = Field(min_length=1, max_length=64)  #: Name.
-    purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
+    name: str = Field(min_length=1, max_length=64)  #: Display name for list; can not be empty.
+    purpose: (
+        'models.AppBskyGraphDefs.ListPurpose'
+    )  #: Defines the purpose of the list (aka, moderation-oriented or curration-oriented).
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.

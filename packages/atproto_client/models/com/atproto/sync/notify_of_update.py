@@ -13,8 +13,8 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.sync.notifyOfUpdate`."""
 
-    hostname: str  #: Hostname of the service that is notifying of update.
+    hostname: str  #: Hostname of the current service (usually a PDS) that is notifying of update.
 
 
 class DataDict(te.TypedDict):
-    hostname: str  #: Hostname of the service that is notifying of update.
+    hostname: str  #: Hostname of the current service (usually a PDS) that is notifying of update.

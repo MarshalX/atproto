@@ -69,7 +69,7 @@ class ProfileViewDetailed(base.ModelBase):
 
 
 class ViewerState(base.ModelBase):
-    """Definition model for :obj:`app.bsky.actor.defs`."""
+    """Definition model for :obj:`app.bsky.actor.defs`. Metadata about the requesting account's relationship with the subject account. Only has meaningful content for authed requests."""
 
     blocked_by: t.Optional[bool] = None  #: Blocked by.
     blocking: t.Optional[str] = None  #: Blocking.
@@ -126,6 +126,7 @@ class SavedFeedsPref(base.ModelBase):
 
     pinned: t.List[str]  #: Pinned.
     saved: t.List[str]  #: Saved.
+    timeline_index: t.Optional[int] = None  #: Timeline index.
 
     py_type: te.Literal['app.bsky.actor.defs#savedFeedsPref'] = Field(
         default='app.bsky.actor.defs#savedFeedsPref', alias='$type', frozen=True

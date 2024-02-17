@@ -18,11 +18,11 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.label.subscribeLabels`."""
 
-    cursor: t.Optional[int] = None  #: The last known event to backfill from.
+    cursor: t.Optional[int] = None  #: The last known event seq number to backfill from.
 
 
 class ParamsDict(te.TypedDict):
-    cursor: te.NotRequired[t.Optional[int]]  #: The last known event to backfill from.
+    cursor: te.NotRequired[t.Optional[int]]  #: The last known event seq number to backfill from.
 
 
 class Labels(base.ModelBase):

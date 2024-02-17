@@ -13,8 +13,8 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.identity.updateHandle`."""
 
-    handle: str  #: Handle.
+    handle: str  #: The new handle.
 
 
 class DataDict(te.TypedDict):
-    handle: str  #: Handle.
+    handle: str  #: The new handle.

@@ -18,15 +18,17 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getRepostedBy`."""
 
-    uri: str  #: Uri.
-    cid: t.Optional[str] = None  #: Cid.
+    uri: str  #: Reference (AT-URI) of post record.
+    cid: t.Optional[str] = None  #: If supplied, filters to reposts of specific version (by CID) of the post record.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
 class ParamsDict(te.TypedDict):
-    uri: str  #: Uri.
-    cid: te.NotRequired[t.Optional[str]]  #: Cid.
+    uri: str  #: Reference (AT-URI) of post record.
+    cid: te.NotRequired[
+        t.Optional[str]
+    ]  #: If supplied, filters to reposts of specific version (by CID) of the post record.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 

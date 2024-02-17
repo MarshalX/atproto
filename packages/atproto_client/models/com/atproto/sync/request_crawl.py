@@ -13,8 +13,8 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.sync.requestCrawl`."""
 
-    hostname: str  #: Hostname of the service that is requesting to be crawled.
+    hostname: str  #: Hostname of the current service (eg, PDS) that is requesting to be crawled.
 
 
 class DataDict(te.TypedDict):
-    hostname: str  #: Hostname of the service that is requesting to be crawled.
+    hostname: str  #: Hostname of the current service (eg, PDS) that is requesting to be crawled.
