@@ -34,7 +34,7 @@ class ParamsDict(te.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.feed.getRepostedBy`."""
 
-    reposted_by: t.List['models.AppBskyActorDefs.ProfileView'] = Field(alias='repostedBy')  #: Reposted by.
+    reposted_by: t.List['models.AppBskyActorDefs.ProfileView']  #: Reposted by.
     uri: str  #: Uri.
     cid: t.Optional[str] = None  #: Cid.
     cursor: t.Optional[str] = None  #: Cursor.

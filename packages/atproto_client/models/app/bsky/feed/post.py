@@ -52,7 +52,7 @@ class TextSlice(base.ModelBase):
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.feed.post`."""
 
-    created_at: str = Field(alias='createdAt')  #: Created at.
+    created_at: str  #: Created at.
     text: str = Field(max_length=3000)  #: Text.
     embed: t.Optional[
         te.Annotated[

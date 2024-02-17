@@ -2,9 +2,18 @@ import os
 import typing as t
 import warnings
 
-from pydantic import BaseModel, ConfigDict, model_validator
+from pydantic import BaseModel, ConfigDict, alias_generators, model_validator
 
 from atproto_client.exceptions import ModelFieldNotFoundError
+
+
+def _alias_generator(name: str) -> str:
+    camel_name = alias_generators.to_camel(name)
+
+    if camel_name.endswith('_'):
+        camel_name = camel_name[:-1]
+
+    return camel_name
 
 
 class AtProtocolBase:
@@ -17,7 +26,7 @@ class ModelBase(BaseModel, AtProtocolBase):
     Provides square brackets [] notation to get attributes like in a dictionary.
     """
 
-    model_config = ConfigDict(extra='allow', populate_by_name=True, strict=True)
+    model_config = ConfigDict(extra='allow', alias_generator=_alias_generator, populate_by_name=True, strict=True)
 
     def __getitem__(self, item: str) -> t.Any:
         if hasattr(self, item):

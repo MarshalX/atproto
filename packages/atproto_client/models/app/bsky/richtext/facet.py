@@ -68,8 +68,8 @@ class Tag(base.ModelBase):
 class ByteSlice(base.ModelBase):
     """Definition model for :obj:`app.bsky.richtext.facet`. A text segment. Start is inclusive, end is exclusive. Indices are for utf8-encoded strings."""
 
-    byte_end: int = Field(alias='byteEnd', ge=0)  #: Byte end.
-    byte_start: int = Field(alias='byteStart', ge=0)  #: Byte start.
+    byte_end: int = Field(ge=0)  #: Byte end.
+    byte_start: int = Field(ge=0)  #: Byte start.
 
     py_type: te.Literal['app.bsky.richtext.facet#byteSlice'] = Field(
         default='app.bsky.richtext.facet#byteSlice', alias='$type', frozen=True

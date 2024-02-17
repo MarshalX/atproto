@@ -18,19 +18,17 @@ from atproto_client.models import base
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.server.describeServer`."""
 
-    available_user_domains: t.List[str] = Field(alias='availableUserDomains')  #: Available user domains.
-    invite_code_required: t.Optional[bool] = Field(default=None, alias='inviteCodeRequired')  #: Invite code required.
+    available_user_domains: t.List[str]  #: Available user domains.
+    invite_code_required: t.Optional[bool] = None  #: Invite code required.
     links: t.Optional['models.ComAtprotoServerDescribeServer.Links'] = None  #: Links.
-    phone_verification_required: t.Optional[bool] = Field(
-        default=None, alias='phoneVerificationRequired'
-    )  #: Phone verification required.
+    phone_verification_required: t.Optional[bool] = None  #: Phone verification required.
 
 
 class Links(base.ModelBase):
     """Definition model for :obj:`com.atproto.server.describeServer`."""
 
-    privacy_policy: t.Optional[str] = Field(default=None, alias='privacyPolicy')  #: Privacy policy.
-    terms_of_service: t.Optional[str] = Field(default=None, alias='termsOfService')  #: Terms of service.
+    privacy_policy: t.Optional[str] = None  #: Privacy policy.
+    terms_of_service: t.Optional[str] = None  #: Terms of service.
 
     py_type: te.Literal['com.atproto.server.describeServer#links'] = Field(
         default='com.atproto.server.describeServer#links', alias='$type', frozen=True

@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 from atproto_client.models import base
 
@@ -16,7 +15,7 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.notification.getUnreadCount`."""
 
-    seen_at: t.Optional[str] = Field(default=None, alias='seenAt')  #: Seen at.
+    seen_at: t.Optional[str] = None  #: Seen at.
 
 
 class ParamsDict(te.TypedDict):

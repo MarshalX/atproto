@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client.models.unknown_type import UnknownType
@@ -30,6 +29,6 @@ class Response(base.ResponseModelBase):
 
     collections: t.List[str]  #: Collections.
     did: str  #: Did.
-    did_doc: 'UnknownType' = Field(alias='didDoc')  #: Did doc.
+    did_doc: 'UnknownType'  #: Did doc.
     handle: str  #: Handle.
-    handle_is_correct: bool = Field(alias='handleIsCorrect')  #: Handle is correct.
+    handle_is_correct: bool  #: Handle is correct.

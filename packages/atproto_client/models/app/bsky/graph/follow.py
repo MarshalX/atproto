@@ -18,7 +18,7 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.graph.follow`."""
 
-    created_at: str = Field(alias='createdAt')  #: Created at.
+    created_at: str  #: Created at.
     subject: str  #: Subject.
 
     py_type: te.Literal['app.bsky.graph.follow'] = Field(default='app.bsky.graph.follow', alias='$type', frozen=True)

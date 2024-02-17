@@ -6,7 +6,6 @@
 
 
 import typing_extensions as te
-from pydantic import Field
 
 from atproto_client.models import base
 
@@ -14,7 +13,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`app.bsky.notification.updateSeen`."""
 
-    seen_at: str = Field(alias='seenAt')  #: Seen at.
+    seen_at: str  #: Seen at.
 
 
 class DataDict(te.TypedDict):

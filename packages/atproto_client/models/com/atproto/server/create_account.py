@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client.models.unknown_type import UnknownInputType, UnknownType
@@ -21,12 +20,12 @@ class Data(base.DataModelBase):
     handle: str  #: Handle.
     did: t.Optional[str] = None  #: Did.
     email: t.Optional[str] = None  #: Email.
-    invite_code: t.Optional[str] = Field(default=None, alias='inviteCode')  #: Invite code.
+    invite_code: t.Optional[str] = None  #: Invite code.
     password: t.Optional[str] = None  #: Password.
-    plc_op: t.Optional['UnknownInputType'] = Field(default=None, alias='plcOp')  #: Plc op.
-    recovery_key: t.Optional[str] = Field(default=None, alias='recoveryKey')  #: Recovery key.
-    verification_code: t.Optional[str] = Field(default=None, alias='verificationCode')  #: Verification code.
-    verification_phone: t.Optional[str] = Field(default=None, alias='verificationPhone')  #: Verification phone.
+    plc_op: t.Optional['UnknownInputType'] = None  #: Plc op.
+    recovery_key: t.Optional[str] = None  #: Recovery key.
+    verification_code: t.Optional[str] = None  #: Verification code.
+    verification_phone: t.Optional[str] = None  #: Verification phone.
 
 
 class DataDict(te.TypedDict):
@@ -44,8 +43,8 @@ class DataDict(te.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.server.createAccount`."""
 
-    access_jwt: str = Field(alias='accessJwt')  #: Access jwt.
+    access_jwt: str  #: Access jwt.
     did: str  #: Did.
     handle: str  #: Handle.
-    refresh_jwt: str = Field(alias='refreshJwt')  #: Refresh jwt.
-    did_doc: t.Optional['UnknownType'] = Field(default=None, alias='didDoc')  #: Did doc.
+    refresh_jwt: str  #: Refresh jwt.
+    did_doc: t.Optional['UnknownType'] = None  #: Did doc.

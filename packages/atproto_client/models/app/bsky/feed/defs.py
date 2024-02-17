@@ -21,7 +21,7 @@ class PostView(base.ModelBase):
 
     author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
     cid: str  #: Cid.
-    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
+    indexed_at: str  #: Indexed at.
     record: 'UnknownType'  #: Record.
     uri: str  #: Uri.
     embed: t.Optional[
@@ -36,9 +36,9 @@ class PostView(base.ModelBase):
         ]
     ] = None  #: Embed.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    like_count: t.Optional[int] = Field(default=None, alias='likeCount')  #: Like count.
-    reply_count: t.Optional[int] = Field(default=None, alias='replyCount')  #: Reply count.
-    repost_count: t.Optional[int] = Field(default=None, alias='repostCount')  #: Repost count.
+    like_count: t.Optional[int] = None  #: Like count.
+    reply_count: t.Optional[int] = None  #: Reply count.
+    repost_count: t.Optional[int] = None  #: Repost count.
     threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.
     viewer: t.Optional['models.AppBskyFeedDefs.ViewerState'] = None  #: Viewer.
 
@@ -51,7 +51,7 @@ class ViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     like: t.Optional[str] = None  #: Like.
-    reply_disabled: t.Optional[bool] = Field(default=None, alias='replyDisabled')  #: Reply disabled.
+    reply_disabled: t.Optional[bool] = None  #: Reply disabled.
     repost: t.Optional[str] = None  #: Repost.
 
     py_type: te.Literal['app.bsky.feed.defs#viewerState'] = Field(
@@ -102,7 +102,7 @@ class ReasonRepost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     by: 'models.AppBskyActorDefs.ProfileViewBasic'  #: By.
-    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
+    indexed_at: str  #: Indexed at.
 
     py_type: te.Literal['app.bsky.feed.defs#reasonRepost'] = Field(
         default='app.bsky.feed.defs#reasonRepost', alias='$type', frozen=True
@@ -144,7 +144,7 @@ class ThreadViewPost(base.ModelBase):
 class NotFoundPost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    not_found: bool = Field(alias='notFound', frozen=True)  #: Not found.
+    not_found: bool = Field(frozen=True)  #: Not found.
     uri: str  #: Uri.
 
     py_type: te.Literal['app.bsky.feed.defs#notFoundPost'] = Field(
@@ -181,15 +181,13 @@ class GeneratorView(base.ModelBase):
     cid: str  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
     did: str  #: Did.
-    display_name: str = Field(alias='displayName')  #: Display name.
-    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
+    display_name: str  #: Display name.
+    indexed_at: str  #: Indexed at.
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
-    description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = Field(
-        default=None, alias='descriptionFacets'
-    )  #: Description facets.
-    like_count: t.Optional[int] = Field(default=None, alias='likeCount', ge=0)  #: Like count.
+    description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
+    like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
     viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.feed.defs#generatorView'] = Field(

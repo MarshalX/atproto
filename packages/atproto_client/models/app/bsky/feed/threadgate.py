@@ -44,7 +44,7 @@ class ListRule(base.ModelBase):
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.feed.threadgate`."""
 
-    created_at: str = Field(alias='createdAt')  #: Created at.
+    created_at: str  #: Created at.
     post: str  #: Post.
     allow: t.Optional[
         t.List[

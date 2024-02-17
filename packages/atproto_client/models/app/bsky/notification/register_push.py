@@ -6,7 +6,6 @@
 
 
 import typing_extensions as te
-from pydantic import Field
 
 from atproto_client.models import base
 
@@ -14,9 +13,9 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`app.bsky.notification.registerPush`."""
 
-    app_id: str = Field(alias='appId')  #: App id.
+    app_id: str  #: App id.
     platform: str  #: Platform.
-    service_did: str = Field(alias='serviceDid')  #: Service did.
+    service_did: str  #: Service did.
     token: str  #: Token.
 
 

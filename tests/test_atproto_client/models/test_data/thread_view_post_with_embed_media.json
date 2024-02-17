@@ -16,8 +16,8 @@
                 "labels": []
             },
             "record": {
-                "text": "",
                 "$type": "app.bsky.feed.post",
+                "createdAt": "2023-09-28T12:49:36.735Z",
                 "embed": {
                     "$type": "app.bsky.embed.recordWithMedia",
                     "media": {
@@ -47,10 +47,20 @@
                 "langs": [
                     "en"
                 ],
-                "createdAt": "2023-09-28T12:49:36.735Z"
+                "text": ""
             },
             "embed": {
                 "$type": "app.bsky.embed.recordWithMedia#view",
+                "media": {
+                    "$type": "app.bsky.embed.images#view",
+                    "images": [
+                        {
+                            "thumb": "https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreic3cp5ky525vsukjvrzxsc2h3jka2gud74l2hgeatw2rhj2qycnmq@jpeg",
+                            "fullsize": "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreic3cp5ky525vsukjvrzxsc2h3jka2gud74l2hgeatw2rhj2qycnmq@jpeg",
+                            "alt": ""
+                        }
+                    ]
+                },
                 "record": {
                     "record": {
                         "$type": "app.bsky.embed.record#viewRecord",
@@ -68,27 +78,17 @@
                             "labels": []
                         },
                         "value": {
-                            "text": "test",
                             "$type": "app.bsky.feed.post",
+                            "createdAt": "2023-09-28T12:46:18.414Z",
                             "langs": [
                                 "en"
                             ],
-                            "createdAt": "2023-09-28T12:46:18.414Z"
+                            "text": "test"
                         },
                         "labels": [],
                         "indexedAt": "2023-09-28T12:46:18.414Z",
                         "embeds": []
                     }
-                },
-                "media": {
-                    "$type": "app.bsky.embed.images#view",
-                    "images": [
-                        {
-                            "thumb": "https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreic3cp5ky525vsukjvrzxsc2h3jka2gud74l2hgeatw2rhj2qycnmq@jpeg",
-                            "fullsize": "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreic3cp5ky525vsukjvrzxsc2h3jka2gud74l2hgeatw2rhj2qycnmq@jpeg",
-                            "alt": ""
-                        }
-                    ]
                 }
             },
             "replyCount": 0,

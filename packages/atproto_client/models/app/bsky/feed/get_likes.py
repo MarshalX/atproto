@@ -44,8 +44,8 @@ class Like(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.getLikes`."""
 
     actor: 'models.AppBskyActorDefs.ProfileView'  #: Actor.
-    created_at: str = Field(alias='createdAt')  #: Created at.
-    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
+    created_at: str  #: Created at.
+    indexed_at: str  #: Indexed at.
 
     py_type: te.Literal['app.bsky.feed.getLikes#like'] = Field(
         default='app.bsky.feed.getLikes#like', alias='$type', frozen=True

@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
 
     uri: str  #: Uri.
     depth: t.Optional[int] = Field(default=6, ge=0, le=1000)  #: Depth.
-    parent_height: t.Optional[int] = Field(default=80, alias='parentHeight', ge=0, le=1000)  #: Parent height.
+    parent_height: t.Optional[int] = Field(default=80, ge=0, le=1000)  #: Parent height.
 
 
 class ParamsDict(te.TypedDict):

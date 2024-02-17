@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client.models.unknown_type import UnknownType
@@ -30,10 +29,10 @@ class DataDict(te.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.server.createSession`."""
 
-    access_jwt: str = Field(alias='accessJwt')  #: Access jwt.
+    access_jwt: str  #: Access jwt.
     did: str  #: Did.
     handle: str  #: Handle.
-    refresh_jwt: str = Field(alias='refreshJwt')  #: Refresh jwt.
-    did_doc: t.Optional['UnknownType'] = Field(default=None, alias='didDoc')  #: Did doc.
+    refresh_jwt: str  #: Refresh jwt.
+    did_doc: t.Optional['UnknownType'] = None  #: Did doc.
     email: t.Optional[str] = None  #: Email.
-    email_confirmed: t.Optional[bool] = Field(default=None, alias='emailConfirmed')  #: Email confirmed.
+    email_confirmed: t.Optional[bool] = None  #: Email confirmed.

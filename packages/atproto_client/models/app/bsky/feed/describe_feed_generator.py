@@ -36,8 +36,8 @@ class Feed(base.ModelBase):
 class Links(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.describeFeedGenerator`."""
 
-    privacy_policy: t.Optional[str] = Field(default=None, alias='privacyPolicy')  #: Privacy policy.
-    terms_of_service: t.Optional[str] = Field(default=None, alias='termsOfService')  #: Terms of service.
+    privacy_policy: t.Optional[str] = None  #: Privacy policy.
+    terms_of_service: t.Optional[str] = None  #: Terms of service.
 
     py_type: te.Literal['app.bsky.feed.describeFeedGenerator#links'] = Field(
         default='app.bsky.feed.describeFeedGenerator#links', alias='$type', frozen=True

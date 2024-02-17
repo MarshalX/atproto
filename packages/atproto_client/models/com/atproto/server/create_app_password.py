@@ -24,7 +24,7 @@ class DataDict(te.TypedDict):
 class AppPassword(base.ModelBase):
     """Definition model for :obj:`com.atproto.server.createAppPassword`."""
 
-    created_at: str = Field(alias='createdAt')  #: Created at.
+    created_at: str  #: Created at.
     name: str  #: Name.
     password: str  #: Password.
 

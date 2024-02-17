@@ -22,10 +22,8 @@ class Data(base.DataModelBase):
     record: 'UnknownInputType'  #: The record to create.
     repo: str  #: The handle or DID of the repo.
     rkey: t.Optional[str] = Field(default=None, max_length=15)  #: The key of the record.
-    swap_commit: t.Optional[str] = Field(
-        default=None, alias='swapCommit'
-    )  #: Compare and swap with the previous commit by CID.
-    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Flag for validating the record.
+    swap_commit: t.Optional[str] = None  #: Compare and swap with the previous commit by CID.
+    validate_: t.Optional[bool] = None  #: Flag for validating the record.
 
 
 class DataDict(te.TypedDict):

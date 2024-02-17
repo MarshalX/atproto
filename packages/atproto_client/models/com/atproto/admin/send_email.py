@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 from atproto_client.models import base
 
@@ -17,8 +16,8 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.sendEmail`."""
 
     content: str  #: Content.
-    recipient_did: str = Field(alias='recipientDid')  #: Recipient did.
-    sender_did: str = Field(alias='senderDid')  #: Sender did.
+    recipient_did: str  #: Recipient did.
+    sender_did: str  #: Sender did.
     comment: t.Optional[
         str
     ] = None  #: Additional comment by the sender that won't be used in the email itself but helpful to provide more context for moderators/reviewers.
