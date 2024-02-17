@@ -48,8 +48,6 @@ def ensure_atproto_document(did_doc: 'DidDocument') -> AtprotoData:
     """
     atproto_data = AtprotoData.from_did_doc(did_doc)
 
-    if atproto_data.did is None:
-        raise AtprotoDataParseError(f'Could not parse did from doc: {did_doc}')
     if atproto_data.signing_key is None:
         raise AtprotoDataParseError(f'Could not parse signing_key from doc: {did_doc}')
     if atproto_data.handle is None:

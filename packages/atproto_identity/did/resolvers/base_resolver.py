@@ -15,7 +15,7 @@ _DID_KEY_PREFIX = 'did:key:'
 
 class _BaseResolver:
     @staticmethod
-    def validate_did_doc(did: str, value: dict) -> 'DidDocument':
+    def validate_did_doc(did: str, value: t.Dict[str, t.Any]) -> 'DidDocument':
         # it performs double parsing, but it's ok for now
         if not is_valid_did_doc(value):
             raise PoorlyFormattedDidDocumentError(f'Invalid DID document for DID {did}')
@@ -28,11 +28,11 @@ class _BaseResolver:
 
 
 class BaseResolver(_BaseResolver, ABC):
-    def __init__(self, cache: 'DidBaseCache' = None) -> None:
+    def __init__(self, cache: t.Optional['DidBaseCache'] = None) -> None:
         self._cache = cache
 
     @abstractmethod
-    def resolve_without_validation(self, did: str) -> t.Optional[dict]:
+    def resolve_without_validation(self, did: str) -> t.Optional[t.Dict[str, t.Any]]:
         raise NotImplementedError
 
     def resolve_no_cache(self, did: str) -> t.Optional['DidDocument']:
@@ -78,7 +78,7 @@ class BaseResolver(_BaseResolver, ABC):
                     self.refresh_cache(did)
                     cached_result = self._cache.get(did)
 
-                return cached_result.document
+                return cached_result and cached_result.document
 
         did_doc = self.resolve_no_cache(did)
         if did_doc is None:
@@ -150,11 +150,11 @@ class BaseResolver(_BaseResolver, ABC):
 
 
 class AsyncBaseResolver(_BaseResolver, ABC):
-    def __init__(self, cache: 'AsyncDidBaseCache' = None) -> None:
+    def __init__(self, cache: t.Optional['AsyncDidBaseCache'] = None) -> None:
         self._cache = cache
 
     @abstractmethod
-    async def resolve_without_validation(self, did: str) -> t.Optional[dict]:
+    async def resolve_without_validation(self, did: str) -> t.Optional[t.Dict[str, t.Any]]:
         raise NotImplementedError
 
     async def resolve_no_cache(self, did: str) -> t.Optional['DidDocument']:
@@ -200,7 +200,7 @@ class AsyncBaseResolver(_BaseResolver, ABC):
                     await self.refresh_cache(did)
                     cached_result = await self._cache.get(did)
 
-                return cached_result.document
+                return cached_result and cached_result.document
 
         did_doc = await self.resolve_no_cache(did)
         if did_doc is None:

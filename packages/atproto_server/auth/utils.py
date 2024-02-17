@@ -5,10 +5,8 @@ import typing as t
 def force_bytes(value: t.Union[bytes, str]) -> bytes:
     if isinstance(value, str):
         return value.encode('UTF-8')
-    if isinstance(value, bytes):
-        return value
 
-    raise TypeError('Expected a string value')
+    return value
 
 
 def base64url_decode(input_data: t.Union[bytes, str]) -> bytes:

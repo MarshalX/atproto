@@ -23,7 +23,7 @@ class DidPlcResolver(BaseResolver):
 
         self._client = httpx.Client()
 
-    def resolve_without_validation(self, did: str) -> t.Optional[dict]:
+    def resolve_without_validation(self, did: str) -> t.Optional[t.Dict[str, t.Any]]:
         try:
             response = self._client.get(f'{self._plc_url}/{did}', timeout=self._timeout)
 
@@ -50,7 +50,7 @@ class AsyncDidPlcResolver(AsyncBaseResolver):
 
         self._client = httpx.AsyncClient()
 
-    async def resolve_without_validation(self, did: str) -> t.Optional[dict]:
+    async def resolve_without_validation(self, did: str) -> t.Optional[t.Dict[str, t.Any]]:
         try:
             response = await self._client.get(f'{self._plc_url}/{did}', timeout=self._timeout)
 
