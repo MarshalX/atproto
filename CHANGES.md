@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 0.0.42
+
+**17.02.2024**
+
+* Add `send_ogp_link_card.py` (Open Graph protocol) example by @OhkuboSGMS in https://github.com/MarshalX/atproto/pull/273
+* Update lexicons fetched from 8c94979 committed 2024-02-16T02:12:39Z by @MarshalX in https://github.com/MarshalX/atproto/pull/279
+* Bump cryptography from 41.0.7 to 42.0.2 by @dependabot in https://github.com/MarshalX/atproto/pull/280
+* Fix pyright for pydantic aliases via `alias_generator` by @MarshalX in https://github.com/MarshalX/atproto/pull/277
+* Fix `filter` argument of `get_author_feed` method in https://github.com/MarshalX/atproto/pull/278
+* Fix pyright errors part 1 by @MarshalX in https://github.com/MarshalX/atproto/pull/278
+
 ## Version 0.0.41
 
 **09.02.2024**
