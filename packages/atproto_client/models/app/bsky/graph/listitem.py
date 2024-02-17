@@ -19,8 +19,8 @@ class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.graph.listitem`."""
 
     created_at: str  #: Created at.
-    list: str  #: List.
-    subject: str  #: Subject.
+    list: str  #: Reference (AT-URI) to the list record (app.bsky.graph.list).
+    subject: str  #: The account which is included on the list.
 
     py_type: te.Literal['app.bsky.graph.listitem'] = Field(
         default='app.bsky.graph.listitem', alias='$type', frozen=True

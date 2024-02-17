@@ -19,20 +19,22 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.repo.createRecord`."""
 
     collection: str  #: The NSID of the record collection.
-    record: 'UnknownInputType'  #: The record to create.
-    repo: str  #: The handle or DID of the repo.
-    rkey: t.Optional[str] = Field(default=None, max_length=15)  #: The key of the record.
+    record: 'UnknownInputType'  #: The record itself. Must contain a $type field.
+    repo: str  #: The handle or DID of the repo (aka, current account).
+    rkey: t.Optional[str] = Field(default=None, max_length=15)  #: The Record Key.
     swap_commit: t.Optional[str] = None  #: Compare and swap with the previous commit by CID.
-    validate_: t.Optional[bool] = None  #: Flag for validating the record.
+    validate_: t.Optional[bool] = None  #: Can be set to 'false' to skip Lexicon schema validation of record data.
 
 
 class DataDict(te.TypedDict):
     collection: str  #: The NSID of the record collection.
-    record: 'UnknownInputType'  #: The record to create.
-    repo: str  #: The handle or DID of the repo.
-    rkey: te.NotRequired[t.Optional[str]]  #: The key of the record.
+    record: 'UnknownInputType'  #: The record itself. Must contain a $type field.
+    repo: str  #: The handle or DID of the repo (aka, current account).
+    rkey: te.NotRequired[t.Optional[str]]  #: The Record Key.
     swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by CID.
-    validate: te.NotRequired[t.Optional[bool]]  #: Flag for validating the record.
+    validate: te.NotRequired[
+        t.Optional[bool]
+    ]  #: Can be set to 'false' to skip Lexicon schema validation of record data.
 
 
 class Response(base.ResponseModelBase):

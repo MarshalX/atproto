@@ -52,8 +52,8 @@ class TextSlice(base.ModelBase):
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.feed.post`."""
 
-    created_at: str  #: Created at.
-    text: str = Field(max_length=3000)  #: Text.
+    created_at: str  #: Client-declared timestamp when this post was originally created.
+    text: str = Field(max_length=3000)  #: The primary post content. May be an empty string, if there are embeds.
     embed: t.Optional[
         te.Annotated[
             t.Union[
@@ -67,16 +67,20 @@ class Record(base.RecordModelBase):
     ] = None  #: Embed.
     entities: t.Optional[
         t.List['models.AppBskyFeedPost.Entity']
-    ] = None  #: Deprecated: replaced by app.bsky.richtext.facet.
-    facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Facets.
+    ] = None  #: DEPRECATED: replaced by app.bsky.richtext.facet.
+    facets: t.Optional[
+        t.List['models.AppBskyRichtextFacet.Main']
+    ] = None  #: Annotations of text (mentions, URLs, hashtags, etc).
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
-    ] = None  #: Labels.
-    langs: t.Optional[t.List[str]] = Field(default=None, max_length=3)  #: Langs.
+    ] = None  #: Self-label values for this post. Effectively content warnings.
+    langs: t.Optional[t.List[str]] = Field(
+        default=None, max_length=3
+    )  #: Indicates human language of post primary text content.
     reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None  #: Reply.
     tags: t.Optional[t.List[str]] = Field(
         default=None, max_length=8
-    )  #: Additional non-inline tags describing this post.
+    )  #: Additional hashtags, in addition to any included in post text and facets.
 
     py_type: te.Literal['app.bsky.feed.post'] = Field(default='app.bsky.feed.post', alias='$type', frozen=True)
 

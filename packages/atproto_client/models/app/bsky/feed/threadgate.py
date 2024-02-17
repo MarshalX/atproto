@@ -45,7 +45,7 @@ class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.feed.threadgate`."""
 
     created_at: str  #: Created at.
-    post: str  #: Post.
+    post: str  #: Reference (AT-URI) to the post record.
     allow: t.Optional[
         t.List[
             te.Annotated[

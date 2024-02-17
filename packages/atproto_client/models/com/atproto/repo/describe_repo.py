@@ -27,8 +27,8 @@ class ParamsDict(te.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.repo.describeRepo`."""
 
-    collections: t.List[str]  #: Collections.
+    collections: t.List[str]  #: List of all the collections (NSIDs) for which this repo contains at least one record.
     did: str  #: Did.
-    did_doc: 'UnknownType'  #: Did doc.
+    did_doc: 'UnknownType'  #: The complete DID document for this account.
     handle: str  #: Handle.
-    handle_is_correct: bool  #: Handle is correct.
+    handle_is_correct: bool  #: Indicates if handle is currently valid (resolves bi-directionally).

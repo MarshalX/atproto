@@ -17,16 +17,18 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getFeedGenerator`."""
 
-    feed: str  #: Feed.
+    feed: str  #: AT-URI of the feed generator record.
 
 
 class ParamsDict(te.TypedDict):
-    feed: str  #: Feed.
+    feed: str  #: AT-URI of the feed generator record.
 
 
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.feed.getFeedGenerator`."""
 
-    is_online: bool  #: Is online.
-    is_valid: bool  #: Is valid.
+    is_online: (
+        bool
+    )  #: Indicates whether the feed generator service has been online recently, or else seems to be inactive.
+    is_valid: bool  #: Indicates whether the feed generator service is compatible with the record declaration.
     view: 'models.AppBskyFeedDefs.GeneratorView'  #: View.

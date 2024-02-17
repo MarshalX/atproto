@@ -19,7 +19,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.repo.applyWrites`."""
 
-    repo: str  #: The handle or DID of the repo.
+    repo: str  #: The handle or DID of the repo (aka, current account).
     writes: t.List[
         te.Annotated[
             t.Union[
@@ -30,12 +30,16 @@ class Data(base.DataModelBase):
             Field(discriminator='py_type'),
         ]
     ]  #: Writes.
-    swap_commit: t.Optional[str] = None  #: Swap commit.
-    validate_: t.Optional[bool] = None  #: Flag for validating the records.
+    swap_commit: t.Optional[
+        str
+    ] = None  #: If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations.
+    validate_: t.Optional[
+        bool
+    ] = None  #: Can be set to 'false' to skip Lexicon schema validation of record data, for all operations.
 
 
 class DataDict(te.TypedDict):
-    repo: str  #: The handle or DID of the repo.
+    repo: str  #: The handle or DID of the repo (aka, current account).
     writes: t.List[
         te.Annotated[
             t.Union[
@@ -46,12 +50,16 @@ class DataDict(te.TypedDict):
             Field(discriminator='py_type'),
         ]
     ]  #: Writes.
-    swap_commit: te.NotRequired[t.Optional[str]]  #: Swap commit.
-    validate: te.NotRequired[t.Optional[bool]]  #: Flag for validating the records.
+    swap_commit: te.NotRequired[
+        t.Optional[str]
+    ]  #: If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations.
+    validate: te.NotRequired[
+        t.Optional[bool]
+    ]  #: Can be set to 'false' to skip Lexicon schema validation of record data, for all operations.
 
 
 class Create(base.ModelBase):
-    """Definition model for :obj:`com.atproto.repo.applyWrites`. Create a new record."""
+    """Definition model for :obj:`com.atproto.repo.applyWrites`. Operation which creates a new record."""
 
     collection: str  #: Collection.
     value: 'UnknownType'  #: Value.
@@ -63,7 +71,7 @@ class Create(base.ModelBase):
 
 
 class Update(base.ModelBase):
-    """Definition model for :obj:`com.atproto.repo.applyWrites`. Update an existing record."""
+    """Definition model for :obj:`com.atproto.repo.applyWrites`. Operation which updates an existing record."""
 
     collection: str  #: Collection.
     rkey: str  #: Rkey.
@@ -75,7 +83,7 @@ class Update(base.ModelBase):
 
 
 class Delete(base.ModelBase):
-    """Definition model for :obj:`com.atproto.repo.applyWrites`. Delete an existing record."""
+    """Definition model for :obj:`com.atproto.repo.applyWrites`. Operation which deletes an existing record."""
 
     collection: str  #: Collection.
     rkey: str  #: Rkey.

@@ -20,28 +20,32 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.subscribeRepos`."""
 
-    cursor: t.Optional[int] = None  #: The last known event to backfill from.
+    cursor: t.Optional[int] = None  #: The last known event seq number to backfill from.
 
 
 class ParamsDict(te.TypedDict):
-    cursor: te.NotRequired[t.Optional[int]]  #: The last known event to backfill from.
+    cursor: te.NotRequired[t.Optional[int]]  #: The last known event seq number to backfill from.
 
 
 class Commit(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents an update of repository state. Note that empty commits are allowed, which include no repo data changes, but an update to rev and signature."""
 
     blobs: t.List['CIDType']  #: Blobs.
-    blocks: t.Union[str, bytes]  #: CAR file containing relevant blocks.
-    commit: 'CIDType'  #: Commit.
+    blocks: t.Union[str, bytes]  #: CAR file containing relevant blocks, as a diff since the previous repo state.
+    commit: 'CIDType'  #: Repo commit object CID.
     ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp'] = Field(max_length=200)  #: Ops.
-    rebase: bool  #: Rebase.
-    repo: str  #: Repo.
-    rev: str  #: The rev of the emitted commit.
-    seq: int  #: Seq.
-    time: str  #: Time.
-    too_big: bool  #: Too big.
-    prev: t.Optional['CIDType'] = None  #: Prev.
-    since: t.Optional[str] = None  #: The rev of the last emitted commit from this repo.
+    rebase: bool  #: DEPRECATED -- unused.
+    repo: str  #: The repo this event comes from.
+    rev: str  #: The rev of the emitted commit. Note that this information is also in the commit object included in blocks, unless this is a tooBig event.
+    seq: int  #: The stream sequence number of this message.
+    time: str  #: Timestamp of when this message was originally broadcast.
+    too_big: bool  #: Indicates that this commit contained too many ops, or data size was too large. Consumers will need to make a separate request to get missing data.
+    prev: t.Optional[
+        'CIDType'
+    ] = (
+        None
+    )  #: DEPRECATED -- unused. WARNING -- nullable and optional; stick with optional to ensure golang interoperability.
+    since: t.Optional[str] = None  #: The rev of the last emitted commit from this repo (if any).
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#commit'] = Field(
         default='com.atproto.sync.subscribeRepos#commit', alias='$type', frozen=True
@@ -49,7 +53,7 @@ class Commit(base.ModelBase):
 
 
 class Handle(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents an update of the account's handle, or transition to/from invalid state."""
 
     did: str  #: Did.
     handle: str  #: Handle.
@@ -62,7 +66,7 @@ class Handle(base.ModelBase):
 
 
 class Migrate(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents an account moving from one PDS instance to another. NOTE: not implemented; full account migration may introduce a new message instead."""
 
     did: str  #: Did.
     seq: int  #: Seq.
@@ -75,7 +79,7 @@ class Migrate(base.ModelBase):
 
 
 class Tombstone(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Indicates that an account has been deleted."""
 
     did: str  #: Did.
     seq: int  #: Seq.
@@ -98,11 +102,11 @@ class Info(base.ModelBase):
 
 
 class RepoOp(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. A repo operation, ie a write of a single record. For creates and updates, CID is the record's CID as of this operation. For deletes, it's null."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. A repo operation, ie a mutation of a single record."""
 
     action: str  #: Action.
     path: str  #: Path.
-    cid: t.Optional['CIDType'] = None  #: Cid.
+    cid: t.Optional['CIDType'] = None  #: For creates and updates, the new record CID. For deletions, null.
 
     py_type: te.Literal['com.atproto.sync.subscribeRepos#repoOp'] = Field(
         default='com.atproto.sync.subscribeRepos#repoOp', alias='$type', frozen=True

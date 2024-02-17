@@ -16,15 +16,15 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.repo.deleteRecord`."""
 
     collection: str  #: The NSID of the record collection.
-    repo: str  #: The handle or DID of the repo.
-    rkey: str  #: The key of the record.
+    repo: str  #: The handle or DID of the repo (aka, current account).
+    rkey: str  #: The Record Key.
     swap_commit: t.Optional[str] = None  #: Compare and swap with the previous commit by CID.
     swap_record: t.Optional[str] = None  #: Compare and swap with the previous record by CID.
 
 
 class DataDict(te.TypedDict):
     collection: str  #: The NSID of the record collection.
-    repo: str  #: The handle or DID of the repo.
-    rkey: str  #: The key of the record.
+    repo: str  #: The handle or DID of the repo (aka, current account).
+    rkey: str  #: The Record Key.
     swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by CID.
     swap_record: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous record by CID.

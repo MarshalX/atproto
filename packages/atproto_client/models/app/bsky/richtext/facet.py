@@ -16,7 +16,7 @@ from atproto_client.models import base
 
 
 class Main(base.ModelBase):
-    """Definition model for :obj:`app.bsky.richtext.facet`."""
+    """Definition model for :obj:`app.bsky.richtext.facet`. Annotation of a sub-string within rich text."""
 
     features: t.List[
         te.Annotated[
@@ -36,7 +36,7 @@ class Main(base.ModelBase):
 
 
 class Mention(base.ModelBase):
-    """Definition model for :obj:`app.bsky.richtext.facet`. A facet feature for actor mentions."""
+    """Definition model for :obj:`app.bsky.richtext.facet`. Facet feature for mention of another account. The text is usually a handle, including a '@' prefix, but the facet reference is a DID."""
 
     did: str  #: Did.
 
@@ -46,7 +46,7 @@ class Mention(base.ModelBase):
 
 
 class Link(base.ModelBase):
-    """Definition model for :obj:`app.bsky.richtext.facet`. A facet feature for links."""
+    """Definition model for :obj:`app.bsky.richtext.facet`. Facet feature for a URL. The text URL may have been simplified or truncated, but the facet reference should be a complete URL."""
 
     uri: str  #: Uri.
 
@@ -56,7 +56,7 @@ class Link(base.ModelBase):
 
 
 class Tag(base.ModelBase):
-    """Definition model for :obj:`app.bsky.richtext.facet`. A hashtag."""
+    """Definition model for :obj:`app.bsky.richtext.facet`. Facet feature for a hashtag. The text usually includes a '#' prefix, but the facet reference should not (except in the case of 'double hash tags')."""
 
     tag: str = Field(max_length=640)  #: Tag.
 
@@ -66,7 +66,7 @@ class Tag(base.ModelBase):
 
 
 class ByteSlice(base.ModelBase):
-    """Definition model for :obj:`app.bsky.richtext.facet`. A text segment. Start is inclusive, end is exclusive. Indices are for utf8-encoded strings."""
+    """Definition model for :obj:`app.bsky.richtext.facet`. Specifies the sub-string range a facet feature applies to. Start index is inclusive, end index is exclusive. Indices are zero-indexed, counting bytes of the UTF-8 encoded text. NOTE: some languages, like Javascript, use UTF-16 or Unicode codepoints for string slice indexing; in these languages, convert to byte arrays before working with facets."""
 
     byte_end: int = Field(ge=0)  #: Byte end.
     byte_start: int = Field(ge=0)  #: Byte start.

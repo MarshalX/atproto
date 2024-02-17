@@ -18,11 +18,11 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getPosts`."""
 
-    uris: t.List[str] = Field(max_length=25)  #: Uris.
+    uris: t.List[str] = Field(max_length=25)  #: List of post AT-URIs to return hydrated views for.
 
 
 class ParamsDict(te.TypedDict):
-    uris: t.List[str]  #: Uris.
+    uris: t.List[str]  #: List of post AT-URIs to return hydrated views for.
 
 
 class Response(base.ResponseModelBase):

@@ -16,12 +16,12 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.getRepo`."""
 
     did: str  #: The DID of the repo.
-    since: t.Optional[str] = None  #: The revision of the repo to catch up from.
+    since: t.Optional[str] = None  #: The revision ('rev') of the repo to create a diff from.
 
 
 class ParamsDict(te.TypedDict):
     did: str  #: The DID of the repo.
-    since: te.NotRequired[t.Optional[str]]  #: The revision of the repo to catch up from.
+    since: te.NotRequired[t.Optional[str]]  #: The revision ('rev') of the repo to create a diff from.
 
 
 #: Response raw data type.

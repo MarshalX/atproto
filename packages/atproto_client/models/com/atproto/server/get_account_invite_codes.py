@@ -17,12 +17,16 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.server.getAccountInviteCodes`."""
 
-    create_available: t.Optional[bool] = None  #: Create available.
+    create_available: t.Optional[
+        bool
+    ] = None  #: Controls whether any new 'earned' but not 'created' invites should be created.
     include_used: t.Optional[bool] = None  #: Include used.
 
 
 class ParamsDict(te.TypedDict):
-    create_available: te.NotRequired[t.Optional[bool]]  #: Create available.
+    create_available: te.NotRequired[
+        t.Optional[bool]
+    ]  #: Controls whether any new 'earned' but not 'created' invites should be created.
     include_used: te.NotRequired[t.Optional[bool]]  #: Include used.
 
 

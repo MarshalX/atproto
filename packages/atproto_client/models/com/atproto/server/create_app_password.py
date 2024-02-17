@@ -14,11 +14,11 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.createAppPassword`."""
 
-    name: str  #: Name.
+    name: str  #: A short name for the App Password, to help distinguish them.
 
 
 class DataDict(te.TypedDict):
-    name: str  #: Name.
+    name: str  #: A short name for the App Password, to help distinguish them.
 
 
 class AppPassword(base.ModelBase):

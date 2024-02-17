@@ -17,34 +17,46 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.createAccount`."""
 
-    handle: str  #: Handle.
-    did: t.Optional[str] = None  #: Did.
+    handle: str  #: Requested handle for the account.
+    did: t.Optional[str] = None  #: Pre-existing atproto DID, being imported to a new account.
     email: t.Optional[str] = None  #: Email.
     invite_code: t.Optional[str] = None  #: Invite code.
-    password: t.Optional[str] = None  #: Password.
-    plc_op: t.Optional['UnknownInputType'] = None  #: Plc op.
-    recovery_key: t.Optional[str] = None  #: Recovery key.
+    password: t.Optional[
+        str
+    ] = None  #: Initial account password. May need to meet instance-specific password strength requirements.
+    plc_op: t.Optional[
+        'UnknownInputType'
+    ] = None  #: A signed DID PLC operation to be submitted as part of importing an existing account to this instance. NOTE: this optional field may be updated when full account migration is implemented.
+    recovery_key: t.Optional[
+        str
+    ] = None  #: DID PLC rotation key (aka, recovery key) to be included in PLC creation operation.
     verification_code: t.Optional[str] = None  #: Verification code.
     verification_phone: t.Optional[str] = None  #: Verification phone.
 
 
 class DataDict(te.TypedDict):
-    handle: str  #: Handle.
-    did: te.NotRequired[t.Optional[str]]  #: Did.
+    handle: str  #: Requested handle for the account.
+    did: te.NotRequired[t.Optional[str]]  #: Pre-existing atproto DID, being imported to a new account.
     email: te.NotRequired[t.Optional[str]]  #: Email.
     invite_code: te.NotRequired[t.Optional[str]]  #: Invite code.
-    password: te.NotRequired[t.Optional[str]]  #: Password.
-    plc_op: te.NotRequired[t.Optional['UnknownInputType']]  #: Plc op.
-    recovery_key: te.NotRequired[t.Optional[str]]  #: Recovery key.
+    password: te.NotRequired[
+        t.Optional[str]
+    ]  #: Initial account password. May need to meet instance-specific password strength requirements.
+    plc_op: te.NotRequired[
+        t.Optional['UnknownInputType']
+    ]  #: A signed DID PLC operation to be submitted as part of importing an existing account to this instance. NOTE: this optional field may be updated when full account migration is implemented.
+    recovery_key: te.NotRequired[
+        t.Optional[str]
+    ]  #: DID PLC rotation key (aka, recovery key) to be included in PLC creation operation.
     verification_code: te.NotRequired[t.Optional[str]]  #: Verification code.
     verification_phone: te.NotRequired[t.Optional[str]]  #: Verification phone.
 
 
 class Response(base.ResponseModelBase):
-    """Output data model for :obj:`com.atproto.server.createAccount`."""
+    """Output data model for :obj:`com.atproto.server.createAccount`. Account login session returned on successful account creation."""
 
     access_jwt: str  #: Access jwt.
-    did: str  #: Did.
+    did: str  #: The DID of the new account.
     handle: str  #: Handle.
     refresh_jwt: str  #: Refresh jwt.
-    did_doc: t.Optional['UnknownType'] = None  #: Did doc.
+    did_doc: t.Optional['UnknownType'] = None  #: Complete DID document.

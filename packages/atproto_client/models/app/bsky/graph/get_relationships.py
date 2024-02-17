@@ -18,13 +18,15 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.graph.getRelationships`."""
 
-    actor: str  #: Actor.
-    others: t.Optional[t.List[str]] = Field(default=None, max_length=30)  #: Others.
+    actor: str  #: Primary account requesting relationships for.
+    others: t.Optional[t.List[str]] = Field(
+        default=None, max_length=30
+    )  #: List of 'other' accounts to be related back to the primary.
 
 
 class ParamsDict(te.TypedDict):
-    actor: str  #: Actor.
-    others: te.NotRequired[t.Optional[t.List[str]]]  #: Others.
+    actor: str  #: Primary account requesting relationships for.
+    others: te.NotRequired[t.Optional[t.List[str]]]  #: List of 'other' accounts to be related back to the primary.
 
 
 class Response(base.ResponseModelBase):

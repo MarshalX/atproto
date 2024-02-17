@@ -38,7 +38,7 @@ class Repo(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.listRepos`."""
 
     did: str  #: Did.
-    head: str  #: Head.
+    head: str  #: Current repo commit CID.
     rev: str  #: Rev.
 
     py_type: te.Literal['com.atproto.sync.listRepos#repo'] = Field(

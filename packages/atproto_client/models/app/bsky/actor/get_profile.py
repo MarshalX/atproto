@@ -13,8 +13,8 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.actor.getProfile`."""
 
-    actor: str  #: Actor.
+    actor: str  #: Handle or DID of account to fetch profile of.
 
 
 class ParamsDict(te.TypedDict):
-    actor: str  #: Actor.
+    actor: str  #: Handle or DID of account to fetch profile of.

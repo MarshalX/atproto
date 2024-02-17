@@ -19,13 +19,15 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.actor.profile`."""
 
-    avatar: t.Optional['BlobRef'] = None  #: Avatar.
-    banner: t.Optional['BlobRef'] = None  #: Banner.
-    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
+    avatar: t.Optional[
+        'BlobRef'
+    ] = None  #: Small image to be displayed next to posts from account. AKA, 'profile picture'.
+    banner: t.Optional['BlobRef'] = None  #: Larger horizontal image to display behind profile view.
+    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Free-form profile description text.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
-    ] = None  #: Labels.
+    ] = None  #: Self-label values, specific to the Bluesky application, on the overall account.
 
     py_type: te.Literal['app.bsky.actor.profile'] = Field(default='app.bsky.actor.profile', alias='$type', frozen=True)
 

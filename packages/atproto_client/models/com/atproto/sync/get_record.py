@@ -17,14 +17,14 @@ class Params(base.ParamsModelBase):
 
     collection: str  #: Collection.
     did: str  #: The DID of the repo.
-    rkey: str  #: Rkey.
+    rkey: str  #: Record Key.
     commit: t.Optional[str] = None  #: An optional past commit CID.
 
 
 class ParamsDict(te.TypedDict):
     collection: str  #: Collection.
     did: str  #: The DID of the repo.
-    rkey: str  #: Rkey.
+    rkey: str  #: Record Key.
     commit: te.NotRequired[t.Optional[str]]  #: An optional past commit CID.
 
 

@@ -18,15 +18,19 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getPostThread`."""
 
-    uri: str  #: Uri.
-    depth: t.Optional[int] = Field(default=6, ge=0, le=1000)  #: Depth.
-    parent_height: t.Optional[int] = Field(default=80, ge=0, le=1000)  #: Parent height.
+    uri: str  #: Reference (AT-URI) to post record.
+    depth: t.Optional[int] = Field(
+        default=6, ge=0, le=1000
+    )  #: How many levels of reply depth should be included in response.
+    parent_height: t.Optional[int] = Field(
+        default=80, ge=0, le=1000
+    )  #: How many levels of parent (and grandparent, etc) post to include.
 
 
 class ParamsDict(te.TypedDict):
-    uri: str  #: Uri.
-    depth: te.NotRequired[t.Optional[int]]  #: Depth.
-    parent_height: te.NotRequired[t.Optional[int]]  #: Parent height.
+    uri: str  #: Reference (AT-URI) to post record.
+    depth: te.NotRequired[t.Optional[int]]  #: How many levels of reply depth should be included in response.
+    parent_height: te.NotRequired[t.Optional[int]]  #: How many levels of parent (and grandparent, etc) post to include.
 
 
 class Response(base.ResponseModelBase):

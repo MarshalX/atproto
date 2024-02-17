@@ -18,13 +18,13 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getFeedSkeleton`."""
 
-    feed: str  #: Feed.
+    feed: str  #: Reference to feed generator record describing the specific feed being requested.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
 class ParamsDict(te.TypedDict):
-    feed: str  #: Feed.
+    feed: str  #: Reference to feed generator record describing the specific feed being requested.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 
