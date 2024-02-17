@@ -1,11 +1,9 @@
-import typing as t
-
 from atproto_crypto.algs import ALGORITHM_TO_CLASS
 from atproto_crypto.did import parse_did_key
 from atproto_crypto.exceptions import UnsupportedSignatureAlgorithmError
 
 
-def verify_signature(did_key: str, signing_input: t.Union[str, bytes], signature: t.Union[str, bytes]) -> bool:
+def verify_signature(did_key: str, signing_input: bytes, signature: bytes) -> bool:
     """Verify signature.
 
     Args:

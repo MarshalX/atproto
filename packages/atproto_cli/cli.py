@@ -37,7 +37,7 @@ class AliasedGroup(click.Group):
         return name, cmd, args
 
 
-def echo(ctx: click.Context, *args) -> None:
+def echo(ctx: click.Context, *args: t.Any) -> None:
     if not ctx.obj.get('silent'):
         click.echo(*args)
 
@@ -74,11 +74,11 @@ def gen_all(ctx: click.Context) -> None:
     echo(ctx, 'Done!')
 
 
-def _gen_models(*args) -> None:
+def _gen_models(*args: t.Any) -> None:
     generate_models(*args)
 
 
-def _gen_namespaces(*args) -> None:
+def _gen_namespaces(*args: t.Any) -> None:
     generate_namespaces(*args)
 
 

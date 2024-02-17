@@ -15,7 +15,7 @@ def _datetime_now() -> datetime:
 
 
 class DidInMemoryCache(DidBaseCache):
-    def __init__(self, *args, **kwargs: t.Any) -> None:
+    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self._cache: t.Dict[str, CachedDid] = {}
@@ -47,7 +47,7 @@ class DidInMemoryCache(DidBaseCache):
 
 
 class AsyncDidInMemoryCache(AsyncDidBaseCache):
-    def __init__(self, *args, **kwargs: t.Any) -> None:
+    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self._in_memory_cache = DidInMemoryCache(*args, **kwargs)

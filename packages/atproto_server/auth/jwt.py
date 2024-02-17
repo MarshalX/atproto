@@ -52,9 +52,6 @@ def parse_jwt(jwt: t.Union[str, bytes]) -> t.Tuple[bytes, bytes, t.Dict[str, t.A
     if isinstance(jwt, str):
         jwt = jwt.encode('UTF-8')
 
-    if not isinstance(jwt, bytes):
-        raise TokenDecodeError(f'Invalid token type. Token must be a {bytes}')
-
     try:
         signing_input, crypto_segment = jwt.rsplit(b'.', 1)
         header_segment, payload_segment = signing_input.split(b'.', 1)
@@ -73,6 +70,8 @@ def parse_jwt(jwt: t.Union[str, bytes]) -> t.Tuple[bytes, bytes, t.Dict[str, t.A
 
     if not isinstance(header, dict):
         raise TokenDecodeError('Invalid header string: must be a json object')
+
+    header = t.cast(t.Dict[str, t.Any], json.loads(header_data))  # we expect object in header
 
     try:
         payload = base64url_decode(payload_segment)
@@ -103,7 +102,10 @@ def decode_jwt_payload(payload: t.Union[str, bytes]) -> JwtPayload:
     if not isinstance(plain_payload, dict):
         raise TokenDecodeError('Invalid payload string: must be a json object')
 
-    return JwtPayload(**plain_payload)
+    try:
+        return JwtPayload(**plain_payload)  # type: ignore  # noqa: PGH003
+    except Exception as e:  # noqa: BLE001
+        raise TokenDecodeError(f'Invalid payload string: {e}') from e
 
 
 def get_jwt_payload(jwt: str) -> JwtPayload:
@@ -198,13 +200,16 @@ def verify_jwt(
         TokenInvalidIssuedAtError: If the given JWT has invalid issued at.
         TokenInvalidSignatureError: If the given JWT has invalid signature.
     """
-    plain_payload, signing_input, header, signature = parse_jwt(jwt)
+    plain_payload, signing_input, _, signature = parse_jwt(jwt)
 
     payload = decode_jwt_payload(plain_payload)
     validate_jwt_payload(payload)
 
     if own_did and payload.aud != own_did:
         raise TokenInvalidAudienceError('Invalid subject')
+
+    if payload.iss is None:
+        raise TokenDecodeError('Invalid payload. Expected not None iss')
 
     signing_key = get_signing_key_callback(payload.iss, False)
     if _verify_signature(signing_key, signing_input, signature):
@@ -243,13 +248,16 @@ async def verify_jwt_async(
         TokenInvalidIssuedAtError: If the given JWT has invalid issued at.
         TokenInvalidSignatureError: If the given JWT has invalid signature.
     """
-    plain_payload, signing_input, header, signature = parse_jwt(jwt)
+    plain_payload, signing_input, _, signature = parse_jwt(jwt)
 
     payload = decode_jwt_payload(plain_payload)
     validate_jwt_payload(payload)
 
     if own_did and payload.aud != own_did:
         raise TokenInvalidAudienceError('Invalid subject')
+
+    if payload.iss is None:
+        raise TokenDecodeError('Invalid payload. Expected not None iss')
 
     signing_key = await get_signing_key_callback(payload.iss, False)
     if _verify_signature(signing_key, signing_input, signature):

@@ -12,7 +12,7 @@ class ClientRaw(ClientBase):
     com: 'sync_ns.ComNamespace'
     app: 'sync_ns.AppNamespace'
 
-    def __init__(self, *args, **kwargs: t.Any) -> None:
+    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self.com = sync_ns.ComNamespace(self)

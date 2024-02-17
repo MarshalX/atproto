@@ -39,7 +39,7 @@ class DidWebResolver(_DidWebResolverBase, BaseResolver):
 
         self._client = httpx.Client()
 
-    def resolve_without_validation(self, did: str) -> dict:
+    def resolve_without_validation(self, did: str) -> t.Dict[str, t.Any]:
         url = self._parse_web_did(did)
 
         try:
@@ -62,7 +62,7 @@ class AsyncDidWebResolver(_DidWebResolverBase, AsyncBaseResolver):
 
         self._client = httpx.AsyncClient()
 
-    async def resolve_without_validation(self, did: str) -> dict:
+    async def resolve_without_validation(self, did: str) -> t.Dict[str, t.Any]:
         url = self._parse_web_did(did)
 
         try:

@@ -20,13 +20,15 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 M = t.TypeVar('M')
-ModelData: te.TypeAlias = t.Union[M, dict, None]
+ModelData: te.TypeAlias = t.Union[
+    M, t.Dict[str, t.Any], None
+]  # we assume that dict is JSON object. not list or primitive
 
 _TYPE_SERVICE_FIELD = '$type'
 
 
 def get_or_create(
-    model_data: ModelData, model: t.Optional[t.Type[M]] = None, *, strict: bool = True
+    model_data: ModelData[M], model: t.Optional[t.Type[M]] = None, *, strict: bool = True
 ) -> t.Optional[t.Union[M, UnknownRecordType, DotDict]]:
     """Get model instance from raw data.
 
@@ -58,28 +60,37 @@ def get_or_create(
     """
     try:
         model_instance = _get_or_create(model_data, model, strict=strict)
-        if strict and model_instance is not None and not isinstance(model_instance, model):
+        if strict and model_instance is not None and (not model or not isinstance(model_instance, model)):
             raise ModelError(f"Can't properly parse model of type {model}")
 
         return model_instance
     except Exception as e:  # noqa: BLE001
-        if strict:
+        if strict or not isinstance(model_data, dict):
             raise e
 
         return DotDict(model_data)
 
 
 def _get_or_create(
-    model_data: ModelData, model: t.Type[M], *, strict: bool
+    model_data: ModelData[M], model: t.Optional[t.Type[M]], *, strict: bool
 ) -> t.Optional[t.Union[M, UnknownRecordType, DotDict]]:
     if model_data is None:
         return None
 
     if model is None:
+        if not isinstance(model_data, dict):
+            return None
+
+        # we are sure that this is dict because of check above
+        model_data = t.cast(t.Dict[str, t.Any], model_data)
+
         # resolve a record model by type and try to deserialize
-        record_type = model_data.get(_TYPE_SERVICE_FIELD)
+        record_type: t.Any = model_data.get(_TYPE_SERVICE_FIELD)
         if record_type not in RECORD_TYPE_TO_MODEL_CLASS:
             return None
+
+        # now we are sure that this is str because it's in RECORD_TYPE_TO_MODEL_CLASS
+        record_type = t.cast(str, record_type)
 
         return get_or_create(model_data, RECORD_TYPE_TO_MODEL_CLASS[record_type], strict=strict)
 
@@ -95,13 +106,16 @@ def _get_or_create(
 def get_response_model(response: 'Response', model: t.Type[M]) -> M:
     if model is bool:
         # Could not be False? Because the exception with errors will be raised from the server
-        return response.success
+        return t.cast(M, response.success)
 
-    # return is optional if response.content is None, but doesn't occur in practice
-    return get_or_create(response.content, model)
+    if not isinstance(response.content, dict):
+        raise ModelError("Can't properly parse response model because JSON is expected in response")
+
+    # casting to M because of enabled strict mode
+    return t.cast(M, get_or_create(response.content, model, strict=True))
 
 
-def get_model_as_dict(model: t.Union[DotDict, BlobRef, ModelBase]) -> dict:
+def get_model_as_dict(model: t.Union[DotDict, BlobRef, ModelBase]) -> t.Dict[str, t.Any]:
     if isinstance(model, DotDict):
         return model.to_dict()
 

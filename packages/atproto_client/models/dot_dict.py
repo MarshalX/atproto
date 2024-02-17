@@ -61,12 +61,12 @@ class DotDict(UnknownDict):
         >>> assert model.to_dict() == test_data
     """
 
-    def __init__(self, data: dict) -> None:
+    def __init__(self, data: t.Dict[str, t.Any]) -> None:
         self._data = deepcopy(data)
         for k, v in self._data.items():
             self.__setitem__(k, v)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> t.Dict[str, t.Any]:
         """Unwrap DotDict to Python built-in dict."""
         return deepcopy(self._data)
 
@@ -106,22 +106,22 @@ class DotDict(UnknownDict):
     def __repr__(self) -> str:
         return repr(self._data)
 
-    def __reduce_ex__(self, protocol: int):  # noqa: ANN204
-        return getattr(self._data, '__reduce_ex__', None)(protocol)
+    def __reduce_ex__(self, protocol: te.SupportsIndex):  # noqa: ANN204
+        return self._data.__reduce_ex__(protocol)
 
     def __reduce__(self):  # noqa: ANN204
-        return getattr(self._data, '__reduce__', None)()
+        return self._data.__reduce__()
 
     @staticmethod
     def __convert(obj: t.Any) -> t.Any:
         if isinstance(obj, dict):
-            return DotDict(obj)
+            return DotDict(t.cast(t.Dict[str, t.Any], obj))
         if isinstance(obj, list):
-            return [DotDict.__convert(v) for v in obj]
+            return [DotDict.__convert(v) for v in t.cast(t.List[t.Any], obj)]
         if isinstance(obj, set):
-            return {DotDict.__convert(v) for v in obj}
+            return {DotDict.__convert(v) for v in t.cast(t.Set[t.Any], obj)}
         if isinstance(obj, tuple):
-            return tuple(DotDict.__convert(v) for v in obj)
+            return tuple(DotDict.__convert(v) for v in t.cast(t.Tuple[t.Any], obj))
         return obj
 
 
@@ -140,7 +140,7 @@ class _DotDictPydanticAnnotation:
         * Serialization will always return just a dict
         """
 
-        def validate_from_dict(value: dict) -> DotDict:
+        def validate_from_dict(value: t.Dict[str, t.Any]) -> DotDict:
             return DotDict(value)
 
         from_dict_schema = core_schema.chain_schema(

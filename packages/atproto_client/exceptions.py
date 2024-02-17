@@ -6,6 +6,9 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
+_DEFAULT_LOGING_REQUIRED_ERROR_MESSAGE = 'To perform this action, you must be logged in. Use the `login` method first.'
+
+
 class ModelError(AtProtocolError):
     ...
 
@@ -37,3 +40,8 @@ class RequestException(RequestErrorBase):
 
 class BadRequestError(RequestErrorBase):
     ...
+
+
+class LoginRequiredError(AtProtocolError):
+    def __init__(self, message: t.Optional[str] = _DEFAULT_LOGING_REQUIRED_ERROR_MESSAGE) -> None:
+        super().__init__(message)

@@ -15,6 +15,7 @@ from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethods
 from atproto_client.client.methods_mixin.backward_compatibility import _BackwardCompatibility
 from atproto_client.client.methods_mixin.session import AsyncSessionDispatchMixin
 from atproto_client.client.session import Session, SessionEvent, SessionResponse
+from atproto_client.exceptions import LoginRequiredError
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
 from atproto_client.utils import TextBuilder
 
@@ -28,7 +29,7 @@ class AsyncClient(
 ):
     """High-level client for XRPC of ATProto."""
 
-    def __init__(self, base_url: t.Optional[str] = None, *args, **kwargs: t.Any) -> None:
+    def __init__(self, base_url: t.Optional[str] = None, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(base_url, *args, **kwargs)
 
         self._refresh_lock = Lock()
@@ -47,8 +48,8 @@ class AsyncClient(
         return await super()._invoke(invoke_type, **kwargs)
 
     async def _set_session(self, event: SessionEvent, session: SessionResponse) -> None:
-        self._set_session_common(session)
-        await self._call_on_session_change_callbacks(event, self._session.copy())
+        session = self._set_session_common(session)
+        await self._call_on_session_change_callbacks(event, session.copy())
 
     async def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
         session = await self.com.atproto.server.create_session(
@@ -58,6 +59,9 @@ class AsyncClient(
         return session
 
     async def _refresh_and_set_session(self) -> 'models.ComAtprotoServerRefreshSession.Response':
+        if not self._refresh_jwt:
+            raise LoginRequiredError
+
         refresh_session = await self.com.atproto.server.refresh_session(
             headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
         )
@@ -104,7 +108,7 @@ class AsyncClient(
         self,
         text: t.Union[str, TextBuilder],
         profile_identify: t.Optional[str] = None,
-        reply_to: t.Optional[t.Union['models.AppBskyFeedPost.ReplyRef', 'models.AppBskyFeedDefs.ReplyRef']] = None,
+        reply_to: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None,
         embed: t.Optional[
             t.Union[
                 'models.AppBskyEmbedImages.Main',
@@ -142,9 +146,12 @@ class AsyncClient(
             facets = text.build_facets()
             text = text.build_text()
 
-        repo = self.me.did
+        repo = self.me and self.me.did
         if profile_identify:
             repo = profile_identify
+
+        if not repo:
+            raise LoginRequiredError
 
         if not langs:
             langs = [DEFAULT_LANGUAGE_CODE1]
@@ -180,7 +187,7 @@ class AsyncClient(
         image: bytes,
         image_alt: str,
         profile_identify: t.Optional[str] = None,
-        reply_to: t.Optional[t.Union['models.AppBskyFeedPost.ReplyRef', 'models.AppBskyFeedDefs.ReplyRef']] = None,
+        reply_to: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
     ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
@@ -231,9 +238,12 @@ class AsyncClient(
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        repo = self.me.did
+        repo = self.me and self.me.did
         if profile_identify:
             repo = profile_identify
+
+        if not repo:
+            raise LoginRequiredError
 
         return await self.app.bsky.feed.post.get(repo, post_rkey, cid)
 
@@ -364,7 +374,7 @@ class AsyncClient(
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         return await self.app.bsky.feed.get_author_feed(
-            models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, fitler=filter, limit=limit)
+            models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, filter=filter, limit=limit)
         )
 
     async def like(
@@ -373,12 +383,15 @@ class AsyncClient(
         cid: t.Optional[str] = None,
         subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
     ) -> 'models.AppBskyFeedLike.CreateRecordResponse':
-        """Like the post.
+        """Like the record.
 
         Args:
-            cid: The CID of the post.
-            uri: The URI of the post.
+            cid: The CID of the record.
+            uri: The URI of the record.
             subject: DEPRECATED.
+
+        Note:
+            Record could be post, custom feed, etc.
 
         Returns:
             :obj:`models.AppBskyFeedLike.CreateRecordResponse`: Reference to the created record.
@@ -388,8 +401,12 @@ class AsyncClient(
         """
         subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
 
+        repo = self.me and self.me.did
+        if not repo:
+            raise LoginRequiredError
+
         record = models.AppBskyFeedLike.Record(created_at=self.get_current_time_iso(), subject=subject_obj)
-        return await self.app.bsky.feed.like.create(self.me.did, record)
+        return await self.app.bsky.feed.like.create(repo, record)
 
     async def unlike(self, like_uri: str) -> bool:
         """Unlike the post.
@@ -427,8 +444,12 @@ class AsyncClient(
         """
         subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
 
+        repo = self.me and self.me.did
+        if not repo:
+            raise LoginRequiredError
+
         record = models.AppBskyFeedRepost.Record(created_at=self.get_current_time_iso(), subject=subject_obj)
-        return await self.app.bsky.feed.repost.create(self.me.did, record)
+        return await self.app.bsky.feed.repost.create(repo, record)
 
     async def unrepost(self, repost_uri: str) -> bool:
         """Unrepost the post (delete repost).
@@ -457,8 +478,12 @@ class AsyncClient(
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
+        repo = self.me and self.me.did
+        if not repo:
+            raise LoginRequiredError
+
         record = models.AppBskyGraphFollow.Record(created_at=self.get_current_time_iso(), subject=subject)
-        return await self.app.bsky.graph.follow.create(self.me.did, record)
+        return await self.app.bsky.graph.follow.create(repo, record)
 
     async def unfollow(self, follow_uri: str) -> bool:
         """Unfollow the profile.

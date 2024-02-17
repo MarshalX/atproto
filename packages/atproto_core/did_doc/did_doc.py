@@ -33,7 +33,7 @@ def _validate_url(url: str) -> t.Optional[str]:
     return url
 
 
-def is_valid_did_doc(did_doc: t.Union[dict, t.Any]) -> bool:
+def is_valid_did_doc(did_doc: t.Union[t.Dict[str, t.Any], t.Any]) -> bool:
     """Return whether the given DID document is valid.
 
     Args:
@@ -63,7 +63,7 @@ class Service(BaseModel):
 
     id: str
     type: str
-    service_endpoint: t.Union[str, dict] = Field(alias='serviceEndpoint')
+    service_endpoint: t.Union[str, t.Any] = Field(alias='serviceEndpoint')
 
 
 class DidDocument(BaseModel):
@@ -188,7 +188,7 @@ class DidDocument(BaseModel):
         )
 
     @classmethod
-    def from_dict(cls, did_doc: t.Union[dict, t.Any]) -> 'DidDocument':
+    def from_dict(cls, did_doc: t.Union[t.Dict[str, t.Any], t.Any]) -> 'DidDocument':
         """Parse a DID document.
 
         Args:

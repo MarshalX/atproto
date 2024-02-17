@@ -13,8 +13,22 @@ from atproto_client.models.utils import get_or_create, is_json
 class Response:
     success: bool
     status_code: int
-    content: t.Optional[t.Union[dict, bytes, 'XrpcError']]
+    content: t.Optional[t.Union[t.Dict[str, t.Any], bytes, 'XrpcError']]
     headers: t.Dict[str, t.Any]
+
+
+def _convert_headers_to_dict(headers: httpx.Headers) -> t.Dict[str, str]:
+    headers_dict: t.Dict[str, str] = {}
+
+    for key, value in headers.raw:
+        str_key = key.decode(headers.encoding)
+        str_value = value.decode(headers.encoding)
+        if str_key in headers_dict:
+            headers_dict[str_key] += f', {str_value}'
+        else:
+            headers_dict[str_key] = str_value
+
+    return headers_dict
 
 
 def _parse_response(response: httpx.Response) -> Response:
@@ -26,7 +40,7 @@ def _parse_response(response: httpx.Response) -> Response:
         success=True,
         status_code=response.status_code,
         content=content,
-        headers=response.headers,
+        headers=_convert_headers_to_dict(response.headers),
     )
 
 
@@ -48,11 +62,11 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
         success=False,
         status_code=response.status_code,
         content=response.content,
-        headers=response.headers,
+        headers=_convert_headers_to_dict(response.headers),
     )
     if response.content and is_json(response.content):
-        data = json.loads(response.content)
-        error_response.content = get_or_create(data, XrpcError)
+        data: t.Dict[str, t.Any] = json.loads(response.content)
+        error_response.content = t.cast(XrpcError, get_or_create(data, XrpcError))
 
     if response.status_code in {401, 403}:
         raise exceptions.UnauthorizedError(error_response)
@@ -68,9 +82,9 @@ class RequestBase:
     _MANDATORY_HEADERS: t.ClassVar[t.Dict[str, str]] = {'User-Agent': 'atproto/alpha (Python SDK)'}
 
     def __init__(self) -> None:
-        self._additional_headers: dict = {}
+        self._additional_headers: t.Dict[str, str] = {}
 
-    def get_headers(self, additional_headers: t.Optional[dict] = None) -> dict:
+    def get_headers(self, additional_headers: t.Optional[t.Dict[str, str]] = None) -> t.Dict[str, str]:
         headers = {**RequestBase._MANDATORY_HEADERS, **self._additional_headers}
 
         if additional_headers:
@@ -78,11 +92,8 @@ class RequestBase:
 
         return headers
 
-    def set_additional_headers(self, headers: dict) -> None:
-        if isinstance(headers, dict):
-            self._additional_headers = headers.copy()
-        else:
-            raise ValueError('Headers must be dict')
+    def set_additional_headers(self, headers: t.Dict[str, str]) -> None:
+        self._additional_headers = headers.copy()
 
 
 class Request(RequestBase):
@@ -105,10 +116,10 @@ class Request(RequestBase):
     def close(self) -> None:
         self._client.close()
 
-    def get(self, *args, **kwargs: t.Any) -> Response:
+    def get(self, *args: t.Any, **kwargs: t.Any) -> Response:
         return _parse_response(self._send_request('GET', *args, **kwargs))
 
-    def post(self, *args, **kwargs: t.Any) -> Response:
+    def post(self, *args: t.Any, **kwargs: t.Any) -> Response:
         return _parse_response(self._send_request('POST', *args, **kwargs))
 
 
@@ -132,8 +143,8 @@ class AsyncRequest(RequestBase):
     async def close(self) -> None:
         await self._client.aclose()
 
-    async def get(self, *args, **kwargs: t.Any) -> Response:
+    async def get(self, *args: t.Any, **kwargs: t.Any) -> Response:
         return _parse_response(await self._send_request('GET', *args, **kwargs))
 
-    async def post(self, *args, **kwargs: t.Any) -> Response:
+    async def post(self, *args: t.Any, **kwargs: t.Any) -> Response:
         return _parse_response(await self._send_request('POST', *args, **kwargs))

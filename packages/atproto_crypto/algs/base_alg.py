@@ -12,7 +12,7 @@ class AlgBase:
 
     NAME = None
 
-    def __init__(self, curve: EllipticCurve, curve_order: hex) -> None:
+    def __init__(self, curve: EllipticCurve, curve_order: int) -> None:
         self.curve = curve
         self.curve_order = curve_order
 
