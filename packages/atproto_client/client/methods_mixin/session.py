@@ -4,6 +4,7 @@ from datetime import timedelta
 
 from atproto_server.auth.jwt import get_jwt_payload
 
+from atproto_client.client.methods_mixin.time import TimeMethodsMixin
 from atproto_client.client.session import (
     AsyncSessionChangeCallback,
     Session,
@@ -11,13 +12,14 @@ from atproto_client.client.session import (
     SessionEvent,
     SessionResponse,
 )
+from atproto_client.exceptions import LoginRequiredError
 
 if t.TYPE_CHECKING:
     from atproto_server.auth.jwt import JwtPayload
 
 
 class SessionDispatchMixin:
-    def __init__(self, *args, **kwargs: t.Any) -> None:
+    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self._on_session_change_callbacks: t.List[SessionChangeCallback] = []
@@ -51,7 +53,7 @@ class SessionDispatchMixin:
 
 
 class AsyncSessionDispatchMixin:
-    def __init__(self, *args, **kwargs: t.Any) -> None:
+    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
@@ -86,15 +88,15 @@ class AsyncSessionDispatchMixin:
         self._on_session_change_async_callbacks.append(callback)
 
     async def _call_on_session_change_callbacks(self, event: SessionEvent, session: Session) -> None:
-        coroutines = []
+        coroutines: t.List[t.Coroutine[t.Any, t.Any, None]] = []
         for on_session_change_async_callback in self._on_session_change_async_callbacks:
             coroutines.append(on_session_change_async_callback(event, session))
 
         await asyncio.gather(*coroutines)
 
 
-class SessionMethodsMixin:
-    def __init__(self, *args, **kwargs: t.Any) -> None:
+class SessionMethodsMixin(TimeMethodsMixin):
+    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self._access_jwt: t.Optional[str] = None
@@ -106,12 +108,15 @@ class SessionMethodsMixin:
         self._session: t.Optional[Session] = None
 
     def _should_refresh_session(self) -> bool:
+        if not self._access_jwt_payload or not self._access_jwt_payload.exp:
+            raise LoginRequiredError
+
         expired_at = self.get_time_from_timestamp(self._access_jwt_payload.exp)
         expired_at = expired_at - timedelta(minutes=15)  # let's update the token a bit earlier than required
 
         return self.get_current_time() > expired_at
 
-    def _set_session_common(self, session: SessionResponse) -> None:
+    def _set_session_common(self, session: SessionResponse) -> Session:
         self._access_jwt = session.access_jwt
         self._access_jwt_payload = get_jwt_payload(session.access_jwt)
 
@@ -126,6 +131,8 @@ class SessionMethodsMixin:
         )
 
         self._set_auth_headers(session.access_jwt)
+
+        return self._session
 
     @staticmethod
     def _get_auth_headers(token: str) -> t.Dict[str, str]:
@@ -165,4 +172,7 @@ class SessionMethodsMixin:
         Returns:
             :obj:`str`: Session string.
         """
+        if not self._session:
+            raise LoginRequiredError
+
         return self._session.export()

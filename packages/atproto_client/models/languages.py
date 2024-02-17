@@ -15,7 +15,7 @@ class Language:
 # language databases:
 # - official db: https://www.loc.gov/standards/iso639-2/php/code_list.php
 # - bsky app: https://github.com/bluesky-social/social-app/blob/main/src/locale/languages.ts
-LANGUAGES: t.Tuple = (
+LANGUAGES: t.Tuple[Language, ...] = (
     Language(name='Afar', code1='aa', code2='aar'),
     Language(name='Abkhazian', code1='ab', code2='abk'),
     Language(name='Achinese', code1='', code2='ace'),
