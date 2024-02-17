@@ -106,7 +106,7 @@ class DotDict(UnknownDict):
     def __repr__(self) -> str:
         return repr(self._data)
 
-    def __reduce_ex__(self, protocol: t.SupportsIndex):  # noqa: ANN204
+    def __reduce_ex__(self, protocol: te.SupportsIndex):  # noqa: ANN204
         return self._data.__reduce_ex__(protocol)
 
     def __reduce__(self):  # noqa: ANN204
