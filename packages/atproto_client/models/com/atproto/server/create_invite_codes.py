@@ -18,9 +18,9 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.createInviteCodes`."""
 
-    code_count: int = Field(default=1, alias='codeCount')  #: Code count.
-    use_count: int = Field(alias='useCount')  #: Use count.
-    for_accounts: t.Optional[t.List[str]] = Field(default=None, alias='forAccounts')  #: For accounts.
+    code_count: int = None  #: Code count.
+    use_count: int  #: Use count.
+    for_accounts: t.Optional[t.List[str]] = None  #: For accounts.
 
 
 class DataDict(te.TypedDict):

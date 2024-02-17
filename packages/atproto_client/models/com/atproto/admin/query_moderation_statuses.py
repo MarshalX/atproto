@@ -21,31 +21,19 @@ class Params(base.ParamsModelBase):
     appealed: t.Optional[bool] = None  #: Get subjects in unresolved appealed status.
     comment: t.Optional[str] = None  #: Search subjects by keyword from comments.
     cursor: t.Optional[str] = None  #: Cursor.
-    ignore_subjects: t.Optional[t.List[str]] = Field(default=None, alias='ignoreSubjects')  #: Ignore subjects.
-    include_muted: t.Optional[bool] = Field(
-        default=None, alias='includeMuted'
-    )  #: By default, we don't include muted subjects in the results. Set this to true to include them.
-    last_reviewed_by: t.Optional[str] = Field(
-        default=None, alias='lastReviewedBy'
-    )  #: Get all subject statuses that were reviewed by a specific moderator.
+    ignore_subjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
+    include_muted: t.Optional[
+        bool
+    ] = None  #: By default, we don't include muted subjects in the results. Set this to true to include them.
+    last_reviewed_by: t.Optional[str] = None  #: Get all subject statuses that were reviewed by a specific moderator.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
-    reported_after: t.Optional[str] = Field(
-        default=None, alias='reportedAfter'
-    )  #: Search subjects reported after a given timestamp.
-    reported_before: t.Optional[str] = Field(
-        default=None, alias='reportedBefore'
-    )  #: Search subjects reported before a given timestamp.
-    review_state: t.Optional[str] = Field(
-        default=None, alias='reviewState'
-    )  #: Specify when fetching subjects in a certain state.
-    reviewed_after: t.Optional[str] = Field(
-        default=None, alias='reviewedAfter'
-    )  #: Search subjects reviewed after a given timestamp.
-    reviewed_before: t.Optional[str] = Field(
-        default=None, alias='reviewedBefore'
-    )  #: Search subjects reviewed before a given timestamp.
-    sort_direction: t.Optional[str] = Field(default='desc', alias='sortDirection')  #: Sort direction.
-    sort_field: t.Optional[str] = Field(default='lastReportedAt', alias='sortField')  #: Sort field.
+    reported_after: t.Optional[str] = None  #: Search subjects reported after a given timestamp.
+    reported_before: t.Optional[str] = None  #: Search subjects reported before a given timestamp.
+    review_state: t.Optional[str] = None  #: Specify when fetching subjects in a certain state.
+    reviewed_after: t.Optional[str] = None  #: Search subjects reviewed after a given timestamp.
+    reviewed_before: t.Optional[str] = None  #: Search subjects reviewed before a given timestamp.
+    sort_direction: t.Optional[str] = None  #: Sort direction.
+    sort_field: t.Optional[str] = None  #: Sort field.
     subject: t.Optional[str] = None  #: Subject.
     takendown: t.Optional[bool] = None  #: Get subjects that were taken down.
 
@@ -76,7 +64,5 @@ class ParamsDict(te.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.admin.queryModerationStatuses`."""
 
-    subject_statuses: t.List['models.ComAtprotoAdminDefs.SubjectStatusView'] = Field(
-        alias='subjectStatuses'
-    )  #: Subject statuses.
+    subject_statuses: t.List['models.ComAtprotoAdminDefs.SubjectStatusView']  #: Subject statuses.
     cursor: t.Optional[str] = None  #: Cursor.

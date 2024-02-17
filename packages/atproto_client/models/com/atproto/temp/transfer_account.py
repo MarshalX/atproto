@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client.models.unknown_type import UnknownInputType
@@ -20,7 +19,7 @@ class Data(base.DataModelBase):
 
     did: str  #: Did.
     handle: str  #: Handle.
-    plc_op: 'UnknownInputType' = Field(alias='plcOp')  #: Plc op.
+    plc_op: 'UnknownInputType'  #: Plc op.
 
 
 class DataDict(te.TypedDict):
@@ -32,7 +31,7 @@ class DataDict(te.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.temp.transferAccount`."""
 
-    access_jwt: str = Field(alias='accessJwt')  #: Access jwt.
+    access_jwt: str  #: Access jwt.
     did: str  #: Did.
     handle: str  #: Handle.
-    refresh_jwt: str = Field(alias='refreshJwt')  #: Refresh jwt.
+    refresh_jwt: str  #: Refresh jwt.

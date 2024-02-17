@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 from atproto_client.models import base
 
@@ -17,15 +16,13 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.updateCommunicationTemplate`."""
 
     id: str  #: ID of the template to be updated.
-    content_markdown: t.Optional[str] = Field(
-        default=None, alias='contentMarkdown'
-    )  #: Content of the template, markdown supported, can contain variable placeholders.
+    content_markdown: t.Optional[
+        str
+    ] = None  #: Content of the template, markdown supported, can contain variable placeholders.
     disabled: t.Optional[bool] = None  #: Disabled.
     name: t.Optional[str] = None  #: Name of the template.
     subject: t.Optional[str] = None  #: Subject of the message, used in emails.
-    updated_by: t.Optional[str] = Field(
-        default=None, alias='updatedBy'
-    )  #: DID of the user who is updating the template.
+    updated_by: t.Optional[str] = None  #: DID of the user who is updating the template.
 
 
 class DataDict(te.TypedDict):

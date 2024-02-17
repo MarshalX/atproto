@@ -5,8 +5,8 @@ from atproto_core.uri import AtUri
 
 from atproto_client import models
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
+from atproto_client.client.methods_mixin.backward_compatibility import _BackwardCompatibility
 from atproto_client.client.methods_mixin.session import SessionDispatchMixin
-from atproto_client.client.methods_mixin.strong_ref_arg_backward_compatibility import _StrongRefArgBackwardCompatibility
 from atproto_client.client.raw import ClientRaw
 from atproto_client.client.session import Session, SessionEvent, SessionResponse
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
@@ -17,9 +17,7 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
-class Client(
-    _StrongRefArgBackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, ClientRaw
-):
+class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args, **kwargs: t.Any) -> None:

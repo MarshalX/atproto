@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client import models
@@ -18,8 +17,8 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.server.getAccountInviteCodes`."""
 
-    create_available: t.Optional[bool] = Field(default=True, alias='createAvailable')  #: Create available.
-    include_used: t.Optional[bool] = Field(default=True, alias='includeUsed')  #: Include used.
+    create_available: t.Optional[bool] = None  #: Create available.
+    include_used: t.Optional[bool] = None  #: Include used.
 
 
 class ParamsDict(te.TypedDict):

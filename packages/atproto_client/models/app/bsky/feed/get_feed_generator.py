@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client import models
@@ -28,6 +27,6 @@ class ParamsDict(te.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.feed.getFeedGenerator`."""
 
-    is_online: bool = Field(alias='isOnline')  #: Is online.
-    is_valid: bool = Field(alias='isValid')  #: Is valid.
+    is_online: bool  #: Is online.
+    is_valid: bool  #: Is valid.
     view: 'models.AppBskyFeedDefs.GeneratorView'  #: View.

@@ -18,7 +18,7 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.graph.listitem`."""
 
-    created_at: str = Field(alias='createdAt')  #: Created at.
+    created_at: str  #: Created at.
     list: str  #: List.
     subject: str  #: Subject.
 

@@ -4,7 +4,7 @@ import warnings
 from atproto_client import models
 
 
-class _StrongRefArgBackwardCompatibility:
+class _BackwardCompatibility:
     @staticmethod
     def _strong_ref_arg_backward_compatibility(
         uri: t.Optional[str] = None,

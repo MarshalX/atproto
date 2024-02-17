@@ -23,7 +23,7 @@ class ListViewBasic(base.ModelBase):
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
-    indexed_at: t.Optional[str] = Field(default=None, alias='indexedAt')  #: Indexed at.
+    indexed_at: t.Optional[str] = None  #: Indexed at.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.graph.defs#listViewBasic'] = Field(
@@ -36,15 +36,13 @@ class ListView(base.ModelBase):
 
     cid: str  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
-    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
+    indexed_at: str  #: Indexed at.
     name: str = Field(min_length=1, max_length=64)  #: Name.
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
-    description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = Field(
-        default=None, alias='descriptionFacets'
-    )  #: Description facets.
+    description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.graph.defs#listView'] = Field(
@@ -89,7 +87,7 @@ class NotFoundActor(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`. indicates that a handle or DID could not be resolved."""
 
     actor: str  #: Actor.
-    not_found: bool = Field(alias='notFound', frozen=True)  #: Not found.
+    not_found: bool = Field(frozen=True)  #: Not found.
 
     py_type: te.Literal['app.bsky.graph.defs#notFoundActor'] = Field(
         default='app.bsky.graph.defs#notFoundActor', alias='$type', frozen=True
@@ -100,9 +98,9 @@ class Relationship(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`. lists the bi-directional graph relationships between one actor (not indicated in the object), and the target actors (the DID included in the object)."""
 
     did: str  #: Did.
-    followed_by: t.Optional[str] = Field(
-        default=None, alias='followedBy'
-    )  #: if the actor is followed by this DID, contains the AT-URI of the follow record.
+    followed_by: t.Optional[
+        str
+    ] = None  #: if the actor is followed by this DID, contains the AT-URI of the follow record.
     following: t.Optional[str] = None  #: if the actor follows this DID, this is the AT-URI of the follow record.
 
     py_type: te.Literal['app.bsky.graph.defs#relationship'] = Field(

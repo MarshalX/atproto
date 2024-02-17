@@ -134,8 +134,8 @@ class ProfileRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -174,8 +174,8 @@ class ProfileRecord(AsyncRecordBase):
             collection='app.bsky.actor.profile',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -478,8 +478,8 @@ class GeneratorRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -518,8 +518,8 @@ class GeneratorRecord(AsyncRecordBase):
             collection='app.bsky.feed.generator',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -629,8 +629,8 @@ class LikeRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -669,8 +669,8 @@ class LikeRecord(AsyncRecordBase):
             collection='app.bsky.feed.like',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -780,8 +780,8 @@ class PostRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -820,8 +820,8 @@ class PostRecord(AsyncRecordBase):
             collection='app.bsky.feed.post',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -931,8 +931,8 @@ class RepostRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -971,8 +971,8 @@ class RepostRecord(AsyncRecordBase):
             collection='app.bsky.feed.repost',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -1083,8 +1083,8 @@ class ThreadgateRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -1123,8 +1123,8 @@ class ThreadgateRecord(AsyncRecordBase):
             collection='app.bsky.feed.threadgate',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -1637,8 +1637,8 @@ class BlockRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -1677,8 +1677,8 @@ class BlockRecord(AsyncRecordBase):
             collection='app.bsky.graph.block',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -1789,8 +1789,8 @@ class FollowRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -1829,8 +1829,8 @@ class FollowRecord(AsyncRecordBase):
             collection='app.bsky.graph.follow',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -1940,8 +1940,8 @@ class ListRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -1980,8 +1980,8 @@ class ListRecord(AsyncRecordBase):
             collection='app.bsky.graph.list',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -2092,8 +2092,8 @@ class ListblockRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -2132,8 +2132,8 @@ class ListblockRecord(AsyncRecordBase):
             collection='app.bsky.graph.listblock',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
@@ -2244,8 +2244,8 @@ class ListitemRecord(AsyncRecordBase):
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -2284,8 +2284,8 @@ class ListitemRecord(AsyncRecordBase):
             collection='app.bsky.graph.listitem',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = await self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs

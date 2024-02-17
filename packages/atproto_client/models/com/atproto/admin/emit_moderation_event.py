@@ -18,7 +18,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.emitModerationEvent`."""
 
-    created_by: str = Field(alias='createdBy')  #: Created by.
+    created_by: str  #: Created by.
     event: te.Annotated[
         t.Union[
             'models.ComAtprotoAdminDefs.ModEventTakedown',
@@ -38,7 +38,7 @@ class Data(base.DataModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    subject_blob_cids: t.Optional[t.List[str]] = Field(default=None, alias='subjectBlobCids')  #: Subject blob cids.
+    subject_blob_cids: t.Optional[t.List[str]] = None  #: Subject blob cids.
 
 
 class DataDict(te.TypedDict):

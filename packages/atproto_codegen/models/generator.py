@@ -375,14 +375,21 @@ def _get_model(
         alias_name = None
         snake_cased_field_name = convert_camel_case_to_snake_case(field_name)
 
+        # previously, camel cases aliases were applied to fields directly.
+        # but it doesn't work well with pyright checks because of "populate_by_name"
+        # that's why aliases are now implemented via alias_generator
+        """
         if snake_cased_field_name != field_name:
             # make aliases for fields with camel case names
             alias_name = field_name
+        """
 
         if _is_reserved_pydantic_name(snake_cased_field_name):
             # make aliases for fields with reserved names
             snake_cased_field_name += '_'  # add underscore to the end
-            alias_name = field_name
+
+            # handled in alias_generator.py
+            # alias_name = field_name  # noqa: ERA001
 
         type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional, is_input_type=is_input_type)
         value = _get_model_field_value(field_type_def, alias_name, optional=is_optional)

@@ -12,8 +12,8 @@ from atproto_core.uri import AtUri
 from atproto_client import models
 from atproto_client.client.async_raw import AsyncClientRaw
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
+from atproto_client.client.methods_mixin.backward_compatibility import _BackwardCompatibility
 from atproto_client.client.methods_mixin.session import AsyncSessionDispatchMixin
-from atproto_client.client.methods_mixin.strong_ref_arg_backward_compatibility import _StrongRefArgBackwardCompatibility
 from atproto_client.client.session import Session, SessionEvent, SessionResponse
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
 from atproto_client.utils import TextBuilder
@@ -24,7 +24,7 @@ if t.TYPE_CHECKING:
 
 
 class AsyncClient(
-    _StrongRefArgBackwardCompatibility, AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw
+    _BackwardCompatibility, AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw
 ):
     """High-level client for XRPC of ATProto."""
 

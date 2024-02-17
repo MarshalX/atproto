@@ -7,8 +7,6 @@
 
 import typing as t
 
-from pydantic import Field
-
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,6 +15,4 @@ from atproto_client.models import base
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.admin.listCommunicationTemplates`."""
 
-    communication_templates: t.List['models.ComAtprotoAdminDefs.CommunicationTemplateView'] = Field(
-        alias='communicationTemplates'
-    )  #: Communication templates.
+    communication_templates: t.List['models.ComAtprotoAdminDefs.CommunicationTemplateView']  #: Communication templates.

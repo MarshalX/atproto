@@ -48,7 +48,7 @@ class ViewRecord(base.ModelBase):
 
     author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
     cid: str  #: Cid.
-    indexed_at: str = Field(alias='indexedAt')  #: Indexed at.
+    indexed_at: str  #: Indexed at.
     uri: str  #: Uri.
     value: 'UnknownType'  #: Value.
     embeds: t.Optional[
@@ -74,7 +74,7 @@ class ViewRecord(base.ModelBase):
 class ViewNotFound(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.record`."""
 
-    not_found: bool = Field(alias='notFound', frozen=True)  #: Not found.
+    not_found: bool = Field(frozen=True)  #: Not found.
     uri: str  #: Uri.
 
     py_type: te.Literal['app.bsky.embed.record#viewNotFound'] = Field(

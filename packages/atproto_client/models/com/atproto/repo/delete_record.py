@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 from atproto_client.models import base
 
@@ -19,12 +18,8 @@ class Data(base.DataModelBase):
     collection: str  #: The NSID of the record collection.
     repo: str  #: The handle or DID of the repo.
     rkey: str  #: The key of the record.
-    swap_commit: t.Optional[str] = Field(
-        default=None, alias='swapCommit'
-    )  #: Compare and swap with the previous commit by CID.
-    swap_record: t.Optional[str] = Field(
-        default=None, alias='swapRecord'
-    )  #: Compare and swap with the previous record by CID.
+    swap_commit: t.Optional[str] = None  #: Compare and swap with the previous commit by CID.
+    swap_record: t.Optional[str] = None  #: Compare and swap with the previous record by CID.
 
 
 class DataDict(te.TypedDict):

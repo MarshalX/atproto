@@ -24,7 +24,7 @@ class Response(base.ResponseModelBase):
 class AppPassword(base.ModelBase):
     """Definition model for :obj:`com.atproto.server.listAppPasswords`."""
 
-    created_at: str = Field(alias='createdAt')  #: Created at.
+    created_at: str  #: Created at.
     name: str  #: Name.
 
     py_type: te.Literal['com.atproto.server.listAppPasswords#appPassword'] = Field(

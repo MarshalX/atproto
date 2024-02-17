@@ -4,23 +4,21 @@
             "did": "did:plc:vpkhqolt662uhesyj6nxm7ys",
             "handle": "why.bsky.team",
             "displayName": "Why",
-            "description": "Technical advisor to @bluesky, first engineer at Protocol Labs. Wizard Utopian",
             "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:vpkhqolt662uhesyj6nxm7ys/bafkreihxiic7f65slclhzy3aanyvrclotyvatwmd7lct4g4bwfvnzqlexa@jpeg",
-            "indexedAt": "2023-07-02T23:59:30.706Z",
             "viewer": {
                 "muted": false,
                 "blockedBy": false,
                 "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3jueqtsliw22n"
             },
-            "labels": []
+            "labels": [],
+            "description": "Technical advisor to @bluesky, first engineer at Protocol Labs. Wizard Utopian",
+            "indexedAt": "2024-01-26T00:00:18.896Z"
         },
         {
             "did": "did:plc:l3rouwludahu3ui3bt66mfvj",
             "handle": "divy.zone",
             "displayName": "devin ivy \ud83d\udc0b",
-            "description": "\ud83c\udf00 bluesky team",
             "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:l3rouwludahu3ui3bt66mfvj/bafkreidx62owa2htpluf7izkfxfqkqsthsmqxiutwy5lmblvpvxhdc2xtq@jpeg",
-            "indexedAt": "2023-11-30T01:33:01.039Z",
             "viewer": {
                 "muted": true,
                 "mutedByList": {
@@ -36,78 +34,79 @@
                 "blockedBy": false,
                 "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3jueqt6dbqs2g"
             },
-            "labels": []
+            "labels": [],
+            "description": "\ud83c\udf00 bluesky team",
+            "indexedAt": "2024-01-25T23:51:21.779Z"
         },
         {
             "did": "did:plc:oky5czdrnfjpqslsw2a5iclo",
             "handle": "jay.bsky.team",
             "displayName": "Jay \ud83e\udd8b",
-            "description": "CEO of Bluesky, steward of AT Protocol. Let\u2019s build a federated republic, starting with this server.\n\nNature, knowledge, technology. I like to think of a cybernetic forest. \ud83c\udf31 \ud83e\udeb4 \ud83c\udf33 ",
-            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:oky5czdrnfjpqslsw2a5iclo/bafkreihquydaf5xer53afkmdefp2hpwbtqcgurxo2hsdkrpwpvm6uhkyg4@jpeg",
-            "indexedAt": "2023-07-02T23:59:30.709Z",
+            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:oky5czdrnfjpqslsw2a5iclo/bafkreihidru2xruxdxlvvcixc7lbgoudzicjbrdgacdhdhxyfw4yut4nfq@jpeg",
             "viewer": {
                 "muted": false,
                 "blockedBy": false,
                 "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3judl7ak7gp2f"
             },
-            "labels": []
+            "labels": [],
+            "description": "CEO of Bluesky, steward of AT Protocol. \n\nLet\u2019s build a federated republic, starting with this server. \ud83c\udf31 \ud83e\udeb4 \ud83c\udf33 ",
+            "indexedAt": "2024-02-06T22:21:45.352Z"
         },
         {
             "did": "did:plc:z72i7hdynmk6r22z27h6tvur",
             "handle": "bsky.app",
             "displayName": "Bluesky",
-            "description": "Official Bluesky account (check domain\ud83d\udc46)\n\nFollow for updates and announcements",
-            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:z72i7hdynmk6r22z27h6tvur/bafkreic5kmqlhrhbfnh2bx6fsetvkra4noqja5ngsnnadrvubd6jcoc3ae@jpeg",
-            "indexedAt": "2023-07-03T01:10:55.392Z",
+            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:z72i7hdynmk6r22z27h6tvur/bafkreihagr2cmvl2jt4mgx3sppwe2it3fwolkrbtjrhcnwjk4jdijhsoze@jpeg",
             "viewer": {
                 "muted": false,
                 "blockedBy": false,
                 "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3judkza2vrb2y"
             },
-            "labels": []
+            "labels": [],
+            "description": "Official Bluesky account (check domain\ud83d\udc46)\n\nFollow for updates and announcements",
+            "indexedAt": "2024-01-25T23:46:28.776Z"
         },
         {
             "did": "did:plc:m2jwplpernhxkzbo4ev5ljwj",
             "handle": "vercel.com",
             "displayName": "Vercel",
-            "description": "Vercel\u2019s frontend cloud gives developers the frameworks, workflows, and infrastructure to build a faster, more personalized web. Creators of @nextjs.org.",
-            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:m2jwplpernhxkzbo4ev5ljwj/bafkreicybrf3xp2eesezps5c6xm4brmexjsml4cavkvmlm6xznuj4uddiq@jpeg",
-            "indexedAt": "2023-07-03T03:38:08.594Z",
+            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:m2jwplpernhxkzbo4ev5ljwj/bafkreicebob2yf5lv6yg72luzv5qwsr6ob65j6oc3jciyowqkfiz736oqu@jpeg",
             "viewer": {
                 "muted": false,
                 "blockedBy": false,
                 "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3judkwijszc25"
             },
-            "labels": []
+            "labels": [],
+            "description": "Vercel\u2019s frontend cloud gives developers the frameworks, workflows, and infrastructure to build a faster, more personalized web. Creators of @nextjs.org.",
+            "indexedAt": "2024-02-16T21:57:28.740Z"
         },
         {
             "did": "did:plc:s6jnht6koorxz7trghirytmf",
             "handle": "marshal.dev",
             "displayName": "Ilya (Marshal)",
-            "description": "Software Engineer\n\n\ud83d\udc0d The AT Protocol SDK for Python: https://atproto.blue/\n\ud83c\udf7f Custom Feed in Python: https://github.com/MarshalX/bluesky-feed-generator\n\ud83c\udfce\ufe0f Fast DAG-CBOR decoder for Python: https://github.com/MarshalX/python-libipld\n\nhttps://marshal.dev",
             "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:s6jnht6koorxz7trghirytmf/bafkreihyuxbogcsrarso2ulwvjzq2spezopsgnt26uface5zwyiy5yhyje@jpeg",
-            "indexedAt": "2023-09-07T23:54:36.539Z",
             "viewer": {
                 "muted": false,
                 "blockedBy": false,
                 "following": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.graph.follow/3jucbzvek222k",
                 "followedBy": "at://did:plc:s6jnht6koorxz7trghirytmf/app.bsky.graph.follow/3jucc25a7qs2k"
             },
-            "labels": []
+            "labels": [],
+            "description": "Software Engineer\n\n\ud83d\udc0d The AT Protocol SDK for Python: https://atproto.blue/\n\ud83c\udf7f Custom Feed in Python: https://github.com/MarshalX/bluesky-feed-generator\n\ud83c\udfce\ufe0f Fast DAG-CBOR decoder for Python: https://github.com/MarshalX/python-libipld\n\nhttps://marshal.dev",
+            "indexedAt": "2024-01-26T00:15:07.447Z"
         }
     ],
     "subject": {
         "did": "did:plc:kvwvcn5iqfooopmyzvb4qzba",
         "handle": "test.marshal.dev",
         "displayName": "I love Python 3",
-        "description": "test",
         "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
-        "indexedAt": "2023-07-28T18:17:15.466Z",
         "viewer": {
             "muted": false,
             "blockedBy": false
         },
-        "labels": []
-    },
-    "cursor": "1682536253184::bafyreicbazjbm65mgbs2s25qmlqpe2betv7vssid32q5ckidy4js6dctve"
+        "labels": [],
+        "description": "test",
+        "indexedAt": "2024-01-26T00:51:00.363Z"
+    }
 }

@@ -8,7 +8,6 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 from atproto_client.models import base
 
@@ -26,4 +25,4 @@ class DataDict(te.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.server.reserveSigningKey`."""
 
-    signing_key: str = Field(alias='signingKey')  #: Public signing key in the form of a did:key.
+    signing_key: str  #: Public signing key in the form of a did:key.

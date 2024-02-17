@@ -30,8 +30,8 @@ class Data(base.DataModelBase):
             Field(discriminator='py_type'),
         ]
     ]  #: Writes.
-    swap_commit: t.Optional[str] = Field(default=None, alias='swapCommit')  #: Swap commit.
-    validate_: t.Optional[bool] = Field(default=True, alias='validate')  #: Flag for validating the records.
+    swap_commit: t.Optional[str] = None  #: Swap commit.
+    validate_: t.Optional[bool] = None  #: Flag for validating the records.
 
 
 class DataDict(te.TypedDict):

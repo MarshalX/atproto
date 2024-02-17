@@ -7,8 +7,6 @@
 
 import typing as t
 
-from pydantic import Field
-
 if t.TYPE_CHECKING:
     from atproto_client.models.unknown_type import UnknownType
 from atproto_client.models import base
@@ -19,6 +17,6 @@ class Response(base.ResponseModelBase):
 
     did: str  #: Did.
     handle: str  #: Handle.
-    did_doc: t.Optional['UnknownType'] = Field(default=None, alias='didDoc')  #: Did doc.
+    did_doc: t.Optional['UnknownType'] = None  #: Did doc.
     email: t.Optional[str] = None  #: Email.
-    email_confirmed: t.Optional[bool] = Field(default=None, alias='emailConfirmed')  #: Email confirmed.
+    email_confirmed: t.Optional[bool] = None  #: Email confirmed.

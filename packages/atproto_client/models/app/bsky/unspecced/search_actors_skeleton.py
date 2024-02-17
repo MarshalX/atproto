@@ -40,6 +40,6 @@ class Response(base.ResponseModelBase):
 
     actors: t.List['models.AppBskyUnspeccedDefs.SkeletonSearchActor']  #: Actors.
     cursor: t.Optional[str] = None  #: Cursor.
-    hits_total: t.Optional[int] = Field(
-        default=None, alias='hitsTotal'
-    )  #: Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits.
+    hits_total: t.Optional[
+        int
+    ] = None  #: Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits.

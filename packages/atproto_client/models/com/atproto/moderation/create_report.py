@@ -18,7 +18,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.moderation.createReport`."""
 
-    reason_type: 'models.ComAtprotoModerationDefs.ReasonType' = Field(alias='reasonType')  #: Reason type.
+    reason_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
@@ -38,10 +38,10 @@ class DataDict(te.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.moderation.createReport`."""
 
-    created_at: str = Field(alias='createdAt')  #: Created at.
+    created_at: str  #: Created at.
     id: int  #: Id.
-    reason_type: 'models.ComAtprotoModerationDefs.ReasonType' = Field(alias='reasonType')  #: Reason type.
-    reported_by: str = Field(alias='reportedBy')  #: Reported by.
+    reason_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
+    reported_by: str  #: Reported by.
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),

@@ -43,8 +43,8 @@ RECORD_CREATE_METHOD_TEMPLATE = """
             repo=repo,
             record=record,
             rkey=rkey,
-            swapCommit=swap_commit,
-            validate=validate,
+            swap_commit=swap_commit,
+            validate_=validate,
         )
         response = {c}self._client.invoke_procedure(
             'com.atproto.repo.createRecord',
@@ -181,8 +181,8 @@ RECORD_DELETE_METHOD_TEMPLATE = """
             collection='{collection}',
             repo=repo,
             rkey=rkey,
-            swapCommit=swap_commit,
-            swapRecord=swap_record,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
         )
         response = {c}self._client.invoke_procedure(
             'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
