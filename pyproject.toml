@@ -57,7 +57,7 @@ websockets = ">=11.0.3,<13"
 pydantic = ">=2.0,<3.0"
 libipld = ">=1.1.0,<2.0.0"
 dnspython = ">=2.3.0,<3"
-cryptography = ">=41.0.7,<42"
+cryptography = ">=41.0.7,<43"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "0.1.2"
