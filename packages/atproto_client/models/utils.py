@@ -107,6 +107,8 @@ def get_response_model(response: 'Response', model: t.Type[M]) -> M:
     if model is bool:
         # Could not be False? Because the exception with errors will be raised from the server
         return t.cast(M, response.success)
+    if model is bytes:
+        return t.cast(M, response.content)
 
     if not isinstance(response.content, dict):
         raise ModelError("Can't properly parse response model because JSON is expected in response")
