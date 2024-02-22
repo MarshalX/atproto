@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 0.0.43
+
+**22.02.2024**
+
+**🎉 New lexicon introduces Account Migration between PDS. More info: https://github.com/bluesky-social/pds/blob/main/ACCOUNT_MIGRATION.md**
+
+* Fix bytes response by @MarshalX in https://github.com/MarshalX/atproto/pull/287
+* Update lexicons fetched from 514aab9 committed 2024-02-22T15:43:58Z by @MarshalX in https://github.com/MarshalX/atproto/pull/288
+* Bump cryptography from 42.0.2 to 42.0.4 by @dependabot in https://github.com/MarshalX/atproto/pull/289
+
 ## Version 0.0.42
 
 **17.02.2024**
