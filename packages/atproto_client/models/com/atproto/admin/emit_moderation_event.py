@@ -31,6 +31,7 @@ class Data(base.DataModelBase):
             'models.ComAtprotoAdminDefs.ModEventReverseTakedown',
             'models.ComAtprotoAdminDefs.ModEventUnmute',
             'models.ComAtprotoAdminDefs.ModEventEmail',
+            'models.ComAtprotoAdminDefs.ModEventTag',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -55,6 +56,7 @@ class DataDict(te.TypedDict):
             'models.ComAtprotoAdminDefs.ModEventReverseTakedown',
             'models.ComAtprotoAdminDefs.ModEventUnmute',
             'models.ComAtprotoAdminDefs.ModEventEmail',
+            'models.ComAtprotoAdminDefs.ModEventTag',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.

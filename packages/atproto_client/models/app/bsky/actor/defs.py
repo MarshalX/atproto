@@ -94,6 +94,8 @@ Preferences = t.List[
             'models.AppBskyActorDefs.FeedViewPref',
             'models.AppBskyActorDefs.ThreadViewPref',
             'models.AppBskyActorDefs.InterestsPref',
+            'models.AppBskyActorDefs.MutedWordsPref',
+            'models.AppBskyActorDefs.HiddenPostsPref',
         ],
         Field(discriminator='py_type'),
     ]
@@ -180,4 +182,38 @@ class InterestsPref(base.ModelBase):
 
     py_type: te.Literal['app.bsky.actor.defs#interestsPref'] = Field(
         default='app.bsky.actor.defs#interestsPref', alias='$type', frozen=True
+    )
+
+
+MutedWordTarget = t.Union[te.Literal['content'], te.Literal['tag']]  #: Muted word target
+
+
+class MutedWord(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`. A word that the account owner has muted."""
+
+    targets: t.List['models.AppBskyActorDefs.MutedWordTarget']  #: The intended targets of the muted word.
+    value: str = Field(max_length=10000)  #: The muted word itself.
+
+    py_type: te.Literal['app.bsky.actor.defs#mutedWord'] = Field(
+        default='app.bsky.actor.defs#mutedWord', alias='$type', frozen=True
+    )
+
+
+class MutedWordsPref(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    items: t.List['models.AppBskyActorDefs.MutedWord']  #: A list of words the account owner has muted.
+
+    py_type: te.Literal['app.bsky.actor.defs#mutedWordsPref'] = Field(
+        default='app.bsky.actor.defs#mutedWordsPref', alias='$type', frozen=True
+    )
+
+
+class HiddenPostsPref(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    items: t.List[str]  #: A list of URIs of posts the account owner has hidden.
+
+    py_type: te.Literal['app.bsky.actor.defs#hiddenPostsPref'] = Field(
+        default='app.bsky.actor.defs#hiddenPostsPref', alias='$type', frozen=True
     )

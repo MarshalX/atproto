@@ -17,6 +17,8 @@ Submodules
    atproto_client.models.com.atproto.repo.delete_record
    atproto_client.models.com.atproto.repo.describe_repo
    atproto_client.models.com.atproto.repo.get_record
+   atproto_client.models.com.atproto.repo.import_repo
+   atproto_client.models.com.atproto.repo.list_missing_blobs
    atproto_client.models.com.atproto.repo.list_records
    atproto_client.models.com.atproto.repo.put_record
    atproto_client.models.com.atproto.repo.strong_ref

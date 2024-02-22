@@ -7,18 +7,5 @@
 
 import typing_extensions as te
 
-from atproto_client.models import base
-
-
-class Params(base.ParamsModelBase):
-    """Parameters model for :obj:`com.atproto.temp.pushBlob`."""
-
-    did: str  #: The DID of the repo.
-
-
-class ParamsDict(te.TypedDict):
-    did: str  #: The DID of the repo.
-
-
 #: Data raw data type.
 Data: te.TypeAlias = bytes
