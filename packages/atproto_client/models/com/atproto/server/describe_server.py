@@ -19,6 +19,7 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.server.describeServer`."""
 
     available_user_domains: t.List[str]  #: List of domain suffixes that can be used in account handles.
+    did: str  #: Did.
     invite_code_required: t.Optional[
         bool
     ] = None  #: If true, an invite code must be supplied to create an account on this instance.

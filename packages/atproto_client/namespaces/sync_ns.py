@@ -3504,6 +3504,34 @@ class AdminNamespace(NamespaceBase):
         )
         return get_response_model(response, bool)
 
+    def update_account_password(
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminUpdateAccountPassword.Data, models.ComAtprotoAdminUpdateAccountPassword.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Update the password for a user account as an administrator.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ComAtprotoAdminUpdateAccountPassword.Data',
+            get_or_create(data, models.ComAtprotoAdminUpdateAccountPassword.Data),
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.admin.updateAccountPassword', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     def update_communication_template(
         self,
         data: t.Union[
@@ -3571,6 +3599,40 @@ class AdminNamespace(NamespaceBase):
 
 
 class IdentityNamespace(NamespaceBase):
+    def get_recommended_did_credentials(
+        self, **kwargs: t.Any
+    ) -> 'models.ComAtprotoIdentityGetRecommendedDidCredentials.Response':
+        """Describe the credentials that should be included in the DID doc of an account that is migrating to this service.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoIdentityGetRecommendedDidCredentials.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = self._client.invoke_query(
+            'com.atproto.identity.getRecommendedDidCredentials', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoIdentityGetRecommendedDidCredentials.Response)
+
+    def request_plc_operation_signature(self, **kwargs: t.Any) -> bool:
+        """Request an email with a code to in order to request a signed PLC operation. Requires Auth.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = self._client.invoke_procedure('com.atproto.identity.requestPlcOperationSignature', **kwargs)
+        return get_response_model(response, bool)
+
     def resolve_handle(
         self,
         params: t.Union[
@@ -3598,6 +3660,66 @@ class IdentityNamespace(NamespaceBase):
             'com.atproto.identity.resolveHandle', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoIdentityResolveHandle.Response)
+
+    def sign_plc_operation(
+        self,
+        data: t.Optional[
+            t.Union[models.ComAtprotoIdentitySignPlcOperation.Data, models.ComAtprotoIdentitySignPlcOperation.DataDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoIdentitySignPlcOperation.Response':
+        """Signs a PLC operation to update some value(s) in the requesting DID's document.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoIdentitySignPlcOperation.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ComAtprotoIdentitySignPlcOperation.Data',
+            get_or_create(data, models.ComAtprotoIdentitySignPlcOperation.Data),
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.identity.signPlcOperation',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoIdentitySignPlcOperation.Response)
+
+    def submit_plc_operation(
+        self,
+        data: t.Union[
+            models.ComAtprotoIdentitySubmitPlcOperation.Data, models.ComAtprotoIdentitySubmitPlcOperation.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Validates a PLC operation to ensure that it doesn't violate a service's constraints or get the identity into a bad state, then submits it to the PLC registry.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ComAtprotoIdentitySubmitPlcOperation.Data',
+            get_or_create(data, models.ComAtprotoIdentitySubmitPlcOperation.Data),
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.identity.submitPlcOperation', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
 
     def update_handle(
         self,
@@ -3815,6 +3937,52 @@ class RepoNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
 
+    def import_repo(self, data: 'models.ComAtprotoRepoImportRepo.Data', **kwargs: t.Any) -> bool:
+        """Import a repo in the form of a CAR file. Requires Content-Length HTTP header to be set.
+
+        Args:
+            data: Input data alias.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.importRepo', data=data, input_encoding='application/vnd.ipld.car', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def list_missing_blobs(
+        self,
+        params: t.Optional[
+            t.Union[models.ComAtprotoRepoListMissingBlobs.Params, models.ComAtprotoRepoListMissingBlobs.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoRepoListMissingBlobs.Response':
+        """Returns a list of missing blobs for the requesting account. Intended to be used in the account migration flow.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoRepoListMissingBlobs.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoRepoListMissingBlobs.Params',
+            get_or_create(params, models.ComAtprotoRepoListMissingBlobs.Params),
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.listMissingBlobs', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoRepoListMissingBlobs.Response)
+
     def list_records(
         self,
         params: t.Union[models.ComAtprotoRepoListRecords.Params, models.ComAtprotoRepoListRecords.ParamsDict],
@@ -3891,6 +4059,38 @@ class RepoNamespace(NamespaceBase):
 
 
 class ServerNamespace(NamespaceBase):
+    def activate_account(self, **kwargs: t.Any) -> bool:
+        """Activates a currently deactivated account. Used to finalize account migration after the account's repo is imported and identity is setup.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = self._client.invoke_procedure('com.atproto.server.activateAccount', **kwargs)
+        return get_response_model(response, bool)
+
+    def check_account_status(self, **kwargs: t.Any) -> 'models.ComAtprotoServerCheckAccountStatus.Response':
+        """Returns the status of an account, especially as pertaining to import or recovery. Can be called many times over the course of an account migration. Requires auth and can only be called pertaining to oneself.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoServerCheckAccountStatus.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = self._client.invoke_query(
+            'com.atproto.server.checkAccountStatus', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoServerCheckAccountStatus.Response)
+
     def confirm_email(
         self,
         data: t.Union[models.ComAtprotoServerConfirmEmail.Data, models.ComAtprotoServerConfirmEmail.DataDict],
@@ -4064,6 +4264,34 @@ class ServerNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoServerCreateSession.Response)
 
+    def deactivate_account(
+        self,
+        data: t.Optional[
+            t.Union[models.ComAtprotoServerDeactivateAccount.Data, models.ComAtprotoServerDeactivateAccount.DataDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Deactivates a currently active account. Stops serving of repo, and future writes to repo until reactivated. Used to finalize account migration with the old host after the account has been activated on the new host.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ComAtprotoServerDeactivateAccount.Data',
+            get_or_create(data, models.ComAtprotoServerDeactivateAccount.Data),
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.server.deactivateAccount', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     def delete_account(
         self,
         data: t.Union[models.ComAtprotoServerDeleteAccount.Data, models.ComAtprotoServerDeleteAccount.DataDict],
@@ -4154,6 +4382,32 @@ class ServerNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ComAtprotoServerGetAccountInviteCodes.Response)
+
+    def get_service_auth(
+        self,
+        params: t.Union[models.ComAtprotoServerGetServiceAuth.Params, models.ComAtprotoServerGetServiceAuth.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoServerGetServiceAuth.Response':
+        """Get a signed token on behalf of the requesting DID for the requested service.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoServerGetServiceAuth.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoServerGetServiceAuth.Params',
+            get_or_create(params, models.ComAtprotoServerGetServiceAuth.Params),
+        )
+        response = self._client.invoke_query(
+            'com.atproto.server.getServiceAuth', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoServerGetServiceAuth.Response)
 
     def get_session(self, **kwargs: t.Any) -> 'models.ComAtprotoServerGetSession.Response':
         """Get information about the current auth session. Requires auth.
@@ -4715,65 +4969,6 @@ class TempNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoTempFetchLabels.Response)
 
-    def import_repo(
-        self,
-        params: t.Union[models.ComAtprotoTempImportRepo.Params, models.ComAtprotoTempImportRepo.ParamsDict],
-        data: 'models.ComAtprotoTempImportRepo.Data',
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoTempImportRepo.Response':
-        """Gets the did's repo, optionally catching up from a specific revision.
-
-        Args:
-            params: Parameters.
-            data: Input data alias.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoTempImportRepo.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = t.cast(
-            'models.ComAtprotoTempImportRepo.Params', get_or_create(params, models.ComAtprotoTempImportRepo.Params)
-        )
-        response = self._client.invoke_procedure(
-            'com.atproto.temp.importRepo',
-            params=params_model,
-            data=data,
-            input_encoding='application/vnd.ipld.car',
-            output_encoding='text/plain',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoTempImportRepo.Response)
-
-    def push_blob(
-        self,
-        params: t.Union[models.ComAtprotoTempPushBlob.Params, models.ComAtprotoTempPushBlob.ParamsDict],
-        data: 'models.ComAtprotoTempPushBlob.Data',
-        **kwargs: t.Any,
-    ) -> bool:
-        """Gets the did's repo, optionally catching up from a specific revision.
-
-        Args:
-            params: Parameters.
-            data: Input data alias.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = t.cast(
-            'models.ComAtprotoTempPushBlob.Params', get_or_create(params, models.ComAtprotoTempPushBlob.Params)
-        )
-        response = self._client.invoke_procedure(
-            'com.atproto.temp.pushBlob', params=params_model, data=data, input_encoding='*/*', **kwargs
-        )
-        return get_response_model(response, bool)
-
     def request_phone_verification(
         self,
         data: t.Union[
@@ -4801,32 +4996,3 @@ class TempNamespace(NamespaceBase):
             'com.atproto.temp.requestPhoneVerification', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
-
-    def transfer_account(
-        self,
-        data: t.Union[models.ComAtprotoTempTransferAccount.Data, models.ComAtprotoTempTransferAccount.DataDict],
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoTempTransferAccount.Response':
-        """Transfer an account. NOTE: temporary method, necessarily how account migration will be implemented.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoTempTransferAccount.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        data_model = t.cast(
-            'models.ComAtprotoTempTransferAccount.Data', get_or_create(data, models.ComAtprotoTempTransferAccount.Data)
-        )
-        response = self._client.invoke_procedure(
-            'com.atproto.temp.transferAccount',
-            data=data_model,
-            input_encoding='application/json',
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoTempTransferAccount.Response)

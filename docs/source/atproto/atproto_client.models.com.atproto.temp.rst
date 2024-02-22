@@ -14,7 +14,4 @@ Submodules
 
    atproto_client.models.com.atproto.temp.check_signup_queue
    atproto_client.models.com.atproto.temp.fetch_labels
-   atproto_client.models.com.atproto.temp.import_repo
-   atproto_client.models.com.atproto.temp.push_blob
    atproto_client.models.com.atproto.temp.request_phone_verification
-   atproto_client.models.com.atproto.temp.transfer_account

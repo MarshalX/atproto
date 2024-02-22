@@ -21,6 +21,7 @@ class Params(base.ParamsModelBase):
     appealed: t.Optional[bool] = None  #: Get subjects in unresolved appealed status.
     comment: t.Optional[str] = None  #: Search subjects by keyword from comments.
     cursor: t.Optional[str] = None  #: Cursor.
+    exclude_tags: t.Optional[t.List[str]] = None  #: Exclude tags.
     ignore_subjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
     include_muted: t.Optional[
         bool
@@ -35,6 +36,7 @@ class Params(base.ParamsModelBase):
     sort_direction: t.Optional[str] = None  #: Sort direction.
     sort_field: t.Optional[str] = None  #: Sort field.
     subject: t.Optional[str] = None  #: Subject.
+    tags: t.Optional[t.List[str]] = None  #: Tags.
     takendown: t.Optional[bool] = None  #: Get subjects that were taken down.
 
 
@@ -42,6 +44,7 @@ class ParamsDict(te.TypedDict):
     appealed: te.NotRequired[t.Optional[bool]]  #: Get subjects in unresolved appealed status.
     comment: te.NotRequired[t.Optional[str]]  #: Search subjects by keyword from comments.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    exclude_tags: te.NotRequired[t.Optional[t.List[str]]]  #: Exclude tags.
     ignore_subjects: te.NotRequired[t.Optional[t.List[str]]]  #: Ignore subjects.
     include_muted: te.NotRequired[
         t.Optional[bool]
@@ -58,6 +61,7 @@ class ParamsDict(te.TypedDict):
     sort_direction: te.NotRequired[t.Optional[str]]  #: Sort direction.
     sort_field: te.NotRequired[t.Optional[str]]  #: Sort field.
     subject: te.NotRequired[t.Optional[str]]  #: Subject.
+    tags: te.NotRequired[t.Optional[t.List[str]]]  #: Tags.
     takendown: te.NotRequired[t.Optional[bool]]  #: Get subjects that were taken down.
 
 

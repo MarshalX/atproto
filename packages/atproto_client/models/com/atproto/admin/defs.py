@@ -143,6 +143,7 @@ class SubjectStatusView(base.ModelBase):
     subject_blob_cids: t.Optional[t.List[str]] = None  #: Subject blob cids.
     subject_repo_handle: t.Optional[str] = None  #: Subject repo handle.
     suspend_until: t.Optional[str] = None  #: Suspend until.
+    tags: t.Optional[t.List[str]] = None  #: Tags.
     takendown: t.Optional[bool] = None  #: Takendown.
 
     py_type: te.Literal['com.atproto.admin.defs#subjectStatusView'] = Field(
@@ -506,6 +507,18 @@ class ModEventEmail(base.ModelBase):
 
     py_type: te.Literal['com.atproto.admin.defs#modEventEmail'] = Field(
         default='com.atproto.admin.defs#modEventEmail', alias='$type', frozen=True
+    )
+
+
+class ModEventTag(base.ModelBase):
+    """Definition model for :obj:`com.atproto.admin.defs`. Add/Remove a tag on a subject."""
+
+    add: t.List[str]  #: Tags to be added to the subject. If already exists, won't be duplicated.
+    remove: t.List[str]  #: Tags to be removed to the subject. Ignores a tag If it doesn't exist, won't be duplicated.
+    comment: t.Optional[str] = None  #: Additional comment about added/removed tags.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventTag'] = Field(
+        default='com.atproto.admin.defs#modEventTag', alias='$type', frozen=True
     )
 
 

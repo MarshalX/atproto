@@ -15,23 +15,10 @@ from atproto_client.models import base
 
 
 class Data(base.DataModelBase):
-    """Input data model for :obj:`com.atproto.temp.transferAccount`."""
+    """Input data model for :obj:`com.atproto.identity.submitPlcOperation`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
-    plc_op: 'UnknownInputType'  #: Plc op.
+    operation: 'UnknownInputType'  #: Operation.
 
 
 class DataDict(te.TypedDict):
-    did: str  #: Did.
-    handle: str  #: Handle.
-    plc_op: 'UnknownInputType'  #: Plc op.
-
-
-class Response(base.ResponseModelBase):
-    """Output data model for :obj:`com.atproto.temp.transferAccount`."""
-
-    access_jwt: str  #: Access jwt.
-    did: str  #: Did.
-    handle: str  #: Handle.
-    refresh_jwt: str  #: Refresh jwt.
+    operation: 'UnknownInputType'  #: Operation.

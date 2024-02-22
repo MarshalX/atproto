@@ -95,11 +95,20 @@ from atproto_client.models.com.atproto.admin import search_repos as ComAtprotoAd
 from atproto_client.models.com.atproto.admin import send_email as ComAtprotoAdminSendEmail
 from atproto_client.models.com.atproto.admin import update_account_email as ComAtprotoAdminUpdateAccountEmail
 from atproto_client.models.com.atproto.admin import update_account_handle as ComAtprotoAdminUpdateAccountHandle
+from atproto_client.models.com.atproto.admin import update_account_password as ComAtprotoAdminUpdateAccountPassword
 from atproto_client.models.com.atproto.admin import (
     update_communication_template as ComAtprotoAdminUpdateCommunicationTemplate,
 )
 from atproto_client.models.com.atproto.admin import update_subject_status as ComAtprotoAdminUpdateSubjectStatus
+from atproto_client.models.com.atproto.identity import (
+    get_recommended_did_credentials as ComAtprotoIdentityGetRecommendedDidCredentials,
+)
+from atproto_client.models.com.atproto.identity import (
+    request_plc_operation_signature as ComAtprotoIdentityRequestPlcOperationSignature,
+)
 from atproto_client.models.com.atproto.identity import resolve_handle as ComAtprotoIdentityResolveHandle
+from atproto_client.models.com.atproto.identity import sign_plc_operation as ComAtprotoIdentitySignPlcOperation
+from atproto_client.models.com.atproto.identity import submit_plc_operation as ComAtprotoIdentitySubmitPlcOperation
 from atproto_client.models.com.atproto.identity import update_handle as ComAtprotoIdentityUpdateHandle
 from atproto_client.models.com.atproto.label import defs as ComAtprotoLabelDefs
 from atproto_client.models.com.atproto.label import query_labels as ComAtprotoLabelQueryLabels
@@ -111,21 +120,27 @@ from atproto_client.models.com.atproto.repo import create_record as ComAtprotoRe
 from atproto_client.models.com.atproto.repo import delete_record as ComAtprotoRepoDeleteRecord
 from atproto_client.models.com.atproto.repo import describe_repo as ComAtprotoRepoDescribeRepo
 from atproto_client.models.com.atproto.repo import get_record as ComAtprotoRepoGetRecord
+from atproto_client.models.com.atproto.repo import import_repo as ComAtprotoRepoImportRepo
+from atproto_client.models.com.atproto.repo import list_missing_blobs as ComAtprotoRepoListMissingBlobs
 from atproto_client.models.com.atproto.repo import list_records as ComAtprotoRepoListRecords
 from atproto_client.models.com.atproto.repo import put_record as ComAtprotoRepoPutRecord
 from atproto_client.models.com.atproto.repo import strong_ref as ComAtprotoRepoStrongRef
 from atproto_client.models.com.atproto.repo import upload_blob as ComAtprotoRepoUploadBlob
+from atproto_client.models.com.atproto.server import activate_account as ComAtprotoServerActivateAccount
+from atproto_client.models.com.atproto.server import check_account_status as ComAtprotoServerCheckAccountStatus
 from atproto_client.models.com.atproto.server import confirm_email as ComAtprotoServerConfirmEmail
 from atproto_client.models.com.atproto.server import create_account as ComAtprotoServerCreateAccount
 from atproto_client.models.com.atproto.server import create_app_password as ComAtprotoServerCreateAppPassword
 from atproto_client.models.com.atproto.server import create_invite_code as ComAtprotoServerCreateInviteCode
 from atproto_client.models.com.atproto.server import create_invite_codes as ComAtprotoServerCreateInviteCodes
 from atproto_client.models.com.atproto.server import create_session as ComAtprotoServerCreateSession
+from atproto_client.models.com.atproto.server import deactivate_account as ComAtprotoServerDeactivateAccount
 from atproto_client.models.com.atproto.server import defs as ComAtprotoServerDefs
 from atproto_client.models.com.atproto.server import delete_account as ComAtprotoServerDeleteAccount
 from atproto_client.models.com.atproto.server import delete_session as ComAtprotoServerDeleteSession
 from atproto_client.models.com.atproto.server import describe_server as ComAtprotoServerDescribeServer
 from atproto_client.models.com.atproto.server import get_account_invite_codes as ComAtprotoServerGetAccountInviteCodes
+from atproto_client.models.com.atproto.server import get_service_auth as ComAtprotoServerGetServiceAuth
 from atproto_client.models.com.atproto.server import get_session as ComAtprotoServerGetSession
 from atproto_client.models.com.atproto.server import list_app_passwords as ComAtprotoServerListAppPasswords
 from atproto_client.models.com.atproto.server import refresh_session as ComAtprotoServerRefreshSession
@@ -153,10 +168,7 @@ from atproto_client.models.com.atproto.sync import request_crawl as ComAtprotoSy
 from atproto_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
 from atproto_client.models.com.atproto.temp import check_signup_queue as ComAtprotoTempCheckSignupQueue
 from atproto_client.models.com.atproto.temp import fetch_labels as ComAtprotoTempFetchLabels
-from atproto_client.models.com.atproto.temp import import_repo as ComAtprotoTempImportRepo
-from atproto_client.models.com.atproto.temp import push_blob as ComAtprotoTempPushBlob
 from atproto_client.models.com.atproto.temp import request_phone_verification as ComAtprotoTempRequestPhoneVerification
-from atproto_client.models.com.atproto.temp import transfer_account as ComAtprotoTempTransferAccount
 from atproto_client.models.models_loader import load_models
 from atproto_client.models.utils import (
     create_strong_ref,
@@ -255,9 +267,14 @@ class _Ids:
     ComAtprotoAdminSendEmail: str = 'com.atproto.admin.sendEmail'
     ComAtprotoAdminUpdateAccountEmail: str = 'com.atproto.admin.updateAccountEmail'
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'
+    ComAtprotoAdminUpdateAccountPassword: str = 'com.atproto.admin.updateAccountPassword'
     ComAtprotoAdminUpdateCommunicationTemplate: str = 'com.atproto.admin.updateCommunicationTemplate'
     ComAtprotoAdminUpdateSubjectStatus: str = 'com.atproto.admin.updateSubjectStatus'
+    ComAtprotoIdentityGetRecommendedDidCredentials: str = 'com.atproto.identity.getRecommendedDidCredentials'
+    ComAtprotoIdentityRequestPlcOperationSignature: str = 'com.atproto.identity.requestPlcOperationSignature'
     ComAtprotoIdentityResolveHandle: str = 'com.atproto.identity.resolveHandle'
+    ComAtprotoIdentitySignPlcOperation: str = 'com.atproto.identity.signPlcOperation'
+    ComAtprotoIdentitySubmitPlcOperation: str = 'com.atproto.identity.submitPlcOperation'
     ComAtprotoIdentityUpdateHandle: str = 'com.atproto.identity.updateHandle'
     ComAtprotoLabelDefs: str = 'com.atproto.label.defs'
     ComAtprotoLabelQueryLabels: str = 'com.atproto.label.queryLabels'
@@ -269,21 +286,27 @@ class _Ids:
     ComAtprotoRepoDeleteRecord: str = 'com.atproto.repo.deleteRecord'
     ComAtprotoRepoDescribeRepo: str = 'com.atproto.repo.describeRepo'
     ComAtprotoRepoGetRecord: str = 'com.atproto.repo.getRecord'
+    ComAtprotoRepoImportRepo: str = 'com.atproto.repo.importRepo'
+    ComAtprotoRepoListMissingBlobs: str = 'com.atproto.repo.listMissingBlobs'
     ComAtprotoRepoListRecords: str = 'com.atproto.repo.listRecords'
     ComAtprotoRepoPutRecord: str = 'com.atproto.repo.putRecord'
     ComAtprotoRepoStrongRef: str = 'com.atproto.repo.strongRef'
     ComAtprotoRepoUploadBlob: str = 'com.atproto.repo.uploadBlob'
+    ComAtprotoServerActivateAccount: str = 'com.atproto.server.activateAccount'
+    ComAtprotoServerCheckAccountStatus: str = 'com.atproto.server.checkAccountStatus'
     ComAtprotoServerConfirmEmail: str = 'com.atproto.server.confirmEmail'
     ComAtprotoServerCreateAccount: str = 'com.atproto.server.createAccount'
     ComAtprotoServerCreateAppPassword: str = 'com.atproto.server.createAppPassword'
     ComAtprotoServerCreateInviteCode: str = 'com.atproto.server.createInviteCode'
     ComAtprotoServerCreateInviteCodes: str = 'com.atproto.server.createInviteCodes'
     ComAtprotoServerCreateSession: str = 'com.atproto.server.createSession'
+    ComAtprotoServerDeactivateAccount: str = 'com.atproto.server.deactivateAccount'
     ComAtprotoServerDefs: str = 'com.atproto.server.defs'
     ComAtprotoServerDeleteAccount: str = 'com.atproto.server.deleteAccount'
     ComAtprotoServerDeleteSession: str = 'com.atproto.server.deleteSession'
     ComAtprotoServerDescribeServer: str = 'com.atproto.server.describeServer'
     ComAtprotoServerGetAccountInviteCodes: str = 'com.atproto.server.getAccountInviteCodes'
+    ComAtprotoServerGetServiceAuth: str = 'com.atproto.server.getServiceAuth'
     ComAtprotoServerGetSession: str = 'com.atproto.server.getSession'
     ComAtprotoServerListAppPasswords: str = 'com.atproto.server.listAppPasswords'
     ComAtprotoServerRefreshSession: str = 'com.atproto.server.refreshSession'
@@ -309,10 +332,7 @@ class _Ids:
     ComAtprotoSyncSubscribeRepos: str = 'com.atproto.sync.subscribeRepos'
     ComAtprotoTempCheckSignupQueue: str = 'com.atproto.temp.checkSignupQueue'
     ComAtprotoTempFetchLabels: str = 'com.atproto.temp.fetchLabels'
-    ComAtprotoTempImportRepo: str = 'com.atproto.temp.importRepo'
-    ComAtprotoTempPushBlob: str = 'com.atproto.temp.pushBlob'
     ComAtprotoTempRequestPhoneVerification: str = 'com.atproto.temp.requestPhoneVerification'
-    ComAtprotoTempTransferAccount: str = 'com.atproto.temp.transferAccount'
 
 
 ids = _Ids()

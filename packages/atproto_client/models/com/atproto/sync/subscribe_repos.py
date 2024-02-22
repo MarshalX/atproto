@@ -52,8 +52,20 @@ class Commit(base.ModelBase):
     )
 
 
+class Identity(base.ModelBase):
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents a change to an account's identity. Could be an updated handle, signing key, or pds hosting endpoint. Serves as a prod to all downstream services to refresh their identity cache."""
+
+    did: str  #: Did.
+    seq: int  #: Seq.
+    time: str  #: Time.
+
+    py_type: te.Literal['com.atproto.sync.subscribeRepos#identity'] = Field(
+        default='com.atproto.sync.subscribeRepos#identity', alias='$type', frozen=True
+    )
+
+
 class Handle(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents an update of the account's handle, or transition to/from invalid state."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents an update of the account's handle, or transition to/from invalid state. NOTE: Will be deprecated in favor of #identity."""
 
     did: str  #: Did.
     handle: str  #: Handle.
@@ -66,7 +78,7 @@ class Handle(base.ModelBase):
 
 
 class Migrate(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents an account moving from one PDS instance to another. NOTE: not implemented; full account migration may introduce a new message instead."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents an account moving from one PDS instance to another. NOTE: not implemented; account migration uses #identity instead."""
 
     did: str  #: Did.
     seq: int  #: Seq.
@@ -79,7 +91,7 @@ class Migrate(base.ModelBase):
 
 
 class Tombstone(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Indicates that an account has been deleted."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Indicates that an account has been deleted. NOTE: may be deprecated in favor of #identity or a future #account event."""
 
     did: str  #: Did.
     seq: int  #: Seq.

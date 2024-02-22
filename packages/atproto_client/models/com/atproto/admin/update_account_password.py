@@ -10,19 +10,13 @@ import typing_extensions as te
 from atproto_client.models import base
 
 
-class Params(base.ParamsModelBase):
-    """Parameters model for :obj:`com.atproto.temp.importRepo`."""
+class Data(base.DataModelBase):
+    """Input data model for :obj:`com.atproto.admin.updateAccountPassword`."""
 
-    did: str  #: The DID of the repo.
-
-
-class ParamsDict(te.TypedDict):
-    did: str  #: The DID of the repo.
+    did: str  #: Did.
+    password: str  #: Password.
 
 
-#: Data raw data type.
-Data: te.TypeAlias = bytes
-
-
-#: Response raw data type.
-Response: te.TypeAlias = bytes
+class DataDict(te.TypedDict):
+    did: str  #: Did.
+    password: str  #: Password.

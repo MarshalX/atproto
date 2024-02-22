@@ -21,6 +21,9 @@ class Params(base.ParamsModelBase):
     added_labels: t.Optional[
         t.List[str]
     ] = None  #: If specified, only events where all of these labels were added are returned.
+    added_tags: t.Optional[
+        t.List[str]
+    ] = None  #: If specified, only events where all of these tags were added are returned.
     comment: t.Optional[str] = None  #: If specified, only events with comments containing the keyword are returned.
     created_after: t.Optional[str] = None  #: Retrieve events created after a given timestamp.
     created_before: t.Optional[str] = None  #: Retrieve events created before a given timestamp.
@@ -34,6 +37,9 @@ class Params(base.ParamsModelBase):
     removed_labels: t.Optional[
         t.List[str]
     ] = None  #: If specified, only events where all of these labels were removed are returned.
+    removed_tags: t.Optional[
+        t.List[str]
+    ] = None  #: If specified, only events where all of these tags were removed are returned.
     report_types: t.Optional[t.List[str]] = None  #: Report types.
     sort_direction: t.Optional[
         str
@@ -48,6 +54,9 @@ class ParamsDict(te.TypedDict):
     added_labels: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: If specified, only events where all of these labels were added are returned.
+    added_tags: te.NotRequired[
+        t.Optional[t.List[str]]
+    ]  #: If specified, only events where all of these tags were added are returned.
     comment: te.NotRequired[
         t.Optional[str]
     ]  #: If specified, only events with comments containing the keyword are returned.
@@ -63,6 +72,9 @@ class ParamsDict(te.TypedDict):
     removed_labels: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: If specified, only events where all of these labels were removed are returned.
+    removed_tags: te.NotRequired[
+        t.Optional[t.List[str]]
+    ]  #: If specified, only events where all of these tags were removed are returned.
     report_types: te.NotRequired[t.Optional[t.List[str]]]  #: Report types.
     sort_direction: te.NotRequired[
         t.Optional[str]
