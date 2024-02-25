@@ -79,7 +79,7 @@ The SDK is built upon the following components:
 | `atproto_firehose` | Firehose (data streaming) client and models.                                |
 | `atproto_identity` | Identity resolvers for DID, Handle, AT Protocol data, signing keys.         |
 | `atproto_lexicon`  | Lexicon parser.                                                             |
-| `atproro_server`   | Server-side utils like JWT.                                                 |
+| `atproto_server`   | Server-side utils like JWT.                                                 |
 
 I highly recommend you to use the `atproto` package to import everything that you need.
 It contains shortcuts to all other packages.
