@@ -4949,7 +4949,7 @@ class TempNamespace(AsyncNamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoTempFetchLabels.Response':
-        """Fetch all labels from a labeler created after a certain date. DEPRECATED: use queryLabels or subscribeLabels instead.
+        """DEPRECATED: use queryLabels or subscribeLabels instead -- Fetch all labels from a labeler created after a certain date.
 
         Args:
             params: Parameters.
