@@ -1,5 +1,14 @@
 # Change Log
 
+## Version 0.0.44
+
+**05.03.2024**
+
+* Add identity firehose message by @MarshalX in https://github.com/MarshalX/atproto/pull/294
+* Update lexicons fetched from d643b5b committed 2024-02-23T22:59:47Z by @MarshalX in https://github.com/MarshalX/atproto/pull/293
+* Update lexicons fetched from c7e6ef0 committed 2024-03-05T19:27:25Z by @MarshalX in https://github.com/MarshalX/atproto/pull/295
+* Fix typo in README by @yallxe in https://github.com/MarshalX/atproto/pull/291
+
 ## Version 0.0.43
 
 **22.02.2024**
