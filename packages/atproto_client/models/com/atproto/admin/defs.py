@@ -504,6 +504,7 @@ class ModEventEmail(base.ModelBase):
 
     subject_line: str  #: The subject line of the email sent to the user.
     comment: t.Optional[str] = None  #: Additional comment about the outgoing comm.
+    content: t.Optional[str] = None  #: The content of the email sent to the user.
 
     py_type: te.Literal['com.atproto.admin.defs#modEventEmail'] = Field(
         default='com.atproto.admin.defs#modEventEmail', alias='$type', frozen=True
