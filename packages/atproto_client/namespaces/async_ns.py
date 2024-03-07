@@ -27,6 +27,7 @@ class BskyNamespace(AsyncNamespaceBase):
         self.actor = ActorNamespace(self._client)
         self.feed = FeedNamespace(self._client)
         self.graph = GraphNamespace(self._client)
+        self.labeler = LabelerNamespace(self._client)
         self.notification = NotificationNamespace(self._client)
         self.unspecced = UnspeccedNamespace(self._client)
 
@@ -2659,6 +2660,189 @@ class GraphNamespace(AsyncNamespaceBase):
             'app.bsky.graph.unmuteActorList', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
+
+
+class ServiceRecord(AsyncRecordBase):
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyLabelerService.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyLabelerService.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.labeler.service', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.AppBskyLabelerService.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyLabelerService.Record', response_model.value),
+        )
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyLabelerService.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyLabelerService.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.labeler.service',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.AppBskyLabelerService.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.AppBskyLabelerService.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyLabelerService.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyLabelerService.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyLabelerService.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.labeler.service',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.AppBskyLabelerService.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.labeler.service',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class LabelerNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        super().__init__(client)
+        self.service = ServiceRecord(self._client)
+
+    async def get_services(
+        self,
+        params: t.Union[models.AppBskyLabelerGetServices.Params, models.AppBskyLabelerGetServices.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyLabelerGetServices.Response':
+        """Get information about a list of labeler services.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyLabelerGetServices.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyLabelerGetServices.Params', get_or_create(params, models.AppBskyLabelerGetServices.Params)
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.labeler.getServices', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyLabelerGetServices.Response)
 
 
 class NotificationNamespace(AsyncNamespaceBase):

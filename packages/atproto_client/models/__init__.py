@@ -55,6 +55,9 @@ from atproto_client.models.app.bsky.graph import mute_actor as AppBskyGraphMuteA
 from atproto_client.models.app.bsky.graph import mute_actor_list as AppBskyGraphMuteActorList
 from atproto_client.models.app.bsky.graph import unmute_actor as AppBskyGraphUnmuteActor
 from atproto_client.models.app.bsky.graph import unmute_actor_list as AppBskyGraphUnmuteActorList
+from atproto_client.models.app.bsky.labeler import defs as AppBskyLabelerDefs
+from atproto_client.models.app.bsky.labeler import get_services as AppBskyLabelerGetServices
+from atproto_client.models.app.bsky.labeler import service as AppBskyLabelerService
 from atproto_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
 from atproto_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
 from atproto_client.models.app.bsky.notification import register_push as AppBskyNotificationRegisterPush
@@ -235,6 +238,9 @@ class _Ids:
     AppBskyGraphMuteActorList: str = 'app.bsky.graph.muteActorList'
     AppBskyGraphUnmuteActor: str = 'app.bsky.graph.unmuteActor'
     AppBskyGraphUnmuteActorList: str = 'app.bsky.graph.unmuteActorList'
+    AppBskyLabelerDefs: str = 'app.bsky.labeler.defs'
+    AppBskyLabelerGetServices: str = 'app.bsky.labeler.getServices'
+    AppBskyLabelerService: str = 'app.bsky.labeler.service'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
     AppBskyNotificationListNotifications: str = 'app.bsky.notification.listNotifications'
     AppBskyNotificationRegisterPush: str = 'app.bsky.notification.registerPush'
