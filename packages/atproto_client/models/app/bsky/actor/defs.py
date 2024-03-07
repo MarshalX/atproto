@@ -52,6 +52,7 @@ class ProfileViewDetailed(base.ModelBase):
 
     did: str  #: Did.
     handle: str  #: Handle.
+    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[str] = None  #: Avatar.
     banner: t.Optional[str] = None  #: Banner.
     description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
@@ -65,6 +66,18 @@ class ProfileViewDetailed(base.ModelBase):
 
     py_type: te.Literal['app.bsky.actor.defs#profileViewDetailed'] = Field(
         default='app.bsky.actor.defs#profileViewDetailed', alias='$type', frozen=True
+    )
+
+
+class ProfileAssociated(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    feedgens: t.Optional[int] = None  #: Feedgens.
+    labeler: t.Optional[bool] = None  #: Labeler.
+    lists: t.Optional[int] = None  #: Lists.
+
+    py_type: te.Literal['app.bsky.actor.defs#profileAssociated'] = Field(
+        default='app.bsky.actor.defs#profileAssociated', alias='$type', frozen=True
     )
 
 
@@ -117,6 +130,7 @@ class ContentLabelPref(base.ModelBase):
 
     label: str  #: Label.
     visibility: str  #: Visibility.
+    labeler_did: t.Optional[str] = None  #: Which labeler does this preference apply to? If undefined, applies globally.
 
     py_type: te.Literal['app.bsky.actor.defs#contentLabelPref'] = Field(
         default='app.bsky.actor.defs#contentLabelPref', alias='$type', frozen=True
@@ -216,4 +230,24 @@ class HiddenPostsPref(base.ModelBase):
 
     py_type: te.Literal['app.bsky.actor.defs#hiddenPostsPref'] = Field(
         default='app.bsky.actor.defs#hiddenPostsPref', alias='$type', frozen=True
+    )
+
+
+class ModsPref(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    mods: t.List['models.AppBskyActorDefs.ModPrefItem']  #: Mods.
+
+    py_type: te.Literal['app.bsky.actor.defs#modsPref'] = Field(
+        default='app.bsky.actor.defs#modsPref', alias='$type', frozen=True
+    )
+
+
+class ModPrefItem(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    did: str  #: Did.
+
+    py_type: te.Literal['app.bsky.actor.defs#modPrefItem'] = Field(
+        default='app.bsky.actor.defs#modPrefItem', alias='$type', frozen=True
     )

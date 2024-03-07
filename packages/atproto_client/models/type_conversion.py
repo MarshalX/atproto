@@ -12,4 +12,5 @@ RECORD_TYPE_TO_MODEL_CLASS = {
     'app.bsky.graph.list': models.AppBskyGraphList.Record,
     'app.bsky.graph.listblock': models.AppBskyGraphListblock.Record,
     'app.bsky.graph.listitem': models.AppBskyGraphListitem.Record,
+    'app.bsky.labeler.service': models.AppBskyLabelerService.Record,
 }

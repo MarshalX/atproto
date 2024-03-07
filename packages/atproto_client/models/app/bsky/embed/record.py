@@ -34,6 +34,7 @@ class View(base.ModelBase):
             'models.AppBskyEmbedRecord.ViewBlocked',
             'models.AppBskyFeedDefs.GeneratorView',
             'models.AppBskyGraphDefs.ListView',
+            'models.AppBskyLabelerDefs.LabelerView',
         ],
         Field(discriminator='py_type'),
     ]  #: Record.

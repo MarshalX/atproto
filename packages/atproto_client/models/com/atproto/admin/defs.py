@@ -376,6 +376,7 @@ SubjectReviewState = t.Union[
     'models.ComAtprotoAdminDefs.ReviewOpen',
     'models.ComAtprotoAdminDefs.ReviewEscalated',
     'models.ComAtprotoAdminDefs.ReviewClosed',
+    'models.ComAtprotoAdminDefs.ReviewNone',
 ]  #: Subject review state
 
 ReviewOpen = te.Literal[
@@ -389,6 +390,10 @@ ReviewEscalated = te.Literal[
 ReviewClosed = te.Literal[
     'com.atproto.admin.defs#reviewClosed'
 ]  #: Moderator review status of a subject: Closed. Indicates that the subject was already reviewed and resolved by a moderator
+
+ReviewNone = te.Literal[
+    'com.atproto.admin.defs#reviewNone'
+]  #: Moderator review status of a subject: Unnecessary. Indicates that the subject does not need a review at the moment but there is probably some moderation related metadata available for it
 
 
 class ModEventTakedown(base.ModelBase):

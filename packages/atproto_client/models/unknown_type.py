@@ -19,6 +19,7 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyGraphList.Record',
     'models.AppBskyGraphListblock.Record',
     'models.AppBskyGraphListitem.Record',
+    'models.AppBskyLabelerService.Record',
 ]
 UnknownRecordTypePydantic = te.Annotated[
     t.Union[
@@ -33,6 +34,7 @@ UnknownRecordTypePydantic = te.Annotated[
         'models.AppBskyGraphList.Record',
         'models.AppBskyGraphListblock.Record',
         'models.AppBskyGraphListitem.Record',
+        'models.AppBskyLabelerService.Record',
     ],
     Field(discriminator='py_type'),
 ]
