@@ -25,7 +25,10 @@ class Label(base.ModelBase):
     cid: t.Optional[
         str
     ] = None  #: Optionally, CID specifying the specific version of 'uri' resource this label applies to.
+    exp: t.Optional[str] = None  #: Timestamp at which this label expires (no longer applies).
     neg: t.Optional[bool] = None  #: If true, this is a negation label, overwriting a previous label.
+    sig: t.Optional[t.Union[str, bytes]] = None  #: Signature of dag-cbor encoded label.
+    ver: t.Optional[int] = None  #: The AT Protocol version of the label object.
 
     py_type: te.Literal['com.atproto.label.defs#label'] = Field(
         default='com.atproto.label.defs#label', alias='$type', frozen=True

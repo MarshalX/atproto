@@ -44,6 +44,7 @@ class ModEventView(base.ModelBase):
             'models.ComAtprotoAdminDefs.ModEventMute',
             'models.ComAtprotoAdminDefs.ModEventEmail',
             'models.ComAtprotoAdminDefs.ModEventResolveAppeal',
+            'models.ComAtprotoAdminDefs.ModEventDivert',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -78,6 +79,7 @@ class ModEventViewDetail(base.ModelBase):
             'models.ComAtprotoAdminDefs.ModEventMute',
             'models.ComAtprotoAdminDefs.ModEventEmail',
             'models.ComAtprotoAdminDefs.ModEventResolveAppeal',
+            'models.ComAtprotoAdminDefs.ModEventDivert',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -525,6 +527,16 @@ class ModEventTag(base.ModelBase):
 
     py_type: te.Literal['com.atproto.admin.defs#modEventTag'] = Field(
         default='com.atproto.admin.defs#modEventTag', alias='$type', frozen=True
+    )
+
+
+class ModEventDivert(base.ModelBase):
+    """Definition model for :obj:`com.atproto.admin.defs`. Divert a record's blobs to a 3rd party service for further scanning/tagging."""
+
+    comment: t.Optional[str] = None  #: Comment.
+
+    py_type: te.Literal['com.atproto.admin.defs#modEventDivert'] = Field(
+        default='com.atproto.admin.defs#modEventDivert', alias='$type', frozen=True
     )
 
 
