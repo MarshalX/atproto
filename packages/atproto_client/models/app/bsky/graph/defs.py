@@ -24,6 +24,7 @@ class ListViewBasic(base.ModelBase):
     uri: str  #: Uri.
     avatar: t.Optional[str] = None  #: Avatar.
     indexed_at: t.Optional[str] = None  #: Indexed at.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.graph.defs#listViewBasic'] = Field(
@@ -43,6 +44,7 @@ class ListView(base.ModelBase):
     avatar: t.Optional[str] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: te.Literal['app.bsky.graph.defs#listView'] = Field(

@@ -187,6 +187,7 @@ class GeneratorView(base.ModelBase):
     avatar: t.Optional[str] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
     viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState'] = None  #: Viewer.
 
