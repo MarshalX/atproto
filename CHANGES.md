@@ -1,5 +1,21 @@
 # Change Log
 
+## Version 0.0.45
+
+**14.03.2024**
+
+**Content labeling (moderation) is here! This update brings labeling data-stream support as well ozone.tools API!**
+
+- [Example how to subscribe and process labeling update](https://github.com/MarshalX/atproto/blob/main/examples/firehose/sub_labels.py)
+- [Updated documentation about real-time updates](https://atproto.blue/en/latest/atproto_firehose/index.html)
+
+* Add labels firehose data stream by @MarshalX in https://github.com/MarshalX/atproto/pull/304
+* Register ozone.tools namespace as root namespace by @MarshalX in https://github.com/MarshalX/atproto/pull/303
+* Generate unique namespace classes to avoid collisions between lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/299
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/297, https://github.com/MarshalX/atproto/pull/298, https://github.com/MarshalX/atproto/pull/302
+* Fix CIMON by @MarshalX in https://github.com/MarshalX/atproto/pull/300
+* Fix lexicon updater by @MarshalX in https://github.com/MarshalX/atproto/pull/301
+
 ## Version 0.0.44
 
 **05.03.2024**
