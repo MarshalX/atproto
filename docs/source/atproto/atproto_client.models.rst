@@ -14,6 +14,7 @@ Subpackages
 
    atproto_client.models.app
    atproto_client.models.com
+   atproto_client.models.tools
 
 Submodules
 ----------

@@ -70,38 +70,19 @@ from atproto_client.models.app.bsky.unspecced import (
 from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as AppBskyUnspeccedGetTaggedSuggestions
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
-from atproto_client.models.com.atproto.admin import (
-    create_communication_template as ComAtprotoAdminCreateCommunicationTemplate,
-)
 from atproto_client.models.com.atproto.admin import defs as ComAtprotoAdminDefs
 from atproto_client.models.com.atproto.admin import delete_account as ComAtprotoAdminDeleteAccount
-from atproto_client.models.com.atproto.admin import (
-    delete_communication_template as ComAtprotoAdminDeleteCommunicationTemplate,
-)
 from atproto_client.models.com.atproto.admin import disable_account_invites as ComAtprotoAdminDisableAccountInvites
 from atproto_client.models.com.atproto.admin import disable_invite_codes as ComAtprotoAdminDisableInviteCodes
-from atproto_client.models.com.atproto.admin import emit_moderation_event as ComAtprotoAdminEmitModerationEvent
 from atproto_client.models.com.atproto.admin import enable_account_invites as ComAtprotoAdminEnableAccountInvites
 from atproto_client.models.com.atproto.admin import get_account_info as ComAtprotoAdminGetAccountInfo
 from atproto_client.models.com.atproto.admin import get_account_infos as ComAtprotoAdminGetAccountInfos
 from atproto_client.models.com.atproto.admin import get_invite_codes as ComAtprotoAdminGetInviteCodes
-from atproto_client.models.com.atproto.admin import get_moderation_event as ComAtprotoAdminGetModerationEvent
-from atproto_client.models.com.atproto.admin import get_record as ComAtprotoAdminGetRecord
-from atproto_client.models.com.atproto.admin import get_repo as ComAtprotoAdminGetRepo
 from atproto_client.models.com.atproto.admin import get_subject_status as ComAtprotoAdminGetSubjectStatus
-from atproto_client.models.com.atproto.admin import (
-    list_communication_templates as ComAtprotoAdminListCommunicationTemplates,
-)
-from atproto_client.models.com.atproto.admin import query_moderation_events as ComAtprotoAdminQueryModerationEvents
-from atproto_client.models.com.atproto.admin import query_moderation_statuses as ComAtprotoAdminQueryModerationStatuses
-from atproto_client.models.com.atproto.admin import search_repos as ComAtprotoAdminSearchRepos
 from atproto_client.models.com.atproto.admin import send_email as ComAtprotoAdminSendEmail
 from atproto_client.models.com.atproto.admin import update_account_email as ComAtprotoAdminUpdateAccountEmail
 from atproto_client.models.com.atproto.admin import update_account_handle as ComAtprotoAdminUpdateAccountHandle
 from atproto_client.models.com.atproto.admin import update_account_password as ComAtprotoAdminUpdateAccountPassword
-from atproto_client.models.com.atproto.admin import (
-    update_communication_template as ComAtprotoAdminUpdateCommunicationTemplate,
-)
 from atproto_client.models.com.atproto.admin import update_subject_status as ComAtprotoAdminUpdateSubjectStatus
 from atproto_client.models.com.atproto.identity import (
     get_recommended_did_credentials as ComAtprotoIdentityGetRecommendedDidCredentials,
@@ -173,6 +154,19 @@ from atproto_client.models.com.atproto.temp import check_signup_queue as ComAtpr
 from atproto_client.models.com.atproto.temp import fetch_labels as ComAtprotoTempFetchLabels
 from atproto_client.models.com.atproto.temp import request_phone_verification as ComAtprotoTempRequestPhoneVerification
 from atproto_client.models.models_loader import load_models
+from atproto_client.models.tools.ozone.communication import create_template as ToolsOzoneCommunicationCreateTemplate
+from atproto_client.models.tools.ozone.communication import defs as ToolsOzoneCommunicationDefs
+from atproto_client.models.tools.ozone.communication import delete_template as ToolsOzoneCommunicationDeleteTemplate
+from atproto_client.models.tools.ozone.communication import list_templates as ToolsOzoneCommunicationListTemplates
+from atproto_client.models.tools.ozone.communication import update_template as ToolsOzoneCommunicationUpdateTemplate
+from atproto_client.models.tools.ozone.moderation import defs as ToolsOzoneModerationDefs
+from atproto_client.models.tools.ozone.moderation import emit_event as ToolsOzoneModerationEmitEvent
+from atproto_client.models.tools.ozone.moderation import get_event as ToolsOzoneModerationGetEvent
+from atproto_client.models.tools.ozone.moderation import get_record as ToolsOzoneModerationGetRecord
+from atproto_client.models.tools.ozone.moderation import get_repo as ToolsOzoneModerationGetRepo
+from atproto_client.models.tools.ozone.moderation import query_events as ToolsOzoneModerationQueryEvents
+from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
+from atproto_client.models.tools.ozone.moderation import search_repos as ToolsOzoneModerationSearchRepos
 from atproto_client.models.utils import (
     create_strong_ref,
     get_model_as_dict,
@@ -251,30 +245,19 @@ class _Ids:
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
-    ComAtprotoAdminCreateCommunicationTemplate: str = 'com.atproto.admin.createCommunicationTemplate'
     ComAtprotoAdminDefs: str = 'com.atproto.admin.defs'
     ComAtprotoAdminDeleteAccount: str = 'com.atproto.admin.deleteAccount'
-    ComAtprotoAdminDeleteCommunicationTemplate: str = 'com.atproto.admin.deleteCommunicationTemplate'
     ComAtprotoAdminDisableAccountInvites: str = 'com.atproto.admin.disableAccountInvites'
     ComAtprotoAdminDisableInviteCodes: str = 'com.atproto.admin.disableInviteCodes'
-    ComAtprotoAdminEmitModerationEvent: str = 'com.atproto.admin.emitModerationEvent'
     ComAtprotoAdminEnableAccountInvites: str = 'com.atproto.admin.enableAccountInvites'
     ComAtprotoAdminGetAccountInfo: str = 'com.atproto.admin.getAccountInfo'
     ComAtprotoAdminGetAccountInfos: str = 'com.atproto.admin.getAccountInfos'
     ComAtprotoAdminGetInviteCodes: str = 'com.atproto.admin.getInviteCodes'
-    ComAtprotoAdminGetModerationEvent: str = 'com.atproto.admin.getModerationEvent'
-    ComAtprotoAdminGetRecord: str = 'com.atproto.admin.getRecord'
-    ComAtprotoAdminGetRepo: str = 'com.atproto.admin.getRepo'
     ComAtprotoAdminGetSubjectStatus: str = 'com.atproto.admin.getSubjectStatus'
-    ComAtprotoAdminListCommunicationTemplates: str = 'com.atproto.admin.listCommunicationTemplates'
-    ComAtprotoAdminQueryModerationEvents: str = 'com.atproto.admin.queryModerationEvents'
-    ComAtprotoAdminQueryModerationStatuses: str = 'com.atproto.admin.queryModerationStatuses'
-    ComAtprotoAdminSearchRepos: str = 'com.atproto.admin.searchRepos'
     ComAtprotoAdminSendEmail: str = 'com.atproto.admin.sendEmail'
     ComAtprotoAdminUpdateAccountEmail: str = 'com.atproto.admin.updateAccountEmail'
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'
     ComAtprotoAdminUpdateAccountPassword: str = 'com.atproto.admin.updateAccountPassword'
-    ComAtprotoAdminUpdateCommunicationTemplate: str = 'com.atproto.admin.updateCommunicationTemplate'
     ComAtprotoAdminUpdateSubjectStatus: str = 'com.atproto.admin.updateSubjectStatus'
     ComAtprotoIdentityGetRecommendedDidCredentials: str = 'com.atproto.identity.getRecommendedDidCredentials'
     ComAtprotoIdentityRequestPlcOperationSignature: str = 'com.atproto.identity.requestPlcOperationSignature'
@@ -339,6 +322,19 @@ class _Ids:
     ComAtprotoTempCheckSignupQueue: str = 'com.atproto.temp.checkSignupQueue'
     ComAtprotoTempFetchLabels: str = 'com.atproto.temp.fetchLabels'
     ComAtprotoTempRequestPhoneVerification: str = 'com.atproto.temp.requestPhoneVerification'
+    ToolsOzoneCommunicationCreateTemplate: str = 'tools.ozone.communication.createTemplate'
+    ToolsOzoneCommunicationDefs: str = 'tools.ozone.communication.defs'
+    ToolsOzoneCommunicationDeleteTemplate: str = 'tools.ozone.communication.deleteTemplate'
+    ToolsOzoneCommunicationListTemplates: str = 'tools.ozone.communication.listTemplates'
+    ToolsOzoneCommunicationUpdateTemplate: str = 'tools.ozone.communication.updateTemplate'
+    ToolsOzoneModerationDefs: str = 'tools.ozone.moderation.defs'
+    ToolsOzoneModerationEmitEvent: str = 'tools.ozone.moderation.emitEvent'
+    ToolsOzoneModerationGetEvent: str = 'tools.ozone.moderation.getEvent'
+    ToolsOzoneModerationGetRecord: str = 'tools.ozone.moderation.getRecord'
+    ToolsOzoneModerationGetRepo: str = 'tools.ozone.moderation.getRepo'
+    ToolsOzoneModerationQueryEvents: str = 'tools.ozone.moderation.queryEvents'
+    ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
+    ToolsOzoneModerationSearchRepos: str = 'tools.ozone.moderation.searchRepos'
 
 
 ids = _Ids()

@@ -20,6 +20,7 @@ class Response(base.ResponseModelBase):
 
     available_user_domains: t.List[str]  #: List of domain suffixes that can be used in account handles.
     did: str  #: Did.
+    contact: t.Optional['models.ComAtprotoServerDescribeServer.Contact'] = None  #: Contact information.
     invite_code_required: t.Optional[
         bool
     ] = None  #: If true, an invite code must be supplied to create an account on this instance.
@@ -37,4 +38,14 @@ class Links(base.ModelBase):
 
     py_type: te.Literal['com.atproto.server.describeServer#links'] = Field(
         default='com.atproto.server.describeServer#links', alias='$type', frozen=True
+    )
+
+
+class Contact(base.ModelBase):
+    """Definition model for :obj:`com.atproto.server.describeServer`."""
+
+    email: t.Optional[str] = None  #: Email.
+
+    py_type: te.Literal['com.atproto.server.describeServer#contact'] = Field(
+        default='com.atproto.server.describeServer#contact', alias='$type', frozen=True
     )

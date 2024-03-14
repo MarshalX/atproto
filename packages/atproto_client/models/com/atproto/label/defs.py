@@ -64,6 +64,10 @@ class LabelValueDefinition(base.ModelBase):
     )  #: The value of the label being defined. Must only include lowercase ascii and the '-' character ([a-z-]+).
     locales: t.List['models.ComAtprotoLabelDefs.LabelValueDefinitionStrings']  #: Locales.
     severity: str  #: How should a client visually convey this label? 'inform' means neutral and informational; 'alert' means negative and warning; 'none' means show nothing.
+    adult_only: t.Optional[
+        bool
+    ] = None  #: Does the user need to have adult content enabled in order to configure this label?
+    default_setting: t.Optional[str] = None  #: The default setting for this label.
 
     py_type: te.Literal['com.atproto.label.defs#labelValueDefinition'] = Field(
         default='com.atproto.label.defs#labelValueDefinition', alias='$type', frozen=True
