@@ -25,8 +25,6 @@ _FOLDER_TO_WRITE_LEXICONS = Path(__file__).parent.joinpath('lexicons').absolute(
 _FOLDER_OF_GEN_DOCS = Path(__file__).parent.joinpath('docs', 'source', 'atproto').absolute()
 
 _FOLDER_OF_MODELS = Path(__file__).parent.joinpath('packages', 'atproto_client', 'models').absolute()
-_FOLDER_OF_GEN_MODELS_1 = _FOLDER_OF_MODELS.joinpath('com').absolute()
-_FOLDER_OF_GEN_MODELS_2 = _FOLDER_OF_MODELS.joinpath('app').absolute()
 
 
 def _build_last_commit_api_url() -> str:
@@ -116,8 +114,11 @@ def _remove_content_in_path(path: Path) -> None:
     for child in path.iterdir():
         if child.is_dir():
             _remove_content_in_path(child)
+            if child.exists():
+                child.rmdir()
         else:
             child.unlink()
+    path.rmdir()
 
 
 def _run_subprocess(command: t.List[str]) -> None:
@@ -140,8 +141,10 @@ def main() -> None:
     _write_extracted_lexicons(_extract_zip(_download_zip_with_code()))
 
     _print('- Running codegen (poetry run atp -s gen all)...')
-    _remove_content_in_path(_FOLDER_OF_GEN_MODELS_1)
-    _remove_content_in_path(_FOLDER_OF_GEN_MODELS_2)
+    for item in os.listdir(_FOLDER_OF_MODELS):
+        path = Path(_FOLDER_OF_MODELS, item)
+        if path.is_dir():
+            _remove_content_in_path(path)
     _run_subprocess(['poetry', 'run', 'atp', '-s', 'gen', 'all'])
 
     _print('- Running ruff (poetry run ruff .)...')
