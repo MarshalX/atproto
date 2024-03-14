@@ -233,21 +233,21 @@ class HiddenPostsPref(base.ModelBase):
     )
 
 
-class ModsPref(base.ModelBase):
+class LabelersPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    mods: t.List['models.AppBskyActorDefs.ModPrefItem']  #: Mods.
+    labelers: t.List['models.AppBskyActorDefs.LabelerPrefItem']  #: Labelers.
 
-    py_type: te.Literal['app.bsky.actor.defs#modsPref'] = Field(
-        default='app.bsky.actor.defs#modsPref', alias='$type', frozen=True
+    py_type: te.Literal['app.bsky.actor.defs#labelersPref'] = Field(
+        default='app.bsky.actor.defs#labelersPref', alias='$type', frozen=True
     )
 
 
-class ModPrefItem(base.ModelBase):
+class LabelerPrefItem(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     did: str  #: Did.
 
-    py_type: te.Literal['app.bsky.actor.defs#modPrefItem'] = Field(
-        default='app.bsky.actor.defs#modPrefItem', alias='$type', frozen=True
+    py_type: te.Literal['app.bsky.actor.defs#labelerPrefItem'] = Field(
+        default='app.bsky.actor.defs#labelerPrefItem', alias='$type', frozen=True
     )

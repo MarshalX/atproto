@@ -3102,39 +3102,6 @@ class ComAtprotoNamespace(AsyncNamespaceBase):
 
 
 class ComAtprotoAdminNamespace(AsyncNamespaceBase):
-    async def create_communication_template(
-        self,
-        data: t.Union[
-            models.ComAtprotoAdminCreateCommunicationTemplate.Data,
-            models.ComAtprotoAdminCreateCommunicationTemplate.DataDict,
-        ],
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoAdminDefs.CommunicationTemplateView':
-        """Administrative action to create a new, re-usable communication (email for now) template.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminDefs.CommunicationTemplateView`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        data_model = t.cast(
-            'models.ComAtprotoAdminCreateCommunicationTemplate.Data',
-            get_or_create(data, models.ComAtprotoAdminCreateCommunicationTemplate.Data),
-        )
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.createCommunicationTemplate',
-            data=data_model,
-            input_encoding='application/json',
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoAdminDefs.CommunicationTemplateView)
-
     async def delete_account(
         self,
         data: t.Union[models.ComAtprotoAdminDeleteAccount.Data, models.ComAtprotoAdminDeleteAccount.DataDict],
@@ -3157,38 +3124,6 @@ class ComAtprotoAdminNamespace(AsyncNamespaceBase):
         )
         response = await self._client.invoke_procedure(
             'com.atproto.admin.deleteAccount', data=data_model, input_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, bool)
-
-    async def delete_communication_template(
-        self,
-        data: t.Union[
-            models.ComAtprotoAdminDeleteCommunicationTemplate.Data,
-            models.ComAtprotoAdminDeleteCommunicationTemplate.DataDict,
-        ],
-        **kwargs: t.Any,
-    ) -> bool:
-        """Delete a communication template.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`bool`: Success status.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        data_model = t.cast(
-            'models.ComAtprotoAdminDeleteCommunicationTemplate.Data',
-            get_or_create(data, models.ComAtprotoAdminDeleteCommunicationTemplate.Data),
-        )
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.deleteCommunicationTemplate',
-            data=data_model,
-            input_encoding='application/json',
-            **kwargs,
         )
         return get_response_model(response, bool)
 
@@ -3247,38 +3182,6 @@ class ComAtprotoAdminNamespace(AsyncNamespaceBase):
             'com.atproto.admin.disableInviteCodes', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
-
-    async def emit_moderation_event(
-        self,
-        data: t.Union[
-            models.ComAtprotoAdminEmitModerationEvent.Data, models.ComAtprotoAdminEmitModerationEvent.DataDict
-        ],
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoAdminDefs.ModEventView':
-        """Take a moderation action on an actor.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminDefs.ModEventView`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        data_model = t.cast(
-            'models.ComAtprotoAdminEmitModerationEvent.Data',
-            get_or_create(data, models.ComAtprotoAdminEmitModerationEvent.Data),
-        )
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.emitModerationEvent',
-            data=data_model,
-            input_encoding='application/json',
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoAdminDefs.ModEventView)
 
     async def enable_account_invites(
         self,
@@ -3388,84 +3291,6 @@ class ComAtprotoAdminNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoAdminGetInviteCodes.Response)
 
-    async def get_moderation_event(
-        self,
-        params: t.Union[
-            models.ComAtprotoAdminGetModerationEvent.Params, models.ComAtprotoAdminGetModerationEvent.ParamsDict
-        ],
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoAdminDefs.ModEventViewDetail':
-        """Get details about a moderation event.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminDefs.ModEventViewDetail`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = t.cast(
-            'models.ComAtprotoAdminGetModerationEvent.Params',
-            get_or_create(params, models.ComAtprotoAdminGetModerationEvent.Params),
-        )
-        response = await self._client.invoke_query(
-            'com.atproto.admin.getModerationEvent', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminDefs.ModEventViewDetail)
-
-    async def get_record(
-        self,
-        params: t.Union[models.ComAtprotoAdminGetRecord.Params, models.ComAtprotoAdminGetRecord.ParamsDict],
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoAdminDefs.RecordViewDetail':
-        """Get details about a record.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminDefs.RecordViewDetail`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = t.cast(
-            'models.ComAtprotoAdminGetRecord.Params', get_or_create(params, models.ComAtprotoAdminGetRecord.Params)
-        )
-        response = await self._client.invoke_query(
-            'com.atproto.admin.getRecord', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminDefs.RecordViewDetail)
-
-    async def get_repo(
-        self,
-        params: t.Union[models.ComAtprotoAdminGetRepo.Params, models.ComAtprotoAdminGetRepo.ParamsDict],
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoAdminDefs.RepoViewDetail':
-        """Get details about a repository.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminDefs.RepoViewDetail`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = t.cast(
-            'models.ComAtprotoAdminGetRepo.Params', get_or_create(params, models.ComAtprotoAdminGetRepo.Params)
-        )
-        response = await self._client.invoke_query(
-            'com.atproto.admin.getRepo', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminDefs.RepoViewDetail)
-
     async def get_subject_status(
         self,
         params: t.Optional[
@@ -3493,117 +3318,6 @@ class ComAtprotoAdminNamespace(AsyncNamespaceBase):
             'com.atproto.admin.getSubjectStatus', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoAdminGetSubjectStatus.Response)
-
-    async def list_communication_templates(
-        self, **kwargs: t.Any
-    ) -> 'models.ComAtprotoAdminListCommunicationTemplates.Response':
-        """Get list of all communication templates.
-
-        Args:
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminListCommunicationTemplates.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        response = await self._client.invoke_query(
-            'com.atproto.admin.listCommunicationTemplates', output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminListCommunicationTemplates.Response)
-
-    async def query_moderation_events(
-        self,
-        params: t.Optional[
-            t.Union[
-                models.ComAtprotoAdminQueryModerationEvents.Params,
-                models.ComAtprotoAdminQueryModerationEvents.ParamsDict,
-            ]
-        ] = None,
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoAdminQueryModerationEvents.Response':
-        """List moderation events related to a subject.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminQueryModerationEvents.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = t.cast(
-            'models.ComAtprotoAdminQueryModerationEvents.Params',
-            get_or_create(params, models.ComAtprotoAdminQueryModerationEvents.Params),
-        )
-        response = await self._client.invoke_query(
-            'com.atproto.admin.queryModerationEvents', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminQueryModerationEvents.Response)
-
-    async def query_moderation_statuses(
-        self,
-        params: t.Optional[
-            t.Union[
-                models.ComAtprotoAdminQueryModerationStatuses.Params,
-                models.ComAtprotoAdminQueryModerationStatuses.ParamsDict,
-            ]
-        ] = None,
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoAdminQueryModerationStatuses.Response':
-        """View moderation statuses of subjects (record or repo).
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminQueryModerationStatuses.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = t.cast(
-            'models.ComAtprotoAdminQueryModerationStatuses.Params',
-            get_or_create(params, models.ComAtprotoAdminQueryModerationStatuses.Params),
-        )
-        response = await self._client.invoke_query(
-            'com.atproto.admin.queryModerationStatuses',
-            params=params_model,
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoAdminQueryModerationStatuses.Response)
-
-    async def search_repos(
-        self,
-        params: t.Optional[
-            t.Union[models.ComAtprotoAdminSearchRepos.Params, models.ComAtprotoAdminSearchRepos.ParamsDict]
-        ] = None,
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoAdminSearchRepos.Response':
-        """Find repositories based on a search term.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminSearchRepos.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = t.cast(
-            'models.ComAtprotoAdminSearchRepos.Params', get_or_create(params, models.ComAtprotoAdminSearchRepos.Params)
-        )
-        response = await self._client.invoke_query(
-            'com.atproto.admin.searchRepos', params=params_model, output_encoding='application/json', **kwargs
-        )
-        return get_response_model(response, models.ComAtprotoAdminSearchRepos.Response)
 
     async def send_email(
         self,
@@ -3715,39 +3429,6 @@ class ComAtprotoAdminNamespace(AsyncNamespaceBase):
             'com.atproto.admin.updateAccountPassword', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
-
-    async def update_communication_template(
-        self,
-        data: t.Union[
-            models.ComAtprotoAdminUpdateCommunicationTemplate.Data,
-            models.ComAtprotoAdminUpdateCommunicationTemplate.DataDict,
-        ],
-        **kwargs: t.Any,
-    ) -> 'models.ComAtprotoAdminDefs.CommunicationTemplateView':
-        """Administrative action to update an existing communication template. Allows passing partial fields to patch specific fields only.
-
-        Args:
-            data: Input data.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.ComAtprotoAdminDefs.CommunicationTemplateView`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        data_model = t.cast(
-            'models.ComAtprotoAdminUpdateCommunicationTemplate.Data',
-            get_or_create(data, models.ComAtprotoAdminUpdateCommunicationTemplate.Data),
-        )
-        response = await self._client.invoke_procedure(
-            'com.atproto.admin.updateCommunicationTemplate',
-            data=data_model,
-            input_encoding='application/json',
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.ComAtprotoAdminDefs.CommunicationTemplateView)
 
     async def update_subject_status(
         self,
@@ -5180,3 +4861,322 @@ class ComAtprotoTempNamespace(AsyncNamespaceBase):
             'com.atproto.temp.requestPhoneVerification', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
+
+
+class ToolsNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        super().__init__(client)
+        self.ozone = ToolsOzoneNamespace(self._client)
+
+
+class ToolsOzoneNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        super().__init__(client)
+        self.communication = ToolsOzoneCommunicationNamespace(self._client)
+        self.moderation = ToolsOzoneModerationNamespace(self._client)
+
+
+class ToolsOzoneCommunicationNamespace(AsyncNamespaceBase):
+    async def create_template(
+        self,
+        data: t.Union[
+            models.ToolsOzoneCommunicationCreateTemplate.Data, models.ToolsOzoneCommunicationCreateTemplate.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneCommunicationDefs.TemplateView':
+        """Administrative action to create a new, re-usable communication (email for now) template.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneCommunicationDefs.TemplateView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneCommunicationCreateTemplate.Data',
+            get_or_create(data, models.ToolsOzoneCommunicationCreateTemplate.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.communication.createTemplate',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneCommunicationDefs.TemplateView)
+
+    async def delete_template(
+        self,
+        data: t.Union[
+            models.ToolsOzoneCommunicationDeleteTemplate.Data, models.ToolsOzoneCommunicationDeleteTemplate.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a communication template.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneCommunicationDeleteTemplate.Data',
+            get_or_create(data, models.ToolsOzoneCommunicationDeleteTemplate.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.communication.deleteTemplate', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def list_templates(self, **kwargs: t.Any) -> 'models.ToolsOzoneCommunicationListTemplates.Response':
+        """Get list of all communication templates.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneCommunicationListTemplates.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = await self._client.invoke_query(
+            'tools.ozone.communication.listTemplates', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneCommunicationListTemplates.Response)
+
+    async def update_template(
+        self,
+        data: t.Union[
+            models.ToolsOzoneCommunicationUpdateTemplate.Data, models.ToolsOzoneCommunicationUpdateTemplate.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneCommunicationDefs.TemplateView':
+        """Administrative action to update an existing communication template. Allows passing partial fields to patch specific fields only.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneCommunicationDefs.TemplateView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneCommunicationUpdateTemplate.Data',
+            get_or_create(data, models.ToolsOzoneCommunicationUpdateTemplate.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.communication.updateTemplate',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneCommunicationDefs.TemplateView)
+
+
+class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
+    async def emit_event(
+        self,
+        data: t.Union[models.ToolsOzoneModerationEmitEvent.Data, models.ToolsOzoneModerationEmitEvent.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationDefs.ModEventView':
+        """Take a moderation action on an actor.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationDefs.ModEventView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneModerationEmitEvent.Data', get_or_create(data, models.ToolsOzoneModerationEmitEvent.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.moderation.emitEvent',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationDefs.ModEventView)
+
+    async def get_event(
+        self,
+        params: t.Union[models.ToolsOzoneModerationGetEvent.Params, models.ToolsOzoneModerationGetEvent.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationDefs.ModEventViewDetail':
+        """Get details about a moderation event.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationDefs.ModEventViewDetail`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationGetEvent.Params',
+            get_or_create(params, models.ToolsOzoneModerationGetEvent.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.moderation.getEvent', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneModerationDefs.ModEventViewDetail)
+
+    async def get_record(
+        self,
+        params: t.Union[models.ToolsOzoneModerationGetRecord.Params, models.ToolsOzoneModerationGetRecord.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationDefs.RecordViewDetail':
+        """Get details about a record.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationDefs.RecordViewDetail`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationGetRecord.Params',
+            get_or_create(params, models.ToolsOzoneModerationGetRecord.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.moderation.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneModerationDefs.RecordViewDetail)
+
+    async def get_repo(
+        self,
+        params: t.Union[models.ToolsOzoneModerationGetRepo.Params, models.ToolsOzoneModerationGetRepo.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationDefs.RepoViewDetail':
+        """Get details about a repository.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationDefs.RepoViewDetail`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationGetRepo.Params',
+            get_or_create(params, models.ToolsOzoneModerationGetRepo.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.moderation.getRepo', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneModerationDefs.RepoViewDetail)
+
+    async def query_events(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneModerationQueryEvents.Params, models.ToolsOzoneModerationQueryEvents.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationQueryEvents.Response':
+        """List moderation events related to a subject.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationQueryEvents.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationQueryEvents.Params',
+            get_or_create(params, models.ToolsOzoneModerationQueryEvents.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.moderation.queryEvents', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneModerationQueryEvents.Response)
+
+    async def query_statuses(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.ToolsOzoneModerationQueryStatuses.Params, models.ToolsOzoneModerationQueryStatuses.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationQueryStatuses.Response':
+        """View moderation statuses of subjects (record or repo).
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationQueryStatuses.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationQueryStatuses.Params',
+            get_or_create(params, models.ToolsOzoneModerationQueryStatuses.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.moderation.queryStatuses', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneModerationQueryStatuses.Response)
+
+    async def search_repos(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneModerationSearchRepos.Params, models.ToolsOzoneModerationSearchRepos.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationSearchRepos.Response':
+        """Find repositories based on a search term.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationSearchRepos.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationSearchRepos.Params',
+            get_or_create(params, models.ToolsOzoneModerationSearchRepos.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.moderation.searchRepos', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneModerationSearchRepos.Response)
