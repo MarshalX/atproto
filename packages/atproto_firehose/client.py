@@ -25,7 +25,6 @@ from websockets.sync.client import connect
 from atproto_firehose.exceptions import FirehoseDecodingError, FirehoseError
 from atproto_firehose.models import ErrorFrame, Frame, MessageFrame
 
-_BASE_WEBSOCKET_URI = 'wss://bsky.network/xrpc'
 _MAX_MESSAGE_SIZE_BYTES = 1024 * 1024 * 5  # 5MB
 
 OnMessageCallback = t.Callable[['MessageFrame'], None]
@@ -40,12 +39,7 @@ if t.TYPE_CHECKING:
     from websockets.legacy.client import Connect as AsyncConnect
 
 
-def _build_websocket_uri(
-    method: str, base_uri: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
-) -> str:
-    if base_uri is None:
-        base_uri = _BASE_WEBSOCKET_URI
-
+def _build_websocket_uri(method: str, base_uri: str, params: t.Optional[t.Dict[str, t.Any]] = None) -> str:
     query_string = ''
     if params:
         query_string = f'?{urlencode(params)}'
@@ -88,7 +82,7 @@ class _WebsocketClientBase:
     def __init__(
         self,
         method: str,
-        base_uri: t.Optional[str] = None,
+        base_uri: str,
         params: t.Optional[t.Dict[str, t.Any]] = None,
     ) -> None:
         self._method = method
@@ -132,9 +126,7 @@ class _WebsocketClientBase:
 
 
 class _WebsocketClient(_WebsocketClientBase):
-    def __init__(
-        self, method: str, base_uri: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
-    ) -> None:
+    def __init__(self, method: str, base_uri: str, params: t.Optional[t.Dict[str, t.Any]] = None) -> None:
         super().__init__(method, base_uri, params)
 
         # TODO(DXsmiley): Not sure if this should be a Lock or not, the async is using an Event now
@@ -213,9 +205,7 @@ class _WebsocketClient(_WebsocketClientBase):
 
 
 class _AsyncWebsocketClient(_WebsocketClientBase):
-    def __init__(
-        self, method: str, base_uri: t.Optional[str] = None, params: t.Optional[t.Dict[str, t.Any]] = None
-    ) -> None:
+    def __init__(self, method: str, base_uri: str, params: t.Optional[t.Dict[str, t.Any]] = None) -> None:
         super().__init__(method, base_uri, params)
 
         self._stop_event = asyncio.Event()
