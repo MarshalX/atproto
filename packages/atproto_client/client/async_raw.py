@@ -11,9 +11,11 @@ class AsyncClientRaw(AsyncClientBase):
 
     com: 'async_ns.ComNamespace'
     app: 'async_ns.AppNamespace'
+    tools: 'async_ns.ToolsNamespace'
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self.com = async_ns.ComNamespace(self)
         self.app = async_ns.AppNamespace(self)
+        self.tools = async_ns.ToolsNamespace(self)

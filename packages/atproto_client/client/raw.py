@@ -11,9 +11,11 @@ class ClientRaw(ClientBase):
 
     com: 'sync_ns.ComNamespace'
     app: 'sync_ns.AppNamespace'
+    tools: 'sync_ns.ToolsNamespace'
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
 
         self.com = sync_ns.ComNamespace(self)
         self.app = sync_ns.AppNamespace(self)
+        self.tools = sync_ns.ToolsNamespace(self)
