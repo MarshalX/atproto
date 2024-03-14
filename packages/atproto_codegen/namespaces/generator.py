@@ -47,12 +47,12 @@ _NAMESPACE_SUFFIX = 'Namespace'
 _RECORD_SUFFIX = 'Record'
 
 
-def get_namespace_name(path_part: str) -> str:
-    return f'{path_part.capitalize()}{_NAMESPACE_SUFFIX}'
+def get_namespace_name(path_parts: t.List[str]) -> str:
+    return ''.join([p.capitalize() for p in path_parts]) + _NAMESPACE_SUFFIX
 
 
-def get_record_name(path_part: str) -> str:
-    return f'{path_part.capitalize()}{_RECORD_SUFFIX}'
+def get_record_name(path_parts: t.List[str]) -> str:
+    return ''.join([p.capitalize() for p in path_parts]) + _RECORD_SUFFIX
 
 
 def _get_namespace_imports() -> str:
@@ -72,21 +72,21 @@ def _get_namespace_imports() -> str:
     return join_code(lines)
 
 
-def _get_namespace_class_def(name: str, *, sync: bool) -> str:
+def _get_namespace_class_def(name_parts: t.List[str], *, sync: bool) -> str:
     base_class = 'NamespaceBase' if sync else 'AsyncNamespaceBase'
-    lines = [f'class {get_namespace_name(name)}({base_class}):']
+    lines = [f'class {get_namespace_name(name_parts)}({base_class}):']
 
     return join_code(lines)
 
 
-def _get_record_class_def(name: str, *, sync: bool) -> str:
+def _get_record_class_def(name_parts: t.List[str], *, sync: bool) -> str:
     base_class = 'RecordBase' if sync else 'AsyncRecordBase'
-    lines = [f'class {get_record_name(name)}({base_class}):']
+    lines = [f'class {get_record_name(name_parts)}({base_class}):']
 
     return join_code(lines)
 
 
-def _get_init_method(sub_items: t.List[str], *, sync: bool, for_record: bool = False) -> str:
+def _get_init_method(sub_items: t.List[str], *, sync: bool, parent_nodes: t.List[str], for_record: bool = False) -> str:
     if not sub_items:
         return ''
 
@@ -98,7 +98,7 @@ def _get_init_method(sub_items: t.List[str], *, sync: bool, for_record: bool = F
         get_name = get_record_name
 
     for sub_item in sub_items:
-        lines.append(f'{_(2)}self.{sub_item} = {get_name(sub_item)}(self._client)')
+        lines.append(f'{_(2)}self.{sub_item} = {get_name([*parent_nodes, sub_item])}(self._client)')
 
     return join_code(lines)
 
@@ -343,21 +343,25 @@ def _get_record_class(records_info: t.List[RecordInfo], sync: bool) -> str:
     lines = []
 
     for record_info in records_info:
-        lines.append(_get_record_class_def(record_info.name, sync=sync))
+        lines.append(_get_record_class_def(record_info.nsid.segments, sync=sync))
         lines.append(_get_record_methods_block(record_info, sync=sync))
 
     return join_code(lines)
 
 
-def _generate_namespace_in_output(namespace_tree: dict, output: t.List[str], *, sync: bool) -> None:
+def _generate_namespace_in_output(
+    namespace_tree: dict, output: t.List[str], *, sync: bool, parent_nodes: t.List[str]
+) -> None:
     for node_name, sub_node in namespace_tree.items():
+        nodes_path = [*parent_nodes, node_name]
+
         if isinstance(sub_node, dict):
-            output.append(_get_namespace_class_def(node_name, sync=sync))
+            output.append(_get_namespace_class_def(nodes_path, sync=sync))
 
             sub_nodes_names = list(sort_dict_by_key(sub_node).keys())
-            output.append(_get_init_method(sub_nodes_names, sync=sync))
+            output.append(_get_init_method(sub_nodes_names, sync=sync, parent_nodes=nodes_path))
 
-            _generate_namespace_in_output(sub_node, output, sync=sync)
+            _generate_namespace_in_output(sub_node, output, sync=sync, parent_nodes=nodes_path)
 
         if isinstance(sub_node, list):
             records = [info for info in sub_node if isinstance(info, RecordInfo)]
@@ -365,10 +369,10 @@ def _generate_namespace_in_output(namespace_tree: dict, output: t.List[str], *, 
 
             output.append(_get_record_class(records, sync=sync))
 
-            output.append(_get_namespace_class_def(node_name, sync=sync))
+            output.append(_get_namespace_class_def(nodes_path, sync=sync))
 
             record_names = sorted([record.name for record in records])
-            output.append(_get_init_method(record_names, sync=sync, for_record=True))
+            output.append(_get_init_method(record_names, sync=sync, parent_nodes=nodes_path, for_record=True))
 
             output.append(_get_namespace_methods_block(methods, sync=sync))
 
@@ -390,7 +394,7 @@ def generate_namespaces(
 
     for sync in (True, False):
         generated_code_lines_buffer: t.List[str] = []
-        _generate_namespace_in_output(namespace_tree, generated_code_lines_buffer, sync=sync)
+        _generate_namespace_in_output(namespace_tree, generated_code_lines_buffer, sync=sync, parent_nodes=[])
 
         code = join_code([_get_namespace_imports(), *generated_code_lines_buffer])
 

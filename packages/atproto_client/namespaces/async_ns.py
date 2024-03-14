@@ -18,21 +18,21 @@ if t.TYPE_CHECKING:
 class AppNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
-        self.bsky = BskyNamespace(self._client)
+        self.bsky = AppBskyNamespace(self._client)
 
 
-class BskyNamespace(AsyncNamespaceBase):
+class AppBskyNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
-        self.actor = ActorNamespace(self._client)
-        self.feed = FeedNamespace(self._client)
-        self.graph = GraphNamespace(self._client)
-        self.labeler = LabelerNamespace(self._client)
-        self.notification = NotificationNamespace(self._client)
-        self.unspecced = UnspeccedNamespace(self._client)
+        self.actor = AppBskyActorNamespace(self._client)
+        self.feed = AppBskyFeedNamespace(self._client)
+        self.graph = AppBskyGraphNamespace(self._client)
+        self.labeler = AppBskyLabelerNamespace(self._client)
+        self.notification = AppBskyNotificationNamespace(self._client)
+        self.unspecced = AppBskyUnspeccedNamespace(self._client)
 
 
-class ProfileRecord(AsyncRecordBase):
+class AppBskyActorProfileRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyActorProfile.GetRecordResponse':
@@ -184,10 +184,10 @@ class ProfileRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class ActorNamespace(AsyncNamespaceBase):
+class AppBskyActorNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
-        self.profile = ProfileRecord(self._client)
+        self.profile = AppBskyActorProfileRecord(self._client)
 
     async def get_preferences(
         self,
@@ -376,7 +376,7 @@ class ActorNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.AppBskyActorSearchActorsTypeahead.Response)
 
 
-class GeneratorRecord(AsyncRecordBase):
+class AppBskyFeedGeneratorRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyFeedGenerator.GetRecordResponse':
@@ -528,7 +528,7 @@ class GeneratorRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class LikeRecord(AsyncRecordBase):
+class AppBskyFeedLikeRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyFeedLike.GetRecordResponse':
@@ -679,7 +679,7 @@ class LikeRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class PostRecord(AsyncRecordBase):
+class AppBskyFeedPostRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyFeedPost.GetRecordResponse':
@@ -830,7 +830,7 @@ class PostRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class RepostRecord(AsyncRecordBase):
+class AppBskyFeedRepostRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyFeedRepost.GetRecordResponse':
@@ -981,7 +981,7 @@ class RepostRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class ThreadgateRecord(AsyncRecordBase):
+class AppBskyFeedThreadgateRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyFeedThreadgate.GetRecordResponse':
@@ -1133,14 +1133,14 @@ class ThreadgateRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class FeedNamespace(AsyncNamespaceBase):
+class AppBskyFeedNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
-        self.generator = GeneratorRecord(self._client)
-        self.like = LikeRecord(self._client)
-        self.post = PostRecord(self._client)
-        self.repost = RepostRecord(self._client)
-        self.threadgate = ThreadgateRecord(self._client)
+        self.generator = AppBskyFeedGeneratorRecord(self._client)
+        self.like = AppBskyFeedLikeRecord(self._client)
+        self.post = AppBskyFeedPostRecord(self._client)
+        self.repost = AppBskyFeedRepostRecord(self._client)
+        self.threadgate = AppBskyFeedThreadgateRecord(self._client)
 
     async def describe_feed_generator(self, **kwargs: t.Any) -> 'models.AppBskyFeedDescribeFeedGenerator.Response':
         """Get information about a feed generator, including policies and offered feed URIs. Does not require auth; implemented by Feed Generator services (not App View).
@@ -1536,7 +1536,7 @@ class FeedNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.AppBskyFeedSearchPosts.Response)
 
 
-class BlockRecord(AsyncRecordBase):
+class AppBskyGraphBlockRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyGraphBlock.GetRecordResponse':
@@ -1687,7 +1687,7 @@ class BlockRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class FollowRecord(AsyncRecordBase):
+class AppBskyGraphFollowRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyGraphFollow.GetRecordResponse':
@@ -1839,7 +1839,7 @@ class FollowRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class ListRecord(AsyncRecordBase):
+class AppBskyGraphListRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyGraphList.GetRecordResponse':
@@ -1990,7 +1990,7 @@ class ListRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class ListblockRecord(AsyncRecordBase):
+class AppBskyGraphListblockRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyGraphListblock.GetRecordResponse':
@@ -2142,7 +2142,7 @@ class ListblockRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class ListitemRecord(AsyncRecordBase):
+class AppBskyGraphListitemRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyGraphListitem.GetRecordResponse':
@@ -2294,14 +2294,14 @@ class ListitemRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class GraphNamespace(AsyncNamespaceBase):
+class AppBskyGraphNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
-        self.block = BlockRecord(self._client)
-        self.follow = FollowRecord(self._client)
-        self.list = ListRecord(self._client)
-        self.listblock = ListblockRecord(self._client)
-        self.listitem = ListitemRecord(self._client)
+        self.block = AppBskyGraphBlockRecord(self._client)
+        self.follow = AppBskyGraphFollowRecord(self._client)
+        self.list = AppBskyGraphListRecord(self._client)
+        self.listblock = AppBskyGraphListblockRecord(self._client)
+        self.listitem = AppBskyGraphListitemRecord(self._client)
 
     async def get_blocks(
         self,
@@ -2662,7 +2662,7 @@ class GraphNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
 
-class ServiceRecord(AsyncRecordBase):
+class AppBskyLabelerServiceRecord(AsyncRecordBase):
     async def get(
         self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
     ) -> 'models.AppBskyLabelerService.GetRecordResponse':
@@ -2814,10 +2814,10 @@ class ServiceRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
-class LabelerNamespace(AsyncNamespaceBase):
+class AppBskyLabelerNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
-        self.service = ServiceRecord(self._client)
+        self.service = AppBskyLabelerServiceRecord(self._client)
 
     async def get_services(
         self,
@@ -2845,7 +2845,7 @@ class LabelerNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.AppBskyLabelerGetServices.Response)
 
 
-class NotificationNamespace(AsyncNamespaceBase):
+class AppBskyNotificationNamespace(AsyncNamespaceBase):
     async def get_unread_count(
         self,
         params: t.Optional[
@@ -2959,7 +2959,7 @@ class NotificationNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
 
-class UnspeccedNamespace(AsyncNamespaceBase):
+class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
     async def get_popular_feed_generators(
         self,
         params: t.Optional[
@@ -3085,23 +3085,23 @@ class UnspeccedNamespace(AsyncNamespaceBase):
 class ComNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
-        self.atproto = AtprotoNamespace(self._client)
+        self.atproto = ComAtprotoNamespace(self._client)
 
 
-class AtprotoNamespace(AsyncNamespaceBase):
+class ComAtprotoNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
-        self.admin = AdminNamespace(self._client)
-        self.identity = IdentityNamespace(self._client)
-        self.label = LabelNamespace(self._client)
-        self.moderation = ModerationNamespace(self._client)
-        self.repo = RepoNamespace(self._client)
-        self.server = ServerNamespace(self._client)
-        self.sync = SyncNamespace(self._client)
-        self.temp = TempNamespace(self._client)
+        self.admin = ComAtprotoAdminNamespace(self._client)
+        self.identity = ComAtprotoIdentityNamespace(self._client)
+        self.label = ComAtprotoLabelNamespace(self._client)
+        self.moderation = ComAtprotoModerationNamespace(self._client)
+        self.repo = ComAtprotoRepoNamespace(self._client)
+        self.server = ComAtprotoServerNamespace(self._client)
+        self.sync = ComAtprotoSyncNamespace(self._client)
+        self.temp = ComAtprotoTempNamespace(self._client)
 
 
-class AdminNamespace(AsyncNamespaceBase):
+class ComAtprotoAdminNamespace(AsyncNamespaceBase):
     async def create_communication_template(
         self,
         data: t.Union[
@@ -3782,7 +3782,7 @@ class AdminNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoAdminUpdateSubjectStatus.Response)
 
 
-class IdentityNamespace(AsyncNamespaceBase):
+class ComAtprotoIdentityNamespace(AsyncNamespaceBase):
     async def get_recommended_did_credentials(
         self, **kwargs: t.Any
     ) -> 'models.ComAtprotoIdentityGetRecommendedDidCredentials.Response':
@@ -3932,7 +3932,7 @@ class IdentityNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
 
-class LabelNamespace(AsyncNamespaceBase):
+class ComAtprotoLabelNamespace(AsyncNamespaceBase):
     async def query_labels(
         self,
         params: t.Union[models.ComAtprotoLabelQueryLabels.Params, models.ComAtprotoLabelQueryLabels.ParamsDict],
@@ -3959,7 +3959,7 @@ class LabelNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoLabelQueryLabels.Response)
 
 
-class ModerationNamespace(AsyncNamespaceBase):
+class ComAtprotoModerationNamespace(AsyncNamespaceBase):
     async def create_report(
         self,
         data: t.Union[models.ComAtprotoModerationCreateReport.Data, models.ComAtprotoModerationCreateReport.DataDict],
@@ -3991,7 +3991,7 @@ class ModerationNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoModerationCreateReport.Response)
 
 
-class RepoNamespace(AsyncNamespaceBase):
+class ComAtprotoRepoNamespace(AsyncNamespaceBase):
     async def apply_writes(
         self,
         data: t.Union[models.ComAtprotoRepoApplyWrites.Data, models.ComAtprotoRepoApplyWrites.DataDict],
@@ -4242,7 +4242,7 @@ class RepoNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoRepoUploadBlob.Response)
 
 
-class ServerNamespace(AsyncNamespaceBase):
+class ComAtprotoServerNamespace(AsyncNamespaceBase):
     async def activate_account(self, **kwargs: t.Any) -> bool:
         """Activates a currently deactivated account. Used to finalize account migration after the account's repo is imported and identity is setup.
 
@@ -4828,7 +4828,7 @@ class ServerNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
 
-class SyncNamespace(AsyncNamespaceBase):
+class ComAtprotoSyncNamespace(AsyncNamespaceBase):
     async def get_blob(
         self,
         params: t.Union[models.ComAtprotoSyncGetBlob.Params, models.ComAtprotoSyncGetBlob.ParamsDict],
@@ -5108,7 +5108,7 @@ class SyncNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
 
-class TempNamespace(AsyncNamespaceBase):
+class ComAtprotoTempNamespace(AsyncNamespaceBase):
     async def check_signup_queue(self, **kwargs: t.Any) -> 'models.ComAtprotoTempCheckSignupQueue.Response':
         """Check accounts location in signup queue.
 
