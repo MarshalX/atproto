@@ -118,7 +118,6 @@ def _remove_content_in_path(path: Path) -> None:
                 child.rmdir()
         else:
             child.unlink()
-    path.rmdir()
 
 
 def _run_subprocess(command: t.List[str]) -> None:
@@ -140,11 +139,13 @@ def main() -> None:
     _remove_content_in_path(_FOLDER_TO_WRITE_LEXICONS)
     _write_extracted_lexicons(_extract_zip(_download_zip_with_code()))
 
-    _print('- Running codegen (poetry run atp -s gen all)...')
+    # remove all generated models
     for item in os.listdir(_FOLDER_OF_MODELS):
         path = Path(_FOLDER_OF_MODELS, item)
         if path.is_dir():
             _remove_content_in_path(path)
+            path.rmdir()
+    _print('- Running codegen (poetry run atp -s gen all)...')
     _run_subprocess(['poetry', 'run', 'atp', '-s', 'gen', 'all'])
 
     _print('- Running ruff (poetry run ruff .)...')
