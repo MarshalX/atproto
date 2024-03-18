@@ -101,7 +101,7 @@ class Request(RequestBase):
 
     def __init__(self) -> None:
         super().__init__()
-        self._client = httpx.Client()
+        self._client = httpx.Client(follow_redirects=True)
 
     def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers', None))
@@ -128,7 +128,7 @@ class AsyncRequest(RequestBase):
 
     def __init__(self) -> None:
         super().__init__()
-        self._client = httpx.AsyncClient()
+        self._client = httpx.AsyncClient(follow_redirects=True)
 
     async def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers', None))
