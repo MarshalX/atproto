@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 0.0.46
+
+**20.03.2024**
+
+* Fix follow redirects by @MarshalX in https://github.com/MarshalX/atproto/pull/309
+* Update lexicons fetched from c28e374 committed 2024-03-19T16:26:14Z by @MarshalX in https://github.com/MarshalX/atproto/pull/310
+
 ## Version 0.0.45
 
 **14.03.2024**
