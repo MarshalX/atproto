@@ -20,6 +20,7 @@ class ProfileViewBasic(base.ModelBase):
 
     did: str  #: Did.
     handle: str  #: Handle.
+    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[str] = None  #: Avatar.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
@@ -35,6 +36,7 @@ class ProfileView(base.ModelBase):
 
     did: str  #: Did.
     handle: str  #: Handle.
+    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[str] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
