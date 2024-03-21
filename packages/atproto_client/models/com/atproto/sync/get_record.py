@@ -18,14 +18,18 @@ class Params(base.ParamsModelBase):
     collection: str  #: Collection.
     did: str  #: The DID of the repo.
     rkey: str  #: Record Key.
-    commit: t.Optional[str] = None  #: An optional past commit CID.
+    commit: t.Optional[
+        str
+    ] = None  #: DEPRECATED: referenced a repo commit by CID, and retrieved record as of that commit.
 
 
 class ParamsDict(te.TypedDict):
     collection: str  #: Collection.
     did: str  #: The DID of the repo.
     rkey: str  #: Record Key.
-    commit: te.NotRequired[t.Optional[str]]  #: An optional past commit CID.
+    commit: te.NotRequired[
+        t.Optional[str]
+    ]  #: DEPRECATED: referenced a repo commit by CID, and retrieved record as of that commit.
 
 
 #: Response raw data type.
