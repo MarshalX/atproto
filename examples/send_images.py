@@ -14,10 +14,7 @@ def main() -> None:
         with open(path, 'rb') as f:
             images.append(f.read())
 
-    client.send_images(
-        text='Post with image from Python',
-        images=images,
-        image_alts=image_alts)
+    client.send_images(text='Post with image from Python', images=images, image_alts=image_alts)
 
 
 if __name__ == '__main__':
