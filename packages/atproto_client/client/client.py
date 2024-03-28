@@ -1,8 +1,8 @@
 import typing as t
 from threading import Lock
 
-from atproto_core.uri import AtUri
 from atproto_core.exceptions import AtProtocolError
+from atproto_core.uri import AtUri
 
 from atproto_client import models
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
@@ -205,13 +205,13 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         if image_alts is None:
-            image_alts = [""] * len(images)
+            image_alts = [''] * len(images)
 
         # validation
         if len(images) > 4:
             raise AtProtocolError("The length of images must be less than or equal to 4.")
         if len(images) != len(image_alts):
-            raise AtProtocolError("The lengths of images & image_alts must be equal.")
+            raise AtProtocolError('The lengths of images & image_alts must be equal.')
 
         uploads = [self.upload_blob(i) for i in images]
         embed_images = [
