@@ -208,8 +208,6 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
             image_alts = [''] * len(images)
 
         # validation
-        if len(images) > 4:
-            raise AtProtocolError("The length of images must be less than or equal to 4.")
         if len(images) != len(image_alts):
             raise AtProtocolError('The lengths of images & image_alts must be equal.')
 
