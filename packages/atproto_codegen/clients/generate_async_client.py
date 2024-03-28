@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from atproto_codegen.consts import DISCLAIMER
@@ -39,6 +40,12 @@ def gen_client(input_filename: str, output_filename: str) -> None:
     for method in methods:
         code = code.replace(f'self.{method}(', f'await self.{method}(')
         code = code.replace(f'super().{method}(', f'await super().{method}(')
+
+    code = code.replace('from asyncio', 'import asyncio\nfrom asyncio')
+    code = re.sub(
+        r'(\[self\.upload_blob.*\])',
+        r'await asyncio.gather(*\1)',
+        code)
 
     code = DISCLAIMER + code
 
