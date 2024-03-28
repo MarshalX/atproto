@@ -1,7 +1,6 @@
 import typing as t
 from threading import Lock
 
-from atproto_core.exceptions import AtProtocolError
 from atproto_core.uri import AtUri
 
 from atproto_client import models
@@ -192,7 +191,8 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         Args:
             text: Text of the post.
             images: List of binary images to attach. The length must be less than or equal to 4.
-            image_alts: List of text version of the images. The length must be equal to the length of `images`.
+            image_alts: List of text version of the images.
+                        The length should be shorter than or equal to the length of `images`.
             profile_identify: Handle or DID. Where to send post.
             reply_to: Root and parent of the post to reply to.
             langs: List of used languages in the post.
@@ -206,15 +206,14 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         """
         if image_alts is None:
             image_alts = [''] * len(images)
+        else:
+            # padding with empty string if len is insufficient
+            diff = len(images) - len(image_alts)
+            image_alts = image_alts + [''] * diff  # [''] * (minus) => []
 
-        # validation
-        if len(images) != len(image_alts):
-            raise AtProtocolError('The lengths of images & image_alts must be equal.')
-
-        uploads = [self.upload_blob(i) for i in images]
+        uploads = [self.upload_blob(image) for image in images]
         embed_images = [
-            models.AppBskyEmbedImages.Image(alt=a, image=u.blob)
-            for a, u in zip(image_alts, uploads)
+            models.AppBskyEmbedImages.Image(alt=alt, image=upload.blob) for alt, upload in zip(image_alts, uploads)
         ]
 
         return self.send_post(
