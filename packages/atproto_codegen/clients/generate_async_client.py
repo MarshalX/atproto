@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from atproto_codegen.consts import DISCLAIMER
@@ -14,6 +15,7 @@ def gen_client(input_filename: str, output_filename: str) -> None:
     methods = [
         'send_post',
         'send_image',
+        'send_images',
         '_set_session',
         '_get_and_set_session',
         '_refresh_and_set_session',
@@ -22,7 +24,7 @@ def gen_client(input_filename: str, output_filename: str) -> None:
         '_invoke',
     ]
 
-    code = code.replace('from threading', 'from asyncio')
+    code = code.replace('from threading', 'import asyncio\nfrom asyncio')
     code = code.replace('client.raw', 'client.async_raw')
     code = code.replace('class Client', 'class AsyncClient')
     code = code.replace('ClientRaw', 'AsyncClientRaw')
@@ -39,6 +41,8 @@ def gen_client(input_filename: str, output_filename: str) -> None:
     for method in methods:
         code = code.replace(f'self.{method}(', f'await self.{method}(')
         code = code.replace(f'super().{method}(', f'await super().{method}(')
+
+    code = re.sub(r'(\[self\.upload_blob.*\])', r'await asyncio.gather(*\1)', code)
 
     code = DISCLAIMER + code
 
