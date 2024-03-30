@@ -25,7 +25,9 @@ class Data(base.DataModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    reason: t.Optional[str] = None  #: Additional context about the content and violation.
+    reason: t.Optional[str] = Field(
+        default=None, max_length=20000
+    )  #: Additional context about the content and violation.
 
 
 class DataDict(te.TypedDict):
