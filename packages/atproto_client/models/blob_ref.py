@@ -25,7 +25,7 @@ class BlobRef(BaseModel):
     @property
     def cid(self) -> 'CID':
         """Get CID."""
-        if isinstance(self.ref, str) or isinstance(self.ref, bytes):
+        if isinstance(self.ref, (str, bytes)):
             return CID.decode(self.ref)
 
         return CID.decode(self.ref.link)
