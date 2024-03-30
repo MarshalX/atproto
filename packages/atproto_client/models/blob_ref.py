@@ -18,14 +18,14 @@ class BlobRef(BaseModel):
 
     mime_type: str = Field(alias='mimeType')  #: Mime type.
     size: int  #: Size in bytes.
-    ref: t.Union[str, IpldLink]  #: CID.
+    ref: t.Union[str, bytes, IpldLink]  #: CID.
 
     py_type: te.Literal['blob'] = Field(default='blob', alias='$type')
 
     @property
     def cid(self) -> 'CID':
         """Get CID."""
-        if isinstance(self.ref, str):
+        if isinstance(self.ref, str) or isinstance(self.ref, bytes):
             return CID.decode(self.ref)
 
         return CID.decode(self.ref.link)
