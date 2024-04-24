@@ -32,6 +32,7 @@ from atproto_client.models.app.bsky.feed import like as AppBskyFeedLike
 from atproto_client.models.app.bsky.feed import post as AppBskyFeedPost
 from atproto_client.models.app.bsky.feed import repost as AppBskyFeedRepost
 from atproto_client.models.app.bsky.feed import search_posts as AppBskyFeedSearchPosts
+from atproto_client.models.app.bsky.feed import send_interactions as AppBskyFeedSendInteractions
 from atproto_client.models.app.bsky.feed import threadgate as AppBskyFeedThreadgate
 from atproto_client.models.app.bsky.graph import block as AppBskyGraphBlock
 from atproto_client.models.app.bsky.graph import defs as AppBskyGraphDefs
@@ -67,6 +68,7 @@ from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDef
 from atproto_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
 )
+from atproto_client.models.app.bsky.unspecced import get_suggestions_skeleton as AppBskyUnspeccedGetSuggestionsSkeleton
 from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as AppBskyUnspeccedGetTaggedSuggestions
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
@@ -211,6 +213,7 @@ class _Ids:
     AppBskyFeedPost: str = 'app.bsky.feed.post'
     AppBskyFeedRepost: str = 'app.bsky.feed.repost'
     AppBskyFeedSearchPosts: str = 'app.bsky.feed.searchPosts'
+    AppBskyFeedSendInteractions: str = 'app.bsky.feed.sendInteractions'
     AppBskyFeedThreadgate: str = 'app.bsky.feed.threadgate'
     AppBskyGraphBlock: str = 'app.bsky.graph.block'
     AppBskyGraphDefs: str = 'app.bsky.graph.defs'
@@ -242,6 +245,7 @@ class _Ids:
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
+    AppBskyUnspeccedGetSuggestionsSkeleton: str = 'app.bsky.unspecced.getSuggestionsSkeleton'
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'

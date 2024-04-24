@@ -7,17 +7,22 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
-    from atproto_client.models.unknown_type import UnknownType
+    from atproto_client import models
 from atproto_client.models import base
 
 
-class Response(base.ResponseModelBase):
-    """Output data model for :obj:`com.atproto.server.getSession`."""
+class Data(base.DataModelBase):
+    """Input data model for :obj:`app.bsky.feed.sendInteractions`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
-    did_doc: t.Optional['UnknownType'] = None  #: Did doc.
-    email: t.Optional[str] = None  #: Email.
-    email_auth_factor: t.Optional[bool] = None  #: Email auth factor.
-    email_confirmed: t.Optional[bool] = None  #: Email confirmed.
+    interactions: t.List['models.AppBskyFeedDefs.Interaction']  #: Interactions.
+
+
+class DataDict(te.TypedDict):
+    interactions: t.List['models.AppBskyFeedDefs.Interaction']  #: Interactions.
+
+
+class Response(base.ResponseModelBase):
+    """Output data model for :obj:`app.bsky.feed.sendInteractions`."""

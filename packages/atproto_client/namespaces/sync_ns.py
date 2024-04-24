@@ -1535,6 +1535,35 @@ class AppBskyFeedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyFeedSearchPosts.Response)
 
+    def send_interactions(
+        self,
+        data: t.Union[models.AppBskyFeedSendInteractions.Data, models.AppBskyFeedSendInteractions.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyFeedSendInteractions.Response':
+        """Send information about interactions with feed items back to the feed generator that served them.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedSendInteractions.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyFeedSendInteractions.Data', get_or_create(data, models.AppBskyFeedSendInteractions.Data)
+        )
+        response = self._client.invoke_procedure(
+            'app.bsky.feed.sendInteractions',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyFeedSendInteractions.Response)
+
 
 class AppBskyGraphBlockRecord(RecordBase):
     def get(
@@ -2993,6 +3022,40 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.AppBskyUnspeccedGetPopularFeedGenerators.Response)
+
+    def get_suggestions_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestionsSkeleton.Params,
+                models.AppBskyUnspeccedGetSuggestionsSkeleton.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestionsSkeleton.Response':
+        """Get a skeleton of suggested actors. Intended to be called and then hydrated through app.bsky.actor.getSuggestions.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestionsSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestionsSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestionsSkeleton.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestionsSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestionsSkeleton.Response)
 
     def get_tagged_suggestions(
         self,
