@@ -31,6 +31,9 @@ class ModEventView(base.ModelBase):
             'models.ToolsOzoneModerationDefs.ModEventAcknowledge',
             'models.ToolsOzoneModerationDefs.ModEventEscalate',
             'models.ToolsOzoneModerationDefs.ModEventMute',
+            'models.ToolsOzoneModerationDefs.ModEventUnmute',
+            'models.ToolsOzoneModerationDefs.ModEventMuteReporter',
+            'models.ToolsOzoneModerationDefs.ModEventUnmuteReporter',
             'models.ToolsOzoneModerationDefs.ModEventEmail',
             'models.ToolsOzoneModerationDefs.ModEventResolveAppeal',
             'models.ToolsOzoneModerationDefs.ModEventDivert',
@@ -66,6 +69,9 @@ class ModEventViewDetail(base.ModelBase):
             'models.ToolsOzoneModerationDefs.ModEventAcknowledge',
             'models.ToolsOzoneModerationDefs.ModEventEscalate',
             'models.ToolsOzoneModerationDefs.ModEventMute',
+            'models.ToolsOzoneModerationDefs.ModEventUnmute',
+            'models.ToolsOzoneModerationDefs.ModEventMuteReporter',
+            'models.ToolsOzoneModerationDefs.ModEventUnmuteReporter',
             'models.ToolsOzoneModerationDefs.ModEventEmail',
             'models.ToolsOzoneModerationDefs.ModEventResolveAppeal',
             'models.ToolsOzoneModerationDefs.ModEventDivert',
@@ -110,6 +116,7 @@ class SubjectStatusView(base.ModelBase):
     last_reported_at: t.Optional[str] = None  #: Last reported at.
     last_reviewed_at: t.Optional[str] = None  #: Last reviewed at.
     last_reviewed_by: t.Optional[str] = None  #: Last reviewed by.
+    mute_reporting_until: t.Optional[str] = None  #: Mute reporting until.
     mute_until: t.Optional[str] = None  #: Mute until.
     subject_blob_cids: t.Optional[t.List[str]] = None  #: Subject blob cids.
     subject_repo_handle: t.Optional[str] = None  #: Subject repo handle.
@@ -195,6 +202,9 @@ class ModEventReport(base.ModelBase):
 
     report_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Report type.
     comment: t.Optional[str] = None  #: Comment.
+    is_reporter_muted: t.Optional[
+        bool
+    ] = None  #: Set to true if the reporter was muted from reporting at the time of the event. These reports won't impact the reviewState of the subject.
 
     py_type: te.Literal['tools.ozone.moderation.defs#modEventReport'] = Field(
         default='tools.ozone.moderation.defs#modEventReport', alias='$type', frozen=True
@@ -251,6 +261,27 @@ class ModEventUnmute(base.ModelBase):
 
     py_type: te.Literal['tools.ozone.moderation.defs#modEventUnmute'] = Field(
         default='tools.ozone.moderation.defs#modEventUnmute', alias='$type', frozen=True
+    )
+
+
+class ModEventMuteReporter(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Mute incoming reports from an account."""
+
+    duration_in_hours: int  #: Indicates how long the account should remain muted.
+    comment: t.Optional[str] = None  #: Comment.
+
+    py_type: te.Literal['tools.ozone.moderation.defs#modEventMuteReporter'] = Field(
+        default='tools.ozone.moderation.defs#modEventMuteReporter', alias='$type', frozen=True
+    )
+
+
+class ModEventUnmuteReporter(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Unmute incoming reports from an account."""
+
+    comment: t.Optional[str] = None  #: Describe reasoning behind the reversal.
+
+    py_type: te.Literal['tools.ozone.moderation.defs#modEventUnmuteReporter'] = Field(
+        default='tools.ozone.moderation.defs#modEventUnmuteReporter', alias='$type', frozen=True
     )
 
 
