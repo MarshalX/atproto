@@ -63,6 +63,9 @@ class FeedViewPost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     post: 'models.AppBskyFeedDefs.PostView'  #: Post.
+    feed_context: t.Optional[str] = Field(
+        default=None, max_length=2000
+    )  #: Context provided by feed generator that may be passed back alongside interactions.
     reason: t.Optional[
         te.Annotated[t.Union['models.AppBskyFeedDefs.ReasonRepost'], Field(default=None, discriminator='py_type')]
     ] = None  #: Reason.
@@ -184,6 +187,7 @@ class GeneratorView(base.ModelBase):
     display_name: str  #: Display name.
     indexed_at: str  #: Indexed at.
     uri: str  #: Uri.
+    accepts_interactions: t.Optional[bool] = None  #: Accepts interactions.
     avatar: t.Optional[str] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
@@ -210,6 +214,9 @@ class SkeletonFeedPost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     post: str  #: Post.
+    feed_context: t.Optional[str] = Field(
+        default=None, max_length=2000
+    )  #: Context that will be passed through to client and may be passed to feed generator back alongside interactions.
     reason: t.Optional[
         te.Annotated[
             t.Union['models.AppBskyFeedDefs.SkeletonReasonRepost'], Field(default=None, discriminator='py_type')
@@ -242,3 +249,52 @@ class ThreadgateView(base.ModelBase):
     py_type: te.Literal['app.bsky.feed.defs#threadgateView'] = Field(
         default='app.bsky.feed.defs#threadgateView', alias='$type', frozen=True
     )
+
+
+class Interaction(base.ModelBase):
+    """Definition model for :obj:`app.bsky.feed.defs`."""
+
+    event: t.Optional[str] = None  #: Event.
+    feed_context: t.Optional[str] = Field(
+        default=None, max_length=2000
+    )  #: Context on a feed item that was orginally supplied by the feed generator on getFeedSkeleton.
+    item: t.Optional[str] = None  #: Item.
+
+    py_type: te.Literal['app.bsky.feed.defs#interaction'] = Field(
+        default='app.bsky.feed.defs#interaction', alias='$type', frozen=True
+    )
+
+
+RequestLess = te.Literal[
+    'app.bsky.feed.defs#requestLess'
+]  #: Request that less content like the given feed item be shown in the feed
+
+RequestMore = te.Literal[
+    'app.bsky.feed.defs#requestMore'
+]  #: Request that more content like the given feed item be shown in the feed
+
+ClickthroughItem = te.Literal['app.bsky.feed.defs#clickthroughItem']  #: User clicked through to the feed item
+
+ClickthroughAuthor = te.Literal[
+    'app.bsky.feed.defs#clickthroughAuthor'
+]  #: User clicked through to the author of the feed item
+
+ClickthroughReposter = te.Literal[
+    'app.bsky.feed.defs#clickthroughReposter'
+]  #: User clicked through to the reposter of the feed item
+
+ClickthroughEmbed = te.Literal[
+    'app.bsky.feed.defs#clickthroughEmbed'
+]  #: User clicked through to the embedded content of the feed item
+
+InteractionSeen = te.Literal['app.bsky.feed.defs#interactionSeen']  #: Feed item was seen by user
+
+InteractionLike = te.Literal['app.bsky.feed.defs#interactionLike']  #: User liked the feed item
+
+InteractionRepost = te.Literal['app.bsky.feed.defs#interactionRepost']  #: User reposted the feed item
+
+InteractionReply = te.Literal['app.bsky.feed.defs#interactionReply']  #: User replied to the feed item
+
+InteractionQuote = te.Literal['app.bsky.feed.defs#interactionQuote']  #: User quoted the feed item
+
+InteractionShare = te.Literal['app.bsky.feed.defs#interactionShare']  #: User shared the feed item

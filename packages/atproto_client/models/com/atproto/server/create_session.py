@@ -19,11 +19,13 @@ class Data(base.DataModelBase):
 
     identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
     password: str  #: Password.
+    auth_factor_token: t.Optional[str] = None  #: Auth factor token.
 
 
 class DataDict(te.TypedDict):
     identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
     password: str  #: Password.
+    auth_factor_token: te.NotRequired[t.Optional[str]]  #: Auth factor token.
 
 
 class Response(base.ResponseModelBase):
@@ -35,4 +37,5 @@ class Response(base.ResponseModelBase):
     refresh_jwt: str  #: Refresh jwt.
     did_doc: t.Optional['UnknownType'] = None  #: Did doc.
     email: t.Optional[str] = None  #: Email.
+    email_auth_factor: t.Optional[bool] = None  #: Email auth factor.
     email_confirmed: t.Optional[bool] = None  #: Email confirmed.

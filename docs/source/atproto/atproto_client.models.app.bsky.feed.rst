@@ -33,4 +33,5 @@ Submodules
    atproto_client.models.app.bsky.feed.post
    atproto_client.models.app.bsky.feed.repost
    atproto_client.models.app.bsky.feed.search_posts
+   atproto_client.models.app.bsky.feed.send_interactions
    atproto_client.models.app.bsky.feed.threadgate

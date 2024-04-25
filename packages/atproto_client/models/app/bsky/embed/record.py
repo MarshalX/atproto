@@ -66,6 +66,9 @@ class ViewRecord(base.ModelBase):
         ]
     ] = None  #: Embeds.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    like_count: t.Optional[int] = None  #: Like count.
+    reply_count: t.Optional[int] = None  #: Reply count.
+    repost_count: t.Optional[int] = None  #: Repost count.
 
     py_type: te.Literal['app.bsky.embed.record#viewRecord'] = Field(
         default='app.bsky.embed.record#viewRecord', alias='$type', frozen=True

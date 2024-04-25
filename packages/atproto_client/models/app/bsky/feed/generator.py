@@ -22,6 +22,11 @@ class Record(base.RecordModelBase):
     created_at: str  #: Created at.
     did: str  #: Did.
     display_name: str = Field(max_length=240)  #: Display name.
+    accepts_interactions: t.Optional[
+        bool
+    ] = (
+        None
+    )  #: Declaration that a feed accepts feedback interactions from a client through app.bsky.feed.sendInteractions.
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
