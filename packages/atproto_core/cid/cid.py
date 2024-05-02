@@ -17,13 +17,15 @@ class Multihash:
 
 @dataclass(eq=False)
 class CID:
-    _cid: str
     version: int
     codec: int
     hash: Multihash
 
+    _stringified_form: t.Optional[str] = None
+    _raw_byte_form: t.Optional[str] = None
+
     @classmethod
-    def decode(cls, value: str) -> 'CID':
+    def decode(cls, value: t.Union[str, bytes]) -> 'CID':
         cid = libipld.decode_cid(value)
 
         multihash = Multihash(
@@ -32,15 +34,25 @@ class CID:
             digest=cid['hash']['digest'],
         )
 
-        return cls(
-            _cid=value,
+        instance = cls(
             version=cid['version'],
             codec=cid['codec'],
             hash=multihash,
         )
 
+        if isinstance(value, str):
+            instance._stringified_form = value
+        else:
+            instance._raw_byte_form = value
+
+        return instance
+
     def encode(self) -> str:
-        return self._cid
+        if self._stringified_form is not None:
+            return self._stringified_form
+
+        self._stringified_form = libipld.encode_cid(self._raw_byte_form)
+        return self._stringified_form
 
     def __str__(self) -> str:
         return self.encode()
@@ -67,19 +79,26 @@ class _CIDPydanticAnnotation:
     ) -> core_schema.CoreSchema:
         """We return a pydantic_core.CoreSchema that behaves in the following ways below.
 
-        * Strings will be parsed as `CID` instances
+        * Strings and bytes will be parsed as `CID` instances
         * `CID` instances will be parsed as `CID` instances without any changes
         * Nothing else will pass validation
         * Serialization will always return just a str
         """
 
-        def validate_from_str(value: str) -> CID:
+        def validate_from_value(value: t.Union[str, bytes]) -> CID:
             return CID.decode(value)
 
         from_str_schema = core_schema.chain_schema(
             [
                 core_schema.str_schema(),
-                core_schema.no_info_plain_validator_function(validate_from_str),
+                core_schema.no_info_plain_validator_function(validate_from_value),
+            ]
+        )
+
+        from_bytes_schema = core_schema.chain_schema(
+            [
+                core_schema.bytes_schema(),
+                core_schema.no_info_plain_validator_function(validate_from_value),
             ]
         )
 
@@ -90,6 +109,7 @@ class _CIDPydanticAnnotation:
                     # check if it's an instance first before doing any further work
                     core_schema.is_instance_schema(CID),
                     from_str_schema,
+                    from_bytes_schema,
                 ]
             ),
             serialization=core_schema.plain_serializer_function_ser_schema(lambda instance: instance.encode()),
