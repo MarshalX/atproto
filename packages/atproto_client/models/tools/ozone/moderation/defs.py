@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -46,7 +46,7 @@ class ModEventView(base.ModelBase):
     creator_handle: t.Optional[str] = None  #: Creator handle.
     subject_handle: t.Optional[str] = None  #: Subject handle.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventView'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventView'] = Field(
         default='tools.ozone.moderation.defs#modEventView', alias='$type', frozen=True
     )
 
@@ -84,7 +84,7 @@ class ModEventViewDetail(base.ModelBase):
     ]  #: Subject.
     subject_blobs: t.List['models.ToolsOzoneModerationDefs.BlobView']  #: Subject blobs.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventViewDetail'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventViewDetail'] = Field(
         default='tools.ozone.moderation.defs#modEventViewDetail', alias='$type', frozen=True
     )
 
@@ -117,7 +117,7 @@ class SubjectStatusView(base.ModelBase):
     tags: t.Optional[t.List[str]] = None  #: Tags.
     takendown: t.Optional[bool] = None  #: Takendown.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#subjectStatusView'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#subjectStatusView'] = Field(
         default='tools.ozone.moderation.defs#subjectStatusView', alias='$type', frozen=True
     )
 
@@ -129,19 +129,19 @@ SubjectReviewState = t.Union[
     'models.ToolsOzoneModerationDefs.ReviewNone',
 ]  #: Subject review state
 
-ReviewOpen = te.Literal[
+ReviewOpen = t.Literal[
     'tools.ozone.moderation.defs#reviewOpen'
 ]  #: Moderator review status of a subject: Open. Indicates that the subject needs to be reviewed by a moderator
 
-ReviewEscalated = te.Literal[
+ReviewEscalated = t.Literal[
     'tools.ozone.moderation.defs#reviewEscalated'
 ]  #: Moderator review status of a subject: Escalated. Indicates that the subject was escalated for review by a moderator
 
-ReviewClosed = te.Literal[
+ReviewClosed = t.Literal[
     'tools.ozone.moderation.defs#reviewClosed'
 ]  #: Moderator review status of a subject: Closed. Indicates that the subject was already reviewed and resolved by a moderator
 
-ReviewNone = te.Literal[
+ReviewNone = t.Literal[
     'tools.ozone.moderation.defs#reviewNone'
 ]  #: Moderator review status of a subject: Unnecessary. Indicates that the subject does not need a review at the moment but there is probably some moderation related metadata available for it
 
@@ -154,7 +154,7 @@ class ModEventTakedown(base.ModelBase):
         int
     ] = None  #: Indicates how long the takedown should be in effect before automatically expiring.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventTakedown'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventTakedown'] = Field(
         default='tools.ozone.moderation.defs#modEventTakedown', alias='$type', frozen=True
     )
 
@@ -164,7 +164,7 @@ class ModEventReverseTakedown(base.ModelBase):
 
     comment: t.Optional[str] = None  #: Describe reasoning behind the reversal.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventReverseTakedown'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventReverseTakedown'] = Field(
         default='tools.ozone.moderation.defs#modEventReverseTakedown', alias='$type', frozen=True
     )
 
@@ -174,7 +174,7 @@ class ModEventResolveAppeal(base.ModelBase):
 
     comment: t.Optional[str] = None  #: Describe resolution.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventResolveAppeal'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventResolveAppeal'] = Field(
         default='tools.ozone.moderation.defs#modEventResolveAppeal', alias='$type', frozen=True
     )
 
@@ -185,7 +185,7 @@ class ModEventComment(base.ModelBase):
     comment: str  #: Comment.
     sticky: t.Optional[bool] = None  #: Make the comment persistent on the subject.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventComment'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventComment'] = Field(
         default='tools.ozone.moderation.defs#modEventComment', alias='$type', frozen=True
     )
 
@@ -196,7 +196,7 @@ class ModEventReport(base.ModelBase):
     report_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Report type.
     comment: t.Optional[str] = None  #: Comment.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventReport'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventReport'] = Field(
         default='tools.ozone.moderation.defs#modEventReport', alias='$type', frozen=True
     )
 
@@ -208,7 +208,7 @@ class ModEventLabel(base.ModelBase):
     negate_label_vals: t.List[str]  #: Negate label vals.
     comment: t.Optional[str] = None  #: Comment.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventLabel'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventLabel'] = Field(
         default='tools.ozone.moderation.defs#modEventLabel', alias='$type', frozen=True
     )
 
@@ -218,7 +218,7 @@ class ModEventAcknowledge(base.ModelBase):
 
     comment: t.Optional[str] = None  #: Comment.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventAcknowledge'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventAcknowledge'] = Field(
         default='tools.ozone.moderation.defs#modEventAcknowledge', alias='$type', frozen=True
     )
 
@@ -228,7 +228,7 @@ class ModEventEscalate(base.ModelBase):
 
     comment: t.Optional[str] = None  #: Comment.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventEscalate'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventEscalate'] = Field(
         default='tools.ozone.moderation.defs#modEventEscalate', alias='$type', frozen=True
     )
 
@@ -239,7 +239,7 @@ class ModEventMute(base.ModelBase):
     duration_in_hours: int  #: Indicates how long the subject should remain muted.
     comment: t.Optional[str] = None  #: Comment.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventMute'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventMute'] = Field(
         default='tools.ozone.moderation.defs#modEventMute', alias='$type', frozen=True
     )
 
@@ -249,7 +249,7 @@ class ModEventUnmute(base.ModelBase):
 
     comment: t.Optional[str] = None  #: Describe reasoning behind the reversal.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventUnmute'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventUnmute'] = Field(
         default='tools.ozone.moderation.defs#modEventUnmute', alias='$type', frozen=True
     )
 
@@ -261,7 +261,7 @@ class ModEventEmail(base.ModelBase):
     comment: t.Optional[str] = None  #: Additional comment about the outgoing comm.
     content: t.Optional[str] = None  #: The content of the email sent to the user.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventEmail'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventEmail'] = Field(
         default='tools.ozone.moderation.defs#modEventEmail', alias='$type', frozen=True
     )
 
@@ -271,7 +271,7 @@ class ModEventDivert(base.ModelBase):
 
     comment: t.Optional[str] = None  #: Comment.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventDivert'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventDivert'] = Field(
         default='tools.ozone.moderation.defs#modEventDivert', alias='$type', frozen=True
     )
 
@@ -283,7 +283,7 @@ class ModEventTag(base.ModelBase):
     remove: t.List[str]  #: Tags to be removed to the subject. Ignores a tag If it doesn't exist, won't be duplicated.
     comment: t.Optional[str] = None  #: Additional comment about added/removed tags.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#modEventTag'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventTag'] = Field(
         default='tools.ozone.moderation.defs#modEventTag', alias='$type', frozen=True
     )
 
@@ -301,7 +301,7 @@ class RepoView(base.ModelBase):
     invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
     invites_disabled: t.Optional[bool] = None  #: Invites disabled.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#repoView'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#repoView'] = Field(
         default='tools.ozone.moderation.defs#repoView', alias='$type', frozen=True
     )
 
@@ -322,7 +322,7 @@ class RepoViewDetail(base.ModelBase):
     invites_disabled: t.Optional[bool] = None  #: Invites disabled.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#repoViewDetail'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#repoViewDetail'] = Field(
         default='tools.ozone.moderation.defs#repoViewDetail', alias='$type', frozen=True
     )
 
@@ -332,7 +332,7 @@ class RepoViewNotFound(base.ModelBase):
 
     did: str  #: Did.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#repoViewNotFound'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#repoViewNotFound'] = Field(
         default='tools.ozone.moderation.defs#repoViewNotFound', alias='$type', frozen=True
     )
 
@@ -348,7 +348,7 @@ class RecordView(base.ModelBase):
     uri: str  #: Uri.
     value: 'UnknownType'  #: Value.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#recordView'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#recordView'] = Field(
         default='tools.ozone.moderation.defs#recordView', alias='$type', frozen=True
     )
 
@@ -365,7 +365,7 @@ class RecordViewDetail(base.ModelBase):
     value: 'UnknownType'  #: Value.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#recordViewDetail'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#recordViewDetail'] = Field(
         default='tools.ozone.moderation.defs#recordViewDetail', alias='$type', frozen=True
     )
 
@@ -375,7 +375,7 @@ class RecordViewNotFound(base.ModelBase):
 
     uri: str  #: Uri.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#recordViewNotFound'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#recordViewNotFound'] = Field(
         default='tools.ozone.moderation.defs#recordViewNotFound', alias='$type', frozen=True
     )
 
@@ -385,7 +385,7 @@ class Moderation(base.ModelBase):
 
     subject_status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView'] = None  #: Subject status.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#moderation'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#moderation'] = Field(
         default='tools.ozone.moderation.defs#moderation', alias='$type', frozen=True
     )
 
@@ -395,7 +395,7 @@ class ModerationDetail(base.ModelBase):
 
     subject_status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView'] = None  #: Subject status.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#moderationDetail'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#moderationDetail'] = Field(
         default='tools.ozone.moderation.defs#moderationDetail', alias='$type', frozen=True
     )
 
@@ -415,7 +415,7 @@ class BlobView(base.ModelBase):
     ] = None  #: Details.
     moderation: t.Optional['models.ToolsOzoneModerationDefs.Moderation'] = None  #: Moderation.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#blobView'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#blobView'] = Field(
         default='tools.ozone.moderation.defs#blobView', alias='$type', frozen=True
     )
 
@@ -426,7 +426,7 @@ class ImageDetails(base.ModelBase):
     height: int  #: Height.
     width: int  #: Width.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#imageDetails'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#imageDetails'] = Field(
         default='tools.ozone.moderation.defs#imageDetails', alias='$type', frozen=True
     )
 
@@ -438,6 +438,6 @@ class VideoDetails(base.ModelBase):
     length: int  #: Length.
     width: int  #: Width.
 
-    py_type: te.Literal['tools.ozone.moderation.defs#videoDetails'] = Field(
+    py_type: t.Literal['tools.ozone.moderation.defs#videoDetails'] = Field(
         default='tools.ozone.moderation.defs#videoDetails', alias='$type', frozen=True
     )

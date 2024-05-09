@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -30,7 +29,7 @@ class Label(base.ModelBase):
     sig: t.Optional[t.Union[str, bytes]] = None  #: Signature of dag-cbor encoded label.
     ver: t.Optional[int] = None  #: The AT Protocol version of the label object.
 
-    py_type: te.Literal['com.atproto.label.defs#label'] = Field(
+    py_type: t.Literal['com.atproto.label.defs#label'] = Field(
         default='com.atproto.label.defs#label', alias='$type', frozen=True
     )
 
@@ -40,7 +39,7 @@ class SelfLabels(base.ModelBase):
 
     values: t.List['models.ComAtprotoLabelDefs.SelfLabel'] = Field(max_length=10)  #: Values.
 
-    py_type: te.Literal['com.atproto.label.defs#selfLabels'] = Field(
+    py_type: t.Literal['com.atproto.label.defs#selfLabels'] = Field(
         default='com.atproto.label.defs#selfLabels', alias='$type', frozen=True
     )
 
@@ -50,7 +49,7 @@ class SelfLabel(base.ModelBase):
 
     val: str = Field(max_length=128)  #: The short string name of the value or type of this label.
 
-    py_type: te.Literal['com.atproto.label.defs#selfLabel'] = Field(
+    py_type: t.Literal['com.atproto.label.defs#selfLabel'] = Field(
         default='com.atproto.label.defs#selfLabel', alias='$type', frozen=True
     )
 
@@ -69,7 +68,7 @@ class LabelValueDefinition(base.ModelBase):
     ] = None  #: Does the user need to have adult content enabled in order to configure this label?
     default_setting: t.Optional[str] = None  #: The default setting for this label.
 
-    py_type: te.Literal['com.atproto.label.defs#labelValueDefinition'] = Field(
+    py_type: t.Literal['com.atproto.label.defs#labelValueDefinition'] = Field(
         default='com.atproto.label.defs#labelValueDefinition', alias='$type', frozen=True
     )
 
@@ -83,21 +82,21 @@ class LabelValueDefinitionStrings(base.ModelBase):
     lang: str  #: The code of the language these strings are written in.
     name: str = Field(max_length=640)  #: A short human-readable name for the label.
 
-    py_type: te.Literal['com.atproto.label.defs#labelValueDefinitionStrings'] = Field(
+    py_type: t.Literal['com.atproto.label.defs#labelValueDefinitionStrings'] = Field(
         default='com.atproto.label.defs#labelValueDefinitionStrings', alias='$type', frozen=True
     )
 
 
 LabelValue = t.Union[
-    te.Literal['!hide'],
-    te.Literal['!no-promote'],
-    te.Literal['!warn'],
-    te.Literal['!no-unauthenticated'],
-    te.Literal['dmca-violation'],
-    te.Literal['doxxing'],
-    te.Literal['porn'],
-    te.Literal['sexual'],
-    te.Literal['nudity'],
-    te.Literal['nsfl'],
-    te.Literal['gore'],
+    t.Literal['!hide'],
+    t.Literal['!no-promote'],
+    t.Literal['!warn'],
+    t.Literal['!no-unauthenticated'],
+    t.Literal['dmca-violation'],
+    t.Literal['doxxing'],
+    t.Literal['porn'],
+    t.Literal['sexual'],
+    t.Literal['nudity'],
+    t.Literal['nsfl'],
+    t.Literal['gore'],
 ]  #: Label value

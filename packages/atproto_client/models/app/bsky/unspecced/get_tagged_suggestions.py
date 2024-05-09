@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -19,7 +18,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getTaggedSuggestions`."""
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     pass
 
 
@@ -36,6 +35,6 @@ class Suggestion(base.ModelBase):
     subject_type: str  #: Subject type.
     tag: str  #: Tag.
 
-    py_type: te.Literal['app.bsky.unspecced.getTaggedSuggestions#suggestion'] = Field(
+    py_type: t.Literal['app.bsky.unspecced.getTaggedSuggestions#suggestion'] = Field(
         default='app.bsky.unspecced.getTaggedSuggestions#suggestion', alias='$type', frozen=True
     )

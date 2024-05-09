@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -21,7 +20,7 @@ class Record(base.RecordModelBase):
     created_at: str  #: Created at.
     subject: str  #: Reference (AT-URI) to the mod list record.
 
-    py_type: te.Literal['app.bsky.graph.listblock'] = Field(
+    py_type: t.Literal['app.bsky.graph.listblock'] = Field(
         default='app.bsky.graph.listblock', alias='$type', frozen=True
     )
 

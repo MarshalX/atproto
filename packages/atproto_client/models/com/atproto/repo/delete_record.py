@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -22,7 +22,7 @@ class Data(base.DataModelBase):
     swap_record: t.Optional[str] = None  #: Compare and swap with the previous record by CID.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     collection: str  #: The NSID of the record collection.
     repo: str  #: The handle or DID of the repo (aka, current account).
     rkey: str  #: The Record Key.

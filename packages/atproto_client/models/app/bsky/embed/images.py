@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -21,7 +20,7 @@ class Main(base.ModelBase):
 
     images: t.List['models.AppBskyEmbedImages.Image'] = Field(max_length=4)  #: Images.
 
-    py_type: te.Literal['app.bsky.embed.images'] = Field(default='app.bsky.embed.images', alias='$type', frozen=True)
+    py_type: t.Literal['app.bsky.embed.images'] = Field(default='app.bsky.embed.images', alias='$type', frozen=True)
 
 
 class Image(base.ModelBase):
@@ -31,7 +30,7 @@ class Image(base.ModelBase):
     image: 'BlobRef'  #: Image.
     aspect_ratio: t.Optional['models.AppBskyEmbedImages.AspectRatio'] = None  #: Aspect ratio.
 
-    py_type: te.Literal['app.bsky.embed.images#image'] = Field(
+    py_type: t.Literal['app.bsky.embed.images#image'] = Field(
         default='app.bsky.embed.images#image', alias='$type', frozen=True
     )
 
@@ -42,7 +41,7 @@ class AspectRatio(base.ModelBase):
     height: int = Field(ge=1)  #: Height.
     width: int = Field(ge=1)  #: Width.
 
-    py_type: te.Literal['app.bsky.embed.images#aspectRatio'] = Field(
+    py_type: t.Literal['app.bsky.embed.images#aspectRatio'] = Field(
         default='app.bsky.embed.images#aspectRatio', alias='$type', frozen=True
     )
 
@@ -52,7 +51,7 @@ class View(base.ModelBase):
 
     images: t.List['models.AppBskyEmbedImages.ViewImage'] = Field(max_length=4)  #: Images.
 
-    py_type: te.Literal['app.bsky.embed.images#view'] = Field(
+    py_type: t.Literal['app.bsky.embed.images#view'] = Field(
         default='app.bsky.embed.images#view', alias='$type', frozen=True
     )
 
@@ -65,6 +64,6 @@ class ViewImage(base.ModelBase):
     thumb: str  #: Fully-qualified URL where a thumbnail of the image can be fetched. For example, CDN location provided by the App View.
     aspect_ratio: t.Optional['models.AppBskyEmbedImages.AspectRatio'] = None  #: Aspect ratio.
 
-    py_type: te.Literal['app.bsky.embed.images#viewImage'] = Field(
+    py_type: t.Literal['app.bsky.embed.images#viewImage'] = Field(
         default='app.bsky.embed.images#viewImage', alias='$type', frozen=True
     )

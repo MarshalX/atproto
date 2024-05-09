@@ -29,7 +29,7 @@ source_suffix = {
 # -- Project information -----------------------------------------------------
 
 project = 'The AT Protocol SDK'
-copyright = '2023 Ilya (Marshal) <https://github.com/MarshalX>'
+copyright = '2024 Ilya (Marshal) <https://github.com/MarshalX>'
 author = 'Ilya (Marshal)'
 
 language = 'en'
@@ -85,6 +85,9 @@ html_css_files = [
 
 html_theme_options = {
     'navigation_with_keys': True,
+    'source_repository': 'https://github.com/MarshalX/atproto/',
+    'source_branch': 'main',
+    'source_directory': 'docs/source/',
 }
 
 # Favicons

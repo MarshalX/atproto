@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -26,7 +26,7 @@ class Params(base.ParamsModelBase):
     sources: t.Optional[t.List[str]] = None  #: Optional list of label sources (DIDs) to filter on.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     uri_patterns: t.List[
         str
     ]  #: List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI.

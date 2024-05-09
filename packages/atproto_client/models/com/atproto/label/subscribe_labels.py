@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -21,7 +21,7 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[int] = None  #: The last known event seq number to backfill from.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[int]]  #: The last known event seq number to backfill from.
 
 
@@ -31,7 +31,7 @@ class Labels(base.ModelBase):
     labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.
     seq: int  #: Seq.
 
-    py_type: te.Literal['com.atproto.label.subscribeLabels#labels'] = Field(
+    py_type: t.Literal['com.atproto.label.subscribeLabels#labels'] = Field(
         default='com.atproto.label.subscribeLabels#labels', alias='$type', frozen=True
     )
 
@@ -42,6 +42,6 @@ class Info(base.ModelBase):
     name: str  #: Name.
     message: t.Optional[str] = None  #: Message.
 
-    py_type: te.Literal['com.atproto.label.subscribeLabels#info'] = Field(
+    py_type: t.Literal['com.atproto.label.subscribeLabels#info'] = Field(
         default='com.atproto.label.subscribeLabels#info', alias='$type', frozen=True
     )

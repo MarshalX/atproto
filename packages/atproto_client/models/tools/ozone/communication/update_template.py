@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -25,7 +25,7 @@ class Data(base.DataModelBase):
     updated_by: t.Optional[str] = None  #: DID of the user who is updating the template.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     id: str  #: ID of the template to be updated.
     content_markdown: te.NotRequired[
         t.Optional[str]

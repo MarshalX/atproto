@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -28,7 +27,7 @@ class Feed(base.ModelBase):
 
     uri: str  #: Uri.
 
-    py_type: te.Literal['app.bsky.feed.describeFeedGenerator#feed'] = Field(
+    py_type: t.Literal['app.bsky.feed.describeFeedGenerator#feed'] = Field(
         default='app.bsky.feed.describeFeedGenerator#feed', alias='$type', frozen=True
     )
 
@@ -39,6 +38,6 @@ class Links(base.ModelBase):
     privacy_policy: t.Optional[str] = None  #: Privacy policy.
     terms_of_service: t.Optional[str] = None  #: Terms of service.
 
-    py_type: te.Literal['app.bsky.feed.describeFeedGenerator#links'] = Field(
+    py_type: t.Literal['app.bsky.feed.describeFeedGenerator#links'] = Field(
         default='app.bsky.feed.describeFeedGenerator#links', alias='$type', frozen=True
     )

@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -24,7 +24,7 @@ class Params(base.ParamsModelBase):
     seen_at: t.Optional[str] = None  #: Seen at.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     seen_at: te.NotRequired[t.Optional[str]]  #: Seen at.
@@ -51,6 +51,6 @@ class Notification(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     reason_subject: t.Optional[str] = None  #: Reason subject.
 
-    py_type: te.Literal['app.bsky.notification.listNotifications#notification'] = Field(
+    py_type: t.Literal['app.bsky.notification.listNotifications#notification'] = Field(
         default='app.bsky.notification.listNotifications#notification', alias='$type', frozen=True
     )

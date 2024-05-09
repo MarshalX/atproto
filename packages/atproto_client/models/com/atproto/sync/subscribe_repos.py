@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -23,7 +23,7 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[int] = None  #: The last known event seq number to backfill from.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[int]]  #: The last known event seq number to backfill from.
 
 
@@ -47,7 +47,7 @@ class Commit(base.ModelBase):
     )  #: DEPRECATED -- unused. WARNING -- nullable and optional; stick with optional to ensure golang interoperability.
     since: t.Optional[str] = None  #: The rev of the last emitted commit from this repo (if any).
 
-    py_type: te.Literal['com.atproto.sync.subscribeRepos#commit'] = Field(
+    py_type: t.Literal['com.atproto.sync.subscribeRepos#commit'] = Field(
         default='com.atproto.sync.subscribeRepos#commit', alias='$type', frozen=True
     )
 
@@ -59,7 +59,7 @@ class Identity(base.ModelBase):
     seq: int  #: Seq.
     time: str  #: Time.
 
-    py_type: te.Literal['com.atproto.sync.subscribeRepos#identity'] = Field(
+    py_type: t.Literal['com.atproto.sync.subscribeRepos#identity'] = Field(
         default='com.atproto.sync.subscribeRepos#identity', alias='$type', frozen=True
     )
 
@@ -72,7 +72,7 @@ class Handle(base.ModelBase):
     seq: int  #: Seq.
     time: str  #: Time.
 
-    py_type: te.Literal['com.atproto.sync.subscribeRepos#handle'] = Field(
+    py_type: t.Literal['com.atproto.sync.subscribeRepos#handle'] = Field(
         default='com.atproto.sync.subscribeRepos#handle', alias='$type', frozen=True
     )
 
@@ -85,7 +85,7 @@ class Migrate(base.ModelBase):
     time: str  #: Time.
     migrate_to: t.Optional[str] = None  #: Migrate to.
 
-    py_type: te.Literal['com.atproto.sync.subscribeRepos#migrate'] = Field(
+    py_type: t.Literal['com.atproto.sync.subscribeRepos#migrate'] = Field(
         default='com.atproto.sync.subscribeRepos#migrate', alias='$type', frozen=True
     )
 
@@ -97,7 +97,7 @@ class Tombstone(base.ModelBase):
     seq: int  #: Seq.
     time: str  #: Time.
 
-    py_type: te.Literal['com.atproto.sync.subscribeRepos#tombstone'] = Field(
+    py_type: t.Literal['com.atproto.sync.subscribeRepos#tombstone'] = Field(
         default='com.atproto.sync.subscribeRepos#tombstone', alias='$type', frozen=True
     )
 
@@ -108,7 +108,7 @@ class Info(base.ModelBase):
     name: str  #: Name.
     message: t.Optional[str] = None  #: Message.
 
-    py_type: te.Literal['com.atproto.sync.subscribeRepos#info'] = Field(
+    py_type: t.Literal['com.atproto.sync.subscribeRepos#info'] = Field(
         default='com.atproto.sync.subscribeRepos#info', alias='$type', frozen=True
     )
 
@@ -120,6 +120,6 @@ class RepoOp(base.ModelBase):
     path: str  #: Path.
     cid: t.Optional['CIDType'] = None  #: For creates and updates, the new record CID. For deletions, null.
 
-    py_type: te.Literal['com.atproto.sync.subscribeRepos#repoOp'] = Field(
+    py_type: t.Literal['com.atproto.sync.subscribeRepos#repoOp'] = Field(
         default='com.atproto.sync.subscribeRepos#repoOp', alias='$type', frozen=True
     )

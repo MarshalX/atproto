@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -42,7 +42,7 @@ class PostView(base.ModelBase):
     threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.
     viewer: t.Optional['models.AppBskyFeedDefs.ViewerState'] = None  #: Viewer.
 
-    py_type: te.Literal['app.bsky.feed.defs#postView'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#postView'] = Field(
         default='app.bsky.feed.defs#postView', alias='$type', frozen=True
     )
 
@@ -54,7 +54,7 @@ class ViewerState(base.ModelBase):
     reply_disabled: t.Optional[bool] = None  #: Reply disabled.
     repost: t.Optional[str] = None  #: Repost.
 
-    py_type: te.Literal['app.bsky.feed.defs#viewerState'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#viewerState'] = Field(
         default='app.bsky.feed.defs#viewerState', alias='$type', frozen=True
     )
 
@@ -71,7 +71,7 @@ class FeedViewPost(base.ModelBase):
     ] = None  #: Reason.
     reply: t.Optional['models.AppBskyFeedDefs.ReplyRef'] = None  #: Reply.
 
-    py_type: te.Literal['app.bsky.feed.defs#feedViewPost'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#feedViewPost'] = Field(
         default='app.bsky.feed.defs#feedViewPost', alias='$type', frozen=True
     )
 
@@ -96,7 +96,7 @@ class ReplyRef(base.ModelBase):
         Field(discriminator='py_type'),
     ]  #: Root.
 
-    py_type: te.Literal['app.bsky.feed.defs#replyRef'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#replyRef'] = Field(
         default='app.bsky.feed.defs#replyRef', alias='$type', frozen=True
     )
 
@@ -107,7 +107,7 @@ class ReasonRepost(base.ModelBase):
     by: 'models.AppBskyActorDefs.ProfileViewBasic'  #: By.
     indexed_at: str  #: Indexed at.
 
-    py_type: te.Literal['app.bsky.feed.defs#reasonRepost'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#reasonRepost'] = Field(
         default='app.bsky.feed.defs#reasonRepost', alias='$type', frozen=True
     )
 
@@ -139,7 +139,7 @@ class ThreadViewPost(base.ModelBase):
         ]
     ] = None  #: Replies.
 
-    py_type: te.Literal['app.bsky.feed.defs#threadViewPost'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#threadViewPost'] = Field(
         default='app.bsky.feed.defs#threadViewPost', alias='$type', frozen=True
     )
 
@@ -150,7 +150,7 @@ class NotFoundPost(base.ModelBase):
     not_found: bool = Field(frozen=True)  #: Not found.
     uri: str  #: Uri.
 
-    py_type: te.Literal['app.bsky.feed.defs#notFoundPost'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#notFoundPost'] = Field(
         default='app.bsky.feed.defs#notFoundPost', alias='$type', frozen=True
     )
 
@@ -162,7 +162,7 @@ class BlockedPost(base.ModelBase):
     blocked: bool = Field(frozen=True)  #: Blocked.
     uri: str  #: Uri.
 
-    py_type: te.Literal['app.bsky.feed.defs#blockedPost'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#blockedPost'] = Field(
         default='app.bsky.feed.defs#blockedPost', alias='$type', frozen=True
     )
 
@@ -173,7 +173,7 @@ class BlockedAuthor(base.ModelBase):
     did: str  #: Did.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
-    py_type: te.Literal['app.bsky.feed.defs#blockedAuthor'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#blockedAuthor'] = Field(
         default='app.bsky.feed.defs#blockedAuthor', alias='$type', frozen=True
     )
 
@@ -195,7 +195,7 @@ class GeneratorView(base.ModelBase):
     like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
     viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState'] = None  #: Viewer.
 
-    py_type: te.Literal['app.bsky.feed.defs#generatorView'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#generatorView'] = Field(
         default='app.bsky.feed.defs#generatorView', alias='$type', frozen=True
     )
 
@@ -205,7 +205,7 @@ class GeneratorViewerState(base.ModelBase):
 
     like: t.Optional[str] = None  #: Like.
 
-    py_type: te.Literal['app.bsky.feed.defs#generatorViewerState'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#generatorViewerState'] = Field(
         default='app.bsky.feed.defs#generatorViewerState', alias='$type', frozen=True
     )
 
@@ -223,7 +223,7 @@ class SkeletonFeedPost(base.ModelBase):
         ]
     ] = None  #: Reason.
 
-    py_type: te.Literal['app.bsky.feed.defs#skeletonFeedPost'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#skeletonFeedPost'] = Field(
         default='app.bsky.feed.defs#skeletonFeedPost', alias='$type', frozen=True
     )
 
@@ -233,7 +233,7 @@ class SkeletonReasonRepost(base.ModelBase):
 
     repost: str  #: Repost.
 
-    py_type: te.Literal['app.bsky.feed.defs#skeletonReasonRepost'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#skeletonReasonRepost'] = Field(
         default='app.bsky.feed.defs#skeletonReasonRepost', alias='$type', frozen=True
     )
 
@@ -246,7 +246,7 @@ class ThreadgateView(base.ModelBase):
     record: t.Optional['UnknownType'] = None  #: Record.
     uri: t.Optional[str] = None  #: Uri.
 
-    py_type: te.Literal['app.bsky.feed.defs#threadgateView'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#threadgateView'] = Field(
         default='app.bsky.feed.defs#threadgateView', alias='$type', frozen=True
     )
 
@@ -260,41 +260,41 @@ class Interaction(base.ModelBase):
     )  #: Context on a feed item that was orginally supplied by the feed generator on getFeedSkeleton.
     item: t.Optional[str] = None  #: Item.
 
-    py_type: te.Literal['app.bsky.feed.defs#interaction'] = Field(
+    py_type: t.Literal['app.bsky.feed.defs#interaction'] = Field(
         default='app.bsky.feed.defs#interaction', alias='$type', frozen=True
     )
 
 
-RequestLess = te.Literal[
+RequestLess = t.Literal[
     'app.bsky.feed.defs#requestLess'
 ]  #: Request that less content like the given feed item be shown in the feed
 
-RequestMore = te.Literal[
+RequestMore = t.Literal[
     'app.bsky.feed.defs#requestMore'
 ]  #: Request that more content like the given feed item be shown in the feed
 
-ClickthroughItem = te.Literal['app.bsky.feed.defs#clickthroughItem']  #: User clicked through to the feed item
+ClickthroughItem = t.Literal['app.bsky.feed.defs#clickthroughItem']  #: User clicked through to the feed item
 
-ClickthroughAuthor = te.Literal[
+ClickthroughAuthor = t.Literal[
     'app.bsky.feed.defs#clickthroughAuthor'
 ]  #: User clicked through to the author of the feed item
 
-ClickthroughReposter = te.Literal[
+ClickthroughReposter = t.Literal[
     'app.bsky.feed.defs#clickthroughReposter'
 ]  #: User clicked through to the reposter of the feed item
 
-ClickthroughEmbed = te.Literal[
+ClickthroughEmbed = t.Literal[
     'app.bsky.feed.defs#clickthroughEmbed'
 ]  #: User clicked through to the embedded content of the feed item
 
-InteractionSeen = te.Literal['app.bsky.feed.defs#interactionSeen']  #: Feed item was seen by user
+InteractionSeen = t.Literal['app.bsky.feed.defs#interactionSeen']  #: Feed item was seen by user
 
-InteractionLike = te.Literal['app.bsky.feed.defs#interactionLike']  #: User liked the feed item
+InteractionLike = t.Literal['app.bsky.feed.defs#interactionLike']  #: User liked the feed item
 
-InteractionRepost = te.Literal['app.bsky.feed.defs#interactionRepost']  #: User reposted the feed item
+InteractionRepost = t.Literal['app.bsky.feed.defs#interactionRepost']  #: User reposted the feed item
 
-InteractionReply = te.Literal['app.bsky.feed.defs#interactionReply']  #: User replied to the feed item
+InteractionReply = t.Literal['app.bsky.feed.defs#interactionReply']  #: User replied to the feed item
 
-InteractionQuote = te.Literal['app.bsky.feed.defs#interactionQuote']  #: User quoted the feed item
+InteractionQuote = t.Literal['app.bsky.feed.defs#interactionQuote']  #: User quoted the feed item
 
-InteractionShare = te.Literal['app.bsky.feed.defs#interactionShare']  #: User shared the feed item
+InteractionShare = t.Literal['app.bsky.feed.defs#interactionShare']  #: User shared the feed item

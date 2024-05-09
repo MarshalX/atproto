@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -19,7 +19,7 @@ class Params(base.ParamsModelBase):
     since: t.Optional[str] = None  #: The revision ('rev') of the repo to create a diff from.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     did: str  #: The DID of the repo.
     since: te.NotRequired[t.Optional[str]]  #: The revision ('rev') of the repo to create a diff from.
 

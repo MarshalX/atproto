@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -23,7 +23,7 @@ class Data(base.DataModelBase):
     for_accounts: t.Optional[t.List[str]] = None  #: For accounts.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     code_count: int  #: Code count.
     use_count: int  #: Use count.
     for_accounts: te.NotRequired[t.Optional[t.List[str]]]  #: For accounts.
@@ -41,6 +41,6 @@ class AccountCodes(base.ModelBase):
     account: str  #: Account.
     codes: t.List[str]  #: Codes.
 
-    py_type: te.Literal['com.atproto.server.createInviteCodes#accountCodes'] = Field(
+    py_type: t.Literal['com.atproto.server.createInviteCodes#accountCodes'] = Field(
         default='com.atproto.server.createInviteCodes#accountCodes', alias='$type', frozen=True
     )

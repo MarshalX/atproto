@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
     limit: t.Optional[int] = Field(default=500, ge=1, le=1000)  #: Limit.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 
@@ -40,6 +40,6 @@ class RecordBlob(base.ModelBase):
     cid: str  #: Cid.
     record_uri: str  #: Record uri.
 
-    py_type: te.Literal['com.atproto.repo.listMissingBlobs#recordBlob'] = Field(
+    py_type: t.Literal['com.atproto.repo.listMissingBlobs#recordBlob'] = Field(
         default='com.atproto.repo.listMissingBlobs#recordBlob', alias='$type', frozen=True
     )

@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -24,7 +24,7 @@ class Params(base.ParamsModelBase):
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     uri: str  #: AT-URI of the subject (eg, a post record).
     cid: te.NotRequired[
         t.Optional[str]
@@ -49,6 +49,6 @@ class Like(base.ModelBase):
     created_at: str  #: Created at.
     indexed_at: str  #: Indexed at.
 
-    py_type: te.Literal['app.bsky.feed.getLikes#like'] = Field(
+    py_type: t.Literal['app.bsky.feed.getLikes#like'] = Field(
         default='app.bsky.feed.getLikes#like', alias='$type', frozen=True
     )
