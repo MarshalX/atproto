@@ -12,6 +12,5 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   atproto_client.client.methods_mixin.backward_compatibility
    atproto_client.client.methods_mixin.session
    atproto_client.client.methods_mixin.time
