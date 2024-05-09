@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -19,7 +19,7 @@ class Data(base.DataModelBase):
     for_account: t.Optional[str] = None  #: For account.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     use_count: int  #: Use count.
     for_account: te.NotRequired[t.Optional[str]]  #: For account.
 

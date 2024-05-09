@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -24,7 +24,7 @@ class Data(base.DataModelBase):
     verification_methods: t.Optional['UnknownInputType'] = None  #: Verification methods.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     also_known_as: te.NotRequired[t.Optional[t.List[str]]]  #: Also known as.
     rotation_keys: te.NotRequired[t.Optional[t.List[str]]]  #: Rotation keys.
     services: te.NotRequired[t.Optional['UnknownInputType']]  #: Services.

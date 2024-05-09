@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -21,7 +21,7 @@ class Main(base.ModelBase):
 
     record: 'models.ComAtprotoRepoStrongRef.Main'  #: Record.
 
-    py_type: te.Literal['app.bsky.embed.record'] = Field(default='app.bsky.embed.record', alias='$type', frozen=True)
+    py_type: t.Literal['app.bsky.embed.record'] = Field(default='app.bsky.embed.record', alias='$type', frozen=True)
 
 
 class View(base.ModelBase):
@@ -39,7 +39,7 @@ class View(base.ModelBase):
         Field(discriminator='py_type'),
     ]  #: Record.
 
-    py_type: te.Literal['app.bsky.embed.record#view'] = Field(
+    py_type: t.Literal['app.bsky.embed.record#view'] = Field(
         default='app.bsky.embed.record#view', alias='$type', frozen=True
     )
 
@@ -70,7 +70,7 @@ class ViewRecord(base.ModelBase):
     reply_count: t.Optional[int] = None  #: Reply count.
     repost_count: t.Optional[int] = None  #: Repost count.
 
-    py_type: te.Literal['app.bsky.embed.record#viewRecord'] = Field(
+    py_type: t.Literal['app.bsky.embed.record#viewRecord'] = Field(
         default='app.bsky.embed.record#viewRecord', alias='$type', frozen=True
     )
 
@@ -81,7 +81,7 @@ class ViewNotFound(base.ModelBase):
     not_found: bool = Field(frozen=True)  #: Not found.
     uri: str  #: Uri.
 
-    py_type: te.Literal['app.bsky.embed.record#viewNotFound'] = Field(
+    py_type: t.Literal['app.bsky.embed.record#viewNotFound'] = Field(
         default='app.bsky.embed.record#viewNotFound', alias='$type', frozen=True
     )
 
@@ -93,6 +93,6 @@ class ViewBlocked(base.ModelBase):
     blocked: bool = Field(frozen=True)  #: Blocked.
     uri: str  #: Uri.
 
-    py_type: te.Literal['app.bsky.embed.record#viewBlocked'] = Field(
+    py_type: t.Literal['app.bsky.embed.record#viewBlocked'] = Field(
         default='app.bsky.embed.record#viewBlocked', alias='$type', frozen=True
     )

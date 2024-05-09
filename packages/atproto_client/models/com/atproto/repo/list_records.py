@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -28,7 +28,7 @@ class Params(base.ParamsModelBase):
     rkey_start: t.Optional[str] = None  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     collection: str  #: The NSID of the record type.
     repo: str  #: The handle or DID of the repo.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
@@ -52,6 +52,6 @@ class Record(base.ModelBase):
     uri: str  #: Uri.
     value: 'UnknownType'  #: Value.
 
-    py_type: te.Literal['com.atproto.repo.listRecords#record'] = Field(
+    py_type: t.Literal['com.atproto.repo.listRecords#record'] = Field(
         default='com.atproto.repo.listRecords#record', alias='$type', frozen=True
     )

@@ -81,7 +81,7 @@ This SDK attempts to implement everything that provides ATProto. There is suppor
 
 ### Requirements
 
-- Python 3.7.1 or higher.
+- Python 3.8 or higher.
 
 ### Installing
 

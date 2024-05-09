@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -18,7 +18,7 @@ class Data(base.DataModelBase):
     did: t.Optional[str] = None  #: The DID to reserve a key for.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     did: te.NotRequired[t.Optional[str]]  #: The DID to reserve a key for.
 
 

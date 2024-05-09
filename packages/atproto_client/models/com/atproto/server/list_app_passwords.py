@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -27,6 +26,6 @@ class AppPassword(base.ModelBase):
     created_at: str  #: Created at.
     name: str  #: Name.
 
-    py_type: te.Literal['com.atproto.server.listAppPasswords#appPassword'] = Field(
+    py_type: t.Literal['com.atproto.server.listAppPasswords#appPassword'] = Field(
         default='com.atproto.server.listAppPasswords#appPassword', alias='$type', frozen=True
     )

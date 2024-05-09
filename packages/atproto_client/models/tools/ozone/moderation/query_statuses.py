@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -40,7 +40,7 @@ class Params(base.ParamsModelBase):
     takendown: t.Optional[bool] = None  #: Get subjects that were taken down.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     appealed: te.NotRequired[t.Optional[bool]]  #: Get subjects in unresolved appealed status.
     comment: te.NotRequired[t.Optional[str]]  #: Search subjects by keyword from comments.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.

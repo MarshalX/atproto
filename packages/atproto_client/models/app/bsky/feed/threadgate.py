@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -18,7 +18,7 @@ from atproto_client.models import base
 class MentionRule(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.threadgate`. Allow replies from actors mentioned in your post."""
 
-    py_type: te.Literal['app.bsky.feed.threadgate#mentionRule'] = Field(
+    py_type: t.Literal['app.bsky.feed.threadgate#mentionRule'] = Field(
         default='app.bsky.feed.threadgate#mentionRule', alias='$type', frozen=True
     )
 
@@ -26,7 +26,7 @@ class MentionRule(base.ModelBase):
 class FollowingRule(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.threadgate`. Allow replies from actors you follow."""
 
-    py_type: te.Literal['app.bsky.feed.threadgate#followingRule'] = Field(
+    py_type: t.Literal['app.bsky.feed.threadgate#followingRule'] = Field(
         default='app.bsky.feed.threadgate#followingRule', alias='$type', frozen=True
     )
 
@@ -36,7 +36,7 @@ class ListRule(base.ModelBase):
 
     list: str  #: List.
 
-    py_type: te.Literal['app.bsky.feed.threadgate#listRule'] = Field(
+    py_type: t.Literal['app.bsky.feed.threadgate#listRule'] = Field(
         default='app.bsky.feed.threadgate#listRule', alias='$type', frozen=True
     )
 
@@ -59,7 +59,7 @@ class Record(base.RecordModelBase):
         ]
     ] = Field(default=None, max_length=5)  #: Allow.
 
-    py_type: te.Literal['app.bsky.feed.threadgate'] = Field(
+    py_type: t.Literal['app.bsky.feed.threadgate'] = Field(
         default='app.bsky.feed.threadgate', alias='$type', frozen=True
     )
 

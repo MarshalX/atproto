@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -22,9 +21,7 @@ class Record(base.RecordModelBase):
     list: str  #: Reference (AT-URI) to the list record (app.bsky.graph.list).
     subject: str  #: The account which is included on the list.
 
-    py_type: te.Literal['app.bsky.graph.listitem'] = Field(
-        default='app.bsky.graph.listitem', alias='$type', frozen=True
-    )
+    py_type: t.Literal['app.bsky.graph.listitem'] = Field(default='app.bsky.graph.listitem', alias='$type', frozen=True)
 
 
 class Main(Record):

@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -24,7 +24,7 @@ class Data(base.DataModelBase):
     subject: t.Optional[str] = None  #: Subject.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     content: str  #: Content.
     recipient_did: str  #: Recipient did.
     sender_did: str  #: Sender did.

@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -50,7 +50,7 @@ class Params(base.ParamsModelBase):
     ] = None  #: The types of events (fully qualified string in the format of tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     added_labels: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: If specified, only events where all of these labels were added are returned.

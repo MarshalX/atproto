@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -34,7 +34,7 @@ class Data(base.DataModelBase):
     verification_phone: t.Optional[str] = None  #: Verification phone.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     handle: str  #: Requested handle for the account.
     did: te.NotRequired[t.Optional[str]]  #: Pre-existing atproto DID, being imported to a new account.
     email: te.NotRequired[t.Optional[str]]  #: Email.

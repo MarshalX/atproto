@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -29,7 +29,7 @@ class Data(base.DataModelBase):
     validate_: t.Optional[bool] = None  #: Can be set to 'false' to skip Lexicon schema validation of record data.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     collection: str  #: The NSID of the record collection.
     record: 'UnknownInputType'  #: The record to write.
     repo: str  #: The handle or DID of the repo (aka, current account).

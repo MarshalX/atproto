@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -18,7 +18,7 @@ class Params(base.ParamsModelBase):
     seen_at: t.Optional[str] = None  #: Seen at.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     seen_at: te.NotRequired[t.Optional[str]]  #: Seen at.
 
 

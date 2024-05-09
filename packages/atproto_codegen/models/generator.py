@@ -117,9 +117,9 @@ def _get_typeddict_class_def(name: str, model_type: TypedDictType) -> str:
     lines: t.List[str] = []
 
     if model_type is TypedDictType.PARAMS:
-        lines.append(f'class {PARAMS_DICT}(te.TypedDict):')
+        lines.append(f'class {PARAMS_DICT}(t.TypedDict):')
     elif model_type is TypedDictType.DATA:
-        lines.append(f'class {INPUT_DICT}(te.TypedDict):')
+        lines.append(f'class {INPUT_DICT}(t.TypedDict):')
 
     lines.append('')
 
@@ -534,7 +534,7 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
     if def_name == 'main':
         def_type = str(nsid)
 
-    lines.append(f"{_(1)}py_type: te.Literal['{def_type}'] = Field(default='{def_type}', alias='$type', frozen=True)")
+    lines.append(f"{_(1)}py_type: t.Literal['{def_type}'] = Field(default='{def_type}', alias='$type', frozen=True)")
     lines.append('')
 
     # TODO(MarshalX): remove it
@@ -550,7 +550,7 @@ def _generate_def_token(nsid: NSID, def_name: str, def_model: models.LexToken) -
         description = gen_description_by_camel_case_name(def_name)
 
     lines = [
-        f"{get_def_model_name(def_name)} = te.Literal['{nsid}#{def_name}'] #: {description}",
+        f"{get_def_model_name(def_name)} = t.Literal['{nsid}#{def_name}'] #: {description}",
         '',
         '',
     ]
@@ -576,7 +576,7 @@ def _generate_def_string(nsid: NSID, def_name: str, def_model: models.LexString)
         else:
             # literal
             # FIXME(MarshalX): not used for now
-            type_ = f"te.Literal['{known_value}']"
+            type_ = f"t.Literal['{known_value}']"
 
         union_types.append(type_)
 

@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import base
@@ -25,6 +24,6 @@ class TemplateView(base.ModelBase):
     updated_at: str  #: Updated at.
     subject: t.Optional[str] = None  #: Content of the template, can contain markdown and variable placeholders.
 
-    py_type: te.Literal['tools.ozone.communication.defs#templateView'] = Field(
+    py_type: t.Literal['tools.ozone.communication.defs#templateView'] = Field(
         default='tools.ozone.communication.defs#templateView', alias='$type', frozen=True
     )

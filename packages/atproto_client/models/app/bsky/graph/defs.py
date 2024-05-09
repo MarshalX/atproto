@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -27,7 +26,7 @@ class ListViewBasic(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
-    py_type: te.Literal['app.bsky.graph.defs#listViewBasic'] = Field(
+    py_type: t.Literal['app.bsky.graph.defs#listViewBasic'] = Field(
         default='app.bsky.graph.defs#listViewBasic', alias='$type', frozen=True
     )
 
@@ -47,7 +46,7 @@ class ListView(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
-    py_type: te.Literal['app.bsky.graph.defs#listView'] = Field(
+    py_type: t.Literal['app.bsky.graph.defs#listView'] = Field(
         default='app.bsky.graph.defs#listView', alias='$type', frozen=True
     )
 
@@ -58,18 +57,18 @@ class ListItemView(base.ModelBase):
     subject: 'models.AppBskyActorDefs.ProfileView'  #: Subject.
     uri: str  #: Uri.
 
-    py_type: te.Literal['app.bsky.graph.defs#listItemView'] = Field(
+    py_type: t.Literal['app.bsky.graph.defs#listItemView'] = Field(
         default='app.bsky.graph.defs#listItemView', alias='$type', frozen=True
     )
 
 
 ListPurpose = t.Union['models.AppBskyGraphDefs.Modlist', 'models.AppBskyGraphDefs.Curatelist']  #: List purpose
 
-Modlist = te.Literal[
+Modlist = t.Literal[
     'app.bsky.graph.defs#modlist'
 ]  #: A list of actors to apply an aggregate moderation action (mute/block) on.
 
-Curatelist = te.Literal[
+Curatelist = t.Literal[
     'app.bsky.graph.defs#curatelist'
 ]  #: A list of actors used for curation purposes such as list feeds or interaction gating.
 
@@ -80,7 +79,7 @@ class ListViewerState(base.ModelBase):
     blocked: t.Optional[str] = None  #: Blocked.
     muted: t.Optional[bool] = None  #: Muted.
 
-    py_type: te.Literal['app.bsky.graph.defs#listViewerState'] = Field(
+    py_type: t.Literal['app.bsky.graph.defs#listViewerState'] = Field(
         default='app.bsky.graph.defs#listViewerState', alias='$type', frozen=True
     )
 
@@ -91,7 +90,7 @@ class NotFoundActor(base.ModelBase):
     actor: str  #: Actor.
     not_found: bool = Field(frozen=True)  #: Not found.
 
-    py_type: te.Literal['app.bsky.graph.defs#notFoundActor'] = Field(
+    py_type: t.Literal['app.bsky.graph.defs#notFoundActor'] = Field(
         default='app.bsky.graph.defs#notFoundActor', alias='$type', frozen=True
     )
 
@@ -105,6 +104,6 @@ class Relationship(base.ModelBase):
     ] = None  #: if the actor is followed by this DID, contains the AT-URI of the follow record.
     following: t.Optional[str] = None  #: if the actor follows this DID, this is the AT-URI of the follow record.
 
-    py_type: te.Literal['app.bsky.graph.defs#relationship'] = Field(
+    py_type: t.Literal['app.bsky.graph.defs#relationship'] = Field(
         default='app.bsky.graph.defs#relationship', alias='$type', frozen=True
     )

@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -22,7 +22,7 @@ class Data(base.DataModelBase):
     auth_factor_token: t.Optional[str] = None  #: Auth factor token.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
     password: str  #: Password.
     auth_factor_token: te.NotRequired[t.Optional[str]]  #: Auth factor token.

@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -24,7 +24,7 @@ class Params(base.ParamsModelBase):
     )  #: List of 'other' accounts to be related back to the primary.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     actor: str  #: Primary account requesting relationships for.
     others: te.NotRequired[t.Optional[t.List[str]]]  #: List of 'other' accounts to be related back to the primary.
 

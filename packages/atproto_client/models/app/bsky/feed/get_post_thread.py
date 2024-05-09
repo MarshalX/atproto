@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -27,7 +27,7 @@ class Params(base.ParamsModelBase):
     )  #: How many levels of parent (and grandparent, etc) post to include.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     uri: str  #: Reference (AT-URI) to post record.
     depth: te.NotRequired[t.Optional[int]]  #: How many levels of reply depth should be included in response.
     parent_height: te.NotRequired[t.Optional[int]]  #: How many levels of parent (and grandparent, etc) post to include.

@@ -14,7 +14,7 @@ class SessionEvent(Enum):
     REFRESH = 'refresh'
 
 
-_SESSION_STRING_SEPARATOR: te.Final[te.Literal[':::']] = ':::'
+_SESSION_STRING_SEPARATOR: t.Final[te.Literal[':::']] = ':::'
 
 
 @dataclass
