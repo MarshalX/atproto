@@ -13,7 +13,6 @@ from atproto_core.uri import AtUri
 from atproto_client import models
 from atproto_client.client.async_raw import AsyncClientRaw
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
-from atproto_client.client.methods_mixin.backward_compatibility import _BackwardCompatibility
 from atproto_client.client.methods_mixin.session import AsyncSessionDispatchMixin
 from atproto_client.client.session import Session, SessionEvent, SessionResponse
 from atproto_client.exceptions import LoginRequiredError
@@ -25,9 +24,7 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
-class AsyncClient(
-    _BackwardCompatibility, AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw
-):
+class AsyncClient(AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args: t.Any, **kwargs: t.Any) -> None:
@@ -431,16 +428,14 @@ class AsyncClient(
 
     async def like(
         self,
-        uri: t.Optional[str] = None,
-        cid: t.Optional[str] = None,
-        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
+        uri: str,
+        cid: str,
     ) -> 'models.AppBskyFeedLike.CreateRecordResponse':
         """Like the record.
 
         Args:
             cid: The CID of the record.
             uri: The URI of the record.
-            subject: DEPRECATED.
 
         Note:
             Record could be post, custom feed, etc.
@@ -451,7 +446,7 @@ class AsyncClient(
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
+        subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
         repo = self.me and self.me.did
         if not repo:
