@@ -85,6 +85,9 @@ html_css_files = [
 
 html_theme_options = {
     'navigation_with_keys': True,
+    'source_repository': 'https://github.com/MarshalX/atproto/',
+    'source_branch': 'main',
+    'source_directory': 'docs/source/',
 }
 
 # Favicons
