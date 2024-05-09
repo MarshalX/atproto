@@ -29,20 +29,6 @@ class Record(base.RecordModelBase):
     )
 
 
-class Main(Record):
-    def __init_subclass__(cls, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init_subclass__(**data)
-
-    def __init__(self, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init__(**data)
-
-
 class GetRecordResponse(base.SugarResponseModelBase):
     """Get record response for :obj:`models.AppBskyLabelerService.Record`."""
 

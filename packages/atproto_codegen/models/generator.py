@@ -509,20 +509,6 @@ def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str
     return _generate_xrpc_body_model(nsid, output_body, ModelType.RESPONSE)
 
 
-_MAIN_MODEL_BACKWARD_COMPATIBILITY = """
-class Main(Record):
-    def __init_subclass__(cls, **data: t.Any) -> None:
-        import warnings
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init_subclass__(**data)
-
-    def __init__(self, **data: t.Any) -> None:
-        import warnings
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init__(**data)
-"""
-
-
 def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, model_type: ModelType) -> str:
     lines = [
         _get_model_class_def(def_name, model_type),
@@ -536,10 +522,6 @@ def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, 
 
     lines.append(f"{_(1)}py_type: t.Literal['{def_type}'] = Field(default='{def_type}', alias='$type', frozen=True)")
     lines.append('')
-
-    # TODO(MarshalX): remove it
-    if model_type is ModelType.RECORD:
-        lines.append(_MAIN_MODEL_BACKWARD_COMPATIBILITY)
 
     return join_code(lines)
 
