@@ -105,6 +105,7 @@ Preferences = t.List[
             'models.AppBskyActorDefs.AdultContentPref',
             'models.AppBskyActorDefs.ContentLabelPref',
             'models.AppBskyActorDefs.SavedFeedsPref',
+            'models.AppBskyActorDefs.SavedFeedsPrefV2',
             'models.AppBskyActorDefs.PersonalDetailsPref',
             'models.AppBskyActorDefs.FeedViewPref',
             'models.AppBskyActorDefs.ThreadViewPref',
@@ -136,6 +137,29 @@ class ContentLabelPref(base.ModelBase):
 
     py_type: t.Literal['app.bsky.actor.defs#contentLabelPref'] = Field(
         default='app.bsky.actor.defs#contentLabelPref', alias='$type', frozen=True
+    )
+
+
+class SavedFeed(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    id: str  #: Id.
+    pinned: bool  #: Pinned.
+    type: str  #: Type.
+    value: str  #: Value.
+
+    py_type: t.Literal['app.bsky.actor.defs#savedFeed'] = Field(
+        default='app.bsky.actor.defs#savedFeed', alias='$type', frozen=True
+    )
+
+
+class SavedFeedsPrefV2(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    items: t.List['models.AppBskyActorDefs.SavedFeed']  #: Items.
+
+    py_type: t.Literal['app.bsky.actor.defs#savedFeedsPrefV2'] = Field(
+        default='app.bsky.actor.defs#savedFeedsPrefV2', alias='$type', frozen=True
     )
 
 
