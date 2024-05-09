@@ -59,17 +59,3 @@ SessionResponse: te.TypeAlias = t.Union[
 
 SessionChangeCallback = t.Callable[[SessionEvent, Session], None]
 AsyncSessionChangeCallback = t.Callable[[SessionEvent, Session], t.Coroutine[t.Any, t.Any, None]]
-
-
-class SessionString(Session):
-    def __init_subclass__(cls, *args, **kwargs: t.Any) -> None:
-        import warnings
-
-        warnings.warn('SessionString class is deprecated. Use Session class instead.', DeprecationWarning, stacklevel=2)
-        super().__init_subclass__(*args, **kwargs)
-
-    def __init__(self, *args, **kwargs: t.Any) -> None:
-        import warnings
-
-        warnings.warn('SessionString class is deprecated. Use Session class instead.', DeprecationWarning, stacklevel=2)
-        super().__init__(*args, **kwargs)
