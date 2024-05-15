@@ -13,6 +13,7 @@ Subpackages
    :maxdepth: 4
 
    atproto_client.models.app
+   atproto_client.models.chat
    atproto_client.models.com
    atproto_client.models.tools
 

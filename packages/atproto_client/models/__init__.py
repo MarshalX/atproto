@@ -72,6 +72,26 @@ from atproto_client.models.app.bsky.unspecced import get_suggestions_skeleton as
 from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as AppBskyUnspeccedGetTaggedSuggestions
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
+from atproto_client.models.chat.bsky.actor import declaration as ChatBskyActorDeclaration
+from atproto_client.models.chat.bsky.actor import defs as ChatBskyActorDefs
+from atproto_client.models.chat.bsky.actor import delete_account as ChatBskyActorDeleteAccount
+from atproto_client.models.chat.bsky.actor import export_account_data as ChatBskyActorExportAccountData
+from atproto_client.models.chat.bsky.convo import defs as ChatBskyConvoDefs
+from atproto_client.models.chat.bsky.convo import delete_message_for_self as ChatBskyConvoDeleteMessageForSelf
+from atproto_client.models.chat.bsky.convo import get_convo as ChatBskyConvoGetConvo
+from atproto_client.models.chat.bsky.convo import get_convo_for_members as ChatBskyConvoGetConvoForMembers
+from atproto_client.models.chat.bsky.convo import get_log as ChatBskyConvoGetLog
+from atproto_client.models.chat.bsky.convo import get_messages as ChatBskyConvoGetMessages
+from atproto_client.models.chat.bsky.convo import leave_convo as ChatBskyConvoLeaveConvo
+from atproto_client.models.chat.bsky.convo import list_convos as ChatBskyConvoListConvos
+from atproto_client.models.chat.bsky.convo import mute_convo as ChatBskyConvoMuteConvo
+from atproto_client.models.chat.bsky.convo import send_message as ChatBskyConvoSendMessage
+from atproto_client.models.chat.bsky.convo import send_message_batch as ChatBskyConvoSendMessageBatch
+from atproto_client.models.chat.bsky.convo import unmute_convo as ChatBskyConvoUnmuteConvo
+from atproto_client.models.chat.bsky.convo import update_read as ChatBskyConvoUpdateRead
+from atproto_client.models.chat.bsky.moderation import get_actor_metadata as ChatBskyModerationGetActorMetadata
+from atproto_client.models.chat.bsky.moderation import get_message_context as ChatBskyModerationGetMessageContext
+from atproto_client.models.chat.bsky.moderation import update_actor_access as ChatBskyModerationUpdateActorAccess
 from atproto_client.models.com.atproto.admin import defs as ComAtprotoAdminDefs
 from atproto_client.models.com.atproto.admin import delete_account as ComAtprotoAdminDeleteAccount
 from atproto_client.models.com.atproto.admin import disable_account_invites as ComAtprotoAdminDisableAccountInvites
@@ -249,6 +269,26 @@ class _Ids:
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
+    ChatBskyActorDeclaration: str = 'chat.bsky.actor.declaration'
+    ChatBskyActorDefs: str = 'chat.bsky.actor.defs'
+    ChatBskyActorDeleteAccount: str = 'chat.bsky.actor.deleteAccount'
+    ChatBskyActorExportAccountData: str = 'chat.bsky.actor.exportAccountData'
+    ChatBskyConvoDefs: str = 'chat.bsky.convo.defs'
+    ChatBskyConvoDeleteMessageForSelf: str = 'chat.bsky.convo.deleteMessageForSelf'
+    ChatBskyConvoGetConvo: str = 'chat.bsky.convo.getConvo'
+    ChatBskyConvoGetConvoForMembers: str = 'chat.bsky.convo.getConvoForMembers'
+    ChatBskyConvoGetLog: str = 'chat.bsky.convo.getLog'
+    ChatBskyConvoGetMessages: str = 'chat.bsky.convo.getMessages'
+    ChatBskyConvoLeaveConvo: str = 'chat.bsky.convo.leaveConvo'
+    ChatBskyConvoListConvos: str = 'chat.bsky.convo.listConvos'
+    ChatBskyConvoMuteConvo: str = 'chat.bsky.convo.muteConvo'
+    ChatBskyConvoSendMessage: str = 'chat.bsky.convo.sendMessage'
+    ChatBskyConvoSendMessageBatch: str = 'chat.bsky.convo.sendMessageBatch'
+    ChatBskyConvoUnmuteConvo: str = 'chat.bsky.convo.unmuteConvo'
+    ChatBskyConvoUpdateRead: str = 'chat.bsky.convo.updateRead'
+    ChatBskyModerationGetActorMetadata: str = 'chat.bsky.moderation.getActorMetadata'
+    ChatBskyModerationGetMessageContext: str = 'chat.bsky.moderation.getMessageContext'
+    ChatBskyModerationUpdateActorAccess: str = 'chat.bsky.moderation.updateActorAccess'
     ComAtprotoAdminDefs: str = 'com.atproto.admin.defs'
     ComAtprotoAdminDeleteAccount: str = 'com.atproto.admin.deleteAccount'
     ComAtprotoAdminDisableAccountInvites: str = 'com.atproto.admin.disableAccountInvites'
