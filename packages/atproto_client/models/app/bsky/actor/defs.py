@@ -74,12 +74,23 @@ class ProfileViewDetailed(base.ModelBase):
 class ProfileAssociated(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
+    chat: t.Optional['models.AppBskyActorDefs.ProfileAssociatedChat'] = None  #: Chat.
     feedgens: t.Optional[int] = None  #: Feedgens.
     labeler: t.Optional[bool] = None  #: Labeler.
     lists: t.Optional[int] = None  #: Lists.
 
     py_type: t.Literal['app.bsky.actor.defs#profileAssociated'] = Field(
         default='app.bsky.actor.defs#profileAssociated', alias='$type', frozen=True
+    )
+
+
+class ProfileAssociatedChat(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    allow_incoming: str  #: Allow incoming.
+
+    py_type: t.Literal['app.bsky.actor.defs#profileAssociatedChat'] = Field(
+        default='app.bsky.actor.defs#profileAssociatedChat', alias='$type', frozen=True
     )
 
 

@@ -42,7 +42,11 @@ class ModEventView(base.ModelBase):
     ]  #: Event.
     id: int  #: Id.
     subject: te.Annotated[
-        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        t.Union[
+            'models.ComAtprotoAdminDefs.RepoRef',
+            'models.ComAtprotoRepoStrongRef.Main',
+            'models.ChatBskyConvoDefs.MessageRef',
+        ],
         Field(discriminator='py_type'),
     ]  #: Subject.
     subject_blob_cids: t.List[str]  #: Subject blob cids.
