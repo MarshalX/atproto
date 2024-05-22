@@ -66,7 +66,7 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
     )
     if response.content and is_json(response.content):
         data: t.Dict[str, t.Any] = json.loads(response.content)
-        error_response.content = t.cast(XrpcError, get_or_create(data, XrpcError))
+        error_response.content = t.cast(XrpcError, get_or_create(data, XrpcError, strict=False))
 
     if response.status_code in {401, 403}:
         raise exceptions.UnauthorizedError(error_response)
