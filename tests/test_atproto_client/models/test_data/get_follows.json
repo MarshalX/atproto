@@ -4,7 +4,12 @@
             "did": "did:plc:vpkhqolt662uhesyj6nxm7ys",
             "handle": "why.bsky.team",
             "displayName": "Why",
-            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:vpkhqolt662uhesyj6nxm7ys/bafkreihxiic7f65slclhzy3aanyvrclotyvatwmd7lct4g4bwfvnzqlexa@jpeg",
+            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:vpkhqolt662uhesyj6nxm7ys/bafkreietenc2aywhzxdyvalgffxl35tvxri6wv2iwryfdcdoecdfg553fy@jpeg",
+            "associated": {
+                "chat": {
+                    "allowIncoming": "following"
+                }
+            },
             "viewer": {
                 "muted": false,
                 "blockedBy": false,
@@ -12,13 +17,18 @@
             },
             "labels": [],
             "description": "Technical advisor to @bluesky, first engineer at Protocol Labs. Wizard Utopian",
-            "indexedAt": "2024-01-26T00:00:18.896Z"
+            "indexedAt": "2024-05-14T15:42:22.889Z"
         },
         {
             "did": "did:plc:l3rouwludahu3ui3bt66mfvj",
             "handle": "divy.zone",
             "displayName": "devin ivy \ud83d\udc0b",
-            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:l3rouwludahu3ui3bt66mfvj/bafkreidx62owa2htpluf7izkfxfqkqsthsmqxiutwy5lmblvpvxhdc2xtq@jpeg",
+            "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:l3rouwludahu3ui3bt66mfvj/bafkreicg6y3mlr3eszmbjm3swyuncwf4ruzohcsvtcbrjzyhkwibtx7nyy@jpeg",
+            "associated": {
+                "chat": {
+                    "allowIncoming": "following"
+                }
+            },
             "viewer": {
                 "muted": true,
                 "mutedByList": {
@@ -27,6 +37,7 @@
                     "name": "test mute list",
                     "purpose": "app.bsky.graph.defs#modlist",
                     "indexedAt": "2023-08-28T10:08:27.442Z",
+                    "labels": [],
                     "viewer": {
                         "muted": true
                     }
@@ -36,13 +47,18 @@
             },
             "labels": [],
             "description": "\ud83c\udf00 bluesky team",
-            "indexedAt": "2024-01-25T23:51:21.779Z"
+            "indexedAt": "2024-03-08T04:03:32.618Z"
         },
         {
             "did": "did:plc:oky5czdrnfjpqslsw2a5iclo",
             "handle": "jay.bsky.team",
             "displayName": "Jay \ud83e\udd8b",
             "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:oky5czdrnfjpqslsw2a5iclo/bafkreihidru2xruxdxlvvcixc7lbgoudzicjbrdgacdhdhxyfw4yut4nfq@jpeg",
+            "associated": {
+                "chat": {
+                    "allowIncoming": "following"
+                }
+            },
             "viewer": {
                 "muted": false,
                 "blockedBy": false,
@@ -57,6 +73,11 @@
             "handle": "bsky.app",
             "displayName": "Bluesky",
             "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:z72i7hdynmk6r22z27h6tvur/bafkreihagr2cmvl2jt4mgx3sppwe2it3fwolkrbtjrhcnwjk4jdijhsoze@jpeg",
+            "associated": {
+                "chat": {
+                    "allowIncoming": "none"
+                }
+            },
             "viewer": {
                 "muted": false,
                 "blockedBy": false,
@@ -85,6 +106,11 @@
             "handle": "marshal.dev",
             "displayName": "Ilya (Marshal)",
             "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:s6jnht6koorxz7trghirytmf/bafkreihyuxbogcsrarso2ulwvjzq2spezopsgnt26uface5zwyiy5yhyje@jpeg",
+            "associated": {
+                "chat": {
+                    "allowIncoming": "all"
+                }
+            },
             "viewer": {
                 "muted": false,
                 "blockedBy": false,
@@ -99,14 +125,19 @@
     "subject": {
         "did": "did:plc:kvwvcn5iqfooopmyzvb4qzba",
         "handle": "test.marshal.dev",
-        "displayName": "I love Python 3",
+        "displayName": "Python SDK",
         "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
+        "associated": {
+            "chat": {
+                "allowIncoming": "all"
+            }
+        },
         "viewer": {
             "muted": false,
             "blockedBy": false
         },
         "labels": [],
-        "description": "test",
-        "indexedAt": "2024-01-26T00:51:00.363Z"
+        "description": "account for tests",
+        "indexedAt": "2024-05-22T21:04:02.588Z"
     }
 }

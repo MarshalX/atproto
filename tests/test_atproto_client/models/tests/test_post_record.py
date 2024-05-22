@@ -14,9 +14,9 @@ def test_post_record_deserialization() -> None:
     assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
     assert isinstance(model.value, models.AppBskyFeedPost.Record)
 
-    expected_text = 'regress test'
-    expected_langs = ['en']
-    expected_created_at = '2023-07-21T01:33:51.481951'
+    expected_text = 'new text114'
+    expected_langs = None
+    expected_created_at = '2024-02-22T19:58:13.903293+00:00'
 
     assert model.value.py_type == models.ids.AppBskyFeedPost
     assert model.value['py_type'] == models.ids.AppBskyFeedPost
@@ -43,20 +43,16 @@ def test_post_record_serialization() -> None:
     assert isinstance(get_model_as_dict(model.value), dict)
     assert model_dict == get_model_as_dict(restored_model)
 
-    expected_text = 'regress test'
-    expected_langs = ['en']
-    expected_created_at = '2023-07-21T01:33:51.481951'
+    expected_text = 'new text114'
+    expected_created_at = '2024-02-22T19:58:13.903293+00:00'
 
     assert restored_model.value.py_type == models.ids.AppBskyFeedPost
     assert restored_model.value['py_type'] == models.ids.AppBskyFeedPost
     assert restored_model.value.text == expected_text
     assert restored_model.value['text'] == expected_text
-    assert restored_model.value.langs == expected_langs
-    assert restored_model.value['langs'] == expected_langs
     assert restored_model.value.created_at == expected_created_at
     assert restored_model.value['created_at'] == expected_created_at
 
     assert model_dict['value']['$type'] == models.ids.AppBskyFeedPost
     assert model_dict['value']['text'] == expected_text
-    assert model_dict['value']['langs'] == expected_langs
     assert model_dict['value']['createdAt'] == expected_created_at

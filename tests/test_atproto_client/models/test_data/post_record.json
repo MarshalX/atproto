@@ -1,12 +1,9 @@
 {
     "uri": "at://did:plc:kvwvcn5iqfooopmyzvb4qzba/app.bsky.feed.post/3k2yihcrp6f2c",
-    "cid": "bafyreifdem5mvbzekpz4v4veo3hyk6pnfmg3uzzertmaociqnikwstgqze",
+    "cid": "bafyreifzi5xyrf3c5jw7cci4zrltyl25ik2dboznop4qo4cotcfbyjtita",
     "value": {
-        "text": "regress test",
+        "text": "new text114",
         "$type": "app.bsky.feed.post",
-        "langs": [
-            "en"
-        ],
-        "createdAt": "2023-07-21T01:33:51.481951"
+        "createdAt": "2024-02-22T19:58:13.903293+00:00"
     }
 }

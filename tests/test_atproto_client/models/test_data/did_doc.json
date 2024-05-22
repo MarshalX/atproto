@@ -35,7 +35,8 @@
         "app.bsky.feed.repost",
         "app.bsky.graph.follow",
         "app.bsky.graph.list",
-        "app.bsky.graph.listitem"
+        "app.bsky.graph.listitem",
+        "chat.bsky.actor.declaration"
     ],
     "handleIsCorrect": true
 }

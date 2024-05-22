@@ -183,6 +183,12 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
         output_encoding = method_info.definition.output.encoding
         invoke_args.append(f"output_encoding='{output_encoding}'")
 
+    # TODO(MarshalX): REMOVE AS SOON AS BSKY TEAM FIX IT
+    if str(method_info.nsid).startswith('chat.bsky.convo'):
+        invoke_args.append(
+            "headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'})"
+        )
+
     invoke_args.append('**kwargs')
     invoke_args_str = ', '.join(invoke_args)
 
