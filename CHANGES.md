@@ -4,7 +4,7 @@
 
 **22.05.2024**
 
-**Just shipped: Bluesky Direct Messages! https://atproto.blue/en/latest/dm.html**
+**💬 Just shipped: Bluesky Direct Messages! https://atproto.blue/en/latest/dm.html**
 
 **Breaking changes**
 
