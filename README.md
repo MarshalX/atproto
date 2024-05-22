@@ -69,6 +69,8 @@ if __name__ == '__main__':
 ```
 </details>
 
+💬 [Direct Messages (Chats)](https://atproto.blue/en/latest/dm.html)
+
 🍿 [Example project with custom feed generator](https://github.com/MarshalX/bluesky-feed-generator)
 
 🔥 [Firehose data streaming is available](https://atproto.blue/en/latest/atproto_firehose/index.html)
