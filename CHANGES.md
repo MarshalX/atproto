@@ -1,5 +1,29 @@
 # Change Log
 
+## Version 0.0.47
+
+**22.05.2024**
+
+**Just shipped: Bluesky Direct Messages! https://atproto.blue/en/latest/dm.html**
+
+**Breaking changes**
+
+Many of these changes were backward compatible for a few months with proper warnings.
+
+* Drop support for Python 3.7 by @MarshalX in https://github.com/MarshalX/atproto/pull/321
+* Delete deprecated record models called `Main` instead of `Record` by @MarshalX in https://github.com/MarshalX/atproto/pull/323
+* Delete deprecated `SessionString` class by @MarshalX in https://github.com/MarshalX/atproto/pull/324
+* Delete deprecated `subject` argument of `.like()` and `.repost()` methods by @MarshalX in https://github.com/MarshalX/atproto/pull/325
+
+**What's Changed**
+
+* Add support for Direct Messages (Chats) by @MarshalX in https://github.com/MarshalX/atproto/pull/331
+* Add method to send post with multiple attached photos by @ryoryo25 in https://github.com/MarshalX/atproto/pull/313
+* Register chat (DM) namespace by @MarshalX in https://github.com/MarshalX/atproto/pull/330
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/312, https://github.com/MarshalX/atproto/pull/314, https://github.com/MarshalX/atproto/pull/317, https://github.com/MarshalX/atproto/pull/322, https://github.com/MarshalX/atproto/pull/327, https://github.com/MarshalX/atproto/pull/328
+* Fix HTTP error handling by @MarshalX in https://github.com/MarshalX/atproto/pull/329
+* Bump requests from 2.31.0 to 2.32.2 by @dependabot in https://github.com/MarshalX/atproto/pull/332
+
 ## Version 0.0.46
 
 **20.03.2024**
