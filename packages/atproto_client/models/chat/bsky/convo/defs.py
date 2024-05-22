@@ -18,6 +18,7 @@ from atproto_client.models import base
 class MessageRef(base.ModelBase):
     """Definition model for :obj:`chat.bsky.convo.defs`."""
 
+    convo_id: str  #: Convo id.
     did: str  #: Did.
     message_id: str  #: Message id.
 
@@ -26,7 +27,7 @@ class MessageRef(base.ModelBase):
     )
 
 
-class Message(base.ModelBase):
+class MessageInput(base.ModelBase):
     """Definition model for :obj:`chat.bsky.convo.defs`."""
 
     text: str = Field(max_length=10000)  #: Text.
@@ -36,10 +37,9 @@ class Message(base.ModelBase):
     facets: t.Optional[
         t.List['models.AppBskyRichtextFacet.Main']
     ] = None  #: Annotations of text (mentions, URLs, hashtags, etc).
-    id: t.Optional[str] = None  #: Id.
 
-    py_type: t.Literal['chat.bsky.convo.defs#message'] = Field(
-        default='chat.bsky.convo.defs#message', alias='$type', frozen=True
+    py_type: t.Literal['chat.bsky.convo.defs#messageInput'] = Field(
+        default='chat.bsky.convo.defs#messageInput', alias='$type', frozen=True
     )
 
 
