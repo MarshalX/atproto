@@ -3378,6 +3378,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
             data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
             **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoDefs.DeletedMessageView)
@@ -3403,7 +3404,11 @@ class ChatBskyConvoNamespace(NamespaceBase):
             'models.ChatBskyConvoGetConvo.Params', get_or_create(params, models.ChatBskyConvoGetConvo.Params)
         )
         response = self._client.invoke_query(
-            'chat.bsky.convo.getConvo', params=params_model, output_encoding='application/json', **kwargs
+            'chat.bsky.convo.getConvo',
+            params=params_model,
+            output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
+            **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoGetConvo.Response)
 
@@ -3431,7 +3436,11 @@ class ChatBskyConvoNamespace(NamespaceBase):
             get_or_create(params, models.ChatBskyConvoGetConvoForMembers.Params),
         )
         response = self._client.invoke_query(
-            'chat.bsky.convo.getConvoForMembers', params=params_model, output_encoding='application/json', **kwargs
+            'chat.bsky.convo.getConvoForMembers',
+            params=params_model,
+            output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
+            **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoGetConvoForMembers.Response)
 
@@ -3456,7 +3465,11 @@ class ChatBskyConvoNamespace(NamespaceBase):
             'models.ChatBskyConvoGetLog.Params', get_or_create(params, models.ChatBskyConvoGetLog.Params)
         )
         response = self._client.invoke_query(
-            'chat.bsky.convo.getLog', params=params_model, output_encoding='application/json', **kwargs
+            'chat.bsky.convo.getLog',
+            params=params_model,
+            output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
+            **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoGetLog.Response)
 
@@ -3481,7 +3494,11 @@ class ChatBskyConvoNamespace(NamespaceBase):
             'models.ChatBskyConvoGetMessages.Params', get_or_create(params, models.ChatBskyConvoGetMessages.Params)
         )
         response = self._client.invoke_query(
-            'chat.bsky.convo.getMessages', params=params_model, output_encoding='application/json', **kwargs
+            'chat.bsky.convo.getMessages',
+            params=params_model,
+            output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
+            **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoGetMessages.Response)
 
@@ -3510,6 +3527,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
             data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
             **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoLeaveConvo.Response)
@@ -3537,7 +3555,11 @@ class ChatBskyConvoNamespace(NamespaceBase):
             'models.ChatBskyConvoListConvos.Params', get_or_create(params, models.ChatBskyConvoListConvos.Params)
         )
         response = self._client.invoke_query(
-            'chat.bsky.convo.listConvos', params=params_model, output_encoding='application/json', **kwargs
+            'chat.bsky.convo.listConvos',
+            params=params_model,
+            output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
+            **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoListConvos.Response)
 
@@ -3564,6 +3586,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
             data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
             **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoMuteConvo.Response)
@@ -3593,6 +3616,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
             data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
             **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoDefs.MessageView)
@@ -3622,6 +3646,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
             data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
             **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoSendMessageBatch.Response)
@@ -3651,6 +3676,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
             data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
             **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoUnmuteConvo.Response)
@@ -3680,6 +3706,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
             data=data_model,
             input_encoding='application/json',
             output_encoding='application/json',
+            headers=dict(kwargs.get('headers', {}), **{'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat'}),
             **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoUpdateRead.Response)
