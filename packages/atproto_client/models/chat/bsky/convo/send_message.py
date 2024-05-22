@@ -16,9 +16,9 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`chat.bsky.convo.sendMessage`."""
 
     convo_id: str  #: Convo id.
-    message: 'models.ChatBskyConvoDefs.Message'  #: Message.
+    message: 'models.ChatBskyConvoDefs.MessageInput'  #: Message.
 
 
 class DataDict(t.TypedDict):
     convo_id: str  #: Convo id.
-    message: 'models.ChatBskyConvoDefs.Message'  #: Message.
+    message: 'models.ChatBskyConvoDefs.MessageInput'  #: Message.

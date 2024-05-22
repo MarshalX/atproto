@@ -17,7 +17,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`chat.bsky.convo.sendMessageBatch`."""
 
-    items: t.List['models.ChatBskyConvoSendMessageBatch.BatchItem']  #: Items.
+    items: t.List['models.ChatBskyConvoSendMessageBatch.BatchItem'] = Field(max_length=100)  #: Items.
 
 
 class DataDict(t.TypedDict):
@@ -34,7 +34,7 @@ class BatchItem(base.ModelBase):
     """Definition model for :obj:`chat.bsky.convo.sendMessageBatch`."""
 
     convo_id: str  #: Convo id.
-    message: 'models.ChatBskyConvoDefs.Message'  #: Message.
+    message: 'models.ChatBskyConvoDefs.MessageInput'  #: Message.
 
     py_type: t.Literal['chat.bsky.convo.sendMessageBatch#batchItem'] = Field(
         default='chat.bsky.convo.sendMessageBatch#batchItem', alias='$type', frozen=True

@@ -21,12 +21,18 @@ class Params(base.ParamsModelBase):
     message_id: str  #: Message id.
     after: t.Optional[int] = None  #: After.
     before: t.Optional[int] = None  #: Before.
+    convo_id: t.Optional[
+        str
+    ] = None  #: Conversation that the message is from. NOTE: this field will eventually be required.
 
 
 class ParamsDict(t.TypedDict):
     message_id: str  #: Message id.
     after: te.NotRequired[t.Optional[int]]  #: After.
     before: te.NotRequired[t.Optional[int]]  #: Before.
+    convo_id: te.NotRequired[
+        t.Optional[str]
+    ]  #: Conversation that the message is from. NOTE: this field will eventually be required.
 
 
 class Response(base.ResponseModelBase):
