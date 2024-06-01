@@ -40,4 +40,5 @@ class Response(base.ResponseModelBase):
         ],
         Field(discriminator='py_type'),
     ]  #: Subject.
+    deactivated: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Deactivated.
     takedown: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Takedown.

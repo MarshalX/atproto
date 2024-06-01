@@ -25,6 +25,7 @@ class AppPassword(base.ModelBase):
 
     created_at: str  #: Created at.
     name: str  #: Name.
+    privileged: t.Optional[bool] = None  #: Privileged.
 
     py_type: t.Literal['com.atproto.server.listAppPasswords#appPassword'] = Field(
         default='com.atproto.server.listAppPasswords#appPassword', alias='$type', frozen=True

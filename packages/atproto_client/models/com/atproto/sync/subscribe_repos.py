@@ -58,14 +58,35 @@ class Identity(base.ModelBase):
     did: str  #: Did.
     seq: int  #: Seq.
     time: str  #: Time.
+    handle: t.Optional[
+        str
+    ] = None  #: The current handle for the account, or 'handle.invalid' if validation fails. This field is optional, might have been validated or passed-through from an upstream source. Semantics and behaviors for PDS vs Relay may evolve in the future; see atproto specs for more details.
 
     py_type: t.Literal['com.atproto.sync.subscribeRepos#identity'] = Field(
         default='com.atproto.sync.subscribeRepos#identity', alias='$type', frozen=True
     )
 
 
+class Account(base.ModelBase):
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents a change to an account's status on a host (eg, PDS or Relay). The semantics of this event are that the status is at the host which emitted the event, not necessarily that at the currently active PDS. Eg, a Relay takedown would emit a takedown with active=false, even if the PDS is still active."""
+
+    active: (
+        bool
+    )  #: Indicates that the account has a repository which can be fetched from the host that emitted this event.
+    did: str  #: Did.
+    seq: int  #: Seq.
+    time: str  #: Time.
+    status: t.Optional[
+        str
+    ] = None  #: If active=false, this optional field indicates a reason for why the account is not active.
+
+    py_type: t.Literal['com.atproto.sync.subscribeRepos#account'] = Field(
+        default='com.atproto.sync.subscribeRepos#account', alias='$type', frozen=True
+    )
+
+
 class Handle(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents an update of the account's handle, or transition to/from invalid state. NOTE: Will be deprecated in favor of #identity."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. DEPRECATED -- Use #identity event instead."""
 
     did: str  #: Did.
     handle: str  #: Handle.
@@ -78,7 +99,7 @@ class Handle(base.ModelBase):
 
 
 class Migrate(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents an account moving from one PDS instance to another. NOTE: not implemented; account migration uses #identity instead."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. DEPRECATED -- Use #account event instead."""
 
     did: str  #: Did.
     seq: int  #: Seq.
@@ -91,7 +112,7 @@ class Migrate(base.ModelBase):
 
 
 class Tombstone(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Indicates that an account has been deleted. NOTE: may be deprecated in favor of #identity or a future #account event."""
+    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. DEPRECATED -- Use #account event instead."""
 
     did: str  #: Did.
     seq: int  #: Seq.

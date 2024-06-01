@@ -19,6 +19,7 @@ Submodules
    atproto_client.models.com.atproto.sync.get_latest_commit
    atproto_client.models.com.atproto.sync.get_record
    atproto_client.models.com.atproto.sync.get_repo
+   atproto_client.models.com.atproto.sync.get_repo_status
    atproto_client.models.com.atproto.sync.list_blobs
    atproto_client.models.com.atproto.sync.list_repos
    atproto_client.models.com.atproto.sync.notify_of_update

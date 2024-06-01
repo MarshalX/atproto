@@ -5402,6 +5402,32 @@ class ComAtprotoSyncNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoSyncGetRepo.Response)
 
+    def get_repo_status(
+        self,
+        params: t.Union[models.ComAtprotoSyncGetRepoStatus.Params, models.ComAtprotoSyncGetRepoStatus.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSyncGetRepoStatus.Response':
+        """Get the hosting status for a repository, on this server. Expected to be implemented by PDS and Relay.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSyncGetRepoStatus.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoSyncGetRepoStatus.Params',
+            get_or_create(params, models.ComAtprotoSyncGetRepoStatus.Params),
+        )
+        response = self._client.invoke_query(
+            'com.atproto.sync.getRepoStatus', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSyncGetRepoStatus.Response)
+
     def list_blobs(
         self,
         params: t.Union[models.ComAtprotoSyncListBlobs.Params, models.ComAtprotoSyncListBlobs.ParamsDict],
