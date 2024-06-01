@@ -331,6 +331,7 @@ class RepoView(base.ModelBase):
     indexed_at: str  #: Indexed at.
     moderation: 'models.ToolsOzoneModerationDefs.Moderation'  #: Moderation.
     related_records: t.List['UnknownType']  #: Related records.
+    deactivated_at: t.Optional[str] = None  #: Deactivated at.
     email: t.Optional[str] = None  #: Email.
     invite_note: t.Optional[str] = None  #: Invite note.
     invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
@@ -349,6 +350,7 @@ class RepoViewDetail(base.ModelBase):
     indexed_at: str  #: Indexed at.
     moderation: 'models.ToolsOzoneModerationDefs.ModerationDetail'  #: Moderation.
     related_records: t.List['UnknownType']  #: Related records.
+    deactivated_at: t.Optional[str] = None  #: Deactivated at.
     email: t.Optional[str] = None  #: Email.
     email_confirmed_at: t.Optional[str] = None  #: Email confirmed at.
     invite_note: t.Optional[str] = None  #: Invite note.

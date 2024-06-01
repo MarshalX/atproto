@@ -167,6 +167,7 @@ from atproto_client.models.com.atproto.sync import get_head as ComAtprotoSyncGet
 from atproto_client.models.com.atproto.sync import get_latest_commit as ComAtprotoSyncGetLatestCommit
 from atproto_client.models.com.atproto.sync import get_record as ComAtprotoSyncGetRecord
 from atproto_client.models.com.atproto.sync import get_repo as ComAtprotoSyncGetRepo
+from atproto_client.models.com.atproto.sync import get_repo_status as ComAtprotoSyncGetRepoStatus
 from atproto_client.models.com.atproto.sync import list_blobs as ComAtprotoSyncListBlobs
 from atproto_client.models.com.atproto.sync import list_repos as ComAtprotoSyncListRepos
 from atproto_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
@@ -358,6 +359,7 @@ class _Ids:
     ComAtprotoSyncGetLatestCommit: str = 'com.atproto.sync.getLatestCommit'
     ComAtprotoSyncGetRecord: str = 'com.atproto.sync.getRecord'
     ComAtprotoSyncGetRepo: str = 'com.atproto.sync.getRepo'
+    ComAtprotoSyncGetRepoStatus: str = 'com.atproto.sync.getRepoStatus'
     ComAtprotoSyncListBlobs: str = 'com.atproto.sync.listBlobs'
     ComAtprotoSyncListRepos: str = 'com.atproto.sync.listRepos'
     ComAtprotoSyncNotifyOfUpdate: str = 'com.atproto.sync.notifyOfUpdate'

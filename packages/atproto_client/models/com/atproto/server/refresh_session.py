@@ -19,4 +19,6 @@ class Response(base.ResponseModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     refresh_jwt: str  #: Refresh jwt.
+    active: t.Optional[bool] = None  #: Active.
     did_doc: t.Optional['UnknownType'] = None  #: Did doc.
+    status: t.Optional[str] = None  #: Hosting status of the account. If not specified, then assume 'active'.

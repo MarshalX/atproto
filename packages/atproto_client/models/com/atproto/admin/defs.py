@@ -32,6 +32,7 @@ class AccountView(base.ModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     indexed_at: str  #: Indexed at.
+    deactivated_at: t.Optional[str] = None  #: Deactivated at.
     email: t.Optional[str] = None  #: Email.
     email_confirmed_at: t.Optional[str] = None  #: Email confirmed at.
     invite_note: t.Optional[str] = None  #: Invite note.

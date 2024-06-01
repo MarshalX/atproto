@@ -52,7 +52,7 @@ class MessageView(base.ModelBase):
     sent_at: str  #: Sent at.
     text: str = Field(max_length=10000)  #: Text.
     embed: t.Optional[
-        te.Annotated[t.Union['models.AppBskyEmbedRecord.Main'], Field(default=None, discriminator='py_type')]
+        te.Annotated[t.Union['models.AppBskyEmbedRecord.View'], Field(default=None, discriminator='py_type')]
     ] = None  #: Embed.
     facets: t.Optional[
         t.List['models.AppBskyRichtextFacet.Main']

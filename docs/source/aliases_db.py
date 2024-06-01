@@ -158,6 +158,7 @@ ALIASES_DB = {
     'models.ComAtprotoSyncGetLatestCommit': 'atproto_client.models.com.atproto.sync.get_latest_commit',
     'models.ComAtprotoSyncGetRecord': 'atproto_client.models.com.atproto.sync.get_record',
     'models.ComAtprotoSyncGetRepo': 'atproto_client.models.com.atproto.sync.get_repo',
+    'models.ComAtprotoSyncGetRepoStatus': 'atproto_client.models.com.atproto.sync.get_repo_status',
     'models.ComAtprotoSyncListBlobs': 'atproto_client.models.com.atproto.sync.list_blobs',
     'models.ComAtprotoSyncListRepos': 'atproto_client.models.com.atproto.sync.list_repos',
     'models.ComAtprotoSyncNotifyOfUpdate': 'atproto_client.models.com.atproto.sync.notify_of_update',
