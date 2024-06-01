@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 0.0.48
+
+**01.06.2024**
+
+* Add Firehose Account message (use instead of Identity) by @MarshalX in https://github.com/MarshalX/atproto/pull/335
+* Update lexicons fetched from 255d5ea committed 2024-05-31T21:39:21Z by @MarshalX in https://github.com/MarshalX/atproto/pull/334
+
 ## Version 0.0.47
 
 **22.05.2024**
