@@ -98,6 +98,7 @@ ALIASES_DB = {
     'models.ComAtprotoAdminGetAccountInfos': 'atproto_client.models.com.atproto.admin.get_account_infos',
     'models.ComAtprotoAdminGetInviteCodes': 'atproto_client.models.com.atproto.admin.get_invite_codes',
     'models.ComAtprotoAdminGetSubjectStatus': 'atproto_client.models.com.atproto.admin.get_subject_status',
+    'models.ComAtprotoAdminSearchAccounts': 'atproto_client.models.com.atproto.admin.search_accounts',
     'models.ComAtprotoAdminSendEmail': 'atproto_client.models.com.atproto.admin.send_email',
     'models.ComAtprotoAdminUpdateAccountEmail': 'atproto_client.models.com.atproto.admin.update_account_email',
     'models.ComAtprotoAdminUpdateAccountHandle': 'atproto_client.models.com.atproto.admin.update_account_handle',
@@ -180,4 +181,5 @@ ALIASES_DB = {
     'models.ToolsOzoneModerationQueryEvents': 'atproto_client.models.tools.ozone.moderation.query_events',
     'models.ToolsOzoneModerationQueryStatuses': 'atproto_client.models.tools.ozone.moderation.query_statuses',
     'models.ToolsOzoneModerationSearchRepos': 'atproto_client.models.tools.ozone.moderation.search_repos',
+    'models.ToolsOzoneServerGetConfig': 'atproto_client.models.tools.ozone.server.get_config',
 }

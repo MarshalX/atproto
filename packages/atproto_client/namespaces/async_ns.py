@@ -4035,6 +4035,34 @@ class ComAtprotoAdminNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoAdminGetSubjectStatus.Response)
 
+    async def search_accounts(
+        self,
+        params: t.Optional[
+            t.Union[models.ComAtprotoAdminSearchAccounts.Params, models.ComAtprotoAdminSearchAccounts.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoAdminSearchAccounts.Response':
+        """Get list of accounts that matches your search query.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoAdminSearchAccounts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoAdminSearchAccounts.Params',
+            get_or_create(params, models.ComAtprotoAdminSearchAccounts.Params),
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.admin.searchAccounts', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoAdminSearchAccounts.Response)
+
     async def send_email(
         self,
         data: t.Union[models.ComAtprotoAdminSendEmail.Data, models.ComAtprotoAdminSendEmail.DataDict],
@@ -5616,6 +5644,7 @@ class ToolsOzoneNamespace(AsyncNamespaceBase):
         super().__init__(client)
         self.communication = ToolsOzoneCommunicationNamespace(self._client)
         self.moderation = ToolsOzoneModerationNamespace(self._client)
+        self.server = ToolsOzoneServerNamespace(self._client)
 
 
 class ToolsOzoneCommunicationNamespace(AsyncNamespaceBase):
@@ -5922,3 +5951,22 @@ class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
             'tools.ozone.moderation.searchRepos', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneModerationSearchRepos.Response)
+
+
+class ToolsOzoneServerNamespace(AsyncNamespaceBase):
+    async def get_config(self, **kwargs: t.Any) -> 'models.ToolsOzoneServerGetConfig.Response':
+        """Get details about ozone's server configuration.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneServerGetConfig.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = await self._client.invoke_query(
+            'tools.ozone.server.getConfig', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneServerGetConfig.Response)

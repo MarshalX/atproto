@@ -101,6 +101,7 @@ from atproto_client.models.com.atproto.admin import get_account_info as ComAtpro
 from atproto_client.models.com.atproto.admin import get_account_infos as ComAtprotoAdminGetAccountInfos
 from atproto_client.models.com.atproto.admin import get_invite_codes as ComAtprotoAdminGetInviteCodes
 from atproto_client.models.com.atproto.admin import get_subject_status as ComAtprotoAdminGetSubjectStatus
+from atproto_client.models.com.atproto.admin import search_accounts as ComAtprotoAdminSearchAccounts
 from atproto_client.models.com.atproto.admin import send_email as ComAtprotoAdminSendEmail
 from atproto_client.models.com.atproto.admin import update_account_email as ComAtprotoAdminUpdateAccountEmail
 from atproto_client.models.com.atproto.admin import update_account_handle as ComAtprotoAdminUpdateAccountHandle
@@ -190,6 +191,7 @@ from atproto_client.models.tools.ozone.moderation import get_repo as ToolsOzoneM
 from atproto_client.models.tools.ozone.moderation import query_events as ToolsOzoneModerationQueryEvents
 from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
 from atproto_client.models.tools.ozone.moderation import search_repos as ToolsOzoneModerationSearchRepos
+from atproto_client.models.tools.ozone.server import get_config as ToolsOzoneServerGetConfig
 from atproto_client.models.utils import (
     create_strong_ref,
     get_model_as_dict,
@@ -299,6 +301,7 @@ class _Ids:
     ComAtprotoAdminGetAccountInfos: str = 'com.atproto.admin.getAccountInfos'
     ComAtprotoAdminGetInviteCodes: str = 'com.atproto.admin.getInviteCodes'
     ComAtprotoAdminGetSubjectStatus: str = 'com.atproto.admin.getSubjectStatus'
+    ComAtprotoAdminSearchAccounts: str = 'com.atproto.admin.searchAccounts'
     ComAtprotoAdminSendEmail: str = 'com.atproto.admin.sendEmail'
     ComAtprotoAdminUpdateAccountEmail: str = 'com.atproto.admin.updateAccountEmail'
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'
@@ -381,6 +384,7 @@ class _Ids:
     ToolsOzoneModerationQueryEvents: str = 'tools.ozone.moderation.queryEvents'
     ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
     ToolsOzoneModerationSearchRepos: str = 'tools.ozone.moderation.searchRepos'
+    ToolsOzoneServerGetConfig: str = 'tools.ozone.server.getConfig'
 
 
 ids = _Ids()
