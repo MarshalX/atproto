@@ -102,11 +102,23 @@ class ViewerState(base.ModelBase):
     blocking_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Blocking by list.
     followed_by: t.Optional[str] = None  #: Followed by.
     following: t.Optional[str] = None  #: Following.
+    known_followers: t.Optional['models.AppBskyActorDefs.KnownFollowers'] = None  #: Known followers.
     muted: t.Optional[bool] = None  #: Muted.
     muted_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Muted by list.
 
     py_type: t.Literal['app.bsky.actor.defs#viewerState'] = Field(
         default='app.bsky.actor.defs#viewerState', alias='$type', frozen=True
+    )
+
+
+class KnownFollowers(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`. The subject's followers whom you also follow."""
+
+    count: int  #: Count.
+    followers: t.List['models.AppBskyActorDefs.ProfileViewBasic'] = Field(min_length=0, max_length=5)  #: Followers.
+
+    py_type: t.Literal['app.bsky.actor.defs#knownFollowers'] = Field(
+        default='app.bsky.actor.defs#knownFollowers', alias='$type', frozen=True
     )
 
 
