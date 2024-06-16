@@ -66,6 +66,11 @@ def test_blob_ref_to_ipld() -> None:
     assert blob_ref2 == blob_ref
     assert blob_ref2.ref == blob_ref.ref
 
+    # verify RAW ref representation
+    blob_ref2_raw = get_model_as_dict(blob_ref)
+    assert isinstance(blob_ref2_raw['ref'], str)
+    assert plain_cid == blob_ref2_raw['ref']
+
 
 def test_blob_ref_to_ipld_json() -> None:
     plain_cid = 'bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a'
@@ -88,3 +93,8 @@ def test_blob_ref_to_ipld_json() -> None:
     assert blob_ref2 == blob_ref
     assert blob_ref2.ref == blob_ref.ref
     assert blob_ref2.ref.link == blob_ref.ref.link
+
+    # verify JSON ref representation
+    blob_ref2_raw = get_model_as_dict(blob_ref)
+    assert '$link' in blob_ref2_raw['ref']
+    assert plain_cid == blob_ref2_raw['ref']['$link']
