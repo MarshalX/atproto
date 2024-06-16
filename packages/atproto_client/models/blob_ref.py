@@ -8,6 +8,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class IpldLink(BaseModel):
     """CID representation in JSON."""
 
+    model_config = ConfigDict(extra='allow', populate_by_name=True, strict=True)
+
     link: str = Field(alias='$link')  #: CID.
 
 
