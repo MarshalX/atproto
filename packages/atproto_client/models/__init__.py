@@ -40,6 +40,7 @@ from atproto_client.models.app.bsky.graph import follow as AppBskyGraphFollow
 from atproto_client.models.app.bsky.graph import get_blocks as AppBskyGraphGetBlocks
 from atproto_client.models.app.bsky.graph import get_followers as AppBskyGraphGetFollowers
 from atproto_client.models.app.bsky.graph import get_follows as AppBskyGraphGetFollows
+from atproto_client.models.app.bsky.graph import get_known_followers as AppBskyGraphGetKnownFollowers
 from atproto_client.models.app.bsky.graph import get_list as AppBskyGraphGetList
 from atproto_client.models.app.bsky.graph import get_list_blocks as AppBskyGraphGetListBlocks
 from atproto_client.models.app.bsky.graph import get_list_mutes as AppBskyGraphGetListMutes
@@ -54,8 +55,10 @@ from atproto_client.models.app.bsky.graph import listblock as AppBskyGraphListbl
 from atproto_client.models.app.bsky.graph import listitem as AppBskyGraphListitem
 from atproto_client.models.app.bsky.graph import mute_actor as AppBskyGraphMuteActor
 from atproto_client.models.app.bsky.graph import mute_actor_list as AppBskyGraphMuteActorList
+from atproto_client.models.app.bsky.graph import mute_thread as AppBskyGraphMuteThread
 from atproto_client.models.app.bsky.graph import unmute_actor as AppBskyGraphUnmuteActor
 from atproto_client.models.app.bsky.graph import unmute_actor_list as AppBskyGraphUnmuteActorList
+from atproto_client.models.app.bsky.graph import unmute_thread as AppBskyGraphUnmuteThread
 from atproto_client.models.app.bsky.labeler import defs as AppBskyLabelerDefs
 from atproto_client.models.app.bsky.labeler import get_services as AppBskyLabelerGetServices
 from atproto_client.models.app.bsky.labeler import service as AppBskyLabelerService
@@ -244,6 +247,7 @@ class _Ids:
     AppBskyGraphGetBlocks: str = 'app.bsky.graph.getBlocks'
     AppBskyGraphGetFollowers: str = 'app.bsky.graph.getFollowers'
     AppBskyGraphGetFollows: str = 'app.bsky.graph.getFollows'
+    AppBskyGraphGetKnownFollowers: str = 'app.bsky.graph.getKnownFollowers'
     AppBskyGraphGetList: str = 'app.bsky.graph.getList'
     AppBskyGraphGetListBlocks: str = 'app.bsky.graph.getListBlocks'
     AppBskyGraphGetListMutes: str = 'app.bsky.graph.getListMutes'
@@ -256,8 +260,10 @@ class _Ids:
     AppBskyGraphListitem: str = 'app.bsky.graph.listitem'
     AppBskyGraphMuteActor: str = 'app.bsky.graph.muteActor'
     AppBskyGraphMuteActorList: str = 'app.bsky.graph.muteActorList'
+    AppBskyGraphMuteThread: str = 'app.bsky.graph.muteThread'
     AppBskyGraphUnmuteActor: str = 'app.bsky.graph.unmuteActor'
     AppBskyGraphUnmuteActorList: str = 'app.bsky.graph.unmuteActorList'
+    AppBskyGraphUnmuteThread: str = 'app.bsky.graph.unmuteThread'
     AppBskyLabelerDefs: str = 'app.bsky.labeler.defs'
     AppBskyLabelerGetServices: str = 'app.bsky.labeler.getServices'
     AppBskyLabelerService: str = 'app.bsky.labeler.service'

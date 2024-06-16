@@ -53,6 +53,7 @@ class ViewerState(base.ModelBase):
     like: t.Optional[str] = None  #: Like.
     reply_disabled: t.Optional[bool] = None  #: Reply disabled.
     repost: t.Optional[str] = None  #: Repost.
+    thread_muted: t.Optional[bool] = None  #: Thread muted.
 
     py_type: t.Literal['app.bsky.feed.defs#viewerState'] = Field(
         default='app.bsky.feed.defs#viewerState', alias='$type', frozen=True

@@ -18,6 +18,7 @@ Submodules
    atproto_client.models.app.bsky.graph.get_blocks
    atproto_client.models.app.bsky.graph.get_followers
    atproto_client.models.app.bsky.graph.get_follows
+   atproto_client.models.app.bsky.graph.get_known_followers
    atproto_client.models.app.bsky.graph.get_list
    atproto_client.models.app.bsky.graph.get_list_blocks
    atproto_client.models.app.bsky.graph.get_list_mutes
@@ -30,5 +31,7 @@ Submodules
    atproto_client.models.app.bsky.graph.listitem
    atproto_client.models.app.bsky.graph.mute_actor
    atproto_client.models.app.bsky.graph.mute_actor_list
+   atproto_client.models.app.bsky.graph.mute_thread
    atproto_client.models.app.bsky.graph.unmute_actor
    atproto_client.models.app.bsky.graph.unmute_actor_list
+   atproto_client.models.app.bsky.graph.unmute_thread

@@ -2409,6 +2409,32 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyGraphGetFollows.Response)
 
+    async def get_known_followers(
+        self,
+        params: t.Union[models.AppBskyGraphGetKnownFollowers.Params, models.AppBskyGraphGetKnownFollowers.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphGetKnownFollowers.Response':
+        """Enumerates accounts which follow a specified account (actor) and are followed by the viewer.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetKnownFollowers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyGraphGetKnownFollowers.Params',
+            get_or_create(params, models.AppBskyGraphGetKnownFollowers.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.graph.getKnownFollowers', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetKnownFollowers.Response)
+
     async def get_list(
         self, params: t.Union[models.AppBskyGraphGetList.Params, models.AppBskyGraphGetList.ParamsDict], **kwargs: t.Any
     ) -> 'models.AppBskyGraphGetList.Response':
@@ -2640,6 +2666,29 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
+    async def mute_thread(
+        self, data: t.Union[models.AppBskyGraphMuteThread.Data, models.AppBskyGraphMuteThread.DataDict], **kwargs: t.Any
+    ) -> bool:
+        """Mutes a thread preventing notifications from the thread and any of its children. Mutes are private in Bluesky. Requires auth.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyGraphMuteThread.Data', get_or_create(data, models.AppBskyGraphMuteThread.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.graph.muteThread', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     async def unmute_actor(
         self,
         data: t.Union[models.AppBskyGraphUnmuteActor.Data, models.AppBskyGraphUnmuteActor.DataDict],
@@ -2687,6 +2736,31 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
         )
         response = await self._client.invoke_procedure(
             'app.bsky.graph.unmuteActorList', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def unmute_thread(
+        self,
+        data: t.Union[models.AppBskyGraphUnmuteThread.Data, models.AppBskyGraphUnmuteThread.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Unmutes the specified thread. Requires auth.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyGraphUnmuteThread.Data', get_or_create(data, models.AppBskyGraphUnmuteThread.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.graph.unmuteThread', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
