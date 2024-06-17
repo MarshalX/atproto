@@ -419,11 +419,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Client
             models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, filter=filter, limit=limit)
         )
 
-    def like(
-        self,
-        uri: str,
-        cid: str,
-    ) -> 'models.AppBskyFeedLike.CreateRecordResponse':
+    def like(self, uri: str, cid: str) -> 'models.AppBskyFeedLike.CreateRecordResponse':
         """Like the record.
 
         Args:
@@ -463,18 +459,12 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Client
         uri = AtUri.from_str(like_uri)
         return self.app.bsky.feed.like.delete(uri.hostname, uri.rkey)
 
-    def repost(
-        self,
-        uri: t.Optional[str] = None,
-        cid: t.Optional[str] = None,
-        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
-    ) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
+    def repost(self, uri: str, cid: str) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
         """Repost post.
 
         Args:
             cid: The CID of the post.
             uri: The URI of the post.
-            subject: DEPRECATED.
 
         Returns:
             :obj:`models.AppBskyFeedRepost.CreateRecordResponse`: Reference to the reposted record.
@@ -482,7 +472,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Client
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
+        subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
         repo = self.me and self.me.did
         if not repo:
