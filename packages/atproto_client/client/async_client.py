@@ -426,11 +426,7 @@ class AsyncClient(AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMix
             models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, filter=filter, limit=limit)
         )
 
-    async def like(
-        self,
-        uri: str,
-        cid: str,
-    ) -> 'models.AppBskyFeedLike.CreateRecordResponse':
+    async def like(self, uri: str, cid: str) -> 'models.AppBskyFeedLike.CreateRecordResponse':
         """Like the record.
 
         Args:
@@ -470,18 +466,12 @@ class AsyncClient(AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMix
         uri = AtUri.from_str(like_uri)
         return await self.app.bsky.feed.like.delete(uri.hostname, uri.rkey)
 
-    async def repost(
-        self,
-        uri: t.Optional[str] = None,
-        cid: t.Optional[str] = None,
-        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
-    ) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
+    async def repost(self, uri: str, cid: str) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
         """Repost post.
 
         Args:
             cid: The CID of the post.
             uri: The URI of the post.
-            subject: DEPRECATED.
 
         Returns:
             :obj:`models.AppBskyFeedRepost.CreateRecordResponse`: Reference to the reposted record.
@@ -489,7 +479,7 @@ class AsyncClient(AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMix
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
+        subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
         repo = self.me and self.me.did
         if not repo:
