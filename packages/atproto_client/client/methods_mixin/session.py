@@ -11,6 +11,7 @@ from atproto_client.client.session import (
     SessionChangeCallback,
     SessionEvent,
     SessionResponse,
+    get_session_pds_endpoint,
 )
 from atproto_client.exceptions import LoginRequiredError
 
@@ -123,14 +124,18 @@ class SessionMethodsMixin(TimeMethodsMixin):
         self._refresh_jwt = session.refresh_jwt
         self._refresh_jwt_payload = get_jwt_payload(session.refresh_jwt)
 
+        pds_endpoint = get_session_pds_endpoint(session)
+
         self._session = Session(
             access_jwt=session.access_jwt,
             refresh_jwt=session.refresh_jwt,
             did=session.did,
             handle=session.handle,
+            pds_endpoint=pds_endpoint,
         )
 
         self._set_auth_headers(session.access_jwt)
+        self._update_pds_endpoint(pds_endpoint)
 
         return self._session
 
@@ -140,6 +145,9 @@ class SessionMethodsMixin(TimeMethodsMixin):
 
     def _set_auth_headers(self, token: str) -> None:
         self.request.set_additional_headers(self._get_auth_headers(token))
+
+    def _update_pds_endpoint(self, pds_endpoint: str) -> None:
+        self.update_base_url(pds_endpoint)
 
     def export_session_string(self) -> str:
         """Export session string.

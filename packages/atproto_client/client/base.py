@@ -68,6 +68,17 @@ class ClientBase:
     def request(self) -> Request:
         return self._request
 
+    def update_base_url(self, base_url: t.Optional[str] = None) -> None:
+        """Update XRPC base URL.
+
+        Typically used for switching between PDSs.
+
+        Args:
+            base_url (str, optional): New base URL.
+                Defaults to bsky.social.
+        """
+        self._base_url = _handle_base_url(base_url)
+
     def _build_url(self, nsid: str) -> str:
         return f'{self._base_url}/{nsid}'
 
