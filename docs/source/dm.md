@@ -4,13 +4,13 @@ Bluesky Direct Messages were launched on May 22, 2024. It began as a simple chat
 
 The Python SDK has supported the Bluesky Direct Messages API since day one. You can use the SDK to send messages to other users, create new conversations, list existing conversations, and perform all other functions available in the mobile app and web client.
 
-The API is not very user-friendly and lacks high-level abstractions. However, thanks to the fully automated process of code generation, it is possible to use Python abstractions for the AT Protocol. Additionally, Bsky proxies requests to the Chat API in an unconventional manner, which adds extra steps to make it work.
+**You need to grant access to direct messages when creating App Password!** Otherwise, you will get "Bad token scope" error.
 
 ## Example
 
 This example demonstrates how to list conversations, create a new conversation, and send a message to it.
 
-```Python
+```python
 from atproto import Client, IdResolver, models
 
 USERNAME = 'example.com'
@@ -21,16 +21,8 @@ def main() -> None:
     # create resolver instance with in-memory cache
     id_resolver = IdResolver()
 
-    # resolve our DID from a handle
-    did = id_resolver.handle.resolve(USERNAME)
-    # resolve did document from DID
-    did_doc = id_resolver.did.resolve(did)
-    # get pds (where our account is hosted) endpoint from DID Document
-    pds_url = did_doc.get_pds_endpoint()
-
-    # create client instance with our pds url
-    client = Client(base_url=pds_url)
-    # login with our username and password
+    # create client instance and login
+    client = Client()
     client.login(USERNAME, PASSWORD)
 
     convo_list = client.chat.bsky.convo.list_convos()  # use limit and cursor to paginate
@@ -39,6 +31,7 @@ def main() -> None:
         members = ', '.join(member.display_name for member in convo.members)
         print(f'- ID: {convo.id} ({members})')
 
+    # resolve DID
     chat_to = id_resolver.handle.resolve('test.marshal.dev')
 
     # create or get conversation with chat_to
