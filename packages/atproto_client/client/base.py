@@ -74,7 +74,7 @@ class ClientBase:
         Typically used for switching between PDSs.
 
         Args:
-            base_url (str, optional): New base URL.
+            base_url: New base URL.
                 Defaults to bsky.social.
         """
         self._base_url = _handle_base_url(base_url)
