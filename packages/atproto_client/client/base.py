@@ -1,6 +1,8 @@
 import typing as t
 from enum import Enum
 
+import typing_extensions as te
+
 from atproto_client.models.utils import get_model_as_dict, get_model_as_json
 from atproto_client.request import AsyncRequest, Request, Response
 
@@ -54,19 +56,16 @@ def _handle_base_url(base_url: t.Optional[str] = None) -> str:
     return base_url
 
 
-class ClientBase:
-    """Low-level methods are here."""
+class _ClientCommonMethodsMixin:
+    def clone(self) -> te.Self:
+        """Clone the client instance.
 
-    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None) -> None:
-        if request is None:
-            request = Request()
+        Used to customize atproto proxy and set of labeler services.
 
-        self._request = request
-        self._base_url = _handle_base_url(base_url)
-
-    @property
-    def request(self) -> Request:
-        return self._request
+        Returns:
+            Cloned client instance.
+        """
+        return type(self)(base_url=self._base_url, request=self.request.clone())
 
     def update_base_url(self, base_url: t.Optional[str] = None) -> None:
         """Update XRPC base URL.
@@ -81,6 +80,21 @@ class ClientBase:
 
     def _build_url(self, nsid: str) -> str:
         return f'{self._base_url}/{nsid}'
+
+
+class ClientBase(_ClientCommonMethodsMixin):
+    """Low-level methods are here."""
+
+    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None) -> None:
+        if request is None:
+            request = Request()
+
+        self._request = request
+        self._base_url = _handle_base_url(base_url)
+
+    @property
+    def request(self) -> Request:
+        return self._request
 
     def invoke_query(
         self,
@@ -108,7 +122,7 @@ class ClientBase:
         return self.request.post(**kwargs)
 
 
-class AsyncClientBase:
+class AsyncClientBase(_ClientCommonMethodsMixin):
     """Low-level methods are here."""
 
     def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[AsyncRequest] = None) -> None:
@@ -121,9 +135,6 @@ class AsyncClientBase:
     @property
     def request(self) -> AsyncRequest:
         return self._request
-
-    def _build_url(self, nsid: str) -> str:
-        return f'{self._base_url}/{nsid}'
 
     async def invoke_query(
         self,

@@ -1,10 +1,12 @@
 import typing as t
 from threading import Lock
 
+import typing_extensions as te
 from atproto_core.uri import AtUri
 
 from atproto_client import models
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
+from atproto_client.client.methods_mixin.headers import HeadersConfigurationMethodsMixin
 from atproto_client.client.methods_mixin.session import SessionDispatchMixin
 from atproto_client.client.raw import ClientRaw
 from atproto_client.client.session import Session, SessionEvent, SessionResponse
@@ -17,7 +19,7 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
-class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
+class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, HeadersConfigurationMethodsMixin, ClientRaw):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args: t.Any, **kwargs: t.Any) -> None:
@@ -65,6 +67,18 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Client
         self._set_session(SessionEvent.IMPORT, import_session)
 
         return import_session
+
+    def clone(self) -> te.Self:
+        """Clone the client instance.
+
+        Used to customize atproto proxy and set of labeler services.
+
+        Returns:
+            Cloned client instance.
+        """
+        cloned_client = super().clone()
+        cloned_client.me = self.me
+        return cloned_client
 
     def login(
         self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None

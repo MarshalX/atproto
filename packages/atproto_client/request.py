@@ -3,6 +3,7 @@ import typing as t
 from dataclasses import dataclass
 
 import httpx
+import typing_extensions as te
 
 from atproto_client import exceptions
 from atproto_client.models.common import XrpcError
@@ -85,6 +86,14 @@ class RequestBase:
         self._additional_headers: t.Dict[str, str] = {}
 
     def get_headers(self, additional_headers: t.Optional[t.Dict[str, str]] = None) -> t.Dict[str, str]:
+        """Get headers for the request.
+
+        Args:
+            additional_headers: Additional headers.
+
+        Returns:
+            Headers for the request.
+        """
         headers = {**RequestBase._MANDATORY_HEADERS, **self._additional_headers}
 
         if additional_headers:
@@ -93,7 +102,36 @@ class RequestBase:
         return headers
 
     def set_additional_headers(self, headers: t.Dict[str, str]) -> None:
+        """Set additional headers for the request.
+
+        Args:
+            headers: Additional headers.
+        """
         self._additional_headers = headers.copy()
+
+    def add_additional_header(self, header_name: str, header_value: str) -> None:
+        """Add additional headers for the request.
+
+        Note:
+            This method overrides the existing header with the same name.
+
+        Args:
+            header_name: Header name.
+            header_value: Header value.
+        """
+        self._additional_headers[header_name] = header_value
+
+    def clone(self) -> te.Self:
+        """Clone the client instance.
+
+        Used to customize atproto proxy and set of labeler services.
+
+        Returns:
+            Cloned client instance.
+        """
+        cloned_request = type(self)()
+        cloned_request.set_additional_headers(self.get_headers())
+        return cloned_request
 
 
 class Request(RequestBase):

@@ -144,7 +144,8 @@ class SessionMethodsMixin(TimeMethodsMixin):
         return {'Authorization': f'Bearer {token}'}
 
     def _set_auth_headers(self, token: str) -> None:
-        self.request.set_additional_headers(self._get_auth_headers(token))
+        for header_name, header_value in self._get_auth_headers(token).items():
+            self.request.add_additional_header(header_name, header_value)
 
     def _update_pds_endpoint(self, pds_endpoint: str) -> None:
         self.update_base_url(pds_endpoint)
