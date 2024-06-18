@@ -129,7 +129,7 @@ class RequestBase:
         Returns:
             Cloned client instance.
         """
-        cloned_request = self.__class__()
+        cloned_request = type(self)()
         cloned_request.set_additional_headers(self.get_headers())
         return cloned_request
 

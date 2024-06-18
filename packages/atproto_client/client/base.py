@@ -65,7 +65,7 @@ class _ClientCommonMethodsMixin:
         Returns:
             Cloned client instance.
         """
-        return self.__class__(base_url=self._base_url, request=self.request.clone())
+        return type(self)(base_url=self._base_url, request=self.request.clone())
 
     def update_base_url(self, base_url: t.Optional[str] = None) -> None:
         """Update XRPC base URL.
