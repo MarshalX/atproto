@@ -56,20 +56,7 @@ def _handle_base_url(base_url: t.Optional[str] = None) -> str:
     return base_url
 
 
-class ClientBase:
-    """Low-level methods are here."""
-
-    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None) -> None:
-        if request is None:
-            request = Request()
-
-        self._request = request
-        self._base_url = _handle_base_url(base_url)
-
-    @property
-    def request(self) -> Request:
-        return self._request
-
+class _ClientCommonMethodsMixin:
     def clone(self) -> te.Self:
         """Clone the client instance.
 
@@ -93,6 +80,21 @@ class ClientBase:
 
     def _build_url(self, nsid: str) -> str:
         return f'{self._base_url}/{nsid}'
+
+
+class ClientBase(_ClientCommonMethodsMixin):
+    """Low-level methods are here."""
+
+    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None) -> None:
+        if request is None:
+            request = Request()
+
+        self._request = request
+        self._base_url = _handle_base_url(base_url)
+
+    @property
+    def request(self) -> Request:
+        return self._request
 
     def invoke_query(
         self,
@@ -120,7 +122,7 @@ class ClientBase:
         return self.request.post(**kwargs)
 
 
-class AsyncClientBase:
+class AsyncClientBase(_ClientCommonMethodsMixin):
     """Low-level methods are here."""
 
     def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[AsyncRequest] = None) -> None:
@@ -133,19 +135,6 @@ class AsyncClientBase:
     @property
     def request(self) -> AsyncRequest:
         return self._request
-
-    def clone(self) -> te.Self:
-        """Clone the client instance.
-
-        Used to customize atproto proxy and set of labeler services.
-
-        Returns:
-            Cloned client instance.
-        """
-        return self.__class__(base_url=self._base_url, request=self.request.clone())
-
-    def _build_url(self, nsid: str) -> str:
-        return f'{self._base_url}/{nsid}'
 
     async def invoke_query(
         self,
