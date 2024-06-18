@@ -8,11 +8,13 @@ import asyncio
 import typing as t
 from asyncio import Lock
 
+import typing_extensions as te
 from atproto_core.uri import AtUri
 
 from atproto_client import models
 from atproto_client.client.async_raw import AsyncClientRaw
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
+from atproto_client.client.methods_mixin.headers import HeadersConfigurationMethodsMixin
 from atproto_client.client.methods_mixin.session import AsyncSessionDispatchMixin
 from atproto_client.client.session import Session, SessionEvent, SessionResponse
 from atproto_client.exceptions import LoginRequiredError
@@ -24,7 +26,9 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
-class AsyncClient(AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw):
+class AsyncClient(
+    AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, HeadersConfigurationMethodsMixin, AsyncClientRaw
+):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args: t.Any, **kwargs: t.Any) -> None:
@@ -72,6 +76,18 @@ class AsyncClient(AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMix
         await self._set_session(SessionEvent.IMPORT, import_session)
 
         return import_session
+
+    async def clone(self) -> te.Self:
+        """Clone the client instance.
+
+        Used to customize atproto proxy and set of labeler services.
+
+        Returns:
+            Cloned client instance.
+        """
+        cloned_client = super().clone()
+        cloned_client.me = self.me
+        return cloned_client
 
     async def login(
         self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None

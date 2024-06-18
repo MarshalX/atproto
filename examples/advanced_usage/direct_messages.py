@@ -5,35 +5,40 @@ PASSWORD = 'hunter2'  # noqa: S105 never hardcode your password in a real applic
 
 
 def main() -> None:
-    # create resolver instance with in-memory cache
-    id_resolver = IdResolver()
-
     # create client instance and login
     client = Client()
-    client.login(USERNAME, PASSWORD)
+    client.login(USERNAME, PASSWORD)  # use App Password with access to Direct Messages!
 
-    convo_list = client.chat.bsky.convo.list_convos()  # use limit and cursor to paginate
+    # create client proxied to Bluesky Chat service
+    dm_client = client.with_bsky_chat_proxy()
+    # create shortcut to convo methods
+    dm = dm_client.chat.bsky.convo
+
+    convo_list = dm.list_convos()  # use limit and cursor to paginate
     print(f'Your conversations ({len(convo_list.convos)}):')
     for convo in convo_list.convos:
         members = ', '.join(member.display_name for member in convo.members)
         print(f'- ID: {convo.id} ({members})')
 
+    # create resolver instance with in-memory cache
+    id_resolver = IdResolver()
     # resolve DID
     chat_to = id_resolver.handle.resolve('test.marshal.dev')
 
     # create or get conversation with chat_to
-    convo = client.chat.bsky.convo.get_convo_for_members(
+    convo = dm.get_convo_for_members(
         models.ChatBskyConvoGetConvoForMembers.Params(members=[chat_to]),
-    )
-    print(f'\nConvo ID: {convo.convo.id}')
+    ).convo
+
+    print(f'\nConvo ID: {convo.id}')
     print('Convo members:')
-    for member in convo.convo.members:
+    for member in convo.members:
         print(f'- {member.display_name} ({member.did})')
 
     # send a message to the conversation
-    client.chat.bsky.convo.send_message(
+    dm.send_message(
         models.ChatBskyConvoSendMessage.Data(
-            convo_id=convo.convo.id,
+            convo_id=convo.id,
             message=models.ChatBskyConvoDefs.MessageInput(
                 text='Hello from Python SDK!',
             ),

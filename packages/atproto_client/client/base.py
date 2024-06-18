@@ -1,6 +1,8 @@
 import typing as t
 from enum import Enum
 
+import typing_extensions as te
+
 from atproto_client.models.utils import get_model_as_dict, get_model_as_json
 from atproto_client.request import AsyncRequest, Request, Response
 
@@ -68,6 +70,16 @@ class ClientBase:
     def request(self) -> Request:
         return self._request
 
+    def clone(self) -> te.Self:
+        """Clone the client instance.
+
+        Used to customize atproto proxy and set of labeler services.
+
+        Returns:
+            Cloned client instance.
+        """
+        return self.__class__(base_url=self._base_url, request=self.request.clone())
+
     def update_base_url(self, base_url: t.Optional[str] = None) -> None:
         """Update XRPC base URL.
 
@@ -121,6 +133,16 @@ class AsyncClientBase:
     @property
     def request(self) -> AsyncRequest:
         return self._request
+
+    def clone(self) -> te.Self:
+        """Clone the client instance.
+
+        Used to customize atproto proxy and set of labeler services.
+
+        Returns:
+            Cloned client instance.
+        """
+        return self.__class__(base_url=self._base_url, request=self.request.clone())
 
     def _build_url(self, nsid: str) -> str:
         return f'{self._base_url}/{nsid}'
