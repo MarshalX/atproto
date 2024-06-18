@@ -74,7 +74,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Client
         Args:
             login: Handle/username of the account.
             password: Main or app-specific password of the account.
-            session_string: Session string (use :py:attr:`~export_session_string` to obtain it).
+            session_string: Session string (use :py:attr:`~export_session_string` to get it).
 
         Note:
             Either `session_string` or `login` and `password` should be provided.

@@ -8,16 +8,8 @@ def main() -> None:
     # create resolver instance with in-memory cache
     id_resolver = IdResolver()
 
-    # resolve our DID from a handle
-    did = id_resolver.handle.resolve(USERNAME)
-    # resolve did document from DID
-    did_doc = id_resolver.did.resolve(did)
-    # get pds (where our account is hosted) endpoint from DID Document
-    pds_url = did_doc.get_pds_endpoint()
-
-    # create client instance with our pds url
-    client = Client(base_url=pds_url)
-    # login with our username and password
+    # create client instance and login
+    client = Client()
     client.login(USERNAME, PASSWORD)
 
     convo_list = client.chat.bsky.convo.list_convos()  # use limit and cursor to paginate
@@ -26,6 +18,7 @@ def main() -> None:
         members = ', '.join(member.display_name for member in convo.members)
         print(f'- ID: {convo.id} ({members})')
 
+    # resolve DID
     chat_to = id_resolver.handle.resolve('test.marshal.dev')
 
     # create or get conversation with chat_to
