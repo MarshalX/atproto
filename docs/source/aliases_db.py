@@ -185,4 +185,9 @@ ALIASES_DB = {
     'models.ToolsOzoneModerationQueryStatuses': 'atproto_client.models.tools.ozone.moderation.query_statuses',
     'models.ToolsOzoneModerationSearchRepos': 'atproto_client.models.tools.ozone.moderation.search_repos',
     'models.ToolsOzoneServerGetConfig': 'atproto_client.models.tools.ozone.server.get_config',
+    'models.ToolsOzoneTeamAddMember': 'atproto_client.models.tools.ozone.team.add_member',
+    'models.ToolsOzoneTeamDefs': 'atproto_client.models.tools.ozone.team.defs',
+    'models.ToolsOzoneTeamDeleteMember': 'atproto_client.models.tools.ozone.team.delete_member',
+    'models.ToolsOzoneTeamListMembers': 'atproto_client.models.tools.ozone.team.list_members',
+    'models.ToolsOzoneTeamUpdateMember': 'atproto_client.models.tools.ozone.team.update_member',
 }
