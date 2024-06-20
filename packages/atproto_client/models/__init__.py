@@ -195,6 +195,11 @@ from atproto_client.models.tools.ozone.moderation import query_events as ToolsOz
 from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
 from atproto_client.models.tools.ozone.moderation import search_repos as ToolsOzoneModerationSearchRepos
 from atproto_client.models.tools.ozone.server import get_config as ToolsOzoneServerGetConfig
+from atproto_client.models.tools.ozone.team import add_member as ToolsOzoneTeamAddMember
+from atproto_client.models.tools.ozone.team import defs as ToolsOzoneTeamDefs
+from atproto_client.models.tools.ozone.team import delete_member as ToolsOzoneTeamDeleteMember
+from atproto_client.models.tools.ozone.team import list_members as ToolsOzoneTeamListMembers
+from atproto_client.models.tools.ozone.team import update_member as ToolsOzoneTeamUpdateMember
 from atproto_client.models.utils import (
     create_strong_ref,
     get_model_as_dict,
@@ -391,6 +396,11 @@ class _Ids:
     ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
     ToolsOzoneModerationSearchRepos: str = 'tools.ozone.moderation.searchRepos'
     ToolsOzoneServerGetConfig: str = 'tools.ozone.server.getConfig'
+    ToolsOzoneTeamAddMember: str = 'tools.ozone.team.addMember'
+    ToolsOzoneTeamDefs: str = 'tools.ozone.team.defs'
+    ToolsOzoneTeamDeleteMember: str = 'tools.ozone.team.deleteMember'
+    ToolsOzoneTeamListMembers: str = 'tools.ozone.team.listMembers'
+    ToolsOzoneTeamUpdateMember: str = 'tools.ozone.team.updateMember'
 
 
 ids = _Ids()

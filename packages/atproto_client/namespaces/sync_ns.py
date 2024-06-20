@@ -5692,6 +5692,7 @@ class ToolsOzoneNamespace(NamespaceBase):
         self.communication = ToolsOzoneCommunicationNamespace(self._client)
         self.moderation = ToolsOzoneModerationNamespace(self._client)
         self.server = ToolsOzoneServerNamespace(self._client)
+        self.team = ToolsOzoneTeamNamespace(self._client)
 
 
 class ToolsOzoneCommunicationNamespace(NamespaceBase):
@@ -6017,3 +6018,115 @@ class ToolsOzoneServerNamespace(NamespaceBase):
             'tools.ozone.server.getConfig', output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneServerGetConfig.Response)
+
+
+class ToolsOzoneTeamNamespace(NamespaceBase):
+    def add_member(
+        self,
+        data: t.Union[models.ToolsOzoneTeamAddMember.Data, models.ToolsOzoneTeamAddMember.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneTeamDefs.Member':
+        """Add a member to the ozone team. Requires admin role.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneTeamDefs.Member`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneTeamAddMember.Data', get_or_create(data, models.ToolsOzoneTeamAddMember.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.team.addMember',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneTeamDefs.Member)
+
+    def delete_member(
+        self,
+        data: t.Union[models.ToolsOzoneTeamDeleteMember.Data, models.ToolsOzoneTeamDeleteMember.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a member from ozone team. Requires admin role.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneTeamDeleteMember.Data', get_or_create(data, models.ToolsOzoneTeamDeleteMember.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.team.deleteMember', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def list_members(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneTeamListMembers.Params, models.ToolsOzoneTeamListMembers.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneTeamListMembers.Response':
+        """List all members with access to the ozone service.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneTeamListMembers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneTeamListMembers.Params', get_or_create(params, models.ToolsOzoneTeamListMembers.Params)
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.team.listMembers', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneTeamListMembers.Response)
+
+    def update_member(
+        self,
+        data: t.Union[models.ToolsOzoneTeamUpdateMember.Data, models.ToolsOzoneTeamUpdateMember.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneTeamDefs.Member':
+        """Update a member in the ozone service. Requires admin role.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneTeamDefs.Member`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneTeamUpdateMember.Data', get_or_create(data, models.ToolsOzoneTeamUpdateMember.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.team.updateMember',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneTeamDefs.Member)
