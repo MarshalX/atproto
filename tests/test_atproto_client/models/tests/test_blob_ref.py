@@ -120,8 +120,9 @@ def test_blob_ref_to_json_representation() -> None:
     )
     # JSON to JSON representation (nothing should happen)
     json_blob_ref3 = json_blob_ref2.to_json_representation()
-    assert json_blob_ref3 is json_blob_ref2
+    assert json_blob_ref3 is not json_blob_ref2
     assert json_blob_ref3 == json_blob_ref2
+    assert json_blob_ref3.ref.link == bytes_blob_ref.ref
 
 
 def test_blob_ref_to_bytes_representation() -> None:
@@ -144,5 +145,6 @@ def test_blob_ref_to_bytes_representation() -> None:
     )
     # Bytes to Bytes representation (nothing should happen)
     bytes_blob_ref3 = bytes_blob_ref2.to_bytes_representation()
-    assert bytes_blob_ref3 is bytes_blob_ref2
+    assert bytes_blob_ref3 is not bytes_blob_ref2
     assert bytes_blob_ref3 == bytes_blob_ref2
+    assert bytes_blob_ref3.ref == json_blob_ref.ref.link

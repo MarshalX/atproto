@@ -38,11 +38,14 @@ class BlobRef(BaseModel):
         Note:
             Used in XRPC, etc. where JSON is used.
 
+        Warning:
+            It returns new instance.
+
         Returns:
             BlobRef in JSON representation.
         """
         if isinstance(self.ref, IpldLink):
-            return self
+            return BlobRef(mime_type=self.mime_type, size=self.size, ref=IpldLink(link=self.ref.link))
 
         return BlobRef(mime_type=self.mime_type, size=self.size, ref=IpldLink(link=self.ref))
 
@@ -52,10 +55,13 @@ class BlobRef(BaseModel):
         Note:
             Used in Firehose, CAR, etc. where bytes are possible.
 
+        Warning:
+            It returns new instance.
+
         Returns:
             BlobRef in bytes representation.
         """
         if isinstance(self.ref, str):
-            return self
+            return BlobRef(mime_type=self.mime_type, size=self.size, ref=self.ref)
 
         return BlobRef(mime_type=self.mime_type, size=self.size, ref=self.ref.link)
