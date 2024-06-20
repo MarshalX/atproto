@@ -31,3 +31,31 @@ class BlobRef(BaseModel):
             return CID.decode(self.ref)
 
         return CID.decode(self.ref.link)
+
+    def to_json_representation(self) -> 'BlobRef':
+        """Get JSON representation.
+
+        Note:
+            Used in XRPC, etc. where JSON is used.
+
+        Returns:
+            BlobRef in JSON representation.
+        """
+        if isinstance(self.ref, IpldLink):
+            return self
+
+        return BlobRef(mime_type=self.mime_type, size=self.size, ref=IpldLink(link=self.ref))
+
+    def to_bytes_representation(self) -> 'BlobRef':
+        """Get bytes representation.
+
+        Note:
+            Used in Firehose, CAR, etc. where bytes are possible.
+
+        Returns:
+            BlobRef in bytes representation.
+        """
+        if isinstance(self.ref, str):
+            return self
+
+        return BlobRef(mime_type=self.mime_type, size=self.size, ref=self.ref.link)

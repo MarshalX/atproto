@@ -98,3 +98,51 @@ def test_blob_ref_to_ipld_json() -> None:
     blob_ref2_raw = get_model_as_dict(blob_ref)
     assert '$link' in blob_ref2_raw['ref']
     assert plain_cid == blob_ref2_raw['ref']['$link']
+
+
+def test_blob_ref_to_json_representation() -> None:
+    plain_cid = 'bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a'
+
+    bytes_blob_ref = BlobRef(
+        mime_type='text/plain',
+        size=0,
+        ref=plain_cid,
+    )
+
+    json_blob_ref = bytes_blob_ref.to_json_representation()
+    assert json_blob_ref.ref.link == bytes_blob_ref.ref
+    assert json_blob_ref.ref.link == plain_cid
+
+    json_blob_ref2 = BlobRef(
+        mime_type='text/plain',
+        size=0,
+        ref=IpldLink(link=plain_cid),
+    )
+    # JSON to JSON representation (nothing should happen)
+    json_blob_ref3 = json_blob_ref2.to_json_representation()
+    assert json_blob_ref3 is json_blob_ref2
+    assert json_blob_ref3 == json_blob_ref2
+
+
+def test_blob_ref_to_bytes_representation() -> None:
+    plain_cid = 'bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a'
+
+    json_blob_ref = BlobRef(
+        mime_type='text/plain',
+        size=0,
+        ref=IpldLink(link=plain_cid),
+    )
+
+    bytes_blob_ref = json_blob_ref.to_bytes_representation()
+    assert bytes_blob_ref.ref == json_blob_ref.ref.link
+    assert bytes_blob_ref.ref == plain_cid
+
+    bytes_blob_ref2 = BlobRef(
+        mime_type='text/plain',
+        size=0,
+        ref=plain_cid,
+    )
+    # Bytes to Bytes representation (nothing should happen)
+    bytes_blob_ref3 = bytes_blob_ref2.to_bytes_representation()
+    assert bytes_blob_ref3 is bytes_blob_ref2
+    assert bytes_blob_ref3 == bytes_blob_ref2
