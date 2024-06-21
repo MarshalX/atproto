@@ -110,6 +110,8 @@ def test_blob_ref_to_json_representation() -> None:
     )
 
     json_blob_ref = bytes_blob_ref.to_json_representation()
+    assert not json_blob_ref.is_bytes_representation
+    assert json_blob_ref.is_json_representation
     assert json_blob_ref.ref.link == bytes_blob_ref.ref
     assert json_blob_ref.ref.link == plain_cid
 
@@ -135,6 +137,8 @@ def test_blob_ref_to_bytes_representation() -> None:
     )
 
     bytes_blob_ref = json_blob_ref.to_bytes_representation()
+    assert bytes_blob_ref.is_bytes_representation
+    assert not bytes_blob_ref.is_json_representation
     assert bytes_blob_ref.ref == json_blob_ref.ref.link
     assert bytes_blob_ref.ref == plain_cid
 

@@ -32,6 +32,24 @@ class BlobRef(BaseModel):
 
         return CID.decode(self.ref.link)
 
+    @property
+    def is_json_representation(self) -> bool:
+        """Check if it is JSON representation.
+
+        Returns:
+            True if it is JSON representation.
+        """
+        return isinstance(self.ref, IpldLink)
+
+    @property
+    def is_bytes_representation(self) -> bool:
+        """Check if it is bytes representation.
+
+        Returns:
+            True if it is bytes representation.
+        """
+        return isinstance(self.ref, str)
+
     def to_json_representation(self) -> 'BlobRef':
         """Get JSON representation.
 
@@ -44,7 +62,7 @@ class BlobRef(BaseModel):
         Returns:
             BlobRef in JSON representation.
         """
-        if isinstance(self.ref, IpldLink):
+        if self.is_json_representation:
             return BlobRef(mime_type=self.mime_type, size=self.size, ref=IpldLink(link=self.ref.link))
 
         return BlobRef(mime_type=self.mime_type, size=self.size, ref=IpldLink(link=self.ref))
@@ -61,7 +79,7 @@ class BlobRef(BaseModel):
         Returns:
             BlobRef in bytes representation.
         """
-        if isinstance(self.ref, str):
+        if self.is_bytes_representation:
             return BlobRef(mime_type=self.mime_type, size=self.size, ref=self.ref)
 
         return BlobRef(mime_type=self.mime_type, size=self.size, ref=self.ref.link)
