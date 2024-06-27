@@ -19,6 +19,7 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyGraphList.Record',
     'models.AppBskyGraphListblock.Record',
     'models.AppBskyGraphListitem.Record',
+    'models.AppBskyGraphStarterpack.Record',
     'models.AppBskyLabelerService.Record',
     'models.ChatBskyActorDeclaration.Record',
 ]
@@ -35,6 +36,7 @@ UnknownRecordTypePydantic = te.Annotated[
         'models.AppBskyGraphList.Record',
         'models.AppBskyGraphListblock.Record',
         'models.AppBskyGraphListitem.Record',
+        'models.AppBskyGraphStarterpack.Record',
         'models.AppBskyLabelerService.Record',
         'models.ChatBskyActorDeclaration.Record',
     ],

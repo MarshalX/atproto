@@ -22,6 +22,7 @@ class ProfileViewBasic(base.ModelBase):
     handle: str  #: Handle.
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[str] = None  #: Avatar.
+    created_at: t.Optional[str] = None  #: Created at.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
@@ -38,6 +39,7 @@ class ProfileView(base.ModelBase):
     handle: str  #: Handle.
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[str] = None  #: Avatar.
+    created_at: t.Optional[str] = None  #: Created at.
     description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     indexed_at: t.Optional[str] = None  #: Indexed at.
@@ -57,11 +59,15 @@ class ProfileViewDetailed(base.ModelBase):
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[str] = None  #: Avatar.
     banner: t.Optional[str] = None  #: Banner.
+    created_at: t.Optional[str] = None  #: Created at.
     description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     followers_count: t.Optional[int] = None  #: Followers count.
     follows_count: t.Optional[int] = None  #: Follows count.
     indexed_at: t.Optional[str] = None  #: Indexed at.
+    joined_via_starter_pack: t.Optional[
+        'models.AppBskyGraphDefs.StarterPackViewBasic'
+    ] = None  #: Joined via starter pack.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     posts_count: t.Optional[int] = None  #: Posts count.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
@@ -78,6 +84,7 @@ class ProfileAssociated(base.ModelBase):
     feedgens: t.Optional[int] = None  #: Feedgens.
     labeler: t.Optional[bool] = None  #: Labeler.
     lists: t.Optional[int] = None  #: Lists.
+    starter_packs: t.Optional[int] = None  #: Starter packs.
 
     py_type: t.Literal['app.bsky.actor.defs#profileAssociated'] = Field(
         default='app.bsky.actor.defs#profileAssociated', alias='$type', frozen=True

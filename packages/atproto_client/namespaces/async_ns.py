@@ -2323,6 +2323,158 @@ class AppBskyGraphListitemRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
+class AppBskyGraphStarterpackRecord(AsyncRecordBase):
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyGraphStarterpack.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphStarterpack.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.graph.starterpack', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.AppBskyGraphStarterpack.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyGraphStarterpack.Record', response_model.value),
+        )
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphStarterpack.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphStarterpack.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.graph.starterpack',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.AppBskyGraphStarterpack.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.AppBskyGraphStarterpack.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyGraphStarterpack.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphStarterpack.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphStarterpack.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.graph.starterpack',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.AppBskyGraphStarterpack.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.graph.starterpack',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class AppBskyGraphNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
@@ -2331,6 +2483,35 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
         self.list = AppBskyGraphListRecord(self._client)
         self.listblock = AppBskyGraphListblockRecord(self._client)
         self.listitem = AppBskyGraphListitemRecord(self._client)
+        self.starterpack = AppBskyGraphStarterpackRecord(self._client)
+
+    async def get_actor_starter_packs(
+        self,
+        params: t.Union[
+            models.AppBskyGraphGetActorStarterPacks.Params, models.AppBskyGraphGetActorStarterPacks.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphGetActorStarterPacks.Response':
+        """Get a list of starter packs created by the actor.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetActorStarterPacks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyGraphGetActorStarterPacks.Params',
+            get_or_create(params, models.AppBskyGraphGetActorStarterPacks.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.graph.getActorStarterPacks', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetActorStarterPacks.Response)
 
     async def get_blocks(
         self,
@@ -2587,6 +2768,57 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
             'app.bsky.graph.getRelationships', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetRelationships.Response)
+
+    async def get_starter_pack(
+        self,
+        params: t.Union[models.AppBskyGraphGetStarterPack.Params, models.AppBskyGraphGetStarterPack.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphGetStarterPack.Response':
+        """Gets a view of a starter pack.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetStarterPack.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyGraphGetStarterPack.Params', get_or_create(params, models.AppBskyGraphGetStarterPack.Params)
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.graph.getStarterPack', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetStarterPack.Response)
+
+    async def get_starter_packs(
+        self,
+        params: t.Union[models.AppBskyGraphGetStarterPacks.Params, models.AppBskyGraphGetStarterPacks.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphGetStarterPacks.Response':
+        """Get views for a list of starter packs.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetStarterPacks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyGraphGetStarterPacks.Params',
+            get_or_create(params, models.AppBskyGraphGetStarterPacks.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.graph.getStarterPacks', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetStarterPacks.Response)
 
     async def get_suggested_follows_by_actor(
         self,
@@ -5508,7 +5740,7 @@ class ComAtprotoSyncNamespace(AsyncNamespaceBase):
         params: t.Union[models.ComAtprotoSyncListBlobs.Params, models.ComAtprotoSyncListBlobs.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoSyncListBlobs.Response':
-        """List blob CIDso for an account, since some repo revision. Does not require auth; implemented by PDS.
+        """List blob CIDs for an account, since some repo revision. Does not require auth; implemented by PDS.
 
         Args:
             params: Parameters.

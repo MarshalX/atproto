@@ -37,6 +37,7 @@ from atproto_client.models.app.bsky.feed import threadgate as AppBskyFeedThreadg
 from atproto_client.models.app.bsky.graph import block as AppBskyGraphBlock
 from atproto_client.models.app.bsky.graph import defs as AppBskyGraphDefs
 from atproto_client.models.app.bsky.graph import follow as AppBskyGraphFollow
+from atproto_client.models.app.bsky.graph import get_actor_starter_packs as AppBskyGraphGetActorStarterPacks
 from atproto_client.models.app.bsky.graph import get_blocks as AppBskyGraphGetBlocks
 from atproto_client.models.app.bsky.graph import get_followers as AppBskyGraphGetFollowers
 from atproto_client.models.app.bsky.graph import get_follows as AppBskyGraphGetFollows
@@ -47,6 +48,8 @@ from atproto_client.models.app.bsky.graph import get_list_mutes as AppBskyGraphG
 from atproto_client.models.app.bsky.graph import get_lists as AppBskyGraphGetLists
 from atproto_client.models.app.bsky.graph import get_mutes as AppBskyGraphGetMutes
 from atproto_client.models.app.bsky.graph import get_relationships as AppBskyGraphGetRelationships
+from atproto_client.models.app.bsky.graph import get_starter_pack as AppBskyGraphGetStarterPack
+from atproto_client.models.app.bsky.graph import get_starter_packs as AppBskyGraphGetStarterPacks
 from atproto_client.models.app.bsky.graph import (
     get_suggested_follows_by_actor as AppBskyGraphGetSuggestedFollowsByActor,
 )
@@ -56,6 +59,7 @@ from atproto_client.models.app.bsky.graph import listitem as AppBskyGraphListite
 from atproto_client.models.app.bsky.graph import mute_actor as AppBskyGraphMuteActor
 from atproto_client.models.app.bsky.graph import mute_actor_list as AppBskyGraphMuteActorList
 from atproto_client.models.app.bsky.graph import mute_thread as AppBskyGraphMuteThread
+from atproto_client.models.app.bsky.graph import starterpack as AppBskyGraphStarterpack
 from atproto_client.models.app.bsky.graph import unmute_actor as AppBskyGraphUnmuteActor
 from atproto_client.models.app.bsky.graph import unmute_actor_list as AppBskyGraphUnmuteActorList
 from atproto_client.models.app.bsky.graph import unmute_thread as AppBskyGraphUnmuteThread
@@ -249,6 +253,7 @@ class _Ids:
     AppBskyGraphBlock: str = 'app.bsky.graph.block'
     AppBskyGraphDefs: str = 'app.bsky.graph.defs'
     AppBskyGraphFollow: str = 'app.bsky.graph.follow'
+    AppBskyGraphGetActorStarterPacks: str = 'app.bsky.graph.getActorStarterPacks'
     AppBskyGraphGetBlocks: str = 'app.bsky.graph.getBlocks'
     AppBskyGraphGetFollowers: str = 'app.bsky.graph.getFollowers'
     AppBskyGraphGetFollows: str = 'app.bsky.graph.getFollows'
@@ -259,6 +264,8 @@ class _Ids:
     AppBskyGraphGetLists: str = 'app.bsky.graph.getLists'
     AppBskyGraphGetMutes: str = 'app.bsky.graph.getMutes'
     AppBskyGraphGetRelationships: str = 'app.bsky.graph.getRelationships'
+    AppBskyGraphGetStarterPack: str = 'app.bsky.graph.getStarterPack'
+    AppBskyGraphGetStarterPacks: str = 'app.bsky.graph.getStarterPacks'
     AppBskyGraphGetSuggestedFollowsByActor: str = 'app.bsky.graph.getSuggestedFollowsByActor'
     AppBskyGraphList: str = 'app.bsky.graph.list'
     AppBskyGraphListblock: str = 'app.bsky.graph.listblock'
@@ -266,6 +273,7 @@ class _Ids:
     AppBskyGraphMuteActor: str = 'app.bsky.graph.muteActor'
     AppBskyGraphMuteActorList: str = 'app.bsky.graph.muteActorList'
     AppBskyGraphMuteThread: str = 'app.bsky.graph.muteThread'
+    AppBskyGraphStarterpack: str = 'app.bsky.graph.starterpack'
     AppBskyGraphUnmuteActor: str = 'app.bsky.graph.unmuteActor'
     AppBskyGraphUnmuteActorList: str = 'app.bsky.graph.unmuteActorList'
     AppBskyGraphUnmuteThread: str = 'app.bsky.graph.unmuteThread'
