@@ -45,7 +45,9 @@ class Notification(base.ModelBase):
     cid: str  #: Cid.
     indexed_at: str  #: Indexed at.
     is_read: bool  #: Is read.
-    reason: str  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', and 'quote'.
+    reason: (
+        str
+    )  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', 'quote', and 'starterpack-joined'.
     record: 'UnknownType'  #: Record.
     uri: str  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
