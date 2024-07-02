@@ -142,6 +142,8 @@ Preferences = t.List[
             'models.AppBskyActorDefs.InterestsPref',
             'models.AppBskyActorDefs.MutedWordsPref',
             'models.AppBskyActorDefs.HiddenPostsPref',
+            'models.AppBskyActorDefs.BskyAppStatePref',
+            'models.AppBskyActorDefs.LabelersPref',
         ],
         Field(discriminator='py_type'),
     ]
@@ -306,4 +308,27 @@ class LabelerPrefItem(base.ModelBase):
 
     py_type: t.Literal['app.bsky.actor.defs#labelerPrefItem'] = Field(
         default='app.bsky.actor.defs#labelerPrefItem', alias='$type', frozen=True
+    )
+
+
+class BskyAppStatePref(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`. A grab bag of state that's specific to the bsky.app program. Third-party apps shouldn't use this."""
+
+    active_progress_guide: t.Optional['models.AppBskyActorDefs.BskyAppProgressGuide'] = None  #: Active progress guide.
+    queued_nudges: t.Optional[t.List[str]] = Field(
+        default=None, max_length=1000
+    )  #: An array of tokens which identify nudges (modals, popups, tours, highlight dots) that should be shown to the user.
+
+    py_type: t.Literal['app.bsky.actor.defs#bskyAppStatePref'] = Field(
+        default='app.bsky.actor.defs#bskyAppStatePref', alias='$type', frozen=True
+    )
+
+
+class BskyAppProgressGuide(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`. If set, an active progress guide. Once completed, can be set to undefined. Should have unspecced fields tracking progress."""
+
+    guide: str = Field(max_length=100)  #: Guide.
+
+    py_type: t.Literal['app.bsky.actor.defs#bskyAppProgressGuide'] = Field(
+        default='app.bsky.actor.defs#bskyAppProgressGuide', alias='$type', frozen=True
     )
