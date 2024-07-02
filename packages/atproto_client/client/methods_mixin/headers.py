@@ -4,7 +4,6 @@ from enum import Enum
 import typing_extensions as te
 from atproto_core.exceptions import AtProtocolError
 
-_MAX_LABELERS_COUNT = 10
 _ATPROTO_PROXY_HEADER = 'atproto-proxy'
 _ATPROTO_ACCEPT_LABELERS_HEADER = 'atproto-accept-labelers'
 
@@ -71,7 +70,7 @@ class HeadersConfigurationMethodsMixin:
             labeler_dids: The DIDs of the labelers.
         """
         labelers_prepared = [f'{labeler_did};redact' for labeler_did in labeler_dids if labeler_did.startswith('did:')]
-        labelers_header_value = ','.join(labelers_prepared[:_MAX_LABELERS_COUNT])
+        labelers_header_value = ','.join(labelers_prepared)
 
         self.request.add_additional_header(_ATPROTO_ACCEPT_LABELERS_HEADER, labelers_header_value)
 
