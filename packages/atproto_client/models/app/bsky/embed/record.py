@@ -35,6 +35,7 @@ class View(base.ModelBase):
             'models.AppBskyFeedDefs.GeneratorView',
             'models.AppBskyGraphDefs.ListView',
             'models.AppBskyLabelerDefs.LabelerView',
+            'models.AppBskyGraphDefs.StarterPackViewBasic',
         ],
         Field(discriminator='py_type'),
     ]  #: Record.
