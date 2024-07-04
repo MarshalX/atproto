@@ -1,5 +1,20 @@
 # Change Log
 
+## Version 0.0.49
+
+**04.07.2024**
+
+**Breaking changes for Direct Messages. Now you must create a client with a chat proxy. See the updated [documentation](https://atproto.blue/en/latest/dm.html)**.
+
+* Add automatically switching to PDS endpoint after login and session resume by @MarshalX in https://github.com/MarshalX/atproto/pull/344
+* Add atproto proxy and atproto labelers support by @MarshalX in https://github.com/MarshalX/atproto/pull/345 and https://github.com/MarshalX/atproto/pull/351
+* Add `BlobRef` representation conversations by @MarshalX in https://github.com/MarshalX/atproto/pull/348
+* Fix `BlobRef` creation for JSON representation by @MarshalX in https://github.com/MarshalX/atproto/pull/340
+* Fix `delete_post` example by @MarshalX in https://github.com/MarshalX/atproto/pull/342
+* Fix `repost` method by @MarshalX in https://github.com/MarshalX/atproto/pull/343
+* Bump urllib3 from 2.2.1 to 2.2.2 by @dependabot in https://github.com/MarshalX/atproto/pull/346
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/352, https://github.com/MarshalX/atproto/pull/350, https://github.com/MarshalX/atproto/pull/349, https://github.com/MarshalX/atproto/pull/347, https://github.com/MarshalX/atproto/pull/339, https://github.com/MarshalX/atproto/pull/337
+
 ## Version 0.0.48
 
 **01.06.2024**
