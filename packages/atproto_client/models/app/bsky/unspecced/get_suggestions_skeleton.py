@@ -20,6 +20,11 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    relative_to_did: t.Optional[
+        str
+    ] = (
+        None
+    )  #: DID of the account to get suggestions relative to. If not provided, suggestions will be based on the viewer.
     viewer: t.Optional[
         str
     ] = None  #: DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking.
@@ -28,6 +33,9 @@ class Params(base.ParamsModelBase):
 class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    relative_to_did: te.NotRequired[
+        t.Optional[str]
+    ]  #: DID of the account to get suggestions relative to. If not provided, suggestions will be based on the viewer.
     viewer: te.NotRequired[
         t.Optional[str]
     ]  #: DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking.

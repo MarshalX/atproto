@@ -37,6 +37,7 @@ class ModEventView(base.ModelBase):
             'models.ToolsOzoneModerationDefs.ModEventEmail',
             'models.ToolsOzoneModerationDefs.ModEventResolveAppeal',
             'models.ToolsOzoneModerationDefs.ModEventDivert',
+            'models.ToolsOzoneModerationDefs.ModEventTag',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -79,6 +80,7 @@ class ModEventViewDetail(base.ModelBase):
             'models.ToolsOzoneModerationDefs.ModEventEmail',
             'models.ToolsOzoneModerationDefs.ModEventResolveAppeal',
             'models.ToolsOzoneModerationDefs.ModEventDivert',
+            'models.ToolsOzoneModerationDefs.ModEventTag',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
