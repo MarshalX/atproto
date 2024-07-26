@@ -67,6 +67,7 @@ ALIASES_DB = {
     'models.AppBskyLabelerService': 'atproto_client.models.app.bsky.labeler.service',
     'models.AppBskyNotificationGetUnreadCount': 'atproto_client.models.app.bsky.notification.get_unread_count',
     'models.AppBskyNotificationListNotifications': 'atproto_client.models.app.bsky.notification.list_notifications',
+    'models.AppBskyNotificationPutPreferences': 'atproto_client.models.app.bsky.notification.put_preferences',
     'models.AppBskyNotificationRegisterPush': 'atproto_client.models.app.bsky.notification.register_push',
     'models.AppBskyNotificationUpdateSeen': 'atproto_client.models.app.bsky.notification.update_seen',
     'models.AppBskyRichtextFacet': 'atproto_client.models.app.bsky.richtext.facet',

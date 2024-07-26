@@ -15,10 +15,12 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.notification.getUnreadCount`."""
 
+    priority: t.Optional[bool] = None  #: Priority.
     seen_at: t.Optional[str] = None  #: Seen at.
 
 
 class ParamsDict(t.TypedDict):
+    priority: te.NotRequired[t.Optional[bool]]  #: Priority.
     seen_at: te.NotRequired[t.Optional[str]]  #: Seen at.
 
 
