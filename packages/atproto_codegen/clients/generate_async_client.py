@@ -8,7 +8,7 @@ _CLIENT_DIR = Path(__file__).parent.parent.parent.joinpath('atproto_client', 'cl
 
 
 def gen_client(input_filename: str, output_filename: str) -> None:
-    with open(_CLIENT_DIR.joinpath(input_filename), 'r', encoding='UTF-8') as f:
+    with open(_CLIENT_DIR.joinpath(input_filename), encoding='UTF-8') as f:
         code = f.read()
 
     # TODO(MarshalX): Get automatically

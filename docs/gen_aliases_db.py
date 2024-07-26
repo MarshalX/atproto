@@ -5,7 +5,7 @@ from pathlib import Path
 def main(init_path: Path, output_path: Path) -> None:
     aliases_db = ['ALIASES_DB = {']
 
-    with open(init_path, 'r', encoding='UTF-8') as f:
+    with open(init_path, encoding='UTF-8') as f:
         tree = ast.parse(f.read())
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom) and node.names:
