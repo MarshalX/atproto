@@ -1,13 +1,13 @@
-import json
 import typing as t
 from dataclasses import dataclass
 
 import httpx
 import typing_extensions as te
+from pydantic_core import from_json
 
 from atproto_client import exceptions
 from atproto_client.models.common import XrpcError
-from atproto_client.models.utils import get_or_create, is_json
+from atproto_client.models.utils import get_or_create, load_json
 
 
 @dataclass
@@ -35,7 +35,7 @@ def _convert_headers_to_dict(headers: httpx.Headers) -> t.Dict[str, str]:
 def _parse_response(response: httpx.Response) -> Response:
     content = response.content
     if response.headers.get('content-type') == 'application/json; charset=utf-8':
-        content = response.json()
+        content = from_json(response.content)
 
     return Response(
         success=True,
@@ -65,9 +65,9 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
         content=response.content,
         headers=_convert_headers_to_dict(response.headers),
     )
-    if response.content and is_json(response.content):
-        data: t.Dict[str, t.Any] = json.loads(response.content)
-        error_response.content = t.cast(XrpcError, get_or_create(data, XrpcError, strict=False))
+    error_content = load_json(response.content, strict=False)
+    if error_content:
+        error_response.content = t.cast(XrpcError, get_or_create(error_content, XrpcError, strict=False))
 
     if response.status_code in {401, 403}:
         raise exceptions.UnauthorizedError(error_response)

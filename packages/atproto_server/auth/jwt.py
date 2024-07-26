@@ -1,10 +1,10 @@
 import binascii
-import json
 import typing as t
 from datetime import datetime, timezone
 
 from atproto_crypto.verify import verify_signature
 from pydantic import BaseModel, ConfigDict
+from pydantic_core import from_json
 
 from atproto_server.auth.utils import base64url_decode
 from atproto_server.exceptions import (
@@ -64,14 +64,14 @@ def parse_jwt(jwt: t.Union[str, bytes]) -> t.Tuple[bytes, bytes, t.Dict[str, t.A
         raise TokenDecodeError('Invalid header padding') from e
 
     try:
-        header = json.loads(header_data)
+        header = from_json(header_data)
     except ValueError as e:
         raise TokenDecodeError(f'Invalid header string: {e}') from e
 
     if not isinstance(header, dict):
         raise TokenDecodeError('Invalid header string: must be a json object')
 
-    header = t.cast(t.Dict[str, t.Any], json.loads(header_data))  # we expect object in header
+    header = t.cast(t.Dict[str, t.Any], from_json(header_data))  # we expect an object in header
 
     try:
         payload = base64url_decode(payload_segment)
@@ -96,7 +96,7 @@ def decode_jwt_payload(payload: t.Union[str, bytes]) -> JwtPayload:
         :obj:`JwtPayload`: The decoded payload of the given JWT.
     """
     try:
-        plain_payload = json.loads(payload)
+        plain_payload = from_json(payload)
     except ValueError as e:
         raise TokenDecodeError(f'Invalid payload string: {e}') from e
     if not isinstance(plain_payload, dict):
