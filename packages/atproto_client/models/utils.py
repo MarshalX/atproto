@@ -132,14 +132,17 @@ def get_model_as_json(model: t.Union[DotDict, BlobRef, ModelBase]) -> str:
 
 
 def is_json(json_data: t.Union[str, bytes]) -> bool:
-    if isinstance(json_data, bytes):
-        json_data.decode('UTF-8', errors='ignore')
+    return load_json(json_data, strict=False) is not None
 
+
+def load_json(json_data: t.Union[str, bytes], strict: bool = True) -> t.Optional[t.Dict[str, t.Any]]:
     try:
-        from_json(json_data)
-        return True
-    except ValueError:
-        return False
+        return from_json(json_data)
+    except ValueError as e:
+        if strict:
+            raise e
+
+        return None
 
 
 def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[str, types.ModuleType]) -> bool:

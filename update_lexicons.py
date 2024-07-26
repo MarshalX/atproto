@@ -8,6 +8,7 @@ from io import BytesIO
 from pathlib import Path
 
 import httpx
+from pydantic_core import from_json
 
 _GITHUB_BASE_URL = 'https://github.com'
 _GITHUB_API_BASE_URL = 'https://api.github.com'
@@ -44,7 +45,7 @@ def _get_last_commit_info() -> t.Tuple[str, str, str]:
     )
     response.raise_for_status()
 
-    response_json = response.json()
+    response_json = from_json(response.content)
     commit_info = response_json[0]
 
     sha = commit_info['sha']
