@@ -21,12 +21,14 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    priority: t.Optional[bool] = None  #: Priority.
     seen_at: t.Optional[str] = None  #: Seen at.
 
 
 class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    priority: te.NotRequired[t.Optional[bool]]  #: Priority.
     seen_at: te.NotRequired[t.Optional[str]]  #: Seen at.
 
 
@@ -35,6 +37,7 @@ class Response(base.ResponseModelBase):
 
     notifications: t.List['models.AppBskyNotificationListNotifications.Notification']  #: Notifications.
     cursor: t.Optional[str] = None  #: Cursor.
+    priority: t.Optional[bool] = None  #: Priority.
     seen_at: t.Optional[str] = None  #: Seen at.
 
 

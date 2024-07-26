@@ -3242,6 +3242,32 @@ class AppBskyNotificationNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyNotificationListNotifications.Response)
 
+    def put_preferences(
+        self,
+        data: t.Union[models.AppBskyNotificationPutPreferences.Data, models.AppBskyNotificationPutPreferences.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Set notification-related preferences for an account. Requires auth.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyNotificationPutPreferences.Data',
+            get_or_create(data, models.AppBskyNotificationPutPreferences.Data),
+        )
+        response = self._client.invoke_procedure(
+            'app.bsky.notification.putPreferences', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
     def register_push(
         self,
         data: t.Union[models.AppBskyNotificationRegisterPush.Data, models.AppBskyNotificationRegisterPush.DataDict],
