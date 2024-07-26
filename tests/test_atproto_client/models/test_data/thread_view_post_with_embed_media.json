@@ -18,7 +18,8 @@
                     "muted": false,
                     "blockedBy": false
                 },
-                "labels": []
+                "labels": [],
+                "createdAt": "2023-04-26T19:05:34.249Z"
             },
             "record": {
                 "$type": "app.bsky.feed.post",
@@ -85,7 +86,8 @@
                                 "muted": false,
                                 "blockedBy": false
                             },
-                            "labels": []
+                            "labels": [],
+                            "createdAt": "2023-04-26T19:05:34.249Z"
                         },
                         "value": {
                             "$type": "app.bsky.feed.post",
@@ -108,7 +110,9 @@
             "repostCount": 0,
             "likeCount": 0,
             "indexedAt": "2023-09-28T12:49:36.735Z",
-            "viewer": {},
+            "viewer": {
+                "threadMuted": false
+            },
             "labels": []
         },
         "replies": []

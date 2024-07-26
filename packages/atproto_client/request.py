@@ -1,9 +1,9 @@
-import json
 import typing as t
 from dataclasses import dataclass
 
 import httpx
 import typing_extensions as te
+from pydantic_core import from_json
 
 from atproto_client import exceptions
 from atproto_client.models.common import XrpcError
@@ -66,7 +66,7 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
         headers=_convert_headers_to_dict(response.headers),
     )
     if response.content and is_json(response.content):
-        data: t.Dict[str, t.Any] = json.loads(response.content)
+        data: t.Dict[str, t.Any] = from_json(response.content)
         error_response.content = t.cast(XrpcError, get_or_create(data, XrpcError, strict=False))
 
     if response.status_code in {401, 403}:

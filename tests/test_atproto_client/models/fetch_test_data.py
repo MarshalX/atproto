@@ -1,10 +1,10 @@
-import json
 import logging
 import os
 import typing as t
 
 from atproto_client import Client
 from atproto_client.request import Request, Response
+from pydantic_core import to_json
 
 if t.TYPE_CHECKING:
     from atproto_client.models.common import XrpcError
@@ -73,7 +73,7 @@ def get_unique_filename(name: str) -> str:
 
 
 def get_pretty_json(data: dict) -> str:
-    return json.dumps(data, indent=4)
+    return to_json(data, indent=4).decode('UTF-8')
 
 
 def save_response(name: str) -> None:

@@ -1,7 +1,8 @@
-import json
 import os
 import typing as t
 from pathlib import Path
+
+from pydantic_core import from_json
 
 from atproto_lexicon import models
 from atproto_lexicon.exceptions import LexiconParsingError
@@ -19,7 +20,7 @@ def lexicon_parse(data: dict, model_class: t.Optional[t.Type[L]] = models.Lexico
 def lexicon_parse_file(lexicon_path: t.Union[Path, str], *, soft_fail: bool = False) -> t.Optional[models.LexiconDoc]:
     try:
         with open(lexicon_path, encoding='UTF-8') as f:
-            plain_lexicon = json.loads(f.read())
+            plain_lexicon = from_json(f.read())
             return lexicon_parse(plain_lexicon)
     except Exception as e:  # noqa: BLE001
         if soft_fail:

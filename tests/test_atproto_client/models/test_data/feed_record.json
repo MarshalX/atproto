@@ -2,7 +2,6 @@
     "uri": "at://did:plc:s6jnht6koorxz7trghirytmf/app.bsky.feed.generator/atproto",
     "cid": "bafyreifiexhek65jxj3ucz6y6zstj45rmtigybzygjkg6lretyqgtge5ai",
     "value": {
-        "did": "did:web:feed.atproto.blue",
         "$type": "app.bsky.feed.generator",
         "avatar": {
             "$type": "blob",
@@ -14,6 +13,7 @@
         },
         "createdAt": "2023-07-20T10:17:40.298101",
         "description": "Posts related to the protocol. Powered by The AT Protocol SDK for Python",
+        "did": "did:web:feed.atproto.blue",
         "displayName": "AT Protocol"
     }
 }
