@@ -68,6 +68,7 @@ from atproto_client.models.app.bsky.labeler import get_services as AppBskyLabele
 from atproto_client.models.app.bsky.labeler import service as AppBskyLabelerService
 from atproto_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
 from atproto_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
+from atproto_client.models.app.bsky.notification import put_preferences as AppBskyNotificationPutPreferences
 from atproto_client.models.app.bsky.notification import register_push as AppBskyNotificationRegisterPush
 from atproto_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
@@ -282,6 +283,7 @@ class _Ids:
     AppBskyLabelerService: str = 'app.bsky.labeler.service'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
     AppBskyNotificationListNotifications: str = 'app.bsky.notification.listNotifications'
+    AppBskyNotificationPutPreferences: str = 'app.bsky.notification.putPreferences'
     AppBskyNotificationRegisterPush: str = 'app.bsky.notification.registerPush'
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'

@@ -14,5 +14,6 @@ Submodules
 
    atproto_client.models.app.bsky.notification.get_unread_count
    atproto_client.models.app.bsky.notification.list_notifications
+   atproto_client.models.app.bsky.notification.put_preferences
    atproto_client.models.app.bsky.notification.register_push
    atproto_client.models.app.bsky.notification.update_seen
