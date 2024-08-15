@@ -50,6 +50,9 @@ By default :obj:`parse_subscribe_repos_message` doesn't decode inner DAG-CBOR. P
         if not isinstance(commit, models.ComAtprotoSyncSubscribeRepos.Commit):
             return
 
+        if not commit.blocks:
+            return
+
         car = CAR.from_bytes(commit.blocks)
 
 Here is how you can process labeling events:
