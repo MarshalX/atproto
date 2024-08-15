@@ -265,6 +265,13 @@ class MutedWord(base.ModelBase):
 
     targets: t.List['models.AppBskyActorDefs.MutedWordTarget']  #: The intended targets of the muted word.
     value: str = Field(max_length=10000)  #: The muted word itself.
+    actor_target: t.Optional[
+        str
+    ] = None  #: Groups of users to apply the muted word to. If undefined, applies to all users.
+    expires_at: t.Optional[
+        str
+    ] = None  #: The date and time at which the muted word will expire and no longer be applied.
+    id: t.Optional[str] = None  #: Id.
 
     py_type: t.Literal['app.bsky.actor.defs#mutedWord'] = Field(
         default='app.bsky.actor.defs#mutedWord', alias='$type', frozen=True

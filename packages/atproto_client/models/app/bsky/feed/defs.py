@@ -261,7 +261,7 @@ class Interaction(base.ModelBase):
     event: t.Optional[str] = None  #: Event.
     feed_context: t.Optional[str] = Field(
         default=None, max_length=2000
-    )  #: Context on a feed item that was orginally supplied by the feed generator on getFeedSkeleton.
+    )  #: Context on a feed item that was originally supplied by the feed generator on getFeedSkeleton.
     item: t.Optional[str] = None  #: Item.
 
     py_type: t.Literal['app.bsky.feed.defs#interaction'] = Field(

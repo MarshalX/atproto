@@ -55,7 +55,7 @@ class SelfLabel(base.ModelBase):
 
 
 class LabelValueDefinition(base.ModelBase):
-    """Definition model for :obj:`com.atproto.label.defs`. Declares a label value and its expected interpertations and behaviors."""
+    """Definition model for :obj:`com.atproto.label.defs`. Declares a label value and its expected interpretations and behaviors."""
 
     blurs: str  #: What should this label hide in the UI, if applied? 'content' hides all of the target; 'media' hides the images/video/audio; 'none' hides nothing.
     identifier: str = Field(
