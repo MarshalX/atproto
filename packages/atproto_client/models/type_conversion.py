@@ -5,6 +5,7 @@ RECORD_TYPE_TO_MODEL_CLASS = {
     'app.bsky.feed.generator': models.AppBskyFeedGenerator.Record,
     'app.bsky.feed.like': models.AppBskyFeedLike.Record,
     'app.bsky.feed.post': models.AppBskyFeedPost.Record,
+    'app.bsky.feed.postgate': models.AppBskyFeedPostgate.Record,
     'app.bsky.feed.repost': models.AppBskyFeedRepost.Record,
     'app.bsky.feed.threadgate': models.AppBskyFeedThreadgate.Record,
     'app.bsky.graph.block': models.AppBskyGraphBlock.Record,

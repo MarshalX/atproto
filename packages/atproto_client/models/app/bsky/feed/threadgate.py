@@ -58,6 +58,7 @@ class Record(base.RecordModelBase):
             ]
         ]
     ] = Field(default=None, max_length=5)  #: Allow.
+    hidden_replies: t.Optional[t.List[str]] = Field(default=None, max_length=50)  #: List of hidden reply URIs.
 
     py_type: t.Literal['app.bsky.feed.threadgate'] = Field(
         default='app.bsky.feed.threadgate', alias='$type', frozen=True
