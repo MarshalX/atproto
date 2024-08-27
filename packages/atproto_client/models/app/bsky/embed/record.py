@@ -32,6 +32,7 @@ class View(base.ModelBase):
             'models.AppBskyEmbedRecord.ViewRecord',
             'models.AppBskyEmbedRecord.ViewNotFound',
             'models.AppBskyEmbedRecord.ViewBlocked',
+            'models.AppBskyEmbedRecord.ViewDetached',
             'models.AppBskyFeedDefs.GeneratorView',
             'models.AppBskyGraphDefs.ListView',
             'models.AppBskyLabelerDefs.LabelerView',
@@ -68,6 +69,7 @@ class ViewRecord(base.ModelBase):
     ] = None  #: Embeds.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: t.Optional[int] = None  #: Like count.
+    quote_count: t.Optional[int] = None  #: Quote count.
     reply_count: t.Optional[int] = None  #: Reply count.
     repost_count: t.Optional[int] = None  #: Repost count.
 
@@ -96,4 +98,15 @@ class ViewBlocked(base.ModelBase):
 
     py_type: t.Literal['app.bsky.embed.record#viewBlocked'] = Field(
         default='app.bsky.embed.record#viewBlocked', alias='$type', frozen=True
+    )
+
+
+class ViewDetached(base.ModelBase):
+    """Definition model for :obj:`app.bsky.embed.record`."""
+
+    detached: bool = Field(frozen=True)  #: Detached.
+    uri: str  #: Uri.
+
+    py_type: t.Literal['app.bsky.embed.record#viewDetached'] = Field(
+        default='app.bsky.embed.record#viewDetached', alias='$type', frozen=True
     )

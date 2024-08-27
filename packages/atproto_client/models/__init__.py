@@ -25,11 +25,13 @@ from atproto_client.models.app.bsky.feed import get_likes as AppBskyFeedGetLikes
 from atproto_client.models.app.bsky.feed import get_list_feed as AppBskyFeedGetListFeed
 from atproto_client.models.app.bsky.feed import get_post_thread as AppBskyFeedGetPostThread
 from atproto_client.models.app.bsky.feed import get_posts as AppBskyFeedGetPosts
+from atproto_client.models.app.bsky.feed import get_quotes as AppBskyFeedGetQuotes
 from atproto_client.models.app.bsky.feed import get_reposted_by as AppBskyFeedGetRepostedBy
 from atproto_client.models.app.bsky.feed import get_suggested_feeds as AppBskyFeedGetSuggestedFeeds
 from atproto_client.models.app.bsky.feed import get_timeline as AppBskyFeedGetTimeline
 from atproto_client.models.app.bsky.feed import like as AppBskyFeedLike
 from atproto_client.models.app.bsky.feed import post as AppBskyFeedPost
+from atproto_client.models.app.bsky.feed import postgate as AppBskyFeedPostgate
 from atproto_client.models.app.bsky.feed import repost as AppBskyFeedRepost
 from atproto_client.models.app.bsky.feed import search_posts as AppBskyFeedSearchPosts
 from atproto_client.models.app.bsky.feed import send_interactions as AppBskyFeedSendInteractions
@@ -242,11 +244,13 @@ class _Ids:
     AppBskyFeedGetListFeed: str = 'app.bsky.feed.getListFeed'
     AppBskyFeedGetPostThread: str = 'app.bsky.feed.getPostThread'
     AppBskyFeedGetPosts: str = 'app.bsky.feed.getPosts'
+    AppBskyFeedGetQuotes: str = 'app.bsky.feed.getQuotes'
     AppBskyFeedGetRepostedBy: str = 'app.bsky.feed.getRepostedBy'
     AppBskyFeedGetSuggestedFeeds: str = 'app.bsky.feed.getSuggestedFeeds'
     AppBskyFeedGetTimeline: str = 'app.bsky.feed.getTimeline'
     AppBskyFeedLike: str = 'app.bsky.feed.like'
     AppBskyFeedPost: str = 'app.bsky.feed.post'
+    AppBskyFeedPostgate: str = 'app.bsky.feed.postgate'
     AppBskyFeedRepost: str = 'app.bsky.feed.repost'
     AppBskyFeedSearchPosts: str = 'app.bsky.feed.searchPosts'
     AppBskyFeedSendInteractions: str = 'app.bsky.feed.sendInteractions'

@@ -37,6 +37,7 @@ class PostView(base.ModelBase):
     ] = None  #: Embed.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: t.Optional[int] = None  #: Like count.
+    quote_count: t.Optional[int] = None  #: Quote count.
     reply_count: t.Optional[int] = None  #: Reply count.
     repost_count: t.Optional[int] = None  #: Repost count.
     threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.
@@ -50,6 +51,7 @@ class PostView(base.ModelBase):
 class ViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`. Metadata about the requesting account's relationship with the subject content. Only has meaningful content for authed requests."""
 
+    embedding_disabled: t.Optional[bool] = None  #: Embedding disabled.
     like: t.Optional[str] = None  #: Like.
     reply_disabled: t.Optional[bool] = None  #: Reply disabled.
     repost: t.Optional[str] = None  #: Repost.
