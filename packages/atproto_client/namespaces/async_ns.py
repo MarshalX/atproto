@@ -30,6 +30,7 @@ class AppBskyNamespace(AsyncNamespaceBase):
         self.labeler = AppBskyLabelerNamespace(self._client)
         self.notification = AppBskyNotificationNamespace(self._client)
         self.unspecced = AppBskyUnspeccedNamespace(self._client)
+        self.video = AppBskyVideoNamespace(self._client)
 
 
 class AppBskyActorProfileRecord(AsyncRecordBase):
@@ -3653,6 +3654,74 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
             'app.bsky.unspecced.searchPostsSkeleton', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyUnspeccedSearchPostsSkeleton.Response)
+
+
+class AppBskyVideoNamespace(AsyncNamespaceBase):
+    async def get_job_status(
+        self,
+        params: t.Union[models.AppBskyVideoGetJobStatus.Params, models.AppBskyVideoGetJobStatus.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyVideoGetJobStatus.Response':
+        """Get status details for a video processing job.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyVideoGetJobStatus.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyVideoGetJobStatus.Params', get_or_create(params, models.AppBskyVideoGetJobStatus.Params)
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.video.getJobStatus', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyVideoGetJobStatus.Response)
+
+    async def get_upload_limits(self, **kwargs: t.Any) -> 'models.AppBskyVideoGetUploadLimits.Response':
+        """Get video upload limits for the authenticated user.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyVideoGetUploadLimits.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = await self._client.invoke_query(
+            'app.bsky.video.getUploadLimits', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyVideoGetUploadLimits.Response)
+
+    async def upload_video(
+        self, data: 'models.AppBskyVideoUploadVideo.Data', **kwargs: t.Any
+    ) -> 'models.AppBskyVideoUploadVideo.Response':
+        """Upload a video to be processed then stored on the PDS.
+
+        Args:
+            data: Input data alias.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyVideoUploadVideo.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = await self._client.invoke_procedure(
+            'app.bsky.video.uploadVideo',
+            data=data,
+            input_encoding='video/mp4',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyVideoUploadVideo.Response)
 
 
 class ChatNamespace(AsyncNamespaceBase):
