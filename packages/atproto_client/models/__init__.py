@@ -7,10 +7,12 @@ from atproto_client.models.app.bsky.actor import profile as AppBskyActorProfile
 from atproto_client.models.app.bsky.actor import put_preferences as AppBskyActorPutPreferences
 from atproto_client.models.app.bsky.actor import search_actors as AppBskyActorSearchActors
 from atproto_client.models.app.bsky.actor import search_actors_typeahead as AppBskyActorSearchActorsTypeahead
+from atproto_client.models.app.bsky.embed import defs as AppBskyEmbedDefs
 from atproto_client.models.app.bsky.embed import external as AppBskyEmbedExternal
 from atproto_client.models.app.bsky.embed import images as AppBskyEmbedImages
 from atproto_client.models.app.bsky.embed import record as AppBskyEmbedRecord
 from atproto_client.models.app.bsky.embed import record_with_media as AppBskyEmbedRecordWithMedia
+from atproto_client.models.app.bsky.embed import video as AppBskyEmbedVideo
 from atproto_client.models.app.bsky.feed import defs as AppBskyFeedDefs
 from atproto_client.models.app.bsky.feed import describe_feed_generator as AppBskyFeedDescribeFeedGenerator
 from atproto_client.models.app.bsky.feed import generator as AppBskyFeedGenerator
@@ -82,6 +84,10 @@ from atproto_client.models.app.bsky.unspecced import get_suggestions_skeleton as
 from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as AppBskyUnspeccedGetTaggedSuggestions
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
+from atproto_client.models.app.bsky.video import defs as AppBskyVideoDefs
+from atproto_client.models.app.bsky.video import get_job_status as AppBskyVideoGetJobStatus
+from atproto_client.models.app.bsky.video import get_upload_limits as AppBskyVideoGetUploadLimits
+from atproto_client.models.app.bsky.video import upload_video as AppBskyVideoUploadVideo
 from atproto_client.models.chat.bsky.actor import declaration as ChatBskyActorDeclaration
 from atproto_client.models.chat.bsky.actor import defs as ChatBskyActorDefs
 from atproto_client.models.chat.bsky.actor import delete_account as ChatBskyActorDeleteAccount
@@ -226,10 +232,12 @@ class _Ids:
     AppBskyActorPutPreferences: str = 'app.bsky.actor.putPreferences'
     AppBskyActorSearchActors: str = 'app.bsky.actor.searchActors'
     AppBskyActorSearchActorsTypeahead: str = 'app.bsky.actor.searchActorsTypeahead'
+    AppBskyEmbedDefs: str = 'app.bsky.embed.defs'
     AppBskyEmbedExternal: str = 'app.bsky.embed.external'
     AppBskyEmbedImages: str = 'app.bsky.embed.images'
     AppBskyEmbedRecord: str = 'app.bsky.embed.record'
     AppBskyEmbedRecordWithMedia: str = 'app.bsky.embed.recordWithMedia'
+    AppBskyEmbedVideo: str = 'app.bsky.embed.video'
     AppBskyFeedDefs: str = 'app.bsky.feed.defs'
     AppBskyFeedDescribeFeedGenerator: str = 'app.bsky.feed.describeFeedGenerator'
     AppBskyFeedGenerator: str = 'app.bsky.feed.generator'
@@ -297,6 +305,10 @@ class _Ids:
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
+    AppBskyVideoDefs: str = 'app.bsky.video.defs'
+    AppBskyVideoGetJobStatus: str = 'app.bsky.video.getJobStatus'
+    AppBskyVideoGetUploadLimits: str = 'app.bsky.video.getUploadLimits'
+    AppBskyVideoUploadVideo: str = 'app.bsky.video.uploadVideo'
     ChatBskyActorDeclaration: str = 'chat.bsky.actor.declaration'
     ChatBskyActorDefs: str = 'chat.bsky.actor.defs'
     ChatBskyActorDeleteAccount: str = 'chat.bsky.actor.deleteAccount'

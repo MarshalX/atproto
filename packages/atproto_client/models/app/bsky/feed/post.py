@@ -58,6 +58,7 @@ class Record(base.RecordModelBase):
         te.Annotated[
             t.Union[
                 'models.AppBskyEmbedImages.Main',
+                'models.AppBskyEmbedVideo.Main',
                 'models.AppBskyEmbedExternal.Main',
                 'models.AppBskyEmbedRecord.Main',
                 'models.AppBskyEmbedRecordWithMedia.Main',

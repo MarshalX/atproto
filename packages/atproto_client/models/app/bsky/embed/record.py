@@ -59,6 +59,7 @@ class ViewRecord(base.ModelBase):
             te.Annotated[
                 t.Union[
                     'models.AppBskyEmbedImages.View',
+                    'models.AppBskyEmbedVideo.View',
                     'models.AppBskyEmbedExternal.View',
                     'models.AppBskyEmbedRecord.View',
                     'models.AppBskyEmbedRecordWithMedia.View',

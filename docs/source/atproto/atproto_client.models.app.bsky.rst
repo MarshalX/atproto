@@ -20,3 +20,4 @@ Subpackages
    atproto_client.models.app.bsky.notification
    atproto_client.models.app.bsky.richtext
    atproto_client.models.app.bsky.unspecced
+   atproto_client.models.app.bsky.video
