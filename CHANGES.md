@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 0.0.50
+
+**30.08.2024**
+
+* Use `jiter` instead of the built-in `json` module to improve performance by @MarshalX in https://github.com/MarshalX/atproto/pull/360
+* Update docs example to fix empty blocks of commit by @MarshalX in https://github.com/MarshalX/atproto/pull/363
+* Bump `certifi` from 2024.2.2 to 2024.7.4 by @dependabot in https://github.com/MarshalX/atproto/pull/355
+* Bump `zipp` from 3.18.1 to 3.19.1 by @dependabot in https://github.com/MarshalX/atproto/pull/356
+* Bump `setuptools` from 69.5.1 to 70.0.0 by @dependabot in https://github.com/MarshalX/atproto/pull/357
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/358, https://github.com/MarshalX/atproto/pull/359, https://github.com/MarshalX/atproto/pull/364, https://github.com/MarshalX/atproto/pull/366, https://github.com/MarshalX/atproto/pull/367
+
 ## Version 0.0.49
 
 **04.07.2024**
