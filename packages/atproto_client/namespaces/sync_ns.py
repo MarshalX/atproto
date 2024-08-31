@@ -4973,7 +4973,7 @@ class ComAtprotoRepoNamespace(NamespaceBase):
         self,
         data: t.Union[models.ComAtprotoRepoApplyWrites.Data, models.ComAtprotoRepoApplyWrites.DataDict],
         **kwargs: t.Any,
-    ) -> bool:
+    ) -> 'models.ComAtprotoRepoApplyWrites.Response':
         """Apply a batch transaction of repository creates, updates, and deletes. Requires auth, implemented by PDS.
 
         Args:
@@ -4981,7 +4981,7 @@ class ComAtprotoRepoNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`bool`: Success status.
+            :obj:`models.ComAtprotoRepoApplyWrites.Response`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -4990,9 +4990,13 @@ class ComAtprotoRepoNamespace(NamespaceBase):
             'models.ComAtprotoRepoApplyWrites.Data', get_or_create(data, models.ComAtprotoRepoApplyWrites.Data)
         )
         response = self._client.invoke_procedure(
-            'com.atproto.repo.applyWrites', data=data_model, input_encoding='application/json', **kwargs
+            'com.atproto.repo.applyWrites',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
         )
-        return get_response_model(response, bool)
+        return get_response_model(response, models.ComAtprotoRepoApplyWrites.Response)
 
     def create_record(
         self,
@@ -5027,7 +5031,7 @@ class ComAtprotoRepoNamespace(NamespaceBase):
         self,
         data: t.Union[models.ComAtprotoRepoDeleteRecord.Data, models.ComAtprotoRepoDeleteRecord.DataDict],
         **kwargs: t.Any,
-    ) -> bool:
+    ) -> 'models.ComAtprotoRepoDeleteRecord.Response':
         """Delete a repository record, or ensure it doesn't exist. Requires auth, implemented by PDS.
 
         Args:
@@ -5035,7 +5039,7 @@ class ComAtprotoRepoNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`bool`: Success status.
+            :obj:`models.ComAtprotoRepoDeleteRecord.Response`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
@@ -5044,9 +5048,13 @@ class ComAtprotoRepoNamespace(NamespaceBase):
             'models.ComAtprotoRepoDeleteRecord.Data', get_or_create(data, models.ComAtprotoRepoDeleteRecord.Data)
         )
         response = self._client.invoke_procedure(
-            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+            'com.atproto.repo.deleteRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
         )
-        return get_response_model(response, bool)
+        return get_response_model(response, models.ComAtprotoRepoDeleteRecord.Response)
 
     def describe_repo(
         self,

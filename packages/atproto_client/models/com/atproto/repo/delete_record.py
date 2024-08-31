@@ -9,6 +9,8 @@ import typing as t
 
 import typing_extensions as te
 
+if t.TYPE_CHECKING:
+    from atproto_client import models
 from atproto_client.models import base
 
 
@@ -28,3 +30,9 @@ class DataDict(t.TypedDict):
     rkey: str  #: The Record Key.
     swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by CID.
     swap_record: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous record by CID.
+
+
+class Response(base.ResponseModelBase):
+    """Output data model for :obj:`com.atproto.repo.deleteRecord`."""
+
+    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta'] = None  #: Commit.

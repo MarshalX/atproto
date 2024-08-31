@@ -133,6 +133,7 @@ ALIASES_DB = {
     'models.ComAtprotoModerationDefs': 'atproto_client.models.com.atproto.moderation.defs',
     'models.ComAtprotoRepoApplyWrites': 'atproto_client.models.com.atproto.repo.apply_writes',
     'models.ComAtprotoRepoCreateRecord': 'atproto_client.models.com.atproto.repo.create_record',
+    'models.ComAtprotoRepoDefs': 'atproto_client.models.com.atproto.repo.defs',
     'models.ComAtprotoRepoDeleteRecord': 'atproto_client.models.com.atproto.repo.delete_record',
     'models.ComAtprotoRepoDescribeRepo': 'atproto_client.models.com.atproto.repo.describe_repo',
     'models.ComAtprotoRepoGetRecord': 'atproto_client.models.com.atproto.repo.get_record',

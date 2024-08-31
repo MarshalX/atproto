@@ -35,7 +35,7 @@ class Data(base.DataModelBase):
     ] = None  #: If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations.
     validate_: t.Optional[
         bool
-    ] = None  #: Can be set to 'false' to skip Lexicon schema validation of record data, for all operations.
+    ] = None  #: Can be set to 'false' to skip Lexicon schema validation of record data across all operations, 'true' to require it, or leave unset to validate only for known Lexicons.
 
 
 class DataDict(t.TypedDict):
@@ -55,7 +55,25 @@ class DataDict(t.TypedDict):
     ]  #: If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations.
     validate: te.NotRequired[
         t.Optional[bool]
-    ]  #: Can be set to 'false' to skip Lexicon schema validation of record data, for all operations.
+    ]  #: Can be set to 'false' to skip Lexicon schema validation of record data across all operations, 'true' to require it, or leave unset to validate only for known Lexicons.
+
+
+class Response(base.ResponseModelBase):
+    """Output data model for :obj:`com.atproto.repo.applyWrites`."""
+
+    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta'] = None  #: Commit.
+    results: t.Optional[
+        t.List[
+            te.Annotated[
+                t.Union[
+                    'models.ComAtprotoRepoApplyWrites.CreateResult',
+                    'models.ComAtprotoRepoApplyWrites.UpdateResult',
+                    'models.ComAtprotoRepoApplyWrites.DeleteResult',
+                ],
+                Field(discriminator='py_type'),
+            ]
+        ]
+    ] = None  #: Results.
 
 
 class Create(base.ModelBase):
@@ -90,4 +108,36 @@ class Delete(base.ModelBase):
 
     py_type: t.Literal['com.atproto.repo.applyWrites#delete'] = Field(
         default='com.atproto.repo.applyWrites#delete', alias='$type', frozen=True
+    )
+
+
+class CreateResult(base.ModelBase):
+    """Definition model for :obj:`com.atproto.repo.applyWrites`."""
+
+    cid: str  #: Cid.
+    uri: str  #: Uri.
+    validation_status: t.Optional[str] = None  #: Validation status.
+
+    py_type: t.Literal['com.atproto.repo.applyWrites#createResult'] = Field(
+        default='com.atproto.repo.applyWrites#createResult', alias='$type', frozen=True
+    )
+
+
+class UpdateResult(base.ModelBase):
+    """Definition model for :obj:`com.atproto.repo.applyWrites`."""
+
+    cid: str  #: Cid.
+    uri: str  #: Uri.
+    validation_status: t.Optional[str] = None  #: Validation status.
+
+    py_type: t.Literal['com.atproto.repo.applyWrites#updateResult'] = Field(
+        default='com.atproto.repo.applyWrites#updateResult', alias='$type', frozen=True
+    )
+
+
+class DeleteResult(base.ModelBase):
+    """Definition model for :obj:`com.atproto.repo.applyWrites`."""
+
+    py_type: t.Literal['com.atproto.repo.applyWrites#deleteResult'] = Field(
+        default='com.atproto.repo.applyWrites#deleteResult', alias='$type', frozen=True
     )

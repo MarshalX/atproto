@@ -11,6 +11,7 @@ import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
+    from atproto_client import models
     from atproto_client.models.unknown_type import UnknownInputType
 from atproto_client.models import base
 
@@ -26,7 +27,9 @@ class Data(base.DataModelBase):
     swap_record: t.Optional[
         str
     ] = None  #: Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause problems with golang implementation.
-    validate_: t.Optional[bool] = None  #: Can be set to 'false' to skip Lexicon schema validation of record data.
+    validate_: t.Optional[
+        bool
+    ] = None  #: Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons.
 
 
 class DataDict(t.TypedDict):
@@ -40,7 +43,7 @@ class DataDict(t.TypedDict):
     ]  #: Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause problems with golang implementation.
     validate: te.NotRequired[
         t.Optional[bool]
-    ]  #: Can be set to 'false' to skip Lexicon schema validation of record data.
+    ]  #: Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons.
 
 
 class Response(base.ResponseModelBase):
@@ -48,3 +51,5 @@ class Response(base.ResponseModelBase):
 
     cid: str  #: Cid.
     uri: str  #: Uri.
+    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta'] = None  #: Commit.
+    validation_status: t.Optional[str] = None  #: Validation status.
