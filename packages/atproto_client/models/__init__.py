@@ -140,6 +140,7 @@ from atproto_client.models.com.atproto.moderation import create_report as ComAtp
 from atproto_client.models.com.atproto.moderation import defs as ComAtprotoModerationDefs
 from atproto_client.models.com.atproto.repo import apply_writes as ComAtprotoRepoApplyWrites
 from atproto_client.models.com.atproto.repo import create_record as ComAtprotoRepoCreateRecord
+from atproto_client.models.com.atproto.repo import defs as ComAtprotoRepoDefs
 from atproto_client.models.com.atproto.repo import delete_record as ComAtprotoRepoDeleteRecord
 from atproto_client.models.com.atproto.repo import describe_repo as ComAtprotoRepoDescribeRepo
 from atproto_client.models.com.atproto.repo import get_record as ComAtprotoRepoGetRecord
@@ -357,6 +358,7 @@ class _Ids:
     ComAtprotoModerationDefs: str = 'com.atproto.moderation.defs'
     ComAtprotoRepoApplyWrites: str = 'com.atproto.repo.applyWrites'
     ComAtprotoRepoCreateRecord: str = 'com.atproto.repo.createRecord'
+    ComAtprotoRepoDefs: str = 'com.atproto.repo.defs'
     ComAtprotoRepoDeleteRecord: str = 'com.atproto.repo.deleteRecord'
     ComAtprotoRepoDescribeRepo: str = 'com.atproto.repo.describeRepo'
     ComAtprotoRepoGetRecord: str = 'com.atproto.repo.getRecord'

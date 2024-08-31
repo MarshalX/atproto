@@ -14,6 +14,7 @@ Submodules
 
    atproto_client.models.com.atproto.repo.apply_writes
    atproto_client.models.com.atproto.repo.create_record
+   atproto_client.models.com.atproto.repo.defs
    atproto_client.models.com.atproto.repo.delete_record
    atproto_client.models.com.atproto.repo.describe_repo
    atproto_client.models.com.atproto.repo.get_record
