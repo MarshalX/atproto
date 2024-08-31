@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 0.0.51
+
+**31.08.2024**
+
+* Fix PDS auto-switching for self-hosted instances by @MarshalX in https://github.com/MarshalX/atproto/pull/370
+* Update lexicons fetched from bfbac24 committed 2024-08-30T18:18:43Z by @MarshalX in https://github.com/MarshalX/atproto/pull/372
+
 ## Version 0.0.50
 
 **30.08.2024**
