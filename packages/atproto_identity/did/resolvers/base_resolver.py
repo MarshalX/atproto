@@ -36,7 +36,7 @@ class BaseResolver(_BaseResolver, ABC):
         raise NotImplementedError
 
     def resolve_no_cache(self, did: str) -> t.Optional['DidDocument']:
-        """Resolve DID without cache.
+        """Resolve DID without a cache.
 
         Args:
             did: DID.
@@ -103,7 +103,7 @@ class BaseResolver(_BaseResolver, ABC):
             :obj:`DidDocument`: DID document.
 
         Raises:
-            :obj:`DidNotFoundError`: DID not found.
+            :obj:`DidNotFoundError`: DID not find.
         """
         did_doc = self.resolve(did, force_refresh)
         if did_doc is None:
@@ -158,7 +158,7 @@ class AsyncBaseResolver(_BaseResolver, ABC):
         raise NotImplementedError
 
     async def resolve_no_cache(self, did: str) -> t.Optional['DidDocument']:
-        """Resolve DID without cache.
+        """Resolve DID without a cache.
 
         Args:
             did: DID.
@@ -225,7 +225,7 @@ class AsyncBaseResolver(_BaseResolver, ABC):
             :obj:`DidDocument`: DID document.
 
         Raises:
-            :obj:`DidNotFoundError`: DID not found.
+            :obj:`DidNotFoundError`: DID not find.
         """
         did_doc = await self.resolve(did, force_refresh)
         if did_doc is None:

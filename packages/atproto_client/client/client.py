@@ -41,7 +41,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         return super()._invoke(invoke_type, **kwargs)
 
     def _set_session(self, event: SessionEvent, session: SessionResponse) -> None:
-        session = self._set_session_common(session)
+        session = self._set_session_common(session, self._base_url)
         self._call_on_session_change_callbacks(event, session.copy())
 
     def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':

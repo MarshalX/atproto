@@ -50,7 +50,7 @@ class AsyncClient(
         return await super()._invoke(invoke_type, **kwargs)
 
     async def _set_session(self, event: SessionEvent, session: SessionResponse) -> None:
-        session = self._set_session_common(session)
+        session = self._set_session_common(session, self._base_url)
         await self._call_on_session_change_callbacks(event, session.copy())
 
     async def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
