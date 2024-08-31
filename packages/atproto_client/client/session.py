@@ -72,11 +72,15 @@ AsyncSessionChangeCallback = t.Callable[[SessionEvent, Session], t.Coroutine[t.A
 
 
 def get_session_pds_endpoint(session: SessionResponse) -> t.Optional[str]:
-    """Return the PDS endpoint of the given session."""
+    """Return the PDS endpoint of the given session.
+
+    Note:
+        Return :obj:`None` for self-hosted PDSs.
+    """
     if isinstance(session, Session):
         return session.pds_endpoint
 
-    if is_valid_did_doc(session.did_doc):
+    if session.did_doc and is_valid_did_doc(session.did_doc):
         doc = DidDocument.from_dict(session.did_doc)
         return doc.get_pds_endpoint()
 

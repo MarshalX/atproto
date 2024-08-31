@@ -117,7 +117,7 @@ class SessionMethodsMixin(TimeMethodsMixin):
 
         return self.get_current_time() > expired_at
 
-    def _set_session_common(self, session: SessionResponse) -> Session:
+    def _set_session_common(self, session: SessionResponse, current_pds: str) -> Session:
         self._access_jwt = session.access_jwt
         self._access_jwt_payload = get_jwt_payload(session.access_jwt)
 
@@ -125,6 +125,10 @@ class SessionMethodsMixin(TimeMethodsMixin):
         self._refresh_jwt_payload = get_jwt_payload(session.refresh_jwt)
 
         pds_endpoint = get_session_pds_endpoint(session)
+        if not pds_endpoint:
+            # current_pds ends with xrpc endpoint, but this is not a problem
+            # overhead is only 4-5 symbols in the exported session string
+            pds_endpoint = current_pds
 
         self._session = Session(
             access_jwt=session.access_jwt,
