@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.0.52
+
+**01.09.2024**
+
+* Add new asyncio implementation support for websockets 13.0; handle `ConnectionError` exception; remove `close_timeout` by @MarshalX in https://github.com/MarshalX/atproto/pull/376
+* Add process_commits_async example by @MarshalX in https://github.com/MarshalX/atproto/pull/377
+* Update process_commits example by @MarshalX in https://github.com/MarshalX/atproto/pull/374
+
 ## Version 0.0.51
 
 **31.08.2024**
