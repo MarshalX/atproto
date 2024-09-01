@@ -12,7 +12,13 @@ from atproto_client.models import get_model_as_dict
 from atproto_client.models.base import ParamsModelBase
 from atproto_client.models.common import XrpcError
 from atproto_core.exceptions import DAGCBORDecodingError
-from websockets.client import connect as aconnect
+
+try:
+    # new asyncio implementation is available since websockets 13.0
+    from websockets.asyncio.client import connect as aconnect
+except ImportError:
+    # fallback to the legacy implementation for older versions
+    from websockets.client import connect as aconnect
 from websockets.exceptions import (
     ConnectionClosedError,
     ConnectionClosedOK,
@@ -33,10 +39,26 @@ AsyncOnMessageCallback = t.Callable[['MessageFrame'], t.Coroutine[t.Any, t.Any, 
 OnCallbackErrorCallback = t.Callable[[BaseException], None]
 AsyncOnCallbackErrorCallback = t.Callable[[BaseException], t.Coroutine[t.Any, t.Any, None]]
 
+_OK_ERRORS = (ConnectionClosedOK,)
+_ERR_ERRORS = (
+    ConnectionError,
+    ConnectionClosedError,
+    InvalidHandshake,
+    PayloadTooBig,
+    ProtocolError,
+    socket.gaierror,
+)
+
 
 if t.TYPE_CHECKING:
     from websockets.client import ClientConnection as SyncWebSocketClient
-    from websockets.legacy.client import Connect as AsyncConnect
+
+    try:
+        # new asyncio implementation is available since websockets 13.0
+        from websockets.asyncio.client import ClientConnection as AsyncConnect
+    except ImportError:
+        # fallback to the legacy implementation for older versions
+        from websockets.legacy.client import Connect as AsyncConnect
 
 
 def _build_websocket_uri(method: str, base_uri: str, params: t.Optional[t.Dict[str, t.Any]] = None) -> str:
@@ -59,10 +81,11 @@ def _handle_frame_decoding_error(exception: Exception) -> None:
 
 def _handle_websocket_error_or_stop(exception: Exception) -> bool:
     """Return if the connection should be properly being closed or reraise exception."""
-    if isinstance(exception, (ConnectionClosedOK,)):
+    if isinstance(exception, _OK_ERRORS):
         return True
-    if isinstance(exception, (ConnectionClosedError, InvalidHandshake, PayloadTooBig, ProtocolError, socket.gaierror)):
+    if isinstance(exception, _ERR_ERRORS):
         return False
+
     if isinstance(exception, FirehoseError):
         raise exception
 
@@ -110,13 +133,10 @@ class _WebsocketClientBase:
         return _build_websocket_uri(self._method, self._base_uri, self._params)
 
     def _get_client(self) -> 'SyncWebSocketClient':
-        return connect(self._websocket_uri, max_size=_MAX_MESSAGE_SIZE_BYTES)
+        return connect(self._websocket_uri, max_size=_MAX_MESSAGE_SIZE_BYTES, close_timeout=None)
 
     def _get_async_client(self) -> 'AsyncConnect':
-        # FIXME(DXsmiley): I've noticed that the close operation often takes the entire timeout for some reason
-        #   By default, this is 10 seconds, which is pretty long.
-        #   Maybe shorten it?
-        return aconnect(self._websocket_uri, max_size=_MAX_MESSAGE_SIZE_BYTES)
+        return aconnect(self._websocket_uri, max_size=_MAX_MESSAGE_SIZE_BYTES, close_timeout=None)
 
     def _get_reconnection_delay(self) -> int:
         base_sec = 2**self._reconnect_no
