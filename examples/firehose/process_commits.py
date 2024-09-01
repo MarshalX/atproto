@@ -1,6 +1,8 @@
 import multiprocessing
+import signal
 import time
 from collections import defaultdict
+from types import FrameType
 from typing import Any
 
 from atproto import CAR, AtUri, FirehoseSubscribeReposClient, firehose_models, models, parse_subscribe_repos_message
@@ -45,6 +47,8 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> defa
 
 
 def worker_main(cursor_value: multiprocessing.Value, pool_queue: multiprocessing.Queue) -> None:
+    signal.signal(signal.SIGINT, signal.SIG_IGN)  # we handle it in the main process
+
     while True:
         message = pool_queue.get()
 
@@ -89,7 +93,28 @@ def measure_events_per_second(func: callable) -> callable:
     return wrapper
 
 
+def signal_handler(_: int, __: FrameType) -> None:
+    print('Keyboard interrupt received. Waiting for the queue to empty before terminating processes...')
+
+    # Stop receiving new messages
+    client.stop()
+
+    # Drain the messages queue
+    while not queue.empty():
+        print('Waiting for the queue to empty...')
+        time.sleep(0.2)
+
+    print('Queue is empty. Gracefully terminating processes...')
+
+    pool.terminate()
+    pool.join()
+
+    exit(0)
+
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal_handler)
+
     start_cursor = None
 
     params = None
