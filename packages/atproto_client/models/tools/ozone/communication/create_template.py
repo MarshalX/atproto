@@ -19,6 +19,7 @@ class Data(base.DataModelBase):
     name: str  #: Name of the template.
     subject: str  #: Subject of the message, used in emails.
     created_by: t.Optional[str] = None  #: DID of the user who is creating the template.
+    lang: t.Optional[str] = None  #: Message language.
 
 
 class DataDict(t.TypedDict):
@@ -26,3 +27,4 @@ class DataDict(t.TypedDict):
     name: str  #: Name of the template.
     subject: str  #: Subject of the message, used in emails.
     created_by: te.NotRequired[t.Optional[str]]  #: DID of the user who is creating the template.
+    lang: te.NotRequired[t.Optional[str]]  #: Message language.
