@@ -27,7 +27,7 @@ class BlobRef(BaseModel):
     @property
     def cid(self) -> 'CID':
         """Get CID."""
-        if isinstance(self.ref, (str, bytes)):
+        if self.is_bytes_representation:
             return CID.decode(self.ref)
 
         return CID.decode(self.ref.link)
@@ -48,7 +48,7 @@ class BlobRef(BaseModel):
         Returns:
             True if it is bytes representation.
         """
-        return isinstance(self.ref, str)
+        return isinstance(self.ref, (str, bytes))
 
     def to_json_representation(self) -> 'BlobRef':
         """Get JSON representation.
