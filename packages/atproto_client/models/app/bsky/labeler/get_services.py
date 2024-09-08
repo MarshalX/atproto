@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
     detailed: t.Optional[bool] = None  #: Detailed.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     dids: t.List[str]  #: Dids.
     detailed: te.NotRequired[t.Optional[bool]]  #: Detailed.
 

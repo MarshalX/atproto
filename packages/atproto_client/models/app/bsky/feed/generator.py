@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -22,6 +22,11 @@ class Record(base.RecordModelBase):
     created_at: str  #: Created at.
     did: str  #: Did.
     display_name: str = Field(max_length=240)  #: Display name.
+    accepts_interactions: t.Optional[
+        bool
+    ] = (
+        None
+    )  #: Declaration that a feed accepts feedback interactions from a client through app.bsky.feed.sendInteractions.
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
@@ -29,23 +34,7 @@ class Record(base.RecordModelBase):
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Self-label values.
 
-    py_type: te.Literal['app.bsky.feed.generator'] = Field(
-        default='app.bsky.feed.generator', alias='$type', frozen=True
-    )
-
-
-class Main(Record):
-    def __init_subclass__(cls, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init_subclass__(**data)
-
-    def __init__(self, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init__(**data)
+    py_type: t.Literal['app.bsky.feed.generator'] = Field(default='app.bsky.feed.generator', alias='$type', frozen=True)
 
 
 class GetRecordResponse(base.SugarResponseModelBase):

@@ -19,6 +19,7 @@ Documentation
    :caption: SDK
    :maxdepth: 4
 
+   dm
    atproto_client/index
    atproto_core/index
    atproto_firehose/index

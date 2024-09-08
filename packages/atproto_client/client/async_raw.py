@@ -12,6 +12,7 @@ class AsyncClientRaw(AsyncClientBase):
     com: 'async_ns.ComNamespace'
     app: 'async_ns.AppNamespace'
     tools: 'async_ns.ToolsNamespace'
+    chat: 'async_ns.ChatNamespace'
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
@@ -19,3 +20,4 @@ class AsyncClientRaw(AsyncClientBase):
         self.com = async_ns.ComNamespace(self)
         self.app = async_ns.AppNamespace(self)
         self.tools = async_ns.ToolsNamespace(self)
+        self.chat = async_ns.ChatNamespace(self)

@@ -18,7 +18,8 @@ _SUBSCRIBE_REPOS_MESSAGE_TYPE_TO_MODEL = {
     '#migrate': models.ComAtprotoSyncSubscribeRepos.Migrate,
     '#tombstone': models.ComAtprotoSyncSubscribeRepos.Tombstone,
     '#info': models.ComAtprotoSyncSubscribeRepos.Info,
-    '#identity': models.ComAtprotoSyncSubscribeRepos.Identity,
+    '#identity': models.ComAtprotoSyncSubscribeRepos.Identity,  # DEPRECATED
+    '#account': models.ComAtprotoSyncSubscribeRepos.Account,
 }
 _SUBSCRIBE_LABELS_MESSAGE_TYPE_TO_MODEL = {
     '#labels': models.ComAtprotoLabelSubscribeLabels.Labels,

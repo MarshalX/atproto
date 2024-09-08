@@ -1,9 +1,9 @@
 import base64
-import json
 import os
 
 import pytest
 from atproto_crypto.verify import verify_signature
+from pydantic_core import from_json
 
 # Ref: https://github.com/bluesky-social/atproto/blob/main/interop-test-files/crypto/signature-fixtures.json
 _FIXTURES_FILE_PATH = os.path.join(os.path.dirname(__file__), 'signature-fixtures.json')
@@ -11,7 +11,7 @@ _FIXTURES_FILE_PATH = os.path.join(os.path.dirname(__file__), 'signature-fixture
 
 def _load_test_cases() -> list:
     with open(_FIXTURES_FILE_PATH, encoding='UTF-8') as file:
-        return json.load(file)
+        return from_json(file.read())
 
 
 def _fix_base64_padding(data: str) -> str:

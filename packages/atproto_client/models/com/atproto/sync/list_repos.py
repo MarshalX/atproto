@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
     limit: t.Optional[int] = Field(default=500, ge=1, le=1000)  #: Limit.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 
@@ -40,7 +40,11 @@ class Repo(base.ModelBase):
     did: str  #: Did.
     head: str  #: Current repo commit CID.
     rev: str  #: Rev.
+    active: t.Optional[bool] = None  #: Active.
+    status: t.Optional[
+        str
+    ] = None  #: If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted.
 
-    py_type: te.Literal['com.atproto.sync.listRepos#repo'] = Field(
+    py_type: t.Literal['com.atproto.sync.listRepos#repo'] = Field(
         default='com.atproto.sync.listRepos#repo', alias='$type', frozen=True
     )

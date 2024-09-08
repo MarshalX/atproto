@@ -1,11 +1,12 @@
 import typing as t
 from threading import Lock
 
+import typing_extensions as te
 from atproto_core.uri import AtUri
 
 from atproto_client import models
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
-from atproto_client.client.methods_mixin.backward_compatibility import _BackwardCompatibility
+from atproto_client.client.methods_mixin.headers import HeadersConfigurationMethodsMixin
 from atproto_client.client.methods_mixin.session import SessionDispatchMixin
 from atproto_client.client.raw import ClientRaw
 from atproto_client.client.session import Session, SessionEvent, SessionResponse
@@ -18,7 +19,7 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
-class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, ClientRaw):
+class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, HeadersConfigurationMethodsMixin, ClientRaw):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args: t.Any, **kwargs: t.Any) -> None:
@@ -40,7 +41,7 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         return super()._invoke(invoke_type, **kwargs)
 
     def _set_session(self, event: SessionEvent, session: SessionResponse) -> None:
-        session = self._set_session_common(session)
+        session = self._set_session_common(session, self._base_url)
         self._call_on_session_change_callbacks(event, session.copy())
 
     def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
@@ -67,6 +68,18 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
 
         return import_session
 
+    def clone(self) -> te.Self:
+        """Clone the client instance.
+
+        Used to customize atproto proxy and set of labeler services.
+
+        Returns:
+            Cloned client instance.
+        """
+        cloned_client = super().clone()
+        cloned_client.me = self.me
+        return cloned_client
+
     def login(
         self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
     ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
@@ -75,7 +88,7 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         Args:
             login: Handle/username of the account.
             password: Main or app-specific password of the account.
-            session_string: Session string (use :py:attr:`~export_session_string` to obtain it).
+            session_string: Session string (use :py:attr:`~export_session_string` to get it).
 
         Note:
             Either `session_string` or `login` and `password` should be provided.
@@ -420,18 +433,12 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
             models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, filter=filter, limit=limit)
         )
 
-    def like(
-        self,
-        uri: t.Optional[str] = None,
-        cid: t.Optional[str] = None,
-        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
-    ) -> 'models.AppBskyFeedLike.CreateRecordResponse':
+    def like(self, uri: str, cid: str) -> 'models.AppBskyFeedLike.CreateRecordResponse':
         """Like the record.
 
         Args:
             cid: The CID of the record.
             uri: The URI of the record.
-            subject: DEPRECATED.
 
         Note:
             Record could be post, custom feed, etc.
@@ -442,7 +449,7 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
+        subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
         repo = self.me and self.me.did
         if not repo:
@@ -466,18 +473,12 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         uri = AtUri.from_str(like_uri)
         return self.app.bsky.feed.like.delete(uri.hostname, uri.rkey)
 
-    def repost(
-        self,
-        uri: t.Optional[str] = None,
-        cid: t.Optional[str] = None,
-        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
-    ) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
+    def repost(self, uri: str, cid: str) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
         """Repost post.
 
         Args:
             cid: The CID of the post.
             uri: The URI of the post.
-            subject: DEPRECATED.
 
         Returns:
             :obj:`models.AppBskyFeedRepost.CreateRecordResponse`: Reference to the reposted record.
@@ -485,7 +486,7 @@ class Client(_BackwardCompatibility, SessionDispatchMixin, SessionMethodsMixin, 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
+        subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
         repo = self.me and self.me.did
         if not repo:

@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -23,27 +23,15 @@ class Record(base.RecordModelBase):
         'BlobRef'
     ] = None  #: Small image to be displayed next to posts from account. AKA, 'profile picture'.
     banner: t.Optional['BlobRef'] = None  #: Larger horizontal image to display behind profile view.
+    created_at: t.Optional[str] = None  #: Created at.
     description: t.Optional[str] = Field(default=None, max_length=2560)  #: Free-form profile description text.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
+    joined_via_starter_pack: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Joined via starter pack.
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Self-label values, specific to the Bluesky application, on the overall account.
 
-    py_type: te.Literal['app.bsky.actor.profile'] = Field(default='app.bsky.actor.profile', alias='$type', frozen=True)
-
-
-class Main(Record):
-    def __init_subclass__(cls, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init_subclass__(**data)
-
-    def __init__(self, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init__(**data)
+    py_type: t.Literal['app.bsky.actor.profile'] = Field(default='app.bsky.actor.profile', alias='$type', frozen=True)
 
 
 class GetRecordResponse(base.SugarResponseModelBase):

@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -19,11 +19,13 @@ class Data(base.DataModelBase):
 
     identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
     password: str  #: Password.
+    auth_factor_token: t.Optional[str] = None  #: Auth factor token.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
     password: str  #: Password.
+    auth_factor_token: te.NotRequired[t.Optional[str]]  #: Auth factor token.
 
 
 class Response(base.ResponseModelBase):
@@ -33,6 +35,11 @@ class Response(base.ResponseModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     refresh_jwt: str  #: Refresh jwt.
+    active: t.Optional[bool] = None  #: Active.
     did_doc: t.Optional['UnknownType'] = None  #: Did doc.
     email: t.Optional[str] = None  #: Email.
+    email_auth_factor: t.Optional[bool] = None  #: Email auth factor.
     email_confirmed: t.Optional[bool] = None  #: Email confirmed.
+    status: t.Optional[
+        str
+    ] = None  #: If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted.

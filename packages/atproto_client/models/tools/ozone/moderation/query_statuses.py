@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -28,6 +28,7 @@ class Params(base.ParamsModelBase):
     ] = None  #: By default, we don't include muted subjects in the results. Set this to true to include them.
     last_reviewed_by: t.Optional[str] = None  #: Get all subject statuses that were reviewed by a specific moderator.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    only_muted: t.Optional[bool] = None  #: When set to true, only muted subjects and reporters will be returned.
     reported_after: t.Optional[str] = None  #: Search subjects reported after a given timestamp.
     reported_before: t.Optional[str] = None  #: Search subjects reported before a given timestamp.
     review_state: t.Optional[str] = None  #: Specify when fetching subjects in a certain state.
@@ -40,7 +41,7 @@ class Params(base.ParamsModelBase):
     takendown: t.Optional[bool] = None  #: Get subjects that were taken down.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     appealed: te.NotRequired[t.Optional[bool]]  #: Get subjects in unresolved appealed status.
     comment: te.NotRequired[t.Optional[str]]  #: Search subjects by keyword from comments.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
@@ -53,6 +54,9 @@ class ParamsDict(te.TypedDict):
         t.Optional[str]
     ]  #: Get all subject statuses that were reviewed by a specific moderator.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    only_muted: te.NotRequired[
+        t.Optional[bool]
+    ]  #: When set to true, only muted subjects and reporters will be returned.
     reported_after: te.NotRequired[t.Optional[str]]  #: Search subjects reported after a given timestamp.
     reported_before: te.NotRequired[t.Optional[str]]  #: Search subjects reported before a given timestamp.
     review_state: te.NotRequired[t.Optional[str]]  #: Specify when fetching subjects in a certain state.

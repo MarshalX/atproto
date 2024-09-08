@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -23,7 +23,7 @@ class Params(base.ParamsModelBase):
     uri: t.Optional[str] = None  #: Uri.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     blob: te.NotRequired[t.Optional[str]]  #: Blob.
     did: te.NotRequired[t.Optional[str]]  #: Did.
     uri: te.NotRequired[t.Optional[str]]  #: Uri.
@@ -40,4 +40,5 @@ class Response(base.ResponseModelBase):
         ],
         Field(discriminator='py_type'),
     ]  #: Subject.
+    deactivated: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Deactivated.
     takedown: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Takedown.

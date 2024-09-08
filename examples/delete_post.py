@@ -1,4 +1,4 @@
-from atproto import AtUri, Client
+from atproto import Client
 
 
 def main() -> None:
@@ -9,12 +9,8 @@ def main() -> None:
     post_ref = client.send_post('Test send-delete from Python SDK')
     print('Post reference:', post_ref)
 
-    # rkey means record key. The ID of the post object
-    post_rkey = AtUri.from_str(post_ref.uri).rkey
-    print('Post rkey:', post_rkey)
-
     # this method returns True/False depends on the response
-    print('Deleted successfully:', client.delete_post(post_rkey))
+    print('Deleted successfully:', client.delete_post(post_ref.uri))
 
 
 if __name__ == '__main__':

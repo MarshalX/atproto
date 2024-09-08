@@ -11,6 +11,7 @@ from atproto_client.client.session import (
     SessionChangeCallback,
     SessionEvent,
     SessionResponse,
+    get_session_pds_endpoint,
 )
 from atproto_client.exceptions import LoginRequiredError
 
@@ -116,21 +117,29 @@ class SessionMethodsMixin(TimeMethodsMixin):
 
         return self.get_current_time() > expired_at
 
-    def _set_session_common(self, session: SessionResponse) -> Session:
+    def _set_session_common(self, session: SessionResponse, current_pds: str) -> Session:
         self._access_jwt = session.access_jwt
         self._access_jwt_payload = get_jwt_payload(session.access_jwt)
 
         self._refresh_jwt = session.refresh_jwt
         self._refresh_jwt_payload = get_jwt_payload(session.refresh_jwt)
 
+        pds_endpoint = get_session_pds_endpoint(session)
+        if not pds_endpoint:
+            # current_pds ends with xrpc endpoint, but this is not a problem
+            # overhead is only 4-5 symbols in the exported session string
+            pds_endpoint = current_pds
+
         self._session = Session(
             access_jwt=session.access_jwt,
             refresh_jwt=session.refresh_jwt,
             did=session.did,
             handle=session.handle,
+            pds_endpoint=pds_endpoint,
         )
 
         self._set_auth_headers(session.access_jwt)
+        self._update_pds_endpoint(pds_endpoint)
 
         return self._session
 
@@ -139,7 +148,11 @@ class SessionMethodsMixin(TimeMethodsMixin):
         return {'Authorization': f'Bearer {token}'}
 
     def _set_auth_headers(self, token: str) -> None:
-        self.request.set_additional_headers(self._get_auth_headers(token))
+        for header_name, header_value in self._get_auth_headers(token).items():
+            self.request.add_additional_header(header_name, header_value)
+
+    def _update_pds_endpoint(self, pds_endpoint: str) -> None:
+        self.update_base_url(pds_endpoint)
 
     def export_session_string(self) -> str:
         """Export session string.

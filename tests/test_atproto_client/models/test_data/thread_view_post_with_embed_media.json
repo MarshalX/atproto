@@ -7,13 +7,19 @@
             "author": {
                 "did": "did:plc:kvwvcn5iqfooopmyzvb4qzba",
                 "handle": "test.marshal.dev",
-                "displayName": "I love Python 3",
+                "displayName": "Python SDK",
                 "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
+                "associated": {
+                    "chat": {
+                        "allowIncoming": "all"
+                    }
+                },
                 "viewer": {
                     "muted": false,
                     "blockedBy": false
                 },
-                "labels": []
+                "labels": [],
+                "createdAt": "2023-04-26T19:05:34.249Z"
             },
             "record": {
                 "$type": "app.bsky.feed.post",
@@ -69,13 +75,19 @@
                         "author": {
                             "did": "did:plc:kvwvcn5iqfooopmyzvb4qzba",
                             "handle": "test.marshal.dev",
-                            "displayName": "I love Python 3",
+                            "displayName": "Python SDK",
                             "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg",
+                            "associated": {
+                                "chat": {
+                                    "allowIncoming": "all"
+                                }
+                            },
                             "viewer": {
                                 "muted": false,
                                 "blockedBy": false
                             },
-                            "labels": []
+                            "labels": [],
+                            "createdAt": "2023-04-26T19:05:34.249Z"
                         },
                         "value": {
                             "$type": "app.bsky.feed.post",
@@ -86,6 +98,9 @@
                             "text": "test"
                         },
                         "labels": [],
+                        "likeCount": 0,
+                        "replyCount": 0,
+                        "repostCount": 0,
                         "indexedAt": "2023-09-28T12:46:18.414Z",
                         "embeds": []
                     }
@@ -95,7 +110,9 @@
             "repostCount": 0,
             "likeCount": 0,
             "indexedAt": "2023-09-28T12:49:36.735Z",
-            "viewer": {},
+            "viewer": {
+                "threadMuted": false
+            },
             "labels": []
         },
         "replies": []

@@ -5,14 +5,14 @@ from atproto_client import Client, Session, SessionEvent
 
 def get_session() -> Optional[str]:
     try:
-        with open('session.txt') as f:
+        with open('session.txt', encoding='UTF-8') as f:
             return f.read()
     except FileNotFoundError:
         return None
 
 
 def save_session(session_string: str) -> None:
-    with open('session.txt', 'w') as f:
+    with open('session.txt', 'w', encoding='UTF-8') as f:
         f.write(session_string)
 
 

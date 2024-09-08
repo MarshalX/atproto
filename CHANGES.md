@@ -1,5 +1,77 @@
 # Change Log
 
+## Version 0.0.52
+
+**01.09.2024**
+
+* Add new asyncio implementation support for websockets 13.0; handle `ConnectionError` exception; remove `close_timeout` by @MarshalX in https://github.com/MarshalX/atproto/pull/376
+* Add process_commits_async example by @MarshalX in https://github.com/MarshalX/atproto/pull/377
+* Update process_commits example by @MarshalX in https://github.com/MarshalX/atproto/pull/374
+
+## Version 0.0.51
+
+**31.08.2024**
+
+* Fix PDS auto-switching for self-hosted instances by @MarshalX in https://github.com/MarshalX/atproto/pull/370
+* Update lexicons fetched from bfbac24 committed 2024-08-30T18:18:43Z by @MarshalX in https://github.com/MarshalX/atproto/pull/372
+
+## Version 0.0.50
+
+**30.08.2024**
+
+* Use `jiter` instead of the built-in `json` module to improve performance by @MarshalX in https://github.com/MarshalX/atproto/pull/360
+* Update docs example to fix empty blocks of commit by @MarshalX in https://github.com/MarshalX/atproto/pull/363
+* Bump `certifi` from 2024.2.2 to 2024.7.4 by @dependabot in https://github.com/MarshalX/atproto/pull/355
+* Bump `zipp` from 3.18.1 to 3.19.1 by @dependabot in https://github.com/MarshalX/atproto/pull/356
+* Bump `setuptools` from 69.5.1 to 70.0.0 by @dependabot in https://github.com/MarshalX/atproto/pull/357
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/358, https://github.com/MarshalX/atproto/pull/359, https://github.com/MarshalX/atproto/pull/364, https://github.com/MarshalX/atproto/pull/366, https://github.com/MarshalX/atproto/pull/367
+
+## Version 0.0.49
+
+**04.07.2024**
+
+**Breaking changes for Direct Messages. Now you must create a client with a chat proxy. See the updated [documentation](https://atproto.blue/en/latest/dm.html)**.
+
+* Add automatically switching to PDS endpoint after login and session resume by @MarshalX in https://github.com/MarshalX/atproto/pull/344
+* Add atproto proxy and atproto labelers support by @MarshalX in https://github.com/MarshalX/atproto/pull/345 and https://github.com/MarshalX/atproto/pull/351
+* Add `BlobRef` representation conversations by @MarshalX in https://github.com/MarshalX/atproto/pull/348
+* Fix `BlobRef` creation for JSON representation by @MarshalX in https://github.com/MarshalX/atproto/pull/340
+* Fix `delete_post` example by @MarshalX in https://github.com/MarshalX/atproto/pull/342
+* Fix `repost` method by @MarshalX in https://github.com/MarshalX/atproto/pull/343
+* Bump urllib3 from 2.2.1 to 2.2.2 by @dependabot in https://github.com/MarshalX/atproto/pull/346
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/352, https://github.com/MarshalX/atproto/pull/350, https://github.com/MarshalX/atproto/pull/349, https://github.com/MarshalX/atproto/pull/347, https://github.com/MarshalX/atproto/pull/339, https://github.com/MarshalX/atproto/pull/337
+
+## Version 0.0.48
+
+**01.06.2024**
+
+* Add Firehose Account message (use instead of Identity) by @MarshalX in https://github.com/MarshalX/atproto/pull/335
+* Update lexicons fetched from 255d5ea committed 2024-05-31T21:39:21Z by @MarshalX in https://github.com/MarshalX/atproto/pull/334
+
+## Version 0.0.47
+
+**22.05.2024**
+
+**💬 Just shipped: Bluesky Direct Messages! https://atproto.blue/en/latest/dm.html**
+
+**Breaking changes**
+
+Many of these changes were backward compatible for a few months with proper warnings.
+
+* Drop support for Python 3.7 by @MarshalX in https://github.com/MarshalX/atproto/pull/321
+* Delete deprecated record models called `Main` instead of `Record` by @MarshalX in https://github.com/MarshalX/atproto/pull/323
+* Delete deprecated `SessionString` class by @MarshalX in https://github.com/MarshalX/atproto/pull/324
+* Delete deprecated `subject` argument of `.like()` and `.repost()` methods by @MarshalX in https://github.com/MarshalX/atproto/pull/325
+
+**What's Changed**
+
+* Add support for Direct Messages (Chats) by @MarshalX in https://github.com/MarshalX/atproto/pull/331
+* Add method to send post with multiple attached photos by @ryoryo25 in https://github.com/MarshalX/atproto/pull/313
+* Register chat (DM) namespace by @MarshalX in https://github.com/MarshalX/atproto/pull/330
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/312, https://github.com/MarshalX/atproto/pull/314, https://github.com/MarshalX/atproto/pull/317, https://github.com/MarshalX/atproto/pull/322, https://github.com/MarshalX/atproto/pull/327, https://github.com/MarshalX/atproto/pull/328
+* Fix HTTP error handling by @MarshalX in https://github.com/MarshalX/atproto/pull/329
+* Bump requests from 2.31.0 to 2.32.2 by @dependabot in https://github.com/MarshalX/atproto/pull/332
+
 ## Version 0.0.46
 
 **20.03.2024**

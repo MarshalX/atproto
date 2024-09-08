@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -21,7 +21,7 @@ class ReplyRef(base.ModelBase):
     parent: 'models.ComAtprotoRepoStrongRef.Main'  #: Parent.
     root: 'models.ComAtprotoRepoStrongRef.Main'  #: Root.
 
-    py_type: te.Literal['app.bsky.feed.post#replyRef'] = Field(
+    py_type: t.Literal['app.bsky.feed.post#replyRef'] = Field(
         default='app.bsky.feed.post#replyRef', alias='$type', frozen=True
     )
 
@@ -33,7 +33,7 @@ class Entity(base.ModelBase):
     type: str  #: Expected values are 'mention' and 'link'.
     value: str  #: Value.
 
-    py_type: te.Literal['app.bsky.feed.post#entity'] = Field(
+    py_type: t.Literal['app.bsky.feed.post#entity'] = Field(
         default='app.bsky.feed.post#entity', alias='$type', frozen=True
     )
 
@@ -44,7 +44,7 @@ class TextSlice(base.ModelBase):
     end: int = Field(ge=0)  #: End.
     start: int = Field(ge=0)  #: Start.
 
-    py_type: te.Literal['app.bsky.feed.post#textSlice'] = Field(
+    py_type: t.Literal['app.bsky.feed.post#textSlice'] = Field(
         default='app.bsky.feed.post#textSlice', alias='$type', frozen=True
     )
 
@@ -58,6 +58,7 @@ class Record(base.RecordModelBase):
         te.Annotated[
             t.Union[
                 'models.AppBskyEmbedImages.Main',
+                'models.AppBskyEmbedVideo.Main',
                 'models.AppBskyEmbedExternal.Main',
                 'models.AppBskyEmbedRecord.Main',
                 'models.AppBskyEmbedRecordWithMedia.Main',
@@ -82,21 +83,7 @@ class Record(base.RecordModelBase):
         default=None, max_length=8
     )  #: Additional hashtags, in addition to any included in post text and facets.
 
-    py_type: te.Literal['app.bsky.feed.post'] = Field(default='app.bsky.feed.post', alias='$type', frozen=True)
-
-
-class Main(Record):
-    def __init_subclass__(cls, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init_subclass__(**data)
-
-    def __init__(self, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init__(**data)
+    py_type: t.Literal['app.bsky.feed.post'] = Field(default='app.bsky.feed.post', alias='$type', frozen=True)
 
 
 class GetRecordResponse(base.SugarResponseModelBase):

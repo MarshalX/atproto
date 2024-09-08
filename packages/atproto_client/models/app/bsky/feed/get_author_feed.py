@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -24,7 +24,7 @@ class Params(base.ParamsModelBase):
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     actor: str  #: Actor.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     filter: te.NotRequired[t.Optional[str]]  #: Combinations of post/repost types to include in response.

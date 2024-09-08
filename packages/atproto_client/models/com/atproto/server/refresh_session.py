@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -19,4 +19,6 @@ class Response(base.ResponseModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     refresh_jwt: str  #: Refresh jwt.
+    active: t.Optional[bool] = None  #: Active.
     did_doc: t.Optional['UnknownType'] = None  #: Did doc.
+    status: t.Optional[str] = None  #: Hosting status of the account. If not specified, then assume 'active'.

@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -28,8 +28,11 @@ class Data(base.DataModelBase):
             'models.ToolsOzoneModerationDefs.ModEventLabel',
             'models.ToolsOzoneModerationDefs.ModEventReport',
             'models.ToolsOzoneModerationDefs.ModEventMute',
-            'models.ToolsOzoneModerationDefs.ModEventReverseTakedown',
             'models.ToolsOzoneModerationDefs.ModEventUnmute',
+            'models.ToolsOzoneModerationDefs.ModEventMuteReporter',
+            'models.ToolsOzoneModerationDefs.ModEventUnmuteReporter',
+            'models.ToolsOzoneModerationDefs.ModEventReverseTakedown',
+            'models.ToolsOzoneModerationDefs.ModEventResolveAppeal',
             'models.ToolsOzoneModerationDefs.ModEventEmail',
             'models.ToolsOzoneModerationDefs.ModEventTag',
         ],
@@ -42,7 +45,7 @@ class Data(base.DataModelBase):
     subject_blob_cids: t.Optional[t.List[str]] = None  #: Subject blob cids.
 
 
-class DataDict(te.TypedDict):
+class DataDict(t.TypedDict):
     created_by: str  #: Created by.
     event: te.Annotated[
         t.Union[
@@ -53,8 +56,11 @@ class DataDict(te.TypedDict):
             'models.ToolsOzoneModerationDefs.ModEventLabel',
             'models.ToolsOzoneModerationDefs.ModEventReport',
             'models.ToolsOzoneModerationDefs.ModEventMute',
-            'models.ToolsOzoneModerationDefs.ModEventReverseTakedown',
             'models.ToolsOzoneModerationDefs.ModEventUnmute',
+            'models.ToolsOzoneModerationDefs.ModEventMuteReporter',
+            'models.ToolsOzoneModerationDefs.ModEventUnmuteReporter',
+            'models.ToolsOzoneModerationDefs.ModEventReverseTakedown',
+            'models.ToolsOzoneModerationDefs.ModEventResolveAppeal',
             'models.ToolsOzoneModerationDefs.ModEventEmail',
             'models.ToolsOzoneModerationDefs.ModEventTag',
         ],

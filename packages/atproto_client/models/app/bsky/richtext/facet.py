@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -30,9 +30,7 @@ class Main(base.ModelBase):
     ]  #: Features.
     index: 'models.AppBskyRichtextFacet.ByteSlice'  #: Index.
 
-    py_type: te.Literal['app.bsky.richtext.facet'] = Field(
-        default='app.bsky.richtext.facet', alias='$type', frozen=True
-    )
+    py_type: t.Literal['app.bsky.richtext.facet'] = Field(default='app.bsky.richtext.facet', alias='$type', frozen=True)
 
 
 class Mention(base.ModelBase):
@@ -40,7 +38,7 @@ class Mention(base.ModelBase):
 
     did: str  #: Did.
 
-    py_type: te.Literal['app.bsky.richtext.facet#mention'] = Field(
+    py_type: t.Literal['app.bsky.richtext.facet#mention'] = Field(
         default='app.bsky.richtext.facet#mention', alias='$type', frozen=True
     )
 
@@ -50,7 +48,7 @@ class Link(base.ModelBase):
 
     uri: str  #: Uri.
 
-    py_type: te.Literal['app.bsky.richtext.facet#link'] = Field(
+    py_type: t.Literal['app.bsky.richtext.facet#link'] = Field(
         default='app.bsky.richtext.facet#link', alias='$type', frozen=True
     )
 
@@ -60,7 +58,7 @@ class Tag(base.ModelBase):
 
     tag: str = Field(max_length=640)  #: Tag.
 
-    py_type: te.Literal['app.bsky.richtext.facet#tag'] = Field(
+    py_type: t.Literal['app.bsky.richtext.facet#tag'] = Field(
         default='app.bsky.richtext.facet#tag', alias='$type', frozen=True
     )
 
@@ -71,6 +69,6 @@ class ByteSlice(base.ModelBase):
     byte_end: int = Field(ge=0)  #: Byte end.
     byte_start: int = Field(ge=0)  #: Byte start.
 
-    py_type: te.Literal['app.bsky.richtext.facet#byteSlice'] = Field(
+    py_type: t.Literal['app.bsky.richtext.facet#byteSlice'] = Field(
         default='app.bsky.richtext.facet#byteSlice', alias='$type', frozen=True
     )

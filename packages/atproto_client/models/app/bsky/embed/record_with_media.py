@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -19,11 +19,12 @@ class Main(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
     media: te.Annotated[
-        t.Union['models.AppBskyEmbedImages.Main', 'models.AppBskyEmbedExternal.Main'], Field(discriminator='py_type')
+        t.Union['models.AppBskyEmbedImages.Main', 'models.AppBskyEmbedVideo.Main', 'models.AppBskyEmbedExternal.Main'],
+        Field(discriminator='py_type'),
     ]  #: Media.
     record: 'models.AppBskyEmbedRecord.Main'  #: Record.
 
-    py_type: te.Literal['app.bsky.embed.recordWithMedia'] = Field(
+    py_type: t.Literal['app.bsky.embed.recordWithMedia'] = Field(
         default='app.bsky.embed.recordWithMedia', alias='$type', frozen=True
     )
 
@@ -32,10 +33,11 @@ class View(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
     media: te.Annotated[
-        t.Union['models.AppBskyEmbedImages.View', 'models.AppBskyEmbedExternal.View'], Field(discriminator='py_type')
+        t.Union['models.AppBskyEmbedImages.View', 'models.AppBskyEmbedVideo.View', 'models.AppBskyEmbedExternal.View'],
+        Field(discriminator='py_type'),
     ]  #: Media.
     record: 'models.AppBskyEmbedRecord.View'  #: Record.
 
-    py_type: te.Literal['app.bsky.embed.recordWithMedia#view'] = Field(
+    py_type: t.Literal['app.bsky.embed.recordWithMedia#view'] = Field(
         default='app.bsky.embed.recordWithMedia#view', alias='$type', frozen=True
     )

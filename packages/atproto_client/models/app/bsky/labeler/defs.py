@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -26,7 +25,7 @@ class LabelerView(base.ModelBase):
     like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
     viewer: t.Optional['models.AppBskyLabelerDefs.LabelerViewerState'] = None  #: Viewer.
 
-    py_type: te.Literal['app.bsky.labeler.defs#labelerView'] = Field(
+    py_type: t.Literal['app.bsky.labeler.defs#labelerView'] = Field(
         default='app.bsky.labeler.defs#labelerView', alias='$type', frozen=True
     )
 
@@ -43,7 +42,7 @@ class LabelerViewDetailed(base.ModelBase):
     like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
     viewer: t.Optional['models.AppBskyLabelerDefs.LabelerViewerState'] = None  #: Viewer.
 
-    py_type: te.Literal['app.bsky.labeler.defs#labelerViewDetailed'] = Field(
+    py_type: t.Literal['app.bsky.labeler.defs#labelerViewDetailed'] = Field(
         default='app.bsky.labeler.defs#labelerViewDetailed', alias='$type', frozen=True
     )
 
@@ -53,7 +52,7 @@ class LabelerViewerState(base.ModelBase):
 
     like: t.Optional[str] = None  #: Like.
 
-    py_type: te.Literal['app.bsky.labeler.defs#labelerViewerState'] = Field(
+    py_type: t.Literal['app.bsky.labeler.defs#labelerViewerState'] = Field(
         default='app.bsky.labeler.defs#labelerViewerState', alias='$type', frozen=True
     )
 
@@ -68,6 +67,6 @@ class LabelerPolicies(base.ModelBase):
         t.List['models.ComAtprotoLabelDefs.LabelValueDefinition']
     ] = None  #: Label values created by this labeler and scoped exclusively to it. Labels defined here will override global label definitions for this labeler.
 
-    py_type: te.Literal['app.bsky.labeler.defs#labelerPolicies'] = Field(
+    py_type: t.Literal['app.bsky.labeler.defs#labelerPolicies'] = Field(
         default='app.bsky.labeler.defs#labelerPolicies', alias='$type', frozen=True
     )

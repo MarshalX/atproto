@@ -12,6 +12,7 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyFeedGenerator.Record',
     'models.AppBskyFeedLike.Record',
     'models.AppBskyFeedPost.Record',
+    'models.AppBskyFeedPostgate.Record',
     'models.AppBskyFeedRepost.Record',
     'models.AppBskyFeedThreadgate.Record',
     'models.AppBskyGraphBlock.Record',
@@ -19,7 +20,9 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyGraphList.Record',
     'models.AppBskyGraphListblock.Record',
     'models.AppBskyGraphListitem.Record',
+    'models.AppBskyGraphStarterpack.Record',
     'models.AppBskyLabelerService.Record',
+    'models.ChatBskyActorDeclaration.Record',
 ]
 UnknownRecordTypePydantic = te.Annotated[
     t.Union[
@@ -27,6 +30,7 @@ UnknownRecordTypePydantic = te.Annotated[
         'models.AppBskyFeedGenerator.Record',
         'models.AppBskyFeedLike.Record',
         'models.AppBskyFeedPost.Record',
+        'models.AppBskyFeedPostgate.Record',
         'models.AppBskyFeedRepost.Record',
         'models.AppBskyFeedThreadgate.Record',
         'models.AppBskyGraphBlock.Record',
@@ -34,7 +38,9 @@ UnknownRecordTypePydantic = te.Annotated[
         'models.AppBskyGraphList.Record',
         'models.AppBskyGraphListblock.Record',
         'models.AppBskyGraphListitem.Record',
+        'models.AppBskyGraphStarterpack.Record',
         'models.AppBskyLabelerService.Record',
+        'models.ChatBskyActorDeclaration.Record',
     ],
     Field(discriminator='py_type'),
 ]

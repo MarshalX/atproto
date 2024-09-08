@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -21,21 +20,7 @@ class Record(base.RecordModelBase):
     created_at: str  #: Created at.
     subject: str  #: Subject.
 
-    py_type: te.Literal['app.bsky.graph.follow'] = Field(default='app.bsky.graph.follow', alias='$type', frozen=True)
-
-
-class Main(Record):
-    def __init_subclass__(cls, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init_subclass__(**data)
-
-    def __init__(self, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init__(**data)
+    py_type: t.Literal['app.bsky.graph.follow'] = Field(default='app.bsky.graph.follow', alias='$type', frozen=True)
 
 
 class GetRecordResponse(base.SugarResponseModelBase):

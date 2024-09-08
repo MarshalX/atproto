@@ -26,11 +26,14 @@ Submodules
    atproto_client.models.app.bsky.feed.get_list_feed
    atproto_client.models.app.bsky.feed.get_post_thread
    atproto_client.models.app.bsky.feed.get_posts
+   atproto_client.models.app.bsky.feed.get_quotes
    atproto_client.models.app.bsky.feed.get_reposted_by
    atproto_client.models.app.bsky.feed.get_suggested_feeds
    atproto_client.models.app.bsky.feed.get_timeline
    atproto_client.models.app.bsky.feed.like
    atproto_client.models.app.bsky.feed.post
+   atproto_client.models.app.bsky.feed.postgate
    atproto_client.models.app.bsky.feed.repost
    atproto_client.models.app.bsky.feed.search_posts
+   atproto_client.models.app.bsky.feed.send_interactions
    atproto_client.models.app.bsky.feed.threadgate

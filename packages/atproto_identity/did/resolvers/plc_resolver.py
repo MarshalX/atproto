@@ -1,6 +1,7 @@
 import typing as t
 
 import httpx
+from pydantic_core import from_json
 
 from atproto_identity.did.resolvers.base_resolver import AsyncBaseResolver, BaseResolver
 from atproto_identity.exceptions import DidPlcResolverError
@@ -31,7 +32,7 @@ class DidPlcResolver(BaseResolver):
                 return None
 
             response.raise_for_status()
-            return response.json()
+            return from_json(response.content)
         except httpx.HTTPError as e:
             raise DidPlcResolverError(f'Error resolving DID {did}') from e
 
@@ -58,6 +59,6 @@ class AsyncDidPlcResolver(AsyncBaseResolver):
                 return None
 
             response.raise_for_status()
-            return response.json()
+            return from_json(response.content)
         except httpx.HTTPError as e:
             raise DidPlcResolverError(f'Error resolving DID {did}') from e

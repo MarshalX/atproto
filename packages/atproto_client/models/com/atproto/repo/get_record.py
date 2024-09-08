@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -25,7 +25,7 @@ class Params(base.ParamsModelBase):
     ] = None  #: The CID of the version of the record. If not specified, then return the most recent version.
 
 
-class ParamsDict(te.TypedDict):
+class ParamsDict(t.TypedDict):
     collection: str  #: The NSID of the record collection.
     repo: str  #: The handle or DID of the repo.
     rkey: str  #: The Record Key.

@@ -14,3 +14,5 @@ Subpackages
 
    atproto_client.models.tools.ozone.communication
    atproto_client.models.tools.ozone.moderation
+   atproto_client.models.tools.ozone.server
+   atproto_client.models.tools.ozone.team

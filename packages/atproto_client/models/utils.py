@@ -1,9 +1,9 @@
-import json
 import types
 import typing as t
 
 import typing_extensions as te
 from pydantic import ValidationError
+from pydantic_core import from_json, to_json
 
 from atproto_client import models
 from atproto_client.exceptions import (
@@ -126,20 +126,23 @@ def get_model_as_dict(model: t.Union[DotDict, BlobRef, ModelBase]) -> t.Dict[str
 
 def get_model_as_json(model: t.Union[DotDict, BlobRef, ModelBase]) -> str:
     if isinstance(model, DotDict):
-        return json.dumps(get_model_as_dict(model))
+        return to_json(get_model_as_dict(model)).decode('UTF-8')
 
     return model.model_dump_json(exclude_none=True, by_alias=True)
 
 
 def is_json(json_data: t.Union[str, bytes]) -> bool:
-    if isinstance(json_data, bytes):
-        json_data.decode('UTF-8')
+    return load_json(json_data, strict=False) is not None
 
+
+def load_json(json_data: t.Union[str, bytes], strict: bool = True) -> t.Optional[t.Dict[str, t.Any]]:
     try:
-        json.loads(json_data)
-        return True
-    except:  # noqa
-        return False
+        return from_json(json_data)
+    except ValueError as e:
+        if strict:
+            raise e
+
+        return None
 
 
 def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[str, types.ModuleType]) -> bool:
@@ -166,12 +169,8 @@ def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[st
     """
     if isinstance(expected_type, types.ModuleType):
         # for now, all records are defined in the Record class
-        # TODO(MarshalX): remove backward compatibility for Main
-        if not hasattr(expected_type, 'Main') or not hasattr(expected_type, 'Record'):
+        if not hasattr(expected_type, 'Record'):
             return False
-
-        if hasattr(expected_type, 'Main'):
-            expected_type = expected_type.Main.model_fields['py_type'].default
 
         if hasattr(expected_type, 'Record'):
             expected_type = expected_type.Record.model_fields['py_type'].default

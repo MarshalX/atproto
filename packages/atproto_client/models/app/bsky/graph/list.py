@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -31,21 +31,7 @@ class Record(base.RecordModelBase):
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Labels.
 
-    py_type: te.Literal['app.bsky.graph.list'] = Field(default='app.bsky.graph.list', alias='$type', frozen=True)
-
-
-class Main(Record):
-    def __init_subclass__(cls, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init_subclass__(**data)
-
-    def __init__(self, **data: t.Any) -> None:
-        import warnings
-
-        warnings.warn('Main class is deprecated. Use Record class instead.', DeprecationWarning, stacklevel=2)
-        super().__init__(**data)
+    py_type: t.Literal['app.bsky.graph.list'] = Field(default='app.bsky.graph.list', alias='$type', frozen=True)
 
 
 class GetRecordResponse(base.SugarResponseModelBase):

@@ -1,13 +1,12 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -22,7 +21,7 @@ class StatusAttr(base.ModelBase):
     applied: bool  #: Applied.
     ref: t.Optional[str] = None  #: Ref.
 
-    py_type: te.Literal['com.atproto.admin.defs#statusAttr'] = Field(
+    py_type: t.Literal['com.atproto.admin.defs#statusAttr'] = Field(
         default='com.atproto.admin.defs#statusAttr', alias='$type', frozen=True
     )
 
@@ -33,6 +32,7 @@ class AccountView(base.ModelBase):
     did: str  #: Did.
     handle: str  #: Handle.
     indexed_at: str  #: Indexed at.
+    deactivated_at: t.Optional[str] = None  #: Deactivated at.
     email: t.Optional[str] = None  #: Email.
     email_confirmed_at: t.Optional[str] = None  #: Email confirmed at.
     invite_note: t.Optional[str] = None  #: Invite note.
@@ -41,7 +41,7 @@ class AccountView(base.ModelBase):
     invites_disabled: t.Optional[bool] = None  #: Invites disabled.
     related_records: t.Optional[t.List['UnknownType']] = None  #: Related records.
 
-    py_type: te.Literal['com.atproto.admin.defs#accountView'] = Field(
+    py_type: t.Literal['com.atproto.admin.defs#accountView'] = Field(
         default='com.atproto.admin.defs#accountView', alias='$type', frozen=True
     )
 
@@ -51,7 +51,7 @@ class RepoRef(base.ModelBase):
 
     did: str  #: Did.
 
-    py_type: te.Literal['com.atproto.admin.defs#repoRef'] = Field(
+    py_type: t.Literal['com.atproto.admin.defs#repoRef'] = Field(
         default='com.atproto.admin.defs#repoRef', alias='$type', frozen=True
     )
 
@@ -63,6 +63,6 @@ class RepoBlobRef(base.ModelBase):
     did: str  #: Did.
     record_uri: t.Optional[str] = None  #: Record uri.
 
-    py_type: te.Literal['com.atproto.admin.defs#repoBlobRef'] = Field(
+    py_type: t.Literal['com.atproto.admin.defs#repoBlobRef'] = Field(
         default='com.atproto.admin.defs#repoBlobRef', alias='$type', frozen=True
     )

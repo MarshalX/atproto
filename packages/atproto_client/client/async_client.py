@@ -1,6 +1,6 @@
 ##################################################################
 # THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
-# Copyright (C) 2023 Ilya (Marshal) <https://github.com/MarshalX>.
+# Copyright (C) 2024 Ilya (Marshal) <https://github.com/MarshalX>.
 # This file is part of Python atproto SDK. Licenced under MIT.
 ##################################################################
 
@@ -8,12 +8,13 @@ import asyncio
 import typing as t
 from asyncio import Lock
 
+import typing_extensions as te
 from atproto_core.uri import AtUri
 
 from atproto_client import models
 from atproto_client.client.async_raw import AsyncClientRaw
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
-from atproto_client.client.methods_mixin.backward_compatibility import _BackwardCompatibility
+from atproto_client.client.methods_mixin.headers import HeadersConfigurationMethodsMixin
 from atproto_client.client.methods_mixin.session import AsyncSessionDispatchMixin
 from atproto_client.client.session import Session, SessionEvent, SessionResponse
 from atproto_client.exceptions import LoginRequiredError
@@ -26,7 +27,7 @@ if t.TYPE_CHECKING:
 
 
 class AsyncClient(
-    _BackwardCompatibility, AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, AsyncClientRaw
+    AsyncSessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, HeadersConfigurationMethodsMixin, AsyncClientRaw
 ):
     """High-level client for XRPC of ATProto."""
 
@@ -49,7 +50,7 @@ class AsyncClient(
         return await super()._invoke(invoke_type, **kwargs)
 
     async def _set_session(self, event: SessionEvent, session: SessionResponse) -> None:
-        session = self._set_session_common(session)
+        session = self._set_session_common(session, self._base_url)
         await self._call_on_session_change_callbacks(event, session.copy())
 
     async def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
@@ -76,6 +77,18 @@ class AsyncClient(
 
         return import_session
 
+    async def clone(self) -> te.Self:
+        """Clone the client instance.
+
+        Used to customize atproto proxy and set of labeler services.
+
+        Returns:
+            Cloned client instance.
+        """
+        cloned_client = super().clone()
+        cloned_client.me = self.me
+        return cloned_client
+
     async def login(
         self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
     ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
@@ -84,7 +97,7 @@ class AsyncClient(
         Args:
             login: Handle/username of the account.
             password: Main or app-specific password of the account.
-            session_string: Session string (use :py:attr:`~export_session_string` to obtain it).
+            session_string: Session string (use :py:attr:`~export_session_string` to get it).
 
         Note:
             Either `session_string` or `login` and `password` should be provided.
@@ -429,18 +442,12 @@ class AsyncClient(
             models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, filter=filter, limit=limit)
         )
 
-    async def like(
-        self,
-        uri: t.Optional[str] = None,
-        cid: t.Optional[str] = None,
-        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
-    ) -> 'models.AppBskyFeedLike.CreateRecordResponse':
+    async def like(self, uri: str, cid: str) -> 'models.AppBskyFeedLike.CreateRecordResponse':
         """Like the record.
 
         Args:
             cid: The CID of the record.
             uri: The URI of the record.
-            subject: DEPRECATED.
 
         Note:
             Record could be post, custom feed, etc.
@@ -451,7 +458,7 @@ class AsyncClient(
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
+        subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
         repo = self.me and self.me.did
         if not repo:
@@ -475,18 +482,12 @@ class AsyncClient(
         uri = AtUri.from_str(like_uri)
         return await self.app.bsky.feed.like.delete(uri.hostname, uri.rkey)
 
-    async def repost(
-        self,
-        uri: t.Optional[str] = None,
-        cid: t.Optional[str] = None,
-        subject: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None,
-    ) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
+    async def repost(self, uri: str, cid: str) -> 'models.AppBskyFeedRepost.CreateRecordResponse':
         """Repost post.
 
         Args:
             cid: The CID of the post.
             uri: The URI of the post.
-            subject: DEPRECATED.
 
         Returns:
             :obj:`models.AppBskyFeedRepost.CreateRecordResponse`: Reference to the reposted record.
@@ -494,7 +495,7 @@ class AsyncClient(
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        subject_obj = self._strong_ref_arg_backward_compatibility(uri, cid, subject)
+        subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
         repo = self.me and self.me.did
         if not repo:
