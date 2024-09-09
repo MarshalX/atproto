@@ -54,7 +54,7 @@ typing-extensions = ">=4.8.0,<5"
 click = ">=8.1.3,<9"
 websockets = ">=12,<14"
 pydantic = ">=2.7,<3"
-libipld = ">=1.1.0,<2"
+libipld = ">=2.0.0,<3.0.0"
 dnspython = ">=2.4.0,<3"
 cryptography = ">=41.0.7,<43"
 

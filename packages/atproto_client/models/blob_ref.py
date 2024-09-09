@@ -20,14 +20,14 @@ class BlobRef(BaseModel):
 
     mime_type: str = Field(alias='mimeType')  #: Mime type.
     size: int  #: Size in bytes.
-    ref: t.Union[str, IpldLink]  #: CID.
+    ref: t.Union[str, bytes, IpldLink]  #: CID.
 
     py_type: te.Literal['blob'] = Field(default='blob', alias='$type')
 
     @property
     def cid(self) -> 'CID':
         """Get CID."""
-        if isinstance(self.ref, str):
+        if self.is_bytes_representation:
             return CID.decode(self.ref)
 
         return CID.decode(self.ref.link)
@@ -48,7 +48,7 @@ class BlobRef(BaseModel):
         Returns:
             True if it is bytes representation.
         """
-        return isinstance(self.ref, str)
+        return isinstance(self.ref, (str, bytes))
 
     def to_json_representation(self) -> 'BlobRef':
         """Get JSON representation.
