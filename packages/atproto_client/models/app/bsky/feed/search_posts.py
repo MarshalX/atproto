@@ -40,7 +40,7 @@ class Params(base.ParamsModelBase):
     ] = None  #: Filter results for posts after the indicated datetime (inclusive). Expected to use 'sortAt' timestamp, which may not match 'createdAt'. Can be a datetime, or just an ISO date (YYYY-MM-DD).
     sort: t.Optional[
         t.Union[t.Literal['top'], t.Literal['latest'], str]
-    ] = None  #: Specifies the ranking order of results.
+    ] = 'latest'  #: Specifies the ranking order of results.
     tag: t.Optional[
         t.List[str]
     ] = None  #: Filter to posts with the given tag (hashtag), based on rich-text facet or tag field. Do not include the hash (#) prefix. Multiple tags can be specified, with 'AND' matching.

@@ -278,7 +278,6 @@ def _get_model_field_value(  # noqa: C901
             min_length = field_type_def.min_length
         if field_type_def.max_length is not None:
             max_length = field_type_def.max_length
-        # TODO (MarshalX): support knownValue, format, enum?
 
     elif field_type == models.LexBoolean:
         if field_type_def.default is not None:
@@ -314,18 +313,18 @@ def _get_model_field_value(  # noqa: C901
         if name != 'default':
             only_default = False
 
-        value_str = f'{name}='
         if isinstance(value, str):
-            value_str += f"'{value}'"
-        elif isinstance(value, bool):
-            value_str += 'True' if value else 'False'
+            str_value = f"'{value}'"
         else:
-            value_str += str(value)
+            str_value = str(value)
 
-        values.append(value_str)
+        if name == 'default':
+            default = str_value
+
+        values.append(f'{name}={str_value}')
 
     if only_default:
-        return 'None'
+        return default
 
     if not values:
         return ''

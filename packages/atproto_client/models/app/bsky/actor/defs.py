@@ -153,7 +153,7 @@ Preferences = t.List[
 class AdultContentPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    enabled: bool = None  #: Enabled.
+    enabled: bool = False  #: Enabled.
 
     py_type: t.Literal['app.bsky.actor.defs#adultContentPref'] = Field(
         default='app.bsky.actor.defs#adultContentPref', alias='$type', frozen=True
@@ -228,7 +228,7 @@ class FeedViewPref(base.ModelBase):
     hide_replies_by_like_count: t.Optional[
         int
     ] = None  #: Hide replies in the feed if they do not have this number of likes.
-    hide_replies_by_unfollowed: t.Optional[bool] = None  #: Hide replies in the feed if they are not by followed users.
+    hide_replies_by_unfollowed: t.Optional[bool] = True  #: Hide replies in the feed if they are not by followed users.
     hide_reposts: t.Optional[bool] = None  #: Hide reposts in the feed.
 
     py_type: t.Literal['app.bsky.actor.defs#feedViewPref'] = Field(
@@ -271,7 +271,7 @@ class MutedWord(base.ModelBase):
     value: str = Field(max_length=10000)  #: The muted word itself.
     actor_target: t.Optional[
         t.Union[t.Literal['all'], t.Literal['exclude-following'], str]
-    ] = None  #: Groups of users to apply the muted word to. If undefined, applies to all users.
+    ] = 'all'  #: Groups of users to apply the muted word to. If undefined, applies to all users.
     expires_at: t.Optional[
         str
     ] = None  #: The date and time at which the muted word will expire and no longer be applied.

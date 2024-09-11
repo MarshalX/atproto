@@ -34,8 +34,10 @@ class Params(base.ParamsModelBase):
     review_state: t.Optional[str] = None  #: Specify when fetching subjects in a certain state.
     reviewed_after: t.Optional[str] = None  #: Search subjects reviewed after a given timestamp.
     reviewed_before: t.Optional[str] = None  #: Search subjects reviewed before a given timestamp.
-    sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = None  #: Sort direction.
-    sort_field: t.Optional[t.Union[t.Literal['lastReviewedAt'], t.Literal['lastReportedAt']]] = None  #: Sort field.
+    sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = 'desc'  #: Sort direction.
+    sort_field: t.Optional[
+        t.Union[t.Literal['lastReviewedAt'], t.Literal['lastReportedAt']]
+    ] = 'lastReportedAt'  #: Sort field.
     subject: t.Optional[str] = None  #: Subject.
     tags: t.Optional[t.List[str]] = None  #: Tags.
     takendown: t.Optional[bool] = None  #: Get subjects that were taken down.

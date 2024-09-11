@@ -19,8 +19,8 @@ class Params(base.ParamsModelBase):
 
     create_available: t.Optional[
         bool
-    ] = None  #: Controls whether any new 'earned' but not 'created' invites should be created.
-    include_used: t.Optional[bool] = None  #: Include used.
+    ] = True  #: Controls whether any new 'earned' but not 'created' invites should be created.
+    include_used: t.Optional[bool] = True  #: Include used.
 
 
 class ParamsDict(t.TypedDict):

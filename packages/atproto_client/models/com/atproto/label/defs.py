@@ -72,7 +72,7 @@ class LabelValueDefinition(base.ModelBase):
     ] = None  #: Does the user need to have adult content enabled in order to configure this label?
     default_setting: t.Optional[
         t.Union[t.Literal['ignore'], t.Literal['warn'], t.Literal['hide'], str]
-    ] = None  #: The default setting for this label.
+    ] = 'warn'  #: The default setting for this label.
 
     py_type: t.Literal['com.atproto.label.defs#labelValueDefinition'] = Field(
         default='com.atproto.label.defs#labelValueDefinition', alias='$type', frozen=True

@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=100, ge=1, le=500)  #: Limit.
-    sort: t.Optional[t.Union[t.Literal['recent'], t.Literal['usage'], str]] = None  #: Sort.
+    sort: t.Optional[t.Union[t.Literal['recent'], t.Literal['usage'], str]] = 'recent'  #: Sort.
 
 
 class ParamsDict(t.TypedDict):
