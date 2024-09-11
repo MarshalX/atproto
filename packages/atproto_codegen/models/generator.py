@@ -310,16 +310,12 @@ def _get_model_field_value(  # noqa: C901
         if value is not_set:
             continue
 
-        if name != 'default':
-            only_default = False
-
-        if isinstance(value, str):
-            str_value = f"'{value}'"
-        else:
-            str_value = str(value)
+        str_value = f"'{value}'" if isinstance(value, str) else str(value)
 
         if name == 'default':
             default = str_value
+        else:
+            only_default = False
 
         values.append(f'{name}={str_value}')
 
