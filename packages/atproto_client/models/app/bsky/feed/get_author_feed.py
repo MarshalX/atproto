@@ -28,7 +28,7 @@ class Params(base.ParamsModelBase):
             t.Literal['posts_and_author_threads'],
             str,
         ]
-    ] = None  #: Combinations of post/repost types to include in response.
+    ] = 'posts_with_replies'  #: Combinations of post/repost types to include in response.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 

@@ -18,7 +18,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.createInviteCodes`."""
 
-    code_count: int = None  #: Code count.
+    code_count: int = 1  #: Code count.
     use_count: int  #: Use count.
     for_accounts: t.Optional[t.List[str]] = None  #: For accounts.
 
