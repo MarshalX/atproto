@@ -23,5 +23,5 @@ class Response(base.ResponseModelBase):
     email_auth_factor: t.Optional[bool] = None  #: Email auth factor.
     email_confirmed: t.Optional[bool] = None  #: Email confirmed.
     status: t.Optional[
-        str
+        t.Union[t.Literal['takendown'], t.Literal['suspended'], t.Literal['deactivated'], str]
     ] = None  #: If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted.

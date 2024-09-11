@@ -32,7 +32,7 @@ class Suggestion(base.ModelBase):
     """Definition model for :obj:`app.bsky.unspecced.getTaggedSuggestions`."""
 
     subject: str  #: Subject.
-    subject_type: str  #: Subject type.
+    subject_type: t.Union[t.Literal['actor'], t.Literal['feed'], str]  #: Subject type.
     tag: str  #: Tag.
 
     py_type: t.Literal['app.bsky.unspecced.getTaggedSuggestions#suggestion'] = Field(

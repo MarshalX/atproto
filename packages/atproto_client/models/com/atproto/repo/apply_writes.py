@@ -116,7 +116,7 @@ class CreateResult(base.ModelBase):
 
     cid: str  #: Cid.
     uri: str  #: Uri.
-    validation_status: t.Optional[str] = None  #: Validation status.
+    validation_status: t.Optional[t.Union[t.Literal['valid'], t.Literal['unknown'], str]] = None  #: Validation status.
 
     py_type: t.Literal['com.atproto.repo.applyWrites#createResult'] = Field(
         default='com.atproto.repo.applyWrites#createResult', alias='$type', frozen=True
@@ -128,7 +128,7 @@ class UpdateResult(base.ModelBase):
 
     cid: str  #: Cid.
     uri: str  #: Uri.
-    validation_status: t.Optional[str] = None  #: Validation status.
+    validation_status: t.Optional[t.Union[t.Literal['valid'], t.Literal['unknown'], str]] = None  #: Validation status.
 
     py_type: t.Literal['com.atproto.repo.applyWrites#updateResult'] = Field(
         default='com.atproto.repo.applyWrites#updateResult', alias='$type', frozen=True
