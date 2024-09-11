@@ -257,7 +257,7 @@ class InterestsPref(base.ModelBase):
     )
 
 
-MutedWordTarget = t.Union[t.Literal['content'], t.Literal['tag']]  #: Muted word target
+MutedWordTarget = t.Union[t.Literal['content'], t.Literal['tag'], str]  #: Muted word target
 
 
 class MutedWord(base.ModelBase):

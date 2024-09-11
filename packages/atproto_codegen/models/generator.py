@@ -562,7 +562,7 @@ def _generate_def_string(nsid: NSID, def_name: str, def_model: models.LexString)
 
         union_types.append(type_)
 
-    final_type = f"t.Union[{', '.join(union_types)}]"
+    final_type = f"t.Union[{', '.join(union_types)}, str]"
 
     description = def_model.description
     if not description:

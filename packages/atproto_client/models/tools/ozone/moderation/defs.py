@@ -140,6 +140,7 @@ SubjectReviewState = t.Union[
     'models.ToolsOzoneModerationDefs.ReviewEscalated',
     'models.ToolsOzoneModerationDefs.ReviewClosed',
     'models.ToolsOzoneModerationDefs.ReviewNone',
+    str,
 ]  #: Subject review state
 
 ReviewOpen = t.Literal[
