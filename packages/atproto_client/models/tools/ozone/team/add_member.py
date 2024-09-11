@@ -7,6 +7,8 @@
 
 import typing as t
 
+if t.TYPE_CHECKING:
+    from atproto_client import models
 from atproto_client.models import base
 
 
@@ -14,9 +16,19 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.team.addMember`."""
 
     did: str  #: Did.
-    role: str  #: Role.
+    role: t.Union[
+        'models.ToolsOzoneTeamDefs.RoleAdmin',
+        'models.ToolsOzoneTeamDefs.RoleModerator',
+        'models.ToolsOzoneTeamDefs.RoleTriage',
+        str,
+    ]  #: Role.
 
 
 class DataDict(t.TypedDict):
     did: str  #: Did.
-    role: str  #: Role.
+    role: t.Union[
+        'models.ToolsOzoneTeamDefs.RoleAdmin',
+        'models.ToolsOzoneTeamDefs.RoleModerator',
+        'models.ToolsOzoneTeamDefs.RoleTriage',
+        str,
+    ]  #: Role.

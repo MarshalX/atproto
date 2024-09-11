@@ -42,7 +42,7 @@ class Params(base.ParamsModelBase):
     ] = None  #: If specified, only events where all of these tags were removed are returned.
     report_types: t.Optional[t.List[str]] = None  #: Report types.
     sort_direction: t.Optional[
-        str
+        t.Union[t.Literal['asc'], t.Literal['desc']]
     ] = None  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     subject: t.Optional[str] = None  #: Subject.
     types: t.Optional[
@@ -77,7 +77,7 @@ class ParamsDict(t.TypedDict):
     ]  #: If specified, only events where all of these tags were removed are returned.
     report_types: te.NotRequired[t.Optional[t.List[str]]]  #: Report types.
     sort_direction: te.NotRequired[
-        t.Optional[str]
+        t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]
     ]  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     subject: te.NotRequired[t.Optional[str]]  #: Subject.
     types: te.NotRequired[

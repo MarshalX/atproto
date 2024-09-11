@@ -261,7 +261,23 @@ class ThreadgateView(base.ModelBase):
 class Interaction(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    event: t.Optional[str] = None  #: Event.
+    event: t.Optional[
+        t.Union[
+            'models.AppBskyFeedDefs.RequestLess',
+            'models.AppBskyFeedDefs.RequestMore',
+            'models.AppBskyFeedDefs.ClickthroughItem',
+            'models.AppBskyFeedDefs.ClickthroughAuthor',
+            'models.AppBskyFeedDefs.ClickthroughReposter',
+            'models.AppBskyFeedDefs.ClickthroughEmbed',
+            'models.AppBskyFeedDefs.InteractionSeen',
+            'models.AppBskyFeedDefs.InteractionLike',
+            'models.AppBskyFeedDefs.InteractionRepost',
+            'models.AppBskyFeedDefs.InteractionReply',
+            'models.AppBskyFeedDefs.InteractionQuote',
+            'models.AppBskyFeedDefs.InteractionShare',
+            str,
+        ]
+    ] = None  #: Event.
     feed_context: t.Optional[str] = Field(
         default=None, max_length=2000
     )  #: Context on a feed item that was originally supplied by the feed generator on getFeedSkeleton.

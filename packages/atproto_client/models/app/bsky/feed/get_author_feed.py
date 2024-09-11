@@ -20,14 +20,32 @@ class Params(base.ParamsModelBase):
 
     actor: str  #: Actor.
     cursor: t.Optional[str] = None  #: Cursor.
-    filter: t.Optional[str] = None  #: Combinations of post/repost types to include in response.
+    filter: t.Optional[
+        t.Union[
+            t.Literal['posts_with_replies'],
+            t.Literal['posts_no_replies'],
+            t.Literal['posts_with_media'],
+            t.Literal['posts_and_author_threads'],
+            str,
+        ]
+    ] = None  #: Combinations of post/repost types to include in response.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
 class ParamsDict(t.TypedDict):
     actor: str  #: Actor.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
-    filter: te.NotRequired[t.Optional[str]]  #: Combinations of post/repost types to include in response.
+    filter: te.NotRequired[
+        t.Optional[
+            t.Union[
+                t.Literal['posts_with_replies'],
+                t.Literal['posts_no_replies'],
+                t.Literal['posts_with_media'],
+                t.Literal['posts_and_author_threads'],
+                str,
+            ]
+        ]
+    ]  #: Combinations of post/repost types to include in response.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 
 

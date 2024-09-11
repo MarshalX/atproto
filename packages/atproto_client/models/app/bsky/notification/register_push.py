@@ -14,13 +14,13 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`app.bsky.notification.registerPush`."""
 
     app_id: str  #: App id.
-    platform: str  #: Platform.
+    platform: t.Union[t.Literal['ios'], t.Literal['android'], t.Literal['web'], str]  #: Platform.
     service_did: str  #: Service did.
     token: str  #: Token.
 
 
 class DataDict(t.TypedDict):
     app_id: str  #: App id.
-    platform: str  #: Platform.
+    platform: t.Union[t.Literal['ios'], t.Literal['android'], t.Literal['web'], str]  #: Platform.
     service_did: str  #: Service did.
     token: str  #: Token.
