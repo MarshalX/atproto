@@ -99,4 +99,5 @@ LabelValue = t.Union[
     t.Literal['nudity'],
     t.Literal['nsfl'],
     t.Literal['gore'],
+    str,
 ]  #: Label value
