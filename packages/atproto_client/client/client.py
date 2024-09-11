@@ -278,6 +278,50 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             facets=facets,
         )
 
+    def send_video(
+        self,
+        text: t.Union[str, TextBuilder],
+        video: bytes,
+        video_alt: t.Optional[str] = None,
+        profile_identify: t.Optional[str] = None,
+        reply_to: t.Optional["models.AppBskyFeedPost.ReplyRef"] = None,
+        langs: t.Optional[t.List[str]] = None,
+        facets: t.Optional[t.List["models.AppBskyRichtextFacet.Main"]] = None,
+    ) -> "models.AppBskyFeedPost.CreateRecordResponse":
+        """Send post with attached video.
+
+        Note:
+            If `profile_identify` is not provided will be sent to the current profile.
+
+        Args:
+            text: Text of the post.
+            video: Binary video to attach.
+            video_alts: Text version of the video.
+            profile_identify: Handle or DID. Where to send post.
+            reply_to: Root and parent of the post to reply to.
+            langs: List of used languages in the post.
+            facets: List of facets (rich text items).
+
+        Returns:
+            :obj:`models.AppBskyFeedPost.CreateRecordResponse`: Reference to the created record.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        if video_alt is None:
+            video_alt = ""
+
+        upload = self.upload_blob(video)
+
+        return self.send_post(
+            text,
+            profile_identify=profile_identify,
+            reply_to=reply_to,
+            embed=models.AppBskyEmbedVideo.Main(video=upload.blob, alt=video_alt),
+            langs=langs,
+            facets=facets,
+        )
+
     def get_post(
         self, post_rkey: str, profile_identify: t.Optional[str] = None, cid: t.Optional[str] = None
     ) -> 'models.AppBskyFeedPost.GetRecordResponse':
