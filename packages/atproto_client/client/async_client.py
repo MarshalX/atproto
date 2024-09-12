@@ -306,7 +306,7 @@ class AsyncClient(
         Args:
             text: Text of the post.
             video: Binary video to attach.
-            video_alts: Text version of the video.
+            video_alt: Text version of the video.
             profile_identify: Handle or DID. Where to send post.
             reply_to: Root and parent of the post to reply to.
             langs: List of used languages in the post.

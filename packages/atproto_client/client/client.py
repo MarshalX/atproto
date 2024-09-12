@@ -285,10 +285,10 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         video: bytes,
         video_alt: t.Optional[str] = None,
         profile_identify: t.Optional[str] = None,
-        reply_to: t.Optional["models.AppBskyFeedPost.ReplyRef"] = None,
+        reply_to: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None,
         langs: t.Optional[t.List[str]] = None,
-        facets: t.Optional[t.List["models.AppBskyRichtextFacet.Main"]] = None,
-    ) -> "models.AppBskyFeedPost.CreateRecordResponse":
+        facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
+    ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
         """Send post with attached video.
 
         Note:
@@ -297,7 +297,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         Args:
             text: Text of the post.
             video: Binary video to attach.
-            video_alts: Text version of the video.
+            video_alt: Text version of the video.
             profile_identify: Handle or DID. Where to send post.
             reply_to: Root and parent of the post to reply to.
             langs: List of used languages in the post.
@@ -310,7 +310,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         if video_alt is None:
-            video_alt = ""
+            video_alt = ''
 
         upload = self.upload_blob(video)
 
