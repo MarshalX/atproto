@@ -120,6 +120,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
                 'models.AppBskyEmbedExternal.Main',
                 'models.AppBskyEmbedRecord.Main',
                 'models.AppBskyEmbedRecordWithMedia.Main',
+                'models.AppBskyEmbedVideo.Main',
             ]
         ] = None,
         langs: t.Optional[t.List[str]] = None,
