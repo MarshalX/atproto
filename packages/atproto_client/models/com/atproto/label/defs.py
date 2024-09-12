@@ -57,16 +57,22 @@ class SelfLabel(base.ModelBase):
 class LabelValueDefinition(base.ModelBase):
     """Definition model for :obj:`com.atproto.label.defs`. Declares a label value and its expected interpretations and behaviors."""
 
-    blurs: str  #: What should this label hide in the UI, if applied? 'content' hides all of the target; 'media' hides the images/video/audio; 'none' hides nothing.
+    blurs: t.Union[
+        t.Literal['content'], t.Literal['media'], t.Literal['none'], str
+    ]  #: What should this label hide in the UI, if applied? 'content' hides all of the target; 'media' hides the images/video/audio; 'none' hides nothing.
     identifier: str = Field(
         max_length=100
     )  #: The value of the label being defined. Must only include lowercase ascii and the '-' character ([a-z-]+).
     locales: t.List['models.ComAtprotoLabelDefs.LabelValueDefinitionStrings']  #: Locales.
-    severity: str  #: How should a client visually convey this label? 'inform' means neutral and informational; 'alert' means negative and warning; 'none' means show nothing.
+    severity: t.Union[
+        t.Literal['inform'], t.Literal['alert'], t.Literal['none'], str
+    ]  #: How should a client visually convey this label? 'inform' means neutral and informational; 'alert' means negative and warning; 'none' means show nothing.
     adult_only: t.Optional[
         bool
     ] = None  #: Does the user need to have adult content enabled in order to configure this label?
-    default_setting: t.Optional[str] = None  #: The default setting for this label.
+    default_setting: t.Optional[
+        t.Union[t.Literal['ignore'], t.Literal['warn'], t.Literal['hide'], str]
+    ] = 'warn'  #: The default setting for this label.
 
     py_type: t.Literal['com.atproto.label.defs#labelValueDefinition'] = Field(
         default='com.atproto.label.defs#labelValueDefinition', alias='$type', frozen=True
@@ -99,4 +105,5 @@ LabelValue = t.Union[
     t.Literal['nudity'],
     t.Literal['nsfl'],
     t.Literal['gore'],
+    str,
 ]  #: Label value

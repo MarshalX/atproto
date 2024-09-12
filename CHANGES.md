@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 0.0.53
+
+**10.09.2024**
+
+**⚡ Thanks to libipld 2.0.0 firehose performance should increase approximately by 30%! No changes from you are required! Check more detailed benchmark results [here](https://github.com/MarshalX/python-libipld/releases/tag/v2.0.0)**
+
+* Add libipld v2.0.0 support by @MarshalX in https://github.com/MarshalX/atproto/pull/315
+* Update lexicons fetched from e4d41d6 committed 2024-09-04T10:42:39Z by @MarshalX in https://github.com/MarshalX/atproto/pull/380
+* Fix firehose client stop by @MarshalX in https://github.com/MarshalX/atproto/pull/384
+
 ## Version 0.0.52
 
 **01.09.2024**

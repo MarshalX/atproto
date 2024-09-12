@@ -32,7 +32,7 @@ class Params(base.ParamsModelBase):
     has_comment: t.Optional[bool] = None  #: If true, only events with comments are returned.
     include_all_user_records: t.Optional[
         bool
-    ] = None  #: If true, events on all record types (posts, lists, profile etc.) owned by the did are returned.
+    ] = False  #: If true, events on all record types (posts, lists, profile etc.) owned by the did are returned.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     removed_labels: t.Optional[
         t.List[str]
@@ -42,8 +42,8 @@ class Params(base.ParamsModelBase):
     ] = None  #: If specified, only events where all of these tags were removed are returned.
     report_types: t.Optional[t.List[str]] = None  #: Report types.
     sort_direction: t.Optional[
-        str
-    ] = None  #: Sort direction for the events. Defaults to descending order of created at timestamp.
+        t.Union[t.Literal['asc'], t.Literal['desc']]
+    ] = 'desc'  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     subject: t.Optional[str] = None  #: Subject.
     types: t.Optional[
         t.List[str]
@@ -77,7 +77,7 @@ class ParamsDict(t.TypedDict):
     ]  #: If specified, only events where all of these tags were removed are returned.
     report_types: te.NotRequired[t.Optional[t.List[str]]]  #: Report types.
     sort_direction: te.NotRequired[
-        t.Optional[str]
+        t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]
     ]  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     subject: te.NotRequired[t.Optional[str]]  #: Subject.
     types: te.NotRequired[

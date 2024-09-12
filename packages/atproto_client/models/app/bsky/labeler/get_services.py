@@ -19,7 +19,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.labeler.getServices`."""
 
     dids: t.List[str]  #: Dids.
-    detailed: t.Optional[bool] = None  #: Detailed.
+    detailed: t.Optional[bool] = False  #: Detailed.
 
 
 class ParamsDict(t.TypedDict):

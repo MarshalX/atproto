@@ -37,7 +37,14 @@ class ServiceConfig(base.ModelBase):
 class ViewerConfig(base.ModelBase):
     """Definition model for :obj:`tools.ozone.server.getConfig`."""
 
-    role: t.Optional[str] = None  #: Role.
+    role: t.Optional[
+        t.Union[
+            'models.ToolsOzoneTeamDefs.RoleAdmin',
+            'models.ToolsOzoneTeamDefs.RoleModerator',
+            'models.ToolsOzoneTeamDefs.RoleTriage',
+            str,
+        ]
+    ] = None  #: Role.
 
     py_type: t.Literal['tools.ozone.server.getConfig#viewerConfig'] = Field(
         default='tools.ozone.server.getConfig#viewerConfig', alias='$type', frozen=True

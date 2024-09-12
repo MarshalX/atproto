@@ -77,7 +77,7 @@ class Account(base.ModelBase):
     seq: int  #: Seq.
     time: str  #: Time.
     status: t.Optional[
-        str
+        t.Union[t.Literal['takendown'], t.Literal['suspended'], t.Literal['deleted'], t.Literal['deactivated'], str]
     ] = None  #: If active=false, this optional field indicates a reason for why the account is not active.
 
     py_type: t.Literal['com.atproto.sync.subscribeRepos#account'] = Field(
@@ -126,7 +126,7 @@ class Tombstone(base.ModelBase):
 class Info(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
-    name: str  #: Name.
+    name: t.Union[t.Literal['OutdatedCursor'], str]  #: Name.
     message: t.Optional[str] = None  #: Message.
 
     py_type: t.Literal['com.atproto.sync.subscribeRepos#info'] = Field(
@@ -137,7 +137,7 @@ class Info(base.ModelBase):
 class RepoOp(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`. A repo operation, ie a mutation of a single record."""
 
-    action: str  #: Action.
+    action: t.Union[t.Literal['create'], t.Literal['update'], t.Literal['delete'], str]  #: Action.
     path: str  #: Path.
     cid: t.Optional['CIDType'] = None  #: For creates and updates, the new record CID. For deletions, null.
 

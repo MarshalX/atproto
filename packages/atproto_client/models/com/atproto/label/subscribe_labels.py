@@ -39,7 +39,7 @@ class Labels(base.ModelBase):
 class Info(base.ModelBase):
     """Definition model for :obj:`com.atproto.label.subscribeLabels`."""
 
-    name: str  #: Name.
+    name: t.Union[t.Literal['OutdatedCursor'], str]  #: Name.
     message: t.Optional[str] = None  #: Message.
 
     py_type: t.Literal['com.atproto.label.subscribeLabels#info'] = Field(

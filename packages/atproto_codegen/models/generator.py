@@ -127,7 +127,6 @@ def _get_typeddict_class_def(name: str, model_type: TypedDictType) -> str:
 
 
 _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT = {
-    models.LexString: 'str',
     models.LexInteger: 'int',
     models.LexBoolean: 'bool',
 }
@@ -137,6 +136,35 @@ def _get_optional_typehint(type_hint: str, *, optional: bool) -> str:
     if optional:
         return f't.Optional[{type_hint}]'
     return type_hint
+
+
+def _get_str_enum_typehint(nsid: NSID, field_type_def: models.LexString, *, optional: bool) -> str:
+    values = field_type_def.known_values or field_type_def.enum
+
+    union_type_parts = []
+    for value in values:
+        if '#' in value:
+            # reference to literal (token)
+            model_path, _ = _resolve_nsid_ref(nsid, value)
+            type_ = f"'{model_path}'"
+        else:
+            # literal
+            type_ = f"t.Literal['{value}']"
+
+        union_type_parts.append(type_)
+
+    # known_values is not closed enum
+    closed_enum = '' if field_type_def.enum else ', str'
+    return f"t.Union[{', '.join(union_type_parts)}{closed_enum}]"
+
+
+def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional: bool) -> str:
+    str_typehint = 'str'
+
+    if field_type_def.known_values or field_type_def.enum:
+        str_typehint = _get_str_enum_typehint(nsid, field_type_def, optional=optional)
+
+    return _get_optional_typehint(str_typehint, optional=optional)
 
 
 def _get_ref_typehint(nsid: NSID, field_type_def: models.LexRef, *, optional: bool) -> str:
@@ -165,7 +193,7 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, o
     return _get_optional_typehint(annotated_union, optional=optional)
 
 
-def _get_model_field_typehint(
+def _get_model_field_typehint(  # noqa: C901
     nsid: NSID,
     field_type_def: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob],
     *,
@@ -183,6 +211,9 @@ def _get_model_field_typehint(
     type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
     if type_hint:
         return _get_optional_typehint(type_hint, optional=optional)
+
+    if field_type is models.LexString:
+        return _get_str_typehint(nsid, field_type_def, optional=optional)
 
     if field_type is models.LexArray:
         items_type_hint = _get_model_field_typehint(
@@ -247,7 +278,6 @@ def _get_model_field_value(  # noqa: C901
             min_length = field_type_def.min_length
         if field_type_def.max_length is not None:
             max_length = field_type_def.max_length
-        # TODO (MarshalX): support knownValue, format, enum?
 
     elif field_type == models.LexBoolean:
         if field_type_def.default is not None:
@@ -280,21 +310,17 @@ def _get_model_field_value(  # noqa: C901
         if value is not_set:
             continue
 
-        if name != 'default':
+        str_value = f"'{value}'" if isinstance(value, str) else str(value)
+
+        if name == 'default':
+            default = str_value
+        else:
             only_default = False
 
-        value_str = f'{name}='
-        if isinstance(value, str):
-            value_str += f"'{value}'"
-        elif isinstance(value, bool):
-            value_str += 'True' if value else 'False'
-        else:
-            value_str += str(value)
-
-        values.append(value_str)
+        values.append(f'{name}={str_value}')
 
     if only_default:
-        return 'None'
+        return default
 
     if not values:
         return ''
@@ -546,30 +572,16 @@ def _generate_def_array(nsid: NSID, def_name: str, def_model: models.LexArray) -
 def _generate_def_string(nsid: NSID, def_name: str, def_model: models.LexString) -> str:
     # FIXME(MarshalX): support more fields. only known_values field is supported for now
 
-    if not def_model.known_values:
+    if not def_model.known_values and not def_model.enum:
         return ''
 
-    union_types = []
-    for known_value in def_model.known_values:
-        if '#' in known_value:
-            # reference to literal (token)
-            model_path, _ = _resolve_nsid_ref(nsid, known_value)
-            type_ = f"'{model_path}'"
-        else:
-            # literal
-            # FIXME(MarshalX): not used for now
-            type_ = f"t.Literal['{known_value}']"
-
-        union_types.append(type_)
-
-    final_type = f"t.Union[{', '.join(union_types)}]"
-
+    type_hint = _get_str_typehint(nsid, def_model, optional=False)
     description = def_model.description
     if not description:
         description = gen_description_by_camel_case_name(def_name)
 
     lines = [
-        f'{get_def_model_name(def_name)} = {final_type} #: {description}',
+        f'{get_def_model_name(def_name)} = {type_hint} #: {description}',
         '',
         '',
     ]

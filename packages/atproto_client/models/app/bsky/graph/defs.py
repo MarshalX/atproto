@@ -106,7 +106,10 @@ class StarterPackViewBasic(base.ModelBase):
 
 
 ListPurpose = t.Union[
-    'models.AppBskyGraphDefs.Modlist', 'models.AppBskyGraphDefs.Curatelist', 'models.AppBskyGraphDefs.Referencelist'
+    'models.AppBskyGraphDefs.Modlist',
+    'models.AppBskyGraphDefs.Curatelist',
+    'models.AppBskyGraphDefs.Referencelist',
+    str,
 ]  #: List purpose
 
 Modlist = t.Literal[

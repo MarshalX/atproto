@@ -18,7 +18,12 @@ class Member(base.ModelBase):
     """Definition model for :obj:`tools.ozone.team.defs`."""
 
     did: str  #: Did.
-    role: str  #: Role.
+    role: t.Union[
+        'models.ToolsOzoneTeamDefs.RoleAdmin',
+        'models.ToolsOzoneTeamDefs.RoleModerator',
+        'models.ToolsOzoneTeamDefs.RoleTriage',
+        str,
+    ]  #: Role.
     created_at: t.Optional[str] = None  #: Created at.
     disabled: t.Optional[bool] = None  #: Disabled.
     last_updated_by: t.Optional[str] = None  #: Last updated by.

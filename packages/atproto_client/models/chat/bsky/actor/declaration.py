@@ -17,7 +17,7 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`chat.bsky.actor.declaration`."""
 
-    allow_incoming: str  #: Allow incoming.
+    allow_incoming: t.Union[t.Literal['all'], t.Literal['none'], t.Literal['following'], str]  #: Allow incoming.
 
     py_type: t.Literal['chat.bsky.actor.declaration'] = Field(
         default='chat.bsky.actor.declaration', alias='$type', frozen=True

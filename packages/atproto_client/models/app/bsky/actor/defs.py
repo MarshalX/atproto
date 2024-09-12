@@ -94,7 +94,7 @@ class ProfileAssociated(base.ModelBase):
 class ProfileAssociatedChat(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    allow_incoming: str  #: Allow incoming.
+    allow_incoming: t.Union[t.Literal['all'], t.Literal['none'], t.Literal['following'], str]  #: Allow incoming.
 
     py_type: t.Literal['app.bsky.actor.defs#profileAssociatedChat'] = Field(
         default='app.bsky.actor.defs#profileAssociatedChat', alias='$type', frozen=True
@@ -153,7 +153,7 @@ Preferences = t.List[
 class AdultContentPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    enabled: bool = None  #: Enabled.
+    enabled: bool = False  #: Enabled.
 
     py_type: t.Literal['app.bsky.actor.defs#adultContentPref'] = Field(
         default='app.bsky.actor.defs#adultContentPref', alias='$type', frozen=True
@@ -164,7 +164,9 @@ class ContentLabelPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     label: str  #: Label.
-    visibility: str  #: Visibility.
+    visibility: t.Union[
+        t.Literal['ignore'], t.Literal['show'], t.Literal['warn'], t.Literal['hide'], str
+    ]  #: Visibility.
     labeler_did: t.Optional[str] = None  #: Which labeler does this preference apply to? If undefined, applies globally.
 
     py_type: t.Literal['app.bsky.actor.defs#contentLabelPref'] = Field(
@@ -177,7 +179,7 @@ class SavedFeed(base.ModelBase):
 
     id: str  #: Id.
     pinned: bool  #: Pinned.
-    type: str  #: Type.
+    type: t.Union[t.Literal['feed'], t.Literal['list'], t.Literal['timeline'], str]  #: Type.
     value: str  #: Value.
 
     py_type: t.Literal['app.bsky.actor.defs#savedFeed'] = Field(
@@ -226,7 +228,7 @@ class FeedViewPref(base.ModelBase):
     hide_replies_by_like_count: t.Optional[
         int
     ] = None  #: Hide replies in the feed if they do not have this number of likes.
-    hide_replies_by_unfollowed: t.Optional[bool] = None  #: Hide replies in the feed if they are not by followed users.
+    hide_replies_by_unfollowed: t.Optional[bool] = True  #: Hide replies in the feed if they are not by followed users.
     hide_reposts: t.Optional[bool] = None  #: Hide reposts in the feed.
 
     py_type: t.Literal['app.bsky.actor.defs#feedViewPref'] = Field(
@@ -238,7 +240,9 @@ class ThreadViewPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     prioritize_followed_users: t.Optional[bool] = None  #: Show followed users at the top of all replies.
-    sort: t.Optional[str] = None  #: Sorting mode for threads.
+    sort: t.Optional[
+        t.Union[t.Literal['oldest'], t.Literal['newest'], t.Literal['most-likes'], t.Literal['random'], str]
+    ] = None  #: Sorting mode for threads.
 
     py_type: t.Literal['app.bsky.actor.defs#threadViewPref'] = Field(
         default='app.bsky.actor.defs#threadViewPref', alias='$type', frozen=True
@@ -257,7 +261,7 @@ class InterestsPref(base.ModelBase):
     )
 
 
-MutedWordTarget = t.Union[t.Literal['content'], t.Literal['tag']]  #: Muted word target
+MutedWordTarget = t.Union[t.Literal['content'], t.Literal['tag'], str]  #: Muted word target
 
 
 class MutedWord(base.ModelBase):
@@ -266,8 +270,8 @@ class MutedWord(base.ModelBase):
     targets: t.List['models.AppBskyActorDefs.MutedWordTarget']  #: The intended targets of the muted word.
     value: str = Field(max_length=10000)  #: The muted word itself.
     actor_target: t.Optional[
-        str
-    ] = None  #: Groups of users to apply the muted word to. If undefined, applies to all users.
+        t.Union[t.Literal['all'], t.Literal['exclude-following'], str]
+    ] = 'all'  #: Groups of users to apply the muted word to. If undefined, applies to all users.
     expires_at: t.Optional[
         str
     ] = None  #: The date and time at which the muted word will expire and no longer be applied.

@@ -9,6 +9,8 @@ import typing as t
 
 import typing_extensions as te
 
+if t.TYPE_CHECKING:
+    from atproto_client import models
 from atproto_client.models import base
 
 
@@ -17,10 +19,26 @@ class Data(base.DataModelBase):
 
     did: str  #: Did.
     disabled: t.Optional[bool] = None  #: Disabled.
-    role: t.Optional[str] = None  #: Role.
+    role: t.Optional[
+        t.Union[
+            'models.ToolsOzoneTeamDefs.RoleAdmin',
+            'models.ToolsOzoneTeamDefs.RoleModerator',
+            'models.ToolsOzoneTeamDefs.RoleTriage',
+            str,
+        ]
+    ] = None  #: Role.
 
 
 class DataDict(t.TypedDict):
     did: str  #: Did.
     disabled: te.NotRequired[t.Optional[bool]]  #: Disabled.
-    role: te.NotRequired[t.Optional[str]]  #: Role.
+    role: te.NotRequired[
+        t.Optional[
+            t.Union[
+                'models.ToolsOzoneTeamDefs.RoleAdmin',
+                'models.ToolsOzoneTeamDefs.RoleModerator',
+                'models.ToolsOzoneTeamDefs.RoleTriage',
+                str,
+            ]
+        ]
+    ]  #: Role.

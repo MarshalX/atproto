@@ -19,7 +19,9 @@ class JobStatus(base.ModelBase):
 
     did: str  #: Did.
     job_id: str  #: Job id.
-    state: str  #: The state of the video processing job. All values not listed as a known value indicate that the job is in process.
+    state: t.Union[
+        t.Literal['JOB_STATE_COMPLETED'], t.Literal['JOB_STATE_FAILED'], str
+    ]  #: The state of the video processing job. All values not listed as a known value indicate that the job is in process.
     blob: t.Optional['BlobRef'] = None  #: Blob.
     error: t.Optional[str] = None  #: Error.
     message: t.Optional[str] = None  #: Message.

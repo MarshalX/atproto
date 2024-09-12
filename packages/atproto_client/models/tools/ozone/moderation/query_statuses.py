@@ -23,6 +23,9 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     exclude_tags: t.Optional[t.List[str]] = None  #: Exclude tags.
     ignore_subjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
+    include_all_user_records: t.Optional[
+        bool
+    ] = None  #: All subjects belonging to the account specified in the 'subject' param will be returned.
     include_muted: t.Optional[
         bool
     ] = None  #: By default, we don't include muted subjects in the results. Set this to true to include them.
@@ -34,9 +37,11 @@ class Params(base.ParamsModelBase):
     review_state: t.Optional[str] = None  #: Specify when fetching subjects in a certain state.
     reviewed_after: t.Optional[str] = None  #: Search subjects reviewed after a given timestamp.
     reviewed_before: t.Optional[str] = None  #: Search subjects reviewed before a given timestamp.
-    sort_direction: t.Optional[str] = None  #: Sort direction.
-    sort_field: t.Optional[str] = None  #: Sort field.
-    subject: t.Optional[str] = None  #: Subject.
+    sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = 'desc'  #: Sort direction.
+    sort_field: t.Optional[
+        t.Union[t.Literal['lastReviewedAt'], t.Literal['lastReportedAt']]
+    ] = 'lastReportedAt'  #: Sort field.
+    subject: t.Optional[str] = None  #: The subject to get the status for.
     tags: t.Optional[t.List[str]] = None  #: Tags.
     takendown: t.Optional[bool] = None  #: Get subjects that were taken down.
 
@@ -47,6 +52,9 @@ class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     exclude_tags: te.NotRequired[t.Optional[t.List[str]]]  #: Exclude tags.
     ignore_subjects: te.NotRequired[t.Optional[t.List[str]]]  #: Ignore subjects.
+    include_all_user_records: te.NotRequired[
+        t.Optional[bool]
+    ]  #: All subjects belonging to the account specified in the 'subject' param will be returned.
     include_muted: te.NotRequired[
         t.Optional[bool]
     ]  #: By default, we don't include muted subjects in the results. Set this to true to include them.
@@ -62,9 +70,11 @@ class ParamsDict(t.TypedDict):
     review_state: te.NotRequired[t.Optional[str]]  #: Specify when fetching subjects in a certain state.
     reviewed_after: te.NotRequired[t.Optional[str]]  #: Search subjects reviewed after a given timestamp.
     reviewed_before: te.NotRequired[t.Optional[str]]  #: Search subjects reviewed before a given timestamp.
-    sort_direction: te.NotRequired[t.Optional[str]]  #: Sort direction.
-    sort_field: te.NotRequired[t.Optional[str]]  #: Sort field.
-    subject: te.NotRequired[t.Optional[str]]  #: Subject.
+    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]]  #: Sort direction.
+    sort_field: te.NotRequired[
+        t.Optional[t.Union[t.Literal['lastReviewedAt'], t.Literal['lastReportedAt']]]
+    ]  #: Sort field.
+    subject: te.NotRequired[t.Optional[str]]  #: The subject to get the status for.
     tags: te.NotRequired[t.Optional[t.List[str]]]  #: Tags.
     takendown: te.NotRequired[t.Optional[bool]]  #: Get subjects that were taken down.
 

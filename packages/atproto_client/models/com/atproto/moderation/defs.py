@@ -18,6 +18,7 @@ ReasonType = t.Union[
     'models.ComAtprotoModerationDefs.ReasonRude',
     'models.ComAtprotoModerationDefs.ReasonOther',
     'models.ComAtprotoModerationDefs.ReasonAppeal',
+    str,
 ]  #: Reason type
 
 ReasonSpam = t.Literal[

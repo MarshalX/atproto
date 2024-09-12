@@ -19,8 +19,8 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`chat.bsky.moderation.getMessageContext`."""
 
     message_id: str  #: Message id.
-    after: t.Optional[int] = None  #: After.
-    before: t.Optional[int] = None  #: Before.
+    after: t.Optional[int] = 5  #: After.
+    before: t.Optional[int] = 5  #: Before.
     convo_id: t.Optional[
         str
     ] = None  #: Conversation that the message is from. NOTE: this field will eventually be required.

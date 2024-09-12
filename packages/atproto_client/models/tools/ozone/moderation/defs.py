@@ -140,6 +140,7 @@ SubjectReviewState = t.Union[
     'models.ToolsOzoneModerationDefs.ReviewEscalated',
     'models.ToolsOzoneModerationDefs.ReviewClosed',
     'models.ToolsOzoneModerationDefs.ReviewNone',
+    str,
 ]  #: Subject review state
 
 ReviewOpen = t.Literal[
@@ -162,6 +163,9 @@ ReviewNone = t.Literal[
 class ModEventTakedown(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`. Take down a subject permanently or temporarily."""
 
+    acknowledge_account_subjects: t.Optional[
+        bool
+    ] = None  #: If true, all other reports on content authored by this account will be resolved (acknowledged).
     comment: t.Optional[str] = None  #: Comment.
     duration_in_hours: t.Optional[
         int
