@@ -326,6 +326,9 @@ class BskyAppStatePref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`. A grab bag of state that's specific to the bsky.app program. Third-party apps shouldn't use this."""
 
     active_progress_guide: t.Optional['models.AppBskyActorDefs.BskyAppProgressGuide'] = None  #: Active progress guide.
+    nuxs: t.Optional[t.List['models.AppBskyActorDefs.Nux']] = Field(
+        default=None, max_length=100
+    )  #: Storage for NUXs the user has encountered.
     queued_nudges: t.Optional[t.List[str]] = Field(
         default=None, max_length=1000
     )  #: An array of tokens which identify nudges (modals, popups, tours, highlight dots) that should be shown to the user.
@@ -343,3 +346,18 @@ class BskyAppProgressGuide(base.ModelBase):
     py_type: t.Literal['app.bsky.actor.defs#bskyAppProgressGuide'] = Field(
         default='app.bsky.actor.defs#bskyAppProgressGuide', alias='$type', frozen=True
     )
+
+
+class Nux(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`. A new user experiences (NUX) storage object."""
+
+    completed: bool = False  #: Completed.
+    id: str = Field(max_length=100)  #: Id.
+    data: t.Optional[str] = Field(
+        default=None, max_length=3000
+    )  #: Arbitrary data for the NUX. The structure is defined by the NUX itself. Limited to 300 characters.
+    expires_at: t.Optional[
+        str
+    ] = None  #: The date and time at which the NUX will expire and should be considered completed.
+
+    py_type: t.Literal['app.bsky.actor.defs#nux'] = Field(default='app.bsky.actor.defs#nux', alias='$type', frozen=True)
