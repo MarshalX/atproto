@@ -16,6 +16,7 @@ def gen_client(input_filename: str, output_filename: str) -> None:
         'send_post',
         'send_image',
         'send_images',
+        'upload_blob',
         '_set_session',
         '_get_and_set_session',
         '_refresh_and_set_session',
@@ -39,10 +40,13 @@ def gen_client(input_filename: str, output_filename: str) -> None:
     code = code.replace('self.app', 'await self.app')
 
     for method in methods:
+        # TODO(MarshalX): abnormally hacky; rework
+        code = re.sub(rf'(\[self\.{method}.*\])', r'await asyncio.gather(*\1)', code)
+
         code = code.replace(f'self.{method}(', f'await self.{method}(')
         code = code.replace(f'super().{method}(', f'await super().{method}(')
 
-    code = re.sub(r'(\[self\.upload_blob.*\])', r'await asyncio.gather(*\1)', code)
+        code = code.replace('gather(*[await', 'gather(*[')  # rollback specific case
 
     code = DISCLAIMER + code
 
