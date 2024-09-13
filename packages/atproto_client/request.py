@@ -1,5 +1,6 @@
 import typing as t
 from dataclasses import dataclass
+from importlib import metadata as importlib_metadata
 
 import httpx
 import typing_extensions as te
@@ -8,6 +9,13 @@ from pydantic_core import from_json
 from atproto_client import exceptions
 from atproto_client.models.common import XrpcError
 from atproto_client.models.utils import get_or_create, load_json
+
+try:
+    _ATPROTO_SDK_VERSION = importlib_metadata.version('atproto')
+except importlib_metadata.PackageNotFoundError:
+    _ATPROTO_SDK_VERSION = 'unknown'
+
+_ATPROTO_SDK_USER_AGENT = f'atproto/{_ATPROTO_SDK_VERSION} Python SDK (atproto.blue)'
 
 
 @dataclass
@@ -34,7 +42,8 @@ def _convert_headers_to_dict(headers: httpx.Headers) -> t.Dict[str, str]:
 
 def _parse_response(response: httpx.Response) -> Response:
     content = response.content
-    if response.headers.get('content-type') == 'application/json; charset=utf-8':
+    content_type = response.headers.get('content-type')
+    if content_type and 'application/json' in content_type.lower():
         content = from_json(response.content)
 
     return Response(
@@ -80,7 +89,7 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
 
 
 class RequestBase:
-    _MANDATORY_HEADERS: t.ClassVar[t.Dict[str, str]] = {'User-Agent': 'atproto/alpha (Python SDK)'}
+    _MANDATORY_HEADERS: t.ClassVar[t.Dict[str, str]] = {'User-Agent': _ATPROTO_SDK_USER_AGENT}
 
     def __init__(self) -> None:
         self._additional_headers: t.Dict[str, str] = {}
