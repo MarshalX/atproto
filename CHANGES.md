@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 0.0.54
+
+**13.09.2024**
+
+* Add `Client.send_video` high-level method by @Meorge in https://github.com/MarshalX/atproto/pull/395
+* Add support for `known_values` and `enum` of string properties in objects by @MarshalX in https://github.com/MarshalX/atproto/pull/391
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/394 and https://github.com/MarshalX/atproto/pull/398
+* Fix string definitions which use `know_values` field as _closed_ enum by @MarshalX in https://github.com/MarshalX/atproto/pull/389
+* Fix model field default value generating in cases when this is the only one constraint by @MarshalX in https://github.com/MarshalX/atproto/pull/393
+* Fix response parsing for JSON content type by @MarshalX in https://github.com/MarshalX/atproto/pull/397
+
 ## Version 0.0.53
 
 **10.09.2024**
