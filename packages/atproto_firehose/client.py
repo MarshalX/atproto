@@ -137,8 +137,7 @@ class _WebsocketClient(_WebsocketClientBase):
     def __init__(self, method: str, base_uri: str, params: t.Optional[t.Dict[str, t.Any]] = None) -> None:
         super().__init__(method, base_uri, params)
 
-        # TODO(DXsmiley): Not sure if this should be a Lock or not, the async is using an Event now
-        self._stop_lock = threading.Lock()
+        self._stopped = False
 
         self._on_message_callback: t.Optional[OnMessageCallback] = None
         self._on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None
@@ -173,7 +172,7 @@ class _WebsocketClient(_WebsocketClientBase):
         self._on_message_callback = on_message_callback
         self._on_callback_error_callback = on_callback_error_callback
 
-        while not self._stop_lock.locked():
+        while not self._stopped:
             try:
                 if self._reconnect_no != 0:
                     time.sleep(self._get_reconnection_delay())
@@ -181,7 +180,7 @@ class _WebsocketClient(_WebsocketClientBase):
                 with self._get_client() as client:
                     self._reconnect_no = 0
 
-                    while not self._stop_lock.locked():
+                    while not self._stopped:
                         raw_frame = client.recv()
                         if isinstance(raw_frame, str):
                             # skip text frames (should not be occurred)
@@ -199,17 +198,13 @@ class _WebsocketClient(_WebsocketClientBase):
                 if should_stop:
                     break
 
-        if self._stop_lock.locked():
-            self._stop_lock.release()
-
     def stop(self) -> None:
         """Unsubscribe and stop the Firehose client.
 
         Returns:
             :obj:`None`
         """
-        if not self._stop_lock.locked():
-            self._stop_lock.acquire()
+        self._stopped = True
 
 
 class _AsyncWebsocketClient(_WebsocketClientBase):
