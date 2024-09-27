@@ -54,6 +54,7 @@ class ViewerState(base.ModelBase):
 
     embedding_disabled: t.Optional[bool] = None  #: Embedding disabled.
     like: t.Optional[str] = None  #: Like.
+    pinned: t.Optional[bool] = None  #: Pinned.
     reply_disabled: t.Optional[bool] = None  #: Reply disabled.
     repost: t.Optional[str] = None  #: Repost.
     thread_muted: t.Optional[bool] = None  #: Thread muted.
@@ -71,7 +72,10 @@ class FeedViewPost(base.ModelBase):
         default=None, max_length=2000
     )  #: Context provided by feed generator that may be passed back alongside interactions.
     reason: t.Optional[
-        te.Annotated[t.Union['models.AppBskyFeedDefs.ReasonRepost'], Field(default=None, discriminator='py_type')]
+        te.Annotated[
+            t.Union['models.AppBskyFeedDefs.ReasonRepost', 'models.AppBskyFeedDefs.ReasonPin'],
+            Field(default=None, discriminator='py_type'),
+        ]
     ] = None  #: Reason.
     reply: t.Optional['models.AppBskyFeedDefs.ReplyRef'] = None  #: Reply.
 
@@ -116,6 +120,14 @@ class ReasonRepost(base.ModelBase):
 
     py_type: t.Literal['app.bsky.feed.defs#reasonRepost'] = Field(
         default='app.bsky.feed.defs#reasonRepost', alias='$type', frozen=True
+    )
+
+
+class ReasonPin(base.ModelBase):
+    """Definition model for :obj:`app.bsky.feed.defs`."""
+
+    py_type: t.Literal['app.bsky.feed.defs#reasonPin'] = Field(
+        default='app.bsky.feed.defs#reasonPin', alias='$type', frozen=True
     )
 
 
@@ -226,7 +238,8 @@ class SkeletonFeedPost(base.ModelBase):
     )  #: Context that will be passed through to client and may be passed to feed generator back alongside interactions.
     reason: t.Optional[
         te.Annotated[
-            t.Union['models.AppBskyFeedDefs.SkeletonReasonRepost'], Field(default=None, discriminator='py_type')
+            t.Union['models.AppBskyFeedDefs.SkeletonReasonRepost', 'models.AppBskyFeedDefs.SkeletonReasonPin'],
+            Field(default=None, discriminator='py_type'),
         ]
     ] = None  #: Reason.
 
@@ -242,6 +255,14 @@ class SkeletonReasonRepost(base.ModelBase):
 
     py_type: t.Literal['app.bsky.feed.defs#skeletonReasonRepost'] = Field(
         default='app.bsky.feed.defs#skeletonReasonRepost', alias='$type', frozen=True
+    )
+
+
+class SkeletonReasonPin(base.ModelBase):
+    """Definition model for :obj:`app.bsky.feed.defs`."""
+
+    py_type: t.Literal['app.bsky.feed.defs#skeletonReasonPin'] = Field(
+        default='app.bsky.feed.defs#skeletonReasonPin', alias='$type', frozen=True
     )
 
 
