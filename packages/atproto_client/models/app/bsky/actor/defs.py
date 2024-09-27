@@ -69,6 +69,7 @@ class ProfileViewDetailed(base.ModelBase):
         'models.AppBskyGraphDefs.StarterPackViewBasic'
     ] = None  #: Joined via starter pack.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Pinned post.
     posts_count: t.Optional[int] = None  #: Posts count.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 

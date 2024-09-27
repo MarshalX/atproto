@@ -29,6 +29,7 @@ class Params(base.ParamsModelBase):
             str,
         ]
     ] = 'posts_with_replies'  #: Combinations of post/repost types to include in response.
+    include_pins: t.Optional[bool] = False  #: Include pins.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
@@ -46,6 +47,7 @@ class ParamsDict(t.TypedDict):
             ]
         ]
     ]  #: Combinations of post/repost types to include in response.
+    include_pins: te.NotRequired[t.Optional[bool]]  #: Include pins.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 
 
