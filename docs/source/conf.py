@@ -9,7 +9,7 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
+
 import os
 import sys
 import typing as t
@@ -37,8 +37,7 @@ language = 'en'
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
@@ -58,17 +57,13 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
-# myst
+# -- MyST-Parser ---------------------------------------------------
 
 myst_heading_anchors = 4
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html?highlight=header-anchors#code-fences-using-colons
 myst_enable_extensions = ['colon_fence']
 
 # -- Options for HTML output -------------------------------------------------
-
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
 
 # These folders are copied to the documentation's HTML output
 html_static_path = ['_static']
@@ -90,7 +85,7 @@ html_theme_options = {
     'source_directory': 'docs/source/',
 }
 
-# Favicons
+# -- Favicons ---------------------------------------------------
 favicons = [
     {
         'rel': 'icon',
@@ -117,16 +112,25 @@ favicons = [
     },
 ]
 
+# -- Read The docs ---------------------------------------------------
 
-# OpenGraph
+# Define the canonical URL if you are using a custom domain on Read the Docs
+html_baseurl = os.environ.get('READTHEDOCS_CANONICAL_URL', '')
+
+# Tell Jinja2 templates the build is running on Read the Docs
+if os.environ.get('READTHEDOCS', '') == 'True':
+    if 'html_context' not in globals():
+        html_context = {}
+    html_context['READTHEDOCS'] = True
+
+# -- OpenGraph ---------------------------------------------------
 ogp_site_url = 'https://atproto.blue/'
 # Social preview of GitHub Repo. I guess it's lifetime link until edit/delete action,
 ogp_image = 'https://repository-images.githubusercontent.com/569485568/9d743322-10a2-4290-9a05-a88348cce2b6'
 ogp_type = 'article'
 ogp_enable_meta_description = True
 
-
-# Pydantic models
+# -- Pydantic models ---------------------------------------------------
 autodoc_pydantic_model_undoc_members = True
 autodoc_pydantic_model_show_json = False
 autodoc_pydantic_model_show_config_summary = False
@@ -136,7 +140,6 @@ autodoc_pydantic_model_signature_prefix = 'class'
 autodoc_pydantic_field_list_validators = False
 autodoc_pydantic_field_show_alias = False
 autodoc_pydantic_settings_show_json = False
-
 
 autosectionlabel_prefix_document = True
 
