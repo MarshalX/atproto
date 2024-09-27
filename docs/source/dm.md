@@ -1,4 +1,4 @@
-# 💬 Direct Messages (Chats)
+# Direct Messages (Chats)
 
 Bluesky Direct Messages were launched on May 22, 2024. It began as a simple chat system for Bluesky users to communicate with one another. Currently, only text messages are supported. 
 
