@@ -13,7 +13,6 @@ Documentation
 
    readme
    Examples <https://github.com/MarshalX/atproto/tree/main/examples>
-   ⭐️ Star <https://github.com/MarshalX/atproto>
 
 .. toctree::
    :caption: SDK
@@ -43,7 +42,7 @@ Documentation
 
    GitHub <https://github.com/MarshalX/atproto>
    PyPI <https://pypi.org/project/atproto/>
-   🦁 Author <https://github.com/MarshalX>
-   AT Protocol Docs <https://atproto.com/docs>
-   IPLD Data Model <https://ipld.io/>
+   Author <https://github.com/MarshalX>
+   AT Protocol Docs <https://atproto.com/>
+   Bluesky Docs <https://docs.bsky.app/>
    Discord Bluesky API <https://discord.gg/PCyVJXU9jN>
