@@ -509,15 +509,8 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
 
             # here we can generate input and output model alises from the reference
             # but instead we just resolve reference inplace without intermediate model
-
-            # maybe we will want to generate aliases in the future, so I leave this code here
-
-            # if model_type is ModelType.DATA:
-            #     lines.append(f'{INPUT_MODEL} = {model_path}')
-            # elif model_type is ModelType.RESPONSE:
-            #     lines.append(f'{OUTPUT_MODEL} = {model_path}')
-            # else:
-            #     raise ValueError('Wrong type or not implemented')
+            # maybe we will want to generate aliases in the future
+            # so I leave this code here: https://github.com/MarshalX/atproto/pull/412
         else:
             raise ValueError('Wrong schema type or not implemented')
     else:
