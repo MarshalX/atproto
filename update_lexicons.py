@@ -122,7 +122,9 @@ def _remove_content_in_path(path: Path) -> None:
 
 
 def _run_subprocess(command: t.List[str]) -> None:
-    subprocess.run(command)  # noqa: S603
+    result = subprocess.run(command)  # noqa: S603
+    if result.returncode != 0:
+        exit(result.returncode)
 
 
 def _print(*args) -> None:

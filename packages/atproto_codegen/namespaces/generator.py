@@ -117,6 +117,8 @@ def _get_method_docstring(method_info: MethodInfo) -> str:
         doc_string.append(f'{_(3)}params: Parameters.')
     if 'data_schema' in presented_args:
         doc_string.append(f'{_(3)}data: Input data.')
+    if 'data_schema_ref' in presented_args:
+        doc_string.append(f'{_(3)}data: Input data (reference).')
     if 'data_alias' in presented_args:
         doc_string.append(f'{_(3)}data: Input data alias.')
 
@@ -174,6 +176,12 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
     if 'data_schema' in presented_args:
         invoke_args.append('data=data_model')
         lines.append(_override_arg_line('data', INPUT_MODEL))
+    if 'data_schema_ref' in presented_args:  # special case
+        invoke_args.append('data=data_model')
+        model_path, __ = _resolve_nsid_ref(method_info.nsid, method_info.definition.input.schema_.ref)
+        # FIXME(MarshalX): typically this refs will lead to base.ModelBase, not models.DataModelBase
+        #  which breaks type hinting in invoke methods (data argument)
+        lines.append(f"{_(2)}data_model = t.cast('{model_path}', get_or_create(data, {model_path}))")
     if 'data_alias' in presented_args:
         invoke_args.append('data=data')
     if 'input_encoding' in presented_args:
@@ -223,8 +231,10 @@ def _get_namespace_method_signature_args_names(definition: t.Union[LexXrpcProced
         args.add('params')
 
     if isinstance(definition, LexXrpcProcedure) and definition.input:
-        if definition.input.schema_:
+        if definition.input.schema_ and isinstance(definition.input.schema_, LexObject):
             args.add('data_schema')
+        elif definition.input.schema_ and isinstance(definition.input.schema_, LexRef):
+            args.add('data_schema_ref')
         else:
             args.add('data_alias')
 
@@ -262,15 +272,18 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
     if isinstance(method_info, ProcedureInfo) and method_info.definition.input:
         schema = method_info.definition.input.schema_
         if schema:
-            is_optional = is_optional_arg(schema)
-
-            if schema and isinstance(schema, LexObject):
+            if isinstance(schema, LexObject):
+                is_optional = is_optional_arg(schema)
                 arg = _get_namespace_method_signature_arg(
                     'data', method_info.nsid, [INPUT_MODEL, INPUT_DICT], optional=is_optional
                 )
                 _add_arg(arg, optional=is_optional)
+            elif isinstance(schema, LexRef):
+                model_path, _ = _resolve_nsid_ref(method_info.nsid, schema.ref)
+                # there is no info about the requirement of LexRef ??? why
+                _add_arg(f'data: {model_path}', optional=False)
             else:
-                raise ValueError(f'Bad type {type(schema)}')  # probably LexRefVariant
+                raise ValueError(f'Bad type {type(schema)}')  # probably LexRefUnion
         else:
             arg = _get_namespace_method_signature_arg('data', method_info.nsid, INPUT_MODEL, optional=False, alias=True)
             _add_arg(arg, optional=False)
