@@ -504,6 +504,15 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
             lines.append(_get_model_class_def(nsid.name, model_type))
             lines.append(_get_model_docstring(nsid, body.schema_, model_type))
             lines.append(_get_model(nsid, body.schema_, is_input_type=(model_type is ModelType.DATA)))
+        elif isinstance(body.schema_, models.LexRef):
+            model_path, _ = _resolve_nsid_ref(nsid, body.schema_.ref)
+
+            # here we can generate input and output model alises from the reference
+            # but instead we just resolve reference inplace without intermediate model
+            # maybe we will want to generate aliases in the future
+            # so I leave this code here: https://github.com/MarshalX/atproto/pull/412
+        else:
+            raise ValueError('Wrong schema type or not implemented')
     else:
         if model_type is ModelType.DATA:
             model_name = INPUT_MODEL

@@ -204,11 +204,24 @@ from atproto_client.models.tools.ozone.moderation import defs as ToolsOzoneModer
 from atproto_client.models.tools.ozone.moderation import emit_event as ToolsOzoneModerationEmitEvent
 from atproto_client.models.tools.ozone.moderation import get_event as ToolsOzoneModerationGetEvent
 from atproto_client.models.tools.ozone.moderation import get_record as ToolsOzoneModerationGetRecord
+from atproto_client.models.tools.ozone.moderation import get_records as ToolsOzoneModerationGetRecords
 from atproto_client.models.tools.ozone.moderation import get_repo as ToolsOzoneModerationGetRepo
+from atproto_client.models.tools.ozone.moderation import get_repos as ToolsOzoneModerationGetRepos
 from atproto_client.models.tools.ozone.moderation import query_events as ToolsOzoneModerationQueryEvents
 from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
 from atproto_client.models.tools.ozone.moderation import search_repos as ToolsOzoneModerationSearchRepos
 from atproto_client.models.tools.ozone.server import get_config as ToolsOzoneServerGetConfig
+from atproto_client.models.tools.ozone.set import add_values as ToolsOzoneSetAddValues
+from atproto_client.models.tools.ozone.set import defs as ToolsOzoneSetDefs
+from atproto_client.models.tools.ozone.set import delete_set as ToolsOzoneSetDeleteSet
+from atproto_client.models.tools.ozone.set import delete_values as ToolsOzoneSetDeleteValues
+from atproto_client.models.tools.ozone.set import get_values as ToolsOzoneSetGetValues
+from atproto_client.models.tools.ozone.set import query_sets as ToolsOzoneSetQuerySets
+from atproto_client.models.tools.ozone.set import upsert_set as ToolsOzoneSetUpsertSet
+from atproto_client.models.tools.ozone.signature import defs as ToolsOzoneSignatureDefs
+from atproto_client.models.tools.ozone.signature import find_correlation as ToolsOzoneSignatureFindCorrelation
+from atproto_client.models.tools.ozone.signature import find_related_accounts as ToolsOzoneSignatureFindRelatedAccounts
+from atproto_client.models.tools.ozone.signature import search_accounts as ToolsOzoneSignatureSearchAccounts
 from atproto_client.models.tools.ozone.team import add_member as ToolsOzoneTeamAddMember
 from atproto_client.models.tools.ozone.team import defs as ToolsOzoneTeamDefs
 from atproto_client.models.tools.ozone.team import delete_member as ToolsOzoneTeamDeleteMember
@@ -419,11 +432,24 @@ class _Ids:
     ToolsOzoneModerationEmitEvent: str = 'tools.ozone.moderation.emitEvent'
     ToolsOzoneModerationGetEvent: str = 'tools.ozone.moderation.getEvent'
     ToolsOzoneModerationGetRecord: str = 'tools.ozone.moderation.getRecord'
+    ToolsOzoneModerationGetRecords: str = 'tools.ozone.moderation.getRecords'
     ToolsOzoneModerationGetRepo: str = 'tools.ozone.moderation.getRepo'
+    ToolsOzoneModerationGetRepos: str = 'tools.ozone.moderation.getRepos'
     ToolsOzoneModerationQueryEvents: str = 'tools.ozone.moderation.queryEvents'
     ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
     ToolsOzoneModerationSearchRepos: str = 'tools.ozone.moderation.searchRepos'
     ToolsOzoneServerGetConfig: str = 'tools.ozone.server.getConfig'
+    ToolsOzoneSetAddValues: str = 'tools.ozone.set.addValues'
+    ToolsOzoneSetDefs: str = 'tools.ozone.set.defs'
+    ToolsOzoneSetDeleteSet: str = 'tools.ozone.set.deleteSet'
+    ToolsOzoneSetDeleteValues: str = 'tools.ozone.set.deleteValues'
+    ToolsOzoneSetGetValues: str = 'tools.ozone.set.getValues'
+    ToolsOzoneSetQuerySets: str = 'tools.ozone.set.querySets'
+    ToolsOzoneSetUpsertSet: str = 'tools.ozone.set.upsertSet'
+    ToolsOzoneSignatureDefs: str = 'tools.ozone.signature.defs'
+    ToolsOzoneSignatureFindCorrelation: str = 'tools.ozone.signature.findCorrelation'
+    ToolsOzoneSignatureFindRelatedAccounts: str = 'tools.ozone.signature.findRelatedAccounts'
+    ToolsOzoneSignatureSearchAccounts: str = 'tools.ozone.signature.searchAccounts'
     ToolsOzoneTeamAddMember: str = 'tools.ozone.team.addMember'
     ToolsOzoneTeamDefs: str = 'tools.ozone.team.defs'
     ToolsOzoneTeamDeleteMember: str = 'tools.ozone.team.deleteMember'

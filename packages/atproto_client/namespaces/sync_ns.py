@@ -6205,6 +6205,8 @@ class ToolsOzoneNamespace(NamespaceBase):
         self.communication = ToolsOzoneCommunicationNamespace(self._client)
         self.moderation = ToolsOzoneModerationNamespace(self._client)
         self.server = ToolsOzoneServerNamespace(self._client)
+        self.set = ToolsOzoneSetNamespace(self._client)
+        self.signature = ToolsOzoneSignatureNamespace(self._client)
         self.team = ToolsOzoneTeamNamespace(self._client)
 
 
@@ -6401,6 +6403,32 @@ class ToolsOzoneModerationNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ToolsOzoneModerationDefs.RecordViewDetail)
 
+    def get_records(
+        self,
+        params: t.Union[models.ToolsOzoneModerationGetRecords.Params, models.ToolsOzoneModerationGetRecords.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationGetRecords.Response':
+        """Get details about some records.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationGetRecords.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationGetRecords.Params',
+            get_or_create(params, models.ToolsOzoneModerationGetRecords.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.moderation.getRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneModerationGetRecords.Response)
+
     def get_repo(
         self,
         params: t.Union[models.ToolsOzoneModerationGetRepo.Params, models.ToolsOzoneModerationGetRepo.ParamsDict],
@@ -6426,6 +6454,32 @@ class ToolsOzoneModerationNamespace(NamespaceBase):
             'tools.ozone.moderation.getRepo', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneModerationDefs.RepoViewDetail)
+
+    def get_repos(
+        self,
+        params: t.Union[models.ToolsOzoneModerationGetRepos.Params, models.ToolsOzoneModerationGetRepos.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationGetRepos.Response':
+        """Get details about some repositories.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationGetRepos.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationGetRepos.Params',
+            get_or_create(params, models.ToolsOzoneModerationGetRepos.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.moderation.getRepos', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneModerationGetRepos.Response)
 
     def query_events(
         self,
@@ -6531,6 +6585,248 @@ class ToolsOzoneServerNamespace(NamespaceBase):
             'tools.ozone.server.getConfig', output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneServerGetConfig.Response)
+
+
+class ToolsOzoneSetNamespace(NamespaceBase):
+    def add_values(
+        self, data: t.Union[models.ToolsOzoneSetAddValues.Data, models.ToolsOzoneSetAddValues.DataDict], **kwargs: t.Any
+    ) -> bool:
+        """Add values to a specific set. Attempting to add values to a set that does not exist will result in an error.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneSetAddValues.Data', get_or_create(data, models.ToolsOzoneSetAddValues.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.set.addValues', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def delete_set(
+        self, data: t.Union[models.ToolsOzoneSetDeleteSet.Data, models.ToolsOzoneSetDeleteSet.DataDict], **kwargs: t.Any
+    ) -> 'models.ToolsOzoneSetDeleteSet.Response':
+        """Delete an entire set. Attempting to delete a set that does not exist will result in an error.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSetDeleteSet.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneSetDeleteSet.Data', get_or_create(data, models.ToolsOzoneSetDeleteSet.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.set.deleteSet',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSetDeleteSet.Response)
+
+    def delete_values(
+        self,
+        data: t.Union[models.ToolsOzoneSetDeleteValues.Data, models.ToolsOzoneSetDeleteValues.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete values from a specific set. Attempting to delete values that are not in the set will not result in an error.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneSetDeleteValues.Data', get_or_create(data, models.ToolsOzoneSetDeleteValues.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.set.deleteValues', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def get_values(
+        self,
+        params: t.Union[models.ToolsOzoneSetGetValues.Params, models.ToolsOzoneSetGetValues.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSetGetValues.Response':
+        """Get a specific set and its values.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSetGetValues.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneSetGetValues.Params', get_or_create(params, models.ToolsOzoneSetGetValues.Params)
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.set.getValues', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneSetGetValues.Response)
+
+    def query_sets(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneSetQuerySets.Params, models.ToolsOzoneSetQuerySets.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSetQuerySets.Response':
+        """Query available sets.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSetQuerySets.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneSetQuerySets.Params', get_or_create(params, models.ToolsOzoneSetQuerySets.Params)
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.set.querySets', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneSetQuerySets.Response)
+
+    def upsert_set(self, data: models.ToolsOzoneSetDefs.Set, **kwargs: t.Any) -> 'models.ToolsOzoneSetDefs.SetView':
+        """Create or update set metadata.
+
+        Args:
+            data: Input data (reference).
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSetDefs.SetView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast('models.ToolsOzoneSetDefs.Set', get_or_create(data, models.ToolsOzoneSetDefs.Set))
+        response = self._client.invoke_procedure(
+            'tools.ozone.set.upsertSet',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSetDefs.SetView)
+
+
+class ToolsOzoneSignatureNamespace(NamespaceBase):
+    def find_correlation(
+        self,
+        params: t.Union[
+            models.ToolsOzoneSignatureFindCorrelation.Params, models.ToolsOzoneSignatureFindCorrelation.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSignatureFindCorrelation.Response':
+        """Find all correlated threat signatures between 2 or more accounts.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSignatureFindCorrelation.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneSignatureFindCorrelation.Params',
+            get_or_create(params, models.ToolsOzoneSignatureFindCorrelation.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.signature.findCorrelation', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneSignatureFindCorrelation.Response)
+
+    def find_related_accounts(
+        self,
+        params: t.Union[
+            models.ToolsOzoneSignatureFindRelatedAccounts.Params,
+            models.ToolsOzoneSignatureFindRelatedAccounts.ParamsDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSignatureFindRelatedAccounts.Response':
+        """Get accounts that share some matching threat signatures with the root account.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSignatureFindRelatedAccounts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneSignatureFindRelatedAccounts.Params',
+            get_or_create(params, models.ToolsOzoneSignatureFindRelatedAccounts.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.signature.findRelatedAccounts',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSignatureFindRelatedAccounts.Response)
+
+    def search_accounts(
+        self,
+        params: t.Union[
+            models.ToolsOzoneSignatureSearchAccounts.Params, models.ToolsOzoneSignatureSearchAccounts.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSignatureSearchAccounts.Response':
+        """Search for accounts that match one or more threat signature values.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSignatureSearchAccounts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneSignatureSearchAccounts.Params',
+            get_or_create(params, models.ToolsOzoneSignatureSearchAccounts.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.signature.searchAccounts', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneSignatureSearchAccounts.Response)
 
 
 class ToolsOzoneTeamNamespace(NamespaceBase):
