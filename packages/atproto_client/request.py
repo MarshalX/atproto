@@ -27,7 +27,7 @@ class Response:
 
 
 def _convert_headers_to_dict(headers: httpx.Headers) -> t.Dict[str, str]:
-    """Converts custom case-insensitive multi-dict of HTTPX to pure dict.
+    """Converts custom case-insensitive multi-dict of HTTPX to pure dict with lowercased keys.
 
     Note:
         Concatenate headers into a single comma separated value when a key occurs multiple times.
