@@ -16,8 +16,7 @@ def _alias_generator(name: str) -> str:
     return camel_name
 
 
-class AtProtocolBase:
-    ...
+class AtProtocolBase: ...
 
 
 class ModelBase(BaseModel, AtProtocolBase):

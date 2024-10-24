@@ -24,9 +24,9 @@ class Data(base.DataModelBase):
     repo: str  #: The handle or DID of the repo (aka, current account).
     rkey: t.Optional[str] = Field(default=None, max_length=15)  #: The Record Key.
     swap_commit: t.Optional[str] = None  #: Compare and swap with the previous commit by CID.
-    validate_: t.Optional[
-        bool
-    ] = None  #: Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons.
+    validate_: t.Optional[bool] = (
+        None  #: Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons.
+    )
 
 
 class DataDict(t.TypedDict):

@@ -40,11 +40,9 @@ class Commit(base.ModelBase):
     seq: int  #: The stream sequence number of this message.
     time: str  #: Timestamp of when this message was originally broadcast.
     too_big: bool  #: Indicates that this commit contained too many ops, or data size was too large. Consumers will need to make a separate request to get missing data.
-    prev: t.Optional[
-        'CIDType'
-    ] = (
-        None
-    )  #: DEPRECATED -- unused. WARNING -- nullable and optional; stick with optional to ensure golang interoperability.
+    prev: t.Optional['CIDType'] = (
+        None  #: DEPRECATED -- unused. WARNING -- nullable and optional; stick with optional to ensure golang interoperability.
+    )
     since: t.Optional[str] = None  #: The rev of the last emitted commit from this repo (if any).
 
     py_type: t.Literal['com.atproto.sync.subscribeRepos#commit'] = Field(
@@ -58,9 +56,9 @@ class Identity(base.ModelBase):
     did: str  #: Did.
     seq: int  #: Seq.
     time: str  #: Time.
-    handle: t.Optional[
-        str
-    ] = None  #: The current handle for the account, or 'handle.invalid' if validation fails. This field is optional, might have been validated or passed-through from an upstream source. Semantics and behaviors for PDS vs Relay may evolve in the future; see atproto specs for more details.
+    handle: t.Optional[str] = (
+        None  #: The current handle for the account, or 'handle.invalid' if validation fails. This field is optional, might have been validated or passed-through from an upstream source. Semantics and behaviors for PDS vs Relay may evolve in the future; see atproto specs for more details.
+    )
 
     py_type: t.Literal['com.atproto.sync.subscribeRepos#identity'] = Field(
         default='com.atproto.sync.subscribeRepos#identity', alias='$type', frozen=True
@@ -71,8 +69,8 @@ class Account(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents a change to an account's status on a host (eg, PDS or Relay). The semantics of this event are that the status is at the host which emitted the event, not necessarily that at the currently active PDS. Eg, a Relay takedown would emit a takedown with active=false, even if the PDS is still active."""
 
     active: (
-        bool
-    )  #: Indicates that the account has a repository which can be fetched from the host that emitted this event.
+        bool  #: Indicates that the account has a repository which can be fetched from the host that emitted this event.
+    )
     did: str  #: Did.
     seq: int  #: Seq.
     time: str  #: Time.

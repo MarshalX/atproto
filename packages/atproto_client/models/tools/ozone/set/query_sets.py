@@ -21,12 +21,12 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     name_prefix: t.Optional[str] = None  #: Name prefix.
-    sort_by: t.Optional[
-        t.Union[t.Literal['name'], t.Literal['createdAt'], t.Literal['updatedAt']]
-    ] = 'name'  #: Sort by.
-    sort_direction: t.Optional[
-        t.Union[t.Literal['asc'], t.Literal['desc']]
-    ] = 'asc'  #: Defaults to ascending order of name field.
+    sort_by: t.Optional[t.Union[t.Literal['name'], t.Literal['createdAt'], t.Literal['updatedAt']]] = (
+        'name'  #: Sort by.
+    )
+    sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = (
+        'asc'  #: Defaults to ascending order of name field.
+    )
 
 
 class ParamsDict(t.TypedDict):

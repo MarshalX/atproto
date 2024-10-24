@@ -65,9 +65,9 @@ class ProfileViewDetailed(base.ModelBase):
     followers_count: t.Optional[int] = None  #: Followers count.
     follows_count: t.Optional[int] = None  #: Follows count.
     indexed_at: t.Optional[str] = None  #: Indexed at.
-    joined_via_starter_pack: t.Optional[
-        'models.AppBskyGraphDefs.StarterPackViewBasic'
-    ] = None  #: Joined via starter pack.
+    joined_via_starter_pack: t.Optional['models.AppBskyGraphDefs.StarterPackViewBasic'] = (
+        None  #: Joined via starter pack.
+    )
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Pinned post.
     posts_count: t.Optional[int] = None  #: Posts count.
@@ -226,9 +226,9 @@ class FeedViewPref(base.ModelBase):
     feed: str  #: The URI of the feed, or an identifier which describes the feed.
     hide_quote_posts: t.Optional[bool] = None  #: Hide quote posts in the feed.
     hide_replies: t.Optional[bool] = None  #: Hide replies in the feed.
-    hide_replies_by_like_count: t.Optional[
-        int
-    ] = None  #: Hide replies in the feed if they do not have this number of likes.
+    hide_replies_by_like_count: t.Optional[int] = (
+        None  #: Hide replies in the feed if they do not have this number of likes.
+    )
     hide_replies_by_unfollowed: t.Optional[bool] = True  #: Hide replies in the feed if they are not by followed users.
     hide_reposts: t.Optional[bool] = None  #: Hide reposts in the feed.
 
@@ -270,12 +270,12 @@ class MutedWord(base.ModelBase):
 
     targets: t.List['models.AppBskyActorDefs.MutedWordTarget']  #: The intended targets of the muted word.
     value: str = Field(max_length=10000)  #: The muted word itself.
-    actor_target: t.Optional[
-        t.Union[t.Literal['all'], t.Literal['exclude-following'], str]
-    ] = 'all'  #: Groups of users to apply the muted word to. If undefined, applies to all users.
-    expires_at: t.Optional[
-        str
-    ] = None  #: The date and time at which the muted word will expire and no longer be applied.
+    actor_target: t.Optional[t.Union[t.Literal['all'], t.Literal['exclude-following'], str]] = (
+        'all'  #: Groups of users to apply the muted word to. If undefined, applies to all users.
+    )
+    expires_at: t.Optional[str] = (
+        None  #: The date and time at which the muted word will expire and no longer be applied.
+    )
     id: t.Optional[str] = None  #: Id.
 
     py_type: t.Literal['app.bsky.actor.defs#mutedWord'] = Field(
@@ -357,8 +357,8 @@ class Nux(base.ModelBase):
     data: t.Optional[str] = Field(
         default=None, max_length=3000
     )  #: Arbitrary data for the NUX. The structure is defined by the NUX itself. Limited to 300 characters.
-    expires_at: t.Optional[
-        str
-    ] = None  #: The date and time at which the NUX will expire and should be considered completed.
+    expires_at: t.Optional[str] = (
+        None  #: The date and time at which the NUX will expire and should be considered completed.
+    )
 
     py_type: t.Literal['app.bsky.actor.defs#nux'] = Field(default='app.bsky.actor.defs#nux', alias='$type', frozen=True)

@@ -18,9 +18,9 @@ class Data(base.DataModelBase):
     content: str  #: Content.
     recipient_did: str  #: Recipient did.
     sender_did: str  #: Sender did.
-    comment: t.Optional[
-        str
-    ] = None  #: Additional comment by the sender that won't be used in the email itself but helpful to provide more context for moderators/reviewers.
+    comment: t.Optional[str] = (
+        None  #: Additional comment by the sender that won't be used in the email itself but helpful to provide more context for moderators/reviewers.
+    )
     subject: t.Optional[str] = None  #: Subject.
 
 

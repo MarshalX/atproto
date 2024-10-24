@@ -22,7 +22,7 @@ def lexicon_parse_file(lexicon_path: t.Union[Path, str], *, soft_fail: bool = Fa
         with open(lexicon_path, encoding='UTF-8') as f:
             plain_lexicon = from_json(f.read())
             return lexicon_parse(plain_lexicon)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         if soft_fail:
             return None
 

@@ -17,9 +17,9 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.server.getAccountInviteCodes`."""
 
-    create_available: t.Optional[
-        bool
-    ] = True  #: Controls whether any new 'earned' but not 'created' invites should be created.
+    create_available: t.Optional[bool] = (
+        True  #: Controls whether any new 'earned' but not 'created' invites should be created.
+    )
     include_used: t.Optional[bool] = True  #: Include used.
 
 

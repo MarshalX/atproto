@@ -16,9 +16,9 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.communication.updateTemplate`."""
 
     id: str  #: ID of the template to be updated.
-    content_markdown: t.Optional[
-        str
-    ] = None  #: Content of the template, markdown supported, can contain variable placeholders.
+    content_markdown: t.Optional[str] = (
+        None  #: Content of the template, markdown supported, can contain variable placeholders.
+    )
     disabled: t.Optional[bool] = None  #: Disabled.
     lang: t.Optional[str] = None  #: Message language.
     name: t.Optional[str] = None  #: Name of the template.

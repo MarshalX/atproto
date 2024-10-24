@@ -38,7 +38,7 @@ def _handle_kwagrs(kwargs: dict) -> None:
     if content_type == _CONTENT_TYPE_JSON and 'data' in kwargs and kwargs['data']:
         kwargs['data'] = get_model_as_json(kwargs['data'])
 
-    if 'params' in kwargs and kwargs['params']:
+    if kwargs.get('params'):
         kwargs['params'] = get_model_as_dict(kwargs['params'])
 
     # pop non-request kwargs

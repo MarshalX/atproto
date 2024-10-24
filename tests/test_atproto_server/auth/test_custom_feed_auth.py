@@ -22,8 +22,7 @@ if t.TYPE_CHECKING:
     from _pytest.monkeypatch import MonkeyPatch
 
 
-class AuthorizationError(Exception):
-    ...
+class AuthorizationError(Exception): ...
 
 
 def test_custom_feed_auth_flow(monkeypatch: 'MonkeyPatch') -> None:

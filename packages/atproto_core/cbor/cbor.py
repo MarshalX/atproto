@@ -16,7 +16,7 @@ def decode_dag(data: bytes) -> dict:
     """
     try:
         return libipld.decode_dag_cbor(data)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         raise DAGCBORDecodingError from e
 
 

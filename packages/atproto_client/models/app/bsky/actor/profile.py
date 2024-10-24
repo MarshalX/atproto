@@ -19,9 +19,9 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.actor.profile`."""
 
-    avatar: t.Optional[
-        'BlobRef'
-    ] = None  #: Small image to be displayed next to posts from account. AKA, 'profile picture'.
+    avatar: t.Optional['BlobRef'] = (
+        None  #: Small image to be displayed next to posts from account. AKA, 'profile picture'.
+    )
     banner: t.Optional['BlobRef'] = None  #: Larger horizontal image to display behind profile view.
     created_at: t.Optional[str] = None  #: Created at.
     description: t.Optional[str] = Field(default=None, max_length=2560)  #: Free-form profile description text.

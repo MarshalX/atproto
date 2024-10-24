@@ -18,7 +18,7 @@ async def main() -> None:
         # example: "Got new notification! Type: like; from: did:plc:hlorqa2iqfooopmyzvb4byaz"
 
     async def listen_for_notifications(
-        on_notification: t.Callable[[Notification], t.Coroutine[t.Any, t.Any, None]]
+        on_notification: t.Callable[[Notification], t.Coroutine[t.Any, t.Any, None]],
     ) -> None:
         print('Start listening for notifications...')
         while True:

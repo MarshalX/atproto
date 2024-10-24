@@ -30,12 +30,12 @@ class Data(base.DataModelBase):
             Field(discriminator='py_type'),
         ]
     ]  #: Writes.
-    swap_commit: t.Optional[
-        str
-    ] = None  #: If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations.
-    validate_: t.Optional[
-        bool
-    ] = None  #: Can be set to 'false' to skip Lexicon schema validation of record data across all operations, 'true' to require it, or leave unset to validate only for known Lexicons.
+    swap_commit: t.Optional[str] = (
+        None  #: If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations.
+    )
+    validate_: t.Optional[bool] = (
+        None  #: Can be set to 'false' to skip Lexicon schema validation of record data across all operations, 'true' to require it, or leave unset to validate only for known Lexicons.
+    )
 
 
 class DataDict(t.TypedDict):
