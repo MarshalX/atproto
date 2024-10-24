@@ -19,14 +19,14 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.searchActorsSkeleton`."""
 
     q: str  #: Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended. For typeahead search, only simple term match is supported, not full syntax.
-    cursor: t.Optional[
-        str
-    ] = None  #: Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
+    cursor: t.Optional[str] = (
+        None  #: Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
+    )
     limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
     typeahead: t.Optional[bool] = None  #: If true, acts as fast/simple 'typeahead' query.
-    viewer: t.Optional[
-        str
-    ] = None  #: DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking.
+    viewer: t.Optional[str] = (
+        None  #: DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking.
+    )
 
 
 class ParamsDict(t.TypedDict):
@@ -46,6 +46,6 @@ class Response(base.ResponseModelBase):
 
     actors: t.List['models.AppBskyUnspeccedDefs.SkeletonSearchActor']  #: Actors.
     cursor: t.Optional[str] = None  #: Cursor.
-    hits_total: t.Optional[
-        int
-    ] = None  #: Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits.
+    hits_total: t.Optional[int] = (
+        None  #: Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits.
+    )

@@ -103,9 +103,9 @@ class ReplyRef(base.ModelBase):
         ],
         Field(discriminator='py_type'),
     ]  #: Root.
-    grandparent_author: t.Optional[
-        'models.AppBskyActorDefs.ProfileViewBasic'
-    ] = None  #: When parent is a reply to another post, this is the author of that post.
+    grandparent_author: t.Optional['models.AppBskyActorDefs.ProfileViewBasic'] = (
+        None  #: When parent is a reply to another post, this is the author of that post.
+    )
 
     py_type: t.Literal['app.bsky.feed.defs#replyRef'] = Field(
         default='app.bsky.feed.defs#replyRef', alias='$type', frozen=True

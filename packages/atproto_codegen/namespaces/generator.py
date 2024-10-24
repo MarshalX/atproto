@@ -146,13 +146,11 @@ def _get_method_docstring(method_info: MethodInfo) -> str:
 
 
 @t.overload
-def _get_namespace_method_body(method_info: ProcedureInfo, *, sync: bool) -> str:
-    ...
+def _get_namespace_method_body(method_info: ProcedureInfo, *, sync: bool) -> str: ...
 
 
 @t.overload
-def _get_namespace_method_body(method_info: QueryInfo, *, sync: bool) -> str:
-    ...
+def _get_namespace_method_body(method_info: QueryInfo, *, sync: bool) -> str: ...
 
 
 def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:

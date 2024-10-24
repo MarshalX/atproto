@@ -21,6 +21,6 @@ class Response(base.ResponseModelBase):
     refresh_jwt: str  #: Refresh jwt.
     active: t.Optional[bool] = None  #: Active.
     did_doc: t.Optional['UnknownType'] = None  #: Did doc.
-    status: t.Optional[
-        t.Union[t.Literal['takendown'], t.Literal['suspended'], t.Literal['deactivated'], str]
-    ] = None  #: Hosting status of the account. If not specified, then assume 'active'.
+    status: t.Optional[t.Union[t.Literal['takendown'], t.Literal['suspended'], t.Literal['deactivated'], str]] = (
+        None  #: Hosting status of the account. If not specified, then assume 'active'.
+    )

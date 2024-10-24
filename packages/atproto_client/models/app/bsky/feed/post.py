@@ -66,12 +66,12 @@ class Record(base.RecordModelBase):
             Field(default=None, discriminator='py_type'),
         ]
     ] = None  #: Embed.
-    entities: t.Optional[
-        t.List['models.AppBskyFeedPost.Entity']
-    ] = None  #: DEPRECATED: replaced by app.bsky.richtext.facet.
-    facets: t.Optional[
-        t.List['models.AppBskyRichtextFacet.Main']
-    ] = None  #: Annotations of text (mentions, URLs, hashtags, etc).
+    entities: t.Optional[t.List['models.AppBskyFeedPost.Entity']] = (
+        None  #: DEPRECATED: replaced by app.bsky.richtext.facet.
+    )
+    facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
+        None  #: Annotations of text (mentions, URLs, hashtags, etc).
+    )
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Self-label values for this post. Effectively content warnings.

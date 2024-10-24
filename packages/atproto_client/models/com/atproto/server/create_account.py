@@ -21,15 +21,15 @@ class Data(base.DataModelBase):
     did: t.Optional[str] = None  #: Pre-existing atproto DID, being imported to a new account.
     email: t.Optional[str] = None  #: Email.
     invite_code: t.Optional[str] = None  #: Invite code.
-    password: t.Optional[
-        str
-    ] = None  #: Initial account password. May need to meet instance-specific password strength requirements.
-    plc_op: t.Optional[
-        'UnknownInputType'
-    ] = None  #: A signed DID PLC operation to be submitted as part of importing an existing account to this instance. NOTE: this optional field may be updated when full account migration is implemented.
-    recovery_key: t.Optional[
-        str
-    ] = None  #: DID PLC rotation key (aka, recovery key) to be included in PLC creation operation.
+    password: t.Optional[str] = (
+        None  #: Initial account password. May need to meet instance-specific password strength requirements.
+    )
+    plc_op: t.Optional['UnknownInputType'] = (
+        None  #: A signed DID PLC operation to be submitted as part of importing an existing account to this instance. NOTE: this optional field may be updated when full account migration is implemented.
+    )
+    recovery_key: t.Optional[str] = (
+        None  #: DID PLC rotation key (aka, recovery key) to be included in PLC creation operation.
+    )
     verification_code: t.Optional[str] = None  #: Verification code.
     verification_phone: t.Optional[str] = None  #: Verification phone.
 

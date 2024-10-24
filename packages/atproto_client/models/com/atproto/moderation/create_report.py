@@ -19,8 +19,8 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.moderation.createReport`."""
 
     reason_type: (
-        'models.ComAtprotoModerationDefs.ReasonType'
-    )  #: Indicates the broad category of violation the report is for.
+        'models.ComAtprotoModerationDefs.ReasonType'  #: Indicates the broad category of violation the report is for.
+    )
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
@@ -32,8 +32,8 @@ class Data(base.DataModelBase):
 
 class DataDict(t.TypedDict):
     reason_type: (
-        'models.ComAtprotoModerationDefs.ReasonType'
-    )  #: Indicates the broad category of violation the report is for.
+        'models.ComAtprotoModerationDefs.ReasonType'  #: Indicates the broad category of violation the report is for.
+    )
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),

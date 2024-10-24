@@ -17,9 +17,9 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.createAppPassword`."""
 
     name: str  #: A short name for the App Password, to help distinguish them.
-    privileged: t.Optional[
-        bool
-    ] = None  #: If an app password has 'privileged' access to possibly sensitive account state. Meant for use with trusted clients.
+    privileged: t.Optional[bool] = (
+        None  #: If an app password has 'privileged' access to possibly sensitive account state. Meant for use with trusted clients.
+    )
 
 
 class DataDict(t.TypedDict):

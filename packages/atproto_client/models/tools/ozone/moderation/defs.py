@@ -112,13 +112,13 @@ class SubjectStatusView(base.ModelBase):
         Field(discriminator='py_type'),
     ]  #: Subject.
     updated_at: str  #: Timestamp referencing when the last update was made to the moderation status of the subject.
-    appealed: t.Optional[
-        bool
-    ] = None  #: True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators.
+    appealed: t.Optional[bool] = (
+        None  #: True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators.
+    )
     comment: t.Optional[str] = None  #: Sticky comment on the subject.
-    last_appealed_at: t.Optional[
-        str
-    ] = None  #: Timestamp referencing when the author of the subject appealed a moderation action.
+    last_appealed_at: t.Optional[str] = (
+        None  #: Timestamp referencing when the author of the subject appealed a moderation action.
+    )
     last_reported_at: t.Optional[str] = None  #: Last reported at.
     last_reviewed_at: t.Optional[str] = None  #: Last reviewed at.
     last_reviewed_by: t.Optional[str] = None  #: Last reviewed by.
@@ -163,13 +163,13 @@ ReviewNone = t.Literal[
 class ModEventTakedown(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`. Take down a subject permanently or temporarily."""
 
-    acknowledge_account_subjects: t.Optional[
-        bool
-    ] = None  #: If true, all other reports on content authored by this account will be resolved (acknowledged).
+    acknowledge_account_subjects: t.Optional[bool] = (
+        None  #: If true, all other reports on content authored by this account will be resolved (acknowledged).
+    )
     comment: t.Optional[str] = None  #: Comment.
-    duration_in_hours: t.Optional[
-        int
-    ] = None  #: Indicates how long the takedown should be in effect before automatically expiring.
+    duration_in_hours: t.Optional[int] = (
+        None  #: Indicates how long the takedown should be in effect before automatically expiring.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventTakedown'] = Field(
         default='tools.ozone.moderation.defs#modEventTakedown', alias='$type', frozen=True
@@ -212,9 +212,9 @@ class ModEventReport(base.ModelBase):
 
     report_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Report type.
     comment: t.Optional[str] = None  #: Comment.
-    is_reporter_muted: t.Optional[
-        bool
-    ] = None  #: Set to true if the reporter was muted from reporting at the time of the event. These reports won't impact the reviewState of the subject.
+    is_reporter_muted: t.Optional[bool] = (
+        None  #: Set to true if the reporter was muted from reporting at the time of the event. These reports won't impact the reviewState of the subject.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventReport'] = Field(
         default='tools.ozone.moderation.defs#modEventReport', alias='$type', frozen=True

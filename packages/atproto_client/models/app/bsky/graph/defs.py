@@ -151,9 +151,9 @@ class Relationship(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`. lists the bi-directional graph relationships between one actor (not indicated in the object), and the target actors (the DID included in the object)."""
 
     did: str  #: Did.
-    followed_by: t.Optional[
-        str
-    ] = None  #: if the actor is followed by this DID, contains the AT-URI of the follow record.
+    followed_by: t.Optional[str] = (
+        None  #: if the actor is followed by this DID, contains the AT-URI of the follow record.
+    )
     following: t.Optional[str] = None  #: if the actor follows this DID, this is the AT-URI of the follow record.
 
     py_type: t.Literal['app.bsky.graph.defs#relationship'] = Field(

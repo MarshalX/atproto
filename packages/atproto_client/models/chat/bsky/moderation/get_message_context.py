@@ -21,9 +21,9 @@ class Params(base.ParamsModelBase):
     message_id: str  #: Message id.
     after: t.Optional[int] = 5  #: After.
     before: t.Optional[int] = 5  #: Before.
-    convo_id: t.Optional[
-        str
-    ] = None  #: Conversation that the message is from. NOTE: this field will eventually be required.
+    convo_id: t.Optional[str] = (
+        None  #: Conversation that the message is from. NOTE: this field will eventually be required.
+    )
 
 
 class ParamsDict(t.TypedDict):

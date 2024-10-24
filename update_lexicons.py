@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Fetch new lexicons and regenerate code and docs. Used in CI/CD."""
+
 import os
 import subprocess
 import typing as t

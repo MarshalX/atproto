@@ -23,12 +23,12 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     exclude_tags: t.Optional[t.List[str]] = None  #: Exclude tags.
     ignore_subjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
-    include_all_user_records: t.Optional[
-        bool
-    ] = None  #: All subjects belonging to the account specified in the 'subject' param will be returned.
-    include_muted: t.Optional[
-        bool
-    ] = None  #: By default, we don't include muted subjects in the results. Set this to true to include them.
+    include_all_user_records: t.Optional[bool] = (
+        None  #: All subjects belonging to the account specified in the 'subject' param will be returned.
+    )
+    include_muted: t.Optional[bool] = (
+        None  #: By default, we don't include muted subjects in the results. Set this to true to include them.
+    )
     last_reviewed_by: t.Optional[str] = None  #: Get all subject statuses that were reviewed by a specific moderator.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     only_muted: t.Optional[bool] = None  #: When set to true, only muted subjects and reporters will be returned.
@@ -38,9 +38,9 @@ class Params(base.ParamsModelBase):
     reviewed_after: t.Optional[str] = None  #: Search subjects reviewed after a given timestamp.
     reviewed_before: t.Optional[str] = None  #: Search subjects reviewed before a given timestamp.
     sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = 'desc'  #: Sort direction.
-    sort_field: t.Optional[
-        t.Union[t.Literal['lastReviewedAt'], t.Literal['lastReportedAt']]
-    ] = 'lastReportedAt'  #: Sort field.
+    sort_field: t.Optional[t.Union[t.Literal['lastReviewedAt'], t.Literal['lastReportedAt']]] = (
+        'lastReportedAt'  #: Sort field.
+    )
     subject: t.Optional[str] = None  #: The subject to get the status for.
     tags: t.Optional[t.List[str]] = None  #: Tags.
     takendown: t.Optional[bool] = None  #: Get subjects that were taken down.

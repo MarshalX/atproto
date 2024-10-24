@@ -21,9 +21,9 @@ class Label(base.ModelBase):
     src: str  #: DID of the actor who created this label.
     uri: str  #: AT URI of the record, repository (account), or other resource that this label applies to.
     val: str = Field(max_length=128)  #: The short string name of the value or type of this label.
-    cid: t.Optional[
-        str
-    ] = None  #: Optionally, CID specifying the specific version of 'uri' resource this label applies to.
+    cid: t.Optional[str] = (
+        None  #: Optionally, CID specifying the specific version of 'uri' resource this label applies to.
+    )
     exp: t.Optional[str] = None  #: Timestamp at which this label expires (no longer applies).
     neg: t.Optional[bool] = None  #: If true, this is a negation label, overwriting a previous label.
     sig: t.Optional[t.Union[str, bytes]] = None  #: Signature of dag-cbor encoded label.
@@ -67,12 +67,12 @@ class LabelValueDefinition(base.ModelBase):
     severity: t.Union[
         t.Literal['inform'], t.Literal['alert'], t.Literal['none'], str
     ]  #: How should a client visually convey this label? 'inform' means neutral and informational; 'alert' means negative and warning; 'none' means show nothing.
-    adult_only: t.Optional[
-        bool
-    ] = None  #: Does the user need to have adult content enabled in order to configure this label?
-    default_setting: t.Optional[
-        t.Union[t.Literal['ignore'], t.Literal['warn'], t.Literal['hide'], str]
-    ] = 'warn'  #: The default setting for this label.
+    adult_only: t.Optional[bool] = (
+        None  #: Does the user need to have adult content enabled in order to configure this label?
+    )
+    default_setting: t.Optional[t.Union[t.Literal['ignore'], t.Literal['warn'], t.Literal['hide'], str]] = (
+        'warn'  #: The default setting for this label.
+    )
 
     py_type: t.Literal['com.atproto.label.defs#labelValueDefinition'] = Field(
         default='com.atproto.label.defs#labelValueDefinition', alias='$type', frozen=True

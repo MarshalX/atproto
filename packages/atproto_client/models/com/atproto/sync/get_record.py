@@ -18,9 +18,9 @@ class Params(base.ParamsModelBase):
     collection: str  #: Collection.
     did: str  #: The DID of the repo.
     rkey: str  #: Record Key.
-    commit: t.Optional[
-        str
-    ] = None  #: DEPRECATED: referenced a repo commit by CID, and retrieved record as of that commit.
+    commit: t.Optional[str] = (
+        None  #: DEPRECATED: referenced a repo commit by CID, and retrieved record as of that commit.
+    )
 
 
 class ParamsDict(t.TypedDict):

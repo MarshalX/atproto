@@ -26,6 +26,6 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.graph.getSuggestedFollowsByActor`."""
 
     suggestions: t.List['models.AppBskyActorDefs.ProfileView']  #: Suggestions.
-    is_fallback: t.Optional[
-        bool
-    ] = False  #: If true, response has fallen-back to generic results, and is not scoped using relativeToDid.
+    is_fallback: t.Optional[bool] = (
+        False  #: If true, response has fallen-back to generic results, and is not scoped using relativeToDid.
+    )

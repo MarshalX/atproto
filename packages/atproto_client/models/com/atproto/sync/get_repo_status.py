@@ -26,6 +26,6 @@ class Response(base.ResponseModelBase):
     active: bool  #: Active.
     did: str  #: Did.
     rev: t.Optional[str] = None  #: Optional field, the current rev of the repo, if active=true.
-    status: t.Optional[
-        t.Union[t.Literal['takendown'], t.Literal['suspended'], t.Literal['deactivated'], str]
-    ] = None  #: If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted.
+    status: t.Optional[t.Union[t.Literal['takendown'], t.Literal['suspended'], t.Literal['deactivated'], str]] = (
+        None  #: If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted.
+    )

@@ -16,8 +16,8 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.identity.getRecommendedDidCredentials`."""
 
     also_known_as: t.Optional[t.List[str]] = None  #: Also known as.
-    rotation_keys: t.Optional[
-        t.List[str]
-    ] = None  #: Recommended rotation keys for PLC dids. Should be undefined (or ignored) for did:webs.
+    rotation_keys: t.Optional[t.List[str]] = (
+        None  #: Recommended rotation keys for PLC dids. Should be undefined (or ignored) for did:webs.
+    )
     services: t.Optional['UnknownType'] = None  #: Services.
     verification_methods: t.Optional['UnknownType'] = None  #: Verification methods.

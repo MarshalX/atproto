@@ -34,9 +34,9 @@ class MessageInput(base.ModelBase):
     embed: t.Optional[
         te.Annotated[t.Union['models.AppBskyEmbedRecord.Main'], Field(default=None, discriminator='py_type')]
     ] = None  #: Embed.
-    facets: t.Optional[
-        t.List['models.AppBskyRichtextFacet.Main']
-    ] = None  #: Annotations of text (mentions, URLs, hashtags, etc).
+    facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
+        None  #: Annotations of text (mentions, URLs, hashtags, etc).
+    )
 
     py_type: t.Literal['chat.bsky.convo.defs#messageInput'] = Field(
         default='chat.bsky.convo.defs#messageInput', alias='$type', frozen=True
@@ -54,9 +54,9 @@ class MessageView(base.ModelBase):
     embed: t.Optional[
         te.Annotated[t.Union['models.AppBskyEmbedRecord.View'], Field(default=None, discriminator='py_type')]
     ] = None  #: Embed.
-    facets: t.Optional[
-        t.List['models.AppBskyRichtextFacet.Main']
-    ] = None  #: Annotations of text (mentions, URLs, hashtags, etc).
+    facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
+        None  #: Annotations of text (mentions, URLs, hashtags, etc).
+    )
 
     py_type: t.Literal['chat.bsky.convo.defs#messageView'] = Field(
         default='chat.bsky.convo.defs#messageView', alias='$type', frozen=True

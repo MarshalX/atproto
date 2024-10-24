@@ -15,11 +15,9 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.deactivateAccount`."""
 
-    delete_after: t.Optional[
-        str
-    ] = (
-        None
-    )  #: A recommendation to server as to how long they should hold onto the deactivated account before deleting.
+    delete_after: t.Optional[str] = (
+        None  #: A recommendation to server as to how long they should hold onto the deactivated account before deleting.
+    )
 
 
 class DataDict(t.TypedDict):

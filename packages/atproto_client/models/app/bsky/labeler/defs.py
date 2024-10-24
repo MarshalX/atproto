@@ -63,9 +63,9 @@ class LabelerPolicies(base.ModelBase):
     label_values: t.List[
         'models.ComAtprotoLabelDefs.LabelValue'
     ]  #: The label values which this labeler publishes. May include global or custom labels.
-    label_value_definitions: t.Optional[
-        t.List['models.ComAtprotoLabelDefs.LabelValueDefinition']
-    ] = None  #: Label values created by this labeler and scoped exclusively to it. Labels defined here will override global label definitions for this labeler.
+    label_value_definitions: t.Optional[t.List['models.ComAtprotoLabelDefs.LabelValueDefinition']] = (
+        None  #: Label values created by this labeler and scoped exclusively to it. Labels defined here will override global label definitions for this labeler.
+    )
 
     py_type: t.Literal['app.bsky.labeler.defs#labelerPolicies'] = Field(
         default='app.bsky.labeler.defs#labelerPolicies', alias='$type', frozen=True

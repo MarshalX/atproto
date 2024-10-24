@@ -20,9 +20,9 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
-    q: t.Optional[
-        str
-    ] = None  #: Search query string. Syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
+    q: t.Optional[str] = (
+        None  #: Search query string. Syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
+    )
     term: t.Optional[str] = None  #: DEPRECATED: use 'q' instead.
 
 
