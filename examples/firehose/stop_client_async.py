@@ -20,9 +20,10 @@ async def main() -> None:
         await client.stop()
 
     # save ref to task to eliminate problems with GC
-    _ = asyncio.create_task(_stop_after_n_sec())
+    _stop_after_n_sec_task = asyncio.create_task(_stop_after_n_sec())
 
     await client.start(on_message_handler)
+    await _stop_after_n_sec_task
 
     print(f'Successfully stopped after {_STOP_AFTER_SECONDS} seconds!')
 
