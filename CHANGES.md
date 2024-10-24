@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 0.0.55
+
+**24.10.2024**
+
+* Add Python 3.13 support by @MarshalX in https://github.com/MarshalX/atproto/pull/416
+* Add support for `LexRef` as a Schema type of inputs by @MarshalX in https://github.com/MarshalX/atproto/pull/412
+* Replace `threading.Lock` with a boolean flag in `_WebsocketClient` by @Darkkekus in https://github.com/MarshalX/atproto/pull/402
+* Update compatibility with Read The Docs by @MarshalX in https://github.com/MarshalX/atproto/pull/405
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/403, https://github.com/MarshalX/atproto/pull/404, https://github.com/MarshalX/atproto/pull/413
+* Fix different cases of response header names by @MarshalX in https://github.com/MarshalX/atproto/pull/415
+
 ## Version 0.0.54
 
 **13.09.2024**
