@@ -64,7 +64,7 @@ def get_or_create(
             raise ModelError(f"Can't properly parse model of type {model}")
 
         return model_instance
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         if strict or not isinstance(model_data, dict):
             raise e
 

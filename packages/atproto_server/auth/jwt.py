@@ -104,7 +104,7 @@ def decode_jwt_payload(payload: t.Union[str, bytes]) -> JwtPayload:
 
     try:
         return JwtPayload(**plain_payload)  # type: ignore  # noqa: PGH003
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         raise TokenDecodeError(f'Invalid payload string: {e}') from e
 
 
@@ -175,7 +175,7 @@ def validate_jwt_payload(payload: JwtPayload, leeway: int = 0) -> None:
 def _verify_signature(signing_key: str, signing_input: bytes, signature: bytes) -> bool:
     try:
         return verify_signature(signing_key, signing_input, signature)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         raise TokenInvalidSignatureError('Could not verify JWT signature') from e
 
 
