@@ -152,8 +152,8 @@ def main() -> None:
     _print('- Running codegen (poetry run atp -s gen all)...')
     _run_subprocess(['poetry', 'run', 'atp', '-s', 'gen', 'all'])
 
-    _print('- Running ruff (poetry run ruff .)...')
-    _run_subprocess(['poetry', 'run', 'ruff', '.'])
+    _print('- Running ruff (poetry run ruff check --fix .)...')
+    _run_subprocess(['poetry', 'run', 'ruff', 'check', '--fix', '.'])
 
     _print('- Running ruff format (poetry run ruff -q format .)...')
     _run_subprocess(['poetry', 'run', 'ruff', 'format', '-q', '.'])
