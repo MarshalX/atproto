@@ -1,5 +1,6 @@
-from atproto import Client, IdResolver, models
 from typing import Optional
+
+from atproto import Client, IdResolver, models
 
 def fetch_posts(client: Client, resolver: IdResolver, url: str) -> Optional[models.app.bsky.feed.get_posts.Response]:
     """
