@@ -1,6 +1,9 @@
 name: Fetch new lexicons and regenerate code and docs
 
-on: [ workflow_dispatch ]
+on:
+  push:
+    branches:
+      - fix-update-lexicons-workflow
 
 permissions:
   contents: read

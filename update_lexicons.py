@@ -165,7 +165,7 @@ def main() -> None:
     commit_message = f'Update lexicons fetched from {sha[:7]} committed {commit_date}'
     _print(f'Commit message: {commit_message}')
 
-    print(commit_message)  # noqa: T201
+    print(commit_message, end='')  # noqa: T201
 
 
 if __name__ == '__main__':
