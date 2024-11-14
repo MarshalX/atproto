@@ -100,6 +100,7 @@ class ConvoView(base.ModelBase):
             Field(default=None, discriminator='py_type'),
         ]
     ] = None  #: Last message.
+    opened: t.Optional[bool] = None  #: Opened.
 
     py_type: t.Literal['chat.bsky.convo.defs#convoView'] = Field(
         default='chat.bsky.convo.defs#convoView', alias='$type', frozen=True

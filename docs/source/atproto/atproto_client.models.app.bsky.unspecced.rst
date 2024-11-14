@@ -13,6 +13,7 @@ Submodules
    :maxdepth: 4
 
    atproto_client.models.app.bsky.unspecced.defs
+   atproto_client.models.app.bsky.unspecced.get_config
    atproto_client.models.app.bsky.unspecced.get_popular_feed_generators
    atproto_client.models.app.bsky.unspecced.get_suggestions_skeleton
    atproto_client.models.app.bsky.unspecced.get_tagged_suggestions

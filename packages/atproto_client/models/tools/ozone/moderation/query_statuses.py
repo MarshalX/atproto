@@ -19,12 +19,28 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`tools.ozone.moderation.queryStatuses`."""
 
     appealed: t.Optional[bool] = None  #: Get subjects in unresolved appealed status.
+    collections: t.Optional[t.List[str]] = Field(
+        default=None, max_length=20
+    )  #: If specified, subjects belonging to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
     comment: t.Optional[str] = None  #: Search subjects by keyword from comments.
     cursor: t.Optional[str] = None  #: Cursor.
     exclude_tags: t.Optional[t.List[str]] = None  #: Exclude tags.
+    hosting_deleted_after: t.Optional[str] = (
+        None  #: Search subjects where the associated record/account was deleted after a given timestamp.
+    )
+    hosting_deleted_before: t.Optional[str] = (
+        None  #: Search subjects where the associated record/account was deleted before a given timestamp.
+    )
+    hosting_statuses: t.Optional[t.List[str]] = None  #: Search subjects by the status of the associated record/account.
+    hosting_updated_after: t.Optional[str] = (
+        None  #: Search subjects where the associated record/account was updated after a given timestamp.
+    )
+    hosting_updated_before: t.Optional[str] = (
+        None  #: Search subjects where the associated record/account was updated before a given timestamp.
+    )
     ignore_subjects: t.Optional[t.List[str]] = None  #: Ignore subjects.
     include_all_user_records: t.Optional[bool] = (
-        None  #: All subjects belonging to the account specified in the 'subject' param will be returned.
+        None  #: All subjects, or subjects from given 'collections' param, belonging to the account specified in the 'subject' param will be returned.
     )
     include_muted: t.Optional[bool] = (
         None  #: By default, we don't include muted subjects in the results. Set this to true to include them.
@@ -42,19 +58,40 @@ class Params(base.ParamsModelBase):
         'lastReportedAt'  #: Sort field.
     )
     subject: t.Optional[str] = None  #: The subject to get the status for.
+    subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]] = (
+        None  #: If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
+    )
     tags: t.Optional[t.List[str]] = None  #: Tags.
     takendown: t.Optional[bool] = None  #: Get subjects that were taken down.
 
 
 class ParamsDict(t.TypedDict):
     appealed: te.NotRequired[t.Optional[bool]]  #: Get subjects in unresolved appealed status.
+    collections: te.NotRequired[
+        t.Optional[t.List[str]]
+    ]  #: If specified, subjects belonging to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
     comment: te.NotRequired[t.Optional[str]]  #: Search subjects by keyword from comments.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     exclude_tags: te.NotRequired[t.Optional[t.List[str]]]  #: Exclude tags.
+    hosting_deleted_after: te.NotRequired[
+        t.Optional[str]
+    ]  #: Search subjects where the associated record/account was deleted after a given timestamp.
+    hosting_deleted_before: te.NotRequired[
+        t.Optional[str]
+    ]  #: Search subjects where the associated record/account was deleted before a given timestamp.
+    hosting_statuses: te.NotRequired[
+        t.Optional[t.List[str]]
+    ]  #: Search subjects by the status of the associated record/account.
+    hosting_updated_after: te.NotRequired[
+        t.Optional[str]
+    ]  #: Search subjects where the associated record/account was updated after a given timestamp.
+    hosting_updated_before: te.NotRequired[
+        t.Optional[str]
+    ]  #: Search subjects where the associated record/account was updated before a given timestamp.
     ignore_subjects: te.NotRequired[t.Optional[t.List[str]]]  #: Ignore subjects.
     include_all_user_records: te.NotRequired[
         t.Optional[bool]
-    ]  #: All subjects belonging to the account specified in the 'subject' param will be returned.
+    ]  #: All subjects, or subjects from given 'collections' param, belonging to the account specified in the 'subject' param will be returned.
     include_muted: te.NotRequired[
         t.Optional[bool]
     ]  #: By default, we don't include muted subjects in the results. Set this to true to include them.
@@ -75,6 +112,9 @@ class ParamsDict(t.TypedDict):
         t.Optional[t.Union[t.Literal['lastReviewedAt'], t.Literal['lastReportedAt']]]
     ]  #: Sort field.
     subject: te.NotRequired[t.Optional[str]]  #: The subject to get the status for.
+    subject_type: te.NotRequired[
+        t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]]
+    ]  #: If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     tags: te.NotRequired[t.Optional[t.List[str]]]  #: Tags.
     takendown: te.NotRequired[t.Optional[bool]]  #: Get subjects that were taken down.
 

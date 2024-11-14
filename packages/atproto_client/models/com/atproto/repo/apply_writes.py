@@ -81,7 +81,7 @@ class Create(base.ModelBase):
 
     collection: str  #: Collection.
     value: 'UnknownType'  #: Value.
-    rkey: t.Optional[str] = Field(default=None, max_length=15)  #: Rkey.
+    rkey: t.Optional[str] = Field(default=None, max_length=512)  #: Rkey.
 
     py_type: t.Literal['com.atproto.repo.applyWrites#create'] = Field(
         default='com.atproto.repo.applyWrites#create', alias='$type', frozen=True

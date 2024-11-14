@@ -38,6 +38,9 @@ class ModEventView(base.ModelBase):
             'models.ToolsOzoneModerationDefs.ModEventResolveAppeal',
             'models.ToolsOzoneModerationDefs.ModEventDivert',
             'models.ToolsOzoneModerationDefs.ModEventTag',
+            'models.ToolsOzoneModerationDefs.AccountEvent',
+            'models.ToolsOzoneModerationDefs.IdentityEvent',
+            'models.ToolsOzoneModerationDefs.RecordEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -81,6 +84,9 @@ class ModEventViewDetail(base.ModelBase):
             'models.ToolsOzoneModerationDefs.ModEventResolveAppeal',
             'models.ToolsOzoneModerationDefs.ModEventDivert',
             'models.ToolsOzoneModerationDefs.ModEventTag',
+            'models.ToolsOzoneModerationDefs.AccountEvent',
+            'models.ToolsOzoneModerationDefs.IdentityEvent',
+            'models.ToolsOzoneModerationDefs.RecordEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -116,6 +122,12 @@ class SubjectStatusView(base.ModelBase):
         None  #: True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators.
     )
     comment: t.Optional[str] = None  #: Sticky comment on the subject.
+    hosting: t.Optional[
+        te.Annotated[
+            t.Union['models.ToolsOzoneModerationDefs.AccountHosting', 'models.ToolsOzoneModerationDefs.RecordHosting'],
+            Field(default=None, discriminator='py_type'),
+        ]
+    ] = None  #: Hosting.
     last_appealed_at: t.Optional[str] = (
         None  #: Timestamp referencing when the author of the subject appealed a moderation action.
     )
@@ -277,8 +289,10 @@ class ModEventUnmute(base.ModelBase):
 class ModEventMuteReporter(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`. Mute incoming reports from an account."""
 
-    duration_in_hours: int  #: Indicates how long the account should remain muted.
     comment: t.Optional[str] = None  #: Comment.
+    duration_in_hours: t.Optional[int] = (
+        None  #: Indicates how long the account should remain muted. Falsy value here means a permanent mute.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventMuteReporter'] = Field(
         default='tools.ozone.moderation.defs#modEventMuteReporter', alias='$type', frozen=True
@@ -329,6 +343,58 @@ class ModEventTag(base.ModelBase):
     )
 
 
+class AccountEvent(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Logs account status related events on a repo subject. Normally captured by automod from the firehose and emitted to ozone for historical tracking."""
+
+    active: (
+        bool  #: Indicates that the account has a repository which can be fetched from the host that emitted this event.
+    )
+    timestamp: str  #: Timestamp.
+    comment: t.Optional[str] = None  #: Comment.
+    status: t.Optional[
+        t.Union[
+            t.Literal['unknown'],
+            t.Literal['deactivated'],
+            t.Literal['deleted'],
+            t.Literal['takendown'],
+            t.Literal['suspended'],
+            t.Literal['tombstoned'],
+            str,
+        ]
+    ] = None  #: Status.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#accountEvent'] = Field(
+        default='tools.ozone.moderation.defs#accountEvent', alias='$type', frozen=True
+    )
+
+
+class IdentityEvent(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Logs identity related events on a repo subject. Normally captured by automod from the firehose and emitted to ozone for historical tracking."""
+
+    timestamp: str  #: Timestamp.
+    comment: t.Optional[str] = None  #: Comment.
+    handle: t.Optional[str] = None  #: Handle.
+    pds_host: t.Optional[str] = None  #: Pds host.
+    tombstone: t.Optional[bool] = None  #: Tombstone.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#identityEvent'] = Field(
+        default='tools.ozone.moderation.defs#identityEvent', alias='$type', frozen=True
+    )
+
+
+class RecordEvent(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Logs lifecycle event on a record subject. Normally captured by automod from the firehose and emitted to ozone for historical tracking."""
+
+    op: t.Union[t.Literal['create'], t.Literal['update'], t.Literal['delete'], str]  #: Op.
+    timestamp: str  #: Timestamp.
+    cid: t.Optional[str] = None  #: Cid.
+    comment: t.Optional[str] = None  #: Comment.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#recordEvent'] = Field(
+        default='tools.ozone.moderation.defs#recordEvent', alias='$type', frozen=True
+    )
+
+
 class RepoView(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
@@ -342,6 +408,7 @@ class RepoView(base.ModelBase):
     invite_note: t.Optional[str] = None  #: Invite note.
     invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
     invites_disabled: t.Optional[bool] = None  #: Invites disabled.
+    threat_signatures: t.Optional[t.List['models.ComAtprotoAdminDefs.ThreatSignature']] = None  #: Threat signatures.
 
     py_type: t.Literal['tools.ozone.moderation.defs#repoView'] = Field(
         default='tools.ozone.moderation.defs#repoView', alias='$type', frozen=True
@@ -364,6 +431,7 @@ class RepoViewDetail(base.ModelBase):
     invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
     invites_disabled: t.Optional[bool] = None  #: Invites disabled.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    threat_signatures: t.Optional[t.List['models.ComAtprotoAdminDefs.ThreatSignature']] = None  #: Threat signatures.
 
     py_type: t.Literal['tools.ozone.moderation.defs#repoViewDetail'] = Field(
         default='tools.ozone.moderation.defs#repoViewDetail', alias='$type', frozen=True
@@ -483,4 +551,39 @@ class VideoDetails(base.ModelBase):
 
     py_type: t.Literal['tools.ozone.moderation.defs#videoDetails'] = Field(
         default='tools.ozone.moderation.defs#videoDetails', alias='$type', frozen=True
+    )
+
+
+class AccountHosting(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`."""
+
+    status: t.Union[
+        t.Literal['takendown'],
+        t.Literal['suspended'],
+        t.Literal['deleted'],
+        t.Literal['deactivated'],
+        t.Literal['unknown'],
+        str,
+    ]  #: Status.
+    created_at: t.Optional[str] = None  #: Created at.
+    deactivated_at: t.Optional[str] = None  #: Deactivated at.
+    deleted_at: t.Optional[str] = None  #: Deleted at.
+    reactivated_at: t.Optional[str] = None  #: Reactivated at.
+    updated_at: t.Optional[str] = None  #: Updated at.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#accountHosting'] = Field(
+        default='tools.ozone.moderation.defs#accountHosting', alias='$type', frozen=True
+    )
+
+
+class RecordHosting(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`."""
+
+    status: t.Union[t.Literal['deleted'], t.Literal['unknown'], str]  #: Status.
+    created_at: t.Optional[str] = None  #: Created at.
+    deleted_at: t.Optional[str] = None  #: Deleted at.
+    updated_at: t.Optional[str] = None  #: Updated at.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#recordHosting'] = Field(
+        default='tools.ozone.moderation.defs#recordHosting', alias='$type', frozen=True
     )
