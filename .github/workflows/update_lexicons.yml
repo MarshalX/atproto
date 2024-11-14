@@ -3,7 +3,7 @@ name: Fetch new lexicons and regenerate code and docs
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 12 * * 5'
+    - cron: '0 12 * * 5' # at 12:00 on Friday day
 
 permissions:
   contents: read
