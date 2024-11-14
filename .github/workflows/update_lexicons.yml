@@ -1,9 +1,9 @@
 name: Fetch new lexicons and regenerate code and docs
 
 on:
-  push:
-    branches:
-      - fix-update-lexicons-workflow
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * 5'
 
 permissions:
   contents: read
@@ -43,15 +43,15 @@ jobs:
           source $(poetry env info -p)/bin/activate
           echo "COMMIT_MESSAGE=$(python update_lexicons.py)" >> $GITHUB_ENV
 
-#      - name: Create Pull Request.
-#        uses: peter-evans/create-pull-request@v5
-#        with:
-#          token: ${{ secrets.PAT }}
-#          committer: Ilya (Marshal) <ilya@marshal.dev>
-#          author: Ilya (Marshal) <ilya@marshal.dev>
-#          commit-message: ${{ env.COMMIT_MESSAGE }}
-#          body: This PR was automatically generated
-#          base: main
-#          branch: update-lexicons
-#          title: ${{ env.COMMIT_MESSAGE }}
-#          assignees: MarshalX
+      - name: Create Pull Request.
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PAT }}
+          committer: Ilya (Marshal) <ilya@marshal.dev>
+          author: Ilya (Marshal) <ilya@marshal.dev>
+          commit-message: ${{ env.COMMIT_MESSAGE }}
+          body: This PR was automatically generated
+          base: main
+          branch: update-lexicons
+          title: ${{ env.COMMIT_MESSAGE }}
+          assignees: MarshalX
