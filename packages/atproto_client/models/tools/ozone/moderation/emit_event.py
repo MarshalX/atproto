@@ -35,6 +35,9 @@ class Data(base.DataModelBase):
             'models.ToolsOzoneModerationDefs.ModEventResolveAppeal',
             'models.ToolsOzoneModerationDefs.ModEventEmail',
             'models.ToolsOzoneModerationDefs.ModEventTag',
+            'models.ToolsOzoneModerationDefs.AccountEvent',
+            'models.ToolsOzoneModerationDefs.IdentityEvent',
+            'models.ToolsOzoneModerationDefs.RecordEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -63,6 +66,9 @@ class DataDict(t.TypedDict):
             'models.ToolsOzoneModerationDefs.ModEventResolveAppeal',
             'models.ToolsOzoneModerationDefs.ModEventEmail',
             'models.ToolsOzoneModerationDefs.ModEventTag',
+            'models.ToolsOzoneModerationDefs.AccountEvent',
+            'models.ToolsOzoneModerationDefs.IdentityEvent',
+            'models.ToolsOzoneModerationDefs.RecordEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.

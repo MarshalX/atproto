@@ -40,6 +40,7 @@ class AccountView(base.ModelBase):
     invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
     invites_disabled: t.Optional[bool] = None  #: Invites disabled.
     related_records: t.Optional[t.List['UnknownType']] = None  #: Related records.
+    threat_signatures: t.Optional[t.List['models.ComAtprotoAdminDefs.ThreatSignature']] = None  #: Threat signatures.
 
     py_type: t.Literal['com.atproto.admin.defs#accountView'] = Field(
         default='com.atproto.admin.defs#accountView', alias='$type', frozen=True
@@ -65,4 +66,15 @@ class RepoBlobRef(base.ModelBase):
 
     py_type: t.Literal['com.atproto.admin.defs#repoBlobRef'] = Field(
         default='com.atproto.admin.defs#repoBlobRef', alias='$type', frozen=True
+    )
+
+
+class ThreatSignature(base.ModelBase):
+    """Definition model for :obj:`com.atproto.admin.defs`."""
+
+    property: str  #: Property.
+    value: str  #: Value.
+
+    py_type: t.Literal['com.atproto.admin.defs#threatSignature'] = Field(
+        default='com.atproto.admin.defs#threatSignature', alias='$type', frozen=True
     )

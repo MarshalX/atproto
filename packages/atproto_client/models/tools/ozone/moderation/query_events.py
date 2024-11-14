@@ -24,6 +24,9 @@ class Params(base.ParamsModelBase):
     added_tags: t.Optional[t.List[str]] = (
         None  #: If specified, only events where all of these tags were added are returned.
     )
+    collections: t.Optional[t.List[str]] = Field(
+        default=None, max_length=20
+    )  #: If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
     comment: t.Optional[str] = None  #: If specified, only events with comments containing the keyword are returned.
     created_after: t.Optional[str] = None  #: Retrieve events created after a given timestamp.
     created_before: t.Optional[str] = None  #: Retrieve events created before a given timestamp.
@@ -31,7 +34,7 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     has_comment: t.Optional[bool] = None  #: If true, only events with comments are returned.
     include_all_user_records: t.Optional[bool] = (
-        False  #: If true, events on all record types (posts, lists, profile etc.) owned by the did are returned.
+        False  #: If true, events on all record types (posts, lists, profile etc.) or records from given 'collections' param, owned by the did are returned.
     )
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     removed_labels: t.Optional[t.List[str]] = (
@@ -45,6 +48,9 @@ class Params(base.ParamsModelBase):
         'desc'  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     )
     subject: t.Optional[str] = None  #: Subject.
+    subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]] = (
+        None  #: If specified, only events where the subject is of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
+    )
     types: t.Optional[t.List[str]] = (
         None  #: The types of events (fully qualified string in the format of tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned.
     )
@@ -57,6 +63,9 @@ class ParamsDict(t.TypedDict):
     added_tags: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: If specified, only events where all of these tags were added are returned.
+    collections: te.NotRequired[
+        t.Optional[t.List[str]]
+    ]  #: If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
     comment: te.NotRequired[
         t.Optional[str]
     ]  #: If specified, only events with comments containing the keyword are returned.
@@ -67,7 +76,7 @@ class ParamsDict(t.TypedDict):
     has_comment: te.NotRequired[t.Optional[bool]]  #: If true, only events with comments are returned.
     include_all_user_records: te.NotRequired[
         t.Optional[bool]
-    ]  #: If true, events on all record types (posts, lists, profile etc.) owned by the did are returned.
+    ]  #: If true, events on all record types (posts, lists, profile etc.) or records from given 'collections' param, owned by the did are returned.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     removed_labels: te.NotRequired[
         t.Optional[t.List[str]]
@@ -80,6 +89,9 @@ class ParamsDict(t.TypedDict):
         t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]
     ]  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     subject: te.NotRequired[t.Optional[str]]  #: Subject.
+    subject_type: te.NotRequired[
+        t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]]
+    ]  #: If specified, only events where the subject is of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     types: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: The types of events (fully qualified string in the format of tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned.

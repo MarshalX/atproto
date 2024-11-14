@@ -77,6 +77,7 @@ from atproto_client.models.app.bsky.notification import register_push as AppBsky
 from atproto_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
 from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
+from atproto_client.models.app.bsky.unspecced import get_config as AppBskyUnspeccedGetConfig
 from atproto_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
 )
@@ -218,6 +219,10 @@ from atproto_client.models.tools.ozone.set import delete_values as ToolsOzoneSet
 from atproto_client.models.tools.ozone.set import get_values as ToolsOzoneSetGetValues
 from atproto_client.models.tools.ozone.set import query_sets as ToolsOzoneSetQuerySets
 from atproto_client.models.tools.ozone.set import upsert_set as ToolsOzoneSetUpsertSet
+from atproto_client.models.tools.ozone.setting import defs as ToolsOzoneSettingDefs
+from atproto_client.models.tools.ozone.setting import list_options as ToolsOzoneSettingListOptions
+from atproto_client.models.tools.ozone.setting import remove_options as ToolsOzoneSettingRemoveOptions
+from atproto_client.models.tools.ozone.setting import upsert_option as ToolsOzoneSettingUpsertOption
 from atproto_client.models.tools.ozone.signature import defs as ToolsOzoneSignatureDefs
 from atproto_client.models.tools.ozone.signature import find_correlation as ToolsOzoneSignatureFindCorrelation
 from atproto_client.models.tools.ozone.signature import find_related_accounts as ToolsOzoneSignatureFindRelatedAccounts
@@ -314,6 +319,7 @@ class _Ids:
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
+    AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
     AppBskyUnspeccedGetSuggestionsSkeleton: str = 'app.bsky.unspecced.getSuggestionsSkeleton'
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
@@ -446,6 +452,10 @@ class _Ids:
     ToolsOzoneSetGetValues: str = 'tools.ozone.set.getValues'
     ToolsOzoneSetQuerySets: str = 'tools.ozone.set.querySets'
     ToolsOzoneSetUpsertSet: str = 'tools.ozone.set.upsertSet'
+    ToolsOzoneSettingDefs: str = 'tools.ozone.setting.defs'
+    ToolsOzoneSettingListOptions: str = 'tools.ozone.setting.listOptions'
+    ToolsOzoneSettingRemoveOptions: str = 'tools.ozone.setting.removeOptions'
+    ToolsOzoneSettingUpsertOption: str = 'tools.ozone.setting.upsertOption'
     ToolsOzoneSignatureDefs: str = 'tools.ozone.signature.defs'
     ToolsOzoneSignatureFindCorrelation: str = 'tools.ozone.signature.findCorrelation'
     ToolsOzoneSignatureFindRelatedAccounts: str = 'tools.ozone.signature.findRelatedAccounts'

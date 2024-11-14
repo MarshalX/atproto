@@ -3500,6 +3500,23 @@ class AppBskyNotificationNamespace(NamespaceBase):
 
 
 class AppBskyUnspeccedNamespace(NamespaceBase):
+    def get_config(self, **kwargs: t.Any) -> 'models.AppBskyUnspeccedGetConfig.Response':
+        """Get miscellaneous runtime configuration.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetConfig.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getConfig', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetConfig.Response)
+
     def get_popular_feed_generators(
         self,
         params: t.Optional[
@@ -6206,6 +6223,7 @@ class ToolsOzoneNamespace(NamespaceBase):
         self.moderation = ToolsOzoneModerationNamespace(self._client)
         self.server = ToolsOzoneServerNamespace(self._client)
         self.set = ToolsOzoneSetNamespace(self._client)
+        self.setting = ToolsOzoneSettingNamespace(self._client)
         self.signature = ToolsOzoneSignatureNamespace(self._client)
         self.team = ToolsOzoneTeamNamespace(self._client)
 
@@ -6737,6 +6755,95 @@ class ToolsOzoneSetNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ToolsOzoneSetDefs.SetView)
+
+
+class ToolsOzoneSettingNamespace(NamespaceBase):
+    def list_options(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneSettingListOptions.Params, models.ToolsOzoneSettingListOptions.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSettingListOptions.Response':
+        """List settings with optional filtering.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSettingListOptions.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneSettingListOptions.Params',
+            get_or_create(params, models.ToolsOzoneSettingListOptions.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.setting.listOptions', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneSettingListOptions.Response)
+
+    def remove_options(
+        self,
+        data: t.Union[models.ToolsOzoneSettingRemoveOptions.Data, models.ToolsOzoneSettingRemoveOptions.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSettingRemoveOptions.Response':
+        """Delete settings by key.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSettingRemoveOptions.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneSettingRemoveOptions.Data',
+            get_or_create(data, models.ToolsOzoneSettingRemoveOptions.Data),
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.setting.removeOptions',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSettingRemoveOptions.Response)
+
+    def upsert_option(
+        self,
+        data: t.Union[models.ToolsOzoneSettingUpsertOption.Data, models.ToolsOzoneSettingUpsertOption.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSettingUpsertOption.Response':
+        """Create or update setting option.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSettingUpsertOption.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneSettingUpsertOption.Data', get_or_create(data, models.ToolsOzoneSettingUpsertOption.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.setting.upsertOption',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSettingUpsertOption.Response)
 
 
 class ToolsOzoneSignatureNamespace(NamespaceBase):
