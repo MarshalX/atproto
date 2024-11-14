@@ -41,9 +41,7 @@ jobs:
       - name: Update lexicons and regen.
         run: |
           source $(poetry env info -p)/bin/activate
-          COMMIT_MESSAGE=$(python update_lexicons.py | tr -d '\n')
-          echo "Debug: Commit message is '$COMMIT_MESSAGE'"
-          echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+          echo "COMMIT_MESSAGE=$(python update_lexicons.py)" >> $GITHUB_ENV
 
 #      - name: Create Pull Request.
 #        uses: peter-evans/create-pull-request@v5
