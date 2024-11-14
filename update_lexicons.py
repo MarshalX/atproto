@@ -152,11 +152,11 @@ def main() -> None:
     _print('- Running codegen (poetry run atp -s gen all)...')
     _run_subprocess(['poetry', 'run', 'atp', '-s', 'gen', 'all'])
 
-    _print('- Running ruff (poetry run ruff check --fix .)...')
-    _run_subprocess(['poetry', 'run', 'ruff', 'check', '--fix', '.'])
+    _print('- Running ruff (poetry run ruff check --quiet --fix .)...')
+    _run_subprocess(['poetry', 'run', 'ruff', 'check', '--quiet', '--fix', '.'])
 
-    _print('- Running ruff format (poetry run ruff -q format .)...')
-    _run_subprocess(['poetry', 'run', 'ruff', 'format', '-q', '.'])
+    _print('- Running ruff format (poetry run ruff --quiet format .)...')
+    _run_subprocess(['poetry', 'run', 'ruff', 'format', '--quiet', '.'])
 
     _print('- Generating docs (make -s -C docs gen)...')
     _remove_content_in_path(_FOLDER_OF_GEN_DOCS)
