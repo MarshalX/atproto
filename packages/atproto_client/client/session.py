@@ -11,7 +11,7 @@ if t.TYPE_CHECKING:
 
 class SessionEvent(Enum):
     IMPORT = 'import'
-    CREATE = 'creat'
+    CREATE = 'create'
     REFRESH = 'refresh'
 
 
