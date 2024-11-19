@@ -3100,6 +3100,32 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
+    async def search_starter_packs(
+        self,
+        params: t.Union[models.AppBskyGraphSearchStarterPacks.Params, models.AppBskyGraphSearchStarterPacks.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphSearchStarterPacks.Response':
+        """Find starter packs matching search criteria. Does not require auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphSearchStarterPacks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyGraphSearchStarterPacks.Params',
+            get_or_create(params, models.AppBskyGraphSearchStarterPacks.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.graph.searchStarterPacks', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphSearchStarterPacks.Response)
+
     async def unmute_actor(
         self,
         data: t.Union[models.AppBskyGraphUnmuteActor.Data, models.AppBskyGraphUnmuteActor.DataDict],
@@ -3671,6 +3697,38 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
             'app.bsky.unspecced.searchPostsSkeleton', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyUnspeccedSearchPostsSkeleton.Response)
+
+    async def search_starter_packs_skeleton(
+        self,
+        params: t.Union[
+            models.AppBskyUnspeccedSearchStarterPacksSkeleton.Params,
+            models.AppBskyUnspeccedSearchStarterPacksSkeleton.ParamsDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedSearchStarterPacksSkeleton.Response':
+        """Backend Starter Pack search, returns only skeleton.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedSearchStarterPacksSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedSearchStarterPacksSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedSearchStarterPacksSkeleton.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.searchStarterPacksSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedSearchStarterPacksSkeleton.Response)
 
 
 class AppBskyVideoNamespace(AsyncNamespaceBase):

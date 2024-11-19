@@ -30,3 +30,13 @@ class SkeletonSearchActor(base.ModelBase):
     py_type: t.Literal['app.bsky.unspecced.defs#skeletonSearchActor'] = Field(
         default='app.bsky.unspecced.defs#skeletonSearchActor', alias='$type', frozen=True
     )
+
+
+class SkeletonSearchStarterPack(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.defs`."""
+
+    uri: str  #: Uri.
+
+    py_type: t.Literal['app.bsky.unspecced.defs#skeletonSearchStarterPack'] = Field(
+        default='app.bsky.unspecced.defs#skeletonSearchStarterPack', alias='$type', frozen=True
+    )
