@@ -19,3 +19,4 @@ Submodules
    atproto_client.models.app.bsky.unspecced.get_tagged_suggestions
    atproto_client.models.app.bsky.unspecced.search_actors_skeleton
    atproto_client.models.app.bsky.unspecced.search_posts_skeleton
+   atproto_client.models.app.bsky.unspecced.search_starter_packs_skeleton

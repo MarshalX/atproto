@@ -63,6 +63,7 @@ from atproto_client.models.app.bsky.graph import listitem as AppBskyGraphListite
 from atproto_client.models.app.bsky.graph import mute_actor as AppBskyGraphMuteActor
 from atproto_client.models.app.bsky.graph import mute_actor_list as AppBskyGraphMuteActorList
 from atproto_client.models.app.bsky.graph import mute_thread as AppBskyGraphMuteThread
+from atproto_client.models.app.bsky.graph import search_starter_packs as AppBskyGraphSearchStarterPacks
 from atproto_client.models.app.bsky.graph import starterpack as AppBskyGraphStarterpack
 from atproto_client.models.app.bsky.graph import unmute_actor as AppBskyGraphUnmuteActor
 from atproto_client.models.app.bsky.graph import unmute_actor_list as AppBskyGraphUnmuteActorList
@@ -85,6 +86,9 @@ from atproto_client.models.app.bsky.unspecced import get_suggestions_skeleton as
 from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as AppBskyUnspeccedGetTaggedSuggestions
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
+from atproto_client.models.app.bsky.unspecced import (
+    search_starter_packs_skeleton as AppBskyUnspeccedSearchStarterPacksSkeleton,
+)
 from atproto_client.models.app.bsky.video import defs as AppBskyVideoDefs
 from atproto_client.models.app.bsky.video import get_job_status as AppBskyVideoGetJobStatus
 from atproto_client.models.app.bsky.video import get_upload_limits as AppBskyVideoGetUploadLimits
@@ -305,6 +309,7 @@ class _Ids:
     AppBskyGraphMuteActor: str = 'app.bsky.graph.muteActor'
     AppBskyGraphMuteActorList: str = 'app.bsky.graph.muteActorList'
     AppBskyGraphMuteThread: str = 'app.bsky.graph.muteThread'
+    AppBskyGraphSearchStarterPacks: str = 'app.bsky.graph.searchStarterPacks'
     AppBskyGraphStarterpack: str = 'app.bsky.graph.starterpack'
     AppBskyGraphUnmuteActor: str = 'app.bsky.graph.unmuteActor'
     AppBskyGraphUnmuteActorList: str = 'app.bsky.graph.unmuteActorList'
@@ -325,6 +330,7 @@ class _Ids:
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
+    AppBskyUnspeccedSearchStarterPacksSkeleton: str = 'app.bsky.unspecced.searchStarterPacksSkeleton'
     AppBskyVideoDefs: str = 'app.bsky.video.defs'
     AppBskyVideoGetJobStatus: str = 'app.bsky.video.getJobStatus'
     AppBskyVideoGetUploadLimits: str = 'app.bsky.video.getUploadLimits'

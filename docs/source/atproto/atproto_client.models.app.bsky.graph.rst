@@ -35,6 +35,7 @@ Submodules
    atproto_client.models.app.bsky.graph.mute_actor
    atproto_client.models.app.bsky.graph.mute_actor_list
    atproto_client.models.app.bsky.graph.mute_thread
+   atproto_client.models.app.bsky.graph.search_starter_packs
    atproto_client.models.app.bsky.graph.starterpack
    atproto_client.models.app.bsky.graph.unmute_actor
    atproto_client.models.app.bsky.graph.unmute_actor_list
