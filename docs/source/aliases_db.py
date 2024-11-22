@@ -185,6 +185,7 @@ ALIASES_DB = {
     'models.ComAtprotoSyncNotifyOfUpdate': 'atproto_client.models.com.atproto.sync.notify_of_update',
     'models.ComAtprotoSyncRequestCrawl': 'atproto_client.models.com.atproto.sync.request_crawl',
     'models.ComAtprotoSyncSubscribeRepos': 'atproto_client.models.com.atproto.sync.subscribe_repos',
+    'models.ComAtprotoTempAddReservedHandle': 'atproto_client.models.com.atproto.temp.add_reserved_handle',
     'models.ComAtprotoTempCheckSignupQueue': 'atproto_client.models.com.atproto.temp.check_signup_queue',
     'models.ComAtprotoTempFetchLabels': 'atproto_client.models.com.atproto.temp.fetch_labels',
     'models.ComAtprotoTempRequestPhoneVerification': 'atproto_client.models.com.atproto.temp.request_phone_verification',
