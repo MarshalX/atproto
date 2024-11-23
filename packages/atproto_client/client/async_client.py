@@ -8,7 +8,6 @@ import asyncio
 import typing as t
 from asyncio import Lock
 
-import typing_extensions as te
 from atproto_core.uri import AtUri
 
 from atproto_client import models
@@ -76,18 +75,6 @@ class AsyncClient(
         await self._set_session(SessionEvent.IMPORT, import_session)
 
         return import_session
-
-    async def clone(self) -> te.Self:
-        """Clone the client instance.
-
-        Used to customize atproto proxy and set of labeler services.
-
-        Returns:
-            Cloned client instance.
-        """
-        cloned_client = super().clone()
-        cloned_client.me = self.me
-        return cloned_client
 
     async def login(
         self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
