@@ -242,7 +242,14 @@ class ThreadViewPref(base.ModelBase):
 
     prioritize_followed_users: t.Optional[bool] = None  #: Show followed users at the top of all replies.
     sort: t.Optional[
-        t.Union[t.Literal['oldest'], t.Literal['newest'], t.Literal['most-likes'], t.Literal['random'], str]
+        t.Union[
+            t.Literal['oldest'],
+            t.Literal['newest'],
+            t.Literal['most-likes'],
+            t.Literal['random'],
+            t.Literal['hotness'],
+            str,
+        ]
     ] = None  #: Sorting mode for threads.
 
     py_type: t.Literal['app.bsky.actor.defs#threadViewPref'] = Field(
