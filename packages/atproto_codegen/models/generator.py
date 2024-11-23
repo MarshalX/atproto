@@ -63,6 +63,7 @@ def save_code_part(nsid: NSID, code: str) -> None:
 
 
 def _get_model_imports() -> str:
+    # we are using ruff with F401 autofix to delete unused imports
     lines = [
         'import typing as t',
         '',
@@ -163,7 +164,7 @@ def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional:
     str_typehint = 'str'
 
     # Map lexicon string formats to our validator types
-    if hasattr(field_type_def, 'format') and (format_type := field_type_def.format):
+    if field_type_def.format:
         # Map format types to our string_formats types
         format_map = {
             'at-identifier': 'string_formats.Handle',
@@ -178,7 +179,7 @@ def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional:
             'uri': 'string_formats.Uri',
             'language': 'string_formats.Language',
         }
-        str_typehint = format_map.get(format_type, 'str')
+        str_typehint = format_map.get(field_type_def.format, 'str')
 
     # Handle existing enum/known_values logic
     if field_type_def.known_values or field_type_def.enum:

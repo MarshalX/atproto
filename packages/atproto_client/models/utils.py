@@ -108,7 +108,7 @@ def _get_or_create(
         return model_data
 
     try:
-        return model(**model_data)
+        return model.model_validate(model_data, context={'strict_string_format': strict_string_format})
     except ValidationError as e:
         raise ModelError(str(e)) from e
 
