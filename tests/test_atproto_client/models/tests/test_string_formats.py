@@ -75,6 +75,28 @@ def test_string_format_validation(
         assert expected_error in error['msg']
 
 
+@pytest.mark.parametrize(
+    'valid_value',
+    [
+        'test.bsky.social',
+        'did:plc:1234abcd',
+        'app.bsky.feed.post',
+        'at://user.bsky.social/posts/123',
+        'bafyreidfayvfuwqa2beehqn7axeeeaej5aqvaowxgwcdt2rw',
+        '2023-01-01T12:00:00Z',
+        '3jqvenncqkgbm',
+        'valid-key',
+        'https://example.com',
+        'en-US',
+    ],
+)
+def test_generic_string_format_validation(valid_value: str) -> None:
+    """Test that ATProtoString accepts each valid string format."""
+
+    validated = TypeAdapter(string_formats.ATProtoString).validate_python(valid_value, context={_OPT_IN_KEY: True})
+    assert validated == valid_value
+
+
 def test_get_or_create_with_strict_validation(valid_data: dict, invalid_data: dict) -> None:
     """Test that get_or_create uses strict validation."""
 
