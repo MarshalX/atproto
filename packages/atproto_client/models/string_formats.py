@@ -44,71 +44,79 @@ def only_validate_if_strict(validate_fn: core_schema.WithInfoValidatorFunction) 
 @only_validate_if_strict
 def validate_handle(v: str, info: ValidationInfo) -> str:
     if not DOMAIN_RE.match(v.lower()) or len(v) > MAX_HANDLE_LENGTH:
-        raise ValueError('Invalid handle')
+        raise ValueError(
+            f'Invalid handle: must be a domain name (e.g. user.bsky.social) with max length {MAX_HANDLE_LENGTH}'
+        )
     return v
 
 
 @only_validate_if_strict
 def validate_did(v: str, info: ValidationInfo) -> str:
     if not DID_RE.match(v):
-        raise ValueError('Invalid DID')
+        raise ValueError('Invalid DID: must be in format did:method:identifier (e.g. did:plc:1234abcd)')
     return v
 
 
 @only_validate_if_strict
 def validate_nsid(v: str, info: ValidationInfo) -> str:
     if not NSID_RE.match(v) or '.' not in v or len(v) > MAX_NSID_LENGTH:
-        raise ValueError('Invalid NSID')
+        raise ValueError(
+            f'Invalid NSID: must be dot-separated segments (e.g. app.bsky.feed.post) with max length {MAX_NSID_LENGTH}'
+        )
     return v
 
 
 @only_validate_if_strict
 def validate_language(v: str, info: ValidationInfo) -> str:
     if not LANG_RE.match(v):
-        raise ValueError('Invalid language code')
+        raise ValueError('Invalid language code: must be ISO language code (e.g. en or en-US)')
     return v
 
 
 @only_validate_if_strict
 def validate_record_key(v: str, info: ValidationInfo) -> str:
     if v in INVALID_RECORD_KEYS or not RKEY_RE.match(v):
-        raise ValueError('Invalid record key')
+        raise ValueError(
+            'Invalid record key: must contain only alphanumeric, dot, underscore, colon, tilde, or hyphen characters'
+        )
     return v
 
 
 @only_validate_if_strict
 def validate_cid(v: str, info: ValidationInfo) -> str:
     if not CID_RE.match(v):
-        raise ValueError('Invalid CID')
+        raise ValueError('Invalid CID: must be a valid Content Identifier with minimum length 8')
     return v
 
 
 @only_validate_if_strict
 def validate_at_uri(v: str, info: ValidationInfo) -> str:
     if len(v) >= MAX_URI_LENGTH or '/./' in v or '/../' in v or v.endswith(('/.', '/..')):
-        raise ValueError('Invalid AT-URI')
+        raise ValueError(f'Invalid AT-URI: must be under {MAX_URI_LENGTH} chars and not contain /./ or /../ patterns')
     if not AT_URI_RE.match(v):
-        raise ValueError('Invalid AT-URI format')
+        raise ValueError(
+            'Invalid AT-URI: must be in format at://authority/collection/record (e.g. at://user.bsky.social/posts/123)'
+        )
     return v
 
 
 @only_validate_if_strict
 def validate_datetime(v: str, info: ValidationInfo) -> str:
-    # could just use pydantic_extra_types.pendulum_dt.DateTime but
-    # see https://github.com/pydantic/pydantic-extra-types/issues/239
     if 'T' not in v or not any(v.endswith(x) for x in ('Z', '+00:00')):
-        raise ValueError('Invalid datetime format')
+        raise ValueError('Invalid datetime format: must be ISO 8601 with timezone (e.g. 2023-01-01T12:00:00Z)')
     try:
         datetime.fromisoformat(v.replace('Z', '+00:00'))
         return v
     except ValueError:
-        raise ValueError('Invalid datetime format') from None
+        raise ValueError(
+            'Invalid datetime format: must be ISO 8601 with timezone (e.g. 2023-01-01T12:00:00Z)'
+        ) from None
 
 
 @only_validate_if_strict
 def validate_tid(v: str, info: ValidationInfo) -> str:
     if not TID_RE.match(v):
-        raise ValueError('Invalid TID format')
+        raise ValueError(f'Invalid TID format: must be exactly {TID_LENGTH} lowercase letters/numbers')
     if ord(v[0]) & 0x40:
         raise ValueError('Invalid TID: high bit cannot be 1')
     return v
@@ -117,14 +125,14 @@ def validate_tid(v: str, info: ValidationInfo) -> str:
 @only_validate_if_strict
 def validate_uri(v: str, info: ValidationInfo) -> str:
     if len(v) >= MAX_URI_LENGTH or ' ' in v:
-        raise ValueError('Invalid URI')
+        raise ValueError(f'Invalid URI: must be under {MAX_URI_LENGTH} chars and not contain spaces')
     parsed = urlparse(v)
     if not (
         parsed.scheme
         and parsed.scheme[0].isalpha()
         and (parsed.netloc or parsed.path or parsed.query or parsed.fragment)
     ):
-        raise ValueError('Invalid URI')
+        raise ValueError('Invalid URI: must be a valid URI with scheme and authority/path (e.g. https://example.com)')
     return v
 
 

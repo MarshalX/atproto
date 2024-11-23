@@ -6,7 +6,6 @@ from pydantic import TypeAdapter, ValidationError
 
 @pytest.fixture
 def invalid_data():
-    # TODO: retrieve believable examples of invalid data
     return {
         'handle': 'invalid@ @handle',
         'did': 'not-a-did',
@@ -16,14 +15,13 @@ def invalid_data():
         'datetime': '2023-01-01',
         'tid': 'invalid-tid',
         'record_key': '..',
-        'uri': ' invalid uri ',
+        'uri': 'invalid-uri-no-scheme',
         'language': 'invalid!',
     }
 
 
 @pytest.fixture
 def valid_data():
-    # TODO: retrieve real examples of test data
     return {
         'handle': 'test.bsky.social',
         'did': 'did:plc:1234abcd',
@@ -41,16 +39,16 @@ def valid_data():
 @pytest.mark.parametrize(
     'type_name,field_name,expected_error',
     [
-        ('Handle', 'handle', 'Invalid handle'),
-        ('Did', 'did', 'Invalid DID'),
-        ('Nsid', 'nsid', 'Invalid NSID'),
-        ('AtUri', 'at_uri', 'Invalid AT-URI'),
-        ('Cid', 'cid', 'Invalid CID'),
-        ('DateTime', 'datetime', 'Invalid datetime format'),
-        ('Tid', 'tid', 'Invalid TID format'),
-        ('RecordKey', 'record_key', 'Invalid record key'),
-        ('Uri', 'uri', 'Invalid URI'),
-        ('Language', 'language', 'Invalid language code'),
+        ('Handle', 'handle', 'must be a domain name'),
+        ('Did', 'did', 'must be in format did:method:identifier'),
+        ('Nsid', 'nsid', 'must be dot-separated segments'),
+        ('AtUri', 'at_uri', 'must be in format at://authority/collection/record'),
+        ('Cid', 'cid', 'must be a valid Content Identifier'),
+        ('DateTime', 'datetime', 'must be ISO 8601 with timezone'),
+        ('Tid', 'tid', 'must be exactly 13 lowercase letters/numbers'),
+        ('RecordKey', 'record_key', 'must contain only alphanumeric'),
+        ('Uri', 'uri', 'must be a valid URI with scheme and authority/path'),
+        ('Language', 'language', 'must be ISO language code'),
     ],
 )
 def test_string_format_validation(
