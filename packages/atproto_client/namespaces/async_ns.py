@@ -6195,6 +6195,36 @@ class ComAtprotoSyncNamespace(AsyncNamespaceBase):
 
 
 class ComAtprotoTempNamespace(AsyncNamespaceBase):
+    async def add_reserved_handle(
+        self,
+        data: t.Union[models.ComAtprotoTempAddReservedHandle.Data, models.ComAtprotoTempAddReservedHandle.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoTempAddReservedHandle.Response':
+        """Add a handle to the set of reserved handles.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoTempAddReservedHandle.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ComAtprotoTempAddReservedHandle.Data',
+            get_or_create(data, models.ComAtprotoTempAddReservedHandle.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.temp.addReservedHandle',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoTempAddReservedHandle.Response)
+
     async def check_signup_queue(self, **kwargs: t.Any) -> 'models.ComAtprotoTempCheckSignupQueue.Response':
         """Check accounts location in signup queue.
 

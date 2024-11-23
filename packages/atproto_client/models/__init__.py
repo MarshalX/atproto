@@ -196,6 +196,7 @@ from atproto_client.models.com.atproto.sync import list_repos as ComAtprotoSyncL
 from atproto_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
 from atproto_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
+from atproto_client.models.com.atproto.temp import add_reserved_handle as ComAtprotoTempAddReservedHandle
 from atproto_client.models.com.atproto.temp import check_signup_queue as ComAtprotoTempCheckSignupQueue
 from atproto_client.models.com.atproto.temp import fetch_labels as ComAtprotoTempFetchLabels
 from atproto_client.models.com.atproto.temp import request_phone_verification as ComAtprotoTempRequestPhoneVerification
@@ -432,6 +433,7 @@ class _Ids:
     ComAtprotoSyncNotifyOfUpdate: str = 'com.atproto.sync.notifyOfUpdate'
     ComAtprotoSyncRequestCrawl: str = 'com.atproto.sync.requestCrawl'
     ComAtprotoSyncSubscribeRepos: str = 'com.atproto.sync.subscribeRepos'
+    ComAtprotoTempAddReservedHandle: str = 'com.atproto.temp.addReservedHandle'
     ComAtprotoTempCheckSignupQueue: str = 'com.atproto.temp.checkSignupQueue'
     ComAtprotoTempFetchLabels: str = 'com.atproto.temp.fetchLabels'
     ComAtprotoTempRequestPhoneVerification: str = 'com.atproto.temp.requestPhoneVerification'
