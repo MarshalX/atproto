@@ -1,7 +1,6 @@
 import typing as t
 from threading import Lock
 
-import typing_extensions as te
 from atproto_core.uri import AtUri
 
 from atproto_client import models
@@ -67,18 +66,6 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         self._set_session(SessionEvent.IMPORT, import_session)
 
         return import_session
-
-    def clone(self) -> te.Self:
-        """Clone the client instance.
-
-        Used to customize atproto proxy and set of labeler services.
-
-        Returns:
-            Cloned client instance.
-        """
-        cloned_client = super().clone()
-        cloned_client.me = self.me
-        return cloned_client
 
     def login(
         self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None

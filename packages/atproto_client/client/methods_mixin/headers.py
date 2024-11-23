@@ -20,6 +20,18 @@ class HeadersConfigurationMethodsMixin:
         ATPROTO_LABELER = 'atproto_labeler'
         BSKY_CHAT = 'bsky_chat'
 
+    def clone(self) -> te.Self:
+        """Clone the client instance.
+
+        Used to customize atproto proxy and set of labeler services.
+
+        Returns:
+            Cloned client instance.
+        """
+        cloned_client = super().clone()
+        cloned_client.me = self.me
+        return cloned_client
+
     def with_proxy(self, service_type: t.Union[AtprotoServiceType, str], did: str) -> te.Self:
         """Get a new client instance with the atproto-proxy header configured.
 
