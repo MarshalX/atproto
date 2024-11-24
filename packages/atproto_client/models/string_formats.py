@@ -1,5 +1,4 @@
 import re
-import string
 from datetime import datetime
 from typing import Callable, Mapping, Set, Union
 from urllib.parse import urlparse
@@ -22,21 +21,32 @@ INVALID_RECORD_KEYS: Set[str] = {'.', '..'}
 # patterns
 DOMAIN_RE = re.compile(r'([a-z0-9][a-z0-9-]{0,62}(?<!-)\.){1,}[a-z][a-z0-9-]*(?<!-)')
 DID_RE = re.compile(r'did:[a-z]+:[A-Za-z0-9._%:-]{1,2048}(?<!:)')
-NSID_RE = re.compile(r'(?![0-9])((?!-)[a-z0-9-]{1,63}(?<!-)\.){2,}[a-zA-Z]{1,63}')
+NSID_RE = re.compile(
+    r'(?![0-9])'  # Can't start with number
+    r'((?!-)[a-z0-9-]{1,63}(?<!-)\.){2,}'  # At least 2 segments, each 1-63 chars
+    r'[a-zA-Z]'  # Last segment must start with letter
+    r'[a-zA-Z0-9-]*'  # Middle chars
+    r'[a-zA-Z]'  # Must end with letter
+    r'$'  # End of string
+)
 LANG_RE = re.compile(r'^(i|[a-z]{2,3})(-[A-Za-z0-9-]+)?$')
 RKEY_RE = re.compile(r'^[A-Za-z0-9._:~-]{1,512}$')
-TID_RE = re.compile(rf'^[{string.ascii_lowercase}234567]{{{TID_LENGTH}}}$')
+TID_RE = re.compile(rf'^[2-7a-z]{{{TID_LENGTH}}}$')
 CID_RE = re.compile(r'^[A-Za-z0-9+]{8,}$')
-AT_URI_RE = re.compile(r'at://[^/]+(/[^/]+(/[^/]+)?)?')
+AT_URI_RE = re.compile(
+    r'^at://'  # Protocol
+    r'([a-z0-9][a-z0-9.-]*[a-z0-9]|did:[a-z]+:[a-z0-9.:%-]+)'  # Authority: either domain or DID
+    r'(/[a-z][a-z0-9.-]*(\.[a-z][a-z0-9.-]*)*(/[a-z0-9.-]+)?)?$'  # Optional path segments
+)
 
 
 def only_validate_if_strict(validate_fn: core_schema.WithInfoValidatorFunction) -> Callable:
     """Skip validation if not opting into strict validation."""
 
     def wrapper(v: str, info: ValidationInfo) -> str:
-        if not (info and isinstance(info.context, Mapping) and info.context.get(_OPT_IN_KEY, False)):
-            return v
-        return validate_fn(v, info)
+        if info and isinstance(info.context, Mapping) and info.context.get(_OPT_IN_KEY, False):
+            return validate_fn(v, info)
+        return v
 
     return wrapper
 
@@ -59,7 +69,16 @@ def validate_did(v: str, info: ValidationInfo) -> str:
 
 @only_validate_if_strict
 def validate_nsid(v: str, info: ValidationInfo) -> str:
-    if not NSID_RE.match(v) or '.' not in v or len(v) > MAX_NSID_LENGTH:
+    if (
+        not NSID_RE.match(v)
+        or '..' in v  # No double dots
+        or len(v) > MAX_NSID_LENGTH
+        or any(c in v for c in '@_*#!')  # Explicitly disallow special chars
+        or not all(seg for seg in v.split('.'))  # No empty segments
+        or any(len(seg) > 63 for seg in v.split('.'))  # Max segment length
+        or any(seg[-1].isdigit() for seg in v.split('.'))  # No segments ending in numbers
+        or any(seg.endswith('-') for seg in v.split('.'))  # No segments ending in hyphen
+    ):
         raise ValueError(
             f'Invalid NSID: must be dot-separated segments (e.g. app.bsky.feed.post) with max length {MAX_NSID_LENGTH}'
         )
@@ -91,34 +110,54 @@ def validate_cid(v: str, info: ValidationInfo) -> str:
 
 @only_validate_if_strict
 def validate_at_uri(v: str, info: ValidationInfo) -> str:
-    if len(v) >= MAX_URI_LENGTH or '/./' in v or '/../' in v or v.endswith(('/.', '/..')):
-        raise ValueError(f'Invalid AT-URI: must be under {MAX_URI_LENGTH} chars and not contain /./ or /../ patterns')
+    if len(v) >= MAX_URI_LENGTH:
+        raise ValueError(f'Invalid AT-URI: must be under {MAX_URI_LENGTH} chars')
+
     if not AT_URI_RE.match(v):
+        raise ValueError('Invalid AT-URI: must be in format at://authority/collection/record')
+
+    if (
+        '/./' in v
+        or '/../' in v
+        or v.endswith('/')
+        or '#' in v
+        or
+        # Invalid percent encoding patterns
+        ('%' in v and not re.match(r'%[0-9A-Fa-f]{2}', v[v.index('%') :]))
+    ):
         raise ValueError(
-            'Invalid AT-URI: must be in format at://authority/collection/record (e.g. at://user.bsky.social/posts/123)'
+            'Invalid AT-URI: must not contain /./, /../, trailing slashes, fragments, or invalid percent encoding'
         )
+
     return v
 
 
 @only_validate_if_strict
 def validate_datetime(v: str, info: ValidationInfo) -> str:
-    if 'T' not in v or not any(v.endswith(x) for x in ('Z', '+00:00')):
-        raise ValueError('Invalid datetime format: must be ISO 8601 with timezone (e.g. 2023-01-01T12:00:00Z)')
+    # Must contain T separator
+    if 'T' not in v:
+        raise ValueError('Invalid datetime: must contain T separator')
+
+    # Must have timezone
+    orig_val = v
+    v = re.sub(r'([+-][0-9]{2}:[0-9]{2}|Z)$', '', orig_val)
+    if v == orig_val:
+        raise ValueError('Invalid datetime: must include timezone (Z or +/-HH:MM)')
+
+    # Strip fractional seconds before parsing
+    v = re.sub(r'\.[0-9]+$', '', v)
+
     try:
-        datetime.fromisoformat(v.replace('Z', '+00:00'))
-        return v
+        datetime.fromisoformat(v)
+        return orig_val
     except ValueError:
-        raise ValueError(
-            'Invalid datetime format: must be ISO 8601 with timezone (e.g. 2023-01-01T12:00:00Z)'
-        ) from None
+        raise ValueError('Invalid datetime: must be valid ISO 8601 format') from None
 
 
 @only_validate_if_strict
 def validate_tid(v: str, info: ValidationInfo) -> str:
-    if not TID_RE.match(v):
-        raise ValueError(f'Invalid TID format: must be exactly {TID_LENGTH} lowercase letters/numbers')
-    if ord(v[0]) & 0x40:
-        raise ValueError('Invalid TID: high bit cannot be 1')
+    if not TID_RE.match(v) or (ord(v[0]) & 0x40):
+        raise ValueError(f'Invalid TID: must be exactly {TID_LENGTH} lowercase letters/numbers')
     return v
 
 
