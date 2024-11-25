@@ -17,10 +17,17 @@ MAX_URI_LENGTH: int = 8 * 1024
 MIN_CID_LENGTH: int = 8
 TID_LENGTH: int = 13
 INVALID_RECORD_KEYS: Set[str] = {'.', '..'}
+MAX_DID_LENGTH: int = 2048  # Method-specific identifier max length
+MAX_AT_URI_LENGTH: int = 8 * 1024
 
 # patterns
-DOMAIN_RE = re.compile(r'([a-z0-9][a-z0-9-]{0,62}(?<!-)\.){1,}[a-z][a-z0-9-]*(?<!-)')
-DID_RE = re.compile(r'did:[a-z]+:[A-Za-z0-9._%:-]{1,2048}(?<!:)')
+DOMAIN_RE = re.compile(r'^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z]$')
+DID_RE = re.compile(
+    r'^did:'  # Required prefix
+    r'[a-z]+:'  # method-name (lowercase only)
+    r'[a-zA-Z0-9._%-]{1,2048}'  # method-specific-id with length limit
+    r'(?<!:)$'  # Cannot end with colon
+)
 NSID_RE = re.compile(
     r'(?![0-9])'  # Can't start with number
     r'((?!-)[a-z0-9-]{1,63}(?<!-)\.){2,}'  # At least 2 segments, each 1-63 chars
@@ -35,8 +42,12 @@ TID_RE = re.compile(rf'^[2-7a-z]{{{TID_LENGTH}}}$')
 CID_RE = re.compile(r'^[A-Za-z0-9+]{8,}$')
 AT_URI_RE = re.compile(
     r'^at://'  # Protocol
-    r'([a-z0-9][a-z0-9.-]*[a-z0-9]|did:[a-z]+:[a-z0-9.:%-]+)'  # Authority: either domain or DID
-    r'(/[a-z][a-z0-9.-]*(\.[a-z][a-z0-9.-]*)*(/[a-z0-9.-]+)?)?$'  # Optional path segments
+    r'('  # Authority is either:
+    r'([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z]'  # Handle (must be domain)
+    r'|'  # or
+    r'did:[a-z]+:[a-zA-Z0-9._%-]+'  # DID
+    r')'
+    r'(/[a-z][a-zA-Z0-9-]*(\.[a-z][a-zA-Z0-9-]*)+(/[a-zA-Z0-9._:~-]+)?)?$'  # Optional COLLECTION/RKEY
 )
 
 
@@ -53,17 +64,36 @@ def only_validate_if_strict(validate_fn: core_schema.WithInfoValidatorFunction) 
 
 @only_validate_if_strict
 def validate_handle(v: str, info: ValidationInfo) -> str:
+    # Check ASCII first
+    if not v.isascii():
+        raise ValueError('Invalid handle: must contain only ASCII characters')
+
+    # Use the spec's reference regex
     if not DOMAIN_RE.match(v.lower()) or len(v) > MAX_HANDLE_LENGTH:
         raise ValueError(
             f'Invalid handle: must be a domain name (e.g. user.bsky.social) with max length {MAX_HANDLE_LENGTH}'
         )
+
     return v
 
 
 @only_validate_if_strict
 def validate_did(v: str, info: ValidationInfo) -> str:
+    # Check for invalid characters
+    if any(c in v for c in '/?#[]@'):
+        raise ValueError('Invalid DID: cannot contain /, ?, #, [, ], or @ characters')
+
+    # Check for invalid percent encoding
+    if '%' in v:
+        percent_segments = v.split('%')[1:]
+        for segment in percent_segments:
+            if len(segment) < 2 or not segment[:2].isalnum():
+                raise ValueError('Invalid DID: invalid percent-encoding')
+
+    # Check against regex pattern (which now includes length restriction)
     if not DID_RE.match(v):
         raise ValueError('Invalid DID: must be in format did:method:identifier (e.g. did:plc:1234abcd)')
+
     return v
 
 
@@ -110,24 +140,48 @@ def validate_cid(v: str, info: ValidationInfo) -> str:
 
 @only_validate_if_strict
 def validate_at_uri(v: str, info: ValidationInfo) -> str:
-    if len(v) >= MAX_URI_LENGTH:
-        raise ValueError(f'Invalid AT-URI: must be under {MAX_URI_LENGTH} chars')
+    # Check length
+    if len(v) >= MAX_AT_URI_LENGTH:
+        raise ValueError(f'Invalid AT-URI: must be under {MAX_AT_URI_LENGTH} chars')
 
-    if not AT_URI_RE.match(v):
-        raise ValueError('Invalid AT-URI: must be in format at://authority/collection/record')
-
+    # Check for invalid path patterns
     if (
-        '/./' in v
+        '/./' in v  # No dot segments
         or '/../' in v
-        or v.endswith('/')
-        or '#' in v
-        or
-        # Invalid percent encoding patterns
-        ('%' in v and not re.match(r'%[0-9A-Fa-f]{2}', v[v.index('%') :]))
+        or v.endswith('/')  # No trailing slashes
+        or '#' in v  # No fragments
+        or '?' in v  # No query params
+        or (
+            '%' in v  # Check percent encoding
+            and not re.match(r'%[0-9A-Fa-f]{2}', v[v.index('%') :])
+        )
     ):
         raise ValueError(
-            'Invalid AT-URI: must not contain /./, /../, trailing slashes, fragments, or invalid percent encoding'
+            (
+                'Invalid AT-URI: must not contain /./, /../, trailing slashes,'
+                ' fragments, queries, or invalid percent encoding'
+            )
         )
+
+    parts = v[5:].split('/')  # Skip 'at://'
+
+    # Must have valid authority
+    if len(parts) < 1:
+        raise ValueError('Invalid AT-URI: missing authority')
+
+    # If there's a path, must have collection
+    if len(parts) > 1:
+        if len(parts) == 2:
+            try:
+                validate_nsid(parts[1], info)
+            except ValueError:
+                raise ValueError('Invalid AT-URI: collection must be a valid NSID') from None
+        else:
+            raise ValueError('Invalid AT-URI: must be in format at://authority/collection[/record]')
+
+    # Basic format check still needed for authority validation
+    if not AT_URI_RE.match(v):
+        raise ValueError('Invalid AT-URI: invalid authority format')
 
     return v
 
