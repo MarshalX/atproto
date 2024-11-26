@@ -32,7 +32,7 @@ For example, instead of starting the script by `cron` every 5 minutes, keep it r
 This is incredibly important because API is rate-limited, and you can reach the limit. 
 Which can lead to a temporary outage of your project.
 
-The current rate limits are provided in the [API documentation](https://www.docs.bsky.app/docs/advanced-guides/rate-limits).
+The current rate limits are provided in the [API documentation](https://docs.bsky.app/docs/advanced-guides/rate-limits).
 
 - `createSession`:
   - Rate limited by handle
