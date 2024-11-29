@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Callable, Mapping, Set, Union
 from urllib.parse import urlparse
 
+from atproto_core.nsid import validate_nsid as atproto_core_validate_nsid
 from pydantic import BeforeValidator, Field, ValidationInfo
 from pydantic_core import core_schema
 from typing_extensions import Annotated, Literal
@@ -28,26 +29,25 @@ DID_RE = re.compile(
     r'[a-zA-Z0-9._%-]{1,2048}'  # method-specific-id with length limit
     r'(?<!:)$'  # Cannot end with colon
 )
-NSID_RE = re.compile(
-    r'(?![0-9])'  # Can't start with number
-    r'((?!-)[a-z0-9-]{1,63}(?<!-)\.){2,}'  # At least 2 segments, each 1-63 chars
-    r'[a-zA-Z]'  # Last segment must start with letter
-    r'[a-zA-Z0-9-]*'  # Middle chars
-    r'[a-zA-Z]'  # Must end with letter
-    r'$'  # End of string
-)
 LANG_RE = re.compile(r'^(i|[a-z]{2,3})(-[A-Za-z0-9-]+)?$')
 RKEY_RE = re.compile(r'^[A-Za-z0-9._:~-]{1,512}$')
 TID_RE = re.compile(rf'^[2-7a-z]{{{TID_LENGTH}}}$')
 CID_RE = re.compile(r'^[A-Za-z0-9+]{8,}$')
 AT_URI_RE = re.compile(
-    r'^at://'  # Protocol
-    r'('  # Authority is either:
-    r'([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z]'  # Handle (must be domain)
+    r'^at://'  # Must start with at://
+    r'('  # Authority group start
+    # For DIDs: Only allowed chars are letters, numbers, period, hyphen, and percent
+    r'did:[a-z]+:[a-zA-Z0-9.-]+'  # Notice removed underscore from allowed chars
     r'|'  # or
-    r'did:[a-z]+:[a-zA-Z0-9._%-]+'  # DID
-    r')'
-    r'(/[a-z][a-zA-Z0-9-]*(\.[a-z][a-zA-Z0-9-]*)+(/[a-zA-Z0-9._:~-]+)?)?$'  # Optional COLLECTION/RKEY
+    # Handle: require 2+ segments, TLD can't start with digit
+    r'[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?'  # First segment
+    r'(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*'  # Middle segments
+    r'\.[a-zA-Z][a-zA-Z0-9-]*'  # TLD must start with letter
+    r')'  # Authority group end
+    r'(?:'  # Optional path group
+    r'/[a-z][a-zA-Z0-9-]*(\.[a-z][a-zA-Z0-9-])+'  # NSID
+    r'(?:/[A-Za-z0-9._:~-]+)?'  # Optional record key
+    r')?$'
 )
 
 
@@ -100,14 +100,11 @@ def validate_did(v: str, info: ValidationInfo) -> str:
 @only_validate_if_strict
 def validate_nsid(v: str, info: ValidationInfo) -> str:
     if (
-        not NSID_RE.match(v)
-        or '..' in v  # No double dots
+        not atproto_core_validate_nsid(v, soft_fail=True)
         or len(v) > MAX_NSID_LENGTH
         or any(c in v for c in '@_*#!')  # Explicitly disallow special chars
-        or not all(seg for seg in v.split('.'))  # No empty segments
         or any(len(seg) > 63 for seg in v.split('.'))  # Max segment length
         or any(seg[-1].isdigit() for seg in v.split('.'))  # No segments ending in numbers
-        or any(seg.endswith('-') for seg in v.split('.'))  # No segments ending in hyphen
     ):
         raise ValueError(
             f'Invalid NSID: must be dot-separated segments (e.g. app.bsky.feed.post) with max length {MAX_NSID_LENGTH}'
@@ -140,72 +137,46 @@ def validate_cid(v: str, info: ValidationInfo) -> str:
 
 @only_validate_if_strict
 def validate_at_uri(v: str, info: ValidationInfo) -> str:
-    # Check length
     if len(v) >= MAX_AT_URI_LENGTH:
         raise ValueError(f'Invalid AT-URI: must be under {MAX_AT_URI_LENGTH} chars')
 
-    # Check for invalid path patterns
-    if (
-        '/./' in v  # No dot segments
-        or '/../' in v
-        or v.endswith('/')  # No trailing slashes
-        or '#' in v  # No fragments
-        or '?' in v  # No query params
-        or (
-            '%' in v  # Check percent encoding
-            and not re.match(r'%[0-9A-Fa-f]{2}', v[v.index('%') :])
-        )
-    ):
-        raise ValueError(
-            (
-                'Invalid AT-URI: must not contain /./, /../, trailing slashes,'
-                ' fragments, queries, or invalid percent encoding'
-            )
-        )
-
-    parts = v[5:].split('/')  # Skip 'at://'
-
-    # Must have valid authority
-    if len(parts) < 1:
-        raise ValueError('Invalid AT-URI: missing authority')
-
-    # If there's a path, must have collection
-    if len(parts) > 1:
-        if len(parts) == 2:
-            try:
-                validate_nsid(parts[1], info)
-            except ValueError:
-                raise ValueError('Invalid AT-URI: collection must be a valid NSID') from None
-        else:
-            raise ValueError('Invalid AT-URI: must be in format at://authority/collection[/record]')
-
-    # Basic format check still needed for authority validation
     if not AT_URI_RE.match(v):
-        raise ValueError('Invalid AT-URI: invalid authority format')
+        raise ValueError('Invalid AT-URI: invalid format')
 
     return v
 
 
 @only_validate_if_strict
 def validate_datetime(v: str, info: ValidationInfo) -> str:
-    # Must contain T separator
-    if 'T' not in v:
-        raise ValueError('Invalid datetime: must contain T separator')
+    # Must contain uppercase T and Z if used
+    if v != v.strip():
+        raise ValueError('Invalid datetime: no whitespace allowed')
 
-    # Must have timezone
-    orig_val = v
-    v = re.sub(r'([+-][0-9]{2}:[0-9]{2}|Z)$', '', orig_val)
-    if v == orig_val:
-        raise ValueError('Invalid datetime: must include timezone (Z or +/-HH:MM)')
+    # Must contain uppercase T
+    if 'T' not in v or ('z' in v and 'Z' not in v):
+        raise ValueError('Invalid datetime: must contain uppercase T separator')
 
-    # Strip fractional seconds before parsing
-    v = re.sub(r'\.[0-9]+$', '', v)
+    # Must have seconds (HH:MM:SS)
+    time_part = v.split('T')[1]
+    if len(time_part.split(':')) != 3:
+        raise ValueError('Invalid datetime: seconds are required')
 
+    # If has decimal point, must have digits after it
+    if '.' in v and not re.search(r'\.\d+', v):
+        raise ValueError('Invalid datetime: invalid fractional seconds format')
+
+    # Must match exactly timezone pattern with nothing after
+    if v.endswith('-00:00'):
+        raise ValueError('Invalid datetime: -00:00 timezone not allowed')
+    if not (re.match(r'.*Z$', v) or re.match(r'.*[+-]\d{2}:\d{2}$', v)):
+        raise ValueError('Invalid datetime: must include timezone')
+
+    # Final validation
     try:
-        datetime.fromisoformat(v)
-        return orig_val
+        datetime.fromisoformat(v.replace('Z', '+00:00'))
+        return v
     except ValueError:
-        raise ValueError('Invalid datetime: must be valid ISO 8601 format') from None
+        raise ValueError('Invalid datetime: invalid format') from None
 
 
 @only_validate_if_strict

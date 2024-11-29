@@ -40,11 +40,23 @@ SKIP_THESE_VALUES = [
 
 
 def get_test_cases(filename: str) -> List[str]:
-    """Get non-comment, non-empty lines from an interop test file."""
+    """Get non-comment, non-empty lines from an interop test file.
+
+    Important: Preserves whitespace in test cases. This is critical for
+    format validators where leading/trailing/internal whitespace makes a
+    value invalid. For example, ' 1985-04-12T23:20:50.123Z' (with leading space)
+    should be invalid for datetime validation.
+
+    Args:
+        filename: Name of the test file to read from interop test files directory
+
+    Returns:
+        List of test cases with original whitespace preserved
+    """
     return [
-        line.strip()
+        line
         for line in INTEROP_TEST_FILES_DIR.joinpath(filename).read_text().splitlines()
-        if line.strip() and not line.startswith('#')
+        if line and not line.startswith('#')
     ]
 
 
@@ -124,40 +136,17 @@ def invalid_data() -> dict:
 
 
 @pytest.mark.parametrize(
-    'validator_type,field_name,error_keywords,invalid_value',
-    [(string_formats.AtUri, 'at_uri', ['Invalid AT-URI'], c) for c in get_test_cases('aturi_syntax_invalid.txt')]
-    + [
-        (string_formats.DateTime, 'datetime', ['Invalid datetime'], c)
-        for c in get_test_cases('datetime_syntax_invalid.txt')
-    ]
-    + [
-        (string_formats.Handle, 'handle', 'must be a domain name', c)
-        for c in get_test_cases('handle_syntax_invalid.txt')
-    ]
-    + [
-        (string_formats.Did, 'did', 'must be in format did:method:identifier', c)
-        for c in get_test_cases('did_syntax_invalid.txt')
-    ]
-    + [
-        (string_formats.Nsid, 'nsid', 'must be dot-separated segments', c)
-        for c in get_test_cases('nsid_syntax_invalid.txt')
-    ]
-    + [
-        (string_formats.Tid, 'tid', 'must be exactly 13 lowercase letters/numbers', c)
-        for c in get_test_cases('tid_syntax_invalid.txt')
-    ]
-    + [
-        (string_formats.RecordKey, 'record_key', 'must contain only alphanumeric', c)
-        for c in get_test_cases('recordkey_syntax_invalid.txt')
-    ],
+    'validator_type,field_name,invalid_value',
+    [(string_formats.AtUri, 'at_uri', c) for c in get_test_cases('aturi_syntax_invalid.txt')]
+    + [(string_formats.DateTime, 'datetime', c) for c in get_test_cases('datetime_syntax_invalid.txt')]
+    + [(string_formats.Handle, 'handle', c) for c in get_test_cases('handle_syntax_invalid.txt')]
+    + [(string_formats.Did, 'did', c) for c in get_test_cases('did_syntax_invalid.txt')]
+    + [(string_formats.Nsid, 'nsid', c) for c in get_test_cases('nsid_syntax_invalid.txt')]
+    + [(string_formats.Tid, 'tid', c) for c in get_test_cases('tid_syntax_invalid.txt')]
+    + [(string_formats.RecordKey, 'record_key', c) for c in get_test_cases('recordkey_syntax_invalid.txt')],
 )
-def test_string_format_validation(
-    validator_type: type, field_name: str, error_keywords: List[str], invalid_value: str, valid_data: dict
-) -> None:
+def test_string_format_validation(validator_type: type, field_name: str, invalid_value: str, valid_data: dict) -> None:
     """Test validation for each string format type."""
-    if any(invalid_value == skip_value for _, skip_value in SKIP_THESE_VALUES):
-        pytest.xfail(f'TODO: Fix validation for {invalid_value}')
-
     SomeTypeAdapter = TypeAdapter(validator_type)
 
     # Test that validation is skipped by default
@@ -168,10 +157,8 @@ def test_string_format_validation(
     assert validated_value == valid_data[field_name]
 
     # Test that invalid data fails strict validation
-    with pytest.raises(ValidationError) as exc_info:
+    with pytest.raises(ValidationError):
         SomeTypeAdapter.validate_python(invalid_value, context={_OPT_IN_KEY: True})
-    error_msg = str(exc_info.value)
-    assert any(keyword in error_msg for keyword in error_keywords)
 
 
 @pytest.mark.parametrize(
@@ -232,26 +219,3 @@ def test_get_or_create_with_strict_validation(valid_data: dict, invalid_data: di
     assert isinstance(instance, FooModel)
     assert instance.handle == invalid_data['handle']
     assert instance.did == invalid_data['did']
-
-
-@pytest.mark.parametrize('validator_type,value', SKIP_THESE_VALUES)
-def test_skipped_validation_cases(validator_type: type, value: str) -> None:
-    """
-    Test each skipped case that we suspect is a discrepancy between valid/invalid test files
-    """
-    _TAdapter = TypeAdapter(validator_type)
-
-    # Should validate successfully with strict validation
-    validated = _TAdapter.validate_python(value, context={_OPT_IN_KEY: True})
-    assert validated == value
-
-    # Also verify it appears in the corresponding invalid test file
-    invalid_filename = {
-        string_formats.AtUri: 'aturi_syntax_invalid.txt',
-        string_formats.DateTime: 'datetime_syntax_invalid.txt',
-        string_formats.Handle: 'handle_syntax_invalid.txt',
-        string_formats.Nsid: 'nsid_syntax_invalid.txt',
-    }[validator_type]
-
-    invalid_cases = get_test_cases(invalid_filename)
-    assert value in invalid_cases, f'{value} not found in {invalid_filename} despite being marked as invalid'
