@@ -8,7 +8,7 @@ This SDK attempts to implement everything that provides ATProto. There is suppor
 
 ### Installing
 
-``` bash
+```bash
 pip install atproto
 ```
 
@@ -69,7 +69,7 @@ Useful links to continue:
 The SDK is built upon the following components:
 
 | Package            | Description                                                                 |
-|--------------------|-----------------------------------------------------------------------------|
+| ------------------ | --------------------------------------------------------------------------- |
 | `atproto`          | Import shortcuts to other packages.                                         |
 | `atproto_cli`      | CLI tool to generate code.                                                  |
 | `atproto_client`   | XRPC Client, data models, and utils like rich text helper.                  |
@@ -91,6 +91,7 @@ The documentation is live at [atproto.blue](https://atproto.blue/).
 ### Getting help
 
 You can get help in several ways:
+
 - Report bugs, request new features by [creating an issue](https://github.com/MarshalX/atproto/issues/new).
 - Ask questions by [starting a discussion](https://github.com/MarshalX/atproto/discussions/new).
 - Ask questions in [Discord server](https://discord.gg/PCyVJXU9jN).
@@ -100,6 +101,7 @@ You can get help in several ways:
 I'll be honest. The high-level Client that was shown in the "Quick Start" section is not a real ATProto API. This is syntax sugar built upon the real XRPC methods! The high-level methods are not cover the full need of developers. To be able to do anything that you want, you should know to work with low-level API. Let's dive into it!
 
 The basics:
+
 - Namespaces – classes that group sub-namespaces and the XRPC queries and procedures. Built upon NSID ATProto semantic.
 - Model – dataclasses for input, output, and params of the methods from namespaces. Models describe Record and all other types in the Lexicon Schemes.
 
@@ -238,9 +240,9 @@ client.login('my-username', 'my-password')
 
 with open('cat.jpg', 'rb') as f:
     img_data = f.read()
-
+    aspect_ratio =  models.AppBskyEmbedDefs.AspectRatio(height=1, width=1)
     upload = client.upload_blob(img_data)
-    images = [models.AppBskyEmbedImages.Image(alt='Img alt', image=upload.blob)]
+    images = [models.AppBskyEmbedImages.Image(alt='Img alt', image=upload.blob, aspect_ratio=aspect_ratio)]
     embed = models.AppBskyEmbedImages.Main(images=images)
 
     client.com.atproto.repo.create_record(
@@ -257,7 +259,7 @@ with open('cat.jpg', 'rb') as f:
     post = models.AppBskyFeedPost.Record(text='Text of the post', embed=embed, created_at=client.get_current_time_iso())
     client.app.bsky.feed.post.create(client.me.did, post)
     # or even high-level client
-    client.send_image(text='Text of the post', image=img_data, image_alt='Img alt')
+    client.send_image(text='Text of the post', image=img_data, image_alt='Img alt', aspect_ratio=aspect_ratio)
     # these three methods are equivalent
 ```
 
