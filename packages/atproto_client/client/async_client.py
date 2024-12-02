@@ -209,11 +209,11 @@ class AsyncClient(
         text: t.Union[str, TextBuilder],
         images: t.List[bytes],
         image_alts: t.Optional[t.List[str]] = None,
-        image_aspect_ratios: t.Optional[t.List['models.AppBskyEmbedDefs.AspectRatio']] = None,
         profile_identify: t.Optional[str] = None,
         reply_to: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
+        image_aspect_ratios: t.Optional[t.List['models.AppBskyEmbedDefs.AspectRatio']] = None,
     ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
         """Send post with multiple attached images (up to 4 images).
 
@@ -272,11 +272,11 @@ class AsyncClient(
         text: t.Union[str, TextBuilder],
         image: bytes,
         image_alt: str,
-        image_aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None,
         profile_identify: t.Optional[str] = None,
         reply_to: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
+        image_aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None,
     ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
         """Send post with attached image.
 
