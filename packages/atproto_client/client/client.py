@@ -215,8 +215,9 @@ class Client(
             text: Text of the post.
             images: List of binary images to attach. The length must be less than or equal to 4.
             image_alts: List of text version of the images.
-                        The length should be shorter than or equal to the length of `images`.
+                The length should be shorter than or equal to the length of `images`.
             image_aspect_ratios: List of aspect ratios of the images.
+                The length should be shorter than or equal to the length of `images`.
             profile_identify: Handle or DID. Where to send post.
             reply_to: Root and parent of the post to reply to.
             langs: List of used languages in the post.
