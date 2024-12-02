@@ -4,20 +4,11 @@ from threading import Lock
 from atproto_core.uri import AtUri
 
 from atproto_client import models
-from atproto_client.client.methods_mixin import (
-    SessionMethodsMixin,
-    TimeMethodsMixin,
-)
-from atproto_client.client.methods_mixin.headers import (
-    HeadersConfigurationMethodsMixin,
-)
+from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
+from atproto_client.client.methods_mixin.headers import HeadersConfigurationMethodsMixin
 from atproto_client.client.methods_mixin.session import SessionDispatchMixin
 from atproto_client.client.raw import ClientRaw
-from atproto_client.client.session import (
-    Session,
-    SessionEvent,
-    SessionResponse,
-)
+from atproto_client.client.session import Session, SessionEvent, SessionResponse
 from atproto_client.exceptions import LoginRequiredError
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
 from atproto_client.utils import TextBuilder
@@ -27,13 +18,7 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
-class Client(
-    SessionDispatchMixin,
-    SessionMethodsMixin,
-    TimeMethodsMixin,
-    HeadersConfigurationMethodsMixin,
-    ClientRaw,
-):
+class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, HeadersConfigurationMethodsMixin, ClientRaw):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args: t.Any, **kwargs: t.Any) -> None:
@@ -65,15 +50,12 @@ class Client(
         self._set_session(SessionEvent.CREATE, session)
         return session
 
-    def _refresh_and_set_session(
-        self,
-    ) -> 'models.ComAtprotoServerRefreshSession.Response':
+    def _refresh_and_set_session(self) -> 'models.ComAtprotoServerRefreshSession.Response':
         if not self._refresh_jwt:
             raise LoginRequiredError
 
         refresh_session = self.com.atproto.server.refresh_session(
-            headers=self._get_auth_headers(self._refresh_jwt),
-            session_refreshing=True,
+            headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
         )
         self._set_session(SessionEvent.REFRESH, refresh_session)
 
@@ -86,10 +68,7 @@ class Client(
         return import_session
 
     def login(
-        self,
-        login: t.Optional[str] = None,
-        password: t.Optional[str] = None,
-        session_string: t.Optional[str] = None,
+        self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
     ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
         """Authorize a client and get profile info.
 
@@ -215,13 +194,13 @@ class Client(
             text: Text of the post.
             images: List of binary images to attach. The length must be less than or equal to 4.
             image_alts: List of text version of the images.
-                The length should be shorter than or equal to the length of `images`.
-            image_aspect_ratios: List of aspect ratios of the images.
-                The length should be shorter than or equal to the length of `images`.
+                        The length should be shorter than or equal to the length of `images`.
             profile_identify: Handle or DID. Where to send post.
             reply_to: Root and parent of the post to reply to.
             langs: List of used languages in the post.
             facets: List of facets (rich text items).
+            image_aspect_ratios: List of aspect ratios of the images.
+                        The length should be shorter than or equal to the length of `images`.
 
         Returns:
             :obj:`models.AppBskyFeedPost.CreateRecordResponse`: Reference to the created record.
@@ -278,11 +257,11 @@ class Client(
             text: Text of the post.
             image: Binary image to attach.
             image_alt: Text version of the image.
-            image_aspect_ratio: Aspect ratio of the image.
             profile_identify: Handle or DID. Where to send post.
             reply_to: Root and parent of the post to reply to.
             langs: List of used languages in the post.
             facets: List of facets (rich text items).
+            image_aspect_ratio: Aspect ratio of the image.
 
         Returns:
             :obj:`models.AppBskyFeedPost.CreateRecordResponse`: Reference to the created record.
@@ -294,11 +273,11 @@ class Client(
             text,
             images=[image],
             image_alts=[image_alt],
-            image_aspect_ratios=[image_aspect_ratio],
             profile_identify=profile_identify,
             reply_to=reply_to,
             langs=langs,
             facets=facets,
+            image_aspect_ratios=[image_aspect_ratio],
         )
 
     def send_video(
@@ -346,10 +325,7 @@ class Client(
         )
 
     def get_post(
-        self,
-        post_rkey: str,
-        profile_identify: t.Optional[str] = None,
-        cid: t.Optional[str] = None,
+        self, post_rkey: str, profile_identify: t.Optional[str] = None, cid: t.Optional[str] = None
     ) -> 'models.AppBskyFeedPost.GetRecordResponse':
         """Get post.
 
@@ -397,10 +373,7 @@ class Client(
         )
 
     def get_post_thread(
-        self,
-        uri: str,
-        depth: t.Optional[int] = None,
-        parent_height: t.Optional[int] = None,
+        self, uri: str, depth: t.Optional[int] = None, parent_height: t.Optional[int] = None
     ) -> 'models.AppBskyFeedGetPostThread.Response':
         """Get post thread.
 
@@ -424,11 +397,7 @@ class Client(
         )
 
     def get_likes(
-        self,
-        uri: str,
-        cid: t.Optional[str] = None,
-        cursor: t.Optional[str] = None,
-        limit: t.Optional[int] = None,
+        self, uri: str, cid: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
     ) -> 'models.AppBskyFeedGetLikes.Response':
         """Get likes.
 
@@ -449,11 +418,7 @@ class Client(
         )
 
     def get_reposted_by(
-        self,
-        uri: str,
-        cid: t.Optional[str] = None,
-        cursor: t.Optional[str] = None,
-        limit: t.Optional[int] = None,
+        self, uri: str, cid: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
     ) -> 'models.AppBskyFeedGetRepostedBy.Response':
         """Get reposted by (reposts).
 
@@ -474,10 +439,7 @@ class Client(
         )
 
     def get_timeline(
-        self,
-        algorithm: t.Optional[str] = None,
-        cursor: t.Optional[str] = None,
-        limit: t.Optional[int] = None,
+        self, algorithm: t.Optional[str] = None, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
     ) -> 'models.AppBskyFeedGetTimeline.Response':
         """Get home timeline.
 
@@ -497,11 +459,7 @@ class Client(
         )
 
     def get_author_feed(
-        self,
-        actor: str,
-        cursor: t.Optional[str] = None,
-        filter: t.Optional[str] = None,
-        limit: t.Optional[int] = None,
+        self, actor: str, cursor: t.Optional[str] = None, filter: t.Optional[str] = None, limit: t.Optional[int] = None
     ) -> 'models.AppBskyFeedGetAuthorFeed.Response':
         """Get author (profile) feed.
 
@@ -633,10 +591,7 @@ class Client(
         return self.app.bsky.graph.follow.delete(uri.hostname, uri.rkey)
 
     def get_follows(
-        self,
-        actor: str,
-        cursor: t.Optional[str] = None,
-        limit: t.Optional[int] = None,
+        self, actor: str, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
     ) -> 'models.AppBskyGraphGetFollows.Response':
         """Get follows of the profile.
 
@@ -656,10 +611,7 @@ class Client(
         )
 
     def get_followers(
-        self,
-        actor: str,
-        cursor: t.Optional[str] = None,
-        limit: t.Optional[int] = None,
+        self, actor: str, cursor: t.Optional[str] = None, limit: t.Optional[int] = None
     ) -> 'models.AppBskyGraphGetFollowers.Response':
         """Get followers of the profile.
 
