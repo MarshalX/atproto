@@ -2,7 +2,7 @@ import types
 import typing as t
 
 import typing_extensions as te
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError
 from pydantic_core import from_json, to_json
 
 from atproto_client import models
@@ -108,7 +108,11 @@ def _get_or_create(
         return model_data
 
     try:
-        return model.model_validate(model_data, context={'strict_string_format': strict_string_format})
+        if issubclass(model, BaseModel):
+            return model.model_validate(model_data, context={'strict_string_format': strict_string_format})
+        if not isinstance(model_data, t.Mapping):
+            raise ModelError(f'Cannot parse model of type {model}')
+        return model(**model_data)
     except ValidationError as e:
         raise ModelError(str(e)) from e
 

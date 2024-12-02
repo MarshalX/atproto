@@ -1,12 +1,13 @@
 import re
 from datetime import datetime
-from typing import Callable, Mapping, Set, Union
+from inspect import signature
+from typing import Mapping, Set, Union, cast
 from urllib.parse import urlparse
 
 from atproto_core.nsid import validate_nsid as atproto_core_validate_nsid
 from pydantic import BeforeValidator, Field, ValidationInfo
 from pydantic_core import core_schema
-from typing_extensions import Annotated, Literal
+from typing_extensions import Annotated, Literal, TypeAlias
 
 _OPT_IN_KEY: Literal['strict_string_format'] = 'strict_string_format'
 
@@ -50,20 +51,29 @@ AT_URI_RE = re.compile(
     r')?$'
 )
 
+WithOrWithoutInfoValidator: TypeAlias = Union[
+    core_schema.WithInfoValidatorFunction, core_schema.NoInfoValidatorFunction
+]
 
-def only_validate_if_strict(validate_fn: core_schema.WithInfoValidatorFunction) -> Callable:
-    """Skip validation if not opting into strict validation."""
+
+def only_validate_if_strict(validate_fn: WithOrWithoutInfoValidator) -> WithOrWithoutInfoValidator:
+    """Skip pydantic validation if not opting into strict validation via context."""
+    params = list(signature(validate_fn).parameters.values())
+    validator_wants_info = len(params) > 1 and params[1].annotation is ValidationInfo
 
     def wrapper(v: str, info: ValidationInfo) -> str:
+        """Could likely be generalized to support arbitrary signatures."""
         if info and isinstance(info.context, Mapping) and info.context.get(_OPT_IN_KEY, False):
-            return validate_fn(v, info)
+            if validator_wants_info:
+                return cast(core_schema.WithInfoValidatorFunction, validate_fn)(v, info)
+            return cast(core_schema.NoInfoValidatorFunction, validate_fn)(v)
         return v
 
     return wrapper
 
 
 @only_validate_if_strict
-def validate_handle(v: str, info: ValidationInfo) -> str:
+def validate_handle(v: str) -> str:
     # Check ASCII first
     if not v.isascii():
         raise ValueError('Invalid handle: must contain only ASCII characters')
@@ -78,7 +88,7 @@ def validate_handle(v: str, info: ValidationInfo) -> str:
 
 
 @only_validate_if_strict
-def validate_did(v: str, info: ValidationInfo) -> str:
+def validate_did(v: str) -> str:
     # Check for invalid characters
     if any(c in v for c in '/?#[]@'):
         raise ValueError('Invalid DID: cannot contain /, ?, #, [, ], or @ characters')
@@ -98,7 +108,7 @@ def validate_did(v: str, info: ValidationInfo) -> str:
 
 
 @only_validate_if_strict
-def validate_nsid(v: str, info: ValidationInfo) -> str:
+def validate_nsid(v: str) -> str:
     if (
         not atproto_core_validate_nsid(v, soft_fail=True)
         or len(v) > MAX_NSID_LENGTH
@@ -113,14 +123,14 @@ def validate_nsid(v: str, info: ValidationInfo) -> str:
 
 
 @only_validate_if_strict
-def validate_language(v: str, info: ValidationInfo) -> str:
+def validate_language(v: str) -> str:
     if not LANG_RE.match(v):
         raise ValueError('Invalid language code: must be ISO language code (e.g. en or en-US)')
     return v
 
 
 @only_validate_if_strict
-def validate_record_key(v: str, info: ValidationInfo) -> str:
+def validate_record_key(v: str) -> str:
     if v in INVALID_RECORD_KEYS or not RKEY_RE.match(v):
         raise ValueError(
             'Invalid record key: must contain only alphanumeric, dot, underscore, colon, tilde, or hyphen characters'
@@ -129,14 +139,14 @@ def validate_record_key(v: str, info: ValidationInfo) -> str:
 
 
 @only_validate_if_strict
-def validate_cid(v: str, info: ValidationInfo) -> str:
+def validate_cid(v: str) -> str:
     if not CID_RE.match(v):
         raise ValueError('Invalid CID: must be a valid Content Identifier with minimum length 8')
     return v
 
 
 @only_validate_if_strict
-def validate_at_uri(v: str, info: ValidationInfo) -> str:
+def validate_at_uri(v: str) -> str:
     if len(v) >= MAX_AT_URI_LENGTH:
         raise ValueError(f'Invalid AT-URI: must be under {MAX_AT_URI_LENGTH} chars')
 
@@ -147,7 +157,7 @@ def validate_at_uri(v: str, info: ValidationInfo) -> str:
 
 
 @only_validate_if_strict
-def validate_datetime(v: str, info: ValidationInfo) -> str:
+def validate_datetime(v: str) -> str:
     # Must contain uppercase T and Z if used
     if v != v.strip():
         raise ValueError('Invalid datetime: no whitespace allowed')
@@ -180,14 +190,14 @@ def validate_datetime(v: str, info: ValidationInfo) -> str:
 
 
 @only_validate_if_strict
-def validate_tid(v: str, info: ValidationInfo) -> str:
+def validate_tid(v: str) -> str:
     if not TID_RE.match(v) or (ord(v[0]) & 0x40):
         raise ValueError(f'Invalid TID: must be exactly {TID_LENGTH} lowercase letters/numbers')
     return v
 
 
 @only_validate_if_strict
-def validate_uri(v: str, info: ValidationInfo) -> str:
+def validate_uri(v: str) -> str:
     if len(v) >= MAX_URI_LENGTH or ' ' in v:
         raise ValueError(f'Invalid URI: must be under {MAX_URI_LENGTH} chars and not contain spaces')
     parsed = urlparse(v)
@@ -212,7 +222,7 @@ Tid = Annotated[str, BeforeValidator(validate_tid)]
 Uri = Annotated[str, BeforeValidator(validate_uri)]
 
 # Any valid ATProto string format
-ATProtoString = Annotated[
+AtProtoString = Annotated[
     Union[Handle, Did, Nsid, AtUri, Cid, DateTime, Tid, RecordKey, Uri, Language],
     Field(description='ATProto string format'),
 ]
