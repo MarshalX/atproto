@@ -12,6 +12,9 @@ def main() -> None:
         'of the image (ALT)',
         'This parameter is optional',
     ]
+
+    # Add image aspect ratio to prevent default 1:1 aspect ratio
+    # Replace with your desired aspect ratio
     image_aspect_ratios = [
         models.AppBskyEmbedDefs.AspectRatio(height=1, width=1),
         models.AppBskyEmbedDefs.AspectRatio(height=4, width=3),

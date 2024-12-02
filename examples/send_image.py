@@ -9,6 +9,8 @@ def main() -> None:
     with open('cat.jpg', 'rb') as f:
         img_data = f.read()
 
+    # Add image aspect ratio to prevent default 1:1 aspect ratio
+    # Replace with your desired aspect ratio
     aspect_ratio = models.AppBskyEmbedDefs.AspectRatio(height=100, width=100)
 
     client.send_image(
