@@ -1,13 +1,12 @@
 import re
 from datetime import datetime
-from inspect import signature
-from typing import Mapping, Set, Union, cast
+from typing import Callable, Mapping, Set, Union, cast
 from urllib.parse import urlparse
 
 from atproto_core.nsid import validate_nsid as atproto_core_validate_nsid
 from pydantic import BeforeValidator, Field, ValidationInfo
 from pydantic_core import core_schema
-from typing_extensions import Annotated, Literal, TypeAlias
+from typing_extensions import Annotated, Literal
 
 _OPT_IN_KEY: Literal['strict_string_format'] = 'strict_string_format'
 
@@ -51,21 +50,13 @@ AT_URI_RE = re.compile(
     r')?$'
 )
 
-WithOrWithoutInfoValidator: TypeAlias = Union[
-    core_schema.WithInfoValidatorFunction, core_schema.NoInfoValidatorFunction
-]
 
-
-def only_validate_if_strict(validate_fn: WithOrWithoutInfoValidator) -> WithOrWithoutInfoValidator:
+def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., str]:
     """Skip pydantic validation if not opting into strict validation via context."""
-    params = list(signature(validate_fn).parameters.values())
-    validator_wants_info = len(params) > 1 and params[1].annotation is ValidationInfo
 
     def wrapper(v: str, info: ValidationInfo) -> str:
         """Could likely be generalized to support arbitrary signatures."""
         if info and isinstance(info.context, Mapping) and info.context.get(_OPT_IN_KEY, False):
-            if validator_wants_info:
-                return cast(core_schema.WithInfoValidatorFunction, validate_fn)(v, info)
             return cast(core_schema.NoInfoValidatorFunction, validate_fn)(v)
         return v
 
