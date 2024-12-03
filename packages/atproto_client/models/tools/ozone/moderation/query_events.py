@@ -27,7 +27,9 @@ class Params(base.ParamsModelBase):
     collections: t.Optional[t.List[str]] = Field(
         default=None, max_length=20
     )  #: If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
-    comment: t.Optional[str] = None  #: If specified, only events with comments containing the keyword are returned.
+    comment: t.Optional[str] = (
+        None  #: If specified, only events with comments containing the keyword are returned. Apply || separator to use multiple keywords and match using OR condition.
+    )
     created_after: t.Optional[str] = None  #: Retrieve events created after a given timestamp.
     created_before: t.Optional[str] = None  #: Retrieve events created before a given timestamp.
     created_by: t.Optional[str] = None  #: Created by.
@@ -68,7 +70,7 @@ class ParamsDict(t.TypedDict):
     ]  #: If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
     comment: te.NotRequired[
         t.Optional[str]
-    ]  #: If specified, only events with comments containing the keyword are returned.
+    ]  #: If specified, only events with comments containing the keyword are returned. Apply || separator to use multiple keywords and match using OR condition.
     created_after: te.NotRequired[t.Optional[str]]  #: Retrieve events created after a given timestamp.
     created_before: te.NotRequired[t.Optional[str]]  #: Retrieve events created before a given timestamp.
     created_by: te.NotRequired[t.Optional[str]]  #: Created by.
