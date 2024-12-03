@@ -183,6 +183,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         reply_to: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
+        image_aspect_ratios: t.Optional[t.List['models.AppBskyEmbedDefs.AspectRatio']] = None,
     ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
         """Send post with multiple attached images (up to 4 images).
 
@@ -198,6 +199,8 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             reply_to: Root and parent of the post to reply to.
             langs: List of used languages in the post.
             facets: List of facets (rich text items).
+            image_aspect_ratios: List of aspect ratios of the images.
+                        The length should be shorter than or equal to the length of `images`.
 
         Returns:
             :obj:`models.AppBskyFeedPost.CreateRecordResponse`: Reference to the created record.
@@ -212,9 +215,17 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             diff = len(images) - len(image_alts)
             image_alts = image_alts + [''] * diff  # [''] * (minus) => []
 
+        if image_aspect_ratios is None:
+            image_aspect_ratios = [None] * len(images)
+        else:
+            # padding with None if len is insufficient
+            diff = len(images) - len(image_aspect_ratios)
+            image_aspect_ratios = image_aspect_ratios + [None] * diff
+
         uploads = [self.upload_blob(image) for image in images]
         embed_images = [
-            models.AppBskyEmbedImages.Image(alt=alt, image=upload.blob) for alt, upload in zip(image_alts, uploads)
+            models.AppBskyEmbedImages.Image(alt=alt, image=upload.blob, aspect_ratio=aspect_ratio)
+            for alt, upload, aspect_ratio in zip(image_alts, uploads, image_aspect_ratios)
         ]
 
         return self.send_post(
@@ -235,6 +246,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         reply_to: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
+        image_aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None,
     ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
         """Send post with attached image.
 
@@ -249,6 +261,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             reply_to: Root and parent of the post to reply to.
             langs: List of used languages in the post.
             facets: List of facets (rich text items).
+            image_aspect_ratio: Aspect ratio of the image.
 
         Returns:
             :obj:`models.AppBskyFeedPost.CreateRecordResponse`: Reference to the created record.
@@ -264,6 +277,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             reply_to=reply_to,
             langs=langs,
             facets=facets,
+            image_aspect_ratios=[image_aspect_ratio],
         )
 
     def send_video(

@@ -1,4 +1,4 @@
-from atproto import Client
+from atproto import Client, models
 
 
 def main() -> None:
@@ -9,7 +9,16 @@ def main() -> None:
     with open('cat.jpg', 'rb') as f:
         img_data = f.read()
 
-    client.send_image(text='Post with image from Python', image=img_data, image_alt='Text version of the image (ALT)')
+    # Add image aspect ratio to prevent default 1:1 aspect ratio
+    # Replace with your desired aspect ratio
+    aspect_ratio = models.AppBskyEmbedDefs.AspectRatio(height=100, width=100)
+
+    client.send_image(
+        text='Post with image from Python',
+        image=img_data,
+        image_alt='Text version of the image (ALT)',
+        image_aspect_ratio=aspect_ratio,
+    )
 
 
 if __name__ == '__main__':
