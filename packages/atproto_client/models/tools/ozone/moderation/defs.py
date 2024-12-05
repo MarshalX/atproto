@@ -248,6 +248,9 @@ class ModEventLabel(base.ModelBase):
 class ModEventAcknowledge(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
+    acknowledge_account_subjects: t.Optional[bool] = (
+        None  #: If true, all other reports on content authored by this account will be resolved (acknowledged).
+    )
     comment: t.Optional[str] = None  #: Comment.
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventAcknowledge'] = Field(
