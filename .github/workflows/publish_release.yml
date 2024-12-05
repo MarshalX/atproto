@@ -22,6 +22,7 @@ jobs:
             install.python-poetry.org
             pypi.org
             upload.pypi.org
+            *.sigstore.dev
 
       - name: Checkout repository.
         uses: actions/checkout@v4
