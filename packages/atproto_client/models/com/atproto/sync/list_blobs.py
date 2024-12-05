@@ -10,20 +10,20 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.listBlobs`."""
 
-    did: str  #: The DID of the repo.
+    did: string_formats.Did  #: The DID of the repo.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=500, ge=1, le=1000)  #: Limit.
     since: t.Optional[str] = None  #: Optional revision of the repo to list blobs since.
 
 
 class ParamsDict(t.TypedDict):
-    did: str  #: The DID of the repo.
+    did: string_formats.Did  #: The DID of the repo.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     since: te.NotRequired[t.Optional[str]]  #: Optional revision of the repo to list blobs since.
@@ -32,5 +32,5 @@ class ParamsDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.sync.listBlobs`."""
 
-    cids: t.List[str]  #: Cids.
+    cids: t.List[string_formats.Cid]  #: Cids.
     cursor: t.Optional[str] = None  #: Cursor.

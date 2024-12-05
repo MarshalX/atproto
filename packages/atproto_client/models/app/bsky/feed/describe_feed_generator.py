@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,7 +19,7 @@ from atproto_client.models import base
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.feed.describeFeedGenerator`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     feeds: t.List['models.AppBskyFeedDescribeFeedGenerator.Feed']  #: Feeds.
     links: t.Optional['models.AppBskyFeedDescribeFeedGenerator.Links'] = None  #: Links.
 
@@ -25,7 +27,7 @@ class Response(base.ResponseModelBase):
 class Feed(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.describeFeedGenerator`."""
 
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
 
     py_type: t.Literal['app.bsky.feed.describeFeedGenerator#feed'] = Field(
         default='app.bsky.feed.describeFeedGenerator#feed', alias='$type', frozen=True

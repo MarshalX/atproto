@@ -9,18 +9,18 @@ import typing as t
 
 from pydantic import Field
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.setting.removeOptions`."""
 
-    keys: t.List[str] = Field(min_length=1, max_length=200)  #: Keys.
+    keys: t.List[string_formats.Nsid] = Field(min_length=1, max_length=200)  #: Keys.
     scope: t.Union[t.Literal['instance'], t.Literal['personal'], str]  #: Scope.
 
 
 class DataDict(t.TypedDict):
-    keys: t.List[str]  #: Keys.
+    keys: t.List[string_formats.Nsid]  #: Keys.
     scope: t.Union[t.Literal['instance'], t.Literal['personal'], str]  #: Scope.
 
 

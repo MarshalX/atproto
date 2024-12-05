@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.blob_ref import BlobRef
@@ -28,7 +30,7 @@ class External(base.ModelBase):
 
     description: str  #: Description.
     title: str  #: Title.
-    uri: str  #: Uri.
+    uri: string_formats.Uri  #: Uri.
     thumb: t.Optional['BlobRef'] = None  #: Thumb.
 
     py_type: t.Literal['app.bsky.embed.external#external'] = Field(
@@ -51,8 +53,8 @@ class ViewExternal(base.ModelBase):
 
     description: str  #: Description.
     title: str  #: Title.
-    uri: str  #: Uri.
-    thumb: t.Optional[str] = None  #: Thumb.
+    uri: string_formats.Uri  #: Uri.
+    thumb: t.Optional[string_formats.Uri] = None  #: Thumb.
 
     py_type: t.Literal['app.bsky.embed.external#viewExternal'] = Field(
         default='app.bsky.embed.external#viewExternal', alias='$type', frozen=True

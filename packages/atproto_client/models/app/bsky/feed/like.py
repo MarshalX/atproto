@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,7 +19,7 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.feed.like`."""
 
-    created_at: str  #: Created at.
+    created_at: string_formats.DateTime  #: Created at.
     subject: 'models.ComAtprotoRepoStrongRef.Main'  #: Subject.
 
     py_type: t.Literal['app.bsky.feed.like'] = Field(default='app.bsky.feed.like', alias='$type', frozen=True)

@@ -7,6 +7,8 @@
 
 import typing as t
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -15,11 +17,11 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.graph.getStarterPack`."""
 
-    starter_pack: str  #: Reference (AT-URI) of the starter pack record.
+    starter_pack: string_formats.AtUri  #: Reference (AT-URI) of the starter pack record.
 
 
 class ParamsDict(t.TypedDict):
-    starter_pack: str  #: Reference (AT-URI) of the starter pack record.
+    starter_pack: string_formats.AtUri  #: Reference (AT-URI) of the starter pack record.
 
 
 class Response(base.ResponseModelBase):

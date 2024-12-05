@@ -9,19 +9,19 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.notification.getUnreadCount`."""
 
     priority: t.Optional[bool] = None  #: Priority.
-    seen_at: t.Optional[str] = None  #: Seen at.
+    seen_at: t.Optional[string_formats.DateTime] = None  #: Seen at.
 
 
 class ParamsDict(t.TypedDict):
     priority: te.NotRequired[t.Optional[bool]]  #: Priority.
-    seen_at: te.NotRequired[t.Optional[str]]  #: Seen at.
+    seen_at: te.NotRequired[t.Optional[string_formats.DateTime]]  #: Seen at.
 
 
 class Response(base.ResponseModelBase):

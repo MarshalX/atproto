@@ -9,17 +9,17 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.getCheckout`."""
 
-    did: str  #: The DID of the repo.
+    did: string_formats.Did  #: The DID of the repo.
 
 
 class ParamsDict(t.TypedDict):
-    did: str  #: The DID of the repo.
+    did: string_formats.Did  #: The DID of the repo.
 
 
 #: Response raw data type.

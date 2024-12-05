@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -37,8 +39,8 @@ class Response(base.ResponseModelBase):
 class Repo(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.listRepos`."""
 
-    did: str  #: Did.
-    head: str  #: Current repo commit CID.
+    did: string_formats.Did  #: Did.
+    head: string_formats.Cid  #: Current repo commit CID.
     rev: str  #: Rev.
     active: t.Optional[bool] = None  #: Active.
     status: t.Optional[t.Union[t.Literal['takendown'], t.Literal['suspended'], t.Literal['deactivated'], str]] = (

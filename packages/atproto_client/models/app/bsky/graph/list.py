@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.blob_ref import BlobRef
@@ -19,7 +21,7 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.graph.list`."""
 
-    created_at: str  #: Created at.
+    created_at: string_formats.DateTime  #: Created at.
     name: str = Field(min_length=1, max_length=64)  #: Display name for list; can not be empty.
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Defines the purpose of the list (aka, moderation-oriented or curration-oriented).
     avatar: t.Optional['BlobRef'] = None  #: Avatar.

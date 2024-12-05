@@ -7,16 +7,16 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.updateAccountHandle`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.
 
 
 class DataDict(t.TypedDict):
-    did: str  #: Did.
-    handle: str  #: Handle.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.

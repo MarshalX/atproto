@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
@@ -19,8 +21,8 @@ from atproto_client.models import base
 class ModEventView(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    created_at: str  #: Created at.
-    created_by: str  #: Created by.
+    created_at: string_formats.DateTime  #: Created at.
+    created_by: string_formats.Did  #: Created by.
     event: te.Annotated[
         t.Union[
             'models.ToolsOzoneModerationDefs.ModEventTakedown',
@@ -65,8 +67,8 @@ class ModEventView(base.ModelBase):
 class ModEventViewDetail(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    created_at: str  #: Created at.
-    created_by: str  #: Created by.
+    created_at: string_formats.DateTime  #: Created at.
+    created_by: string_formats.Did  #: Created by.
     event: te.Annotated[
         t.Union[
             'models.ToolsOzoneModerationDefs.ModEventTakedown',
@@ -110,14 +112,18 @@ class ModEventViewDetail(base.ModelBase):
 class SubjectStatusView(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    created_at: str  #: Timestamp referencing the first moderation status impacting event was emitted on the subject.
+    created_at: (
+        string_formats.DateTime
+    )  #: Timestamp referencing the first moderation status impacting event was emitted on the subject.
     id: int  #: Id.
     review_state: 'models.ToolsOzoneModerationDefs.SubjectReviewState'  #: Review state.
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    updated_at: str  #: Timestamp referencing when the last update was made to the moderation status of the subject.
+    updated_at: (
+        string_formats.DateTime
+    )  #: Timestamp referencing when the last update was made to the moderation status of the subject.
     appealed: t.Optional[bool] = (
         None  #: True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators.
     )
@@ -128,17 +134,17 @@ class SubjectStatusView(base.ModelBase):
             Field(default=None, discriminator='py_type'),
         ]
     ] = None  #: Hosting.
-    last_appealed_at: t.Optional[str] = (
+    last_appealed_at: t.Optional[string_formats.DateTime] = (
         None  #: Timestamp referencing when the author of the subject appealed a moderation action.
     )
-    last_reported_at: t.Optional[str] = None  #: Last reported at.
-    last_reviewed_at: t.Optional[str] = None  #: Last reviewed at.
-    last_reviewed_by: t.Optional[str] = None  #: Last reviewed by.
-    mute_reporting_until: t.Optional[str] = None  #: Mute reporting until.
-    mute_until: t.Optional[str] = None  #: Mute until.
-    subject_blob_cids: t.Optional[t.List[str]] = None  #: Subject blob cids.
+    last_reported_at: t.Optional[string_formats.DateTime] = None  #: Last reported at.
+    last_reviewed_at: t.Optional[string_formats.DateTime] = None  #: Last reviewed at.
+    last_reviewed_by: t.Optional[string_formats.Did] = None  #: Last reviewed by.
+    mute_reporting_until: t.Optional[string_formats.DateTime] = None  #: Mute reporting until.
+    mute_until: t.Optional[string_formats.DateTime] = None  #: Mute until.
+    subject_blob_cids: t.Optional[t.List[string_formats.Cid]] = None  #: Subject blob cids.
     subject_repo_handle: t.Optional[str] = None  #: Subject repo handle.
-    suspend_until: t.Optional[str] = None  #: Suspend until.
+    suspend_until: t.Optional[string_formats.DateTime] = None  #: Suspend until.
     tags: t.Optional[t.List[str]] = None  #: Tags.
     takendown: t.Optional[bool] = None  #: Takendown.
 
@@ -352,7 +358,7 @@ class AccountEvent(base.ModelBase):
     active: (
         bool  #: Indicates that the account has a repository which can be fetched from the host that emitted this event.
     )
-    timestamp: str  #: Timestamp.
+    timestamp: string_formats.DateTime  #: Timestamp.
     comment: t.Optional[str] = None  #: Comment.
     status: t.Optional[
         t.Union[
@@ -374,10 +380,10 @@ class AccountEvent(base.ModelBase):
 class IdentityEvent(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`. Logs identity related events on a repo subject. Normally captured by automod from the firehose and emitted to ozone for historical tracking."""
 
-    timestamp: str  #: Timestamp.
+    timestamp: string_formats.DateTime  #: Timestamp.
     comment: t.Optional[str] = None  #: Comment.
-    handle: t.Optional[str] = None  #: Handle.
-    pds_host: t.Optional[str] = None  #: Pds host.
+    handle: t.Optional[string_formats.Handle] = None  #: Handle.
+    pds_host: t.Optional[string_formats.Uri] = None  #: Pds host.
     tombstone: t.Optional[bool] = None  #: Tombstone.
 
     py_type: t.Literal['tools.ozone.moderation.defs#identityEvent'] = Field(
@@ -389,8 +395,8 @@ class RecordEvent(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`. Logs lifecycle event on a record subject. Normally captured by automod from the firehose and emitted to ozone for historical tracking."""
 
     op: t.Union[t.Literal['create'], t.Literal['update'], t.Literal['delete'], str]  #: Op.
-    timestamp: str  #: Timestamp.
-    cid: t.Optional[str] = None  #: Cid.
+    timestamp: string_formats.DateTime  #: Timestamp.
+    cid: t.Optional[string_formats.Cid] = None  #: Cid.
     comment: t.Optional[str] = None  #: Comment.
 
     py_type: t.Literal['tools.ozone.moderation.defs#recordEvent'] = Field(
@@ -401,12 +407,12 @@ class RecordEvent(base.ModelBase):
 class RepoView(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
-    indexed_at: str  #: Indexed at.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.
+    indexed_at: string_formats.DateTime  #: Indexed at.
     moderation: 'models.ToolsOzoneModerationDefs.Moderation'  #: Moderation.
     related_records: t.List['UnknownType']  #: Related records.
-    deactivated_at: t.Optional[str] = None  #: Deactivated at.
+    deactivated_at: t.Optional[string_formats.DateTime] = None  #: Deactivated at.
     email: t.Optional[str] = None  #: Email.
     invite_note: t.Optional[str] = None  #: Invite note.
     invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
@@ -421,14 +427,14 @@ class RepoView(base.ModelBase):
 class RepoViewDetail(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
-    indexed_at: str  #: Indexed at.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.
+    indexed_at: string_formats.DateTime  #: Indexed at.
     moderation: 'models.ToolsOzoneModerationDefs.ModerationDetail'  #: Moderation.
     related_records: t.List['UnknownType']  #: Related records.
-    deactivated_at: t.Optional[str] = None  #: Deactivated at.
+    deactivated_at: t.Optional[string_formats.DateTime] = None  #: Deactivated at.
     email: t.Optional[str] = None  #: Email.
-    email_confirmed_at: t.Optional[str] = None  #: Email confirmed at.
+    email_confirmed_at: t.Optional[string_formats.DateTime] = None  #: Email confirmed at.
     invite_note: t.Optional[str] = None  #: Invite note.
     invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
     invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
@@ -444,7 +450,7 @@ class RepoViewDetail(base.ModelBase):
 class RepoViewNotFound(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
 
     py_type: t.Literal['tools.ozone.moderation.defs#repoViewNotFound'] = Field(
         default='tools.ozone.moderation.defs#repoViewNotFound', alias='$type', frozen=True
@@ -454,12 +460,12 @@ class RepoViewNotFound(base.ModelBase):
 class RecordView(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    blob_cids: t.List[str]  #: Blob cids.
-    cid: str  #: Cid.
-    indexed_at: str  #: Indexed at.
+    blob_cids: t.List[string_formats.Cid]  #: Blob cids.
+    cid: string_formats.Cid  #: Cid.
+    indexed_at: string_formats.DateTime  #: Indexed at.
     moderation: 'models.ToolsOzoneModerationDefs.Moderation'  #: Moderation.
     repo: 'models.ToolsOzoneModerationDefs.RepoView'  #: Repo.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
     value: 'UnknownType'  #: Value.
 
     py_type: t.Literal['tools.ozone.moderation.defs#recordView'] = Field(
@@ -471,11 +477,11 @@ class RecordViewDetail(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
     blobs: t.List['models.ToolsOzoneModerationDefs.BlobView']  #: Blobs.
-    cid: str  #: Cid.
-    indexed_at: str  #: Indexed at.
+    cid: string_formats.Cid  #: Cid.
+    indexed_at: string_formats.DateTime  #: Indexed at.
     moderation: 'models.ToolsOzoneModerationDefs.ModerationDetail'  #: Moderation.
     repo: 'models.ToolsOzoneModerationDefs.RepoView'  #: Repo.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
     value: 'UnknownType'  #: Value.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
 
@@ -487,7 +493,7 @@ class RecordViewDetail(base.ModelBase):
 class RecordViewNotFound(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
 
     py_type: t.Literal['tools.ozone.moderation.defs#recordViewNotFound'] = Field(
         default='tools.ozone.moderation.defs#recordViewNotFound', alias='$type', frozen=True
@@ -517,8 +523,8 @@ class ModerationDetail(base.ModelBase):
 class BlobView(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    cid: str  #: Cid.
-    created_at: str  #: Created at.
+    cid: string_formats.Cid  #: Cid.
+    created_at: string_formats.DateTime  #: Created at.
     mime_type: str  #: Mime type.
     size: int  #: Size.
     details: t.Optional[
@@ -568,11 +574,11 @@ class AccountHosting(base.ModelBase):
         t.Literal['unknown'],
         str,
     ]  #: Status.
-    created_at: t.Optional[str] = None  #: Created at.
-    deactivated_at: t.Optional[str] = None  #: Deactivated at.
-    deleted_at: t.Optional[str] = None  #: Deleted at.
-    reactivated_at: t.Optional[str] = None  #: Reactivated at.
-    updated_at: t.Optional[str] = None  #: Updated at.
+    created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
+    deactivated_at: t.Optional[string_formats.DateTime] = None  #: Deactivated at.
+    deleted_at: t.Optional[string_formats.DateTime] = None  #: Deleted at.
+    reactivated_at: t.Optional[string_formats.DateTime] = None  #: Reactivated at.
+    updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
 
     py_type: t.Literal['tools.ozone.moderation.defs#accountHosting'] = Field(
         default='tools.ozone.moderation.defs#accountHosting', alias='$type', frozen=True
@@ -583,9 +589,9 @@ class RecordHosting(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
     status: t.Union[t.Literal['deleted'], t.Literal['unknown'], str]  #: Status.
-    created_at: t.Optional[str] = None  #: Created at.
-    deleted_at: t.Optional[str] = None  #: Deleted at.
-    updated_at: t.Optional[str] = None  #: Updated at.
+    created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
+    deleted_at: t.Optional[string_formats.DateTime] = None  #: Deleted at.
+    updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
 
     py_type: t.Literal['tools.ozone.moderation.defs#recordHosting'] = Field(
         default='tools.ozone.moderation.defs#recordHosting', alias='$type', frozen=True

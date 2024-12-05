@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -23,7 +25,7 @@ class Params(base.ParamsModelBase):
     ]  #: List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=250)  #: Limit.
-    sources: t.Optional[t.List[str]] = None  #: Optional list of label sources (DIDs) to filter on.
+    sources: t.Optional[t.List[string_formats.Did]] = None  #: Optional list of label sources (DIDs) to filter on.
 
 
 class ParamsDict(t.TypedDict):
@@ -32,7 +34,9 @@ class ParamsDict(t.TypedDict):
     ]  #: List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
-    sources: te.NotRequired[t.Optional[t.List[str]]]  #: Optional list of label sources (DIDs) to filter on.
+    sources: te.NotRequired[
+        t.Optional[t.List[string_formats.Did]]
+    ]  #: Optional list of label sources (DIDs) to filter on.
 
 
 class Response(base.ResponseModelBase):

@@ -9,14 +9,14 @@ import typing as t
 
 from pydantic import Field
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Main(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.strongRef`."""
 
-    cid: str  #: Cid.
-    uri: str  #: Uri.
+    cid: string_formats.Cid  #: Cid.
+    uri: string_formats.AtUri  #: Uri.
 
     py_type: t.Literal['com.atproto.repo.strongRef'] = Field(
         default='com.atproto.repo.strongRef', alias='$type', frozen=True

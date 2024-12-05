@@ -29,6 +29,7 @@ Submodules
    atproto_client.models.dot_dict
    atproto_client.models.languages
    atproto_client.models.models_loader
+   atproto_client.models.string_formats
    atproto_client.models.type_conversion
    atproto_client.models.unknown_type
    atproto_client.models.utils

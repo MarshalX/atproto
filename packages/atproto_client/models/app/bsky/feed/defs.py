@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
@@ -20,10 +22,10 @@ class PostView(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
-    cid: str  #: Cid.
-    indexed_at: str  #: Indexed at.
+    cid: string_formats.Cid  #: Cid.
+    indexed_at: string_formats.DateTime  #: Indexed at.
     record: 'UnknownType'  #: Record.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
     embed: t.Optional[
         te.Annotated[
             t.Union[
@@ -53,10 +55,10 @@ class ViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`. Metadata about the requesting account's relationship with the subject content. Only has meaningful content for authed requests."""
 
     embedding_disabled: t.Optional[bool] = None  #: Embedding disabled.
-    like: t.Optional[str] = None  #: Like.
+    like: t.Optional[string_formats.AtUri] = None  #: Like.
     pinned: t.Optional[bool] = None  #: Pinned.
     reply_disabled: t.Optional[bool] = None  #: Reply disabled.
-    repost: t.Optional[str] = None  #: Repost.
+    repost: t.Optional[string_formats.AtUri] = None  #: Repost.
     thread_muted: t.Optional[bool] = None  #: Thread muted.
 
     py_type: t.Literal['app.bsky.feed.defs#viewerState'] = Field(
@@ -116,7 +118,7 @@ class ReasonRepost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     by: 'models.AppBskyActorDefs.ProfileViewBasic'  #: By.
-    indexed_at: str  #: Indexed at.
+    indexed_at: string_formats.DateTime  #: Indexed at.
 
     py_type: t.Literal['app.bsky.feed.defs#reasonRepost'] = Field(
         default='app.bsky.feed.defs#reasonRepost', alias='$type', frozen=True
@@ -167,7 +169,7 @@ class NotFoundPost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     not_found: bool = Field(frozen=True)  #: Not found.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
 
     py_type: t.Literal['app.bsky.feed.defs#notFoundPost'] = Field(
         default='app.bsky.feed.defs#notFoundPost', alias='$type', frozen=True
@@ -179,7 +181,7 @@ class BlockedPost(base.ModelBase):
 
     author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.
     blocked: bool = Field(frozen=True)  #: Blocked.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
 
     py_type: t.Literal['app.bsky.feed.defs#blockedPost'] = Field(
         default='app.bsky.feed.defs#blockedPost', alias='$type', frozen=True
@@ -189,7 +191,7 @@ class BlockedPost(base.ModelBase):
 class BlockedAuthor(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.feed.defs#blockedAuthor'] = Field(
@@ -200,14 +202,14 @@ class BlockedAuthor(base.ModelBase):
 class GeneratorView(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    cid: str  #: Cid.
+    cid: string_formats.Cid  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     display_name: str  #: Display name.
-    indexed_at: str  #: Indexed at.
-    uri: str  #: Uri.
+    indexed_at: string_formats.DateTime  #: Indexed at.
+    uri: string_formats.AtUri  #: Uri.
     accepts_interactions: t.Optional[bool] = None  #: Accepts interactions.
-    avatar: t.Optional[str] = None  #: Avatar.
+    avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
@@ -222,7 +224,7 @@ class GeneratorView(base.ModelBase):
 class GeneratorViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    like: t.Optional[str] = None  #: Like.
+    like: t.Optional[string_formats.AtUri] = None  #: Like.
 
     py_type: t.Literal['app.bsky.feed.defs#generatorViewerState'] = Field(
         default='app.bsky.feed.defs#generatorViewerState', alias='$type', frozen=True
@@ -232,7 +234,7 @@ class GeneratorViewerState(base.ModelBase):
 class SkeletonFeedPost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    post: str  #: Post.
+    post: string_formats.AtUri  #: Post.
     feed_context: t.Optional[str] = Field(
         default=None, max_length=2000
     )  #: Context that will be passed through to client and may be passed to feed generator back alongside interactions.
@@ -251,7 +253,7 @@ class SkeletonFeedPost(base.ModelBase):
 class SkeletonReasonRepost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    repost: str  #: Repost.
+    repost: string_formats.AtUri  #: Repost.
 
     py_type: t.Literal['app.bsky.feed.defs#skeletonReasonRepost'] = Field(
         default='app.bsky.feed.defs#skeletonReasonRepost', alias='$type', frozen=True
@@ -269,10 +271,10 @@ class SkeletonReasonPin(base.ModelBase):
 class ThreadgateView(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    cid: t.Optional[str] = None  #: Cid.
+    cid: t.Optional[string_formats.Cid] = None  #: Cid.
     lists: t.Optional[t.List['models.AppBskyGraphDefs.ListViewBasic']] = None  #: Lists.
     record: t.Optional['UnknownType'] = None  #: Record.
-    uri: t.Optional[str] = None  #: Uri.
+    uri: t.Optional[string_formats.AtUri] = None  #: Uri.
 
     py_type: t.Literal['app.bsky.feed.defs#threadgateView'] = Field(
         default='app.bsky.feed.defs#threadgateView', alias='$type', frozen=True
@@ -302,7 +304,7 @@ class Interaction(base.ModelBase):
     feed_context: t.Optional[str] = Field(
         default=None, max_length=2000
     )  #: Context on a feed item that was originally supplied by the feed generator on getFeedSkeleton.
-    item: t.Optional[str] = None  #: Item.
+    item: t.Optional[string_formats.AtUri] = None  #: Item.
 
     py_type: t.Literal['app.bsky.feed.defs#interaction'] = Field(
         default='app.bsky.feed.defs#interaction', alias='$type', frozen=True

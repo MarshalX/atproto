@@ -7,14 +7,14 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.team.deleteMember`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
 
 
 class DataDict(t.TypedDict):
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.

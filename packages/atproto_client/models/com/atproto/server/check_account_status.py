@@ -5,7 +5,7 @@
 ##################################################################
 
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Response(base.ResponseModelBase):
@@ -17,6 +17,6 @@ class Response(base.ResponseModelBase):
     indexed_records: int  #: Indexed records.
     private_state_values: int  #: Private state values.
     repo_blocks: int  #: Repo blocks.
-    repo_commit: str  #: Repo commit.
+    repo_commit: string_formats.Cid  #: Repo commit.
     repo_rev: str  #: Repo rev.
     valid_did: bool  #: Valid did.

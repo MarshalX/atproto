@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
@@ -22,14 +24,14 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     priority: t.Optional[bool] = None  #: Priority.
-    seen_at: t.Optional[str] = None  #: Seen at.
+    seen_at: t.Optional[string_formats.DateTime] = None  #: Seen at.
 
 
 class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     priority: te.NotRequired[t.Optional[bool]]  #: Priority.
-    seen_at: te.NotRequired[t.Optional[str]]  #: Seen at.
+    seen_at: te.NotRequired[t.Optional[string_formats.DateTime]]  #: Seen at.
 
 
 class Response(base.ResponseModelBase):
@@ -38,15 +40,15 @@ class Response(base.ResponseModelBase):
     notifications: t.List['models.AppBskyNotificationListNotifications.Notification']  #: Notifications.
     cursor: t.Optional[str] = None  #: Cursor.
     priority: t.Optional[bool] = None  #: Priority.
-    seen_at: t.Optional[str] = None  #: Seen at.
+    seen_at: t.Optional[string_formats.DateTime] = None  #: Seen at.
 
 
 class Notification(base.ModelBase):
     """Definition model for :obj:`app.bsky.notification.listNotifications`."""
 
     author: 'models.AppBskyActorDefs.ProfileView'  #: Author.
-    cid: str  #: Cid.
-    indexed_at: str  #: Indexed at.
+    cid: string_formats.Cid  #: Cid.
+    indexed_at: string_formats.DateTime  #: Indexed at.
     is_read: bool  #: Is read.
     reason: t.Union[
         t.Literal['like'],
@@ -59,9 +61,9 @@ class Notification(base.ModelBase):
         str,
     ]  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', 'quote', and 'starterpack-joined'.
     record: 'UnknownType'  #: Record.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    reason_subject: t.Optional[str] = None  #: Reason subject.
+    reason_subject: t.Optional[string_formats.AtUri] = None  #: Reason subject.
 
     py_type: t.Literal['app.bsky.notification.listNotifications#notification'] = Field(
         default='app.bsky.notification.listNotifications#notification', alias='$type', frozen=True

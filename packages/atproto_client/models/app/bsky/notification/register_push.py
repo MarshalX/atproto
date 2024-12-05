@@ -7,7 +7,7 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
@@ -15,12 +15,12 @@ class Data(base.DataModelBase):
 
     app_id: str  #: App id.
     platform: t.Union[t.Literal['ios'], t.Literal['android'], t.Literal['web'], str]  #: Platform.
-    service_did: str  #: Service did.
+    service_did: string_formats.Did  #: Service did.
     token: str  #: Token.
 
 
 class DataDict(t.TypedDict):
     app_id: str  #: App id.
     platform: t.Union[t.Literal['ios'], t.Literal['android'], t.Literal['web'], str]  #: Platform.
-    service_did: str  #: Service did.
+    service_did: string_formats.Did  #: Service did.
     token: str  #: Token.

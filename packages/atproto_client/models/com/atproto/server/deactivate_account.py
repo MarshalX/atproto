@@ -9,18 +9,18 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.deactivateAccount`."""
 
-    delete_after: t.Optional[str] = (
+    delete_after: t.Optional[string_formats.DateTime] = (
         None  #: A recommendation to server as to how long they should hold onto the deactivated account before deleting.
     )
 
 
 class DataDict(t.TypedDict):
     delete_after: te.NotRequired[
-        t.Optional[str]
+        t.Optional[string_formats.DateTime]
     ]  #: A recommendation to server as to how long they should hold onto the deactivated account before deleting.

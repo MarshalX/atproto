@@ -7,14 +7,14 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`app.bsky.graph.muteActorList`."""
 
-    list: str  #: List.
+    list: string_formats.AtUri  #: List.
 
 
 class DataDict(t.TypedDict):
-    list: str  #: List.
+    list: string_formats.AtUri  #: List.

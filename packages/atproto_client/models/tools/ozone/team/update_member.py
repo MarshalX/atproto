@@ -9,6 +9,8 @@ import typing as t
 
 import typing_extensions as te
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,7 +19,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.team.updateMember`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     disabled: t.Optional[bool] = None  #: Disabled.
     role: t.Optional[
         t.Union[
@@ -30,7 +32,7 @@ class Data(base.DataModelBase):
 
 
 class DataDict(t.TypedDict):
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     disabled: te.NotRequired[t.Optional[bool]]  #: Disabled.
     role: te.NotRequired[
         t.Optional[

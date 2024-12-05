@@ -9,19 +9,19 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.getBlocks`."""
 
-    cids: t.List[str]  #: Cids.
-    did: str  #: The DID of the repo.
+    cids: t.List[string_formats.Cid]  #: Cids.
+    did: string_formats.Did  #: The DID of the repo.
 
 
 class ParamsDict(t.TypedDict):
-    cids: t.List[str]  #: Cids.
-    did: str  #: The DID of the repo.
+    cids: t.List[string_formats.Cid]  #: Cids.
+    did: string_formats.Did  #: The DID of the repo.
 
 
 #: Response raw data type.

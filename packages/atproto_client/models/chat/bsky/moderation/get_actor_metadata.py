@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,11 +19,11 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`chat.bsky.moderation.getActorMetadata`."""
 
-    actor: str  #: Actor.
+    actor: string_formats.Did  #: Actor.
 
 
 class ParamsDict(t.TypedDict):
-    actor: str  #: Actor.
+    actor: string_formats.Did  #: Actor.
 
 
 class Response(base.ResponseModelBase):

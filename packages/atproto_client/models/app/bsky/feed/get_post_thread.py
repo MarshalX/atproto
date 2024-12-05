@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -18,7 +20,7 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getPostThread`."""
 
-    uri: str  #: Reference (AT-URI) to post record.
+    uri: string_formats.AtUri  #: Reference (AT-URI) to post record.
     depth: t.Optional[int] = Field(
         default=6, ge=0, le=1000
     )  #: How many levels of reply depth should be included in response.
@@ -28,7 +30,7 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(t.TypedDict):
-    uri: str  #: Reference (AT-URI) to post record.
+    uri: string_formats.AtUri  #: Reference (AT-URI) to post record.
     depth: te.NotRequired[t.Optional[int]]  #: How many levels of reply depth should be included in response.
     parent_height: te.NotRequired[t.Optional[int]]  #: How many levels of parent (and grandparent, etc) post to include.
 

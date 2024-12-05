@@ -7,14 +7,14 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`app.bsky.graph.unmuteThread`."""
 
-    root: str  #: Root.
+    root: string_formats.AtUri  #: Root.
 
 
 class DataDict(t.TypedDict):
-    root: str  #: Root.
+    root: string_formats.AtUri  #: Root.
