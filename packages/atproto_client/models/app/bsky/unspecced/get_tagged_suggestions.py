@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -31,7 +33,7 @@ class Response(base.ResponseModelBase):
 class Suggestion(base.ModelBase):
     """Definition model for :obj:`app.bsky.unspecced.getTaggedSuggestions`."""
 
-    subject: str  #: Subject.
+    subject: string_formats.Uri  #: Subject.
     subject_type: t.Union[t.Literal['actor'], t.Literal['feed'], str]  #: Subject type.
     tag: str  #: Tag.
 

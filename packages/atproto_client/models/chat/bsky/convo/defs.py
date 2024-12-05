@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -19,7 +21,7 @@ class MessageRef(base.ModelBase):
     """Definition model for :obj:`chat.bsky.convo.defs`."""
 
     convo_id: str  #: Convo id.
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     message_id: str  #: Message id.
 
     py_type: t.Literal['chat.bsky.convo.defs#messageRef'] = Field(
@@ -49,7 +51,7 @@ class MessageView(base.ModelBase):
     id: str  #: Id.
     rev: str  #: Rev.
     sender: 'models.ChatBskyConvoDefs.MessageViewSender'  #: Sender.
-    sent_at: str  #: Sent at.
+    sent_at: string_formats.DateTime  #: Sent at.
     text: str = Field(max_length=10000)  #: Text.
     embed: t.Optional[
         te.Annotated[t.Union['models.AppBskyEmbedRecord.View'], Field(default=None, discriminator='py_type')]
@@ -69,7 +71,7 @@ class DeletedMessageView(base.ModelBase):
     id: str  #: Id.
     rev: str  #: Rev.
     sender: 'models.ChatBskyConvoDefs.MessageViewSender'  #: Sender.
-    sent_at: str  #: Sent at.
+    sent_at: string_formats.DateTime  #: Sent at.
 
     py_type: t.Literal['chat.bsky.convo.defs#deletedMessageView'] = Field(
         default='chat.bsky.convo.defs#deletedMessageView', alias='$type', frozen=True
@@ -79,7 +81,7 @@ class DeletedMessageView(base.ModelBase):
 class MessageViewSender(base.ModelBase):
     """Definition model for :obj:`chat.bsky.convo.defs`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
 
     py_type: t.Literal['chat.bsky.convo.defs#messageViewSender'] = Field(
         default='chat.bsky.convo.defs#messageViewSender', alias='$type', frozen=True

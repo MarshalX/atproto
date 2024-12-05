@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -52,7 +54,7 @@ class TextSlice(base.ModelBase):
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.feed.post`."""
 
-    created_at: str  #: Client-declared timestamp when this post was originally created.
+    created_at: string_formats.DateTime  #: Client-declared timestamp when this post was originally created.
     text: str = Field(max_length=3000)  #: The primary post content. May be an empty string, if there are embeds.
     embed: t.Optional[
         te.Annotated[
@@ -75,7 +77,7 @@ class Record(base.RecordModelBase):
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Self-label values for this post. Effectively content warnings.
-    langs: t.Optional[t.List[str]] = Field(
+    langs: t.Optional[t.List[string_formats.Language]] = Field(
         default=None, max_length=3
     )  #: Indicates human language of post primary text content.
     reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None  #: Reply.

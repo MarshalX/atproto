@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,7 +19,7 @@ from atproto_client.models import base
 class FeedItem(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.starterpack`."""
 
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
 
     py_type: t.Literal['app.bsky.graph.starterpack#feedItem'] = Field(
         default='app.bsky.graph.starterpack#feedItem', alias='$type', frozen=True
@@ -27,8 +29,8 @@ class FeedItem(base.ModelBase):
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.graph.starterpack`."""
 
-    created_at: str  #: Created at.
-    list: str  #: Reference (AT-URI) to the list record.
+    created_at: string_formats.DateTime  #: Created at.
+    list: string_formats.AtUri  #: Reference (AT-URI) to the list record.
     name: str = Field(min_length=1, max_length=500)  #: Display name for starter pack; can not be empty.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.

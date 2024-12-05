@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
@@ -50,9 +52,9 @@ class ViewRecord(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     author: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Author.
-    cid: str  #: Cid.
-    indexed_at: str  #: Indexed at.
-    uri: str  #: Uri.
+    cid: string_formats.Cid  #: Cid.
+    indexed_at: string_formats.DateTime  #: Indexed at.
+    uri: string_formats.AtUri  #: Uri.
     value: 'UnknownType'  #: The record data itself.
     embeds: t.Optional[
         t.List[
@@ -83,7 +85,7 @@ class ViewNotFound(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     not_found: bool = Field(frozen=True)  #: Not found.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
 
     py_type: t.Literal['app.bsky.embed.record#viewNotFound'] = Field(
         default='app.bsky.embed.record#viewNotFound', alias='$type', frozen=True
@@ -95,7 +97,7 @@ class ViewBlocked(base.ModelBase):
 
     author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.
     blocked: bool = Field(frozen=True)  #: Blocked.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
 
     py_type: t.Literal['app.bsky.embed.record#viewBlocked'] = Field(
         default='app.bsky.embed.record#viewBlocked', alias='$type', frozen=True
@@ -106,7 +108,7 @@ class ViewDetached(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.record`."""
 
     detached: bool = Field(frozen=True)  #: Detached.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
 
     py_type: t.Literal['app.bsky.embed.record#viewDetached'] = Field(
         default='app.bsky.embed.record#viewDetached', alias='$type', frozen=True

@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -18,15 +20,17 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.graph.getRelationships`."""
 
-    actor: str  #: Primary account requesting relationships for.
-    others: t.Optional[t.List[str]] = Field(
+    actor: string_formats.Handle  #: Primary account requesting relationships for.
+    others: t.Optional[t.List[string_formats.Handle]] = Field(
         default=None, max_length=30
     )  #: List of 'other' accounts to be related back to the primary.
 
 
 class ParamsDict(t.TypedDict):
-    actor: str  #: Primary account requesting relationships for.
-    others: te.NotRequired[t.Optional[t.List[str]]]  #: List of 'other' accounts to be related back to the primary.
+    actor: string_formats.Handle  #: Primary account requesting relationships for.
+    others: te.NotRequired[
+        t.Optional[t.List[string_formats.Handle]]
+    ]  #: List of 'other' accounts to be related back to the primary.
 
 
 class Response(base.ResponseModelBase):
@@ -38,4 +42,4 @@ class Response(base.ResponseModelBase):
             Field(discriminator='py_type'),
         ]
     ]  #: Relationships.
-    actor: t.Optional[str] = None  #: Actor.
+    actor: t.Optional[string_formats.Did] = None  #: Actor.

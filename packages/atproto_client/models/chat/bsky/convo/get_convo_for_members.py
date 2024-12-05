@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,11 +19,11 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`chat.bsky.convo.getConvoForMembers`."""
 
-    members: t.List[str] = Field(min_length=1, max_length=10)  #: Members.
+    members: t.List[string_formats.Did] = Field(min_length=1, max_length=10)  #: Members.
 
 
 class ParamsDict(t.TypedDict):
-    members: t.List[str]  #: Members.
+    members: t.List[string_formats.Did]  #: Members.
 
 
 class Response(base.ResponseModelBase):

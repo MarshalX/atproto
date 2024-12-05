@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -18,7 +20,7 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getAuthorFeed`."""
 
-    actor: str  #: Actor.
+    actor: string_formats.Handle  #: Actor.
     cursor: t.Optional[str] = None  #: Cursor.
     filter: t.Optional[
         t.Union[
@@ -34,7 +36,7 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(t.TypedDict):
-    actor: str  #: Actor.
+    actor: string_formats.Handle  #: Actor.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     filter: te.NotRequired[
         t.Optional[

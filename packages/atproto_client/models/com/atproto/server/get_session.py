@@ -7,6 +7,8 @@
 
 import typing as t
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client.models.unknown_type import UnknownType
 from atproto_client.models import base
@@ -15,8 +17,8 @@ from atproto_client.models import base
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.server.getSession`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.
     active: t.Optional[bool] = None  #: Active.
     did_doc: t.Optional['UnknownType'] = None  #: Did doc.
     email: t.Optional[str] = None  #: Email.

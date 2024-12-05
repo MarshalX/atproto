@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,10 +19,10 @@ from atproto_client.models import base
 class LabelerView(base.ModelBase):
     """Definition model for :obj:`app.bsky.labeler.defs`."""
 
-    cid: str  #: Cid.
+    cid: string_formats.Cid  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
-    indexed_at: str  #: Indexed at.
-    uri: str  #: Uri.
+    indexed_at: string_formats.DateTime  #: Indexed at.
+    uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
     viewer: t.Optional['models.AppBskyLabelerDefs.LabelerViewerState'] = None  #: Viewer.
@@ -33,11 +35,11 @@ class LabelerView(base.ModelBase):
 class LabelerViewDetailed(base.ModelBase):
     """Definition model for :obj:`app.bsky.labeler.defs`."""
 
-    cid: str  #: Cid.
+    cid: string_formats.Cid  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
-    indexed_at: str  #: Indexed at.
+    indexed_at: string_formats.DateTime  #: Indexed at.
     policies: 'models.AppBskyLabelerDefs.LabelerPolicies'  #: Policies.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
     viewer: t.Optional['models.AppBskyLabelerDefs.LabelerViewerState'] = None  #: Viewer.
@@ -50,7 +52,7 @@ class LabelerViewDetailed(base.ModelBase):
 class LabelerViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.labeler.defs`."""
 
-    like: t.Optional[str] = None  #: Like.
+    like: t.Optional[string_formats.AtUri] = None  #: Like.
 
     py_type: t.Literal['app.bsky.labeler.defs#labelerViewerState'] = Field(
         default='app.bsky.labeler.defs#labelerViewerState', alias='$type', frozen=True

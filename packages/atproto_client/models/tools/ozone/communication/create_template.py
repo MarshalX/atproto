@@ -9,7 +9,7 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
@@ -18,13 +18,13 @@ class Data(base.DataModelBase):
     content_markdown: str  #: Content of the template, markdown supported, can contain variable placeholders.
     name: str  #: Name of the template.
     subject: str  #: Subject of the message, used in emails.
-    created_by: t.Optional[str] = None  #: DID of the user who is creating the template.
-    lang: t.Optional[str] = None  #: Message language.
+    created_by: t.Optional[string_formats.Did] = None  #: DID of the user who is creating the template.
+    lang: t.Optional[string_formats.Language] = None  #: Message language.
 
 
 class DataDict(t.TypedDict):
     content_markdown: str  #: Content of the template, markdown supported, can contain variable placeholders.
     name: str  #: Name of the template.
     subject: str  #: Subject of the message, used in emails.
-    created_by: te.NotRequired[t.Optional[str]]  #: DID of the user who is creating the template.
-    lang: te.NotRequired[t.Optional[str]]  #: Message language.
+    created_by: te.NotRequired[t.Optional[string_formats.Did]]  #: DID of the user who is creating the template.
+    lang: te.NotRequired[t.Optional[string_formats.Language]]  #: Message language.

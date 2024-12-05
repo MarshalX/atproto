@@ -9,16 +9,16 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.disableAccountInvites`."""
 
-    account: str  #: Account.
+    account: string_formats.Did  #: Account.
     note: t.Optional[str] = None  #: Optional reason for disabled invites.
 
 
 class DataDict(t.TypedDict):
-    account: str  #: Account.
+    account: string_formats.Did  #: Account.
     note: te.NotRequired[t.Optional[str]]  #: Optional reason for disabled invites.

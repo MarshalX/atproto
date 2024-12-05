@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownInputType
@@ -19,7 +21,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.setting.upsertOption`."""
 
-    key: str  #: Key.
+    key: string_formats.Nsid  #: Key.
     scope: t.Union[t.Literal['instance'], t.Literal['personal'], str]  #: Scope.
     value: 'UnknownInputType'  #: Value.
     description: t.Optional[str] = Field(default=None, max_length=2000)  #: Description.
@@ -34,7 +36,7 @@ class Data(base.DataModelBase):
 
 
 class DataDict(t.TypedDict):
-    key: str  #: Key.
+    key: string_formats.Nsid  #: Key.
     scope: t.Union[t.Literal['instance'], t.Literal['personal'], str]  #: Scope.
     value: 'UnknownInputType'  #: Value.
     description: te.NotRequired[t.Optional[str]]  #: Description.

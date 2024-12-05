@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -18,15 +20,15 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.admin.getSubjectStatus`."""
 
-    blob: t.Optional[str] = None  #: Blob.
-    did: t.Optional[str] = None  #: Did.
-    uri: t.Optional[str] = None  #: Uri.
+    blob: t.Optional[string_formats.Cid] = None  #: Blob.
+    did: t.Optional[string_formats.Did] = None  #: Did.
+    uri: t.Optional[string_formats.AtUri] = None  #: Uri.
 
 
 class ParamsDict(t.TypedDict):
-    blob: te.NotRequired[t.Optional[str]]  #: Blob.
-    did: te.NotRequired[t.Optional[str]]  #: Did.
-    uri: te.NotRequired[t.Optional[str]]  #: Uri.
+    blob: te.NotRequired[t.Optional[string_formats.Cid]]  #: Blob.
+    did: te.NotRequired[t.Optional[string_formats.Did]]  #: Did.
+    uri: te.NotRequired[t.Optional[string_formats.AtUri]]  #: Uri.
 
 
 class Response(base.ResponseModelBase):

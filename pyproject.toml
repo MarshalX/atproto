@@ -6,7 +6,26 @@ authors = ["Ilya (Marshal) <ilya@marshal.dev>"]
 license = "MIT"
 repository = "https://github.com/MarshalX/atproto"
 readme = "README.md"
-keywords = ["library", "sdk", "codegen", "xrpc", "xrpc-client", "atprotocol", "atproto", "lexicon", "parser", "schema", "bluesky", "bluesky-api", "at", "uri", "atp", "nsid", "did", "cid"]
+keywords = [
+    "library",
+    "sdk",
+    "codegen",
+    "xrpc",
+    "xrpc-client",
+    "atprotocol",
+    "atproto",
+    "lexicon",
+    "parser",
+    "schema",
+    "bluesky",
+    "bluesky-api",
+    "at",
+    "uri",
+    "atp",
+    "nsid",
+    "did",
+    "cid",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -65,10 +84,10 @@ mypy = "1.9"
 pyright = "1.1.362"
 
 [tool.poetry.group.docs.dependencies]
-sphinx = "7.1.2" # they dropped Python 3.8 support in 7.2.0
+sphinx = "7.1.2"              # they dropped Python 3.8 support in 7.2.0
 myst-parser = "3.0.1"
 furo = "2024.8.6"
-autodoc-pydantic = "2.1.0" # for some reason 2.2.0 requirs Python > 3.8.1
+autodoc-pydantic = "2.1.0"    # for some reason 2.2.0 requirs Python > 3.8.1
 sphinx-copybutton = "0.5.2"
 sphinx-favicon = "1.0.1"
 sphinxext-opengraph = "0.9.1"
@@ -108,17 +127,17 @@ quote-style = "single"
 
 [tool.ruff.lint]
 extend-select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # Pyflakes
-    "I",  # isort
-    "D",  # pydocstyle
-    "C90",  # flake8-comprehensions
-    "B",  # flake8-bugbear
-    "Q",  # flake8-quotes
-    "S",  # flake8-bandit
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # Pyflakes
+    "I",     # isort
+    "D",     # pydocstyle
+    "C90",   # flake8-comprehensions
+    "B",     # flake8-bugbear
+    "Q",     # flake8-quotes
+    "S",     # flake8-bandit
     "ASYNC", # flake8-async
-    "ANN", # flake8-annotations
+    "ANN",   # flake8-annotations
     "C",
     "BLE",
     "ERA",
@@ -143,17 +162,25 @@ ignore = [
     "ANN002", # Missing type annotation for `*args`
     "ANN101", # Missing type annotation for `self` in method
     "ANN102", # Missing type annotation for `cls` in classmethod
-    "D203", "D413", # we are not using too many blank lines
-    "D213", # we are using the first line for summary
-    "D406", "D407", # we are using google style docstring
+    "D203",
+    "D413",   # we are not using too many blank lines
+    "D213",   # we are using the first line for summary
+    "D406",
+    "D407",   # we are using google style docstring
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "packages/*.py" = [
-    "D105", "D104", "D100", "D107", "D103", "D415", # missing docstring
-    "D101", "D102", # missing docstring in public class and method
+    "D105",
+    "D104",
+    "D100",
+    "D107",
+    "D103",
+    "D415", # missing docstring
+    "D101",
+    "D102", # missing docstring in public class and method
 ]
-"tests/*.py" = ["S101", "D"]
+"tests/**.py" = ["S101", "D", "ANN201"]
 "docs/*.py" = ["T201", "INP001", "ERA001", "E501", "D"]
 "examples/*.py" = ["T201", "INP001", "ERA001", "D"]
 "packages/atproto/exceptions.py" = ["F403"]
@@ -167,3 +194,6 @@ ignore = [
 docstring-quotes = "double"
 multiline-quotes = "double"
 inline-quotes = "single"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "session"

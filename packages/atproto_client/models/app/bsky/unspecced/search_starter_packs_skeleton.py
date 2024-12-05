@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -23,7 +25,7 @@ class Params(base.ParamsModelBase):
         None  #: Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
     )
     limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
-    viewer: t.Optional[str] = (
+    viewer: t.Optional[string_formats.Did] = (
         None  #: DID of the account making the request (not included for public/unauthenticated queries).
     )
 
@@ -35,7 +37,7 @@ class ParamsDict(t.TypedDict):
     ]  #: Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     viewer: te.NotRequired[
-        t.Optional[str]
+        t.Optional[string_formats.Did]
     ]  #: DID of the account making the request (not included for public/unauthenticated queries).
 
 

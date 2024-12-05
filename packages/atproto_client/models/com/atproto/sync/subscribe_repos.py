@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_core.cid import CIDType
 
@@ -35,10 +37,10 @@ class Commit(base.ModelBase):
     commit: 'CIDType'  #: Repo commit object CID.
     ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp'] = Field(max_length=200)  #: Ops.
     rebase: bool  #: DEPRECATED -- unused.
-    repo: str  #: The repo this event comes from.
+    repo: string_formats.Did  #: The repo this event comes from.
     rev: str  #: The rev of the emitted commit. Note that this information is also in the commit object included in blocks, unless this is a tooBig event.
     seq: int  #: The stream sequence number of this message.
-    time: str  #: Timestamp of when this message was originally broadcast.
+    time: string_formats.DateTime  #: Timestamp of when this message was originally broadcast.
     too_big: bool  #: Indicates that this commit contained too many ops, or data size was too large. Consumers will need to make a separate request to get missing data.
     prev: t.Optional['CIDType'] = (
         None  #: DEPRECATED -- unused. WARNING -- nullable and optional; stick with optional to ensure golang interoperability.
@@ -53,10 +55,10 @@ class Commit(base.ModelBase):
 class Identity(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents a change to an account's identity. Could be an updated handle, signing key, or pds hosting endpoint. Serves as a prod to all downstream services to refresh their identity cache."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     seq: int  #: Seq.
-    time: str  #: Time.
-    handle: t.Optional[str] = (
+    time: string_formats.DateTime  #: Time.
+    handle: t.Optional[string_formats.Handle] = (
         None  #: The current handle for the account, or 'handle.invalid' if validation fails. This field is optional, might have been validated or passed-through from an upstream source. Semantics and behaviors for PDS vs Relay may evolve in the future; see atproto specs for more details.
     )
 
@@ -71,9 +73,9 @@ class Account(base.ModelBase):
     active: (
         bool  #: Indicates that the account has a repository which can be fetched from the host that emitted this event.
     )
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     seq: int  #: Seq.
-    time: str  #: Time.
+    time: string_formats.DateTime  #: Time.
     status: t.Optional[
         t.Union[t.Literal['takendown'], t.Literal['suspended'], t.Literal['deleted'], t.Literal['deactivated'], str]
     ] = None  #: If active=false, this optional field indicates a reason for why the account is not active.
@@ -86,10 +88,10 @@ class Account(base.ModelBase):
 class Handle(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`. DEPRECATED -- Use #identity event instead."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.
     seq: int  #: Seq.
-    time: str  #: Time.
+    time: string_formats.DateTime  #: Time.
 
     py_type: t.Literal['com.atproto.sync.subscribeRepos#handle'] = Field(
         default='com.atproto.sync.subscribeRepos#handle', alias='$type', frozen=True
@@ -99,9 +101,9 @@ class Handle(base.ModelBase):
 class Migrate(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`. DEPRECATED -- Use #account event instead."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     seq: int  #: Seq.
-    time: str  #: Time.
+    time: string_formats.DateTime  #: Time.
     migrate_to: t.Optional[str] = None  #: Migrate to.
 
     py_type: t.Literal['com.atproto.sync.subscribeRepos#migrate'] = Field(
@@ -112,9 +114,9 @@ class Migrate(base.ModelBase):
 class Tombstone(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`. DEPRECATED -- Use #account event instead."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     seq: int  #: Seq.
-    time: str  #: Time.
+    time: string_formats.DateTime  #: Time.
 
     py_type: t.Literal['com.atproto.sync.subscribeRepos#tombstone'] = Field(
         default='com.atproto.sync.subscribeRepos#tombstone', alias='$type', frozen=True

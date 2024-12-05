@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -20,13 +22,13 @@ class Data(base.DataModelBase):
 
     code_count: int = 1  #: Code count.
     use_count: int  #: Use count.
-    for_accounts: t.Optional[t.List[str]] = None  #: For accounts.
+    for_accounts: t.Optional[t.List[string_formats.Did]] = None  #: For accounts.
 
 
 class DataDict(t.TypedDict):
     code_count: int  #: Code count.
     use_count: int  #: Use count.
-    for_accounts: te.NotRequired[t.Optional[t.List[str]]]  #: For accounts.
+    for_accounts: te.NotRequired[t.Optional[t.List[string_formats.Did]]]  #: For accounts.
 
 
 class Response(base.ResponseModelBase):

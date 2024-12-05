@@ -9,19 +9,19 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.createInviteCode`."""
 
     use_count: int  #: Use count.
-    for_account: t.Optional[str] = None  #: For account.
+    for_account: t.Optional[string_formats.Did] = None  #: For account.
 
 
 class DataDict(t.TypedDict):
     use_count: int  #: Use count.
-    for_account: te.NotRequired[t.Optional[str]]  #: For account.
+    for_account: te.NotRequired[t.Optional[string_formats.Did]]  #: For account.
 
 
 class Response(base.ResponseModelBase):

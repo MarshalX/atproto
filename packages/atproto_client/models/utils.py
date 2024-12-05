@@ -28,7 +28,11 @@ _TYPE_SERVICE_FIELD = '$type'
 
 
 def get_or_create(
-    model_data: ModelData[M], model: t.Optional[t.Type[M]] = None, *, strict: bool = True
+    model_data: ModelData[M],
+    model: t.Optional[t.Type[M]] = None,
+    *,
+    strict: bool = True,
+    strict_string_format: bool = False,
 ) -> t.Optional[t.Union[M, UnknownRecordType, DotDict]]:
     """Get model instance from raw data.
 
@@ -53,13 +57,14 @@ def get_or_create(
         model: Class of the model or any another type. If None, it will be resolved automatically.
         strict: Disable fallback to dictionary (:obj:`atproto.xrpc_client.models.base.DotDict`)
             if it can't be properly deserialized in provided `model`. Will raise the exception instead.
+        strict_string_format: Enable strict string format validation.
 
     Returns:
         Instance of :obj:`model` or :obj:`None` or
         :obj:`atproto.xrpc_client.models.dot_dict.DotDict` if `strict` is disabled.
     """
     try:
-        model_instance = _get_or_create(model_data, model, strict=strict)
+        model_instance = _get_or_create(model_data, model, strict=strict, strict_string_format=strict_string_format)
         if strict and model_instance is not None and (not model or not isinstance(model_instance, model)):
             raise ModelError(f"Can't properly parse model of type {model}")
 
@@ -72,7 +77,7 @@ def get_or_create(
 
 
 def _get_or_create(
-    model_data: ModelData[M], model: t.Optional[t.Type[M]], *, strict: bool
+    model_data: ModelData[M], model: t.Optional[t.Type[M]], *, strict: bool, strict_string_format: bool
 ) -> t.Optional[t.Union[M, UnknownRecordType, DotDict]]:
     if model_data is None:
         return None
@@ -92,7 +97,12 @@ def _get_or_create(
         # now we are sure that this is str because it's in RECORD_TYPE_TO_MODEL_CLASS
         record_type = t.cast(str, record_type)
 
-        return get_or_create(model_data, RECORD_TYPE_TO_MODEL_CLASS[record_type], strict=strict)
+        return get_or_create(
+            model_data,
+            RECORD_TYPE_TO_MODEL_CLASS[record_type],
+            strict=strict,
+            strict_string_format=strict_string_format,
+        )
 
     if isinstance(model_data, model):
         return model_data

@@ -9,18 +9,18 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`chat.bsky.moderation.updateActorAccess`."""
 
-    actor: str  #: Actor.
+    actor: string_formats.Did  #: Actor.
     allow_access: bool  #: Allow access.
     ref: t.Optional[str] = None  #: Ref.
 
 
 class DataDict(t.TypedDict):
-    actor: str  #: Actor.
+    actor: string_formats.Did  #: Actor.
     allow_access: bool  #: Allow access.
     ref: te.NotRequired[t.Optional[str]]  #: Ref.

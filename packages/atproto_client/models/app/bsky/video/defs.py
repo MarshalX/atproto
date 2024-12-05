@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client.models.blob_ref import BlobRef
 from atproto_client.models import base
@@ -17,7 +19,7 @@ from atproto_client.models import base
 class JobStatus(base.ModelBase):
     """Definition model for :obj:`app.bsky.video.defs`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     job_id: str  #: Job id.
     state: t.Union[
         t.Literal['JOB_STATE_COMPLETED'], t.Literal['JOB_STATE_FAILED'], str

@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -18,7 +20,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.moderation.emitEvent`."""
 
-    created_by: str  #: Created by.
+    created_by: string_formats.Did  #: Created by.
     event: te.Annotated[
         t.Union[
             'models.ToolsOzoneModerationDefs.ModEventTakedown',
@@ -45,11 +47,11 @@ class Data(base.DataModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    subject_blob_cids: t.Optional[t.List[str]] = None  #: Subject blob cids.
+    subject_blob_cids: t.Optional[t.List[string_formats.Cid]] = None  #: Subject blob cids.
 
 
 class DataDict(t.TypedDict):
-    created_by: str  #: Created by.
+    created_by: string_formats.Did  #: Created by.
     event: te.Annotated[
         t.Union[
             'models.ToolsOzoneModerationDefs.ModEventTakedown',
@@ -76,4 +78,4 @@ class DataDict(t.TypedDict):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    subject_blob_cids: te.NotRequired[t.Optional[t.List[str]]]  #: Subject blob cids.
+    subject_blob_cids: te.NotRequired[t.Optional[t.List[string_formats.Cid]]]  #: Subject blob cids.

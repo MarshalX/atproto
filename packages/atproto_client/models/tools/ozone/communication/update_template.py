@@ -9,7 +9,7 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
@@ -20,10 +20,10 @@ class Data(base.DataModelBase):
         None  #: Content of the template, markdown supported, can contain variable placeholders.
     )
     disabled: t.Optional[bool] = None  #: Disabled.
-    lang: t.Optional[str] = None  #: Message language.
+    lang: t.Optional[string_formats.Language] = None  #: Message language.
     name: t.Optional[str] = None  #: Name of the template.
     subject: t.Optional[str] = None  #: Subject of the message, used in emails.
-    updated_by: t.Optional[str] = None  #: DID of the user who is updating the template.
+    updated_by: t.Optional[string_formats.Did] = None  #: DID of the user who is updating the template.
 
 
 class DataDict(t.TypedDict):
@@ -32,7 +32,7 @@ class DataDict(t.TypedDict):
         t.Optional[str]
     ]  #: Content of the template, markdown supported, can contain variable placeholders.
     disabled: te.NotRequired[t.Optional[bool]]  #: Disabled.
-    lang: te.NotRequired[t.Optional[str]]  #: Message language.
+    lang: te.NotRequired[t.Optional[string_formats.Language]]  #: Message language.
     name: te.NotRequired[t.Optional[str]]  #: Name of the template.
     subject: te.NotRequired[t.Optional[str]]  #: Subject of the message, used in emails.
-    updated_by: te.NotRequired[t.Optional[str]]  #: DID of the user who is updating the template.
+    updated_by: te.NotRequired[t.Optional[string_formats.Did]]  #: DID of the user who is updating the template.

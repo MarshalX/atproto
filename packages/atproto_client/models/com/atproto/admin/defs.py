@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
@@ -29,12 +31,12 @@ class StatusAttr(base.ModelBase):
 class AccountView(base.ModelBase):
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
-    indexed_at: str  #: Indexed at.
-    deactivated_at: t.Optional[str] = None  #: Deactivated at.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.
+    indexed_at: string_formats.DateTime  #: Indexed at.
+    deactivated_at: t.Optional[string_formats.DateTime] = None  #: Deactivated at.
     email: t.Optional[str] = None  #: Email.
-    email_confirmed_at: t.Optional[str] = None  #: Email confirmed at.
+    email_confirmed_at: t.Optional[string_formats.DateTime] = None  #: Email confirmed at.
     invite_note: t.Optional[str] = None  #: Invite note.
     invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
     invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
@@ -50,7 +52,7 @@ class AccountView(base.ModelBase):
 class RepoRef(base.ModelBase):
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
 
     py_type: t.Literal['com.atproto.admin.defs#repoRef'] = Field(
         default='com.atproto.admin.defs#repoRef', alias='$type', frozen=True
@@ -60,9 +62,9 @@ class RepoRef(base.ModelBase):
 class RepoBlobRef(base.ModelBase):
     """Definition model for :obj:`com.atproto.admin.defs`."""
 
-    cid: str  #: Cid.
-    did: str  #: Did.
-    record_uri: t.Optional[str] = None  #: Record uri.
+    cid: string_formats.Cid  #: Cid.
+    did: string_formats.Did  #: Did.
+    record_uri: t.Optional[string_formats.AtUri] = None  #: Record uri.
 
     py_type: t.Literal['com.atproto.admin.defs#repoBlobRef'] = Field(
         default='com.atproto.admin.defs#repoBlobRef', alias='$type', frozen=True

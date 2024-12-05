@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
@@ -18,13 +20,13 @@ from atproto_client.models import base
 class Option(base.ModelBase):
     """Definition model for :obj:`tools.ozone.setting.defs`."""
 
-    created_by: str  #: Created by.
-    did: str  #: Did.
-    key: str  #: Key.
-    last_updated_by: str  #: Last updated by.
+    created_by: string_formats.Did  #: Created by.
+    did: string_formats.Did  #: Did.
+    key: string_formats.Nsid  #: Key.
+    last_updated_by: string_formats.Did  #: Last updated by.
     scope: t.Union[t.Literal['instance'], t.Literal['personal'], str]  #: Scope.
     value: 'UnknownType'  #: Value.
-    created_at: t.Optional[str] = None  #: Created at.
+    created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     description: t.Optional[str] = Field(default=None, max_length=10240)  #: Description.
     manager_role: t.Optional[
         t.Union[
@@ -34,7 +36,7 @@ class Option(base.ModelBase):
             str,
         ]
     ] = None  #: Manager role.
-    updated_at: t.Optional[str] = None  #: Updated at.
+    updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
 
     py_type: t.Literal['tools.ozone.setting.defs#option'] = Field(
         default='tools.ozone.setting.defs#option', alias='$type', frozen=True

@@ -9,19 +9,19 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.getBlob`."""
 
-    cid: str  #: The CID of the blob to fetch.
-    did: str  #: The DID of the account.
+    cid: string_formats.Cid  #: The CID of the blob to fetch.
+    did: string_formats.Did  #: The DID of the account.
 
 
 class ParamsDict(t.TypedDict):
-    cid: str  #: The CID of the blob to fetch.
-    did: str  #: The DID of the account.
+    cid: string_formats.Cid  #: The CID of the blob to fetch.
+    did: string_formats.Did  #: The DID of the account.
 
 
 #: Response raw data type.

@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,10 +19,10 @@ from atproto_client.models import base
 class ProfileViewBasic(base.ModelBase):
     """Definition model for :obj:`chat.bsky.actor.defs`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
-    avatar: t.Optional[str] = None  #: Avatar.
+    avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     chat_disabled: t.Optional[bool] = None  #: Set to true when the actor cannot actively participate in converations.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.

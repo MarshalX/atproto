@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.blob_ref import BlobRef
@@ -32,7 +34,7 @@ class Caption(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.video`."""
 
     file: 'BlobRef'  #: File.
-    lang: str  #: Lang.
+    lang: string_formats.Language  #: Lang.
 
     py_type: t.Literal['app.bsky.embed.video#caption'] = Field(
         default='app.bsky.embed.video#caption', alias='$type', frozen=True
@@ -42,11 +44,11 @@ class Caption(base.ModelBase):
 class View(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.video`."""
 
-    cid: str  #: Cid.
-    playlist: str  #: Playlist.
+    cid: string_formats.Cid  #: Cid.
+    playlist: string_formats.Uri  #: Playlist.
     alt: t.Optional[str] = Field(default=None, max_length=10000)  #: Alt.
     aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None  #: Aspect ratio.
-    thumbnail: t.Optional[str] = None  #: Thumbnail.
+    thumbnail: t.Optional[string_formats.Uri] = None  #: Thumbnail.
 
     py_type: t.Literal['app.bsky.embed.video#view'] = Field(
         default='app.bsky.embed.video#view', alias='$type', frozen=True

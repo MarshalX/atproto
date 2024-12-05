@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,18 +19,18 @@ from atproto_client.models import base
 class Member(base.ModelBase):
     """Definition model for :obj:`tools.ozone.team.defs`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     role: t.Union[
         'models.ToolsOzoneTeamDefs.RoleAdmin',
         'models.ToolsOzoneTeamDefs.RoleModerator',
         'models.ToolsOzoneTeamDefs.RoleTriage',
         str,
     ]  #: Role.
-    created_at: t.Optional[str] = None  #: Created at.
+    created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     disabled: t.Optional[bool] = None  #: Disabled.
     last_updated_by: t.Optional[str] = None  #: Last updated by.
     profile: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed'] = None  #: Profile.
-    updated_at: t.Optional[str] = None  #: Updated at.
+    updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
 
     py_type: t.Literal['tools.ozone.team.defs#member'] = Field(
         default='tools.ozone.team.defs#member', alias='$type', frozen=True

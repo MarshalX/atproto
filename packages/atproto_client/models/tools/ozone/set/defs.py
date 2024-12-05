@@ -9,7 +9,7 @@ import typing as t
 
 from pydantic import Field
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Set(base.ModelBase):
@@ -26,10 +26,10 @@ class Set(base.ModelBase):
 class SetView(base.ModelBase):
     """Definition model for :obj:`tools.ozone.set.defs`."""
 
-    created_at: str  #: Created at.
+    created_at: string_formats.DateTime  #: Created at.
     name: str = Field(min_length=3, max_length=128)  #: Name.
     set_size: int  #: Set size.
-    updated_at: str  #: Updated at.
+    updated_at: string_formats.DateTime  #: Updated at.
     description: t.Optional[str] = Field(default=None, max_length=10240)  #: Description.
 
     py_type: t.Literal['tools.ozone.set.defs#setView'] = Field(

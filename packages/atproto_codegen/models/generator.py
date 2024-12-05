@@ -63,12 +63,13 @@ def save_code_part(nsid: NSID, code: str) -> None:
 
 
 def _get_model_imports() -> str:
-    # we are using ruff with F401 autofix to delete unused imports
     lines = [
         'import typing as t',
         '',
         'import typing_extensions as te',
         'from pydantic import Field',
+        '',
+        'from atproto_client.models import string_formats',
         '',
         'if t.TYPE_CHECKING:',
         f'{_(1)}from atproto_client import models',
@@ -139,7 +140,7 @@ def _get_optional_typehint(type_hint: str, *, optional: bool) -> str:
 
 
 def _get_str_enum_typehint(nsid: NSID, field_type_def: models.LexString, *, optional: bool) -> str:
-    values = field_type_def.known_values or field_type_def.enum
+    values = field_type_def.known_values or field_type_def.enum or []
 
     union_type_parts = []
     for value in values:
@@ -161,6 +162,25 @@ def _get_str_enum_typehint(nsid: NSID, field_type_def: models.LexString, *, opti
 def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional: bool) -> str:
     str_typehint = 'str'
 
+    # Map lexicon string formats to our validator types
+    if hasattr(field_type_def, 'format') and (format_type := field_type_def.format):
+        # Map format types to our string_formats types
+        format_map = {
+            'at-identifier': 'string_formats.Handle',
+            'at-uri': 'string_formats.AtUri',
+            'cid': 'string_formats.Cid',
+            'datetime': 'string_formats.DateTime',
+            'did': 'string_formats.Did',
+            'handle': 'string_formats.Handle',
+            'nsid': 'string_formats.Nsid',
+            'tid': 'string_formats.Tid',
+            'record-key': 'string_formats.RecordKey',
+            'uri': 'string_formats.Uri',
+            'language': 'string_formats.Language',
+        }
+        str_typehint = format_map.get(format_type, 'str')
+
+    # Handle existing enum/known_values logic
     if field_type_def.known_values or field_type_def.enum:
         str_typehint = _get_str_enum_typehint(nsid, field_type_def, optional=optional)
 
