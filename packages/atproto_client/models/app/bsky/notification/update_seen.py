@@ -7,14 +7,14 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`app.bsky.notification.updateSeen`."""
 
-    seen_at: str  #: Seen at.
+    seen_at: string_formats.DateTime  #: Seen at.
 
 
 class DataDict(t.TypedDict):
-    seen_at: str  #: Seen at.
+    seen_at: string_formats.DateTime  #: Seen at.

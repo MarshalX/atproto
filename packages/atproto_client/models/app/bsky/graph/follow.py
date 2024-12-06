@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,8 +19,8 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.graph.follow`."""
 
-    created_at: str  #: Created at.
-    subject: str  #: Subject.
+    created_at: string_formats.DateTime  #: Created at.
+    subject: string_formats.Did  #: Subject.
 
     py_type: t.Literal['app.bsky.graph.follow'] = Field(default='app.bsky.graph.follow', alias='$type', frozen=True)
 

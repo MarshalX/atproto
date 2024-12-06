@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -34,7 +36,7 @@ class FollowingRule(base.ModelBase):
 class ListRule(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.threadgate`. Allow replies from actors on a list."""
 
-    list: str  #: List.
+    list: string_formats.AtUri  #: List.
 
     py_type: t.Literal['app.bsky.feed.threadgate#listRule'] = Field(
         default='app.bsky.feed.threadgate#listRule', alias='$type', frozen=True
@@ -44,8 +46,8 @@ class ListRule(base.ModelBase):
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.feed.threadgate`."""
 
-    created_at: str  #: Created at.
-    post: str  #: Reference (AT-URI) to the post record.
+    created_at: string_formats.DateTime  #: Created at.
+    post: string_formats.AtUri  #: Reference (AT-URI) to the post record.
     allow: t.Optional[
         t.List[
             te.Annotated[
@@ -58,7 +60,9 @@ class Record(base.RecordModelBase):
             ]
         ]
     ] = Field(default=None, max_length=5)  #: Allow.
-    hidden_replies: t.Optional[t.List[str]] = Field(default=None, max_length=50)  #: List of hidden reply URIs.
+    hidden_replies: t.Optional[t.List[string_formats.AtUri]] = Field(
+        default=None, max_length=50
+    )  #: List of hidden reply URIs.
 
     py_type: t.Literal['app.bsky.feed.threadgate'] = Field(
         default='app.bsky.feed.threadgate', alias='$type', frozen=True

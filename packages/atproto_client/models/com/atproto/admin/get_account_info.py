@@ -7,14 +7,14 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.admin.getAccountInfo`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
 
 
 class ParamsDict(t.TypedDict):
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.

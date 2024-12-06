@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -44,10 +46,10 @@ class DataDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.moderation.createReport`."""
 
-    created_at: str  #: Created at.
+    created_at: string_formats.DateTime  #: Created at.
     id: int  #: Id.
     reason_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
-    reported_by: str  #: Reported by.
+    reported_by: string_formats.Did  #: Reported by.
     subject: te.Annotated[
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),

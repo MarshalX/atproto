@@ -9,26 +9,26 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.getRecord`."""
 
-    collection: str  #: Collection.
-    did: str  #: The DID of the repo.
+    collection: string_formats.Nsid  #: Collection.
+    did: string_formats.Did  #: The DID of the repo.
     rkey: str  #: Record Key.
-    commit: t.Optional[str] = (
+    commit: t.Optional[string_formats.Cid] = (
         None  #: DEPRECATED: referenced a repo commit by CID, and retrieved record as of that commit.
     )
 
 
 class ParamsDict(t.TypedDict):
-    collection: str  #: Collection.
-    did: str  #: The DID of the repo.
+    collection: string_formats.Nsid  #: Collection.
+    did: string_formats.Did  #: The DID of the repo.
     rkey: str  #: Record Key.
     commit: te.NotRequired[
-        t.Optional[str]
+        t.Optional[string_formats.Cid]
     ]  #: DEPRECATED: referenced a repo commit by CID, and retrieved record as of that commit.
 
 

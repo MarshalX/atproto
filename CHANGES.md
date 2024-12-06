@@ -1,5 +1,18 @@
 # Change Log
 
+## Version 0.0.56
+
+**05.12.2024**
+
+* Add ability to send aspect ratio with `send_image` and `send_images` by @palmer-cl in https://github.com/MarshalX/atproto/pull/480
+* Add `get_bsky_post_by_url` example by @DGaffney in https://github.com/MarshalX/atproto/pull/424
+* Add new `add_user_to_list` advanced example by @MarshalX in https://github.com/MarshalX/atproto/pull/435
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/481, https://github.com/MarshalX/atproto/pull/485, https://github.com/MarshalX/atproto/pull/458, https://github.com/MarshalX/atproto/pull/452, https://github.com/MarshalX/atproto/pull/429, https://github.com/MarshalX/atproto/pull/442
+* Fix `update_lexicons` workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/428
+* Fix typo in item of `SessionEvent`: `'creat'` -> `'create'` by @zzstoatzz in https://github.com/MarshalX/atproto/pull/439
+* Fix `clone()` and `with_...()` methods for `AsyncClient` by @MarshalX in https://github.com/MarshalX/atproto/pull/457
+* Fix link to API docs for rate-limits in `atproto_client/auth.md` by @questionlp in https://github.com/MarshalX/atproto/pull/464
+
 ## Version 0.0.55
 
 **24.10.2024**

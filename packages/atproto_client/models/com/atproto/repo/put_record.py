@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownInputType
@@ -19,12 +21,12 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.repo.putRecord`."""
 
-    collection: str  #: The NSID of the record collection.
+    collection: string_formats.Nsid  #: The NSID of the record collection.
     record: 'UnknownInputType'  #: The record to write.
-    repo: str  #: The handle or DID of the repo (aka, current account).
+    repo: string_formats.Handle  #: The handle or DID of the repo (aka, current account).
     rkey: str = Field(max_length=512)  #: The Record Key.
-    swap_commit: t.Optional[str] = None  #: Compare and swap with the previous commit by CID.
-    swap_record: t.Optional[str] = (
+    swap_commit: t.Optional[string_formats.Cid] = None  #: Compare and swap with the previous commit by CID.
+    swap_record: t.Optional[string_formats.Cid] = (
         None  #: Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause problems with golang implementation.
     )
     validate_: t.Optional[bool] = (
@@ -33,13 +35,13 @@ class Data(base.DataModelBase):
 
 
 class DataDict(t.TypedDict):
-    collection: str  #: The NSID of the record collection.
+    collection: string_formats.Nsid  #: The NSID of the record collection.
     record: 'UnknownInputType'  #: The record to write.
-    repo: str  #: The handle or DID of the repo (aka, current account).
+    repo: string_formats.Handle  #: The handle or DID of the repo (aka, current account).
     rkey: str  #: The Record Key.
-    swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by CID.
+    swap_commit: te.NotRequired[t.Optional[string_formats.Cid]]  #: Compare and swap with the previous commit by CID.
     swap_record: te.NotRequired[
-        t.Optional[str]
+        t.Optional[string_formats.Cid]
     ]  #: Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause problems with golang implementation.
     validate: te.NotRequired[
         t.Optional[bool]
@@ -49,7 +51,7 @@ class DataDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.repo.putRecord`."""
 
-    cid: str  #: Cid.
-    uri: str  #: Uri.
+    cid: string_formats.Cid  #: Cid.
+    uri: string_formats.AtUri  #: Uri.
     commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta'] = None  #: Commit.
     validation_status: t.Optional[t.Union[t.Literal['valid'], t.Literal['unknown'], str]] = None  #: Validation status.

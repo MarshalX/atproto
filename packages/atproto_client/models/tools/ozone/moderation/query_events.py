@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -24,15 +26,15 @@ class Params(base.ParamsModelBase):
     added_tags: t.Optional[t.List[str]] = (
         None  #: If specified, only events where all of these tags were added are returned.
     )
-    collections: t.Optional[t.List[str]] = Field(
+    collections: t.Optional[t.List[string_formats.Nsid]] = Field(
         default=None, max_length=20
     )  #: If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
     comment: t.Optional[str] = (
         None  #: If specified, only events with comments containing the keyword are returned. Apply || separator to use multiple keywords and match using OR condition.
     )
-    created_after: t.Optional[str] = None  #: Retrieve events created after a given timestamp.
-    created_before: t.Optional[str] = None  #: Retrieve events created before a given timestamp.
-    created_by: t.Optional[str] = None  #: Created by.
+    created_after: t.Optional[string_formats.DateTime] = None  #: Retrieve events created after a given timestamp.
+    created_before: t.Optional[string_formats.DateTime] = None  #: Retrieve events created before a given timestamp.
+    created_by: t.Optional[string_formats.Did] = None  #: Created by.
     cursor: t.Optional[str] = None  #: Cursor.
     has_comment: t.Optional[bool] = None  #: If true, only events with comments are returned.
     include_all_user_records: t.Optional[bool] = (
@@ -49,7 +51,7 @@ class Params(base.ParamsModelBase):
     sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = (
         'desc'  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     )
-    subject: t.Optional[str] = None  #: Subject.
+    subject: t.Optional[string_formats.Uri] = None  #: Subject.
     subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]] = (
         None  #: If specified, only events where the subject is of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     )
@@ -66,14 +68,18 @@ class ParamsDict(t.TypedDict):
         t.Optional[t.List[str]]
     ]  #: If specified, only events where all of these tags were added are returned.
     collections: te.NotRequired[
-        t.Optional[t.List[str]]
+        t.Optional[t.List[string_formats.Nsid]]
     ]  #: If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
     comment: te.NotRequired[
         t.Optional[str]
     ]  #: If specified, only events with comments containing the keyword are returned. Apply || separator to use multiple keywords and match using OR condition.
-    created_after: te.NotRequired[t.Optional[str]]  #: Retrieve events created after a given timestamp.
-    created_before: te.NotRequired[t.Optional[str]]  #: Retrieve events created before a given timestamp.
-    created_by: te.NotRequired[t.Optional[str]]  #: Created by.
+    created_after: te.NotRequired[
+        t.Optional[string_formats.DateTime]
+    ]  #: Retrieve events created after a given timestamp.
+    created_before: te.NotRequired[
+        t.Optional[string_formats.DateTime]
+    ]  #: Retrieve events created before a given timestamp.
+    created_by: te.NotRequired[t.Optional[string_formats.Did]]  #: Created by.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     has_comment: te.NotRequired[t.Optional[bool]]  #: If true, only events with comments are returned.
     include_all_user_records: te.NotRequired[
@@ -90,7 +96,7 @@ class ParamsDict(t.TypedDict):
     sort_direction: te.NotRequired[
         t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]
     ]  #: Sort direction for the events. Defaults to descending order of created at timestamp.
-    subject: te.NotRequired[t.Optional[str]]  #: Subject.
+    subject: te.NotRequired[t.Optional[string_formats.Uri]]  #: Subject.
     subject_type: te.NotRequired[
         t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]]
     ]  #: If specified, only events where the subject is of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.

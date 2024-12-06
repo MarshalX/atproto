@@ -9,17 +9,17 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.reserveSigningKey`."""
 
-    did: t.Optional[str] = None  #: The DID to reserve a key for.
+    did: t.Optional[string_formats.Did] = None  #: The DID to reserve a key for.
 
 
 class DataDict(t.TypedDict):
-    did: te.NotRequired[t.Optional[str]]  #: The DID to reserve a key for.
+    did: te.NotRequired[t.Optional[string_formats.Did]]  #: The DID to reserve a key for.
 
 
 class Response(base.ResponseModelBase):

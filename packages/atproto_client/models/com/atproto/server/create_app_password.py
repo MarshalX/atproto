@@ -10,7 +10,7 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
@@ -32,7 +32,7 @@ class DataDict(t.TypedDict):
 class AppPassword(base.ModelBase):
     """Definition model for :obj:`com.atproto.server.createAppPassword`."""
 
-    created_at: str  #: Created at.
+    created_at: string_formats.DateTime  #: Created at.
     name: str  #: Name.
     password: str  #: Password.
     privileged: t.Optional[bool] = None  #: Privileged.

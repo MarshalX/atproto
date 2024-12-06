@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -37,8 +39,8 @@ class Response(base.ResponseModelBase):
 class RecordBlob(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.listMissingBlobs`."""
 
-    cid: str  #: Cid.
-    record_uri: str  #: Record uri.
+    cid: string_formats.Cid  #: Cid.
+    record_uri: string_formats.AtUri  #: Record uri.
 
     py_type: t.Literal['com.atproto.repo.listMissingBlobs#recordBlob'] = Field(
         default='com.atproto.repo.listMissingBlobs#recordBlob', alias='$type', frozen=True

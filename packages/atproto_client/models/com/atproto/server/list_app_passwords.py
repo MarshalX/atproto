@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -23,7 +25,7 @@ class Response(base.ResponseModelBase):
 class AppPassword(base.ModelBase):
     """Definition model for :obj:`com.atproto.server.listAppPasswords`."""
 
-    created_at: str  #: Created at.
+    created_at: string_formats.DateTime  #: Created at.
     name: str  #: Name.
     privileged: t.Optional[bool] = None  #: Privileged.
 

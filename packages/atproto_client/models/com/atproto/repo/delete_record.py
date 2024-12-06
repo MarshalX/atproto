@@ -9,6 +9,8 @@ import typing as t
 
 import typing_extensions as te
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,19 +19,19 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.repo.deleteRecord`."""
 
-    collection: str  #: The NSID of the record collection.
-    repo: str  #: The handle or DID of the repo (aka, current account).
+    collection: string_formats.Nsid  #: The NSID of the record collection.
+    repo: string_formats.Handle  #: The handle or DID of the repo (aka, current account).
     rkey: str  #: The Record Key.
-    swap_commit: t.Optional[str] = None  #: Compare and swap with the previous commit by CID.
-    swap_record: t.Optional[str] = None  #: Compare and swap with the previous record by CID.
+    swap_commit: t.Optional[string_formats.Cid] = None  #: Compare and swap with the previous commit by CID.
+    swap_record: t.Optional[string_formats.Cid] = None  #: Compare and swap with the previous record by CID.
 
 
 class DataDict(t.TypedDict):
-    collection: str  #: The NSID of the record collection.
-    repo: str  #: The handle or DID of the repo (aka, current account).
+    collection: string_formats.Nsid  #: The NSID of the record collection.
+    repo: string_formats.Handle  #: The handle or DID of the repo (aka, current account).
     rkey: str  #: The Record Key.
-    swap_commit: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous commit by CID.
-    swap_record: te.NotRequired[t.Optional[str]]  #: Compare and swap with the previous record by CID.
+    swap_commit: te.NotRequired[t.Optional[string_formats.Cid]]  #: Compare and swap with the previous commit by CID.
+    swap_record: te.NotRequired[t.Optional[string_formats.Cid]]  #: Compare and swap with the previous record by CID.
 
 
 class Response(base.ResponseModelBase):

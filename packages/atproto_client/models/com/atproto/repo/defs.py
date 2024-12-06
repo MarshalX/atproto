@@ -9,13 +9,13 @@ import typing as t
 
 from pydantic import Field
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class CommitMeta(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.defs`."""
 
-    cid: str  #: Cid.
+    cid: string_formats.Cid  #: Cid.
     rev: str  #: Rev.
 
     py_type: t.Literal['com.atproto.repo.defs#commitMeta'] = Field(

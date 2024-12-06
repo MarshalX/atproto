@@ -7,6 +7,8 @@
 
 import typing as t
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -15,11 +17,11 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getFeedGenerator`."""
 
-    feed: str  #: AT-URI of the feed generator record.
+    feed: string_formats.AtUri  #: AT-URI of the feed generator record.
 
 
 class ParamsDict(t.TypedDict):
-    feed: str  #: AT-URI of the feed generator record.
+    feed: string_formats.AtUri  #: AT-URI of the feed generator record.
 
 
 class Response(base.ResponseModelBase):

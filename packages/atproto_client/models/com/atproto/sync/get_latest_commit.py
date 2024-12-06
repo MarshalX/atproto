@@ -7,21 +7,21 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.getLatestCommit`."""
 
-    did: str  #: The DID of the repo.
+    did: string_formats.Did  #: The DID of the repo.
 
 
 class ParamsDict(t.TypedDict):
-    did: str  #: The DID of the repo.
+    did: string_formats.Did  #: The DID of the repo.
 
 
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.sync.getLatestCommit`."""
 
-    cid: str  #: Cid.
+    cid: string_formats.Cid  #: Cid.
     rev: str  #: Rev.

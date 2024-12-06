@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -27,7 +29,7 @@ class Response(base.ResponseModelBase):
 class ServiceConfig(base.ModelBase):
     """Definition model for :obj:`tools.ozone.server.getConfig`."""
 
-    url: t.Optional[str] = None  #: Url.
+    url: t.Optional[string_formats.Uri] = None  #: Url.
 
     py_type: t.Literal['tools.ozone.server.getConfig#serviceConfig'] = Field(
         default='tools.ozone.server.getConfig#serviceConfig', alias='$type', frozen=True

@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,14 +19,16 @@ from atproto_client.models import base
 class Label(base.ModelBase):
     """Definition model for :obj:`com.atproto.label.defs`. Metadata tag on an atproto resource (eg, repo or record)."""
 
-    cts: str  #: Timestamp when this label was created.
-    src: str  #: DID of the actor who created this label.
-    uri: str  #: AT URI of the record, repository (account), or other resource that this label applies to.
+    cts: string_formats.DateTime  #: Timestamp when this label was created.
+    src: string_formats.Did  #: DID of the actor who created this label.
+    uri: (
+        string_formats.Uri
+    )  #: AT URI of the record, repository (account), or other resource that this label applies to.
     val: str = Field(max_length=128)  #: The short string name of the value or type of this label.
-    cid: t.Optional[str] = (
+    cid: t.Optional[string_formats.Cid] = (
         None  #: Optionally, CID specifying the specific version of 'uri' resource this label applies to.
     )
-    exp: t.Optional[str] = None  #: Timestamp at which this label expires (no longer applies).
+    exp: t.Optional[string_formats.DateTime] = None  #: Timestamp at which this label expires (no longer applies).
     neg: t.Optional[bool] = None  #: If true, this is a negation label, overwriting a previous label.
     sig: t.Optional[t.Union[str, bytes]] = None  #: Signature of dag-cbor encoded label.
     ver: t.Optional[int] = None  #: The AT Protocol version of the label object.
@@ -85,7 +89,7 @@ class LabelValueDefinitionStrings(base.ModelBase):
     description: str = Field(
         max_length=100000
     )  #: A longer description of what the label means and why it might be applied.
-    lang: str  #: The code of the language these strings are written in.
+    lang: string_formats.Language  #: The code of the language these strings are written in.
     name: str = Field(max_length=640)  #: A short human-readable name for the label.
 
     py_type: t.Literal['com.atproto.label.defs#labelValueDefinitionStrings'] = Field(

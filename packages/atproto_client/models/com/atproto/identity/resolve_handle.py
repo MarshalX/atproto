@@ -7,20 +7,20 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.identity.resolveHandle`."""
 
-    handle: str  #: The handle to resolve.
+    handle: string_formats.Handle  #: The handle to resolve.
 
 
 class ParamsDict(t.TypedDict):
-    handle: str  #: The handle to resolve.
+    handle: string_formats.Handle  #: The handle to resolve.
 
 
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.identity.resolveHandle`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.

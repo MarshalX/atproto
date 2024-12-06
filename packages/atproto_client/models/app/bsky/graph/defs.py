@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
@@ -18,12 +20,12 @@ from atproto_client.models import base
 class ListViewBasic(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
-    cid: str  #: Cid.
+    cid: string_formats.Cid  #: Cid.
     name: str = Field(min_length=1, max_length=64)  #: Name.
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
-    uri: str  #: Uri.
-    avatar: t.Optional[str] = None  #: Avatar.
-    indexed_at: t.Optional[str] = None  #: Indexed at.
+    uri: string_formats.AtUri  #: Uri.
+    avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
+    indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     list_item_count: t.Optional[int] = Field(default=None, ge=0)  #: List item count.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
@@ -36,13 +38,13 @@ class ListViewBasic(base.ModelBase):
 class ListView(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
-    cid: str  #: Cid.
+    cid: string_formats.Cid  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileView'  #: Creator.
-    indexed_at: str  #: Indexed at.
+    indexed_at: string_formats.DateTime  #: Indexed at.
     name: str = Field(min_length=1, max_length=64)  #: Name.
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
-    uri: str  #: Uri.
-    avatar: t.Optional[str] = None  #: Avatar.
+    uri: string_formats.AtUri  #: Uri.
+    avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
@@ -58,7 +60,7 @@ class ListItemView(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
     subject: 'models.AppBskyActorDefs.ProfileView'  #: Subject.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
 
     py_type: t.Literal['app.bsky.graph.defs#listItemView'] = Field(
         default='app.bsky.graph.defs#listItemView', alias='$type', frozen=True
@@ -68,11 +70,11 @@ class ListItemView(base.ModelBase):
 class StarterPackView(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
-    cid: str  #: Cid.
+    cid: string_formats.Cid  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Creator.
-    indexed_at: str  #: Indexed at.
+    indexed_at: string_formats.DateTime  #: Indexed at.
     record: 'UnknownType'  #: Record.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
     feeds: t.Optional[t.List['models.AppBskyFeedDefs.GeneratorView']] = Field(default=None, max_length=3)  #: Feeds.
     joined_all_time_count: t.Optional[int] = Field(default=None, ge=0)  #: Joined all time count.
     joined_week_count: t.Optional[int] = Field(default=None, ge=0)  #: Joined week count.
@@ -90,11 +92,11 @@ class StarterPackView(base.ModelBase):
 class StarterPackViewBasic(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
-    cid: str  #: Cid.
+    cid: string_formats.Cid  #: Cid.
     creator: 'models.AppBskyActorDefs.ProfileViewBasic'  #: Creator.
-    indexed_at: str  #: Indexed at.
+    indexed_at: string_formats.DateTime  #: Indexed at.
     record: 'UnknownType'  #: Record.
-    uri: str  #: Uri.
+    uri: string_formats.AtUri  #: Uri.
     joined_all_time_count: t.Optional[int] = Field(default=None, ge=0)  #: Joined all time count.
     joined_week_count: t.Optional[int] = Field(default=None, ge=0)  #: Joined week count.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
@@ -128,7 +130,7 @@ Referencelist = t.Literal[
 class ListViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`."""
 
-    blocked: t.Optional[str] = None  #: Blocked.
+    blocked: t.Optional[string_formats.AtUri] = None  #: Blocked.
     muted: t.Optional[bool] = None  #: Muted.
 
     py_type: t.Literal['app.bsky.graph.defs#listViewerState'] = Field(
@@ -139,7 +141,7 @@ class ListViewerState(base.ModelBase):
 class NotFoundActor(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`. indicates that a handle or DID could not be resolved."""
 
-    actor: str  #: Actor.
+    actor: string_formats.Handle  #: Actor.
     not_found: bool = Field(frozen=True)  #: Not found.
 
     py_type: t.Literal['app.bsky.graph.defs#notFoundActor'] = Field(
@@ -150,11 +152,13 @@ class NotFoundActor(base.ModelBase):
 class Relationship(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`. lists the bi-directional graph relationships between one actor (not indicated in the object), and the target actors (the DID included in the object)."""
 
-    did: str  #: Did.
-    followed_by: t.Optional[str] = (
+    did: string_formats.Did  #: Did.
+    followed_by: t.Optional[string_formats.AtUri] = (
         None  #: if the actor is followed by this DID, contains the AT-URI of the follow record.
     )
-    following: t.Optional[str] = None  #: if the actor follows this DID, this is the AT-URI of the follow record.
+    following: t.Optional[string_formats.AtUri] = (
+        None  #: if the actor follows this DID, this is the AT-URI of the follow record.
+    )
 
     py_type: t.Literal['app.bsky.graph.defs#relationship'] = Field(
         default='app.bsky.graph.defs#relationship', alias='$type', frozen=True

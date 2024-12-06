@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -17,9 +19,9 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.graph.listitem`."""
 
-    created_at: str  #: Created at.
-    list: str  #: Reference (AT-URI) to the list record (app.bsky.graph.list).
-    subject: str  #: The account which is included on the list.
+    created_at: string_formats.DateTime  #: Created at.
+    list: string_formats.AtUri  #: Reference (AT-URI) to the list record (app.bsky.graph.list).
+    subject: string_formats.Did  #: The account which is included on the list.
 
     py_type: t.Literal['app.bsky.graph.listitem'] = Field(default='app.bsky.graph.listitem', alias='$type', frozen=True)
 

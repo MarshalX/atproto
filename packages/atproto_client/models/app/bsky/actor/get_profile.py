@@ -7,14 +7,14 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.actor.getProfile`."""
 
-    actor: str  #: Handle or DID of account to fetch profile of.
+    actor: string_formats.Handle  #: Handle or DID of account to fetch profile of.
 
 
 class ParamsDict(t.TypedDict):
-    actor: str  #: Handle or DID of account to fetch profile of.
+    actor: string_formats.Handle  #: Handle or DID of account to fetch profile of.

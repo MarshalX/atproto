@@ -7,18 +7,18 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.server.deleteAccount`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     password: str  #: Password.
     token: str  #: Token.
 
 
 class DataDict(t.TypedDict):
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
     password: str  #: Password.
     token: str  #: Token.

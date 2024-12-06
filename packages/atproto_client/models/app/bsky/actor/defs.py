@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -18,11 +20,11 @@ from atproto_client.models import base
 class ProfileViewBasic(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
-    avatar: t.Optional[str] = None  #: Avatar.
-    created_at: t.Optional[str] = None  #: Created at.
+    avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
+    created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
@@ -35,14 +37,14 @@ class ProfileViewBasic(base.ModelBase):
 class ProfileView(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
-    avatar: t.Optional[str] = None  #: Avatar.
-    created_at: t.Optional[str] = None  #: Created at.
+    avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
+    created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
-    indexed_at: t.Optional[str] = None  #: Indexed at.
+    indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
@@ -54,17 +56,17 @@ class ProfileView(base.ModelBase):
 class ProfileViewDetailed(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    did: str  #: Did.
-    handle: str  #: Handle.
+    did: string_formats.Did  #: Did.
+    handle: string_formats.Handle  #: Handle.
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
-    avatar: t.Optional[str] = None  #: Avatar.
-    banner: t.Optional[str] = None  #: Banner.
-    created_at: t.Optional[str] = None  #: Created at.
+    avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
+    banner: t.Optional[string_formats.Uri] = None  #: Banner.
+    created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     followers_count: t.Optional[int] = None  #: Followers count.
     follows_count: t.Optional[int] = None  #: Follows count.
-    indexed_at: t.Optional[str] = None  #: Indexed at.
+    indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
     joined_via_starter_pack: t.Optional['models.AppBskyGraphDefs.StarterPackViewBasic'] = (
         None  #: Joined via starter pack.
     )
@@ -106,10 +108,10 @@ class ViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`. Metadata about the requesting account's relationship with the subject account. Only has meaningful content for authed requests."""
 
     blocked_by: t.Optional[bool] = None  #: Blocked by.
-    blocking: t.Optional[str] = None  #: Blocking.
+    blocking: t.Optional[string_formats.AtUri] = None  #: Blocking.
     blocking_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Blocking by list.
-    followed_by: t.Optional[str] = None  #: Followed by.
-    following: t.Optional[str] = None  #: Following.
+    followed_by: t.Optional[string_formats.AtUri] = None  #: Followed by.
+    following: t.Optional[string_formats.AtUri] = None  #: Following.
     known_followers: t.Optional['models.AppBskyActorDefs.KnownFollowers'] = None  #: Known followers.
     muted: t.Optional[bool] = None  #: Muted.
     muted_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Muted by list.
@@ -168,7 +170,9 @@ class ContentLabelPref(base.ModelBase):
     visibility: t.Union[
         t.Literal['ignore'], t.Literal['show'], t.Literal['warn'], t.Literal['hide'], str
     ]  #: Visibility.
-    labeler_did: t.Optional[str] = None  #: Which labeler does this preference apply to? If undefined, applies globally.
+    labeler_did: t.Optional[string_formats.Did] = (
+        None  #: Which labeler does this preference apply to? If undefined, applies globally.
+    )
 
     py_type: t.Literal['app.bsky.actor.defs#contentLabelPref'] = Field(
         default='app.bsky.actor.defs#contentLabelPref', alias='$type', frozen=True
@@ -201,8 +205,8 @@ class SavedFeedsPrefV2(base.ModelBase):
 class SavedFeedsPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    pinned: t.List[str]  #: Pinned.
-    saved: t.List[str]  #: Saved.
+    pinned: t.List[string_formats.AtUri]  #: Pinned.
+    saved: t.List[string_formats.AtUri]  #: Saved.
     timeline_index: t.Optional[int] = None  #: Timeline index.
 
     py_type: t.Literal['app.bsky.actor.defs#savedFeedsPref'] = Field(
@@ -213,7 +217,7 @@ class SavedFeedsPref(base.ModelBase):
 class PersonalDetailsPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    birth_date: t.Optional[str] = None  #: The birth date of account owner.
+    birth_date: t.Optional[string_formats.DateTime] = None  #: The birth date of account owner.
 
     py_type: t.Literal['app.bsky.actor.defs#personalDetailsPref'] = Field(
         default='app.bsky.actor.defs#personalDetailsPref', alias='$type', frozen=True
@@ -280,7 +284,7 @@ class MutedWord(base.ModelBase):
     actor_target: t.Optional[t.Union[t.Literal['all'], t.Literal['exclude-following'], str]] = (
         'all'  #: Groups of users to apply the muted word to. If undefined, applies to all users.
     )
-    expires_at: t.Optional[str] = (
+    expires_at: t.Optional[string_formats.DateTime] = (
         None  #: The date and time at which the muted word will expire and no longer be applied.
     )
     id: t.Optional[str] = None  #: Id.
@@ -303,7 +307,7 @@ class MutedWordsPref(base.ModelBase):
 class HiddenPostsPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    items: t.List[str]  #: A list of URIs of posts the account owner has hidden.
+    items: t.List[string_formats.AtUri]  #: A list of URIs of posts the account owner has hidden.
 
     py_type: t.Literal['app.bsky.actor.defs#hiddenPostsPref'] = Field(
         default='app.bsky.actor.defs#hiddenPostsPref', alias='$type', frozen=True
@@ -323,7 +327,7 @@ class LabelersPref(base.ModelBase):
 class LabelerPrefItem(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
 
     py_type: t.Literal['app.bsky.actor.defs#labelerPrefItem'] = Field(
         default='app.bsky.actor.defs#labelerPrefItem', alias='$type', frozen=True
@@ -364,7 +368,7 @@ class Nux(base.ModelBase):
     data: t.Optional[str] = Field(
         default=None, max_length=3000
     )  #: Arbitrary data for the NUX. The structure is defined by the NUX itself. Limited to 300 characters.
-    expires_at: t.Optional[str] = (
+    expires_at: t.Optional[string_formats.DateTime] = (
         None  #: The date and time at which the NUX will expire and should be considered completed.
     )
 

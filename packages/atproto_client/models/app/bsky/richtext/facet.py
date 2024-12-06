@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -36,7 +38,7 @@ class Main(base.ModelBase):
 class Mention(base.ModelBase):
     """Definition model for :obj:`app.bsky.richtext.facet`. Facet feature for mention of another account. The text is usually a handle, including a '@' prefix, but the facet reference is a DID."""
 
-    did: str  #: Did.
+    did: string_formats.Did  #: Did.
 
     py_type: t.Literal['app.bsky.richtext.facet#mention'] = Field(
         default='app.bsky.richtext.facet#mention', alias='$type', frozen=True
@@ -46,7 +48,7 @@ class Mention(base.ModelBase):
 class Link(base.ModelBase):
     """Definition model for :obj:`app.bsky.richtext.facet`. Facet feature for a URL. The text URL may have been simplified or truncated, but the facet reference should be a complete URL."""
 
-    uri: str  #: Uri.
+    uri: string_formats.Uri  #: Uri.
 
     py_type: t.Literal['app.bsky.richtext.facet#link'] = Field(
         default='app.bsky.richtext.facet#link', alias='$type', frozen=True

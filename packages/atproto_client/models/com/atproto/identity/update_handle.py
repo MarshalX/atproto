@@ -7,14 +7,14 @@
 
 import typing as t
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.identity.updateHandle`."""
 
-    handle: str  #: The new handle.
+    handle: string_formats.Handle  #: The new handle.
 
 
 class DataDict(t.TypedDict):
-    handle: str  #: The new handle.
+    handle: string_formats.Handle  #: The new handle.

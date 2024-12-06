@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -24,7 +26,7 @@ class Params(base.ParamsModelBase):
     )
     limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
     typeahead: t.Optional[bool] = None  #: If true, acts as fast/simple 'typeahead' query.
-    viewer: t.Optional[str] = (
+    viewer: t.Optional[string_formats.Did] = (
         None  #: DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking.
     )
 
@@ -37,7 +39,7 @@ class ParamsDict(t.TypedDict):
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     typeahead: te.NotRequired[t.Optional[bool]]  #: If true, acts as fast/simple 'typeahead' query.
     viewer: te.NotRequired[
-        t.Optional[str]
+        t.Optional[string_formats.Did]
     ]  #: DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking.
 
 

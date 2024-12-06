@@ -9,18 +9,18 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base
+from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.getRepo`."""
 
-    did: str  #: The DID of the repo.
+    did: string_formats.Did  #: The DID of the repo.
     since: t.Optional[str] = None  #: The revision ('rev') of the repo to create a diff from.
 
 
 class ParamsDict(t.TypedDict):
-    did: str  #: The DID of the repo.
+    did: string_formats.Did  #: The DID of the repo.
     since: te.NotRequired[t.Optional[str]]  #: The revision ('rev') of the repo to create a diff from.
 
 

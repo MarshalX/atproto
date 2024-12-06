@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
@@ -19,7 +21,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.repo.applyWrites`."""
 
-    repo: str  #: The handle or DID of the repo (aka, current account).
+    repo: string_formats.Handle  #: The handle or DID of the repo (aka, current account).
     writes: t.List[
         te.Annotated[
             t.Union[
@@ -30,7 +32,7 @@ class Data(base.DataModelBase):
             Field(discriminator='py_type'),
         ]
     ]  #: Writes.
-    swap_commit: t.Optional[str] = (
+    swap_commit: t.Optional[string_formats.Cid] = (
         None  #: If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations.
     )
     validate_: t.Optional[bool] = (
@@ -39,7 +41,7 @@ class Data(base.DataModelBase):
 
 
 class DataDict(t.TypedDict):
-    repo: str  #: The handle or DID of the repo (aka, current account).
+    repo: string_formats.Handle  #: The handle or DID of the repo (aka, current account).
     writes: t.List[
         te.Annotated[
             t.Union[
@@ -51,7 +53,7 @@ class DataDict(t.TypedDict):
         ]
     ]  #: Writes.
     swap_commit: te.NotRequired[
-        t.Optional[str]
+        t.Optional[string_formats.Cid]
     ]  #: If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations.
     validate: te.NotRequired[
         t.Optional[bool]
@@ -79,7 +81,7 @@ class Response(base.ResponseModelBase):
 class Create(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Operation which creates a new record."""
 
-    collection: str  #: Collection.
+    collection: string_formats.Nsid  #: Collection.
     value: 'UnknownType'  #: Value.
     rkey: t.Optional[str] = Field(default=None, max_length=512)  #: Rkey.
 
@@ -91,7 +93,7 @@ class Create(base.ModelBase):
 class Update(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Operation which updates an existing record."""
 
-    collection: str  #: Collection.
+    collection: string_formats.Nsid  #: Collection.
     rkey: str  #: Rkey.
     value: 'UnknownType'  #: Value.
 
@@ -103,7 +105,7 @@ class Update(base.ModelBase):
 class Delete(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Operation which deletes an existing record."""
 
-    collection: str  #: Collection.
+    collection: string_formats.Nsid  #: Collection.
     rkey: str  #: Rkey.
 
     py_type: t.Literal['com.atproto.repo.applyWrites#delete'] = Field(
@@ -114,8 +116,8 @@ class Delete(base.ModelBase):
 class CreateResult(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`."""
 
-    cid: str  #: Cid.
-    uri: str  #: Uri.
+    cid: string_formats.Cid  #: Cid.
+    uri: string_formats.AtUri  #: Uri.
     validation_status: t.Optional[t.Union[t.Literal['valid'], t.Literal['unknown'], str]] = None  #: Validation status.
 
     py_type: t.Literal['com.atproto.repo.applyWrites#createResult'] = Field(
@@ -126,8 +128,8 @@ class CreateResult(base.ModelBase):
 class UpdateResult(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`."""
 
-    cid: str  #: Cid.
-    uri: str  #: Uri.
+    cid: string_formats.Cid  #: Cid.
+    uri: string_formats.AtUri  #: Uri.
     validation_status: t.Optional[t.Union[t.Literal['valid'], t.Literal['unknown'], str]] = None  #: Validation status.
 
     py_type: t.Literal['com.atproto.repo.applyWrites#updateResult'] = Field(

@@ -10,6 +10,8 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -19,7 +21,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.searchPosts`."""
 
     q: str  #: Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
-    author: t.Optional[str] = (
+    author: t.Optional[string_formats.Handle] = (
         None  #: Filter to posts by the given account. Handles are resolved to DID before query-time.
     )
     cursor: t.Optional[str] = (
@@ -28,11 +30,11 @@ class Params(base.ParamsModelBase):
     domain: t.Optional[str] = (
         None  #: Filter to posts with URLs (facet links or embeds) linking to the given domain (hostname). Server may apply hostname normalization.
     )
-    lang: t.Optional[str] = (
+    lang: t.Optional[string_formats.Language] = (
         None  #: Filter to posts in the given language. Expected to be based on post language field, though server may override language detection.
     )
     limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
-    mentions: t.Optional[str] = (
+    mentions: t.Optional[string_formats.Handle] = (
         None  #: Filter to posts which mention the given account. Handles are resolved to DID before query-time. Only matches rich-text facet mentions.
     )
     since: t.Optional[str] = (
@@ -47,7 +49,7 @@ class Params(base.ParamsModelBase):
     until: t.Optional[str] = (
         None  #: Filter results for posts before the indicated datetime (not inclusive). Expected to use 'sortAt' timestamp, which may not match 'createdAt'. Can be a datetime, or just an ISO date (YYY-MM-DD).
     )
-    url: t.Optional[str] = (
+    url: t.Optional[string_formats.Uri] = (
         None  #: Filter to posts with links (facet links or embeds) pointing to this URL. Server may apply URL normalization or fuzzy matching.
     )
 
@@ -55,7 +57,7 @@ class Params(base.ParamsModelBase):
 class ParamsDict(t.TypedDict):
     q: str  #: Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
     author: te.NotRequired[
-        t.Optional[str]
+        t.Optional[string_formats.Handle]
     ]  #: Filter to posts by the given account. Handles are resolved to DID before query-time.
     cursor: te.NotRequired[
         t.Optional[str]
@@ -64,11 +66,11 @@ class ParamsDict(t.TypedDict):
         t.Optional[str]
     ]  #: Filter to posts with URLs (facet links or embeds) linking to the given domain (hostname). Server may apply hostname normalization.
     lang: te.NotRequired[
-        t.Optional[str]
+        t.Optional[string_formats.Language]
     ]  #: Filter to posts in the given language. Expected to be based on post language field, though server may override language detection.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     mentions: te.NotRequired[
-        t.Optional[str]
+        t.Optional[string_formats.Handle]
     ]  #: Filter to posts which mention the given account. Handles are resolved to DID before query-time. Only matches rich-text facet mentions.
     since: te.NotRequired[
         t.Optional[str]
@@ -83,7 +85,7 @@ class ParamsDict(t.TypedDict):
         t.Optional[str]
     ]  #: Filter results for posts before the indicated datetime (not inclusive). Expected to use 'sortAt' timestamp, which may not match 'createdAt'. Can be a datetime, or just an ISO date (YYY-MM-DD).
     url: te.NotRequired[
-        t.Optional[str]
+        t.Optional[string_formats.Uri]
     ]  #: Filter to posts with links (facet links or embeds) pointing to this URL. Server may apply URL normalization or fuzzy matching.
 
 
