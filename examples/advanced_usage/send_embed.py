@@ -1,7 +1,7 @@
 import httpx
 from atproto import Client, models
 
-# condescending cat stare
+# image of a condescending cat stare
 DEFAULT_IMAGE_URL = 'https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:xbtmt2zjwlrfegqvch7fboei/bafkreiae4rcokecag5qlpvg6l3otzulqn3hllnazmz2ezyqfl6xzpy5noe@jpeg'
 
 
@@ -11,6 +11,7 @@ def main(handle: str, password: str) -> None:
 
     # Example 1: Link card embed
     text = 'Example post with embed external resource (link card)'
+    # AppBskyEmbedExternal is the same as "link card" in the app
     embed_external = models.AppBskyEmbedExternal.Main(
         external=models.AppBskyEmbedExternal.External(
             title='Google',
@@ -22,6 +23,7 @@ def main(handle: str, password: str) -> None:
 
     # Example 2: Simple quote post
     text_quote = 'Example post with embed post and quote (quote post)'
+    # AppBskyEmbedRecord is the same as "quote post" in the app
     embed_post = models.AppBskyEmbedRecord.Main(record=models.create_strong_ref(post_with_link_card))
     client.send_post(text=text_quote, embed=embed_post)
 
