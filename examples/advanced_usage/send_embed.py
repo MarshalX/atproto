@@ -2,7 +2,7 @@ import httpx
 from atproto import Client, models
 
 # image of a condescending cat stare
-DEFAULT_IMAGE_URL = 'https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:xbtmt2zjwlrfegqvch7fboei/bafkreiae4rcokecag5qlpvg6l3otzulqn3hllnazmz2ezyqfl6xzpy5noe@jpeg'
+DEFAULT_IMAGE_URL = 'https://cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg'
 
 
 def main(handle: str, password: str) -> None:
