@@ -1,7 +1,6 @@
 import httpx
 from atproto import Client, models
 
-# image of a condescending cat stare
 DEFAULT_IMAGE_URL = 'https://cdn.bsky.app/img/avatar/plain/did:plc:kvwvcn5iqfooopmyzvb4qzba/bafkreicwqcugdgubtawr6xv6jjifoju67eigwx2xgz4zs73nkzzn36oucy@jpeg'
 
 
