@@ -24,6 +24,7 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     priority: t.Optional[bool] = None  #: Priority.
+    reasons: t.Optional[t.List[str]] = None  #: Notification reasons to include in response.
     seen_at: t.Optional[string_formats.DateTime] = None  #: Seen at.
 
 
@@ -31,6 +32,7 @@ class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     priority: te.NotRequired[t.Optional[bool]]  #: Priority.
+    reasons: te.NotRequired[t.Optional[t.List[str]]]  #: Notification reasons to include in response.
     seen_at: te.NotRequired[t.Optional[string_formats.DateTime]]  #: Seen at.
 
 
