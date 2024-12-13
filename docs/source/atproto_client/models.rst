@@ -19,3 +19,4 @@ Submodules
    ../atproto/atproto_client.models.blob_ref
    ../atproto/atproto_client.models.dot_dict
    ../atproto/atproto_client.models.utils
+   ../atproto/atproto_client.models.string_formats
