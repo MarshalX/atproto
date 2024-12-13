@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from functools import wraps
 from typing import Callable, Mapping, Set, Union, cast
 from urllib.parse import urlparse
 
@@ -54,8 +55,9 @@ AT_URI_RE = re.compile(
 def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., str]:
     """Skip pydantic validation if not opting into strict validation via context."""
 
+    # Wrapper could be likely be generalized to support other signatures
+    @wraps(validate_fn)
     def wrapper(v: str, info: ValidationInfo) -> str:
-        """Could likely be generalized to support arbitrary signatures."""
         if info and isinstance(info.context, Mapping) and info.context.get(_OPT_IN_KEY, False):
             return cast(core_schema.NoInfoValidatorFunction, validate_fn)(v)
         return v
@@ -65,6 +67,24 @@ def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., st
 
 @only_validate_if_strict
 def validate_handle(v: str) -> str:
+    """Validate an AT Protocol handle.
+
+    A handle must be a valid domain name with:
+    - 2+ segments separated by dots
+    - ASCII alphanumeric characters and hyphens only
+    - 1-63 chars per segment
+    - Max 253 chars total
+    - Last segment cannot start with a digit
+
+    Args:
+        v: The handle to validate (e.g. "alice.bsky.social")
+
+    Returns:
+        str: The validated handle
+
+    Raises:
+        ValueError: If handle format is invalid
+    """
     # Check ASCII first
     if not v.isascii():
         raise ValueError('Invalid handle: must contain only ASCII characters')
@@ -80,6 +100,25 @@ def validate_handle(v: str) -> str:
 
 @only_validate_if_strict
 def validate_did(v: str) -> str:
+    """Validate an AT Protocol DID.
+
+    A DID must follow the pattern:
+    - Format: did:method:identifier
+    - Method must be lowercase letters
+    - Identifier allows alphanumeric chars, dots, underscores, hyphens, and percent
+    - Max 2KB length
+    - No /?#[]@ characters allowed
+    - Valid percent-encoding if used
+
+    Args:
+        v: The DID to validate (e.g. "did:plc:z72i7hdynmk6r22z27h6tvur")
+
+    Returns:
+        str: The validated DID
+
+    Raises:
+        ValueError: If DID format is invalid
+    """
     # Check for invalid characters
     if any(c in v for c in '/?#[]@'):
         raise ValueError('Invalid DID: cannot contain /, ?, #, [, ], or @ characters')
@@ -100,6 +139,26 @@ def validate_did(v: str) -> str:
 
 @only_validate_if_strict
 def validate_nsid(v: str) -> str:
+    """Validate an AT Protocol NSID (Namespaced Identifier).
+
+    An NSID must have:
+    - 3+ segments separated by dots
+    - Reversed domain name (lowercase alphanumeric + hyphen)
+    - Name segment (letters only)
+    - Max 317 chars total
+    - No segments ending in numbers
+    - No @_*#! special characters
+    - Max 63 chars per segment
+
+    Args:
+        v: The NSID to validate (e.g. "app.bsky.feed.post")
+
+    Returns:
+        str: The validated NSID
+
+    Raises:
+        ValueError: If NSID format is invalid
+    """
     if (
         not atproto_core_validate_nsid(v, soft_fail=True)
         or len(v) > MAX_NSID_LENGTH
@@ -115,6 +174,21 @@ def validate_nsid(v: str) -> str:
 
 @only_validate_if_strict
 def validate_language(v: str) -> str:
+    """Validate an ISO language code.
+
+    Must match pattern:
+    - 2-3 letter language code or 'i'
+    - Optional subtag with alphanumeric chars and hyphens
+
+    Args:
+        v: The language code to validate (e.g. "en" or "en-US")
+
+    Returns:
+        str: The validated language code
+
+    Raises:
+        ValueError: If language code format is invalid
+    """
     if not LANG_RE.match(v):
         raise ValueError('Invalid language code: must be ISO language code (e.g. en or en-US)')
     return v
@@ -122,6 +196,22 @@ def validate_language(v: str) -> str:
 
 @only_validate_if_strict
 def validate_record_key(v: str) -> str:
+    """Validate an AT Protocol record key.
+
+    A record key must:
+    - Be 1-512 characters
+    - Contain only alphanumeric chars, dots, underscores, colons, tildes, or hyphens
+    - Not be "." or ".."
+
+    Args:
+        v: The record key to validate (e.g. "3jxtb5w2hkt2m")
+
+    Returns:
+        str: The validated record key
+
+    Raises:
+        ValueError: If record key format is invalid
+    """
     if v in INVALID_RECORD_KEYS or not RKEY_RE.match(v):
         raise ValueError(
             'Invalid record key: must contain only alphanumeric, dot, underscore, colon, tilde, or hyphen characters'
@@ -131,6 +221,21 @@ def validate_record_key(v: str) -> str:
 
 @only_validate_if_strict
 def validate_cid(v: str) -> str:
+    """Validate a Content Identifier (CID).
+
+    Must be:
+    - Minimum 8 characters
+    - Alphanumeric characters and plus signs only
+
+    Args:
+        v: The CID to validate
+
+    Returns:
+        str: The validated CID
+
+    Raises:
+        ValueError: If CID format is invalid
+    """
     if not CID_RE.match(v):
         raise ValueError('Invalid CID: must be a valid Content Identifier with minimum length 8')
     return v
@@ -138,6 +243,24 @@ def validate_cid(v: str) -> str:
 
 @only_validate_if_strict
 def validate_at_uri(v: str) -> str:
+    """Validate an AT Protocol URI.
+
+    Must follow pattern:
+    - Starts with "at://"
+    - Contains handle or DID
+    - Optional /collection/record-key path
+    - Max 8KB length
+    - No query parameters or fragments
+
+    Args:
+        v: The AT-URI to validate (e.g. "at://alice.bsky.social/app.bsky.feed.post/3jxtb5w2hkt2m")
+
+    Returns:
+        str: The validated AT-URI
+
+    Raises:
+        ValueError: If AT-URI format is invalid
+    """
     if len(v) >= MAX_AT_URI_LENGTH:
         raise ValueError(f'Invalid AT-URI: must be under {MAX_AT_URI_LENGTH} chars')
 
@@ -149,6 +272,25 @@ def validate_at_uri(v: str) -> str:
 
 @only_validate_if_strict
 def validate_datetime(v: str) -> str:
+    """Validate an ISO 8601/RFC 3339 datetime string.
+
+    Requirements:
+    - Must use uppercase 'T' as time separator
+    - Must include seconds (HH:MM:SS)
+    - Must have timezone (Z or ±HH:MM)
+    - No -00:00 timezone allowed
+    - Valid fractional seconds format if used
+    - No whitespace allowed
+
+    Args:
+        v: The datetime string to validate (e.g. "2024-11-24T06:02:00Z")
+
+    Returns:
+        str: The validated datetime string
+
+    Raises:
+        ValueError: If datetime format is invalid
+    """
     # Must contain uppercase T and Z if used
     if v != v.strip():
         raise ValueError('Invalid datetime: no whitespace allowed')
@@ -182,6 +324,22 @@ def validate_datetime(v: str) -> str:
 
 @only_validate_if_strict
 def validate_tid(v: str) -> str:
+    """Validate an AT Protocol TID (Temporal ID).
+
+    Must be:
+    - Exactly 13 characters
+    - Only lowercase letters and numbers 2-7
+    - First byte's high bit (0x40) must be 0
+
+    Args:
+        v: The TID to validate (e.g. "3jxtb5w2hkt2m")
+
+    Returns:
+        str: The validated TID
+
+    Raises:
+        ValueError: If TID format is invalid
+    """
     if not TID_RE.match(v) or (ord(v[0]) & 0x40):
         raise ValueError(f'Invalid TID: must be exactly {TID_LENGTH} lowercase letters/numbers')
     return v
@@ -189,6 +347,24 @@ def validate_tid(v: str) -> str:
 
 @only_validate_if_strict
 def validate_uri(v: str) -> str:
+    """Validate a standard URI.
+
+    Requirements:
+    - Must have a scheme starting with a letter
+    - Must have authority (netloc) or path/query/fragment
+    - Max 8KB length
+    - No spaces allowed
+    - Must follow RFC-3986 format
+
+    Args:
+        v: The URI to validate (e.g. "https://example.com/path")
+
+    Returns:
+        str: The validated URI
+
+    Raises:
+        ValueError: If URI format is invalid
+    """
     if len(v) >= MAX_URI_LENGTH or ' ' in v:
         raise ValueError(f'Invalid URI: must be under {MAX_URI_LENGTH} chars and not contain spaces')
     parsed = urlparse(v)
