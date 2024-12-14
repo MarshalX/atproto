@@ -270,7 +270,7 @@ The model classes in the "models" aliases could be:
 - Record model
 - Type model
 
-The only thing you need to know is how to create instances of models. You won't need to work as model-creator for all models.  For example, the SDK will create Response models for you.
+The only thing you need to know is how to create instances of models. You won't need to work as model-creator for all models. For example, the SDK will create Response models for you.
 
 There are a few ways to create the instance of a model:
 
