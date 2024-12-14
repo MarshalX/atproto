@@ -1,3 +1,14 @@
+"""AT Proto string format validation.
+
+*Note*: These formats are a working empirical understanding of the following resources:
+
+- https://atproto.com/specs/lexicon
+
+- https://github.com/bluesky-social/atproto/tree/main/interop-test-files/syntax
+
+see https://github.com/MarshalX/atproto/pull/406 for more details.
+"""
+
 import re
 from datetime import datetime
 from typing import Callable, Mapping, Set, Union, cast
