@@ -176,7 +176,7 @@ You can get help in several ways:
 
 ### Advanced usage
 
-I'll be honest. The high-level Client that was shown in the "Quick Start" section is not a real ATProto API. This is syntax sugar built upon the real XRPC methods! The high-level methods do not cover the full needs of developers. To be able to do anything that you want, you should know to work with low-level API. Let's dive into it!
+I'll be honest. The high-level Client that was shown in the "Quick Start" section is not a real ATProto API. This is syntax sugar built upon the real XRPC methods! The high-level methods do not cover the full needs of developers. To be able to do anything that you want, you should know how to work with low-level API. Let's dive into it!
 
 The basics:
 - Namespaces – classes that group sub-namespaces and the XRPC queries and procedures. Built upon NSID ATProto semantic.
