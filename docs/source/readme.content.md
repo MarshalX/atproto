@@ -1,6 +1,6 @@
 ### Introduction
 
-This SDK attempts to implement everything that provides ATProto. There is support for Lexicon Schemes, XRPC clients, Firehose, Identity, DID keys, signatures, and more. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Schemes, DAG-CBOR, CAR files, DID Documents and more.
+This SDK attempts to implement everything that provides ATProto. There is support for Lexicon Schemes, XRPC clients, Firehose, Identity, DID keys, signatures, and more. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Schemes, DAG-CBOR, CAR files, DID Documents and more. 
 
 ### Requirements
 
