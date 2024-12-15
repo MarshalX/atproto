@@ -5,8 +5,6 @@
 - https://atproto.com/specs/lexicon
 
 - https://github.com/bluesky-social/atproto/tree/main/interop-test-files/syntax
-
-see https://github.com/MarshalX/atproto/pull/406 for more details.
 """
 
 import re
