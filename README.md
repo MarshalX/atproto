@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
 ### Introduction
 
-This SDK attempts to implement everything that provides ATProto. There is support for Lexicon Schemes, XRPC clients, Firehose, Identity, DID keys, signatures, and more. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. SDK also provides utilities to work with CID, NSID, AT URI Schemes, DAG-CBOR, CAR files, DID Documents and more.
+This SDK attempts to implement everything that provides ATProto. There is support for Lexicon Schemes, XRPC clients, Firehose, Identity, DID keys, signatures, and more. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but it doesn't have a vendor lock on it. Feel free to use the code generator for your own lexicon schemes. The SDK also provides utilities to work with CID, NSID, AT URI Schemes, DAG-CBOR, CAR files, DID Documents and more.
 
 ### Requirements
 
@@ -93,7 +93,7 @@ pip install atproto
 
 ### Quick start
 
-First of all, you need to create the instance of the XRPC Client. To do so, you have two major options: asynchronous, and synchronous. The difference only in import and how you call the methods. If you are not familiar with async, use sync instead.
+First of all, you need to create the instance of the XRPC Client. To do so, you have two major options: asynchronous and synchronous. The difference is only in the import and how you call the methods. If you are not familiar with async, use sync instead.
 
 For sync:
 
@@ -117,7 +117,7 @@ client = AsyncClient()
 
 In the snippets below, only the sync version will be presented.
 
-Right after the creation of the Client instance, you probably want to access the full API and perform actions by profile. To achieve this, you should log in to the network using your handle and password. The password could be app-specific.
+Right after the creation of the Client instance, you will probably want to access the full API and perform actions by profile. To achieve this, you should log into the network using your handle and password. The password could be app-specific.
 
 ```python
 from atproto import Client
@@ -126,9 +126,9 @@ client = Client()
 client.login('my-username', 'my-password')
 ```
 
-You are awesome! Now you feel to pick any high-level method that you want and perform it!
+You are awesome! Now feel free to pick any high-level method that you want and try it out!
 
-Code to send post:
+Code to send a post:
 
 ```python
 from atproto import Client
@@ -160,7 +160,7 @@ The SDK is built upon the following components:
 | `atproto_lexicon`  | Lexicon parser.                                                             |
 | `atproto_server`   | Server-side utils like JWT.                                                 |
 
-I highly recommend you to use the `atproto` package to import everything that you need. 
+I highly recommend that you use the `atproto` package to import everything that you need. 
 It contains shortcuts to all other packages.
 
 ### Documentation
@@ -176,7 +176,7 @@ You can get help in several ways:
 
 ### Advanced usage
 
-I'll be honest. The high-level Client that was shown in the "Quick Start" section is not a real ATProto API. This is syntax sugar built upon the real XRPC methods! The high-level methods are not cover the full need of developers. To be able to do anything that you want, you should know to work with low-level API. Let's dive into it!
+I'll be honest. The high-level Client that was shown in the "Quick Start" section is not a real ATProto API. This is syntax sugar built upon the real XRPC methods! The high-level methods do not cover the full needs of developers. To be able to do anything that you want, you should know how to work with low-level API. Let's dive into it!
 
 The basics:
 - Namespaces – classes that group sub-namespaces and the XRPC queries and procedures. Built upon NSID ATProto semantic.
@@ -193,7 +193,7 @@ Client().com
 Client().app
 ```
 
-To dive deeper, you can navigate using hints from your IDE. Thanks to well-type hinted SDK, it's much easier.
+To dive deeper, you can navigate using hints from your IDE. Thanks to a well-type hinted SDK, it's much easier.
 
 ```python
 from atproto import Client
@@ -204,11 +204,11 @@ Client().app.bsky.feed.get_likes(...)
 Client().app.bsky.graph.get_follows(...)
 ```
 
-The endpoint of the path is always the method that you want to call. The method presents a query or procedure in XRPC. You should not care about it much. The only thing you need to know is that the procedures required data objects. Queries could be called with or without params.
+The endpoint of the path is always the method you want to call. The method presents a query or procedure in XRPC. You should not care about it much. The only thing you need to know is that the procedures require data objects. Queries could be called with or without params.
 
 #### Records
 
-In some sub-namespaces, you can find records. Such record classes provide a syntax sugar not defined in the lexicon scheme. This sugar provides a more convenient way to work with repository operations. Such as creating a record, deleting a record, and so on.
+In some sub-namespaces, you can find records. Such record classes provide a syntax sugar not defined in the lexicon scheme. This sugar provides a more convenient way to work with repository operations, such as creating a record, deleting a record, and so on.
 
 Here are some available records of Bluesky records:
 
@@ -270,14 +270,14 @@ The model classes in the "models" aliases could be:
 - Record model
 - Type model
 
-The only thing you need to know is how to create instances of models. Not with all models, you will work as model-creator. For example, SDK will create Response models for you.
+The only thing you need to know is how to create instances of models. You won't need to work as model-creator for all models. For example, the SDK will create Response models for you.
 
-There are a few ways how to create the instance of a model:
+There are a few ways to create the instance of a model:
 
 - Dict-based
 - Class-based
 
-The instances of data and params models should be passed as arguments to the methods that were described above.
+The instances of any data and params models should be passed as arguments to the methods that were described above.
 
 Dict-based:
 
@@ -301,13 +301,13 @@ params = models.ComAtprotoIdentityResolveHandle.Params(handle='marshal.dev')
 print(client.com.atproto.identity.resolve_handle(params))
 ```
 
-Tip: look at typehint of the method to figure out the name and the path to the input/data model!
+Tip: look at the typehint of the method to figure out the name and the path to the input/data model!
 
 Pro Tip: use IDE autocompletion to find necessary models! Just start typing the method name right after the dot (`models.{type method name in camel case`).
 
-Models could be nested as hell. Be ready for it!
+Models can be nested to the innermost rings of hell. Be ready for it!
 
-This is how we can send a post with the image using low-level XRPC Client:
+This is how we can send a post with an image using low-level XRPC Client:
 
 ```python
 from atproto import Client, models
