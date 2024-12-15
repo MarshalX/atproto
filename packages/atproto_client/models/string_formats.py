@@ -65,10 +65,11 @@ AT_URI_RE = re.compile(
 def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., str]:
     """Skip pydantic validation if not opting into strict validation via context.
 
-    :param validate_fn: The validation function to conditionally apply
-    :type validate_fn: Callable[..., str]
-    :return: A wrapped validation function that only validates in strict mode
-    :rtype: Callable[..., str]
+    Args:
+        validate_fn: The validation function to conditionally apply
+
+    Returns:
+        A wrapped validation function that only validates in strict mode
     """
 
     def wrapper(v: str, info: ValidationInfo) -> str:
@@ -100,11 +101,14 @@ def validate_handle(v: str) -> str:
 
     - Last segment cannot start with a digit
 
-    :param v: The handle to validate (e.g. alice.bsky.social)
-    :type v: str
-    :return: The validated handle
-    :rtype: str
-    :raises ValueError: If handle format is invalid
+    Args:
+        v: The handle to validate (e.g. alice.bsky.social)
+
+    Returns:
+        The validated handle
+
+    Raises:
+        ValueError: If handle format is invalid
     """
     # Check ASCII first
     if not v.isascii():
@@ -137,11 +141,14 @@ def validate_did(v: str) -> str:
 
     - Valid percent-encoding if used
 
-    :param v: The DID to validate (e.g. did:plc:z72i7hdynmk6r22z27h6tvur)
-    :type v: str
-    :return: The validated DID
-    :rtype: str
-    :raises ValueError: If DID format is invalid
+    Args:
+        v: The DID to validate (e.g. did:plc:z72i7hdynmk6r22z27h6tvur)
+
+    Returns:
+        The validated DID
+
+    Raises:
+        ValueError: If DID format is invalid
     """
     # Check for invalid characters
     if any(c in v for c in '/?#[]@'):
@@ -181,11 +188,14 @@ def validate_nsid(v: str) -> str:
 
     - Max 63 chars per segment
 
-    :param v: The NSID to validate (e.g. app.bsky.feed.post)
-    :type v: str
-    :return: The validated NSID
-    :rtype: str
-    :raises ValueError: If NSID format is invalid
+    Args:
+        v: The NSID to validate (e.g. app.bsky.feed.post)
+
+    Returns:
+        The validated NSID
+
+    Raises:
+        ValueError: If NSID format is invalid
     """
     if (
         not atproto_core_validate_nsid(v, soft_fail=True)
@@ -210,11 +220,14 @@ def validate_language(v: str) -> str:
 
     - Optional subtag with alphanumeric chars and hyphens
 
-    :param v: The language code to validate (e.g. en or en-US)
-    :type v: str
-    :return: The validated language code
-    :rtype: str
-    :raises ValueError: If language code format is invalid
+    Args:
+        v: The language code to validate (e.g. en or en-US)
+
+    Returns:
+        The validated language code
+
+    Raises:
+        ValueError: If language code format is invalid
     """
     if not LANG_RE.match(v):
         raise ValueError('Invalid language code: must be ISO language code (e.g. en or en-US)')
@@ -233,11 +246,15 @@ def validate_record_key(v: str) -> str:
 
     - Not be "." or ".."
 
-    :param v: The record key to validate (e.g. 3jxtb5w2hkt2m)
-    :type v: str
-    :return: The validated record key
-    :rtype: str
-    :raises ValueError: If record key format is invalid
+
+    Args:
+        v: The record key to validate (e.g. 3jxtb5w2hkt2m)
+
+    Returns:
+        The validated record key
+
+    Raises:
+        ValueError: If record key format is invalid
     """
     if v in INVALID_RECORD_KEYS or not RKEY_RE.match(v):
         raise ValueError(
@@ -257,10 +274,12 @@ def validate_cid(v: str) -> str:
     - Alphanumeric characters and plus signs only
 
     :param v: The CID to validate (e.g. bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi)
-    :type v: str
-    :return: The validated CID
-    :rtype: str
-    :raises ValueError: If CID format is invalid
+
+    Returns:
+        The validated CID
+
+    Raises:
+        ValueError: If CID format is invalid
     """
     if not CID_RE.match(v):
         raise ValueError('Invalid CID: must be a valid Content Identifier with minimum length 8')
@@ -284,10 +303,12 @@ def validate_at_uri(v: str) -> str:
     - No query parameters or fragments
 
     :param v: The AT-URI to validate (e.g. at://alice.bsky.social/app.bsky.feed.post/3jxtb5w2hkt2m)
-    :type v: str
-    :return: The validated AT-URI
-    :rtype: str
-    :raises ValueError: If AT-URI format is invalid
+
+    Returns:
+        The validated AT-URI
+
+    Raises:
+        ValueError: If AT-URI format is invalid
     """
     if len(v) >= MAX_AT_URI_LENGTH:
         raise ValueError(f'Invalid AT-URI: must be under {MAX_AT_URI_LENGTH} chars')
@@ -316,11 +337,14 @@ def validate_datetime(v: str) -> str:
 
     - No whitespace allowed
 
-    :param v: The datetime string to validate (e.g. 2024-11-24T06:02:00Z)
-    :type v: str
-    :return: The validated datetime string
-    :rtype: str
-    :raises ValueError: If datetime format is invalid
+    Args:
+        v: The datetime string to validate (e.g. 2024-11-24T06:02:00Z)
+
+    Returns:
+        The validated datetime string
+
+    Raises:
+        ValueError: If datetime format is invalid
     """
     # Must contain uppercase T and Z if used
     if v != v.strip():
@@ -365,11 +389,14 @@ def validate_tid(v: str) -> str:
 
     - First byte's high bit (0x40) must be 0
 
-    :param v: The TID to validate (e.g. 3jxtb5w2hkt2m)
-    :type v: str
-    :return: The validated TID
-    :rtype: str
-    :raises ValueError: If TID format is invalid
+    Args:
+        v: The TID to validate (e.g. 3jxtb5w2hkt2m)
+
+    Returns:
+        The validated TID
+
+    Raises:
+        ValueError: If TID format is invalid
     """
     if not TID_RE.match(v) or (ord(v[0]) & 0x40):
         raise ValueError(f'Invalid TID: must be exactly {TID_LENGTH} lowercase letters/numbers')
@@ -392,11 +419,14 @@ def validate_uri(v: str) -> str:
 
     - Must follow RFC-3986 format
 
-    :param v: The URI to validate (e.g. https://example.com/path)
-    :type v: str
-    :return: The validated URI
-    :rtype: str
-    :raises ValueError: If URI format is invalid
+    Args:
+        v: The URI to validate (e.g. https://example.com/path)
+
+    Returns:
+        The validated URI
+
+    Raises:
+        ValueError: If URI format is invalid
     """
     if len(v) >= MAX_URI_LENGTH or ' ' in v:
         raise ValueError(f'Invalid URI: must be under {MAX_URI_LENGTH} chars and not contain spaces')
