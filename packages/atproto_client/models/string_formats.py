@@ -60,6 +60,21 @@ AT_URI_RE = re.compile(
 )
 
 
+class _MaybeStrictValidator:
+    def __init__(self, validate_fn: Callable[..., str]) -> None:
+        self.validate_fn = validate_fn
+        self.__name__ = validate_fn.__name__
+        self.__doc__ = validate_fn.__doc__
+
+    def __call__(self, v: str, info: ValidationInfo) -> str:
+        if info and isinstance(info.context, Mapping) and info.context.get(_OPT_IN_KEY, False):
+            return cast(core_schema.NoInfoValidatorFunction, self.validate_fn)(v)
+        return v
+
+    def __repr__(self) -> str:
+        return f'<validator {self.validate_fn.__name__}>'
+
+
 def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., str]:
     """Skip pydantic validation if not opting into strict validation via context.
 
@@ -69,18 +84,7 @@ def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., st
     Returns:
         A wrapped validation function that only validates in strict mode
     """
-
-    def wrapper(v: str, info: ValidationInfo) -> str:
-        if info and isinstance(info.context, Mapping) and info.context.get(_OPT_IN_KEY, False):
-            return cast(core_schema.NoInfoValidatorFunction, validate_fn)(v)
-        return v
-
-    # Preserve the original function's name and docstring without
-    # requiring the decorated function to be passed `info`
-    wrapper.__name__ = validate_fn.__name__
-    wrapper.__doc__ = validate_fn.__doc__
-
-    return wrapper
+    return _MaybeStrictValidator(validate_fn)
 
 
 @only_validate_if_strict
@@ -438,16 +442,21 @@ def validate_uri(v: str) -> str:
     return v
 
 
-Handle = Annotated[str, BeforeValidator(validate_handle)]
-Did = Annotated[str, BeforeValidator(validate_did)]
-Nsid = Annotated[str, BeforeValidator(validate_nsid)]
-Language = Annotated[str, BeforeValidator(validate_language)]
-RecordKey = Annotated[str, BeforeValidator(validate_record_key)]
-Cid = Annotated[str, BeforeValidator(validate_cid)]
-AtUri = Annotated[str, BeforeValidator(validate_at_uri)]
-DateTime = Annotated[str, BeforeValidator(validate_datetime)]  # see pydantic-extra-types #239
-Tid = Annotated[str, BeforeValidator(validate_tid)]
-Uri = Annotated[str, BeforeValidator(validate_uri)]
+class _ReprBeforeValidator(BeforeValidator):
+    def __repr__(self) -> str:
+        return f'<{self.func.__name__} function>'
+
+
+Handle = Annotated[str, _ReprBeforeValidator(validate_handle)]
+Did = Annotated[str, _ReprBeforeValidator(validate_did)]
+Nsid = Annotated[str, _ReprBeforeValidator(validate_nsid)]
+Language = Annotated[str, _ReprBeforeValidator(validate_language)]
+RecordKey = Annotated[str, _ReprBeforeValidator(validate_record_key)]
+Cid = Annotated[str, _ReprBeforeValidator(validate_cid)]
+AtUri = Annotated[str, _ReprBeforeValidator(validate_at_uri)]
+DateTime = Annotated[str, _ReprBeforeValidator(validate_datetime)]  # see pydantic-extra-types #239
+Tid = Annotated[str, _ReprBeforeValidator(validate_tid)]
+Uri = Annotated[str, _ReprBeforeValidator(validate_uri)]
 
 # Any valid ATProto string format
 AtProtoString = Annotated[
