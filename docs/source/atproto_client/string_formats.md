@@ -119,7 +119,7 @@ from atproto_client.models.string_formats import Handle
 class MyModel(BaseModel):
     handle: Handle
 
-model = MyModel.model_validate(
+model_instance = MyModel.model_validate(
     {"handle": "alice.bsky.social"},
     context={"strict_string_format": True}
 )
