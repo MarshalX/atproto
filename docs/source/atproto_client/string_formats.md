@@ -6,38 +6,6 @@ The AT Protocol defines several string formats that are used throughout the prot
 
 The SDK provides optional strict validation for AT Protocol string formats. By default, validation is disabled for performance reasons, but you can enable it when needed.
 
-### Validation Examples
-
-Using `Handle` as an example, here are the four main validation cases:
-
-```python
-from pydantic import TypeAdapter
-from atproto_client.models.string_formats import Handle
-
-HandleAdapter = TypeAdapter(Handle)
-
-# Case 1: Valid handle without validation (passes)
-handle1 = HandleAdapter.validate_python("alice.bsky.social")
-
-# Case 2: Valid handle with validation (passes)
-handle2 = HandleAdapter.validate_python(
-    "alice.bsky.social",
-    context={"strict_string_format": True}
-)
-
-# Case 3: Invalid handle without validation (passes)
-handle3 = HandleAdapter.validate_python("not a valid handle!")
-
-# Case 4: Invalid handle with validation (raises ValidationError)
-try:
-    HandleAdapter.validate_python(
-        "not a valid handle!",
-        context={"strict_string_format": True}
-    )
-except ValidationError as e:
-    print("Validation failed:", e)
-```
-
 ### Supported String Formats
 
 The SDK supports validation of the following string formats:
@@ -45,9 +13,9 @@ The SDK supports validation of the following string formats:
 :::{attention}
 These formats are a working empirical understanding of the required formats based on the following resources:
 
-- https://atproto.com/specs/lexicon
+- [AT Protocol Lexicon](https://atproto.com/specs/lexicon)
 
-- https://github.com/bluesky-social/atproto/tree/main/interop-test-files/syntax
+- [AT Protocol Interoperability Test Files](https://github.com/bluesky-social/atproto/tree/main/interop-test-files/syntax)
 
 :::
 
@@ -139,10 +107,10 @@ class MyModel(BaseModel):
     handle: Handle
 
 data = {"handle": "alice.bsky.social"}
-model = get_or_create(data, MyModel, strict_string_format=True)
+model_instance = get_or_create(data, MyModel, strict_string_format=True)
 ```
 
-2. Using Pydantic's validation context:
+2. Using Pydantic's validation context directly:
 
 ```python
 from pydantic import BaseModel
@@ -157,4 +125,4 @@ model = MyModel.model_validate(
 )
 ```
 
-When validation is disabled (the default), any string value will be accepted. When enabled, the values must conform to the above validation rules, or else a `ValidationError` will be raised.
+When validation is disabled (the default), any string value will be accepted for any format. When enabled, the values must conform to the above validation rules, or else a `ValidationError` will be raised.
