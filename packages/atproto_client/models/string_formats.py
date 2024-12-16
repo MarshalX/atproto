@@ -54,6 +54,19 @@ AT_URI_RE = re.compile(
 )
 
 
+class _NamedValidator:
+    """Decorator to add a __str__ attribute to a validation function."""
+
+    def __init__(self, validate_fn: Callable[..., str]) -> None:
+        self.validate_fn = validate_fn
+
+    def __call__(self, v: str, info: ValidationInfo) -> str:
+        return self.validate_fn(v, info)
+
+    def __str__(self) -> str:
+        return f'Validated by: {self.validate_fn.__name__} (only when `strict_string_format=True`)'
+
+
 def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., str]:
     """Skip pydantic validation if not opting into strict validation via context."""
 
@@ -422,16 +435,16 @@ def validate_uri(v: str, _: ValidationInfo) -> str:
     return v
 
 
-Handle = Annotated[str, BeforeValidator(validate_handle)]
-Did = Annotated[str, BeforeValidator(validate_did)]
-Nsid = Annotated[str, BeforeValidator(validate_nsid)]
-Language = Annotated[str, BeforeValidator(validate_language)]
-RecordKey = Annotated[str, BeforeValidator(validate_record_key)]
-Cid = Annotated[str, BeforeValidator(validate_cid)]
-AtUri = Annotated[str, BeforeValidator(validate_at_uri)]
-DateTime = Annotated[str, BeforeValidator(validate_datetime)]  # see pydantic-extra-types #239
-Tid = Annotated[str, BeforeValidator(validate_tid)]
-Uri = Annotated[str, BeforeValidator(validate_uri)]
+Handle = Annotated[str, BeforeValidator(_NamedValidator(validate_handle))]
+Did = Annotated[str, BeforeValidator(_NamedValidator(validate_did))]
+Nsid = Annotated[str, BeforeValidator(_NamedValidator(validate_nsid))]
+Language = Annotated[str, BeforeValidator(_NamedValidator(validate_language))]
+RecordKey = Annotated[str, BeforeValidator(_NamedValidator(validate_record_key))]
+Cid = Annotated[str, BeforeValidator(_NamedValidator(validate_cid))]
+AtUri = Annotated[str, BeforeValidator(_NamedValidator(validate_at_uri))]
+DateTime = Annotated[str, BeforeValidator(_NamedValidator(validate_datetime))]  # see pydantic-extra-types #239
+Tid = Annotated[str, BeforeValidator(_NamedValidator(validate_tid))]
+Uri = Annotated[str, BeforeValidator(_NamedValidator(validate_uri))]
 
 # Any valid ATProto string format
 AtProtoString = Annotated[
