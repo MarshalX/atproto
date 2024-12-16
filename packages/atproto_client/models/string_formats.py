@@ -1,4 +1,4 @@
-"""AT Proto string format validation."""
+"""AT Protocol string format validation."""
 
 import re
 from datetime import datetime
@@ -83,7 +83,7 @@ def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., st
 
 @only_validate_if_strict
 def validate_handle(v: str, _: ValidationInfo) -> str:
-    """Validate an AT Protocol handle.
+    """Validate an AT Protocol Handle Identifier.
 
     A handle must be a valid domain name with:
 
@@ -121,7 +121,7 @@ def validate_handle(v: str, _: ValidationInfo) -> str:
 
 @only_validate_if_strict
 def validate_did(v: str, _: ValidationInfo) -> str:
-    """Validate an AT Protocol DID.
+    """Validate a Decentralized Identifiers (DID).
 
     A DID must follow the pattern:
 
@@ -232,7 +232,7 @@ def validate_language(v: str, _: ValidationInfo) -> str:
 
 @only_validate_if_strict
 def validate_record_key(v: str, _: ValidationInfo) -> str:
-    """Validate an AT Protocol record key.
+    """Validate an AT Protocol Record Key (rkey).
 
     A record key must:
 
@@ -241,7 +241,6 @@ def validate_record_key(v: str, _: ValidationInfo) -> str:
     - Contain only alphanumeric chars, dots, underscores, colons, tildes, or hyphens
 
     - Not be "." or ".."
-
 
     Args:
         v: The record key to validate (e.g. 3jxtb5w2hkt2m)
@@ -269,7 +268,8 @@ def validate_cid(v: str, _: ValidationInfo) -> str:
 
     - Alphanumeric characters and plus signs only
 
-    :param v: The CID to validate (e.g. bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi)
+    Args:
+        v: The CID to validate (e.g. bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi)
 
     Returns:
         The validated CID
@@ -298,7 +298,8 @@ def validate_at_uri(v: str, _: ValidationInfo) -> str:
 
     - No query parameters or fragments
 
-    :param v: The AT-URI to validate (e.g. at://alice.bsky.social/app.bsky.feed.post/3jxtb5w2hkt2m)
+    Args:
+        v: The AT-URI to validate (e.g. at://alice.bsky.social/app.bsky.feed.post/3jxtb5w2hkt2m)
 
     Returns:
         The validated AT-URI
@@ -375,7 +376,7 @@ def validate_datetime(v: str, _: ValidationInfo) -> str:
 
 @only_validate_if_strict
 def validate_tid(v: str, _: ValidationInfo) -> str:
-    """Validate an AT Protocol TID (Temporal ID).
+    """Validate an AT Protocol TID (Timestamp Identifiers).
 
     Must be:
 
