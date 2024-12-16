@@ -67,13 +67,13 @@ Requirements:
 - Valid fractional seconds format if used
 - No whitespace allowed
 
-#### TID (Temporal ID)
+#### TID (Timestamp Identifiers)
 Must be:
 - Exactly 13 characters
 - Only lowercase letters and numbers 2-7
 - First byte's high bit (0x40) must be 0
 
-#### Record Key
+#### Record Key (rkey)
 A record key must:
 - Be 1-512 characters
 - Contain only alphanumeric chars, dots, underscores, colons, tildes, or hyphens
