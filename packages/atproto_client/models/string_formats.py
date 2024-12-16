@@ -64,7 +64,8 @@ class _NamedValidator:
         return self.validate_fn(v, info)
 
     def __str__(self) -> str:
-        return f'Validated by: {self.validate_fn.__name__} (only when `strict_string_format=True`)'
+        func_str = f':func:`string_formats.{self.validate_fn.__name__}`'
+        return f'Validated by: {func_str} (only when `strict_string_format=True`)'
 
 
 def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., str]:

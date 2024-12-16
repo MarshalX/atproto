@@ -14,8 +14,21 @@ if t.TYPE_CHECKING:
 # FIXME(MarshalX): I didn't find a fast way to fix aliases resolving after migration to Pydantic.
 #  I hope this is temporary and resolving will be on the Sphinx side.
 
+_GLOBAL_ALIASES_DB = {
+    'string_formats.validate_at_uri': 'atproto_client.models.string_formats.validate_at_uri',
+    'string_formats.validate_cid': 'atproto_client.models.string_formats.validate_cid',
+    'string_formats.validate_datetime': 'atproto_client.models.string_formats.validate_datetime',
+    'string_formats.validate_did': 'atproto_client.models.string_formats.validate_did',
+    'string_formats.validate_handle': 'atproto_client.models.string_formats.validate_handle',
+    'string_formats.validate_language': 'atproto_client.models.string_formats.validate_language',
+    'string_formats.validate_nsid': 'atproto_client.models.string_formats.validate_nsid',
+    'string_formats.validate_record_key': 'atproto_client.models.string_formats.validate_record_key',
+    'string_formats.validate_tid': 'atproto_client.models.string_formats.validate_tid',
+    'string_formats.validate_uri': 'atproto_client.models.string_formats.validate_uri',
+}
 
-def get_alias_from_db(alias: str) -> t.Optional[str]:
+
+def _get_model_alias(alias: str) -> t.Optional[str]:
     # FIXME(MarshalX): Resolving of models.AppBskyGraphDefs ListPurpose is not working.
     alias_split = alias.rsplit('.', maxsplit=1)
     if len(alias_split) < 2:
@@ -26,6 +39,14 @@ def get_alias_from_db(alias: str) -> t.Optional[str]:
         return None
 
     return f'{ALIASES_DB[alias_prefix]}.{alias_suffix}'
+
+
+def get_alias_from_db(alias: str) -> t.Optional[str]:
+    model_alias = _get_model_alias(alias)
+    if model_alias:
+        return model_alias
+
+    return _GLOBAL_ALIASES_DB.get(alias)
 
 
 # annotate
