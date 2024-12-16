@@ -71,7 +71,7 @@ class AsyncSessionDispatchMixin:
 
         Tip:
             You should save the session string to persistent storage
-            on `SessionEvent.CREATE` and `SessionEvent.REFRESN` event.
+            on `SessionEvent.CREATE` and `SessionEvent.REFRESH` event.
 
         Example:
             >>> from atproto import AsyncClient, SessionEvent, Session
