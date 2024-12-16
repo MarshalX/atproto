@@ -1,3 +1,4 @@
+import os
 from functools import lru_cache
 from pathlib import Path
 from typing import List
@@ -11,7 +12,7 @@ from pydantic import BaseModel, TypeAdapter, ValidationError
 
 # Test data sourced directly from bluesky-social/atproto repo:
 # https://github.com/bluesky-social/atproto/tree/main/interop-test-files/syntax
-INTEROP_TEST_FILES_DIR: Path = Path('tests/test_atproto_client/interop-test-files/syntax')
+INTEROP_TEST_FILES_DIR = Path(os.path.join(Path(__file__).parent.parent.parent, 'interop-test-files', 'syntax'))
 
 
 def get_test_cases(filename: str) -> List[str]:
@@ -182,3 +183,22 @@ def test_get_or_create_with_strict_validation(valid_data: dict, invalid_data: di
     assert isinstance(instance, FooModel)
     assert instance.handle == invalid_data['handle']
     assert instance.did == invalid_data['did']
+
+
+@pytest.mark.parametrize('string_format_name', ['handle', 'did'])  # at-identifier: either a Handle or a DID
+def test_at_identifier_type(string_format_name: str, valid_data: dict, invalid_data: dict) -> None:
+    """Test `string_formats.AtIdentifier` validation."""
+
+    class FooModel(BaseModel):
+        at_identifier: string_formats.AtIdentifier
+
+    # Test valid data passes
+    instance = get_or_create({'at_identifier': valid_data[string_format_name]}, FooModel, strict_string_format=True)
+    assert isinstance(instance, FooModel)
+    assert instance.at_identifier == valid_data[string_format_name]
+
+    # Test invalid data fails
+    with pytest.raises(ModelError) as exc_info:
+        get_or_create({'at_identifier': invalid_data[string_format_name]}, FooModel, strict_string_format=True)
+    assert 'Invalid handle' in str(exc_info.value)
+    assert 'Invalid DID' in str(exc_info.value)

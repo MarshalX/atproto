@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.repo.listRecords`."""
 
     collection: string_formats.Nsid  #: The NSID of the record type.
-    repo: string_formats.Handle  #: The handle or DID of the repo.
+    repo: string_formats.AtIdentifier  #: The handle or DID of the repo.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: The number of records to return.
     reverse: t.Optional[bool] = None  #: Flag to reverse the order of the returned records.
@@ -32,7 +32,7 @@ class Params(base.ParamsModelBase):
 
 class ParamsDict(t.TypedDict):
     collection: string_formats.Nsid  #: The NSID of the record type.
-    repo: string_formats.Handle  #: The handle or DID of the repo.
+    repo: string_formats.AtIdentifier  #: The handle or DID of the repo.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: The number of records to return.
     reverse: te.NotRequired[t.Optional[bool]]  #: Flag to reverse the order of the returned records.

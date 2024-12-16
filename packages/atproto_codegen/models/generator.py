@@ -167,7 +167,7 @@ def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional:
     if field_type_def.format:
         # Map format types to our string_formats types
         format_map = {
-            'at-identifier': 'string_formats.Handle',
+            'at-identifier': 'string_formats.AtIdentifier',
             'at-uri': 'string_formats.AtUri',
             'cid': 'string_formats.Cid',
             'datetime': 'string_formats.DateTime',

@@ -13,10 +13,10 @@ from atproto_client.models import base, string_formats
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.updateAccountEmail`."""
 
-    account: string_formats.Handle  #: The handle or DID of the repo.
+    account: string_formats.AtIdentifier  #: The handle or DID of the repo.
     email: str  #: Email.
 
 
 class DataDict(t.TypedDict):
-    account: string_formats.Handle  #: The handle or DID of the repo.
+    account: string_formats.AtIdentifier  #: The handle or DID of the repo.
     email: str  #: Email.

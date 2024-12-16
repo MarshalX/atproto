@@ -19,11 +19,11 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.actor.getProfiles`."""
 
-    actors: t.List[string_formats.Handle] = Field(max_length=25)  #: Actors.
+    actors: t.List[string_formats.AtIdentifier] = Field(max_length=25)  #: Actors.
 
 
 class ParamsDict(t.TypedDict):
-    actors: t.List[string_formats.Handle]  #: Actors.
+    actors: t.List[string_formats.AtIdentifier]  #: Actors.
 
 
 class Response(base.ResponseModelBase):

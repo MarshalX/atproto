@@ -141,7 +141,7 @@ class ListViewerState(base.ModelBase):
 class NotFoundActor(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`. indicates that a handle or DID could not be resolved."""
 
-    actor: string_formats.Handle  #: Actor.
+    actor: string_formats.AtIdentifier  #: Actor.
     not_found: bool = Field(frozen=True)  #: Not found.
 
     py_type: t.Literal['app.bsky.graph.defs#notFoundActor'] = Field(

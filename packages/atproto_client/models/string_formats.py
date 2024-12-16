@@ -448,6 +448,8 @@ DateTime = Annotated[str, BeforeValidator(_NamedValidator(validate_datetime))]  
 Tid = Annotated[str, BeforeValidator(_NamedValidator(validate_tid))]
 Uri = Annotated[str, BeforeValidator(_NamedValidator(validate_uri))]
 
+AtIdentifier = Union[Handle, Did]
+
 # Any valid ATProto string format
 AtProtoString = Annotated[
     Union[Handle, Did, Nsid, AtUri, Cid, DateTime, Tid, RecordKey, Uri, Language],

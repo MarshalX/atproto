@@ -20,13 +20,13 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.graph.getActorStarterPacks`."""
 
-    actor: string_formats.Handle  #: Actor.
+    actor: string_formats.AtIdentifier  #: Actor.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
 
 
 class ParamsDict(t.TypedDict):
-    actor: string_formats.Handle  #: Actor.
+    actor: string_formats.AtIdentifier  #: Actor.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 

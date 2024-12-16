@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.repo.getRecord`."""
 
     collection: string_formats.Nsid  #: The NSID of the record collection.
-    repo: string_formats.Handle  #: The handle or DID of the repo.
+    repo: string_formats.AtIdentifier  #: The handle or DID of the repo.
     rkey: str  #: The Record Key.
     cid: t.Optional[string_formats.Cid] = (
         None  #: The CID of the version of the record. If not specified, then return the most recent version.
@@ -29,7 +29,7 @@ class Params(base.ParamsModelBase):
 
 class ParamsDict(t.TypedDict):
     collection: string_formats.Nsid  #: The NSID of the record collection.
-    repo: string_formats.Handle  #: The handle or DID of the repo.
+    repo: string_formats.AtIdentifier  #: The handle or DID of the repo.
     rkey: str  #: The Record Key.
     cid: te.NotRequired[
         t.Optional[string_formats.Cid]
