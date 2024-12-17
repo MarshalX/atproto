@@ -40,3 +40,16 @@ class SkeletonSearchStarterPack(base.ModelBase):
     py_type: t.Literal['app.bsky.unspecced.defs#skeletonSearchStarterPack'] = Field(
         default='app.bsky.unspecced.defs#skeletonSearchStarterPack', alias='$type', frozen=True
     )
+
+
+class TrendingTopic(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.defs`."""
+
+    link: str  #: Link.
+    topic: str  #: Topic.
+    description: t.Optional[str] = None  #: Description.
+    display_name: t.Optional[str] = None  #: Display name.
+
+    py_type: t.Literal['app.bsky.unspecced.defs#trendingTopic'] = Field(
+        default='app.bsky.unspecced.defs#trendingTopic', alias='$type', frozen=True
+    )

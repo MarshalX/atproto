@@ -84,6 +84,7 @@ from atproto_client.models.app.bsky.unspecced import (
 )
 from atproto_client.models.app.bsky.unspecced import get_suggestions_skeleton as AppBskyUnspeccedGetSuggestionsSkeleton
 from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as AppBskyUnspeccedGetTaggedSuggestions
+from atproto_client.models.app.bsky.unspecced import get_trending_topics as AppBskyUnspeccedGetTrendingTopics
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
 from atproto_client.models.app.bsky.unspecced import (
@@ -329,6 +330,7 @@ class _Ids:
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
     AppBskyUnspeccedGetSuggestionsSkeleton: str = 'app.bsky.unspecced.getSuggestionsSkeleton'
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
+    AppBskyUnspeccedGetTrendingTopics: str = 'app.bsky.unspecced.getTrendingTopics'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
     AppBskyUnspeccedSearchStarterPacksSkeleton: str = 'app.bsky.unspecced.searchStarterPacksSkeleton'
