@@ -3642,6 +3642,36 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetTaggedSuggestions.Response)
 
+    async def get_trending_topics(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetTrendingTopics.Params, models.AppBskyUnspeccedGetTrendingTopics.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetTrendingTopics.Response':
+        """Get a list of trending topics.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetTrendingTopics.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetTrendingTopics.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetTrendingTopics.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getTrendingTopics', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetTrendingTopics.Response)
+
     async def search_actors_skeleton(
         self,
         params: t.Union[
