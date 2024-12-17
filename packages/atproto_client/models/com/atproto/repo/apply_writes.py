@@ -21,7 +21,7 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.repo.applyWrites`."""
 
-    repo: string_formats.Handle  #: The handle or DID of the repo (aka, current account).
+    repo: string_formats.AtIdentifier  #: The handle or DID of the repo (aka, current account).
     writes: t.List[
         te.Annotated[
             t.Union[
@@ -41,7 +41,7 @@ class Data(base.DataModelBase):
 
 
 class DataDict(t.TypedDict):
-    repo: string_formats.Handle  #: The handle or DID of the repo (aka, current account).
+    repo: string_formats.AtIdentifier  #: The handle or DID of the repo (aka, current account).
     writes: t.List[
         te.Annotated[
             t.Union[

@@ -21,7 +21,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.searchPosts`."""
 
     q: str  #: Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
-    author: t.Optional[string_formats.Handle] = (
+    author: t.Optional[string_formats.AtIdentifier] = (
         None  #: Filter to posts by the given account. Handles are resolved to DID before query-time.
     )
     cursor: t.Optional[str] = (
@@ -34,7 +34,7 @@ class Params(base.ParamsModelBase):
         None  #: Filter to posts in the given language. Expected to be based on post language field, though server may override language detection.
     )
     limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
-    mentions: t.Optional[string_formats.Handle] = (
+    mentions: t.Optional[string_formats.AtIdentifier] = (
         None  #: Filter to posts which mention the given account. Handles are resolved to DID before query-time. Only matches rich-text facet mentions.
     )
     since: t.Optional[str] = (
@@ -57,7 +57,7 @@ class Params(base.ParamsModelBase):
 class ParamsDict(t.TypedDict):
     q: str  #: Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
     author: te.NotRequired[
-        t.Optional[string_formats.Handle]
+        t.Optional[string_formats.AtIdentifier]
     ]  #: Filter to posts by the given account. Handles are resolved to DID before query-time.
     cursor: te.NotRequired[
         t.Optional[str]
@@ -70,7 +70,7 @@ class ParamsDict(t.TypedDict):
     ]  #: Filter to posts in the given language. Expected to be based on post language field, though server may override language detection.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     mentions: te.NotRequired[
-        t.Optional[string_formats.Handle]
+        t.Optional[string_formats.AtIdentifier]
     ]  #: Filter to posts which mention the given account. Handles are resolved to DID before query-time. Only matches rich-text facet mentions.
     since: te.NotRequired[
         t.Optional[str]

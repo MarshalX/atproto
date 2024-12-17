@@ -17,11 +17,11 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.repo.describeRepo`."""
 
-    repo: string_formats.Handle  #: The handle or DID of the repo.
+    repo: string_formats.AtIdentifier  #: The handle or DID of the repo.
 
 
 class ParamsDict(t.TypedDict):
-    repo: string_formats.Handle  #: The handle or DID of the repo.
+    repo: string_formats.AtIdentifier  #: The handle or DID of the repo.
 
 
 class Response(base.ResponseModelBase):

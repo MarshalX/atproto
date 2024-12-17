@@ -17,11 +17,11 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.graph.getSuggestedFollowsByActor`."""
 
-    actor: string_formats.Handle  #: Actor.
+    actor: string_formats.AtIdentifier  #: Actor.
 
 
 class ParamsDict(t.TypedDict):
-    actor: string_formats.Handle  #: Actor.
+    actor: string_formats.AtIdentifier  #: Actor.
 
 
 class Response(base.ResponseModelBase):

@@ -13,8 +13,8 @@ from atproto_client.models import base, string_formats
 class Data(base.DataModelBase):
     """Input data model for :obj:`app.bsky.graph.unmuteActor`."""
 
-    actor: string_formats.Handle  #: Actor.
+    actor: string_formats.AtIdentifier  #: Actor.
 
 
 class DataDict(t.TypedDict):
-    actor: string_formats.Handle  #: Actor.
+    actor: string_formats.AtIdentifier  #: Actor.

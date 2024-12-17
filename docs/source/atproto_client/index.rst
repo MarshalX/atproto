@@ -16,4 +16,5 @@ Submodules
    namespace
    models
    auth
+   string_formats
    utils/index

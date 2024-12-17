@@ -20,7 +20,7 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getAuthorFeed`."""
 
-    actor: string_formats.Handle  #: Actor.
+    actor: string_formats.AtIdentifier  #: Actor.
     cursor: t.Optional[str] = None  #: Cursor.
     filter: t.Optional[
         t.Union[
@@ -36,7 +36,7 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(t.TypedDict):
-    actor: string_formats.Handle  #: Actor.
+    actor: string_formats.AtIdentifier  #: Actor.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     filter: te.NotRequired[
         t.Optional[
