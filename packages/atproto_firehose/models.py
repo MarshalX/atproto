@@ -15,10 +15,6 @@ class FrameType(Enum):
     MESSAGE = 1
     ERROR = -1
 
-    @classmethod
-    def has_value(cls, value: int) -> bool:
-        return value in cls._value2member_map_
-
 
 @dataclass
 class MessageFrameHeader:
@@ -50,13 +46,12 @@ class ErrorFrameBody:
 def parse_frame_header(raw_header: dict) -> FrameHeader:
     try:
         header_op = int(raw_header.get('op', 0))
-        if not FrameType.has_value(header_op):
-            raise FirehoseDecodingError('Invalid frame type')
-
-        frame_type = FrameType(header_op)
-        if frame_type is FrameType.MESSAGE:
+        if header_op == FrameType.MESSAGE:
             return get_or_create(raw_header, MessageFrameHeader)
-        return get_or_create(raw_header, ErrorFrameHeader)
+        elif header_op == FrameType.ERROR:
+            return get_or_create(raw_header, ErrorFrameHeader)
+        else:
+            raise FirehoseDecodingError('Invalid frame type')
     except (ValueError, AtProtocolError) as e:
         raise FirehoseDecodingError('Invalid frame header') from e
 
