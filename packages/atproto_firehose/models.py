@@ -104,20 +104,13 @@ class Frame:
             :class:`atproto.exceptions.FirehoseDecodingError`: Invalid data frame.
         """
         decoded_parts = decode_dag_multi(data)
+        if not decoded_parts:
+            raise FirehoseDecodingError('Invalid frame without CBOR data')
         if len(decoded_parts) > 2:
             raise FirehoseDecodingError('Too many CBOR data parts in the frame')
-        if not len(decoded_parts):
-            raise FirehoseDecodingError('Invalid frame without CBOR data')
-
-        raw_header = decoded_parts[0]
-
-        raw_body = None
-        if len(decoded_parts) > 1:
-            raw_body = decoded_parts[1]
-
-        if raw_body is None:
+        if len(decoded_parts) < 2:
             raise FirehoseDecodingError('Frame body not found')
-
+        raw_header, raw_body = decoded_parts
         header = parse_frame_header(raw_header)
         return parse_frame(header, raw_body)
 
