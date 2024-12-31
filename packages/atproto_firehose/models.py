@@ -46,9 +46,9 @@ class ErrorFrameBody:
 def parse_frame_header(raw_header: dict) -> FrameHeader:
     try:
         header_op = int(raw_header.get('op', 0))
-        if header_op == FrameType.MESSAGE:
+        if header_op == FrameType.MESSAGE.value:
             return get_or_create(raw_header, MessageFrameHeader)
-        elif header_op == FrameType.ERROR:
+        elif header_op == FrameType.ERROR.value:
             return get_or_create(raw_header, ErrorFrameHeader)
         else:
             raise FirehoseDecodingError('Invalid frame type')
