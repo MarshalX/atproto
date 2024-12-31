@@ -101,7 +101,7 @@ class Frame:
             :obj:`atproto.firehose_models.MessageFrame` or :obj:`atproto.firehose_models.ErrorFrame`
 
         Raises:
-            :class:`atproto.exceptions.FirehoseError`: Invalid data frame.
+            :class:`atproto.exceptions.FirehoseDecodingError`: Invalid data frame.
         """
         decoded_parts = decode_dag_multi(data)
         if len(decoded_parts) > 2:
