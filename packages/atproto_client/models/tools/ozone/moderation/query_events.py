@@ -41,6 +41,7 @@ class Params(base.ParamsModelBase):
         False  #: If true, events on all record types (posts, lists, profile etc.) or records from given 'collections' param, owned by the did are returned.
     )
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    policies: t.Optional[t.List[str]] = None  #: Policies.
     removed_labels: t.Optional[t.List[str]] = (
         None  #: If specified, only events where all of these labels were removed are returned.
     )
@@ -86,6 +87,7 @@ class ParamsDict(t.TypedDict):
         t.Optional[bool]
     ]  #: If true, events on all record types (posts, lists, profile etc.) or records from given 'collections' param, owned by the did are returned.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    policies: te.NotRequired[t.Optional[t.List[str]]]  #: Policies.
     removed_labels: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: If specified, only events where all of these labels were removed are returned.
