@@ -21,12 +21,18 @@ class Data(base.DataModelBase):
 
     identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
     password: str  #: Password.
+    allow_takendown: t.Optional[bool] = (
+        None  #: When true, instead of throwing error for takendown accounts, a valid response with a narrow scoped token will be returned.
+    )
     auth_factor_token: t.Optional[str] = None  #: Auth factor token.
 
 
 class DataDict(t.TypedDict):
     identifier: str  #: Handle or other identifier supported by the server for the authenticating user.
     password: str  #: Password.
+    allow_takendown: te.NotRequired[
+        t.Optional[bool]
+    ]  #: When true, instead of throwing error for takendown accounts, a valid response with a narrow scoped token will be returned.
     auth_factor_token: te.NotRequired[t.Optional[str]]  #: Auth factor token.
 
 

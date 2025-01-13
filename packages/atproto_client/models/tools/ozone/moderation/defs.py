@@ -188,6 +188,9 @@ class ModEventTakedown(base.ModelBase):
     duration_in_hours: t.Optional[int] = (
         None  #: Indicates how long the takedown should be in effect before automatically expiring.
     )
+    policies: t.Optional[t.List[str]] = Field(
+        default=None, max_length=5
+    )  #: Names/Keywords of the policies that drove the decision.
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventTakedown'] = Field(
         default='tools.ozone.moderation.defs#modEventTakedown', alias='$type', frozen=True

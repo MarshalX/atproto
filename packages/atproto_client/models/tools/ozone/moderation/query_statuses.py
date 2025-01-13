@@ -52,6 +52,13 @@ class Params(base.ParamsModelBase):
     )
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     only_muted: t.Optional[bool] = None  #: When set to true, only muted subjects and reporters will be returned.
+    queue_count: t.Optional[int] = (
+        None  #: Number of queues being used by moderators. Subjects will be split among all queues.
+    )
+    queue_index: t.Optional[int] = (
+        None  #: Index of the queue to fetch subjects from. Works only when queueCount value is specified.
+    )
+    queue_seed: t.Optional[str] = None  #: A seeder to shuffle/balance the queue items.
     reported_after: t.Optional[string_formats.DateTime] = None  #: Search subjects reported after a given timestamp.
     reported_before: t.Optional[string_formats.DateTime] = None  #: Search subjects reported before a given timestamp.
     review_state: t.Optional[str] = None  #: Specify when fetching subjects in a certain state.
@@ -65,7 +72,7 @@ class Params(base.ParamsModelBase):
     subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]] = (
         None  #: If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     )
-    tags: t.Optional[t.List[str]] = None  #: Tags.
+    tags: t.Optional[t.List[str]] = Field(default=None, max_length=25)  #: Tags.
     takendown: t.Optional[bool] = None  #: Get subjects that were taken down.
 
 
@@ -106,6 +113,13 @@ class ParamsDict(t.TypedDict):
     only_muted: te.NotRequired[
         t.Optional[bool]
     ]  #: When set to true, only muted subjects and reporters will be returned.
+    queue_count: te.NotRequired[
+        t.Optional[int]
+    ]  #: Number of queues being used by moderators. Subjects will be split among all queues.
+    queue_index: te.NotRequired[
+        t.Optional[int]
+    ]  #: Index of the queue to fetch subjects from. Works only when queueCount value is specified.
+    queue_seed: te.NotRequired[t.Optional[str]]  #: A seeder to shuffle/balance the queue items.
     reported_after: te.NotRequired[
         t.Optional[string_formats.DateTime]
     ]  #: Search subjects reported after a given timestamp.
