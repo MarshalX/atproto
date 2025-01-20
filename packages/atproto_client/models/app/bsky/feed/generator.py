@@ -28,6 +28,9 @@ class Record(base.RecordModelBase):
         None  #: Declaration that a feed accepts feedback interactions from a client through app.bsky.feed.sendInteractions.
     )
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
+    content_mode: t.Optional[
+        t.Union['models.AppBskyFeedDefs.ContentModeUnspecified', 'models.AppBskyFeedDefs.ContentModeVideo', str]
+    ] = None  #: Content mode.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[

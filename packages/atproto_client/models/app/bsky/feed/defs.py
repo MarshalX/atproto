@@ -210,6 +210,9 @@ class GeneratorView(base.ModelBase):
     uri: string_formats.AtUri  #: Uri.
     accepts_interactions: t.Optional[bool] = None  #: Accepts interactions.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
+    content_mode: t.Optional[
+        t.Union['models.AppBskyFeedDefs.ContentModeUnspecified', 'models.AppBskyFeedDefs.ContentModeVideo', str]
+    ] = None  #: Content mode.
     description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
@@ -332,6 +335,14 @@ ClickthroughReposter = t.Literal[
 ClickthroughEmbed = t.Literal[
     'app.bsky.feed.defs#clickthroughEmbed'
 ]  #: User clicked through to the embedded content of the feed item
+
+ContentModeUnspecified = t.Literal[
+    'app.bsky.feed.defs#contentModeUnspecified'
+]  #: Declares the feed generator returns any types of posts.
+
+ContentModeVideo = t.Literal[
+    'app.bsky.feed.defs#contentModeVideo'
+]  #: Declares the feed generator returns posts containing app.bsky.embed.video embeds.
 
 InteractionSeen = t.Literal['app.bsky.feed.defs#interactionSeen']  #: Feed item was seen by user
 

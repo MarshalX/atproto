@@ -133,6 +133,7 @@ ALIASES_DB = {
     'models.ComAtprotoLabelDefs': 'atproto_client.models.com.atproto.label.defs',
     'models.ComAtprotoLabelQueryLabels': 'atproto_client.models.com.atproto.label.query_labels',
     'models.ComAtprotoLabelSubscribeLabels': 'atproto_client.models.com.atproto.label.subscribe_labels',
+    'models.ComAtprotoLexiconSchema': 'atproto_client.models.com.atproto.lexicon.schema',
     'models.ComAtprotoModerationCreateReport': 'atproto_client.models.com.atproto.moderation.create_report',
     'models.ComAtprotoModerationDefs': 'atproto_client.models.com.atproto.moderation.defs',
     'models.ComAtprotoRepoApplyWrites': 'atproto_client.models.com.atproto.repo.apply_writes',

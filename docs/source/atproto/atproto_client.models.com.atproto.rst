@@ -15,6 +15,7 @@ Subpackages
    atproto_client.models.com.atproto.admin
    atproto_client.models.com.atproto.identity
    atproto_client.models.com.atproto.label
+   atproto_client.models.com.atproto.lexicon
    atproto_client.models.com.atproto.moderation
    atproto_client.models.com.atproto.repo
    atproto_client.models.com.atproto.server

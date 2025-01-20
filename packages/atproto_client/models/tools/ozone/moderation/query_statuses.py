@@ -51,6 +51,15 @@ class Params(base.ParamsModelBase):
         None  #: Get all subject statuses that were reviewed by a specific moderator.
     )
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    min_account_suspend_count: t.Optional[int] = (
+        None  #: If specified, only subjects that belong to an account that has at least this many suspensions will be returned.
+    )
+    min_reported_records_count: t.Optional[int] = (
+        None  #: If specified, only subjects that belong to an account that has at least this many reported records will be returned.
+    )
+    min_takendown_records_count: t.Optional[int] = (
+        None  #: If specified, only subjects that belong to an account that has at least this many taken down records will be returned.
+    )
     only_muted: t.Optional[bool] = None  #: When set to true, only muted subjects and reporters will be returned.
     queue_count: t.Optional[int] = (
         None  #: Number of queues being used by moderators. Subjects will be split among all queues.
@@ -65,9 +74,14 @@ class Params(base.ParamsModelBase):
     reviewed_after: t.Optional[string_formats.DateTime] = None  #: Search subjects reviewed after a given timestamp.
     reviewed_before: t.Optional[string_formats.DateTime] = None  #: Search subjects reviewed before a given timestamp.
     sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = 'desc'  #: Sort direction.
-    sort_field: t.Optional[t.Union[t.Literal['lastReviewedAt'], t.Literal['lastReportedAt']]] = (
-        'lastReportedAt'  #: Sort field.
-    )
+    sort_field: t.Optional[
+        t.Union[
+            t.Literal['lastReviewedAt'],
+            t.Literal['lastReportedAt'],
+            t.Literal['reportedRecordsCount'],
+            t.Literal['takendownRecordsCount'],
+        ]
+    ] = 'lastReportedAt'  #: Sort field.
     subject: t.Optional[string_formats.Uri] = None  #: The subject to get the status for.
     subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]] = (
         None  #: If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
@@ -110,6 +124,15 @@ class ParamsDict(t.TypedDict):
         t.Optional[string_formats.Did]
     ]  #: Get all subject statuses that were reviewed by a specific moderator.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    min_account_suspend_count: te.NotRequired[
+        t.Optional[int]
+    ]  #: If specified, only subjects that belong to an account that has at least this many suspensions will be returned.
+    min_reported_records_count: te.NotRequired[
+        t.Optional[int]
+    ]  #: If specified, only subjects that belong to an account that has at least this many reported records will be returned.
+    min_takendown_records_count: te.NotRequired[
+        t.Optional[int]
+    ]  #: If specified, only subjects that belong to an account that has at least this many taken down records will be returned.
     only_muted: te.NotRequired[
         t.Optional[bool]
     ]  #: When set to true, only muted subjects and reporters will be returned.
@@ -135,7 +158,14 @@ class ParamsDict(t.TypedDict):
     ]  #: Search subjects reviewed before a given timestamp.
     sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]]  #: Sort direction.
     sort_field: te.NotRequired[
-        t.Optional[t.Union[t.Literal['lastReviewedAt'], t.Literal['lastReportedAt']]]
+        t.Optional[
+            t.Union[
+                t.Literal['lastReviewedAt'],
+                t.Literal['lastReportedAt'],
+                t.Literal['reportedRecordsCount'],
+                t.Literal['takendownRecordsCount'],
+            ]
+        ]
     ]  #: Sort field.
     subject: te.NotRequired[t.Optional[string_formats.Uri]]  #: The subject to get the status for.
     subject_type: te.NotRequired[
