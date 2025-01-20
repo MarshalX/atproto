@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 0.0.57
+
+**20.01.2025**
+
+* Add opt-in strict string format validation by @zzstoatzz in https://github.com/MarshalX/atproto/pull/451
+* Add documentation for string formats; fix `at-identifier` format by @zzstoatzz in https://github.com/MarshalX/atproto/pull/491
+* Add an example to quote a post with an image by @zzstoatzz in https://github.com/MarshalX/atproto/pull/484
+* Fix grammar in the README by @ErikPohl444 in https://github.com/MarshalX/atproto/pull/492
+* Fix typo in the word `REFRESH` by @tveastman in https://github.com/MarshalX/atproto/pull/500
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/490, https://github.com/MarshalX/atproto/pull/502, https://github.com/MarshalX/atproto/pull/503, https://github.com/MarshalX/atproto/pull/508, https://github.com/MarshalX/atproto/pull/516
+
 ## Version 0.0.56
 
 **05.12.2024**
