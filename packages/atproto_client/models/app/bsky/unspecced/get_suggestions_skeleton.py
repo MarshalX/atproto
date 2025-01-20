@@ -46,6 +46,7 @@ class Response(base.ResponseModelBase):
 
     actors: t.List['models.AppBskyUnspeccedDefs.SkeletonSearchActor']  #: Actors.
     cursor: t.Optional[str] = None  #: Cursor.
+    rec_id: t.Optional[int] = None  #: Snowflake for this recommendation, use when submitting recommendation events.
     relative_to_did: t.Optional[string_formats.Did] = (
         None  #: DID of the account these suggestions are relative to. If this is returned undefined, suggestions are based on the viewer.
     )

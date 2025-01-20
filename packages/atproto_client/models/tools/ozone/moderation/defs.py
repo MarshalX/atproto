@@ -124,6 +124,9 @@ class SubjectStatusView(base.ModelBase):
     updated_at: (
         string_formats.DateTime
     )  #: Timestamp referencing when the last update was made to the moderation status of the subject.
+    account_stats: t.Optional['models.ToolsOzoneModerationDefs.AccountStats'] = (
+        None  #: Statistics related to the account subject.
+    )
     appealed: t.Optional[bool] = (
         None  #: True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators.
     )
@@ -142,6 +145,9 @@ class SubjectStatusView(base.ModelBase):
     last_reviewed_by: t.Optional[string_formats.Did] = None  #: Last reviewed by.
     mute_reporting_until: t.Optional[string_formats.DateTime] = None  #: Mute reporting until.
     mute_until: t.Optional[string_formats.DateTime] = None  #: Mute until.
+    records_stats: t.Optional['models.ToolsOzoneModerationDefs.RecordsStats'] = (
+        None  #: Statistics related to the record subjects authored by the subject's account.
+    )
     subject_blob_cids: t.Optional[t.List[string_formats.Cid]] = None  #: Subject blob cids.
     subject_repo_handle: t.Optional[str] = None  #: Subject repo handle.
     suspend_until: t.Optional[string_formats.DateTime] = None  #: Suspend until.
@@ -150,6 +156,37 @@ class SubjectStatusView(base.ModelBase):
 
     py_type: t.Literal['tools.ozone.moderation.defs#subjectStatusView'] = Field(
         default='tools.ozone.moderation.defs#subjectStatusView', alias='$type', frozen=True
+    )
+
+
+class AccountStats(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Statistics about a particular account subject."""
+
+    appeal_count: t.Optional[int] = None  #: Total number of appeals against a moderation action on the account.
+    escalate_count: t.Optional[int] = None  #: Number of times the account was escalated.
+    report_count: t.Optional[int] = None  #: Total number of reports on the account.
+    suspend_count: t.Optional[int] = None  #: Number of times the account was suspended.
+    takedown_count: t.Optional[int] = None  #: Number of times the account was taken down.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#accountStats'] = Field(
+        default='tools.ozone.moderation.defs#accountStats', alias='$type', frozen=True
+    )
+
+
+class RecordsStats(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Statistics about a set of record subject items."""
+
+    appealed_count: t.Optional[int] = None  #: Number of items that were appealed at least once.
+    escalated_count: t.Optional[int] = None  #: Number of items that were escalated at least once.
+    pending_count: t.Optional[int] = None  #: Number of item currently in "reviewOpen" or "reviewEscalated" state.
+    processed_count: t.Optional[int] = None  #: Number of item currently in "reviewNone" or "reviewClosed" state.
+    reported_count: t.Optional[int] = None  #: Number of items that were reported at least once.
+    subject_count: t.Optional[int] = None  #: Total number of item in the set.
+    takendown_count: t.Optional[int] = None  #: Number of item currently taken down.
+    total_reports: t.Optional[int] = None  #: Cumulative sum of the number of reports on the items in the set.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#recordsStats'] = Field(
+        default='tools.ozone.moderation.defs#recordsStats', alias='$type', frozen=True
     )
 
 

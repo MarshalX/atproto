@@ -142,6 +142,7 @@ from atproto_client.models.com.atproto.identity import update_handle as ComAtpro
 from atproto_client.models.com.atproto.label import defs as ComAtprotoLabelDefs
 from atproto_client.models.com.atproto.label import query_labels as ComAtprotoLabelQueryLabels
 from atproto_client.models.com.atproto.label import subscribe_labels as ComAtprotoLabelSubscribeLabels
+from atproto_client.models.com.atproto.lexicon import schema as ComAtprotoLexiconSchema
 from atproto_client.models.com.atproto.moderation import create_report as ComAtprotoModerationCreateReport
 from atproto_client.models.com.atproto.moderation import defs as ComAtprotoModerationDefs
 from atproto_client.models.com.atproto.repo import apply_writes as ComAtprotoRepoApplyWrites
@@ -382,6 +383,7 @@ class _Ids:
     ComAtprotoLabelDefs: str = 'com.atproto.label.defs'
     ComAtprotoLabelQueryLabels: str = 'com.atproto.label.queryLabels'
     ComAtprotoLabelSubscribeLabels: str = 'com.atproto.label.subscribeLabels'
+    ComAtprotoLexiconSchema: str = 'com.atproto.lexicon.schema'
     ComAtprotoModerationCreateReport: str = 'com.atproto.moderation.createReport'
     ComAtprotoModerationDefs: str = 'com.atproto.moderation.defs'
     ComAtprotoRepoApplyWrites: str = 'com.atproto.repo.applyWrites'
