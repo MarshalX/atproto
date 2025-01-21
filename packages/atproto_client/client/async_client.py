@@ -298,6 +298,7 @@ class AsyncClient(
         reply_to: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None,
         langs: t.Optional[t.List[str]] = None,
         facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None,
+        video_aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None,
     ) -> 'models.AppBskyFeedPost.CreateRecordResponse':
         """Send post with attached video.
 
@@ -312,6 +313,7 @@ class AsyncClient(
             reply_to: Root and parent of the post to reply to.
             langs: List of used languages in the post.
             facets: List of facets (rich text items).
+            video_aspect_ratio: Aspect ratio of the video.
 
         Returns:
             :obj:`models.AppBskyFeedPost.CreateRecordResponse`: Reference to the created record.
@@ -328,7 +330,7 @@ class AsyncClient(
             text,
             profile_identify=profile_identify,
             reply_to=reply_to,
-            embed=models.AppBskyEmbedVideo.Main(video=upload.blob, alt=video_alt),
+            embed=models.AppBskyEmbedVideo.Main(video=upload.blob, alt=video_alt, aspect_ratio=video_aspect_ratio),
             langs=langs,
             facets=facets,
         )
