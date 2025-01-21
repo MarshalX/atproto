@@ -313,6 +313,7 @@ class AsyncClient(
             reply_to: Root and parent of the post to reply to.
             langs: List of used languages in the post.
             facets: List of facets (rich text items).
+            video_aspect_ratio: Aspect ratio of the video.
 
         Returns:
             :obj:`models.AppBskyFeedPost.CreateRecordResponse`: Reference to the created record.
