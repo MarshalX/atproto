@@ -321,7 +321,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             text,
             profile_identify=profile_identify,
             reply_to=reply_to,
-            embed=models.AppBskyEmbedVideo.Main(video=upload.blob, alt=video_alt,aspect_ratio=video_aspect_ratio),
+            embed=models.AppBskyEmbedVideo.Main(video=upload.blob, alt=video_alt, aspect_ratio=video_aspect_ratio),
             langs=langs,
             facets=facets,
         )
