@@ -34,6 +34,8 @@ AsyncOnCallbackErrorCallback = t.Callable[[BaseException], t.Coroutine[t.Any, t.
 
 _OK_ERRORS = (ConnectionClosedOK,)
 _ERR_ERRORS = (
+    TimeoutError,
+    asyncio.TimeoutError,
     ConnectionError,
     ConnectionClosedError,
     InvalidHandshake,
@@ -94,10 +96,12 @@ class _WebsocketClientBase:
         method: str,
         base_uri: str,
         params: t.Optional[t.Dict[str, t.Any]] = None,
+        recv_timeout: t.Optional[float] = None,
     ) -> None:
         self._method = method
         self._base_uri = base_uri
         self._params = params
+        self._recv_timeout = recv_timeout
 
         self._reconnect_no = 0
         self._max_reconnect_delay_sec = 64
@@ -133,8 +137,14 @@ class _WebsocketClientBase:
 
 
 class _WebsocketClient(_WebsocketClientBase):
-    def __init__(self, method: str, base_uri: str, params: t.Optional[t.Dict[str, t.Any]] = None) -> None:
-        super().__init__(method, base_uri, params)
+    def __init__(
+        self,
+        method: str,
+        base_uri: str,
+        params: t.Optional[t.Dict[str, t.Any]] = None,
+        recv_timeout: t.Optional[float] = None,
+    ) -> None:
+        super().__init__(method, base_uri, params, recv_timeout)
 
         self._stopped = False
 
@@ -180,7 +190,7 @@ class _WebsocketClient(_WebsocketClientBase):
                     self._reconnect_no = 0
 
                     while not self._stopped:
-                        raw_frame = client.recv()
+                        raw_frame = client.recv(self._recv_timeout)
                         if isinstance(raw_frame, str):
                             # skip text frames (should not be occurred)
                             continue
@@ -207,8 +217,14 @@ class _WebsocketClient(_WebsocketClientBase):
 
 
 class _AsyncWebsocketClient(_WebsocketClientBase):
-    def __init__(self, method: str, base_uri: str, params: t.Optional[t.Dict[str, t.Any]] = None) -> None:
-        super().__init__(method, base_uri, params)
+    def __init__(
+        self,
+        method: str,
+        base_uri: str,
+        params: t.Optional[t.Dict[str, t.Any]] = None,
+        recv_timeout: t.Optional[float] = None,
+    ) -> None:
+        super().__init__(method, base_uri, params, recv_timeout)
 
         self._stop_event = asyncio.Event()
 
@@ -254,7 +270,8 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
                     self._reconnect_no = 0
 
                     while not self._stop_event.is_set():
-                        raw_frame = await client.recv()
+                        # TODO(MarshalX): if the perf will be critical consider to use async-timeout lib
+                        raw_frame = await asyncio.wait_for(client.recv(), timeout=self._recv_timeout)
                         if isinstance(raw_frame, str):
                             # skip text frames (should not be occurred)
                             continue
