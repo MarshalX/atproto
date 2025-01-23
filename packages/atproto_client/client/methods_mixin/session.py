@@ -2,8 +2,6 @@ import asyncio
 import typing as t
 from datetime import timedelta
 
-from atproto_server.auth.jwt import get_jwt_payload
-
 from atproto_client.client.methods_mixin.time import TimeMethodsMixin
 from atproto_client.client.session import (
     AsyncSessionChangeCallback,
@@ -14,9 +12,6 @@ from atproto_client.client.session import (
     get_session_pds_endpoint,
 )
 from atproto_client.exceptions import LoginRequiredError
-
-if t.TYPE_CHECKING:
-    from atproto_server.auth.jwt import JwtPayload
 
 
 class SessionDispatchMixin:
@@ -99,46 +94,43 @@ class AsyncSessionDispatchMixin:
 class SessionMethodsMixin(TimeMethodsMixin):
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
-
-        self._access_jwt: t.Optional[str] = None
-        self._access_jwt_payload: t.Optional['JwtPayload'] = None
-
-        self._refresh_jwt: t.Optional[str] = None
-        self._refresh_jwt_payload: t.Optional['JwtPayload'] = None
-
         self._session: t.Optional[Session] = None
 
     def _should_refresh_session(self) -> bool:
-        if not self._access_jwt_payload or not self._access_jwt_payload.exp:
+        if not self._session.access_jwt_payload or not self._session.access_jwt_payload.exp:
             raise LoginRequiredError
 
-        expired_at = self.get_time_from_timestamp(self._access_jwt_payload.exp)
+        expired_at = self.get_time_from_timestamp(self._session.access_jwt_payload.exp)
         expired_at = expired_at - timedelta(minutes=15)  # let's update the token a bit earlier than required
 
         return self.get_current_time() > expired_at
 
+    def _set_or_update_session(self, session: SessionResponse, pds_endpoint: str) -> None:
+        if not self._session:
+            self._session = Session(
+                access_jwt=session.access_jwt,
+                refresh_jwt=session.refresh_jwt,
+                did=session.did,
+                handle=session.handle,
+                pds_endpoint=pds_endpoint,
+            )
+        else:
+            self._session.access_jwt = session.access_jwt
+            self._session.refresh_jwt = session.refresh_jwt
+            self._session.did = session.did
+            self._session.handle = session.handle
+            self._session.pds_endpoint = pds_endpoint
+
     def _set_session_common(self, session: SessionResponse, current_pds: str) -> Session:
-        self._access_jwt = session.access_jwt
-        self._access_jwt_payload = get_jwt_payload(session.access_jwt)
-
-        self._refresh_jwt = session.refresh_jwt
-        self._refresh_jwt_payload = get_jwt_payload(session.refresh_jwt)
-
         pds_endpoint = get_session_pds_endpoint(session)
         if not pds_endpoint:
             # current_pds ends with xrpc endpoint, but this is not a problem
             # overhead is only 4-5 symbols in the exported session string
             pds_endpoint = current_pds
 
-        self._session = Session(
-            access_jwt=session.access_jwt,
-            refresh_jwt=session.refresh_jwt,
-            did=session.did,
-            handle=session.handle,
-            pds_endpoint=pds_endpoint,
-        )
+        self._set_or_update_session(session, pds_endpoint)
 
-        self._set_auth_headers(session.access_jwt)
+        self._set_auth_headers(self._session.access_jwt)
         self._update_pds_endpoint(pds_endpoint)
 
         return self._session

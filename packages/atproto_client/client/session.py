@@ -4,8 +4,11 @@ from enum import Enum
 
 import typing_extensions as te
 from atproto_core.did_doc import DidDocument, is_valid_did_doc
+from atproto_server.auth.jwt import get_jwt_payload
 
 if t.TYPE_CHECKING:
+    from atproto_server.auth.jwt import JwtPayload
+
     from atproto_client import models
 
 
@@ -25,6 +28,14 @@ class Session:
     access_jwt: str
     refresh_jwt: str
     pds_endpoint: t.Optional[str] = 'https://bsky.social'  # Backward compatibility for old sessions
+
+    @property
+    def access_jwt_payload(self) -> 'JwtPayload':
+        return get_jwt_payload(self.access_jwt)
+
+    @property
+    def refresh_jwt_payload(self) -> 'JwtPayload':
+        return get_jwt_payload(self.refresh_jwt)
 
     def __repr__(self) -> str:
         return f'<Session handle={self.handle} did={self.did}>'

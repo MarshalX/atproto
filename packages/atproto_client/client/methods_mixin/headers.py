@@ -30,6 +30,7 @@ class HeadersConfigurationMethodsMixin:
         """
         cloned_client = super().clone()
         cloned_client.me = self.me
+        cloned_client._session = self._session  # share the same object to avoid conflicts with session changes
         return cloned_client
 
     def with_proxy(self, service_type: t.Union[AtprotoServiceType, str], did: str) -> te.Self:

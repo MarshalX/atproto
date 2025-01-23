@@ -34,7 +34,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             return super()._invoke(invoke_type, **kwargs)
 
         with self._refresh_lock:
-            if self._access_jwt and self._should_refresh_session():
+            if self._session and self._session.access_jwt and self._should_refresh_session():
                 self._refresh_and_set_session()
 
         return super()._invoke(invoke_type, **kwargs)
@@ -51,11 +51,11 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         return session
 
     def _refresh_and_set_session(self) -> 'models.ComAtprotoServerRefreshSession.Response':
-        if not self._refresh_jwt:
+        if not self._session or not self._session.refresh_jwt:
             raise LoginRequiredError
 
         refresh_session = self.com.atproto.server.refresh_session(
-            headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
+            headers=self._get_auth_headers(self._session.refresh_jwt), session_refreshing=True
         )
         self._set_session(SessionEvent.REFRESH, refresh_session)
 
