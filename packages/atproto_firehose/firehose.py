@@ -80,7 +80,7 @@ class FirehoseSubscribeReposClient(FirehoseClient):
     Args:
         params: Parameters model.
         base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
-        recv_timeout: Disconnect from the server after this many seconds of inactivity.
+        recv_timeout: Reconnect to the server after this many seconds of inactivity.
             Default is 30 seconds.
     """
 
@@ -107,7 +107,7 @@ class AsyncFirehoseSubscribeReposClient(AsyncFirehoseClient):
     Args:
         params: Parameters model.
         base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
-        recv_timeout: Disconnect from the server after this many seconds of inactivity.
+        recv_timeout: Reconnect to the server after this many seconds of inactivity.
             Default is 30 seconds.
     """
 
@@ -134,7 +134,7 @@ class FirehoseSubscribeLabelsClient(FirehoseClient):
     Args:
         params: Parameters model.
         base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
-        recv_timeout: Disconnect from the server after this many seconds of inactivity.
+        recv_timeout: Reconnect to the server after this many seconds of inactivity.
             Default is 300 seconds (5 minutes).
     """
 
@@ -161,7 +161,7 @@ class AsyncFirehoseSubscribeLabelsClient(AsyncFirehoseClient):
     Args:
         params: Parameters model.
         base_uri: Base websocket URI. Example: `wss://bsky.social/xrpc`.
-        recv_timeout: Disconnect from the server after this many seconds of inactivity.
+        recv_timeout: Reconnect to the server after this many seconds of inactivity.
             Default is 300 seconds (5 minutes).
     """
 
