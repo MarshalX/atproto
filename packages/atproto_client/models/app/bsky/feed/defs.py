@@ -66,6 +66,16 @@ class ViewerState(base.ModelBase):
     )
 
 
+class ThreadContext(base.ModelBase):
+    """Definition model for :obj:`app.bsky.feed.defs`. Metadata about this post within the context of the thread it is in."""
+
+    root_author_like: t.Optional[string_formats.AtUri] = None  #: Root author like.
+
+    py_type: t.Literal['app.bsky.feed.defs#threadContext'] = Field(
+        default='app.bsky.feed.defs#threadContext', alias='$type', frozen=True
+    )
+
+
 class FeedViewPost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
@@ -159,6 +169,7 @@ class ThreadViewPost(base.ModelBase):
             ]
         ]
     ] = None  #: Replies.
+    thread_context: t.Optional['models.AppBskyFeedDefs.ThreadContext'] = None  #: Thread context.
 
     py_type: t.Literal['app.bsky.feed.defs#threadViewPost'] = Field(
         default='app.bsky.feed.defs#threadViewPost', alias='$type', frozen=True
