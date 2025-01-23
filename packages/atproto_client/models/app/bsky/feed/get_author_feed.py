@@ -28,6 +28,7 @@ class Params(base.ParamsModelBase):
             t.Literal['posts_no_replies'],
             t.Literal['posts_with_media'],
             t.Literal['posts_and_author_threads'],
+            t.Literal['posts_with_video'],
             str,
         ]
     ] = 'posts_with_replies'  #: Combinations of post/repost types to include in response.
@@ -45,6 +46,7 @@ class ParamsDict(t.TypedDict):
                 t.Literal['posts_no_replies'],
                 t.Literal['posts_with_media'],
                 t.Literal['posts_and_author_threads'],
+                t.Literal['posts_with_video'],
                 str,
             ]
         ]
