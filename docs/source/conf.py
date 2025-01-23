@@ -47,6 +47,7 @@ extensions = [
     'sphinx_favicon',
     'myst_parser',
     'sphinxcontrib.autodoc_pydantic',
+    'sphinxcontrib.googleanalytics',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -129,6 +130,10 @@ ogp_site_url = 'https://atproto.blue/'
 ogp_image = 'https://repository-images.githubusercontent.com/569485568/9d743322-10a2-4290-9a05-a88348cce2b6'
 ogp_type = 'article'
 ogp_enable_meta_description = True
+
+# -- Google Analytics ---------------------------------------------------
+googleanalytics_id = 'G-07PYQCJ0XP'
+googleanalytics_enabled = True
 
 # -- Pydantic models ---------------------------------------------------
 autodoc_pydantic_model_undoc_members = True
