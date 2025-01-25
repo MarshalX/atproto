@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 0.0.58
+
+**25.01.2025**
+
+* Add the ability to send an aspect ratio with `send_video` by @yamamotura in https://github.com/MarshalX/atproto/pull/521
+* Automatically reconnect firehose clients after a period of inactivity (timeout for recv) by @p1timmy in https://github.com/MarshalX/atproto/pull/520
+* Allow sync `on_session_change` callbacks in an async client by @MarshalX in https://github.com/MarshalX/atproto/pull/531
+* Update lexicons fetched from c0a75d3 committed 2025-01-21T18:49:02Z by @MarshalX in https://github.com/MarshalX/atproto/pull/529
+* Fix session sharing with all cloned client instances by @MarshalX in https://github.com/MarshalX/atproto/pull/531
+* Fix types for image aspect ratios in `send_image` and `send_images` by @MarshalX in https://github.com/MarshalX/atproto/pull/531
+
 ## Version 0.0.57
 
 **20.01.2025**
