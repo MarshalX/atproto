@@ -1,3 +1,5 @@
+import asyncio
+import inspect
 import typing as t
 from dataclasses import dataclass
 from enum import Enum
@@ -12,13 +14,71 @@ if t.TYPE_CHECKING:
     from atproto_client import models
 
 
+_SESSION_STRING_SEPARATOR: t.Final[te.Literal[':::']] = ':::'
+
+
 class SessionEvent(Enum):
     IMPORT = 'import'
     CREATE = 'create'
     REFRESH = 'refresh'
 
 
-_SESSION_STRING_SEPARATOR: t.Final[te.Literal[':::']] = ':::'
+SessionResponse: te.TypeAlias = t.Union[
+    'models.ComAtprotoServerCreateSession.Response',
+    'models.ComAtprotoServerRefreshSession.Response',
+    'Session',
+]
+
+SessionChangeCallback = t.Callable[[SessionEvent, 'Session'], None]
+AsyncSessionChangeCallback = t.Callable[[SessionEvent, 'Session'], t.Coroutine[t.Any, t.Any, None]]
+
+
+def _session_exists(session: t.Optional['Session']) -> te.TypeGuard['Session']:
+    if not session:
+        raise ValueError('Session does not exists. It is not possible to dispatch session change event.')
+
+    return isinstance(session, Session)
+
+
+class SessionDispatcher:
+    def __init__(self, session: t.Optional['Session'] = None) -> None:
+        self._session: t.Optional['Session'] = session
+
+        self._on_session_change_callbacks: t.List[SessionChangeCallback] = []
+        self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
+
+    def set_session(self, session: 'Session') -> None:
+        self._session = session
+
+    def on_session_change(self, callback: t.Union['AsyncSessionChangeCallback', 'SessionChangeCallback']) -> None:
+        if inspect.iscoroutinefunction(callback):
+            self._on_session_change_async_callbacks.append(callback)
+        elif inspect.isfunction(callback):
+            self._on_session_change_callbacks.append(callback)
+
+    def dispatch_session_change(self, event: SessionEvent) -> None:
+        self._call_on_session_change_callbacks(event)
+
+    async def dispatch_session_change_async(self, event: SessionEvent) -> None:
+        self._call_on_session_change_callbacks(event)  # Allow synchronous callbacks in the async client
+        await self._call_on_session_change_callbacks_async(event)
+
+    def _call_on_session_change_callbacks(self, event: SessionEvent) -> None:
+        assert _session_exists(self._session)
+        session_copy = self._session.copy()  # Avoid modifying the original session
+
+        for on_session_change_callback in self._on_session_change_callbacks:
+            on_session_change_callback(event, session_copy)
+
+    async def _call_on_session_change_callbacks_async(self, event: SessionEvent) -> None:
+        assert _session_exists(self._session)
+        session_copy = self._session.copy()  # Avoid modifying the original session
+
+        coroutines: t.List[t.Coroutine[t.Any, t.Any, None]] = []
+        for on_session_change_async_callback in self._on_session_change_async_callbacks:
+            coroutines.append(on_session_change_async_callback(event, session_copy))
+
+        await asyncio.gather(*coroutines)
 
 
 @dataclass
@@ -72,17 +132,7 @@ class Session:
     export = encode
 
 
-SessionResponse: te.TypeAlias = t.Union[
-    'models.ComAtprotoServerCreateSession.Response',
-    'models.ComAtprotoServerRefreshSession.Response',
-    'Session',
-]
-
-SessionChangeCallback = t.Callable[[SessionEvent, Session], None]
-AsyncSessionChangeCallback = t.Callable[[SessionEvent, Session], t.Coroutine[t.Any, t.Any, None]]
-
-
-def get_session_pds_endpoint(session: SessionResponse) -> t.Optional[str]:
+def get_session_pds_endpoint(session: 'SessionResponse') -> t.Optional[str]:
     """Return the PDS endpoint of the given session.
 
     Note:

@@ -88,17 +88,22 @@ class RequestBase:
 
     def __init__(self) -> None:
         self._additional_headers: t.Dict[str, str] = {}
+        self._additional_header_sources: t.List[t.Callable[[], t.Dict[str, str]]] = []
 
     def get_headers(self, additional_headers: t.Optional[t.Dict[str, str]] = None) -> t.Dict[str, str]:
         """Get headers for the request.
 
         Args:
             additional_headers: Additional headers.
+                Overrides existing headers with the same name.
 
         Returns:
             Headers for the request.
         """
         headers = {**RequestBase._MANDATORY_HEADERS, **self._additional_headers}
+
+        for header_source in self._additional_header_sources:
+            headers.update(header_source())
 
         if additional_headers:
             headers.update(additional_headers)
@@ -112,6 +117,14 @@ class RequestBase:
             headers: Additional headers.
         """
         self._additional_headers = headers.copy()
+
+    def add_additional_headers_source(self, callback: t.Callable[[], t.Dict[str, str]]) -> None:
+        """Add additional headers for the request.
+
+        Args:
+            callback: Function to get additional headers.
+        """
+        self._additional_header_sources.append(callback)
 
     def add_additional_header(self, header_name: str, header_value: str) -> None:
         """Add additional headers for the request.
@@ -134,7 +147,10 @@ class RequestBase:
             Cloned client instance.
         """
         cloned_request = type(self)()
-        cloned_request.set_additional_headers(self.get_headers())
+
+        cloned_request._additional_headers = self._additional_headers.copy()
+        cloned_request._additional_header_sources = self._additional_header_sources.copy()
+
         return cloned_request
 
 

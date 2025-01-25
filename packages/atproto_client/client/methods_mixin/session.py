@@ -1,4 +1,3 @@
-import asyncio
 import typing as t
 from datetime import timedelta
 
@@ -7,6 +6,7 @@ from atproto_client.client.session import (
     AsyncSessionChangeCallback,
     Session,
     SessionChangeCallback,
+    SessionDispatcher,
     SessionEvent,
     SessionResponse,
     get_session_pds_endpoint,
@@ -15,46 +15,7 @@ from atproto_client.exceptions import LoginRequiredError
 
 
 class SessionDispatchMixin:
-    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
-        super().__init__(*args, **kwargs)
-
-        self._on_session_change_callbacks: t.List[SessionChangeCallback] = []
-        self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
-
     def on_session_change(self, callback: SessionChangeCallback) -> None:
-        """Register a callback for session change event.
-
-        Args:
-            callback: A callback to be called when the session changes.
-                The callback must accept two arguments: event and session.
-
-        Example:
-            >>> from atproto import Client, SessionEvent, Session
-            >>>
-            >>> client = Client()
-            >>>
-            >>> def on_session_change(event: SessionEvent, session: Session):
-            >>>     print(event, session)
-            >>>
-            >>> client.on_session_change(on_session_change)
-
-        Returns:
-            :obj:`None`
-        """
-        self._on_session_change_callbacks.append(callback)
-
-    def _call_on_session_change_callbacks(self, event: SessionEvent, session: Session) -> None:
-        for on_session_change_callback in self._on_session_change_callbacks:
-            on_session_change_callback(event, session)
-
-
-class AsyncSessionDispatchMixin:
-    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
-        super().__init__(*args, **kwargs)
-
-        self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
-
-    def on_session_change(self, callback: AsyncSessionChangeCallback) -> None:
         """Register a callback for session change event.
 
         Args:
@@ -69,35 +30,76 @@ class AsyncSessionDispatchMixin:
             on `SessionEvent.CREATE` and `SessionEvent.REFRESH` event.
 
         Example:
-            >>> from atproto import AsyncClient, SessionEvent, Session
+            >>> from atproto import Client, SessionEvent, Session
             >>>
-            >>> client = AsyncClient()
+            >>> client = Client()
             >>>
-            >>> async def on_session_change(event: SessionEvent, session: Session):
+            >>> @client.on_session_change
+            >>> def on_session_change(event: SessionEvent, session: Session):
             >>>     print(event, session)
             >>>
-            >>> client.on_session_change(on_session_change)
+            >>> # or you can use this syntax:
+            >>> # client.on_session_change(on_session_change)
 
         Returns:
             :obj:`None`
         """
-        self._on_session_change_async_callbacks.append(callback)
+        self._session_dispatcher.on_session_change(callback)
 
-    async def _call_on_session_change_callbacks(self, event: SessionEvent, session: Session) -> None:
-        coroutines: t.List[t.Coroutine[t.Any, t.Any, None]] = []
-        for on_session_change_async_callback in self._on_session_change_async_callbacks:
-            coroutines.append(on_session_change_async_callback(event, session))
+    def _call_on_session_change_callbacks(self, event: SessionEvent) -> None:
+        self._session_dispatcher.dispatch_session_change(event)
 
-        await asyncio.gather(*coroutines)
+
+class AsyncSessionDispatchMixin:
+    def on_session_change(self, callback: t.Union['AsyncSessionChangeCallback', 'SessionChangeCallback']) -> None:
+        """Register a callback for session change event.
+
+        Args:
+            callback: A callback to be called when the session changes.
+                The callback must accept two arguments: event and session.
+
+        Note:
+            Possible events: `SessionEvent.IMPORT`, `SessionEvent.CREATE`, `SessionEvent.REFRESH`.
+
+        Note:
+            You can register both synchronous and asynchronous callbacks.
+
+        Tip:
+            You should save the session string to persistent storage
+            on `SessionEvent.CREATE` and `SessionEvent.REFRESH` event.
+
+        Example:
+            >>> from atproto import AsyncClient, SessionEvent, Session
+            >>>
+            >>> client = AsyncClient()
+            >>>
+            >>> @client.on_session_change
+            >>> async def on_session_change(event: SessionEvent, session: Session):
+            >>>     print(event, session)
+            >>>
+            >>> # or you can use this syntax:
+            >>> # client.on_session_change(on_session_change)
+
+        Returns:
+            :obj:`None`
+        """
+        self._session_dispatcher.on_session_change(callback)
+
+    async def _call_on_session_change_callbacks(self, event: SessionEvent) -> None:
+        await self._session_dispatcher.dispatch_session_change_async(event)
 
 
 class SessionMethodsMixin(TimeMethodsMixin):
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
         self._session: t.Optional[Session] = None
+        self._session_dispatcher = SessionDispatcher()
+
+    def _register_auth_headers_source(self) -> None:
+        self.request.add_additional_headers_source(self._get_access_auth_headers)
 
     def _should_refresh_session(self) -> bool:
-        if not self._session.access_jwt_payload or not self._session.access_jwt_payload.exp:
+        if not self._session or not self._session.access_jwt_payload or not self._session.access_jwt_payload.exp:
             raise LoginRequiredError
 
         expired_at = self.get_time_from_timestamp(self._session.access_jwt_payload.exp)
@@ -105,7 +107,7 @@ class SessionMethodsMixin(TimeMethodsMixin):
 
         return self.get_current_time() > expired_at
 
-    def _set_or_update_session(self, session: SessionResponse, pds_endpoint: str) -> None:
+    def _set_or_update_session(self, session: SessionResponse, pds_endpoint: str) -> 'Session':
         if not self._session:
             self._session = Session(
                 access_jwt=session.access_jwt,
@@ -114,12 +116,16 @@ class SessionMethodsMixin(TimeMethodsMixin):
                 handle=session.handle,
                 pds_endpoint=pds_endpoint,
             )
+            self._session_dispatcher.set_session(self._session)
+            self._register_auth_headers_source()
         else:
             self._session.access_jwt = session.access_jwt
             self._session.refresh_jwt = session.refresh_jwt
             self._session.did = session.did
             self._session.handle = session.handle
             self._session.pds_endpoint = pds_endpoint
+
+        return self._session
 
     def _set_session_common(self, session: SessionResponse, current_pds: str) -> Session:
         pds_endpoint = get_session_pds_endpoint(session)
@@ -128,20 +134,20 @@ class SessionMethodsMixin(TimeMethodsMixin):
             # overhead is only 4-5 symbols in the exported session string
             pds_endpoint = current_pds
 
-        self._set_or_update_session(session, pds_endpoint)
-
-        self._set_auth_headers(self._session.access_jwt)
         self._update_pds_endpoint(pds_endpoint)
+        return self._set_or_update_session(session, pds_endpoint)
 
-        return self._session
+    def _get_access_auth_headers(self) -> t.Dict[str, str]:
+        if not self._session:
+            return {}
 
-    @staticmethod
-    def _get_auth_headers(token: str) -> t.Dict[str, str]:
-        return {'Authorization': f'Bearer {token}'}
+        return {'Authorization': f'Bearer {self._session.access_jwt}'}
 
-    def _set_auth_headers(self, token: str) -> None:
-        for header_name, header_value in self._get_auth_headers(token).items():
-            self.request.add_additional_header(header_name, header_value)
+    def _get_refresh_auth_headers(self) -> t.Dict[str, str]:
+        if not self._session:
+            return {}
+
+        return {'Authorization': f'Bearer {self._session.refresh_jwt}'}
 
     def _update_pds_endpoint(self, pds_endpoint: str) -> None:
         self.update_base_url(pds_endpoint)
