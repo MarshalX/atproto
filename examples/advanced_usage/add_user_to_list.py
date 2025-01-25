@@ -34,7 +34,7 @@ def main() -> None:
     mod_list = client.app.bsky.graph.get_list(models.AppBskyGraphGetList.Params(list=mod_list_uri))
     mod_list_users = [item.subject.did for item in mod_list.items]
     print(f'List users: {mod_list_users}')
-    assert user_to_add in mod_list_users, f'User {user_to_add} not found in the list {mod_list_uri}'  # noqa: S101
+    assert user_to_add in mod_list_users, f'User {user_to_add} not found in the list {mod_list_uri}'
 
     deleted_success = client.app.bsky.graph.listitem.delete(mod_list_owner, AtUri.from_str(created_list_item.uri).rkey)
     print(f'Deleted list item: {deleted_success}')

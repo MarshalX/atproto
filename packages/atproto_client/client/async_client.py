@@ -43,14 +43,14 @@ class AsyncClient(
             return await super()._invoke(invoke_type, **kwargs)
 
         async with self._refresh_lock:
-            if self._access_jwt and self._should_refresh_session():
+            if self._session and self._session.access_jwt and self._should_refresh_session():
                 await self._refresh_and_set_session()
 
         return await super()._invoke(invoke_type, **kwargs)
 
     async def _set_session(self, event: SessionEvent, session: SessionResponse) -> None:
-        session = self._set_session_common(session, self._base_url)
-        await self._call_on_session_change_callbacks(event, session.copy())
+        self._set_session_common(session, self._base_url)
+        await self._call_on_session_change_callbacks(event)
 
     async def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
         session = await self.com.atproto.server.create_session(
@@ -60,11 +60,11 @@ class AsyncClient(
         return session
 
     async def _refresh_and_set_session(self) -> 'models.ComAtprotoServerRefreshSession.Response':
-        if not self._refresh_jwt:
+        if not self._session or not self._session.refresh_jwt:
             raise LoginRequiredError
 
         refresh_session = await self.com.atproto.server.refresh_session(
-            headers=self._get_auth_headers(self._refresh_jwt), session_refreshing=True
+            headers=self._get_refresh_auth_headers(), session_refreshing=True
         )
         await self._set_session(SessionEvent.REFRESH, refresh_session)
 
@@ -225,16 +225,16 @@ class AsyncClient(
             image_alts = image_alts + [''] * diff  # [''] * (minus) => []
 
         if image_aspect_ratios is None:
-            image_aspect_ratios = [None] * len(images)
+            aligned_image_aspect_ratios = [None] * len(images)
         else:
             # padding with None if len is insufficient
             diff = len(images) - len(image_aspect_ratios)
-            image_aspect_ratios = image_aspect_ratios + [None] * diff
+            aligned_image_aspect_ratios = image_aspect_ratios + [None] * diff
 
         uploads = await asyncio.gather(*[self.upload_blob(image) for image in images])
         embed_images = [
             models.AppBskyEmbedImages.Image(alt=alt, image=upload.blob, aspect_ratio=aspect_ratio)
-            for alt, upload, aspect_ratio in zip(image_alts, uploads, image_aspect_ratios)
+            for alt, upload, aspect_ratio in zip(image_alts, uploads, aligned_image_aspect_ratios)
         ]
 
         return await self.send_post(
@@ -278,6 +278,10 @@ class AsyncClient(
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
+        image_aspect_ratios = None
+        if image_aspect_ratio:
+            image_aspect_ratios = [image_aspect_ratio]
+
         return await self.send_images(
             text,
             images=[image],
@@ -286,7 +290,7 @@ class AsyncClient(
             reply_to=reply_to,
             langs=langs,
             facets=facets,
-            image_aspect_ratios=[image_aspect_ratio],
+            image_aspect_ratios=image_aspect_ratios,
         )
 
     async def send_video(
