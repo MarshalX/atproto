@@ -154,10 +154,10 @@ class Relationship(base.ModelBase):
 
     did: string_formats.Did  #: Did.
     followed_by: t.Optional[string_formats.AtUri] = (
-        None  #: if the actor is followed by this DID, contains the AT-URI of the follow record.
+        None  #: If the actor is followed by this DID, contains the AT-URI of the follow record.
     )
     following: t.Optional[string_formats.AtUri] = (
-        None  #: if the actor follows this DID, this is the AT-URI of the follow record.
+        None  #: If the actor follows this DID, this is the AT-URI of the follow record.
     )
 
     py_type: t.Literal['app.bsky.graph.defs#relationship'] = Field(
