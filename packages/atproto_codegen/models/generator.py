@@ -24,6 +24,7 @@ from atproto_codegen.record_templates import (
 from atproto_codegen.utils import (
     _resolve_nsid_ref,
     append_code,
+    capitalize_first_symbol,
     convert_camel_case_to_snake_case,
     format_code,
     gen_description_by_camel_case_name,
@@ -371,9 +372,13 @@ def _add_dot_to_end_if_not_exist(description: str) -> str:
 def _get_field_docstring(
     field_name: str, field_type: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob]
 ) -> str:
-    field_desc = field_type.description
+    field_desc = capitalize_first_symbol(field_type.description)
     if field_desc is None:
         field_desc = gen_description_by_camel_case_name(field_name)
+
+    if isinstance(field_type, models.LexArray) and field_type.items.description:
+        items_desc = capitalize_first_symbol(field_type.items.description)
+        field_desc = f'{_add_dot_to_end_if_not_exist(field_desc)} {items_desc}'
 
     return _add_dot_to_end_if_not_exist(field_desc)
 

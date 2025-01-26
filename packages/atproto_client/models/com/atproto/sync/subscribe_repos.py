@@ -32,10 +32,12 @@ class ParamsDict(t.TypedDict):
 class Commit(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Represents an update of repository state. Note that empty commits are allowed, which include no repo data changes, but an update to rev and signature."""
 
-    blobs: t.List['CIDType']  #: Blobs.
+    blobs: t.List['CIDType']  #: Blobs. List of new blobs (by CID) referenced by records in this commit.
     blocks: t.Union[str, bytes]  #: CAR file containing relevant blocks, as a diff since the previous repo state.
     commit: 'CIDType'  #: Repo commit object CID.
-    ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp'] = Field(max_length=200)  #: Ops.
+    ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp'] = Field(
+        max_length=200
+    )  #: Ops. List of repo mutation operations in this commit (eg, records created, updated, or deleted).
     rebase: bool  #: DEPRECATED -- unused.
     repo: string_formats.Did  #: The repo this event comes from.
     rev: str  #: The rev of the emitted commit. Note that this information is also in the commit object included in blocks, unless this is a tooBig event.

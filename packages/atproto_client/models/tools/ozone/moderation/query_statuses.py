@@ -86,7 +86,9 @@ class Params(base.ParamsModelBase):
     subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]] = (
         None  #: If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     )
-    tags: t.Optional[t.List[str]] = Field(default=None, max_length=25)  #: Tags.
+    tags: t.Optional[t.List[str]] = Field(
+        default=None, max_length=25
+    )  #: Tags. Items in this array are applied with OR filters. To apply AND filter, put all tags in the same string and separate using && characters.
     takendown: t.Optional[bool] = None  #: Get subjects that were taken down.
 
 
@@ -171,7 +173,9 @@ class ParamsDict(t.TypedDict):
     subject_type: te.NotRequired[
         t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]]
     ]  #: If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
-    tags: te.NotRequired[t.Optional[t.List[str]]]  #: Tags.
+    tags: te.NotRequired[
+        t.Optional[t.List[str]]
+    ]  #: Tags. Items in this array are applied with OR filters. To apply AND filter, put all tags in the same string and separate using && characters.
     takendown: te.NotRequired[t.Optional[bool]]  #: Get subjects that were taken down.
 
 
