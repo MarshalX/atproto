@@ -285,6 +285,9 @@ class ModEventLabel(base.ModelBase):
     create_label_vals: t.List[str]  #: Create label vals.
     negate_label_vals: t.List[str]  #: Negate label vals.
     comment: t.Optional[str] = None  #: Comment.
+    duration_in_hours: t.Optional[int] = (
+        None  #: Indicates how long the label will remain on the subject. Only applies on labels that are being added.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventLabel'] = Field(
         default='tools.ozone.moderation.defs#modEventLabel', alias='$type', frozen=True
