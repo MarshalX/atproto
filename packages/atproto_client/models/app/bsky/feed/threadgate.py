@@ -25,6 +25,14 @@ class MentionRule(base.ModelBase):
     )
 
 
+class FollowerRule(base.ModelBase):
+    """Definition model for :obj:`app.bsky.feed.threadgate`. Allow replies from actors who follow you."""
+
+    py_type: t.Literal['app.bsky.feed.threadgate#followerRule'] = Field(
+        default='app.bsky.feed.threadgate#followerRule', alias='$type', frozen=True
+    )
+
+
 class FollowingRule(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.threadgate`. Allow replies from actors you follow."""
 
@@ -53,13 +61,16 @@ class Record(base.RecordModelBase):
             te.Annotated[
                 t.Union[
                     'models.AppBskyFeedThreadgate.MentionRule',
+                    'models.AppBskyFeedThreadgate.FollowerRule',
                     'models.AppBskyFeedThreadgate.FollowingRule',
                     'models.AppBskyFeedThreadgate.ListRule',
                 ],
                 Field(discriminator='py_type'),
             ]
         ]
-    ] = Field(default=None, max_length=5)  #: Allow.
+    ] = Field(
+        default=None, max_length=5
+    )  #: List of rules defining who can reply to this post. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
     hidden_replies: t.Optional[t.List[string_formats.AtUri]] = Field(
         default=None, max_length=50
     )  #: List of hidden reply URIs.
