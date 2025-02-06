@@ -147,6 +147,7 @@ Preferences = t.List[
             'models.AppBskyActorDefs.HiddenPostsPref',
             'models.AppBskyActorDefs.BskyAppStatePref',
             'models.AppBskyActorDefs.LabelersPref',
+            'models.AppBskyActorDefs.PostInteractionSettingsPref',
         ],
         Field(discriminator='py_type'),
     ]
@@ -373,3 +374,32 @@ class Nux(base.ModelBase):
     )
 
     py_type: t.Literal['app.bsky.actor.defs#nux'] = Field(default='app.bsky.actor.defs#nux', alias='$type', frozen=True)
+
+
+class PostInteractionSettingsPref(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`. Default post interaction settings for the account. These values should be applied as default values when creating new posts. These refs should mirror the threadgate and postgate records exactly."""
+
+    postgate_embedding_rules: t.Optional[
+        t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
+    ] = Field(
+        default=None, max_length=5
+    )  #: Matches postgate record. List of rules defining who can embed this users posts. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
+    threadgate_allow_rules: t.Optional[
+        t.List[
+            te.Annotated[
+                t.Union[
+                    'models.AppBskyFeedThreadgate.MentionRule',
+                    'models.AppBskyFeedThreadgate.FollowerRule',
+                    'models.AppBskyFeedThreadgate.FollowingRule',
+                    'models.AppBskyFeedThreadgate.ListRule',
+                ],
+                Field(discriminator='py_type'),
+            ]
+        ]
+    ] = Field(
+        default=None, max_length=5
+    )  #: Matches threadgate record. List of rules defining who can reply to this users posts. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
+
+    py_type: t.Literal['app.bsky.actor.defs#postInteractionSettingsPref'] = Field(
+        default='app.bsky.actor.defs#postInteractionSettingsPref', alias='$type', frozen=True
+    )
