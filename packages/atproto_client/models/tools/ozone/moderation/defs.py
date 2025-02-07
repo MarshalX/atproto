@@ -43,6 +43,7 @@ class ModEventView(base.ModelBase):
             'models.ToolsOzoneModerationDefs.AccountEvent',
             'models.ToolsOzoneModerationDefs.IdentityEvent',
             'models.ToolsOzoneModerationDefs.RecordEvent',
+            'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -89,6 +90,7 @@ class ModEventViewDetail(base.ModelBase):
             'models.ToolsOzoneModerationDefs.AccountEvent',
             'models.ToolsOzoneModerationDefs.IdentityEvent',
             'models.ToolsOzoneModerationDefs.RecordEvent',
+            'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -145,6 +147,9 @@ class SubjectStatusView(base.ModelBase):
     last_reviewed_by: t.Optional[string_formats.Did] = None  #: Last reviewed by.
     mute_reporting_until: t.Optional[string_formats.DateTime] = None  #: Mute reporting until.
     mute_until: t.Optional[string_formats.DateTime] = None  #: Mute until.
+    priority_score: t.Optional[int] = Field(
+        default=None, ge=0, le=100
+    )  #: Numeric value representing the level of priority. Higher score means higher priority.
     records_stats: t.Optional['models.ToolsOzoneModerationDefs.RecordsStats'] = (
         None  #: Statistics related to the record subjects authored by the subject's account.
     )
@@ -291,6 +296,17 @@ class ModEventLabel(base.ModelBase):
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventLabel'] = Field(
         default='tools.ozone.moderation.defs#modEventLabel', alias='$type', frozen=True
+    )
+
+
+class ModEventPriorityScore(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Set priority score of the subject. Higher score means higher priority."""
+
+    score: int = Field(ge=0, le=100)  #: Score.
+    comment: t.Optional[str] = None  #: Comment.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#modEventPriorityScore'] = Field(
+        default='tools.ozone.moderation.defs#modEventPriorityScore', alias='$type', frozen=True
     )
 
 

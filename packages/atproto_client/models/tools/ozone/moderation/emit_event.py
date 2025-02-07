@@ -40,6 +40,7 @@ class Data(base.DataModelBase):
             'models.ToolsOzoneModerationDefs.AccountEvent',
             'models.ToolsOzoneModerationDefs.IdentityEvent',
             'models.ToolsOzoneModerationDefs.RecordEvent',
+            'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -71,6 +72,7 @@ class DataDict(t.TypedDict):
             'models.ToolsOzoneModerationDefs.AccountEvent',
             'models.ToolsOzoneModerationDefs.IdentityEvent',
             'models.ToolsOzoneModerationDefs.RecordEvent',
+            'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.

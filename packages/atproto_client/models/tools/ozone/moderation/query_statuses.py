@@ -54,6 +54,9 @@ class Params(base.ParamsModelBase):
     min_account_suspend_count: t.Optional[int] = (
         None  #: If specified, only subjects that belong to an account that has at least this many suspensions will be returned.
     )
+    min_priority_score: t.Optional[int] = Field(
+        default=None, ge=0, le=100
+    )  #: If specified, only subjects that have priority score value above the given value will be returned.
     min_reported_records_count: t.Optional[int] = (
         None  #: If specified, only subjects that belong to an account that has at least this many reported records will be returned.
     )
@@ -80,6 +83,7 @@ class Params(base.ParamsModelBase):
             t.Literal['lastReportedAt'],
             t.Literal['reportedRecordsCount'],
             t.Literal['takendownRecordsCount'],
+            t.Literal['priorityScore'],
         ]
     ] = 'lastReportedAt'  #: Sort field.
     subject: t.Optional[string_formats.Uri] = None  #: The subject to get the status for.
@@ -129,6 +133,9 @@ class ParamsDict(t.TypedDict):
     min_account_suspend_count: te.NotRequired[
         t.Optional[int]
     ]  #: If specified, only subjects that belong to an account that has at least this many suspensions will be returned.
+    min_priority_score: te.NotRequired[
+        t.Optional[int]
+    ]  #: If specified, only subjects that have priority score value above the given value will be returned.
     min_reported_records_count: te.NotRequired[
         t.Optional[int]
     ]  #: If specified, only subjects that belong to an account that has at least this many reported records will be returned.
@@ -166,6 +173,7 @@ class ParamsDict(t.TypedDict):
                 t.Literal['lastReportedAt'],
                 t.Literal['reportedRecordsCount'],
                 t.Literal['takendownRecordsCount'],
+                t.Literal['priorityScore'],
             ]
         ]
     ]  #: Sort field.
