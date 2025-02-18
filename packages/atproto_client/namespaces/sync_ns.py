@@ -6332,6 +6332,34 @@ class ComAtprotoSyncNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoSyncListRepos.Response)
 
+    def list_repos_by_collection(
+        self,
+        params: t.Union[
+            models.ComAtprotoSyncListReposByCollection.Params, models.ComAtprotoSyncListReposByCollection.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSyncListReposByCollection.Response':
+        """Enumerates all the DIDs which have records with the given collection NSID.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSyncListReposByCollection.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoSyncListReposByCollection.Params',
+            get_or_create(params, models.ComAtprotoSyncListReposByCollection.Params),
+        )
+        response = self._client.invoke_query(
+            'com.atproto.sync.listReposByCollection', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSyncListReposByCollection.Response)
+
     def notify_of_update(
         self,
         data: t.Union[models.ComAtprotoSyncNotifyOfUpdate.Data, models.ComAtprotoSyncNotifyOfUpdate.DataDict],
@@ -6749,6 +6777,34 @@ class ToolsOzoneModerationNamespace(NamespaceBase):
             'tools.ozone.moderation.getRepo', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneModerationDefs.RepoViewDetail)
+
+    def get_reporter_stats(
+        self,
+        params: t.Union[
+            models.ToolsOzoneModerationGetReporterStats.Params, models.ToolsOzoneModerationGetReporterStats.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationGetReporterStats.Response':
+        """Get reporter stats for a list of users.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationGetReporterStats.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationGetReporterStats.Params',
+            get_or_create(params, models.ToolsOzoneModerationGetReporterStats.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.moderation.getReporterStats', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneModerationGetReporterStats.Response)
 
     def get_repos(
         self,

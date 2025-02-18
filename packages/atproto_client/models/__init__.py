@@ -195,6 +195,7 @@ from atproto_client.models.com.atproto.sync import get_repo as ComAtprotoSyncGet
 from atproto_client.models.com.atproto.sync import get_repo_status as ComAtprotoSyncGetRepoStatus
 from atproto_client.models.com.atproto.sync import list_blobs as ComAtprotoSyncListBlobs
 from atproto_client.models.com.atproto.sync import list_repos as ComAtprotoSyncListRepos
+from atproto_client.models.com.atproto.sync import list_repos_by_collection as ComAtprotoSyncListReposByCollection
 from atproto_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
 from atproto_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
@@ -214,6 +215,7 @@ from atproto_client.models.tools.ozone.moderation import get_event as ToolsOzone
 from atproto_client.models.tools.ozone.moderation import get_record as ToolsOzoneModerationGetRecord
 from atproto_client.models.tools.ozone.moderation import get_records as ToolsOzoneModerationGetRecords
 from atproto_client.models.tools.ozone.moderation import get_repo as ToolsOzoneModerationGetRepo
+from atproto_client.models.tools.ozone.moderation import get_reporter_stats as ToolsOzoneModerationGetReporterStats
 from atproto_client.models.tools.ozone.moderation import get_repos as ToolsOzoneModerationGetRepos
 from atproto_client.models.tools.ozone.moderation import query_events as ToolsOzoneModerationQueryEvents
 from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
@@ -434,6 +436,7 @@ class _Ids:
     ComAtprotoSyncGetRepoStatus: str = 'com.atproto.sync.getRepoStatus'
     ComAtprotoSyncListBlobs: str = 'com.atproto.sync.listBlobs'
     ComAtprotoSyncListRepos: str = 'com.atproto.sync.listRepos'
+    ComAtprotoSyncListReposByCollection: str = 'com.atproto.sync.listReposByCollection'
     ComAtprotoSyncNotifyOfUpdate: str = 'com.atproto.sync.notifyOfUpdate'
     ComAtprotoSyncRequestCrawl: str = 'com.atproto.sync.requestCrawl'
     ComAtprotoSyncSubscribeRepos: str = 'com.atproto.sync.subscribeRepos'
@@ -452,6 +455,7 @@ class _Ids:
     ToolsOzoneModerationGetRecord: str = 'tools.ozone.moderation.getRecord'
     ToolsOzoneModerationGetRecords: str = 'tools.ozone.moderation.getRecords'
     ToolsOzoneModerationGetRepo: str = 'tools.ozone.moderation.getRepo'
+    ToolsOzoneModerationGetReporterStats: str = 'tools.ozone.moderation.getReporterStats'
     ToolsOzoneModerationGetRepos: str = 'tools.ozone.moderation.getRepos'
     ToolsOzoneModerationQueryEvents: str = 'tools.ozone.moderation.queryEvents'
     ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
