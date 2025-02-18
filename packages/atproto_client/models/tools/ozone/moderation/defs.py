@@ -655,3 +655,21 @@ class RecordHosting(base.ModelBase):
     py_type: t.Literal['tools.ozone.moderation.defs#recordHosting'] = Field(
         default='tools.ozone.moderation.defs#recordHosting', alias='$type', frozen=True
     )
+
+
+class ReporterStats(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`."""
+
+    account_report_count: int  #: The total number of reports made by the user on accounts.
+    did: string_formats.Did  #: Did.
+    labeled_account_count: int  #: The total number of accounts labeled as a result of the user's reports.
+    labeled_record_count: int  #: The total number of records labeled as a result of the user's reports.
+    record_report_count: int  #: The total number of reports made by the user on records.
+    reported_account_count: int  #: The total number of accounts reported by the user.
+    reported_record_count: int  #: The total number of records reported by the user.
+    takendown_account_count: int  #: The total number of accounts taken down as a result of the user's reports.
+    takendown_record_count: int  #: The total number of records taken down as a result of the user's reports.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#reporterStats'] = Field(
+        default='tools.ozone.moderation.defs#reporterStats', alias='$type', frozen=True
+    )
