@@ -14,7 +14,7 @@ def main() -> None:
     aspect_ratio = models.AppBskyEmbedDefs.AspectRatio(height=100, width=100)
 
     client.send_video(
-        text='Post with video from Python',
+        text='Post with video from Python SDK',
         video=vid_data,
         video_alt='Text version of the video (ALT)',
         video_aspect_ratio=aspect_ratio,

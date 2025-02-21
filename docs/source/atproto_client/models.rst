@@ -15,6 +15,8 @@ Submodules
    ../atproto/atproto_client.models.base
    ../atproto/atproto_client.models.app
    ../atproto/atproto_client.models.com
+   ../atproto/atproto_client.models.chat
+   ../atproto/atproto_client.models.tools
    ../atproto/atproto_client.models.languages
    ../atproto/atproto_client.models.blob_ref
    ../atproto/atproto_client.models.dot_dict

@@ -5,7 +5,7 @@ def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 
-    client.send_post(text='Hello World from Python!')
+    client.send_post(text='Hello World from Python SDK!')
 
 
 if __name__ == '__main__':

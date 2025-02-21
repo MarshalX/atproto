@@ -27,7 +27,7 @@ def main() -> None:
             images.append(f.read())
 
     client.send_images(
-        text='Post with image from Python',
+        text='Post with image from Python SDK',
         images=images,
         image_alts=image_alts,
         image_aspect_ratios=image_aspect_ratios,
