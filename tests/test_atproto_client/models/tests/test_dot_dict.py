@@ -105,3 +105,56 @@ def test_dot_dict() -> None:
     assert dict_model['a'] == 1
     assert dict_model['d'][0]['e'] == 6
     assert dict_model['createdAt'] == 'blabla'
+
+
+def test_dot_dict_iter() -> None:
+    test_data = {'a': 1, 'b': {'c': 2}, 'd': [{'e': 3}]}
+    model = DotDict(test_data)
+
+    # Test list conversion
+    keys_list = list(model)
+    assert keys_list == list(test_data)
+    assert isinstance(keys_list, list)
+
+    # Test looping
+    og_iter = iter(test_data)
+    for key in model:
+        assert key == next(og_iter)
+
+
+def test_dot_dict_mapping_protocol() -> None:
+    test_data = {'a': 1, 'b': {'c': 2}, 'd': [{'e': 3}]}
+    model = DotDict(test_data)
+
+    # Test dict conversion
+    converted_dict = dict(model)
+    assert converted_dict == test_data
+    assert converted_dict is not test_data
+    assert isinstance(converted_dict, dict)
+    assert not isinstance(converted_dict, DotDict)
+
+    # Test keys looping
+    og_iter = iter(test_data.keys())
+    for key in model:
+        assert key == next(og_iter)
+
+    # Test values looping
+    og_iter = iter(test_data.values())
+    for value in model.values():
+        assert value == next(og_iter)
+
+    # Test items looping
+    og_iter = iter(test_data.items())
+    for key, value in model.items():
+        next_item = next(og_iter)
+        assert key == next_item[0]
+        assert value == next_item[1]
+
+    # Test len
+    assert len(model) == len(test_data)
+    assert len(DotDict({})) == 0
+
+    # Test contains
+    assert 'a' in model
+    assert 'b' in model
+    assert 'c' not in model

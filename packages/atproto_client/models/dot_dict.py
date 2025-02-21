@@ -1,5 +1,6 @@
 import re
 import typing as t
+from collections import abc
 from copy import deepcopy
 
 import typing_extensions as te
@@ -91,6 +92,24 @@ class DotDict(UnknownDict):
         self._data.__setitem__(key, DotDict.__convert(value))
 
     __setattr__ = __setitem__
+
+    def __iter__(self) -> t.Iterator[t.Any]:
+        yield from iter(self._data)
+
+    def keys(self) -> abc.KeysView:
+        return self._data.keys()
+
+    def values(self) -> abc.ValuesView:
+        return self._data.values()
+
+    def items(self) -> abc.ItemsView:
+        return self._data.items()
+
+    def __len__(self) -> int:
+        return len(self._data)
+
+    def __contains__(self, item: t.Any) -> bool:
+        return item in self._data
 
     def __eq__(self, other: t.Any) -> bool:
         if isinstance(other, DotDict):
