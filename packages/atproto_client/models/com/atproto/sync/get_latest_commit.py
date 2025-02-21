@@ -24,4 +24,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.sync.getLatestCommit`."""
 
     cid: string_formats.Cid  #: Cid.
-    rev: str  #: Rev.
+    rev: string_formats.Tid  #: Rev.

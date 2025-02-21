@@ -83,7 +83,9 @@ class Create(base.ModelBase):
 
     collection: string_formats.Nsid  #: Collection.
     value: 'UnknownType'  #: Value.
-    rkey: t.Optional[str] = Field(default=None, max_length=512)  #: Rkey.
+    rkey: t.Optional[string_formats.RecordKey] = Field(
+        default=None, max_length=512
+    )  #: NOTE: maxLength is redundant with record-key format. Keeping it temporarily to ensure backwards compatibility.
 
     py_type: t.Literal['com.atproto.repo.applyWrites#create'] = Field(
         default='com.atproto.repo.applyWrites#create', alias='$type', frozen=True
@@ -94,7 +96,7 @@ class Update(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Operation which updates an existing record."""
 
     collection: string_formats.Nsid  #: Collection.
-    rkey: str  #: Rkey.
+    rkey: string_formats.RecordKey  #: Rkey.
     value: 'UnknownType'  #: Value.
 
     py_type: t.Literal['com.atproto.repo.applyWrites#update'] = Field(
@@ -106,7 +108,7 @@ class Delete(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.applyWrites`. Operation which deletes an existing record."""
 
     collection: string_formats.Nsid  #: Collection.
-    rkey: str  #: Rkey.
+    rkey: string_formats.RecordKey  #: Rkey.
 
     py_type: t.Literal['com.atproto.repo.applyWrites#delete'] = Field(
         default='com.atproto.repo.applyWrites#delete', alias='$type', frozen=True

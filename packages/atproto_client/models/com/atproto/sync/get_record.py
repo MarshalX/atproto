@@ -17,7 +17,7 @@ class Params(base.ParamsModelBase):
 
     collection: string_formats.Nsid  #: Collection.
     did: string_formats.Did  #: The DID of the repo.
-    rkey: str  #: Record Key.
+    rkey: string_formats.RecordKey  #: Record Key.
     commit: t.Optional[string_formats.Cid] = (
         None  #: DEPRECATED: referenced a repo commit by CID, and retrieved record as of that commit.
     )
@@ -26,7 +26,7 @@ class Params(base.ParamsModelBase):
 class ParamsDict(t.TypedDict):
     collection: string_formats.Nsid  #: Collection.
     did: string_formats.Did  #: The DID of the repo.
-    rkey: str  #: Record Key.
+    rkey: string_formats.RecordKey  #: Record Key.
     commit: te.NotRequired[
         t.Optional[string_formats.Cid]
     ]  #: DEPRECATED: referenced a repo commit by CID, and retrieved record as of that commit.

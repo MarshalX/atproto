@@ -16,7 +16,7 @@ class CommitMeta(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.defs`."""
 
     cid: string_formats.Cid  #: Cid.
-    rev: str  #: Rev.
+    rev: string_formats.Tid  #: Rev.
 
     py_type: t.Literal['com.atproto.repo.defs#commitMeta'] = Field(
         default='com.atproto.repo.defs#commitMeta', alias='$type', frozen=True

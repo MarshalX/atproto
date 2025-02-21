@@ -21,7 +21,7 @@ class Data(base.DataModelBase):
 
     collection: string_formats.Nsid  #: The NSID of the record collection.
     repo: string_formats.AtIdentifier  #: The handle or DID of the repo (aka, current account).
-    rkey: str  #: The Record Key.
+    rkey: string_formats.RecordKey  #: The Record Key.
     swap_commit: t.Optional[string_formats.Cid] = None  #: Compare and swap with the previous commit by CID.
     swap_record: t.Optional[string_formats.Cid] = None  #: Compare and swap with the previous record by CID.
 
@@ -29,7 +29,7 @@ class Data(base.DataModelBase):
 class DataDict(t.TypedDict):
     collection: string_formats.Nsid  #: The NSID of the record collection.
     repo: string_formats.AtIdentifier  #: The handle or DID of the repo (aka, current account).
-    rkey: str  #: The Record Key.
+    rkey: string_formats.RecordKey  #: The Record Key.
     swap_commit: te.NotRequired[t.Optional[string_formats.Cid]]  #: Compare and swap with the previous commit by CID.
     swap_record: te.NotRequired[t.Optional[string_formats.Cid]]  #: Compare and swap with the previous record by CID.
 

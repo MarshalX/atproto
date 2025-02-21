@@ -19,14 +19,14 @@ class Params(base.ParamsModelBase):
     did: string_formats.Did  #: The DID of the repo.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=500, ge=1, le=1000)  #: Limit.
-    since: t.Optional[str] = None  #: Optional revision of the repo to list blobs since.
+    since: t.Optional[string_formats.Tid] = None  #: Optional revision of the repo to list blobs since.
 
 
 class ParamsDict(t.TypedDict):
     did: string_formats.Did  #: The DID of the repo.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
-    since: te.NotRequired[t.Optional[str]]  #: Optional revision of the repo to list blobs since.
+    since: te.NotRequired[t.Optional[string_formats.Tid]]  #: Optional revision of the repo to list blobs since.
 
 
 class Response(base.ResponseModelBase):
