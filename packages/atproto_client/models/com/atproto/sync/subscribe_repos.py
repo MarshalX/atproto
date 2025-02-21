@@ -40,14 +40,14 @@ class Commit(base.ModelBase):
     )  #: Ops. List of repo mutation operations in this commit (eg, records created, updated, or deleted).
     rebase: bool  #: DEPRECATED -- unused.
     repo: string_formats.Did  #: The repo this event comes from.
-    rev: str  #: The rev of the emitted commit. Note that this information is also in the commit object included in blocks, unless this is a tooBig event.
+    rev: string_formats.Tid  #: The rev of the emitted commit. Note that this information is also in the commit object included in blocks, unless this is a tooBig event.
     seq: int  #: The stream sequence number of this message.
     time: string_formats.DateTime  #: Timestamp of when this message was originally broadcast.
     too_big: bool  #: Indicates that this commit contained too many ops, or data size was too large. Consumers will need to make a separate request to get missing data.
     prev: t.Optional['CIDType'] = (
         None  #: DEPRECATED -- unused. WARNING -- nullable and optional; stick with optional to ensure golang interoperability.
     )
-    since: t.Optional[str] = None  #: The rev of the last emitted commit from this repo (if any).
+    since: t.Optional[string_formats.Tid] = None  #: The rev of the last emitted commit from this repo (if any).
 
     py_type: t.Literal['com.atproto.sync.subscribeRepos#commit'] = Field(
         default='com.atproto.sync.subscribeRepos#commit', alias='$type', frozen=True

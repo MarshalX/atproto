@@ -19,12 +19,16 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`tools.ozone.team.listMembers`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
+    disabled: t.Optional[bool] = None  #: Disabled.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    roles: t.Optional[t.List[str]] = None  #: Roles.
 
 
 class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
+    disabled: te.NotRequired[t.Optional[bool]]  #: Disabled.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    roles: te.NotRequired[t.Optional[t.List[str]]]  #: Roles.
 
 
 class Response(base.ResponseModelBase):
