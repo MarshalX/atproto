@@ -5,7 +5,7 @@ def main() -> None:
     client = Client()
     client.login('my-handle', 'my-password')
 
-    post = client.send_post(text='Hello World from Python!')
+    post = client.send_post(text='Hello World from Python SDK!')
     print('Post reference:', post)
 
     print('Like reference:', client.like(uri=post.uri, cid=post.cid))

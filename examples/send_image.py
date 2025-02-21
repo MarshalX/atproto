@@ -14,7 +14,7 @@ def main() -> None:
     aspect_ratio = models.AppBskyEmbedDefs.AspectRatio(height=100, width=100)
 
     client.send_image(
-        text='Post with image from Python',
+        text='Post with image from Python SDK',
         image=img_data,
         image_alt='Text version of the image (ALT)',
         image_aspect_ratio=aspect_ratio,
