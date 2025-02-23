@@ -23,6 +23,7 @@ _SUBSCRIBE_REPOS_MESSAGE_TYPE_TO_MODEL = {
     '#info': models.ComAtprotoSyncSubscribeRepos.Info,
     '#identity': models.ComAtprotoSyncSubscribeRepos.Identity,  # DEPRECATED
     '#account': models.ComAtprotoSyncSubscribeRepos.Account,
+    '#sync': models.ComAtprotoSyncSubscribeRepos.Sync,
 }
 _SUBSCRIBE_LABELS_MESSAGE_TYPE_TO_MODEL = {
     '#labels': models.ComAtprotoLabelSubscribeLabels.Labels,
@@ -37,6 +38,8 @@ SubscribeReposMessage = t.Union[
     models.ComAtprotoSyncSubscribeRepos.Tombstone,
     models.ComAtprotoSyncSubscribeRepos.Info,
     models.ComAtprotoSyncSubscribeRepos.Identity,
+    models.ComAtprotoSyncSubscribeRepos.Account,
+    models.ComAtprotoSyncSubscribeRepos.Sync,
 ]
 #: Subscribe Labels Message
 SubscribeLabelsMessage = t.Union[
