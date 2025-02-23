@@ -1,5 +1,18 @@
 # Change Log
 
+## Version 0.0.59
+
+**23.02.2025**
+
+* Add support for the repository `#sync` message in the subscribe repos firehose by @MarshalX in https://github.com/MarshalX/atproto/pull/556
+* Add `chat.*` and `tools.*` models to the main menu of documentation by @MarshalX in https://github.com/MarshalX/atproto/pull/551
+* Allow SDK usage with `httpx` 0.28.x by @MarshalX in https://github.com/MarshalX/atproto/pull/553
+* Allow SDK usage with `cryptography` v44 and v45 by @MarshalX in https://github.com/MarshalX/atproto/pull/554
+* Improve mapping protocol of `DotDict` by @MarshalX in https://github.com/MarshalX/atproto/pull/550
+* Fix segfault in CAR decoding (firehose subscription) by @MarshalX in https://github.com/MarshalX/atproto/pull/552
+* Fix descriptions of array items in generated models by @MarshalX in https://github.com/MarshalX/atproto/pull/534
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/555, https://github.com/MarshalX/atproto/pull/537, https://github.com/MarshalX/atproto/pull/539, https://github.com/MarshalX/atproto/pull/540, https://github.com/MarshalX/atproto/pull/546, https://github.com/MarshalX/atproto/pull/548
+
 ## Version 0.0.58
 
 **25.01.2025**
