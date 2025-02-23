@@ -4036,6 +4036,35 @@ class ChatBskyActorNamespace(AsyncNamespaceBase):
 
 
 class ChatBskyConvoNamespace(AsyncNamespaceBase):
+    async def accept_convo(
+        self,
+        data: t.Union[models.ChatBskyConvoAcceptConvo.Data, models.ChatBskyConvoAcceptConvo.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyConvoAcceptConvo.Response':
+        """Accept convo.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyConvoAcceptConvo.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyConvoAcceptConvo.Data', get_or_create(data, models.ChatBskyConvoAcceptConvo.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'chat.bsky.convo.acceptConvo',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyConvoAcceptConvo.Response)
+
     async def delete_message_for_self(
         self,
         data: t.Union[models.ChatBskyConvoDeleteMessageForSelf.Data, models.ChatBskyConvoDeleteMessageForSelf.DataDict],
@@ -4090,6 +4119,34 @@ class ChatBskyConvoNamespace(AsyncNamespaceBase):
             'chat.bsky.convo.getConvo', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ChatBskyConvoGetConvo.Response)
+
+    async def get_convo_availability(
+        self,
+        params: t.Union[
+            models.ChatBskyConvoGetConvoAvailability.Params, models.ChatBskyConvoGetConvoAvailability.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyConvoGetConvoAvailability.Response':
+        """Get whether the requester and the other members can chat. If an existing convo is found for these members, it is returned.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyConvoGetConvoAvailability.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ChatBskyConvoGetConvoAvailability.Params',
+            get_or_create(params, models.ChatBskyConvoGetConvoAvailability.Params),
+        )
+        response = await self._client.invoke_query(
+            'chat.bsky.convo.getConvoAvailability', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyConvoGetConvoAvailability.Response)
 
     async def get_convo_for_members(
         self,

@@ -20,11 +20,15 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    read_state: t.Optional[t.Union[t.Literal['unread'], str]] = None  #: Read state.
+    status: t.Optional[t.Union[t.Literal['request'], t.Literal['accepted'], str]] = None  #: Status.
 
 
 class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    read_state: te.NotRequired[t.Optional[t.Union[t.Literal['unread'], str]]]  #: Read state.
+    status: te.NotRequired[t.Optional[t.Union[t.Literal['request'], t.Literal['accepted'], str]]]  #: Status.
 
 
 class Response(base.ResponseModelBase):

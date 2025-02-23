@@ -12,9 +12,11 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   atproto_client.models.chat.bsky.convo.accept_convo
    atproto_client.models.chat.bsky.convo.defs
    atproto_client.models.chat.bsky.convo.delete_message_for_self
    atproto_client.models.chat.bsky.convo.get_convo
+   atproto_client.models.chat.bsky.convo.get_convo_availability
    atproto_client.models.chat.bsky.convo.get_convo_for_members
    atproto_client.models.chat.bsky.convo.get_log
    atproto_client.models.chat.bsky.convo.get_messages

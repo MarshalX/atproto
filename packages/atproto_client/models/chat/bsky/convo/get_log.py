@@ -32,6 +32,7 @@ class Response(base.ResponseModelBase):
         te.Annotated[
             t.Union[
                 'models.ChatBskyConvoDefs.LogBeginConvo',
+                'models.ChatBskyConvoDefs.LogAcceptConvo',
                 'models.ChatBskyConvoDefs.LogLeaveConvo',
                 'models.ChatBskyConvoDefs.LogCreateMessage',
                 'models.ChatBskyConvoDefs.LogDeleteMessage',

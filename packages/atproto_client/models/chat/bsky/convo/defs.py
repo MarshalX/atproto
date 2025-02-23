@@ -102,7 +102,7 @@ class ConvoView(base.ModelBase):
             Field(default=None, discriminator='py_type'),
         ]
     ] = None  #: Last message.
-    opened: t.Optional[bool] = None  #: Opened.
+    status: t.Optional[t.Union[t.Literal['request'], t.Literal['accepted'], str]] = None  #: Status.
 
     py_type: t.Literal['chat.bsky.convo.defs#convoView'] = Field(
         default='chat.bsky.convo.defs#convoView', alias='$type', frozen=True
@@ -120,6 +120,17 @@ class LogBeginConvo(base.ModelBase):
     )
 
 
+class LogAcceptConvo(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
+
+    convo_id: str  #: Convo id.
+    rev: str  #: Rev.
+
+    py_type: t.Literal['chat.bsky.convo.defs#logAcceptConvo'] = Field(
+        default='chat.bsky.convo.defs#logAcceptConvo', alias='$type', frozen=True
+    )
+
+
 class LogLeaveConvo(base.ModelBase):
     """Definition model for :obj:`chat.bsky.convo.defs`."""
 
@@ -128,6 +139,28 @@ class LogLeaveConvo(base.ModelBase):
 
     py_type: t.Literal['chat.bsky.convo.defs#logLeaveConvo'] = Field(
         default='chat.bsky.convo.defs#logLeaveConvo', alias='$type', frozen=True
+    )
+
+
+class LogMuteConvo(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
+
+    convo_id: str  #: Convo id.
+    rev: str  #: Rev.
+
+    py_type: t.Literal['chat.bsky.convo.defs#logMuteConvo'] = Field(
+        default='chat.bsky.convo.defs#logMuteConvo', alias='$type', frozen=True
+    )
+
+
+class LogUnmuteConvo(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
+
+    convo_id: str  #: Convo id.
+    rev: str  #: Rev.
+
+    py_type: t.Literal['chat.bsky.convo.defs#logUnmuteConvo'] = Field(
+        default='chat.bsky.convo.defs#logUnmuteConvo', alias='$type', frozen=True
     )
 
 
@@ -158,4 +191,19 @@ class LogDeleteMessage(base.ModelBase):
 
     py_type: t.Literal['chat.bsky.convo.defs#logDeleteMessage'] = Field(
         default='chat.bsky.convo.defs#logDeleteMessage', alias='$type', frozen=True
+    )
+
+
+class LogReadMessage(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
+
+    convo_id: str  #: Convo id.
+    message: te.Annotated[
+        t.Union['models.ChatBskyConvoDefs.MessageView', 'models.ChatBskyConvoDefs.DeletedMessageView'],
+        Field(discriminator='py_type'),
+    ]  #: Message.
+    rev: str  #: Rev.
+
+    py_type: t.Literal['chat.bsky.convo.defs#logReadMessage'] = Field(
+        default='chat.bsky.convo.defs#logReadMessage', alias='$type', frozen=True
     )

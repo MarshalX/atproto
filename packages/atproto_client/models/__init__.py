@@ -98,9 +98,11 @@ from atproto_client.models.chat.bsky.actor import declaration as ChatBskyActorDe
 from atproto_client.models.chat.bsky.actor import defs as ChatBskyActorDefs
 from atproto_client.models.chat.bsky.actor import delete_account as ChatBskyActorDeleteAccount
 from atproto_client.models.chat.bsky.actor import export_account_data as ChatBskyActorExportAccountData
+from atproto_client.models.chat.bsky.convo import accept_convo as ChatBskyConvoAcceptConvo
 from atproto_client.models.chat.bsky.convo import defs as ChatBskyConvoDefs
 from atproto_client.models.chat.bsky.convo import delete_message_for_self as ChatBskyConvoDeleteMessageForSelf
 from atproto_client.models.chat.bsky.convo import get_convo as ChatBskyConvoGetConvo
+from atproto_client.models.chat.bsky.convo import get_convo_availability as ChatBskyConvoGetConvoAvailability
 from atproto_client.models.chat.bsky.convo import get_convo_for_members as ChatBskyConvoGetConvoForMembers
 from atproto_client.models.chat.bsky.convo import get_log as ChatBskyConvoGetLog
 from atproto_client.models.chat.bsky.convo import get_messages as ChatBskyConvoGetMessages
@@ -345,9 +347,11 @@ class _Ids:
     ChatBskyActorDefs: str = 'chat.bsky.actor.defs'
     ChatBskyActorDeleteAccount: str = 'chat.bsky.actor.deleteAccount'
     ChatBskyActorExportAccountData: str = 'chat.bsky.actor.exportAccountData'
+    ChatBskyConvoAcceptConvo: str = 'chat.bsky.convo.acceptConvo'
     ChatBskyConvoDefs: str = 'chat.bsky.convo.defs'
     ChatBskyConvoDeleteMessageForSelf: str = 'chat.bsky.convo.deleteMessageForSelf'
     ChatBskyConvoGetConvo: str = 'chat.bsky.convo.getConvo'
+    ChatBskyConvoGetConvoAvailability: str = 'chat.bsky.convo.getConvoAvailability'
     ChatBskyConvoGetConvoForMembers: str = 'chat.bsky.convo.getConvoForMembers'
     ChatBskyConvoGetLog: str = 'chat.bsky.convo.getLog'
     ChatBskyConvoGetMessages: str = 'chat.bsky.convo.getMessages'
