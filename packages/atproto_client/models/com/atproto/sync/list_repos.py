@@ -43,9 +43,17 @@ class Repo(base.ModelBase):
     head: string_formats.Cid  #: Current repo commit CID.
     rev: string_formats.Tid  #: Rev.
     active: t.Optional[bool] = None  #: Active.
-    status: t.Optional[t.Union[t.Literal['takendown'], t.Literal['suspended'], t.Literal['deactivated'], str]] = (
-        None  #: If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted.
-    )
+    status: t.Optional[
+        t.Union[
+            t.Literal['takendown'],
+            t.Literal['suspended'],
+            t.Literal['deleted'],
+            t.Literal['deactivated'],
+            t.Literal['desynchronized'],
+            t.Literal['throttled'],
+            str,
+        ]
+    ] = None  #: If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted.
 
     py_type: t.Literal['com.atproto.sync.listRepos#repo'] = Field(
         default='com.atproto.sync.listRepos#repo', alias='$type', frozen=True
