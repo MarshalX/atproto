@@ -25,6 +25,15 @@ class Record(base.RecordModelBase):
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Labels.
+    reason_types: t.Optional[t.List['models.ComAtprotoModerationDefs.ReasonType']] = (
+        None  #: The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed.
+    )
+    subject_collections: t.Optional[t.List[string_formats.Nsid]] = (
+        None  #: Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type.
+    )
+    subject_types: t.Optional[t.List['models.ComAtprotoModerationDefs.SubjectType']] = (
+        None  #: The set of subject types (account, record, etc) this service accepts reports on.
+    )
 
     py_type: t.Literal['app.bsky.labeler.service'] = Field(
         default='app.bsky.labeler.service', alias='$type', frozen=True

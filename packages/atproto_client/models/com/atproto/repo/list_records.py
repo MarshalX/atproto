@@ -26,8 +26,6 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: The number of records to return.
     reverse: t.Optional[bool] = None  #: Flag to reverse the order of the returned records.
-    rkey_end: t.Optional[str] = None  #: DEPRECATED: The highest sort-ordered rkey to stop at (exclusive).
-    rkey_start: t.Optional[str] = None  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).
 
 
 class ParamsDict(t.TypedDict):
@@ -36,8 +34,6 @@ class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: The number of records to return.
     reverse: te.NotRequired[t.Optional[bool]]  #: Flag to reverse the order of the returned records.
-    rkey_end: te.NotRequired[t.Optional[str]]  #: DEPRECATED: The highest sort-ordered rkey to stop at (exclusive).
-    rkey_start: te.NotRequired[t.Optional[str]]  #: DEPRECATED: The lowest sort-ordered rkey to start from (exclusive).
 
 
 class Response(base.ResponseModelBase):

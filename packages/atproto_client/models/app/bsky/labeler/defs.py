@@ -42,6 +42,15 @@ class LabelerViewDetailed(base.ModelBase):
     uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
+    reason_types: t.Optional[t.List['models.ComAtprotoModerationDefs.ReasonType']] = (
+        None  #: The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed.
+    )
+    subject_collections: t.Optional[t.List[string_formats.Nsid]] = (
+        None  #: Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type.
+    )
+    subject_types: t.Optional[t.List['models.ComAtprotoModerationDefs.SubjectType']] = (
+        None  #: The set of subject types (account, record, etc) this service accepts reports on.
+    )
     viewer: t.Optional['models.AppBskyLabelerDefs.LabelerViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.labeler.defs#labelerViewDetailed'] = Field(

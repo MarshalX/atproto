@@ -26,4 +26,5 @@ Submodules
    atproto_client.models.chat.bsky.convo.send_message
    atproto_client.models.chat.bsky.convo.send_message_batch
    atproto_client.models.chat.bsky.convo.unmute_convo
+   atproto_client.models.chat.bsky.convo.update_all_read
    atproto_client.models.chat.bsky.convo.update_read
