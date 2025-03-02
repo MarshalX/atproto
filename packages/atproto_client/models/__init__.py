@@ -112,6 +112,7 @@ from atproto_client.models.chat.bsky.convo import mute_convo as ChatBskyConvoMut
 from atproto_client.models.chat.bsky.convo import send_message as ChatBskyConvoSendMessage
 from atproto_client.models.chat.bsky.convo import send_message_batch as ChatBskyConvoSendMessageBatch
 from atproto_client.models.chat.bsky.convo import unmute_convo as ChatBskyConvoUnmuteConvo
+from atproto_client.models.chat.bsky.convo import update_all_read as ChatBskyConvoUpdateAllRead
 from atproto_client.models.chat.bsky.convo import update_read as ChatBskyConvoUpdateRead
 from atproto_client.models.chat.bsky.moderation import get_actor_metadata as ChatBskyModerationGetActorMetadata
 from atproto_client.models.chat.bsky.moderation import get_message_context as ChatBskyModerationGetMessageContext
@@ -131,13 +132,17 @@ from atproto_client.models.com.atproto.admin import update_account_email as ComA
 from atproto_client.models.com.atproto.admin import update_account_handle as ComAtprotoAdminUpdateAccountHandle
 from atproto_client.models.com.atproto.admin import update_account_password as ComAtprotoAdminUpdateAccountPassword
 from atproto_client.models.com.atproto.admin import update_subject_status as ComAtprotoAdminUpdateSubjectStatus
+from atproto_client.models.com.atproto.identity import defs as ComAtprotoIdentityDefs
 from atproto_client.models.com.atproto.identity import (
     get_recommended_did_credentials as ComAtprotoIdentityGetRecommendedDidCredentials,
 )
+from atproto_client.models.com.atproto.identity import refresh_identity as ComAtprotoIdentityRefreshIdentity
 from atproto_client.models.com.atproto.identity import (
     request_plc_operation_signature as ComAtprotoIdentityRequestPlcOperationSignature,
 )
+from atproto_client.models.com.atproto.identity import resolve_did as ComAtprotoIdentityResolveDid
 from atproto_client.models.com.atproto.identity import resolve_handle as ComAtprotoIdentityResolveHandle
+from atproto_client.models.com.atproto.identity import resolve_identity as ComAtprotoIdentityResolveIdentity
 from atproto_client.models.com.atproto.identity import sign_plc_operation as ComAtprotoIdentitySignPlcOperation
 from atproto_client.models.com.atproto.identity import submit_plc_operation as ComAtprotoIdentitySubmitPlcOperation
 from atproto_client.models.com.atproto.identity import update_handle as ComAtprotoIdentityUpdateHandle
@@ -361,6 +366,7 @@ class _Ids:
     ChatBskyConvoSendMessage: str = 'chat.bsky.convo.sendMessage'
     ChatBskyConvoSendMessageBatch: str = 'chat.bsky.convo.sendMessageBatch'
     ChatBskyConvoUnmuteConvo: str = 'chat.bsky.convo.unmuteConvo'
+    ChatBskyConvoUpdateAllRead: str = 'chat.bsky.convo.updateAllRead'
     ChatBskyConvoUpdateRead: str = 'chat.bsky.convo.updateRead'
     ChatBskyModerationGetActorMetadata: str = 'chat.bsky.moderation.getActorMetadata'
     ChatBskyModerationGetMessageContext: str = 'chat.bsky.moderation.getMessageContext'
@@ -380,9 +386,13 @@ class _Ids:
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'
     ComAtprotoAdminUpdateAccountPassword: str = 'com.atproto.admin.updateAccountPassword'
     ComAtprotoAdminUpdateSubjectStatus: str = 'com.atproto.admin.updateSubjectStatus'
+    ComAtprotoIdentityDefs: str = 'com.atproto.identity.defs'
     ComAtprotoIdentityGetRecommendedDidCredentials: str = 'com.atproto.identity.getRecommendedDidCredentials'
+    ComAtprotoIdentityRefreshIdentity: str = 'com.atproto.identity.refreshIdentity'
     ComAtprotoIdentityRequestPlcOperationSignature: str = 'com.atproto.identity.requestPlcOperationSignature'
+    ComAtprotoIdentityResolveDid: str = 'com.atproto.identity.resolveDid'
     ComAtprotoIdentityResolveHandle: str = 'com.atproto.identity.resolveHandle'
+    ComAtprotoIdentityResolveIdentity: str = 'com.atproto.identity.resolveIdentity'
     ComAtprotoIdentitySignPlcOperation: str = 'com.atproto.identity.signPlcOperation'
     ComAtprotoIdentitySubmitPlcOperation: str = 'com.atproto.identity.submitPlcOperation'
     ComAtprotoIdentityUpdateHandle: str = 'com.atproto.identity.updateHandle'

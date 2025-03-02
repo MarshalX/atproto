@@ -4396,6 +4396,37 @@ class ChatBskyConvoNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ChatBskyConvoUnmuteConvo.Response)
 
+    def update_all_read(
+        self,
+        data: t.Optional[
+            t.Union[models.ChatBskyConvoUpdateAllRead.Data, models.ChatBskyConvoUpdateAllRead.DataDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyConvoUpdateAllRead.Response':
+        """Update all read.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyConvoUpdateAllRead.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyConvoUpdateAllRead.Data', get_or_create(data, models.ChatBskyConvoUpdateAllRead.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.convo.updateAllRead',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyConvoUpdateAllRead.Response)
+
     def update_read(
         self,
         data: t.Union[models.ChatBskyConvoUpdateRead.Data, models.ChatBskyConvoUpdateRead.DataDict],
@@ -4942,6 +4973,36 @@ class ComAtprotoIdentityNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoIdentityGetRecommendedDidCredentials.Response)
 
+    def refresh_identity(
+        self,
+        data: t.Union[models.ComAtprotoIdentityRefreshIdentity.Data, models.ComAtprotoIdentityRefreshIdentity.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoIdentityDefs.IdentityInfo':
+        """Request that the server re-resolve an identity (DID and handle). The server may ignore this request, or require authentication, depending on the role, implementation, and policy of the server.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoIdentityDefs.IdentityInfo`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ComAtprotoIdentityRefreshIdentity.Data',
+            get_or_create(data, models.ComAtprotoIdentityRefreshIdentity.Data),
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.identity.refreshIdentity',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoIdentityDefs.IdentityInfo)
+
     def request_plc_operation_signature(self, **kwargs: t.Any) -> bool:
         """Request an email with a code to in order to request a signed PLC operation. Requires Auth.
 
@@ -4957,6 +5018,32 @@ class ComAtprotoIdentityNamespace(NamespaceBase):
         response = self._client.invoke_procedure('com.atproto.identity.requestPlcOperationSignature', **kwargs)
         return get_response_model(response, bool)
 
+    def resolve_did(
+        self,
+        params: t.Union[models.ComAtprotoIdentityResolveDid.Params, models.ComAtprotoIdentityResolveDid.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoIdentityResolveDid.Response':
+        """Resolves DID to DID document. Does not bi-directionally verify handle.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoIdentityResolveDid.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoIdentityResolveDid.Params',
+            get_or_create(params, models.ComAtprotoIdentityResolveDid.Params),
+        )
+        response = self._client.invoke_query(
+            'com.atproto.identity.resolveDid', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoIdentityResolveDid.Response)
+
     def resolve_handle(
         self,
         params: t.Union[
@@ -4964,7 +5051,7 @@ class ComAtprotoIdentityNamespace(NamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.ComAtprotoIdentityResolveHandle.Response':
-        """Resolves a handle (domain name) to a DID.
+        """Resolves an atproto handle (hostname) to a DID. Does not necessarily bi-directionally verify against the the DID document.
 
         Args:
             params: Parameters.
@@ -4984,6 +5071,34 @@ class ComAtprotoIdentityNamespace(NamespaceBase):
             'com.atproto.identity.resolveHandle', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoIdentityResolveHandle.Response)
+
+    def resolve_identity(
+        self,
+        params: t.Union[
+            models.ComAtprotoIdentityResolveIdentity.Params, models.ComAtprotoIdentityResolveIdentity.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoIdentityDefs.IdentityInfo':
+        """Resolves an identity (DID or Handle) to a full identity (DID document and verified handle).
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoIdentityDefs.IdentityInfo`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoIdentityResolveIdentity.Params',
+            get_or_create(params, models.ComAtprotoIdentityResolveIdentity.Params),
+        )
+        response = self._client.invoke_query(
+            'com.atproto.identity.resolveIdentity', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoIdentityDefs.IdentityInfo)
 
     def sign_plc_operation(
         self,
@@ -6422,7 +6537,7 @@ class ComAtprotoSyncNamespace(NamespaceBase):
         data: t.Union[models.ComAtprotoSyncNotifyOfUpdate.Data, models.ComAtprotoSyncNotifyOfUpdate.DataDict],
         **kwargs: t.Any,
     ) -> bool:
-        """Notify a crawling service of a recent update, and that crawling should resume. Intended use is after a gap between repo stream events caused the crawling service to disconnect. Does not require auth; implemented by Relay.
+        """Notify a crawling service of a recent update, and that crawling should resume. Intended use is after a gap between repo stream events caused the crawling service to disconnect. Does not require auth; implemented by Relay. DEPRECATED: just use com.atproto.sync.requestCrawl.
 
         Args:
             data: Input data.

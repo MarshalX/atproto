@@ -46,3 +46,7 @@ ReasonOther = t.Literal[
 ReasonAppeal = t.Literal[
     'com.atproto.moderation.defs#reasonAppeal'
 ]  #: Appeal: appeal a previously taken moderation action
+
+SubjectType = t.Union[
+    t.Literal['account'], t.Literal['record'], t.Literal['chat'], str
+]  #: Tag describing a type of subject that might be reported.

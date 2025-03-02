@@ -7,24 +7,14 @@
 
 import typing as t
 
-import typing_extensions as te
-
 from atproto_client.models import base, string_formats
 
 
 class Params(base.ParamsModelBase):
-    """Parameters model for :obj:`com.atproto.sync.getRecord`."""
+    """Parameters model for :obj:`com.atproto.identity.resolveIdentity`."""
 
-    collection: string_formats.Nsid  #: Collection.
-    did: string_formats.Did  #: The DID of the repo.
-    rkey: string_formats.RecordKey  #: Record Key.
+    identifier: string_formats.AtIdentifier  #: Handle or DID to resolve.
 
 
 class ParamsDict(t.TypedDict):
-    collection: string_formats.Nsid  #: Collection.
-    did: string_formats.Did  #: The DID of the repo.
-    rkey: string_formats.RecordKey  #: Record Key.
-
-
-#: Response raw data type.
-Response: te.TypeAlias = bytes
+    identifier: string_formats.AtIdentifier  #: Handle or DID to resolve.

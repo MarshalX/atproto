@@ -260,9 +260,9 @@ class ModEventResolveAppeal(base.ModelBase):
 
 
 class ModEventComment(base.ModelBase):
-    """Definition model for :obj:`tools.ozone.moderation.defs`. Add a comment to a subject."""
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Add a comment to a subject. An empty comment will clear any previously set sticky comment."""
 
-    comment: str  #: Comment.
+    comment: t.Optional[str] = None  #: Comment.
     sticky: t.Optional[bool] = None  #: Make the comment persistent on the subject.
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventComment'] = Field(

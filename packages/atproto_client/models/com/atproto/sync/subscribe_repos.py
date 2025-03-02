@@ -117,44 +117,6 @@ class Account(base.ModelBase):
     )
 
 
-class Handle(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. DEPRECATED -- Use #identity event instead."""
-
-    did: string_formats.Did  #: Did.
-    handle: string_formats.Handle  #: Handle.
-    seq: int  #: Seq.
-    time: string_formats.DateTime  #: Time.
-
-    py_type: t.Literal['com.atproto.sync.subscribeRepos#handle'] = Field(
-        default='com.atproto.sync.subscribeRepos#handle', alias='$type', frozen=True
-    )
-
-
-class Migrate(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. DEPRECATED -- Use #account event instead."""
-
-    did: string_formats.Did  #: Did.
-    seq: int  #: Seq.
-    time: string_formats.DateTime  #: Time.
-    migrate_to: t.Optional[str] = None  #: Migrate to.
-
-    py_type: t.Literal['com.atproto.sync.subscribeRepos#migrate'] = Field(
-        default='com.atproto.sync.subscribeRepos#migrate', alias='$type', frozen=True
-    )
-
-
-class Tombstone(base.ModelBase):
-    """Definition model for :obj:`com.atproto.sync.subscribeRepos`. DEPRECATED -- Use #account event instead."""
-
-    did: string_formats.Did  #: Did.
-    seq: int  #: Seq.
-    time: string_formats.DateTime  #: Time.
-
-    py_type: t.Literal['com.atproto.sync.subscribeRepos#tombstone'] = Field(
-        default='com.atproto.sync.subscribeRepos#tombstone', alias='$type', frozen=True
-    )
-
-
 class Info(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`."""
 
