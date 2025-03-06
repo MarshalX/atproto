@@ -20,7 +20,7 @@ from atproto_client.models import base
 class Main(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.video`."""
 
-    video: 'BlobRef'  #: Video.
+    video: 'BlobRef'  #: The mp4 video file. May be up to 100mb, formerly limited to 50mb.
     alt: t.Optional[str] = Field(
         default=None, max_length=10000
     )  #: Alt text description of the video, for accessibility.
