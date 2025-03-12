@@ -100,12 +100,13 @@ def validate_did(v: str) -> str:
 
 @only_validate_if_strict
 def validate_nsid(v: str) -> str:
+    segments = v.split('.')
     if (
         not atproto_core_validate_nsid(v, soft_fail=True)
         or len(v) > MAX_NSID_LENGTH
         or any(c in v for c in '@_*#!')  # Explicitly disallow special chars
-        or any(len(seg) > 63 for seg in v.split('.'))  # Max segment length
-        or any(seg[-1].isdigit() for seg in v.split('.'))  # No segments ending in numbers
+        or any(len(seg) > 63 for seg in segments)  # Max segment length
+        or any(seg[-1].isdigit() for seg in segments[:-1])  # No segments ending in numbers except last segment
     ):
         raise ValueError(
             f'Invalid NSID: must be dot-separated segments (e.g. app.bsky.feed.post) with max length {MAX_NSID_LENGTH}'
