@@ -143,6 +143,11 @@ LexPrimitive = te.Annotated[
     Field(discriminator='type'),
 ]
 
+LexLimitedScopedPrimitive = te.Annotated[
+    t.Union[LexBoolean, LexInteger, LexString, LexUnknown],
+    Field(discriminator='type'),
+]
+
 
 class LexBlob(LexDefinitionBase):
     type: te.Literal['blob'] = Field(default=LexDefinitionType.BLOB, frozen=True)
@@ -168,7 +173,9 @@ class LexObject(LexDefinitionBase):
 
     required: t.Optional[t.List[str]] = None
     nullable: t.Optional[t.List[str]] = None
-    properties: t.Dict[str, te.Annotated[t.Union[LexPrimitive, LexArray, LexBlob], Field(discriminator='type')]]
+    properties: t.Dict[
+        str, te.Annotated[t.Union[LexPrimitive, LexArray, LexBlob, 'LexObject'], Field(discriminator='type')]
+    ]
 
 
 class LexRecord(LexDefinitionBase):
@@ -182,7 +189,8 @@ class LexXrpcParameters(LexDefinitionBase):
     type: te.Literal['params'] = Field(default=LexDefinitionType.PARAMS, frozen=True)
 
     required: t.Optional[t.List[str]] = None
-    properties: t.Dict[str, te.Annotated[t.Union[LexArray, LexPrimitive], Field(discriminator='type')]]
+    # FIXME(MarshalX): LexArray must be also be with limited set ot types
+    properties: t.Dict[str, te.Annotated[t.Union[LexLimitedScopedPrimitive, LexArray], Field(discriminator='type')]]
 
 
 class LexXrpcSubscriptionMessage(LexBase):
