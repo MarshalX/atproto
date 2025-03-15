@@ -21,6 +21,7 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     disabled: t.Optional[bool] = None  #: Disabled.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    q: t.Optional[str] = None  #: Q.
     roles: t.Optional[t.List[str]] = None  #: Roles.
 
 
@@ -28,6 +29,7 @@ class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     disabled: te.NotRequired[t.Optional[bool]]  #: Disabled.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    q: te.NotRequired[t.Optional[str]]  #: Q.
     roles: te.NotRequired[t.Optional[t.List[str]]]  #: Roles.
 
 
