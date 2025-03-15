@@ -202,3 +202,28 @@ def test_at_identifier_type(string_format_name: str, valid_data: dict, invalid_d
         get_or_create({'at_identifier': invalid_data[string_format_name]}, FooModel, strict_string_format=True)
     assert 'Invalid handle' in str(exc_info.value)
     assert 'Invalid DID' in str(exc_info.value)
+
+
+def test_nsid_with_digits_in_final_segment() -> None:
+    """Test that NSIDs with digits in the final segment are now valid."""
+    test_cases = [
+        'com.example.postV2',
+        'app.bsky.feed.post123',
+        'com.example.v2',
+        'net.users.bob.post99',
+    ]
+
+    nsid_adapter = TypeAdapter(string_formats.Nsid)
+    for nsid in test_cases:
+        # Should pass with strict validation
+        validated = nsid_adapter.validate_python(nsid, context={_OPT_IN_KEY: True})
+        assert validated == nsid
+
+    # These should still be invalid (digits in non-final segments)
+    invalid_cases = [
+        'com.example123.post',
+        'app.bsky2.feed.post',
+    ]
+    for invalid_nsid in invalid_cases:
+        with pytest.raises(ValidationError):
+            nsid_adapter.validate_python(invalid_nsid, context={_OPT_IN_KEY: True})

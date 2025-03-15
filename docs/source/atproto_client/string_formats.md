@@ -41,9 +41,14 @@ An NSID must have:
 - Reversed domain name (lowercase alphanumeric + hyphen)
 - Name segment (letters only)
 - Max 317 chars total
-- No segments ending in numbers
+- No segments ending in numbers (except for the final segment)
 - No @_*#! special characters
 - Max 63 chars per segment
+
+Examples:
+- `com.example.postV2` (valid)
+- `app.bsky.feed.post123` (valid)
+- `com.example123.post` (invalid - non-final segment ends with number)
 
 #### AT-URI
 An AT-URI must follow the pattern `at://authority/collection/record-key`:
