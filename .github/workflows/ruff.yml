@@ -27,12 +27,12 @@ jobs:
           python-version: 3.8
 
       - name: Run linter check.
-        uses: astral-sh/ruff-action@v1
+        uses: astral-sh/ruff-action@v3
         with:
           version: 0.7.0
 
       - name: Run code style check.
-        uses: astral-sh/ruff-action@v1
+        uses: astral-sh/ruff-action@v3
         with:
           version: 0.7.0
           args: "format --check"
