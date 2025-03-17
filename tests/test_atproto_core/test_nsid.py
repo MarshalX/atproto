@@ -14,4 +14,6 @@ def test_nsid_validation() -> None:
     assert validate_nsid('com.atproto' + '.test' * 90, soft_fail=True) is False
     assert validate_nsid('com.atproto.repo.getRecord', soft_fail=True) is True
     assert validate_nsid('com.atproto.1repo.getRecord', soft_fail=True) is False
-    assert validate_nsid('com.atproto.repo1.getRecord', soft_fail=True) is True
+    assert validate_nsid('com.atproto.repo1.getRecord', soft_fail=True) is False
+    assert validate_nsid('com.atproto.repo.getRecord1', soft_fail=True) is True
+    assert validate_nsid('com.atproto.repo.1getRecord', soft_fail=True) is False

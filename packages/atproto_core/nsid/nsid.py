@@ -14,7 +14,8 @@ _MIN_NSID_PART = 1
 _MIN_NSID_SEGMENTS_COUNT = 3
 
 _NSID_VALID_CHARS_REGEX = r'^[a-zA-Z0-9.-]*$'
-_NSID_PART_VALID_CHARS_REGEX = r'^[a-zA-Z]'
+_NSID_NONFINAL_SEGMENT_REGEX = r'^[a-zA-Z][a-zA-Z-]*$'
+_NSID_FINAL_SEGMENT_REGEX = r'^[a-zA-Z][a-zA-Z0-9-]*$'
 
 _NSID_PART_FORBIDDEN_END = '-'
 
@@ -107,15 +108,16 @@ def _validate_nsid_segment(segment: str, is_last_segment: bool) -> bool:
     if is_last_segment:
         if segment_len > _MAX_NSID_NAME_PART:
             raise InvalidNsidError(f'NSID name segment is too long. Max len: {_MAX_NSID_NAME_PART}')
+        if not re.search(_NSID_FINAL_SEGMENT_REGEX, segment):
+            raise InvalidNsidError('NSID name segments must start with a letter and may contain non-leading digits.')
     else:
         if segment_len > _MAX_NSID_DOMAIN_PART:
             raise InvalidNsidError(f'NSID domain segment is too long. Max len: {_MAX_NSID_DOMAIN_PART}')
+        if not re.search(_NSID_NONFINAL_SEGMENT_REGEX, segment):
+            raise InvalidNsidError('NSID non-final segments must start with ASCII letter and cannot contain digits')
 
     if segment.endswith(_NSID_PART_FORBIDDEN_END):
         raise InvalidNsidError(f'NSID segment contains invalid end symbol: {_NSID_PART_FORBIDDEN_END}')
-
-    if not re.search(_NSID_PART_VALID_CHARS_REGEX, segment):
-        raise InvalidNsidError('NSID segment must starts with ASCII letter')
 
     return True
 

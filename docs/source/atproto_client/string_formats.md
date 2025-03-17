@@ -47,8 +47,7 @@ An NSID must have:
 
 Examples:
 - `com.example.postV2` (valid)
-- `app.bsky.feed.post123` (valid)
-- `com.example123.post` (invalid - non-final segment ends with number)
+- `com.example.fooBar.2` (invalid - final segment has a _leading_ number)
 
 #### AT-URI
 An AT-URI must follow the pattern `at://authority/collection/record-key`:

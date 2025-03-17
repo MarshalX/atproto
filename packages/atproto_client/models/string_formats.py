@@ -445,7 +445,9 @@ Language = Annotated[str, BeforeValidator(_NamedValidator(validate_language))]
 RecordKey = Annotated[str, BeforeValidator(_NamedValidator(validate_record_key))]
 Cid = Annotated[str, BeforeValidator(_NamedValidator(validate_cid))]
 AtUri = Annotated[str, BeforeValidator(_NamedValidator(validate_at_uri))]
-DateTime = Annotated[str, BeforeValidator(_NamedValidator(validate_datetime))]  # see pydantic-extra-types #239
+DateTime = Annotated[
+    str, BeforeValidator(_NamedValidator(validate_datetime))
+]  # see https://github.com/python-pendulum/pendulum/issues/844
 Tid = Annotated[str, BeforeValidator(_NamedValidator(validate_tid))]
 Uri = Annotated[str, BeforeValidator(_NamedValidator(validate_uri))]
 
