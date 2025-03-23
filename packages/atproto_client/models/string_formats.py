@@ -178,11 +178,13 @@ def validate_nsid(v: str, _: ValidationInfo) -> str:
 
     - Max 317 chars total
 
-    - No segments ending in numbers
+    - No segments ending in numbers except last segment
 
     - No @_*#! special characters
 
     - Max 63 chars per segment
+
+    - Non-leading digits are allowed in the name (last) segment
 
     Args:
         v: The NSID to validate (e.g. app.bsky.feed.post)
@@ -193,14 +195,7 @@ def validate_nsid(v: str, _: ValidationInfo) -> str:
     Raises:
         ValueError: If NSID format is invalid
     """
-    segments = v.split('.')
-    if (
-        not atproto_core_validate_nsid(v, soft_fail=True)
-        or len(v) > MAX_NSID_LENGTH
-        or any(c in v for c in '@_*#!')  # Explicitly disallow special chars
-        or any(len(seg) > 63 for seg in segments)  # Max segment length
-        or any(seg[-1].isdigit() for seg in segments[:-1])  # No segments ending in numbers except last segment
-    ):
+    if not atproto_core_validate_nsid(v, soft_fail=True):
         raise ValueError(
             f'Invalid NSID: must be dot-separated segments (e.g. app.bsky.feed.post) with max length {MAX_NSID_LENGTH}'
         )
