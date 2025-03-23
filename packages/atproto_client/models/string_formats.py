@@ -48,8 +48,9 @@ AT_URI_RE = re.compile(
     r'\.[a-zA-Z][a-zA-Z0-9-]*'  # TLD must start with letter
     r')'  # Authority group end
     r'(?:'  # Optional path group
-    r'/[a-z][a-zA-Z0-9-]*(\.[a-z][a-zA-Z0-9-])+'  # NSID
-    r'(?:/[A-Za-z0-9._:~-]+)?'  # Optional record key
+    # NSID: Match core validator rules - last segment must start with letter then allow letters/numbers/hyphens
+    r'/[a-z][a-zA-Z0-9-]*(?:\.[a-z][a-zA-Z0-9-]*)*\.[a-zA-Z][a-zA-Z0-9-]*'  # NSID
+    r'(?:/(?!\.\.?(?:/|$))[A-Za-z0-9._:~-]+)?'  # Record key: must not be . or .. and must not be empty
     r')?$'
 )
 
