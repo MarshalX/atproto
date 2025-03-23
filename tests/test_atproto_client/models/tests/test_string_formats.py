@@ -35,6 +35,19 @@ def read_test_data() -> dict:
     }
 
 
+def _get_validator_type(field_name: str) -> type:
+    field_name_to_type = {
+        'at_uri': string_formats.AtUri,
+        'datetime': string_formats.DateTime,
+        'handle': string_formats.Handle,
+        'did': string_formats.Did,
+        'nsid': string_formats.Nsid,
+        'tid': string_formats.Tid,
+        'record_key': string_formats.RecordKey,
+    }
+    return field_name_to_type[field_name]
+
+
 @pytest.fixture
 def valid_data() -> dict:
     """Get first valid example of each type plus constants"""
@@ -72,35 +85,43 @@ def invalid_data() -> dict:
 
 
 @pytest.mark.parametrize(
-    'validator_type,field_name,invalid_value',
+    'field_name,invalid_value',
     [
-        (validator_type, field_name, invalid_value)
-        for validator_type, field_name in [
-            (string_formats.AtUri, 'at_uri'),
-            (string_formats.DateTime, 'datetime'),
-            (string_formats.Handle, 'handle'),
-            (string_formats.Did, 'did'),
-            (string_formats.Nsid, 'nsid'),
-            (string_formats.Tid, 'tid'),
-            (string_formats.RecordKey, 'record_key'),
-        ]
+        (field_name, invalid_value)
+        for field_name in ['at_uri', 'datetime', 'handle', 'did', 'nsid', 'tid', 'record_key']
         for invalid_value in read_test_data()['invalid'][field_name]
     ],
 )
-def test_string_format_validation(validator_type: type, field_name: str, invalid_value: str, valid_data: dict) -> None:
-    """Test validation for each string format type."""
-    SomeTypeAdapter = TypeAdapter(validator_type)
+def test_string_format_validation_with_invalid(field_name: str, invalid_value: str) -> None:
+    """Test validation with invalid data for each string format type."""
+    SomeTypeAdapter = TypeAdapter(_get_validator_type(field_name))
 
     # Test that validation is skipped by default
     assert SomeTypeAdapter.validate_python(invalid_value) == invalid_value
 
-    # Test that valid data passes strict validation
-    validated_value = SomeTypeAdapter.validate_python(valid_data[field_name], context={_OPT_IN_KEY: True})
-    assert validated_value == valid_data[field_name]
-
     # Test that invalid data fails strict validation
     with pytest.raises(ValidationError):
         SomeTypeAdapter.validate_python(invalid_value, context={_OPT_IN_KEY: True})
+
+
+@pytest.mark.parametrize(
+    'field_name,valid_value',
+    [
+        (field_name, valid_value)
+        for field_name in ['at_uri', 'datetime', 'handle', 'did', 'nsid', 'tid', 'record_key']
+        for valid_value in read_test_data()['valid'][field_name]
+    ],
+)
+def test_string_format_validation_with_valid(field_name: str, valid_value: str) -> None:
+    """Test validation with valid data for each string format type."""
+    SomeTypeAdapter = TypeAdapter(_get_validator_type(field_name))
+
+    # Test that validation is skipped by default
+    assert SomeTypeAdapter.validate_python(valid_value) == valid_value
+
+    # Test that valid data passes strict validation
+    validated = SomeTypeAdapter.validate_python(valid_value, context={_OPT_IN_KEY: True})
+    assert validated == valid_value
 
 
 @pytest.mark.parametrize(
