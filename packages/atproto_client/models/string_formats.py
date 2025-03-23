@@ -25,12 +25,18 @@ MAX_DID_LENGTH: int = 2048  # Method-specific identifier max length
 MAX_AT_URI_LENGTH: int = 8 * 1024
 
 # patterns
-DOMAIN_RE = re.compile(r'^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z]$')
+DOMAIN_RE = re.compile(
+    r'^'
+    r'([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)'  # First/middle segments
+    r'+'  # One or more of those segments
+    r'[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?'  # TLD: must start with letter, then optional chars
+    r'$'
+)
 DID_RE = re.compile(
     r'^did:'  # Required prefix
     r'[a-z]+:'  # method-name (lowercase only)
-    r'[a-zA-Z0-9._%-]{1,2048}'  # method-specific-id with length limit
-    r'(?<!:)$'  # Cannot end with colon
+    r'[a-zA-Z0-9._:%-]*'  # method-specific-id with allowed chars
+    r'[a-zA-Z0-9._-]$'  # must end with allowed char (not : or %)
 )
 LANG_RE = re.compile(r'^(i|[a-z]{2,3})(-[A-Za-z0-9-]+)?$')
 RKEY_RE = re.compile(r'^[A-Za-z0-9._:~-]{1,512}$')
@@ -147,6 +153,10 @@ def validate_did(v: str, _: ValidationInfo) -> str:
     Raises:
         ValueError: If DID format is invalid
     """
+    # Check length first
+    if len(v) > MAX_DID_LENGTH:
+        raise ValueError(f'Invalid DID: must be under {MAX_DID_LENGTH} chars')
+
     # Check for invalid characters
     if any(c in v for c in '/?#[]@'):
         raise ValueError('Invalid DID: cannot contain /, ?, #, [, ], or @ characters')
@@ -158,7 +168,7 @@ def validate_did(v: str, _: ValidationInfo) -> str:
             if len(segment) < 2 or not segment[:2].isalnum():
                 raise ValueError('Invalid DID: invalid percent-encoding')
 
-    # Check against regex pattern (which now includes length restriction)
+    # Check against regex pattern
     if not DID_RE.match(v):
         raise ValueError('Invalid DID: must be in format did:method:identifier (e.g. did:plc:1234abcd)')
 
@@ -314,7 +324,7 @@ def validate_at_uri(v: str, _: ValidationInfo) -> str:
 
 
 @only_validate_if_strict
-def validate_datetime(v: str, _: ValidationInfo) -> str:
+def validate_datetime(v: str, _: ValidationInfo) -> str:  # noqa: C901
     """Validate an ISO 8601/RFC 3339 datetime string.
 
     Requirements:
@@ -354,7 +364,7 @@ def validate_datetime(v: str, _: ValidationInfo) -> str:
     try:
         time_str = v.split('T')[1]
     except IndexError:
-        raise ValueError('Invalid datetime: invalid format')
+        raise ValueError('Invalid datetime: invalid format') from None
 
     # Extract the time part before any timezone
     if 'Z' in time_str:
@@ -389,7 +399,14 @@ def validate_datetime(v: str, _: ValidationInfo) -> str:
         # Handle both Z and explicit timezone formats
         datetime_str = v
         if v.endswith('Z'):
-            datetime_str = v[:-1] + '+00:00'
+            # For Python 3.10 compatibility, normalize fractional seconds to 6 digits
+            if '.' in v:
+                base, frac = v[:-1].split('.')
+                # Pad or truncate to exactly 6 digits
+                frac = (frac + '000000')[:6]
+                datetime_str = f'{base}.{frac}+00:00'
+            else:
+                datetime_str = v[:-1] + '+00:00'
         datetime.fromisoformat(datetime_str)
         return v
     except ValueError as e:
