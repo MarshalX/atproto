@@ -1,4 +1,7 @@
+import pytest
 from atproto_core.nsid import NSID, validate_nsid
+
+from tests.interop_test_files import get_test_cases
 
 
 def test_nsid_from_str() -> None:
@@ -8,10 +11,11 @@ def test_nsid_from_str() -> None:
     assert nsid_obj.name == 'getRecord'
 
 
-def test_nsid_validation() -> None:
-    assert validate_nsid('com.atproto.repo-.*', soft_fail=True) is False
-    assert validate_nsid('com.atproto', soft_fail=True) is False
-    assert validate_nsid('com.atproto' + '.test' * 90, soft_fail=True) is False
-    assert validate_nsid('com.atproto.repo.getRecord', soft_fail=True) is True
-    assert validate_nsid('com.atproto.1repo.getRecord', soft_fail=True) is False
-    assert validate_nsid('com.atproto.repo1.getRecord', soft_fail=True) is True
+@pytest.mark.parametrize('nsid', get_test_cases('nsid_syntax_valid.txt'))
+def test_nsid_validation_with_valid(nsid: str) -> None:
+    assert validate_nsid(nsid, soft_fail=True) is True
+
+
+@pytest.mark.parametrize('nsid', get_test_cases('nsid_syntax_invalid.txt'))
+def test_nsid_validation_with_invalid(nsid: str) -> None:
+    assert validate_nsid(nsid, soft_fail=True) is False

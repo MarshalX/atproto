@@ -6,6 +6,7 @@ from functools import wraps
 from typing import Callable, Mapping, Set, Union, cast
 from urllib.parse import urlparse
 
+from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import validate_nsid as atproto_core_validate_nsid
 from pydantic import BeforeValidator, Field, ValidationInfo
 from pydantic_core import core_schema
@@ -15,7 +16,6 @@ _OPT_IN_KEY: Literal['strict_string_format'] = 'strict_string_format'
 
 # constants
 MAX_HANDLE_LENGTH: int = 253
-MAX_NSID_LENGTH: int = 317
 MAX_RECORD_KEY_LENGTH: int = 512
 MAX_URI_LENGTH: int = 8 * 1024
 MIN_CID_LENGTH: int = 8
@@ -25,12 +25,18 @@ MAX_DID_LENGTH: int = 2048  # Method-specific identifier max length
 MAX_AT_URI_LENGTH: int = 8 * 1024
 
 # patterns
-DOMAIN_RE = re.compile(r'^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z]$')
+DOMAIN_RE = re.compile(
+    r'^'
+    r'([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)'  # First/middle segments
+    r'+'  # One or more of those segments
+    r'[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?'  # TLD: must start with letter, then optional chars
+    r'$'
+)
 DID_RE = re.compile(
     r'^did:'  # Required prefix
     r'[a-z]+:'  # method-name (lowercase only)
-    r'[a-zA-Z0-9._%-]{1,2048}'  # method-specific-id with length limit
-    r'(?<!:)$'  # Cannot end with colon
+    r'[a-zA-Z0-9._:%-]*'  # method-specific-id with allowed chars
+    r'[a-zA-Z0-9._-]$'  # must end with allowed char (not : or %)
 )
 LANG_RE = re.compile(r'^(i|[a-z]{2,3})(-[A-Za-z0-9-]+)?$')
 RKEY_RE = re.compile(r'^[A-Za-z0-9._:~-]{1,512}$')
@@ -48,8 +54,9 @@ AT_URI_RE = re.compile(
     r'\.[a-zA-Z][a-zA-Z0-9-]*'  # TLD must start with letter
     r')'  # Authority group end
     r'(?:'  # Optional path group
-    r'/[a-z][a-zA-Z0-9-]*(\.[a-z][a-zA-Z0-9-])+'  # NSID
-    r'(?:/[A-Za-z0-9._:~-]+)?'  # Optional record key
+    # NSID: Match core validator rules - last segment must start with letter then allow letters/numbers/hyphens
+    r'/[a-z][a-zA-Z0-9-]*(?:\.[a-z][a-zA-Z0-9-]*)*\.[a-zA-Z][a-zA-Z0-9-]*'  # NSID
+    r'(?:/(?!\.\.?(?:/|$))[A-Za-z0-9._:~-]+)?'  # Record key: must not be . or .. and must not be empty
     r')?$'
 )
 
@@ -146,6 +153,10 @@ def validate_did(v: str, _: ValidationInfo) -> str:
     Raises:
         ValueError: If DID format is invalid
     """
+    # Check length first
+    if len(v) > MAX_DID_LENGTH:
+        raise ValueError(f'Invalid DID: must be under {MAX_DID_LENGTH} chars')
+
     # Check for invalid characters
     if any(c in v for c in '/?#[]@'):
         raise ValueError('Invalid DID: cannot contain /, ?, #, [, ], or @ characters')
@@ -157,7 +168,7 @@ def validate_did(v: str, _: ValidationInfo) -> str:
             if len(segment) < 2 or not segment[:2].isalnum():
                 raise ValueError('Invalid DID: invalid percent-encoding')
 
-    # Check against regex pattern (which now includes length restriction)
+    # Check against regex pattern
     if not DID_RE.match(v):
         raise ValueError('Invalid DID: must be in format did:method:identifier (e.g. did:plc:1234abcd)')
 
@@ -178,11 +189,13 @@ def validate_nsid(v: str, _: ValidationInfo) -> str:
 
     - Max 317 chars total
 
-    - No segments ending in numbers
+    - No segments ending in numbers except last segment
 
     - No @_*#! special characters
 
     - Max 63 chars per segment
+
+    - Non-leading digits are allowed in the name (last) segment
 
     Args:
         v: The NSID to validate (e.g. app.bsky.feed.post)
@@ -193,17 +206,11 @@ def validate_nsid(v: str, _: ValidationInfo) -> str:
     Raises:
         ValueError: If NSID format is invalid
     """
-    if (
-        not atproto_core_validate_nsid(v, soft_fail=True)
-        or len(v) > MAX_NSID_LENGTH
-        or any(c in v for c in '@_*#!')  # Explicitly disallow special chars
-        or any(len(seg) > 63 for seg in v.split('.'))  # Max segment length
-        or any(seg[-1].isdigit() for seg in v.split('.'))  # No segments ending in numbers
-    ):
-        raise ValueError(
-            f'Invalid NSID: must be dot-separated segments (e.g. app.bsky.feed.post) with max length {MAX_NSID_LENGTH}'
-        )
-    return v
+    try:
+        atproto_core_validate_nsid(v)
+        return v
+    except InvalidNsidError as e:
+        raise ValueError(str(e)) from None
 
 
 @only_validate_if_strict
@@ -317,7 +324,7 @@ def validate_at_uri(v: str, _: ValidationInfo) -> str:
 
 
 @only_validate_if_strict
-def validate_datetime(v: str, _: ValidationInfo) -> str:
+def validate_datetime(v: str, _: ValidationInfo) -> str:  # noqa: C901
     """Validate an ISO 8601/RFC 3339 datetime string.
 
     Requirements:
@@ -330,9 +337,11 @@ def validate_datetime(v: str, _: ValidationInfo) -> str:
 
     - No -00:00 timezone allowed
 
-    - Valid fractional seconds format if used
+    - Valid fractional seconds format if used (any precision)
 
     - No whitespace allowed
+
+    - Years can have leading zeros
 
     Args:
         v: The datetime string to validate (e.g. 2024-11-24T06:02:00Z)
@@ -343,35 +352,66 @@ def validate_datetime(v: str, _: ValidationInfo) -> str:
     Raises:
         ValueError: If datetime format is invalid
     """
-    # Must contain uppercase T and Z if used
+    # Must not have whitespace
     if v != v.strip():
         raise ValueError('Invalid datetime: no whitespace allowed')
 
     # Must contain uppercase T
-    if 'T' not in v or ('z' in v and 'Z' not in v):
+    if 'T' not in v:
         raise ValueError('Invalid datetime: must contain uppercase T separator')
 
-    # Must have seconds (HH:MM:SS)
-    time_part = v.split('T')[1]
-    if len(time_part.split(':')) != 3:
+    # Split into date and time parts
+    try:
+        time_str = v.split('T')[1]
+    except IndexError:
+        raise ValueError('Invalid datetime: invalid format') from None
+
+    # Extract the time part before any timezone
+    if 'Z' in time_str:
+        time_part = time_str.split('Z')[0]
+    elif '+' in time_str:
+        time_part = time_str.split('+')[0]
+    elif '-' in time_str:
+        # Find the last '-' in case year is negative
+        time_part = time_str.rsplit('-', 1)[0]
+    else:
+        time_part = time_str
+
+    # Check HH:MM:SS format
+    time_segments = time_part.split(':')
+    if len(time_segments) != 3:
         raise ValueError('Invalid datetime: seconds are required')
 
     # If has decimal point, must have digits after it
-    if '.' in v and not re.search(r'\.\d+', v):
+    if '.' in time_segments[2] and not re.search(r'\.\d+', time_segments[2]):
         raise ValueError('Invalid datetime: invalid fractional seconds format')
 
-    # Must match exactly timezone pattern with nothing after
+    # Must have valid timezone
     if v.endswith('-00:00'):
         raise ValueError('Invalid datetime: -00:00 timezone not allowed')
-    if not (re.match(r'.*Z$', v) or re.match(r'.*[+-]\d{2}:\d{2}$', v)):
+
+    # Must end with Z or valid timezone offset
+    if not (v.endswith('Z') or re.search(r'[+-]\d{2}:\d{2}$', v)):
         raise ValueError('Invalid datetime: must include timezone')
 
-    # Final validation
+    # Final validation using datetime.fromisoformat
     try:
-        datetime.fromisoformat(v.replace('Z', '+00:00'))
+        # Handle both Z and explicit timezone formats
+        datetime_str = v
+        if v.endswith('Z'):
+            # For Python 3.10 compatibility, normalize fractional seconds to 6 digits
+            # see https://docs.python.org/3/whatsnew/3.11.html#datetime and https://github.com/python/cpython/issues/80010
+            if '.' in v:
+                base, frac = v[:-1].split('.')
+                # Pad or truncate to exactly 6 digits
+                frac = (frac + '000000')[:6]
+                datetime_str = f'{base}.{frac}+00:00'
+            else:
+                datetime_str = v[:-1] + '+00:00'
+        datetime.fromisoformat(datetime_str)
         return v
-    except ValueError:
-        raise ValueError('Invalid datetime: invalid format') from None
+    except ValueError as e:
+        raise ValueError(f'Invalid datetime: {e!s}') from None
 
 
 @only_validate_if_strict
@@ -444,7 +484,9 @@ Language = Annotated[str, BeforeValidator(_NamedValidator(validate_language))]
 RecordKey = Annotated[str, BeforeValidator(_NamedValidator(validate_record_key))]
 Cid = Annotated[str, BeforeValidator(_NamedValidator(validate_cid))]
 AtUri = Annotated[str, BeforeValidator(_NamedValidator(validate_at_uri))]
-DateTime = Annotated[str, BeforeValidator(_NamedValidator(validate_datetime))]  # see pydantic-extra-types #239
+DateTime = Annotated[
+    str, BeforeValidator(_NamedValidator(validate_datetime))
+]  # see https://github.com/python-pendulum/pendulum/issues/844
 Tid = Annotated[str, BeforeValidator(_NamedValidator(validate_tid))]
 Uri = Annotated[str, BeforeValidator(_NamedValidator(validate_uri))]
 

@@ -1,7 +1,4 @@
-import os
 from functools import lru_cache
-from pathlib import Path
-from typing import List
 
 import pytest
 from atproto_client.exceptions import ModelError
@@ -10,30 +7,7 @@ from atproto_client.models.string_formats import _OPT_IN_KEY
 from atproto_client.models.utils import get_or_create
 from pydantic import BaseModel, TypeAdapter, ValidationError
 
-# Test data sourced directly from bluesky-social/atproto repo:
-# https://github.com/bluesky-social/atproto/tree/main/interop-test-files/syntax
-INTEROP_TEST_FILES_DIR = Path(os.path.join(Path(__file__).parent.parent.parent, 'interop-test-files', 'syntax'))
-
-
-def get_test_cases(filename: str) -> List[str]:
-    """Get non-comment, non-empty lines from an interop test file.
-
-    Important: Preserves whitespace in test cases. This is critical for
-    format validators where leading/trailing/internal whitespace makes a
-    value invalid. For example, ' 1985-04-12T23:20:50.123Z' (with leading space)
-    should be invalid for datetime validation.
-
-    Args:
-        filename: Name of the test file to read from interop test files directory
-
-    Returns:
-        List of test cases with original whitespace preserved
-    """
-    return [
-        line
-        for line in INTEROP_TEST_FILES_DIR.joinpath(filename).read_text().splitlines()
-        if line and not line.startswith('#')
-    ]
+from tests.interop_test_files import get_test_cases
 
 
 @lru_cache
@@ -59,6 +33,19 @@ def read_test_data() -> dict:
             'record_key': get_test_cases('recordkey_syntax_invalid.txt'),
         },
     }
+
+
+def _get_validator_type(field_name: str) -> type:
+    field_name_to_type = {
+        'at_uri': string_formats.AtUri,
+        'datetime': string_formats.DateTime,
+        'handle': string_formats.Handle,
+        'did': string_formats.Did,
+        'nsid': string_formats.Nsid,
+        'tid': string_formats.Tid,
+        'record_key': string_formats.RecordKey,
+    }
+    return field_name_to_type[field_name]
 
 
 @pytest.fixture
@@ -98,35 +85,43 @@ def invalid_data() -> dict:
 
 
 @pytest.mark.parametrize(
-    'validator_type,field_name,invalid_value',
+    'field_name,invalid_value',
     [
-        (validator_type, field_name, invalid_value)
-        for validator_type, field_name in [
-            (string_formats.AtUri, 'at_uri'),
-            (string_formats.DateTime, 'datetime'),
-            (string_formats.Handle, 'handle'),
-            (string_formats.Did, 'did'),
-            (string_formats.Nsid, 'nsid'),
-            (string_formats.Tid, 'tid'),
-            (string_formats.RecordKey, 'record_key'),
-        ]
+        (field_name, invalid_value)
+        for field_name in ['at_uri', 'datetime', 'handle', 'did', 'nsid', 'tid', 'record_key']
         for invalid_value in read_test_data()['invalid'][field_name]
     ],
 )
-def test_string_format_validation(validator_type: type, field_name: str, invalid_value: str, valid_data: dict) -> None:
-    """Test validation for each string format type."""
-    SomeTypeAdapter = TypeAdapter(validator_type)
+def test_string_format_validation_with_invalid(field_name: str, invalid_value: str) -> None:
+    """Test validation with invalid data for each string format type."""
+    SomeTypeAdapter = TypeAdapter(_get_validator_type(field_name))
 
     # Test that validation is skipped by default
     assert SomeTypeAdapter.validate_python(invalid_value) == invalid_value
 
-    # Test that valid data passes strict validation
-    validated_value = SomeTypeAdapter.validate_python(valid_data[field_name], context={_OPT_IN_KEY: True})
-    assert validated_value == valid_data[field_name]
-
     # Test that invalid data fails strict validation
     with pytest.raises(ValidationError):
         SomeTypeAdapter.validate_python(invalid_value, context={_OPT_IN_KEY: True})
+
+
+@pytest.mark.parametrize(
+    'field_name,valid_value',
+    [
+        (field_name, valid_value)
+        for field_name in ['at_uri', 'datetime', 'handle', 'did', 'nsid', 'tid', 'record_key']
+        for valid_value in read_test_data()['valid'][field_name]
+    ],
+)
+def test_string_format_validation_with_valid(field_name: str, valid_value: str) -> None:
+    """Test validation with valid data for each string format type."""
+    SomeTypeAdapter = TypeAdapter(_get_validator_type(field_name))
+
+    # Test that validation is skipped by default
+    assert SomeTypeAdapter.validate_python(valid_value) == valid_value
+
+    # Test that valid data passes strict validation
+    validated = SomeTypeAdapter.validate_python(valid_value, context={_OPT_IN_KEY: True})
+    assert validated == valid_value
 
 
 @pytest.mark.parametrize(
