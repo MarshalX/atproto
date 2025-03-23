@@ -2,6 +2,7 @@ import typing as t
 from enum import Enum
 
 import typing_extensions as te
+from httpx import Headers
 
 from atproto_client.models.utils import get_model_as_dict, get_model_as_json
 from atproto_client.request import AsyncRequest, Request, Response
@@ -25,21 +26,22 @@ _DEFAULT_CONTENT_TYPE = _CONTENT_TYPE_JSON
 
 def _handle_kwagrs(kwargs: dict) -> None:
     """Mutates input data."""
-    content_type = _DEFAULT_CONTENT_TYPE
+    headers = Headers(kwargs.get('headers'))  # case-insensitive dict
 
-    if 'headers' not in kwargs:
-        kwargs['headers'] = {}
-
-    if 'input_encoding' in kwargs:
+    content_type = headers.get('Content-Type', _DEFAULT_CONTENT_TYPE)
+    # set content type from lexicon only if it's not set by user
+    if 'Content-Type' not in headers and 'input_encoding' in kwargs:
         content_type = kwargs['input_encoding']
-
-    kwargs['headers'].update({'Content-Type': content_type})
+        headers['Content-Type'] = content_type
 
     if content_type == _CONTENT_TYPE_JSON and 'data' in kwargs and kwargs['data']:
         kwargs['data'] = get_model_as_json(kwargs['data'])
 
     if kwargs.get('params'):
         kwargs['params'] = get_model_as_dict(kwargs['params'])
+
+    # set headers back
+    kwargs['headers'] = dict(headers.items())
 
     # pop non-request kwargs
     kwargs.pop('input_encoding', None)
