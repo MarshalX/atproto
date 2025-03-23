@@ -400,6 +400,7 @@ def validate_datetime(v: str, _: ValidationInfo) -> str:  # noqa: C901
         datetime_str = v
         if v.endswith('Z'):
             # For Python 3.10 compatibility, normalize fractional seconds to 6 digits
+            # see https://docs.python.org/3/whatsnew/3.11.html#datetime and https://github.com/python/cpython/issues/80010
             if '.' in v:
                 base, frac = v[:-1].split('.')
                 # Pad or truncate to exactly 6 digits
