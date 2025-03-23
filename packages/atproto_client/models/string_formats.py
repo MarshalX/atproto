@@ -6,6 +6,7 @@ from functools import wraps
 from typing import Callable, Mapping, Set, Union, cast
 from urllib.parse import urlparse
 
+from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import validate_nsid as atproto_core_validate_nsid
 from pydantic import BeforeValidator, Field, ValidationInfo
 from pydantic_core import core_schema
@@ -15,7 +16,6 @@ _OPT_IN_KEY: Literal['strict_string_format'] = 'strict_string_format'
 
 # constants
 MAX_HANDLE_LENGTH: int = 253
-MAX_NSID_LENGTH: int = 317
 MAX_RECORD_KEY_LENGTH: int = 512
 MAX_URI_LENGTH: int = 8 * 1024
 MIN_CID_LENGTH: int = 8
@@ -206,11 +206,11 @@ def validate_nsid(v: str, _: ValidationInfo) -> str:
     Raises:
         ValueError: If NSID format is invalid
     """
-    if not atproto_core_validate_nsid(v, soft_fail=True):
-        raise ValueError(
-            f'Invalid NSID: must be dot-separated segments (e.g. app.bsky.feed.post) with max length {MAX_NSID_LENGTH}'
-        )
-    return v
+    try:
+        atproto_core_validate_nsid(v)
+        return v
+    except InvalidNsidError as e:
+        raise ValueError(str(e)) from None
 
 
 @only_validate_if_strict
