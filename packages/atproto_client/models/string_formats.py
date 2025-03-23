@@ -326,9 +326,11 @@ def validate_datetime(v: str, _: ValidationInfo) -> str:
 
     - No -00:00 timezone allowed
 
-    - Valid fractional seconds format if used
+    - Valid fractional seconds format if used (any precision)
 
     - No whitespace allowed
+
+    - Years can have leading zeros
 
     Args:
         v: The datetime string to validate (e.g. 2024-11-24T06:02:00Z)
@@ -339,35 +341,58 @@ def validate_datetime(v: str, _: ValidationInfo) -> str:
     Raises:
         ValueError: If datetime format is invalid
     """
-    # Must contain uppercase T and Z if used
+    # Must not have whitespace
     if v != v.strip():
         raise ValueError('Invalid datetime: no whitespace allowed')
 
     # Must contain uppercase T
-    if 'T' not in v or ('z' in v and 'Z' not in v):
+    if 'T' not in v:
         raise ValueError('Invalid datetime: must contain uppercase T separator')
 
-    # Must have seconds (HH:MM:SS)
-    time_part = v.split('T')[1]
-    if len(time_part.split(':')) != 3:
+    # Split into date and time parts
+    try:
+        time_str = v.split('T')[1]
+    except IndexError:
+        raise ValueError('Invalid datetime: invalid format')
+
+    # Extract the time part before any timezone
+    if 'Z' in time_str:
+        time_part = time_str.split('Z')[0]
+    elif '+' in time_str:
+        time_part = time_str.split('+')[0]
+    elif '-' in time_str:
+        # Find the last '-' in case year is negative
+        time_part = time_str.rsplit('-', 1)[0]
+    else:
+        time_part = time_str
+
+    # Check HH:MM:SS format
+    time_segments = time_part.split(':')
+    if len(time_segments) != 3:
         raise ValueError('Invalid datetime: seconds are required')
 
     # If has decimal point, must have digits after it
-    if '.' in v and not re.search(r'\.\d+', v):
+    if '.' in time_segments[2] and not re.search(r'\.\d+', time_segments[2]):
         raise ValueError('Invalid datetime: invalid fractional seconds format')
 
-    # Must match exactly timezone pattern with nothing after
+    # Must have valid timezone
     if v.endswith('-00:00'):
         raise ValueError('Invalid datetime: -00:00 timezone not allowed')
-    if not (re.match(r'.*Z$', v) or re.match(r'.*[+-]\d{2}:\d{2}$', v)):
+
+    # Must end with Z or valid timezone offset
+    if not (v.endswith('Z') or re.search(r'[+-]\d{2}:\d{2}$', v)):
         raise ValueError('Invalid datetime: must include timezone')
 
-    # Final validation
+    # Final validation using datetime.fromisoformat
     try:
-        datetime.fromisoformat(v.replace('Z', '+00:00'))
+        # Handle both Z and explicit timezone formats
+        datetime_str = v
+        if v.endswith('Z'):
+            datetime_str = v[:-1] + '+00:00'
+        datetime.fromisoformat(datetime_str)
         return v
-    except ValueError:
-        raise ValueError('Invalid datetime: invalid format') from None
+    except ValueError as e:
+        raise ValueError(f'Invalid datetime: {e!s}') from None
 
 
 @only_validate_if_strict
