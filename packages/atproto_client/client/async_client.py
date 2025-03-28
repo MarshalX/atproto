@@ -39,7 +39,8 @@ class AsyncClient(
 
     async def _invoke(self, invoke_type: 'InvokeType', **kwargs: t.Any) -> 'Response':
         session_refreshing = kwargs.pop('session_refreshing', False)
-        if session_refreshing:
+        session_creating = kwargs.pop('session_creating', False)
+        if session_refreshing or session_creating:
             return await super()._invoke(invoke_type, **kwargs)
 
         async with self._refresh_lock:
@@ -54,7 +55,8 @@ class AsyncClient(
 
     async def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
         session = await self.com.atproto.server.create_session(
-            models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
+            models.ComAtprotoServerCreateSession.Data(identifier=login, password=password),
+            session_creating=True,
         )
         await self._set_session(SessionEvent.CREATE, session)
         return session
