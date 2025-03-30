@@ -134,13 +134,13 @@ class DotDict(UnknownDict):
     @staticmethod
     def __convert(obj: t.Any) -> t.Any:
         if isinstance(obj, dict):
-            return DotDict(t.cast(t.Dict[str, t.Any], obj))
+            return DotDict(t.cast('t.Dict[str, t.Any]', obj))
         if isinstance(obj, list):
-            return [DotDict.__convert(v) for v in t.cast(t.List[t.Any], obj)]
+            return [DotDict.__convert(v) for v in t.cast('t.List[t.Any]', obj)]
         if isinstance(obj, set):
-            return {DotDict.__convert(v) for v in t.cast(t.Set[t.Any], obj)}
+            return {DotDict.__convert(v) for v in t.cast('t.Set[t.Any]', obj)}
         if isinstance(obj, tuple):
-            return tuple(DotDict.__convert(v) for v in t.cast(t.Tuple[t.Any], obj))
+            return tuple(DotDict.__convert(v) for v in t.cast('t.Tuple[t.Any]', obj))
         return obj
 
 

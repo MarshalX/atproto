@@ -71,7 +71,7 @@ def parse_jwt(jwt: t.Union[str, bytes]) -> t.Tuple[bytes, bytes, t.Dict[str, t.A
     if not isinstance(header, dict):
         raise TokenDecodeError('Invalid header string: must be a json object')
 
-    header = t.cast(t.Dict[str, t.Any], from_json(header_data))  # we expect an object in header
+    header = t.cast('t.Dict[str, t.Any]', from_json(header_data))  # we expect an object in header
 
     try:
         payload = base64url_decode(payload_segment)
