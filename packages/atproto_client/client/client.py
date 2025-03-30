@@ -465,7 +465,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         )
 
     def get_author_feed(
-        self, actor: str, cursor: t.Optional[str] = None, filter: t.Optional[str] = None, limit: t.Optional[int] = None
+        self, actor: str, cursor: t.Optional[str] = None, filter: t.Optional[str] = None, include_pins: bool = False, limit: t.Optional[int] = None
     ) -> 'models.AppBskyFeedGetAuthorFeed.Response':
         """Get author (profile) feed.
 
@@ -473,6 +473,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             actor: Actor (handle or DID).
             cursor: Cursor of the last like in the previous page.
             filter: Filter.
+            include_pins: Include pins.
             limit: Limit count of likes to return.
 
         Returns:
@@ -482,7 +483,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         return self.app.bsky.feed.get_author_feed(
-            models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, filter=filter, limit=limit)
+            models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, filter=filter, include_pins=include_pins, limit=limit)
         )
 
     def like(self, uri: str, cid: str) -> 'models.AppBskyFeedLike.CreateRecordResponse':
