@@ -13,6 +13,7 @@ Submodules
    :maxdepth: 4
 
    atproto_client.models.chat.bsky.convo.accept_convo
+   atproto_client.models.chat.bsky.convo.add_reaction
    atproto_client.models.chat.bsky.convo.defs
    atproto_client.models.chat.bsky.convo.delete_message_for_self
    atproto_client.models.chat.bsky.convo.get_convo
@@ -23,6 +24,7 @@ Submodules
    atproto_client.models.chat.bsky.convo.leave_convo
    atproto_client.models.chat.bsky.convo.list_convos
    atproto_client.models.chat.bsky.convo.mute_convo
+   atproto_client.models.chat.bsky.convo.remove_reaction
    atproto_client.models.chat.bsky.convo.send_message
    atproto_client.models.chat.bsky.convo.send_message_batch
    atproto_client.models.chat.bsky.convo.unmute_convo

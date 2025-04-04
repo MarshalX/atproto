@@ -9,7 +9,11 @@ import typing as t
 
 from pydantic import Field
 
-from atproto_client.models import base, string_formats
+from atproto_client.models import string_formats
+
+if t.TYPE_CHECKING:
+    from atproto_client import models
+from atproto_client.models import base
 
 
 class SkeletonSearchPost(base.ModelBase):
@@ -52,4 +56,38 @@ class TrendingTopic(base.ModelBase):
 
     py_type: t.Literal['app.bsky.unspecced.defs#trendingTopic'] = Field(
         default='app.bsky.unspecced.defs#trendingTopic', alias='$type', frozen=True
+    )
+
+
+class SkeletonTrend(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.defs`."""
+
+    dids: t.List[string_formats.Did]  #: Dids.
+    display_name: str  #: Display name.
+    link: str  #: Link.
+    post_count: int  #: Post count.
+    started_at: string_formats.DateTime  #: Started at.
+    topic: str  #: Topic.
+    category: t.Optional[str] = None  #: Category.
+    status: t.Optional[t.Union[t.Literal['hot'], str]] = None  #: Status.
+
+    py_type: t.Literal['app.bsky.unspecced.defs#skeletonTrend'] = Field(
+        default='app.bsky.unspecced.defs#skeletonTrend', alias='$type', frozen=True
+    )
+
+
+class TrendView(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.defs`."""
+
+    actors: t.List['models.AppBskyActorDefs.ProfileViewBasic']  #: Actors.
+    display_name: str  #: Display name.
+    link: str  #: Link.
+    post_count: int  #: Post count.
+    started_at: string_formats.DateTime  #: Started at.
+    topic: str  #: Topic.
+    category: t.Optional[str] = None  #: Category.
+    status: t.Optional[t.Union[t.Literal['hot'], str]] = None  #: Status.
+
+    py_type: t.Literal['app.bsky.unspecced.defs#trendView'] = Field(
+        default='app.bsky.unspecced.defs#trendView', alias='$type', frozen=True
     )

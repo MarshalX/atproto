@@ -20,6 +20,7 @@ Submodules
    atproto_client.models.tools.ozone.moderation.get_repo
    atproto_client.models.tools.ozone.moderation.get_reporter_stats
    atproto_client.models.tools.ozone.moderation.get_repos
+   atproto_client.models.tools.ozone.moderation.get_subjects
    atproto_client.models.tools.ozone.moderation.query_events
    atproto_client.models.tools.ozone.moderation.query_statuses
    atproto_client.models.tools.ozone.moderation.search_repos

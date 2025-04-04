@@ -34,8 +34,13 @@ class Response(base.ResponseModelBase):
                 'models.ChatBskyConvoDefs.LogBeginConvo',
                 'models.ChatBskyConvoDefs.LogAcceptConvo',
                 'models.ChatBskyConvoDefs.LogLeaveConvo',
+                'models.ChatBskyConvoDefs.LogMuteConvo',
+                'models.ChatBskyConvoDefs.LogUnmuteConvo',
                 'models.ChatBskyConvoDefs.LogCreateMessage',
                 'models.ChatBskyConvoDefs.LogDeleteMessage',
+                'models.ChatBskyConvoDefs.LogReadMessage',
+                'models.ChatBskyConvoDefs.LogAddReaction',
+                'models.ChatBskyConvoDefs.LogRemoveReaction',
             ],
             Field(discriminator='py_type'),
         ]
