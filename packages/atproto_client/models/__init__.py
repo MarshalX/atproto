@@ -82,9 +82,21 @@ from atproto_client.models.app.bsky.unspecced import get_config as AppBskyUnspec
 from atproto_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
 )
+from atproto_client.models.app.bsky.unspecced import get_suggested_feeds as AppBskyUnspeccedGetSuggestedFeeds
+from atproto_client.models.app.bsky.unspecced import (
+    get_suggested_feeds_skeleton as AppBskyUnspeccedGetSuggestedFeedsSkeleton,
+)
+from atproto_client.models.app.bsky.unspecced import (
+    get_suggested_starter_packs as AppBskyUnspeccedGetSuggestedStarterPacks,
+)
+from atproto_client.models.app.bsky.unspecced import (
+    get_suggested_starter_packs_skeleton as AppBskyUnspeccedGetSuggestedStarterPacksSkeleton,
+)
 from atproto_client.models.app.bsky.unspecced import get_suggestions_skeleton as AppBskyUnspeccedGetSuggestionsSkeleton
 from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as AppBskyUnspeccedGetTaggedSuggestions
 from atproto_client.models.app.bsky.unspecced import get_trending_topics as AppBskyUnspeccedGetTrendingTopics
+from atproto_client.models.app.bsky.unspecced import get_trends as AppBskyUnspeccedGetTrends
+from atproto_client.models.app.bsky.unspecced import get_trends_skeleton as AppBskyUnspeccedGetTrendsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
 from atproto_client.models.app.bsky.unspecced import (
@@ -99,6 +111,7 @@ from atproto_client.models.chat.bsky.actor import defs as ChatBskyActorDefs
 from atproto_client.models.chat.bsky.actor import delete_account as ChatBskyActorDeleteAccount
 from atproto_client.models.chat.bsky.actor import export_account_data as ChatBskyActorExportAccountData
 from atproto_client.models.chat.bsky.convo import accept_convo as ChatBskyConvoAcceptConvo
+from atproto_client.models.chat.bsky.convo import add_reaction as ChatBskyConvoAddReaction
 from atproto_client.models.chat.bsky.convo import defs as ChatBskyConvoDefs
 from atproto_client.models.chat.bsky.convo import delete_message_for_self as ChatBskyConvoDeleteMessageForSelf
 from atproto_client.models.chat.bsky.convo import get_convo as ChatBskyConvoGetConvo
@@ -109,6 +122,7 @@ from atproto_client.models.chat.bsky.convo import get_messages as ChatBskyConvoG
 from atproto_client.models.chat.bsky.convo import leave_convo as ChatBskyConvoLeaveConvo
 from atproto_client.models.chat.bsky.convo import list_convos as ChatBskyConvoListConvos
 from atproto_client.models.chat.bsky.convo import mute_convo as ChatBskyConvoMuteConvo
+from atproto_client.models.chat.bsky.convo import remove_reaction as ChatBskyConvoRemoveReaction
 from atproto_client.models.chat.bsky.convo import send_message as ChatBskyConvoSendMessage
 from atproto_client.models.chat.bsky.convo import send_message_batch as ChatBskyConvoSendMessageBatch
 from atproto_client.models.chat.bsky.convo import unmute_convo as ChatBskyConvoUnmuteConvo
@@ -131,6 +145,7 @@ from atproto_client.models.com.atproto.admin import send_email as ComAtprotoAdmi
 from atproto_client.models.com.atproto.admin import update_account_email as ComAtprotoAdminUpdateAccountEmail
 from atproto_client.models.com.atproto.admin import update_account_handle as ComAtprotoAdminUpdateAccountHandle
 from atproto_client.models.com.atproto.admin import update_account_password as ComAtprotoAdminUpdateAccountPassword
+from atproto_client.models.com.atproto.admin import update_account_signing_key as ComAtprotoAdminUpdateAccountSigningKey
 from atproto_client.models.com.atproto.admin import update_subject_status as ComAtprotoAdminUpdateSubjectStatus
 from atproto_client.models.com.atproto.identity import defs as ComAtprotoIdentityDefs
 from atproto_client.models.com.atproto.identity import (
@@ -224,6 +239,7 @@ from atproto_client.models.tools.ozone.moderation import get_records as ToolsOzo
 from atproto_client.models.tools.ozone.moderation import get_repo as ToolsOzoneModerationGetRepo
 from atproto_client.models.tools.ozone.moderation import get_reporter_stats as ToolsOzoneModerationGetReporterStats
 from atproto_client.models.tools.ozone.moderation import get_repos as ToolsOzoneModerationGetRepos
+from atproto_client.models.tools.ozone.moderation import get_subjects as ToolsOzoneModerationGetSubjects
 from atproto_client.models.tools.ozone.moderation import query_events as ToolsOzoneModerationQueryEvents
 from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
 from atproto_client.models.tools.ozone.moderation import search_repos as ToolsOzoneModerationSearchRepos
@@ -338,9 +354,15 @@ class _Ids:
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
+    AppBskyUnspeccedGetSuggestedFeeds: str = 'app.bsky.unspecced.getSuggestedFeeds'
+    AppBskyUnspeccedGetSuggestedFeedsSkeleton: str = 'app.bsky.unspecced.getSuggestedFeedsSkeleton'
+    AppBskyUnspeccedGetSuggestedStarterPacks: str = 'app.bsky.unspecced.getSuggestedStarterPacks'
+    AppBskyUnspeccedGetSuggestedStarterPacksSkeleton: str = 'app.bsky.unspecced.getSuggestedStarterPacksSkeleton'
     AppBskyUnspeccedGetSuggestionsSkeleton: str = 'app.bsky.unspecced.getSuggestionsSkeleton'
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
     AppBskyUnspeccedGetTrendingTopics: str = 'app.bsky.unspecced.getTrendingTopics'
+    AppBskyUnspeccedGetTrends: str = 'app.bsky.unspecced.getTrends'
+    AppBskyUnspeccedGetTrendsSkeleton: str = 'app.bsky.unspecced.getTrendsSkeleton'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
     AppBskyUnspeccedSearchStarterPacksSkeleton: str = 'app.bsky.unspecced.searchStarterPacksSkeleton'
@@ -353,6 +375,7 @@ class _Ids:
     ChatBskyActorDeleteAccount: str = 'chat.bsky.actor.deleteAccount'
     ChatBskyActorExportAccountData: str = 'chat.bsky.actor.exportAccountData'
     ChatBskyConvoAcceptConvo: str = 'chat.bsky.convo.acceptConvo'
+    ChatBskyConvoAddReaction: str = 'chat.bsky.convo.addReaction'
     ChatBskyConvoDefs: str = 'chat.bsky.convo.defs'
     ChatBskyConvoDeleteMessageForSelf: str = 'chat.bsky.convo.deleteMessageForSelf'
     ChatBskyConvoGetConvo: str = 'chat.bsky.convo.getConvo'
@@ -363,6 +386,7 @@ class _Ids:
     ChatBskyConvoLeaveConvo: str = 'chat.bsky.convo.leaveConvo'
     ChatBskyConvoListConvos: str = 'chat.bsky.convo.listConvos'
     ChatBskyConvoMuteConvo: str = 'chat.bsky.convo.muteConvo'
+    ChatBskyConvoRemoveReaction: str = 'chat.bsky.convo.removeReaction'
     ChatBskyConvoSendMessage: str = 'chat.bsky.convo.sendMessage'
     ChatBskyConvoSendMessageBatch: str = 'chat.bsky.convo.sendMessageBatch'
     ChatBskyConvoUnmuteConvo: str = 'chat.bsky.convo.unmuteConvo'
@@ -385,6 +409,7 @@ class _Ids:
     ComAtprotoAdminUpdateAccountEmail: str = 'com.atproto.admin.updateAccountEmail'
     ComAtprotoAdminUpdateAccountHandle: str = 'com.atproto.admin.updateAccountHandle'
     ComAtprotoAdminUpdateAccountPassword: str = 'com.atproto.admin.updateAccountPassword'
+    ComAtprotoAdminUpdateAccountSigningKey: str = 'com.atproto.admin.updateAccountSigningKey'
     ComAtprotoAdminUpdateSubjectStatus: str = 'com.atproto.admin.updateSubjectStatus'
     ComAtprotoIdentityDefs: str = 'com.atproto.identity.defs'
     ComAtprotoIdentityGetRecommendedDidCredentials: str = 'com.atproto.identity.getRecommendedDidCredentials'
@@ -471,6 +496,7 @@ class _Ids:
     ToolsOzoneModerationGetRepo: str = 'tools.ozone.moderation.getRepo'
     ToolsOzoneModerationGetReporterStats: str = 'tools.ozone.moderation.getReporterStats'
     ToolsOzoneModerationGetRepos: str = 'tools.ozone.moderation.getRepos'
+    ToolsOzoneModerationGetSubjects: str = 'tools.ozone.moderation.getSubjects'
     ToolsOzoneModerationQueryEvents: str = 'tools.ozone.moderation.queryEvents'
     ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
     ToolsOzoneModerationSearchRepos: str = 'tools.ozone.moderation.searchRepos'
