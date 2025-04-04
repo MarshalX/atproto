@@ -158,7 +158,7 @@ def _get_str_enum_typehint(nsid: NSID, field_type_def: models.LexString, *, opti
 
     # known_values is not closed enum
     closed_enum = '' if field_type_def.enum else ', str'
-    return f"t.Union[{', '.join(union_type_parts)}{closed_enum}]"
+    return f't.Union[{", ".join(union_type_parts)}{closed_enum}]'
 
 
 def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional: bool) -> str:
@@ -840,7 +840,7 @@ def _generate_import_aliases(root_package_path: Path) -> None:
             alias_name = ''.join([p.capitalize() for p in [*nsid_parts, *method_name_parts]])
 
             camel_case_method_name = method_name_parts[0] + ''.join(ele.title() for ele in method_name_parts[1:])
-            method_path = f"{'.'.join(nsid_parts)}.{camel_case_method_name}"
+            method_path = f'{".".join(nsid_parts)}.{camel_case_method_name}'
             ids_db.append(f"{_(1)}{alias_name}: str = '{method_path}'")
 
             import_lines.append(f'from {from_import} import {file[:-3]} as {alias_name}')

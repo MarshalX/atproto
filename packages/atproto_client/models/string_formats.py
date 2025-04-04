@@ -82,7 +82,7 @@ def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., st
     def wrapper(v: str, info: ValidationInfo) -> str:
         """Could likely be generalized to support arbitrary signatures."""
         if info and isinstance(info.context, Mapping) and info.context.get(_OPT_IN_KEY, False):
-            return cast(core_schema.WithInfoValidatorFunction, validate_fn)(v, info)
+            return cast('core_schema.WithInfoValidatorFunction', validate_fn)(v, info)
         return v
 
     return wrapper
