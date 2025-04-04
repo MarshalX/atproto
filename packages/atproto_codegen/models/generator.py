@@ -200,6 +200,14 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, o
         import_path, _ = _resolve_nsid_ref(nsid, ref)
         def_names.append(import_path)
 
+    if not def_names and field_type_def.closed:
+        raise ValueError('The schema is invalid because union must have at least one type when it is closed')
+
+    if not def_names:
+        # actually it's a union of unknown types but it must have $type field.
+        # we do specify more correct type here for now
+        def_names.append('t.Any')
+
     # unbelievable but it's true. If schema doesn't describe the right type in Union
     # we should fall back to the plain data
     # maybe it's for the records that have custom fields... idk

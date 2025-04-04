@@ -3,6 +3,7 @@
 
 import os
 import subprocess
+import sys
 import typing as t
 import zipfile
 from io import BytesIO
@@ -130,6 +131,7 @@ def _run_subprocess(command: t.List[str]) -> None:
 
 def _print(*args) -> None:
     if 'CI' in os.environ:
+        print(*args, file=sys.stderr)  # noqa: T201
         return
 
     print(*args)  # noqa: T201

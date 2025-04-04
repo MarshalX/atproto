@@ -124,7 +124,7 @@ class LexRefUnion(LexPrimitiveBase):
     type: te.Literal['union'] = Field(default=LexPrimitiveType.UNION, frozen=True)
 
     refs: t.List[str]
-    closed: t.Optional[bool] = None
+    closed: t.Optional[bool] = False
 
 
 LexRefVariant = te.Annotated[t.Union[LexRef, LexRefUnion], Field(discriminator='type')]
