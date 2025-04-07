@@ -26,4 +26,5 @@ Submodules
    atproto_client.models.com.atproto.admin.update_account_email
    atproto_client.models.com.atproto.admin.update_account_handle
    atproto_client.models.com.atproto.admin.update_account_password
+   atproto_client.models.com.atproto.admin.update_account_signing_key
    atproto_client.models.com.atproto.admin.update_subject_status

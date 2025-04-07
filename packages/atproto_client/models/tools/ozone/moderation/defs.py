@@ -164,6 +164,21 @@ class SubjectStatusView(base.ModelBase):
     )
 
 
+class SubjectView(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Detailed view of a subject. For record subjects, the author's repo and profile will be returned."""
+
+    subject: str  #: Subject.
+    type: 'models.ComAtprotoModerationDefs.SubjectType'  #: Type.
+    profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field(default=None)]] = None  #: Profile.
+    record: t.Optional['models.ToolsOzoneModerationDefs.RecordViewDetail'] = None  #: Record.
+    repo: t.Optional['models.ToolsOzoneModerationDefs.RepoViewDetail'] = None  #: Repo.
+    status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView'] = None  #: Status.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#subjectView'] = Field(
+        default='tools.ozone.moderation.defs#subjectView', alias='$type', frozen=True
+    )
+
+
 class AccountStats(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`. Statistics about a particular account subject."""
 

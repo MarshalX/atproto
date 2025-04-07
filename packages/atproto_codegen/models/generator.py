@@ -200,6 +200,15 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, o
         import_path, _ = _resolve_nsid_ref(nsid, ref)
         def_names.append(import_path)
 
+    if not def_names and field_type_def.closed:
+        raise ValueError('The schema is invalid because union must have at least one type when it is closed')
+
+    is_unknown_union = not def_names
+
+    if is_unknown_union:
+        # union of unknown types but it must have $type field.
+        def_names.append('base.UnknownUnionModel')
+
     # unbelievable but it's true. If schema doesn't describe the right type in Union
     # we should fall back to the plain data
     # maybe it's for the records that have custom fields... idk
@@ -209,7 +218,14 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, o
     # append 't.Dict[str, t.Any]' to def_names  # FIXME(MarshalX): support pydantic
 
     def_names = ', '.join([f"'{name}'" for name in def_names])
-    def_field_meta = 'Field(default=None, discriminator="py_type")' if optional else 'Field(discriminator="py_type")'
+
+    if is_unknown_union:
+        # unknown type does not compatible with discriminator because $type is unknown :)
+        def_field_meta = 'Field(default=None)' if optional else 'Field()'
+    else:
+        def_field_meta = (
+            'Field(default=None, discriminator="py_type")' if optional else 'Field(discriminator="py_type")'
+        )
 
     annotated_union = f'te.Annotated[t.Union[{def_names}], {def_field_meta}]'
     return _get_optional_typehint(annotated_union, optional=optional)
