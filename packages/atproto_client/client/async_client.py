@@ -474,7 +474,12 @@ class AsyncClient(
         )
 
     async def get_author_feed(
-        self, actor: str, cursor: t.Optional[str] = None, filter: t.Optional[str] = None, limit: t.Optional[int] = None
+        self,
+        actor: str,
+        cursor: t.Optional[str] = None,
+        filter: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        include_pins: bool = False,
     ) -> 'models.AppBskyFeedGetAuthorFeed.Response':
         """Get author (profile) feed.
 
@@ -483,6 +488,7 @@ class AsyncClient(
             cursor: Cursor of the last like in the previous page.
             filter: Filter.
             limit: Limit count of likes to return.
+            include_pins: Include pins.
 
         Returns:
             :obj:`models.AppBskyFeedGetAuthorFeed.Response`: Feed.
@@ -491,7 +497,9 @@ class AsyncClient(
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         return await self.app.bsky.feed.get_author_feed(
-            models.AppBskyFeedGetAuthorFeed.Params(actor=actor, cursor=cursor, filter=filter, limit=limit)
+            models.AppBskyFeedGetAuthorFeed.Params(
+                actor=actor, cursor=cursor, filter=filter, include_pins=include_pins, limit=limit
+            )
         )
 
     async def like(self, uri: str, cid: str) -> 'models.AppBskyFeedLike.CreateRecordResponse':
