@@ -59,6 +59,9 @@ class MessageView(base.ModelBase):
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
+    reactions: t.Optional[t.List['models.ChatBskyConvoDefs.ReactionView']] = (
+        None  #: Reactions to this message, in ascending order of creation time.
+    )
 
     py_type: t.Literal['chat.bsky.convo.defs#messageView'] = Field(
         default='chat.bsky.convo.defs#messageView', alias='$type', frozen=True
@@ -88,6 +91,39 @@ class MessageViewSender(base.ModelBase):
     )
 
 
+class ReactionView(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
+
+    created_at: string_formats.DateTime  #: Created at.
+    sender: 'models.ChatBskyConvoDefs.ReactionViewSender'  #: Sender.
+    value: str  #: Value.
+
+    py_type: t.Literal['chat.bsky.convo.defs#reactionView'] = Field(
+        default='chat.bsky.convo.defs#reactionView', alias='$type', frozen=True
+    )
+
+
+class ReactionViewSender(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
+
+    did: string_formats.Did  #: Did.
+
+    py_type: t.Literal['chat.bsky.convo.defs#reactionViewSender'] = Field(
+        default='chat.bsky.convo.defs#reactionViewSender', alias='$type', frozen=True
+    )
+
+
+class MessageAndReactionView(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
+
+    message: 'models.ChatBskyConvoDefs.MessageView'  #: Message.
+    reaction: 'models.ChatBskyConvoDefs.ReactionView'  #: Reaction.
+
+    py_type: t.Literal['chat.bsky.convo.defs#messageAndReactionView'] = Field(
+        default='chat.bsky.convo.defs#messageAndReactionView', alias='$type', frozen=True
+    )
+
+
 class ConvoView(base.ModelBase):
     """Definition model for :obj:`chat.bsky.convo.defs`."""
 
@@ -102,6 +138,11 @@ class ConvoView(base.ModelBase):
             Field(default=None, discriminator='py_type'),
         ]
     ] = None  #: Last message.
+    last_reaction: t.Optional[
+        te.Annotated[
+            t.Union['models.ChatBskyConvoDefs.MessageAndReactionView'], Field(default=None, discriminator='py_type')
+        ]
+    ] = None  #: Last reaction.
     status: t.Optional[t.Union[t.Literal['request'], t.Literal['accepted'], str]] = None  #: Status.
 
     py_type: t.Literal['chat.bsky.convo.defs#convoView'] = Field(
@@ -206,4 +247,36 @@ class LogReadMessage(base.ModelBase):
 
     py_type: t.Literal['chat.bsky.convo.defs#logReadMessage'] = Field(
         default='chat.bsky.convo.defs#logReadMessage', alias='$type', frozen=True
+    )
+
+
+class LogAddReaction(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
+
+    convo_id: str  #: Convo id.
+    message: te.Annotated[
+        t.Union['models.ChatBskyConvoDefs.MessageView', 'models.ChatBskyConvoDefs.DeletedMessageView'],
+        Field(discriminator='py_type'),
+    ]  #: Message.
+    reaction: 'models.ChatBskyConvoDefs.ReactionView'  #: Reaction.
+    rev: str  #: Rev.
+
+    py_type: t.Literal['chat.bsky.convo.defs#logAddReaction'] = Field(
+        default='chat.bsky.convo.defs#logAddReaction', alias='$type', frozen=True
+    )
+
+
+class LogRemoveReaction(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
+
+    convo_id: str  #: Convo id.
+    message: te.Annotated[
+        t.Union['models.ChatBskyConvoDefs.MessageView', 'models.ChatBskyConvoDefs.DeletedMessageView'],
+        Field(discriminator='py_type'),
+    ]  #: Message.
+    reaction: 'models.ChatBskyConvoDefs.ReactionView'  #: Reaction.
+    rev: str  #: Rev.
+
+    py_type: t.Literal['chat.bsky.convo.defs#logRemoveReaction'] = Field(
+        default='chat.bsky.convo.defs#logRemoveReaction', alias='$type', frozen=True
     )

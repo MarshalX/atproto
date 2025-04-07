@@ -3577,6 +3577,202 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetPopularFeedGenerators.Response)
 
+    def get_suggested_feeds(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedFeeds.Params, models.AppBskyUnspeccedGetSuggestedFeeds.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedFeeds.Response':
+        """Get a list of suggested feeds.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedFeeds.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedFeeds.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedFeeds.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedFeeds', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedFeeds.Response)
+
+    def get_suggested_feeds_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedFeedsSkeleton.Params,
+                models.AppBskyUnspeccedGetSuggestedFeedsSkeleton.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedFeedsSkeleton.Response':
+        """Get a skeleton of suggested feeds. Intended to be called and hydrated by app.bsky.unspecced.getSuggestedFeeds.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedFeedsSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedFeedsSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedFeedsSkeleton.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedFeedsSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedFeedsSkeleton.Response)
+
+    def get_suggested_starter_packs(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedStarterPacks.Params,
+                models.AppBskyUnspeccedGetSuggestedStarterPacks.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedStarterPacks.Response':
+        """Get a list of suggested starterpacks.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedStarterPacks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedStarterPacks.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedStarterPacks.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedStarterPacks',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedStarterPacks.Response)
+
+    def get_suggested_starter_packs_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.Params,
+                models.AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.Response':
+        """Get a skeleton of suggested starterpacks. Intended to be called and hydrated by app.bsky.unspecced.getSuggestedStarterpacks.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedStarterPacksSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.Response)
+
+    def get_suggested_users(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedUsers.Params, models.AppBskyUnspeccedGetSuggestedUsers.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedUsers.Response':
+        """Get a list of suggested users.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedUsers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedUsers.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedUsers.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedUsers', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedUsers.Response)
+
+    def get_suggested_users_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedUsersSkeleton.Params,
+                models.AppBskyUnspeccedGetSuggestedUsersSkeleton.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedUsersSkeleton.Response':
+        """Get a skeleton of suggested users. Intended to be called and hydrated by app.bsky.unspecced.getSuggestedUsers.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedUsersSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedUsersSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedUsersSkeleton.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedUsersSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedUsersSkeleton.Response)
+
     def get_suggestions_skeleton(
         self,
         params: t.Optional[
@@ -3671,6 +3867,63 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
             'app.bsky.unspecced.getTrendingTopics', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyUnspeccedGetTrendingTopics.Response)
+
+    def get_trends(
+        self,
+        params: t.Optional[
+            t.Union[models.AppBskyUnspeccedGetTrends.Params, models.AppBskyUnspeccedGetTrends.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetTrends.Response':
+        """Get the current trends on the network.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetTrends.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetTrends.Params', get_or_create(params, models.AppBskyUnspeccedGetTrends.Params)
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getTrends', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetTrends.Response)
+
+    def get_trends_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetTrendsSkeleton.Params, models.AppBskyUnspeccedGetTrendsSkeleton.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetTrendsSkeleton.Response':
+        """Get the skeleton of trends on the network. Intended to be called and then hydrated through app.bsky.unspecced.getTrends.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetTrendsSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetTrendsSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetTrendsSkeleton.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getTrendsSkeleton', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetTrendsSkeleton.Response)
 
     def search_actors_skeleton(
         self,
@@ -4065,6 +4318,35 @@ class ChatBskyConvoNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ChatBskyConvoAcceptConvo.Response)
 
+    def add_reaction(
+        self,
+        data: t.Union[models.ChatBskyConvoAddReaction.Data, models.ChatBskyConvoAddReaction.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyConvoAddReaction.Response':
+        """Adds an emoji reaction to a message. Requires authentication. It is idempotent, so multiple calls from the same user with the same emoji result in a single reaction.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyConvoAddReaction.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyConvoAddReaction.Data', get_or_create(data, models.ChatBskyConvoAddReaction.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.convo.addReaction',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyConvoAddReaction.Response)
+
     def delete_message_for_self(
         self,
         data: t.Union[models.ChatBskyConvoDeleteMessageForSelf.Data, models.ChatBskyConvoDeleteMessageForSelf.DataDict],
@@ -4308,6 +4590,35 @@ class ChatBskyConvoNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoMuteConvo.Response)
+
+    def remove_reaction(
+        self,
+        data: t.Union[models.ChatBskyConvoRemoveReaction.Data, models.ChatBskyConvoRemoveReaction.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyConvoRemoveReaction.Response':
+        """Removes an emoji reaction from a message. Requires authentication. It is idempotent, so multiple calls from the same user with the same emoji result in that reaction not being present, even if it already wasn't.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyConvoRemoveReaction.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyConvoRemoveReaction.Data', get_or_create(data, models.ChatBskyConvoRemoveReaction.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.convo.removeReaction',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyConvoRemoveReaction.Response)
 
     def send_message(
         self,
@@ -4917,6 +5228,34 @@ class ComAtprotoAdminNamespace(NamespaceBase):
         )
         response = self._client.invoke_procedure(
             'com.atproto.admin.updateAccountPassword', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def update_account_signing_key(
+        self,
+        data: t.Union[
+            models.ComAtprotoAdminUpdateAccountSigningKey.Data, models.ComAtprotoAdminUpdateAccountSigningKey.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Administrative action to update an account's signing key in their Did document.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ComAtprotoAdminUpdateAccountSigningKey.Data',
+            get_or_create(data, models.ComAtprotoAdminUpdateAccountSigningKey.Data),
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.admin.updateAccountSigningKey', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -7003,6 +7342,34 @@ class ToolsOzoneModerationNamespace(NamespaceBase):
             'tools.ozone.moderation.getRepos', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneModerationGetRepos.Response)
+
+    def get_subjects(
+        self,
+        params: t.Union[
+            models.ToolsOzoneModerationGetSubjects.Params, models.ToolsOzoneModerationGetSubjects.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationGetSubjects.Response':
+        """Get details about subjects.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationGetSubjects.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationGetSubjects.Params',
+            get_or_create(params, models.ToolsOzoneModerationGetSubjects.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.moderation.getSubjects', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneModerationGetSubjects.Response)
 
     def query_events(
         self,
