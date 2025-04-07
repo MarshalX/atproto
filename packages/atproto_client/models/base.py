@@ -2,7 +2,7 @@ import os
 import typing as t
 import warnings
 
-from pydantic import BaseModel, ConfigDict, alias_generators, model_validator
+from pydantic import BaseModel, ConfigDict, Field, alias_generators, model_validator
 
 from atproto_client.exceptions import ModelFieldNotFoundError
 
@@ -73,6 +73,10 @@ class UnknownDict(AtProtocolBase):
 
 class UnknownRecord(ModelBase):
     pass
+
+
+class UnknownUnionModel(ModelBase):
+    py_type: str = Field(alias='$type')
 
 
 class RecordModelBase(UnknownRecord):
