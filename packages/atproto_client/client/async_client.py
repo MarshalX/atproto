@@ -38,8 +38,8 @@ class AsyncClient(
         self.me: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed'] = None
 
     async def _invoke(self, invoke_type: 'InvokeType', **kwargs: t.Any) -> 'Response':
-        session_refreshing = kwargs.pop('session_refreshing', False)
-        if session_refreshing:
+        ignore_session_check = kwargs.pop('ignore_session_check', False)
+        if ignore_session_check:
             return await super()._invoke(invoke_type, **kwargs)
 
         async with self._refresh_lock:
@@ -54,7 +54,8 @@ class AsyncClient(
 
     async def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
         session = await self.com.atproto.server.create_session(
-            models.ComAtprotoServerCreateSession.Data(identifier=login, password=password)
+            models.ComAtprotoServerCreateSession.Data(identifier=login, password=password),
+            ignore_session_check=True,
         )
         await self._set_session(SessionEvent.CREATE, session)
         return session
@@ -64,7 +65,7 @@ class AsyncClient(
             raise LoginRequiredError
 
         refresh_session = await self.com.atproto.server.refresh_session(
-            headers=self._get_refresh_auth_headers(), session_refreshing=True
+            headers=self._get_refresh_auth_headers(), ignore_session_check=True
         )
         await self._set_session(SessionEvent.REFRESH, refresh_session)
 
