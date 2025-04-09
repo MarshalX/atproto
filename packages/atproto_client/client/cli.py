@@ -5,9 +5,10 @@ from typing import Callable, Any
 from authlib.jose import JsonWebKey
 
 from atproto_client import AsyncClient, Session, SessionEvent
+from atproto_client.exceptions import UnauthorizedError
 
 
-async def fetch_credentials(aip_jwk: str, aip_server: str = "https://grazeaip.tunn.dev") -> dict:
+async def fetch_credentials(aip_jwk: str, aip_server: str = "https://grazeaip.tunn.dev") -> Session:
     async with aiohttp.ClientSession() as session:
         headers = {
             "Authorization": f"Bearer {aip_jwk}",
@@ -39,7 +40,6 @@ async def fetch_credentials(aip_jwk: str, aip_server: str = "https://grazeaip.tu
                     static_dpop_token=session_response.get("token", None),
                     static_dpop_issuer=session_response.get("issuer", None),
                     static_dpop_jwk=JsonWebKey.import_key(session_response.get("jwk", None)),
-                    # static_dpop_nonce="Uuc5_cgxd_V8iEK4pq3u90zMeb8AdP-7E61049HTu-4",
                 )
                 return session
     raise Exception("oops")
@@ -49,23 +49,34 @@ async def retry_invoke(client: AsyncClient, session: Session, func: Callable, *a
     for i in range(2):
         try:
             return await func(*args, **kwargs)
-        except Exception as e:
-            print(e)
-            # if e.response.status_code == 401:
-            #     print("401")
-            #     # await client._refresh_session(session)
-            #     continue
+        except UnauthorizedError as e:
+            if e.response is not None and e.response.status_code == 401:
+                if "www-authenticate" in e.response.headers and "use_dpop_nonce" in e.response.headers["www-authenticate"]:
+                    session.static_dpop_nonce = e.response.headers["dpop-nonce"]
+                    continue
             raise e
 
 async def realMain() -> None:
-    session = await fetch_credentials(os.getenv("AIP_JWK"))
+    session = await fetch_credentials(os.getenv("AIP_JWK", ""), "https://auth.m.graze.social")
 
     client = AsyncClient()
     await client._set_session(SessionEvent.IMPORT, session)
 
-    records = await retry_invoke(client, session, client.com.atproto.repo.list_records, {"collection": "com.atproto.repo.record", "repo": session.did})
-    # timeline = await client.com.atproto.repo.list_records(params = {"collection": "com.atproto.repo.record", "repo": session.did})
+    create_record_args = {
+        "collection": "garden.lexicon.deeply-mouse.profile",
+        "repo": session.did,
+        "record": {
+            "$type": "garden.lexicon.deeply-mouse.profile",
+            "name": session.handle,
+        },
+        "validate": False,
+    }
 
+
+    created_record = await retry_invoke(client, session, client.com.atproto.repo.create_record, {**create_record_args})
+    print(created_record)
+
+    records = await retry_invoke(client, session, client.com.atproto.repo.list_records, {"collection": "garden.lexicon.deeply-mouse.profile", "repo": session.did})
     print(records)
 
 

@@ -3,7 +3,8 @@ import inspect
 import typing as t
 from dataclasses import dataclass
 from enum import Enum
-from authlib.jose import JsonWebKey
+
+from authlib.jose.rfc7517 import Key
 
 import typing_extensions as te
 from atproto_core.did_doc import DidDocument, is_valid_did_doc
@@ -93,17 +94,17 @@ class Session:
     static_access_token: t.Optional[str] = None
 
     static_dpop_token: t.Optional[str] = None
-    static_dpop_jwk: t.Optional[JsonWebKey] = None
+    static_dpop_jwk: t.Optional[Key] = None
     static_dpop_issuer: t.Optional[str] = None
     static_dpop_nonce: t.Optional[str] = None
 
     @property
     def access_jwt_payload(self) -> 'JwtPayload':
-        return get_jwt_payload(self.access_jwt)
+        return get_jwt_payload(self.access_jwt or "")
 
     @property
     def refresh_jwt_payload(self) -> 'JwtPayload':
-        return get_jwt_payload(self.refresh_jwt)
+        return get_jwt_payload(self.refresh_jwt or "")
 
     def __repr__(self) -> str:
         return f'<Session handle={self.handle} did={self.did}>'
