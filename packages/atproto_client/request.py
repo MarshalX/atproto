@@ -88,9 +88,9 @@ class RequestBase:
 
     def __init__(self) -> None:
         self._additional_headers: t.Dict[str, str] = {}
-        self._additional_header_sources: t.List[t.Callable[[], t.Dict[str, str]]] = []
+        self._additional_header_sources: t.List[t.Callable[..., t.Dict[str, str]]] = []
 
-    def get_headers(self, additional_headers: t.Optional[t.Dict[str, str]] = None) -> t.Dict[str, str]:
+    def get_headers(self, additional_headers: t.Optional[t.Dict[str, str]] = None, method: t.Optional[str] = None, url: t.Optional[str] = None) -> t.Dict[str, str]:
         """Get headers for the request.
 
         Args:
@@ -103,7 +103,7 @@ class RequestBase:
         headers = {**RequestBase._MANDATORY_HEADERS, **self._additional_headers}
 
         for header_source in self._additional_header_sources:
-            headers.update(header_source())
+            headers.update(header_source(method=method, url=url))
 
         if additional_headers:
             headers.update(additional_headers)
@@ -118,7 +118,7 @@ class RequestBase:
         """
         self._additional_headers = headers.copy()
 
-    def add_additional_headers_source(self, callback: t.Callable[[], t.Dict[str, str]]) -> None:
+    def add_additional_headers_source(self, callback: t.Callable[..., t.Dict[str, str]]) -> None:
         """Add additional headers for the request.
 
         Args:
@@ -162,7 +162,7 @@ class Request(RequestBase):
         self._client = httpx.Client(follow_redirects=True)
 
     def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
-        headers = self.get_headers(kwargs.pop('headers', None))
+        headers = self.get_headers(kwargs.pop('headers', None), method=method, url=url)
 
         try:
             response = self._client.request(method=method, url=url, headers=headers, **kwargs)
@@ -189,7 +189,7 @@ class AsyncRequest(RequestBase):
         self._client = httpx.AsyncClient(follow_redirects=True)
 
     async def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
-        headers = self.get_headers(kwargs.pop('headers', None))
+        headers = self.get_headers(kwargs.pop('headers', None), method=method, url=url)
 
         try:
             response = await self._client.request(method=method, url=url, headers=headers, **kwargs)

@@ -127,7 +127,7 @@ class ClientBase(_ClientCommonMethodsMixin):
 class AsyncClientBase(_ClientCommonMethodsMixin):
     """Low-level methods are here."""
 
-    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[AsyncRequest] = None) -> None:
+    def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[AsyncRequest] = None, *args: t.Any, **kwargs: t.Any) -> None:
         if request is None:
             request = AsyncRequest()
 

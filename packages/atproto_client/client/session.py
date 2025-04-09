@@ -3,6 +3,7 @@ import inspect
 import typing as t
 from dataclasses import dataclass
 from enum import Enum
+from authlib.jose import JsonWebKey
 
 import typing_extensions as te
 from atproto_core.did_doc import DidDocument, is_valid_did_doc
@@ -85,9 +86,16 @@ class SessionDispatcher:
 class Session:
     handle: str
     did: str
-    access_jwt: str
-    refresh_jwt: str
+    access_jwt: t.Optional[str] = None
+    refresh_jwt: t.Optional[str] = None
     pds_endpoint: t.Optional[str] = 'https://bsky.social'  # Backward compatibility for old sessions
+
+    static_access_token: t.Optional[str] = None
+
+    static_dpop_token: t.Optional[str] = None
+    static_dpop_jwk: t.Optional[JsonWebKey] = None
+    static_dpop_issuer: t.Optional[str] = None
+    static_dpop_nonce: t.Optional[str] = None
 
     @property
     def access_jwt_payload(self) -> 'JwtPayload':
