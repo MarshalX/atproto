@@ -1,0 +1,21 @@
+version: '3.8'
+volumes:
+  aip_db:
+  aip_ts:
+services:
+  devcontainer:
+    image: mcr.microsoft.com/devcontainers/python:3.13
+    volumes:
+      - ..:/workspace:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: sleep infinity
+    environment:
+      - TZ=America/New_York
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    restart: unless-stopped
+    environment:
+      - TS_STATE_DIR=/var/run/tailscale
+    volumes:
+      - aip_ts:/var/run/tailscale

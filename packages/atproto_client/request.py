@@ -162,7 +162,11 @@ class Request(RequestBase):
         self._client = httpx.Client(follow_redirects=True)
 
     def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
+        print(f"method: {method}")
+        print(f"url: {url}")
         headers = self.get_headers(kwargs.pop('headers', None), method=method, url=url)
+
+        print(f"headers: {headers}")
 
         try:
             response = self._client.request(method=method, url=url, headers=headers, **kwargs)
@@ -189,7 +193,11 @@ class AsyncRequest(RequestBase):
         self._client = httpx.AsyncClient(follow_redirects=True)
 
     async def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
+        print(f"method: {method}")
+        print(f"url: {url}")
         headers = self.get_headers(kwargs.pop('headers', None), method=method, url=url)
+
+        print(f"headers: {headers}")
 
         try:
             response = await self._client.request(method=method, url=url, headers=headers, **kwargs)

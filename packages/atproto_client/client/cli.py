@@ -1,12 +1,13 @@
 import os
 import asyncio
 import aiohttp
+from typing import Callable, Any
 from authlib.jose import JsonWebKey
 
 from atproto_client import AsyncClient, Session, SessionEvent
 
 
-async def fetch_credentials(aip_jwk: str, aip_server: str = "https://auth.m.graze.social") -> dict:
+async def fetch_credentials(aip_jwk: str, aip_server: str = "https://grazeaip.tunn.dev") -> dict:
     async with aiohttp.ClientSession() as session:
         headers = {
             "Authorization": f"Bearer {aip_jwk}",
@@ -38,20 +39,34 @@ async def fetch_credentials(aip_jwk: str, aip_server: str = "https://auth.m.graz
                     static_dpop_token=session_response.get("token", None),
                     static_dpop_issuer=session_response.get("issuer", None),
                     static_dpop_jwk=JsonWebKey.import_key(session_response.get("jwk", None)),
-                    static_dpop_nonce="Uuc5_cgxd_V8iEK4pq3u90zMeb8AdP-7E61049HTu-4",
+                    # static_dpop_nonce="Uuc5_cgxd_V8iEK4pq3u90zMeb8AdP-7E61049HTu-4",
                 )
                 return session
     raise Exception("oops")
 
+
+async def retry_invoke(client: AsyncClient, session: Session, func: Callable, *args, **kwargs) -> Any:
+    for i in range(2):
+        try:
+            return await func(*args, **kwargs)
+        except Exception as e:
+            print(e)
+            # if e.response.status_code == 401:
+            #     print("401")
+            #     # await client._refresh_session(session)
+            #     continue
+            raise e
 
 async def realMain() -> None:
     session = await fetch_credentials(os.getenv("AIP_JWK"))
 
     client = AsyncClient()
     await client._set_session(SessionEvent.IMPORT, session)
-    timeline = await client.get_timeline()
 
-    print(timeline)
+    records = await retry_invoke(client, session, client.com.atproto.repo.list_records, {"collection": "com.atproto.repo.record", "repo": session.did})
+    # timeline = await client.com.atproto.repo.list_records(params = {"collection": "com.atproto.repo.record", "repo": session.did})
+
+    print(records)
 
 
 def main() -> None:
