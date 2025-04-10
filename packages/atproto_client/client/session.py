@@ -99,12 +99,16 @@ class Session:
     static_dpop_nonce: t.Optional[str] = None
 
     @property
-    def access_jwt_payload(self) -> 'JwtPayload':
-        return get_jwt_payload(self.access_jwt or "")
+    def access_jwt_payload(self) -> t.Union['JwtPayload', None]:
+        if self.access_jwt is None:
+            return None
+        return get_jwt_payload(self.access_jwt)
 
     @property
-    def refresh_jwt_payload(self) -> 'JwtPayload':
-        return get_jwt_payload(self.refresh_jwt or "")
+    def refresh_jwt_payload(self) ->  t.Union['JwtPayload', None]:
+        if self.refresh_jwt is None:
+            return None
+        return get_jwt_payload(self.refresh_jwt)
 
     def __repr__(self) -> str:
         return f'<Session handle={self.handle} did={self.did}>'

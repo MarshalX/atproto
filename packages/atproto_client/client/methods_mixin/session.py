@@ -110,7 +110,7 @@ class SessionMethodsMixin(TimeMethodsMixin):
         if self._session.static_access_token or self._session.static_dpop_token:
             return False
 
-        if not self._session.access_jwt_payload or not self._session.access_jwt_payload.exp:
+        if self._session.access_jwt is None or self._session.access_jwt_payload is None or self._session.access_jwt_payload.exp is None:
             raise LoginRequiredError
 
         expired_at = self.get_time_from_timestamp(
@@ -160,7 +160,7 @@ class SessionMethodsMixin(TimeMethodsMixin):
         if self._session.static_access_token is not None:
             return {'Authorization': f'Bearer {self._session.static_access_token}'}
 
-        if self._session.static_dpop_token is not None:
+        if self._session.static_dpop_token is not None and self._session.static_dpop_jwk is not None:
 
             htm = kwargs.get("method", "")
             htu = kwargs.get("url", "")
@@ -188,7 +188,6 @@ class SessionMethodsMixin(TimeMethodsMixin):
             return {
                 "Authorization": f"DPoP {self._session.static_dpop_token}",
                 "DPoP": dpop_jwt_encoded,
-                # 'Authorization': f'Bearer {self._session.static_access_token}'
             }
 
         return {'Authorization': f'Bearer {self._session.access_jwt}'}
