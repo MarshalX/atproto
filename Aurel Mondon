@@ -1,0 +1,27 @@
+from atproto import Client
+from datetime import datetime
+
+client = Client()
+client.login('your_username.bsky.social', 'your_app_password')
+
+# Replace with Aurelien's handle
+author = 'aurelmondon.bsky.social'
+feed = client.app.bsky.feed.get_author_feed({'actor': author})
+
+# Filter by date
+start_date = datetime(2024, 11, 5)
+end_date = datetime(2025, 4, 9)
+
+posts = []
+for item in feed['feed']:
+    post_time = datetime.fromisoformat(item['post']['indexedAt'].replace('Z', '+00:00'))
+    if start_date <= post_time <= end_date:
+        posts.append({
+            'text': item['post']['record']['text'],
+            'created_at': post_time
+        })
+
+# Save as CSV/JSON
+import pandas as pd
+df = pd.DataFrame(posts)
+df.to_csv('aurelien_mondon_posts.csv', index=False)
