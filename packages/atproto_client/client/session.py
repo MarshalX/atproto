@@ -32,12 +32,14 @@ SessionResponse: te.TypeAlias = t.Union[
 ]
 
 SessionChangeCallback = t.Callable[[SessionEvent, 'Session'], None]
-AsyncSessionChangeCallback = t.Callable[[SessionEvent, 'Session'], t.Coroutine[t.Any, t.Any, None]]
+AsyncSessionChangeCallback = t.Callable[[
+    SessionEvent, 'Session'], t.Coroutine[t.Any, t.Any, None]]
 
 
 def _session_exists(session: t.Optional['Session']) -> te.TypeGuard['Session']:
     if not session:
-        raise ValueError('Session does not exists. It is not possible to dispatch session change event.')
+        raise ValueError(
+            'Session does not exists. It is not possible to dispatch session change event.')
 
     return isinstance(session, Session)
 
@@ -47,7 +49,8 @@ class SessionDispatcher:
         self._session: t.Optional['Session'] = session
 
         self._on_session_change_callbacks: t.List[SessionChangeCallback] = []
-        self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
+        self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = [
+        ]
 
     def set_session(self, session: 'Session') -> None:
         self._session = session
@@ -62,7 +65,8 @@ class SessionDispatcher:
         self._call_on_session_change_callbacks(event)
 
     async def dispatch_session_change_async(self, event: SessionEvent) -> None:
-        self._call_on_session_change_callbacks(event)  # Allow synchronous callbacks in the async client
+        # Allow synchronous callbacks in the async client
+        self._call_on_session_change_callbacks(event)
         await self._call_on_session_change_callbacks_async(event)
 
     def _call_on_session_change_callbacks(self, event: SessionEvent) -> None:
@@ -78,7 +82,8 @@ class SessionDispatcher:
 
         coroutines: t.List[t.Coroutine[t.Any, t.Any, None]] = []
         for on_session_change_async_callback in self._on_session_change_async_callbacks:
-            coroutines.append(on_session_change_async_callback(event, session_copy))
+            coroutines.append(
+                on_session_change_async_callback(event, session_copy))
 
         await asyncio.gather(*coroutines)
 
@@ -89,7 +94,8 @@ class Session:
     did: str
     access_jwt: t.Optional[str] = None
     refresh_jwt: t.Optional[str] = None
-    pds_endpoint: t.Optional[str] = 'https://bsky.social'  # Backward compatibility for old sessions
+    # Backward compatibility for old sessions
+    pds_endpoint: t.Optional[str] = 'https://bsky.social'
 
     static_access_token: t.Optional[str] = None
 
@@ -105,7 +111,7 @@ class Session:
         return get_jwt_payload(self.access_jwt)
 
     @property
-    def refresh_jwt_payload(self) ->  t.Union['JwtPayload', None]:
+    def refresh_jwt_payload(self) -> t.Union['JwtPayload', None]:
         if self.refresh_jwt is None:
             return None
         return get_jwt_payload(self.refresh_jwt)
@@ -120,8 +126,8 @@ class Session:
         payload = [
             self.handle,
             self.did,
-            self.access_jwt,
-            self.refresh_jwt,
+            self.access_jwt or "",
+            self.refresh_jwt or "",
             self.pds_endpoint,
         ]
         return _SESSION_STRING_SEPARATOR.join(payload)
@@ -135,11 +141,12 @@ class Session:
             handle, did, access_jwt, refresh_jwt = fields
             return cls(handle, did, access_jwt, refresh_jwt)
 
-        handle, did, access_jwt, refresh_jwt, pds_endpoint = session_string.split(_SESSION_STRING_SEPARATOR)
+        handle, did, access_jwt, refresh_jwt, pds_endpoint = session_string.split(
+            _SESSION_STRING_SEPARATOR)
         return cls(handle, did, access_jwt, refresh_jwt, pds_endpoint)
 
     def copy(self) -> 'Session':
-        return Session(self.handle, self.did, self.access_jwt, self.refresh_jwt, self.pds_endpoint)
+        return Session(self.handle, self.did, self.access_jwt, self.refresh_jwt, self.pds_endpoint, self.static_access_token, self.static_dpop_token, self.static_dpop_jwk, self.static_dpop_issuer, self.static_dpop_nonce)
 
     #: Alias for :attr:`encode`
     export = encode
