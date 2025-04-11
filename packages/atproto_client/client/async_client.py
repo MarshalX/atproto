@@ -53,7 +53,7 @@ class AsyncClient(
         await self._call_on_session_change_callbacks(event)
 
     async def _get_and_set_session(
-        self, login: str, password: str, auth_factor_token: t.Optional[[str]] = None
+        self, login: str, password: str, auth_factor_token: t.Optional[str] = None
     ) -> 'models.ComAtprotoServerCreateSession.Response':
         session = await self.com.atproto.server.create_session(
             models.ComAtprotoServerCreateSession.Data(
@@ -86,7 +86,7 @@ class AsyncClient(
         login: t.Optional[str] = None,
         password: t.Optional[str] = None,
         session_string: t.Optional[str] = None,
-        auth_factor_token: t.Optional[[str]] = None,
+        auth_factor_token: t.Optional[str] = None,
     ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
         """Authorize a client and get profile info.
 
