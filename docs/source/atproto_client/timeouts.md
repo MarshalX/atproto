@@ -19,7 +19,7 @@ request = Request(timeout=None)  # Disable all timeouts by default.
 
 client = Client(request=request)
 
-# ... perform requests
+# ... invoke methods
 ```
 
 :::{tip}
@@ -38,5 +38,5 @@ async_request = AsyncRequest(timeout=None)  # Disable all timeouts by default.
 
 async_client = AsyncClient(request=async_request)
 
-# ... perform requests
+# ... invoke methods
 ```
