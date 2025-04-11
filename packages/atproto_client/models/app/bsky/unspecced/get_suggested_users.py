@@ -30,4 +30,4 @@ class ParamsDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.unspecced.getSuggestedUsers`."""
 
-    actors: t.List['models.AppBskyActorDefs.ProfileViewBasic']  #: Actors.
+    actors: t.List['models.AppBskyActorDefs.ProfileView']  #: Actors.

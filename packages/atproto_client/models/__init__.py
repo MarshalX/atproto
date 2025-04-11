@@ -211,15 +211,18 @@ from atproto_client.models.com.atproto.server import reserve_signing_key as ComA
 from atproto_client.models.com.atproto.server import reset_password as ComAtprotoServerResetPassword
 from atproto_client.models.com.atproto.server import revoke_app_password as ComAtprotoServerRevokeAppPassword
 from atproto_client.models.com.atproto.server import update_email as ComAtprotoServerUpdateEmail
+from atproto_client.models.com.atproto.sync import defs as ComAtprotoSyncDefs
 from atproto_client.models.com.atproto.sync import get_blob as ComAtprotoSyncGetBlob
 from atproto_client.models.com.atproto.sync import get_blocks as ComAtprotoSyncGetBlocks
 from atproto_client.models.com.atproto.sync import get_checkout as ComAtprotoSyncGetCheckout
 from atproto_client.models.com.atproto.sync import get_head as ComAtprotoSyncGetHead
+from atproto_client.models.com.atproto.sync import get_host_status as ComAtprotoSyncGetHostStatus
 from atproto_client.models.com.atproto.sync import get_latest_commit as ComAtprotoSyncGetLatestCommit
 from atproto_client.models.com.atproto.sync import get_record as ComAtprotoSyncGetRecord
 from atproto_client.models.com.atproto.sync import get_repo as ComAtprotoSyncGetRepo
 from atproto_client.models.com.atproto.sync import get_repo_status as ComAtprotoSyncGetRepoStatus
 from atproto_client.models.com.atproto.sync import list_blobs as ComAtprotoSyncListBlobs
+from atproto_client.models.com.atproto.sync import list_hosts as ComAtprotoSyncListHosts
 from atproto_client.models.com.atproto.sync import list_repos as ComAtprotoSyncListRepos
 from atproto_client.models.com.atproto.sync import list_repos_by_collection as ComAtprotoSyncListReposByCollection
 from atproto_client.models.com.atproto.sync import notify_of_update as ComAtprotoSyncNotifyOfUpdate
@@ -471,15 +474,18 @@ class _Ids:
     ComAtprotoServerResetPassword: str = 'com.atproto.server.resetPassword'
     ComAtprotoServerRevokeAppPassword: str = 'com.atproto.server.revokeAppPassword'
     ComAtprotoServerUpdateEmail: str = 'com.atproto.server.updateEmail'
+    ComAtprotoSyncDefs: str = 'com.atproto.sync.defs'
     ComAtprotoSyncGetBlob: str = 'com.atproto.sync.getBlob'
     ComAtprotoSyncGetBlocks: str = 'com.atproto.sync.getBlocks'
     ComAtprotoSyncGetCheckout: str = 'com.atproto.sync.getCheckout'
     ComAtprotoSyncGetHead: str = 'com.atproto.sync.getHead'
+    ComAtprotoSyncGetHostStatus: str = 'com.atproto.sync.getHostStatus'
     ComAtprotoSyncGetLatestCommit: str = 'com.atproto.sync.getLatestCommit'
     ComAtprotoSyncGetRecord: str = 'com.atproto.sync.getRecord'
     ComAtprotoSyncGetRepo: str = 'com.atproto.sync.getRepo'
     ComAtprotoSyncGetRepoStatus: str = 'com.atproto.sync.getRepoStatus'
     ComAtprotoSyncListBlobs: str = 'com.atproto.sync.listBlobs'
+    ComAtprotoSyncListHosts: str = 'com.atproto.sync.listHosts'
     ComAtprotoSyncListRepos: str = 'com.atproto.sync.listRepos'
     ComAtprotoSyncListReposByCollection: str = 'com.atproto.sync.listReposByCollection'
     ComAtprotoSyncNotifyOfUpdate: str = 'com.atproto.sync.notifyOfUpdate'

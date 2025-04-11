@@ -6689,6 +6689,32 @@ class ComAtprotoSyncNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoSyncGetHead.Response)
 
+    def get_host_status(
+        self,
+        params: t.Union[models.ComAtprotoSyncGetHostStatus.Params, models.ComAtprotoSyncGetHostStatus.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSyncGetHostStatus.Response':
+        """Returns information about a specified upstream host, as consumed by the server. Implemented by relays.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSyncGetHostStatus.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoSyncGetHostStatus.Params',
+            get_or_create(params, models.ComAtprotoSyncGetHostStatus.Params),
+        )
+        response = self._client.invoke_query(
+            'com.atproto.sync.getHostStatus', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSyncGetHostStatus.Response)
+
     def get_latest_commit(
         self,
         params: t.Union[models.ComAtprotoSyncGetLatestCommit.Params, models.ComAtprotoSyncGetLatestCommit.ParamsDict],
@@ -6815,6 +6841,33 @@ class ComAtprotoSyncNamespace(NamespaceBase):
             'com.atproto.sync.listBlobs', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoSyncListBlobs.Response)
+
+    def list_hosts(
+        self,
+        params: t.Optional[
+            t.Union[models.ComAtprotoSyncListHosts.Params, models.ComAtprotoSyncListHosts.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSyncListHosts.Response':
+        """Enumerates upstream hosts (eg, PDS or relay instances) that this service consumes from. Implemented by relays.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSyncListHosts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoSyncListHosts.Params', get_or_create(params, models.ComAtprotoSyncListHosts.Params)
+        )
+        response = self._client.invoke_query(
+            'com.atproto.sync.listHosts', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSyncListHosts.Response)
 
     def list_repos(
         self,
