@@ -1,5 +1,9 @@
 import typing as t
 from datetime import timedelta
+from authlib.common.security import generate_token
+from authlib.oauth2.rfc7636 import create_s256_code_challenge
+from authlib.jose import jwt
+import json
 
 from atproto_client.client.methods_mixin.time import TimeMethodsMixin
 from atproto_client.client.session import (
@@ -96,26 +100,38 @@ class SessionMethodsMixin(TimeMethodsMixin):
         self._session_dispatcher = SessionDispatcher()
 
     def _register_auth_headers_source(self) -> None:
-        self.request.add_additional_headers_source(self._get_access_auth_headers)
+        self.request.add_additional_headers_source(
+            self._get_access_auth_headers)
 
     def _should_refresh_session(self) -> bool:
-        if not self._session or not self._session.access_jwt_payload or not self._session.access_jwt_payload.exp:
+        if not self._session:
             raise LoginRequiredError
 
-        expired_at = self.get_time_from_timestamp(self._session.access_jwt_payload.exp)
-        expired_at = expired_at - timedelta(minutes=15)  # let's update the token a bit earlier than required
+        if self._session.static_access_token or self._session.static_dpop_token:
+            return False
+
+        if self._session.access_jwt is None or self._session.access_jwt_payload is None or self._session.access_jwt_payload.exp is None:
+            raise LoginRequiredError
+
+        expired_at = self.get_time_from_timestamp(
+            self._session.access_jwt_payload.exp)
+        # let's update the token a bit earlier than required
+        expired_at = expired_at - timedelta(minutes=15)
 
         return self.get_current_time() > expired_at
 
     def _set_or_update_session(self, session: SessionResponse, pds_endpoint: str) -> 'Session':
         if not self._session:
-            self._session = Session(
-                access_jwt=session.access_jwt,
-                refresh_jwt=session.refresh_jwt,
-                did=session.did,
-                handle=session.handle,
-                pds_endpoint=pds_endpoint,
-            )
+            if isinstance(session, Session):
+                self._session = session
+            else:
+                self._session = Session(
+                    access_jwt=session.access_jwt,
+                    refresh_jwt=session.refresh_jwt,
+                    did=session.did,
+                    handle=session.handle,
+                    pds_endpoint=pds_endpoint,
+                )
             self._session_dispatcher.set_session(self._session)
             self._register_auth_headers_source()
         else:
@@ -137,9 +153,42 @@ class SessionMethodsMixin(TimeMethodsMixin):
         self._update_pds_endpoint(pds_endpoint)
         return self._set_or_update_session(session, pds_endpoint)
 
-    def _get_access_auth_headers(self) -> t.Dict[str, str]:
+    def _get_access_auth_headers(self, *args: t.Any, **kwargs: t.Any) -> t.Dict[str, str]:
         if not self._session:
             return {}
+
+        if self._session.static_access_token is not None:
+            return {'Authorization': f'Bearer {self._session.static_access_token}'}
+
+        if self._session.static_dpop_token is not None and self._session.static_dpop_jwk is not None:
+
+            htm = kwargs.get("method", "")
+            htu = kwargs.get("url", "")
+
+            dpop_pub_jwk = json.loads(
+                self._session.static_dpop_jwk.as_json(is_private=False))
+            now = self.get_current_time().timestamp()
+
+            body = {
+                "iss": self._session.static_dpop_issuer,
+                "iat": int(now),
+                "exp": int(now) + 10,
+                "jti": generate_token(),
+                "htm": htm,
+                "htu": htu,
+                "ath": create_s256_code_challenge(self._session.static_dpop_token),
+            }
+
+            if self._session.static_dpop_nonce is not None:
+                body["nonce"] = self._session.static_dpop_nonce
+
+            dpop_jwt_encoded = dpop_proof = jwt.encode(
+                {"typ": "dpop+jwt", "alg": "ES256", "jwk": dpop_pub_jwk}, body, self._session.static_dpop_jwk).decode("utf-8")
+
+            return {
+                "Authorization": f"DPoP {self._session.static_dpop_token}",
+                "DPoP": dpop_jwt_encoded,
+            }
 
         return {'Authorization': f'Bearer {self._session.access_jwt}'}
 
