@@ -5,8 +5,9 @@ from urllib.parse import urlencode
 
 from atproto_core.exceptions import InvalidAtUriError
 
-# ref: https://github.com/bluesky-social/atproto/blob/8c19ce991a766fd9cff5023160853ab1cb106f21/packages/uri/src/index.ts#LL5C38-L5C38
+# ref: https://github.com/bluesky-social/atproto/blob/a4af3494bd8263187bb3450193bcd2467ae6b788/packages/syntax/src/aturi.ts#L5C5-L5C98
 _ATP_URI_REGEX = r'^(at:\/\/)?((?:did:[a-z0-9:%-]+)|(?:[a-z0-9][a-z0-9.:-]*))(\/[^?#\s]*)?(\?[^#\s]+)?(#[^\s]+)?$'
+_ATP_RELATIVE_URI_REGEX = r'^(\/[^?#\s]*)?\?([^#\s]+)?(#[^\s]+)?$'  # modified to not include "?" in a group
 
 
 class AtUri:
@@ -24,7 +25,21 @@ class AtUri:
         Record Field: at://alice.host.com/io.example.song/3yI5-c1z-cc2p-1a#/title
     """
 
-    def __init__(self, host: str, pathname: str, hash_: str, search_params: t.List[t.Tuple[str, t.Any]]) -> None:
+    def __init__(
+        self,
+        host: str,
+        pathname: str = '',
+        hash_: str = '',
+        search_params: t.Optional[t.List[t.Tuple[str, t.Any]]] = None,
+    ) -> None:
+        if search_params is None:
+            search_params = []
+
+        if hash_ and not pathname:
+            raise InvalidAtUriError('`hash_` cannot be set without `pathname`')
+        if search_params and not pathname:
+            raise InvalidAtUriError('`search_params` cannot be set without `pathname`')
+
         self.host = host
         self.pathname = pathname
         self.hash = hash_
@@ -68,6 +83,23 @@ class AtUri:
         """Convert instance to HTTP URI."""
         return str(self)
 
+    @property
+    def search(self) -> str:
+        """Get search params."""
+        return urlencode(self.search_params)
+
+    @classmethod
+    def make(cls, handle_or_did: str, collection: t.Optional[str] = None, rkey: t.Optional[str] = None) -> 'AtUri':
+        """Create `AtUri` instance from handle or DID."""
+        uri = handle_or_did
+
+        if collection:
+            uri = f'{handle_or_did}/{collection}'
+        if rkey:
+            uri = f'{uri}/{rkey}'
+
+        return cls.from_str(uri)
+
     @classmethod
     def from_str(cls, uri: str) -> 'AtUri':
         """Create `AtUri` instance from URI."""
@@ -76,7 +108,19 @@ class AtUri:
             raise InvalidAtUriError
 
         group = groups[0]
-        return cls(host=group[1], pathname=group[2], hash_=group[4], search_params=urlparse.parse_qsl(group[3]))
+        search_params = urlparse.parse_qsl(group[3] or '')
+        return cls(host=group[1] or '', pathname=group[2] or '', hash_=group[4] or '', search_params=search_params)
+
+    @classmethod
+    def from_relative_str(cls, base: str, uri: str) -> 'AtUri':
+        """Create `AtUri` instance from relative URI."""
+        groups = re.findall(_ATP_RELATIVE_URI_REGEX, uri, re.IGNORECASE)
+        if not groups:
+            raise InvalidAtUriError
+
+        group = groups[0]
+        search_params = urlparse.parse_qsl(group[1] or '')
+        return cls(host=base, pathname=group[0] or '', hash_=group[2] or '', search_params=search_params)
 
     def __str__(self) -> str:
         path = self.pathname or '/'
