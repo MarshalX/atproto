@@ -1,5 +1,22 @@
 # Change Log
 
+## Version 0.0.60
+
+**11.04.2025**
+
+* Add message reaction to the example of Direct Messages by @MarshalX in https://github.com/MarshalX/atproto/pull/595
+* Add `UnknownUnionModel` type by @MarshalX in https://github.com/MarshalX/atproto/pull/586
+* Add `include_pins` argument to `get_author_feed` method of `Client` by @maratsh in https://github.com/MarshalX/atproto/pull/583
+* Add `auth_factor_token` argument to the `login` method to support Email 2FA by @MarshalX in https://github.com/MarshalX/atproto/pull/593
+* Improve `AtUri` by adding relative URIs support and `make` method by @MarshalX in https://github.com/MarshalX/atproto/pull/592
+* Improve a way to configure `HTTPX` client (timeouts, SSL, retry policies, etc.) by @MarshalX in https://github.com/MarshalX/atproto/pull/594
+* Allow overriding of `Content-Type` header by @MarshalX in https://github.com/MarshalX/atproto/pull/579
+* Allow digits in the `NSID`; fix edge cases for string format validation by @zzstoatzz in https://github.com/MarshalX/atproto/pull/572
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/562, https://github.com/MarshalX/atproto/pull/570, https://github.com/MarshalX/atproto/pull/567, https://github.com/MarshalX/atproto/pull/587, https://github.com/MarshalX/atproto/pull/591
+* Fix lexicon parsing for nested objects; apply a limited scope of types for properties of params by @MarshalX in https://github.com/MarshalX/atproto/pull/574
+* Fix models code generator with an empty union type by @MarshalX in https://github.com/MarshalX/atproto/pull/584
+* Fix the issue of session refreshing on session creation in Client by @betaprior in https://github.com/MarshalX/atproto/pull/582
+
 ## Version 0.0.59
 
 **23.02.2025**
