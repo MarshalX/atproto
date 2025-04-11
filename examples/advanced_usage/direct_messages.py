@@ -36,12 +36,21 @@ def main() -> None:
         print(f'- {member.display_name} ({member.did})')
 
     # send a message to the conversation
-    dm.send_message(
+    message = dm.send_message(
         models.ChatBskyConvoSendMessage.Data(
             convo_id=convo.id,
             message=models.ChatBskyConvoDefs.MessageInput(
                 text='Hello from Python SDK!',
             ),
+        )
+    )
+
+    # add a reaction to the message
+    dm.add_reaction(
+        models.ChatBskyConvoAddReaction.Data(
+            convo_id=convo.id,
+            message_id=message.id,
+            value='👍',
         )
     )
 
