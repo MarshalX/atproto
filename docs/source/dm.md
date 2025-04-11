@@ -4,11 +4,13 @@ Bluesky Direct Messages were launched on May 22, 2024. It began as a simple chat
 
 The Python SDK has supported the Bluesky Direct Messages API since day one. You can use the SDK to send messages to other users, create new conversations, list existing conversations, and perform all other functions available in the mobile app and web client.
 
+:::{attention}
 **You need to grant access to direct messages when creating App Password!** Otherwise, you will get "Bad token scope" error.
+:::
 
 ## Example
 
-This example demonstrates how to list conversations, create a new conversation, and send a message to it.
+This example demonstrates how to list conversations, create a new conversation, send a message to it, and react to the message.
 
 ```python
 from atproto import Client, IdResolver, models
@@ -49,12 +51,21 @@ def main() -> None:
         print(f'- {member.display_name} ({member.did})')
 
     # send a message to the conversation
-    dm.send_message(
+    message = dm.send_message(
         models.ChatBskyConvoSendMessage.Data(
             convo_id=convo.id,
             message=models.ChatBskyConvoDefs.MessageInput(
                 text='Hello from Python SDK!',
             ),
+        )
+    )
+
+    # add a reaction to the message
+    dm.add_reaction(
+        models.ChatBskyConvoAddReaction.Data(
+            convo_id=convo.id,
+            message_id=message.id,
+            value='👍',
         )
     )
 
