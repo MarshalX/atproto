@@ -52,9 +52,13 @@ class AsyncClient(
         self._set_session_common(session, self._base_url)
         await self._call_on_session_change_callbacks(event)
 
-    async def _get_and_set_session(self, login: str, password: str) -> 'models.ComAtprotoServerCreateSession.Response':
+    async def _get_and_set_session(
+        self, login: str, password: str, auth_factor_token: t.Optional[str] = None
+    ) -> 'models.ComAtprotoServerCreateSession.Response':
         session = await self.com.atproto.server.create_session(
-            models.ComAtprotoServerCreateSession.Data(identifier=login, password=password),
+            models.ComAtprotoServerCreateSession.Data(
+                identifier=login, password=password, auth_factor_token=auth_factor_token
+            ),
             ignore_session_check=True,
         )
         await self._set_session(SessionEvent.CREATE, session)
@@ -78,7 +82,11 @@ class AsyncClient(
         return import_session
 
     async def login(
-        self, login: t.Optional[str] = None, password: t.Optional[str] = None, session_string: t.Optional[str] = None
+        self,
+        login: t.Optional[str] = None,
+        password: t.Optional[str] = None,
+        session_string: t.Optional[str] = None,
+        auth_factor_token: t.Optional[str] = None,
     ) -> 'models.AppBskyActorDefs.ProfileViewDetailed':
         """Authorize a client and get profile info.
 
@@ -86,6 +94,7 @@ class AsyncClient(
             login: Handle/username of the account.
             password: Main or app-specific password of the account.
             session_string: Session string (use :py:attr:`~export_session_string` to get it).
+            auth_factor_token: Auth factor token (for Email 2FA).
 
         Note:
             Either `session_string` or `login` and `password` should be provided.
@@ -99,7 +108,7 @@ class AsyncClient(
         if session_string:
             session = await self._import_session_string(session_string)
         elif login and password:
-            session = await self._get_and_set_session(login, password)
+            session = await self._get_and_set_session(login, password, auth_factor_token)
         else:
             raise ValueError('Either session_string or login and password should be provided.')
 
