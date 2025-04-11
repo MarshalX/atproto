@@ -16,5 +16,6 @@ Submodules
    namespace
    models
    auth
+   timeouts
    string_formats
    utils/index

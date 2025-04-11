@@ -155,11 +155,15 @@ class RequestBase:
 
 
 class Request(RequestBase):
-    """Class for handling requests errors and working with httpx."""
+    """Class for handling requests errors and working with httpx.
 
-    def __init__(self) -> None:
+    Args:
+        **kwargs: Additional parameters for httpx.Client.
+    """
+
+    def __init__(self, **kwargs: t.Any) -> None:
         super().__init__()
-        self._client = httpx.Client(follow_redirects=True)
+        self._client = httpx.Client(follow_redirects=True, **kwargs)
 
     def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers', None))
@@ -182,11 +186,15 @@ class Request(RequestBase):
 
 
 class AsyncRequest(RequestBase):
-    """Class for handling requests errors and working with httpx."""
+    """Class for handling requests errors and working with httpx.
 
-    def __init__(self) -> None:
+    Args:
+        **kwargs: Additional parameters for httpx.AsyncClient.
+    """
+
+    def __init__(self, **kwargs: t.Any) -> None:
         super().__init__()
-        self._client = httpx.AsyncClient(follow_redirects=True)
+        self._client = httpx.AsyncClient(follow_redirects=True, **kwargs)
 
     async def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers', None))

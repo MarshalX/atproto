@@ -12,7 +12,7 @@ Depending on account status and password, the access token permissions are varie
 For example, access tokens created with app-password have limited permissions to create new app-passwords, change email, etc.
 
 The session is created via the [login](#atproto_client.client.client.Client.login) method. 
-Under the hood, the SDK uses [create_session](#atproto_client.namespaces.sync_ns.ServerNamespace.create_session) method.
+Under the hood, the SDK uses [create_session](#atproto_client.namespaces.sync_ns.ComAtprotoServerNamespace.create_session) method.
 
 ```python
 from atproto_client import Client
@@ -50,7 +50,7 @@ The refresh token is used to get a new access token when the old one expires.
 
 The access token is valid for ~2 hours, and the refresh token is valid for ~2 months.
 
-SDK will automatically refresh the access token when it expires using [refresh_session](#atproto_client.namespaces.sync_ns.ServerNamespace.refresh_session) method.
+SDK will automatically refresh the access token when it expires using [refresh_session](#atproto_client.namespaces.sync_ns.ComAtprotoServerNamespace.refresh_session) method.
 
 You are always able to export the current session to persistent storage and import it later.
 To export the session, use the [export_session_string](#atproto_client.client.client.Client.export_session_string) method.
