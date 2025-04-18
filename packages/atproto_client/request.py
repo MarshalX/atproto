@@ -26,13 +26,40 @@ class Response:
     headers: t.Dict[str, t.Any]
 
 
+_NormalizedHeaders = t.Dict[str, t.Tuple[str, str]]
+
+
+def _normalize_headers(headers: t.Dict[str, str]) -> _NormalizedHeaders:
+    """Normalize headers by converting keys to lowercase.
+
+    Args:
+        headers: Headers dictionary with the original case.
+
+    Returns:
+        Dictionary with lowercase keys mapped to tuples of (original_key, value).
+    """
+    return {key.lower(): (key, value) for key, value in headers.items()}
+
+
+def _denormalize_headers(headers: _NormalizedHeaders) -> t.Dict[str, str]:
+    """Denormalize headers by converting keys back to their original case.
+
+    Args:
+        headers: Headers dictionary with lowercase keys mapped to tuples of (original_key, value).
+
+    Returns:
+        Dictionary with original keys and values.
+    """
+    return {original_key: value for _, (original_key, value) in headers.items()}
+
+
 def _convert_headers_to_dict(headers: httpx.Headers) -> t.Dict[str, str]:
-    """Convert custom case-insensitive multi-dict of HTTPX to pure dict with lowercased keys.
+    """Convert custom case-insensitive multi-dict of HTTPX to pure dict with lowercase keys.
 
     Note:
         Concatenate headers into a single comma separated value when a key occurs multiple times.
     """
-    return dict(headers.items())
+    return {key.lower(): value for key, value in headers.items()}
 
 
 def _parse_response(response: httpx.Response) -> Response:
@@ -100,15 +127,19 @@ class RequestBase:
         Returns:
             Headers for the request.
         """
-        headers = {**RequestBase._MANDATORY_HEADERS, **self._additional_headers}
+        # The order of calling `.update()` matters. It defines the priority of overriding.
+        headers_lower = {
+            **_normalize_headers(RequestBase._MANDATORY_HEADERS),
+            **_normalize_headers(self._additional_headers),
+        }
 
         for header_source in self._additional_header_sources:
-            headers.update(header_source())
+            headers_lower.update(_normalize_headers(header_source()))
 
         if additional_headers:
-            headers.update(additional_headers)
+            headers_lower.update(_normalize_headers(additional_headers))
 
-        return headers
+        return _denormalize_headers(headers_lower)
 
     def set_additional_headers(self, headers: t.Dict[str, str]) -> None:
         """Set additional headers for the request.
