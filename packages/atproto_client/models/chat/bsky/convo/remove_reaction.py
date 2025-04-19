@@ -19,7 +19,7 @@ class Data(base.DataModelBase):
 
     convo_id: str  #: Convo id.
     message_id: str  #: Message id.
-    value: str = Field(min_length=1, max_length=32)  #: Value.
+    value: str = Field(min_length=1, max_length=64)  #: Value.
 
 
 class DataDict(t.TypedDict):
