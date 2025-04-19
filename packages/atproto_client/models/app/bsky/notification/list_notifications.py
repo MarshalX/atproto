@@ -64,8 +64,10 @@ class Notification(base.ModelBase):
         t.Literal['reply'],
         t.Literal['quote'],
         t.Literal['starterpack-joined'],
+        t.Literal['verified'],
+        t.Literal['unverified'],
         str,
-    ]  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', 'quote', and 'starterpack-joined'.
+    ]  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', 'quote', 'starterpack-joined', 'verified', and 'unverified'.
     record: 'UnknownType'  #: Record.
     uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.

@@ -68,9 +68,11 @@ from atproto_client.models.app.bsky.graph import starterpack as AppBskyGraphStar
 from atproto_client.models.app.bsky.graph import unmute_actor as AppBskyGraphUnmuteActor
 from atproto_client.models.app.bsky.graph import unmute_actor_list as AppBskyGraphUnmuteActorList
 from atproto_client.models.app.bsky.graph import unmute_thread as AppBskyGraphUnmuteThread
+from atproto_client.models.app.bsky.graph import verification as AppBskyGraphVerification
 from atproto_client.models.app.bsky.labeler import defs as AppBskyLabelerDefs
 from atproto_client.models.app.bsky.labeler import get_services as AppBskyLabelerGetServices
 from atproto_client.models.app.bsky.labeler import service as AppBskyLabelerService
+from atproto_client.models.app.bsky.notification import defs as AppBskyNotificationDefs
 from atproto_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
 from atproto_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
 from atproto_client.models.app.bsky.notification import put_preferences as AppBskyNotificationPutPreferences
@@ -349,9 +351,11 @@ class _Ids:
     AppBskyGraphUnmuteActor: str = 'app.bsky.graph.unmuteActor'
     AppBskyGraphUnmuteActorList: str = 'app.bsky.graph.unmuteActorList'
     AppBskyGraphUnmuteThread: str = 'app.bsky.graph.unmuteThread'
+    AppBskyGraphVerification: str = 'app.bsky.graph.verification'
     AppBskyLabelerDefs: str = 'app.bsky.labeler.defs'
     AppBskyLabelerGetServices: str = 'app.bsky.labeler.getServices'
     AppBskyLabelerService: str = 'app.bsky.labeler.service'
+    AppBskyNotificationDefs: str = 'app.bsky.notification.defs'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
     AppBskyNotificationListNotifications: str = 'app.bsky.notification.listNotifications'
     AppBskyNotificationPutPreferences: str = 'app.bsky.notification.putPreferences'

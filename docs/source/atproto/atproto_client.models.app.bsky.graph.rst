@@ -40,3 +40,4 @@ Submodules
    atproto_client.models.app.bsky.graph.unmute_actor
    atproto_client.models.app.bsky.graph.unmute_actor_list
    atproto_client.models.app.bsky.graph.unmute_thread
+   atproto_client.models.app.bsky.graph.verification

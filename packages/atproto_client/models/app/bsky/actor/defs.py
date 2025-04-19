@@ -27,6 +27,7 @@ class ProfileViewBasic(base.ModelBase):
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.actor.defs#profileViewBasic'] = Field(
@@ -46,6 +47,7 @@ class ProfileView(base.ModelBase):
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.actor.defs#profileView'] = Field(
@@ -73,6 +75,7 @@ class ProfileViewDetailed(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Pinned post.
     posts_count: t.Optional[int] = None  #: Posts count.
+    verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.actor.defs#profileViewDetailed'] = Field(
@@ -132,6 +135,37 @@ class KnownFollowers(base.ModelBase):
     )
 
 
+class VerificationState(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`. Represents the verification information about the user this object is attached to."""
+
+    trusted_verifier_status: t.Union[
+        t.Literal['valid'], t.Literal['invalid'], t.Literal['none'], str
+    ]  #: The user's status as a trusted verifier.
+    verifications: t.List[
+        'models.AppBskyActorDefs.VerificationView'
+    ]  #: All verifications issued by trusted verifiers on behalf of this user. Verifications by untrusted verifiers are not included.
+    verified_status: t.Union[
+        t.Literal['valid'], t.Literal['invalid'], t.Literal['none'], str
+    ]  #: The user's status as a verified account.
+
+    py_type: t.Literal['app.bsky.actor.defs#verificationState'] = Field(
+        default='app.bsky.actor.defs#verificationState', alias='$type', frozen=True
+    )
+
+
+class VerificationView(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`. An individual verification for an associated subject."""
+
+    created_at: string_formats.DateTime  #: Timestamp when the verification was created.
+    is_valid: bool  #: True if the verification passes validation, otherwise false.
+    issuer: string_formats.Did  #: The user who issued this verification.
+    uri: string_formats.AtUri  #: The AT-URI of the verification record.
+
+    py_type: t.Literal['app.bsky.actor.defs#verificationView'] = Field(
+        default='app.bsky.actor.defs#verificationView', alias='$type', frozen=True
+    )
+
+
 Preferences = t.List[
     te.Annotated[
         t.Union[
@@ -148,6 +182,7 @@ Preferences = t.List[
             'models.AppBskyActorDefs.BskyAppStatePref',
             'models.AppBskyActorDefs.LabelersPref',
             'models.AppBskyActorDefs.PostInteractionSettingsPref',
+            'models.AppBskyActorDefs.VerificationPrefs',
         ],
         Field(discriminator='py_type'),
     ]
@@ -374,6 +409,16 @@ class Nux(base.ModelBase):
     )
 
     py_type: t.Literal['app.bsky.actor.defs#nux'] = Field(default='app.bsky.actor.defs#nux', alias='$type', frozen=True)
+
+
+class VerificationPrefs(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`. Preferences for how verified accounts appear in the app."""
+
+    hide_badges: t.Optional[bool] = False  #: Hide the blue check badges for verified accounts and trusted verifiers.
+
+    py_type: t.Literal['app.bsky.actor.defs#verificationPrefs'] = Field(
+        default='app.bsky.actor.defs#verificationPrefs', alias='$type', frozen=True
+    )
 
 
 class PostInteractionSettingsPref(base.ModelBase):

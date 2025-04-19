@@ -23,9 +23,10 @@ class ProfileViewBasic(base.ModelBase):
     handle: string_formats.Handle  #: Handle.
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
-    chat_disabled: t.Optional[bool] = None  #: Set to true when the actor cannot actively participate in converations.
+    chat_disabled: t.Optional[bool] = None  #: Set to true when the actor cannot actively participate in conversations.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['chat.bsky.actor.defs#profileViewBasic'] = Field(
