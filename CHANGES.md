@@ -1,8 +1,19 @@
 # Change Log
 
+## Version 0.0.61
+
+**19.04.2025**
+
+Note: this release fixes the session refreshing issue broken by 0.0.60.
+
+* Fix headers overriding in `RequestBase -> get_headers()` by @MarshalX in https://github.com/MarshalX/atproto/pull/601
+* Update lexicons fetched from 0087dc1 committed 2025-04-18T19:46:42Z by @MarshalX in https://github.com/MarshalX/atproto/pull/599
+
 ## Version 0.0.60
 
 **11.04.2025**
+
+Note: session refreshing was broken in this version. Please use 0.0.61 instead.
 
 * Add message reaction to the example of Direct Messages by @MarshalX in https://github.com/MarshalX/atproto/pull/595
 * Add `UnknownUnionModel` type by @MarshalX in https://github.com/MarshalX/atproto/pull/586
