@@ -21,3 +21,4 @@ Submodules
    atproto_client.models.app.bsky.actor.put_preferences
    atproto_client.models.app.bsky.actor.search_actors
    atproto_client.models.app.bsky.actor.search_actors_typeahead
+   atproto_client.models.app.bsky.actor.status
