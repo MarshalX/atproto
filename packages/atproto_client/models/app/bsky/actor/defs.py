@@ -14,6 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
+    from atproto_client.models.unknown_type import UnknownType
 from atproto_client.models import base
 
 
@@ -27,6 +28,7 @@ class ProfileViewBasic(base.ModelBase):
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
     verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
@@ -47,6 +49,7 @@ class ProfileView(base.ModelBase):
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
     verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
@@ -75,6 +78,7 @@ class ProfileViewDetailed(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Pinned post.
     posts_count: t.Optional[int] = None  #: Posts count.
+    status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
     verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
 
@@ -447,4 +451,24 @@ class PostInteractionSettingsPref(base.ModelBase):
 
     py_type: t.Literal['app.bsky.actor.defs#postInteractionSettingsPref'] = Field(
         default='app.bsky.actor.defs#postInteractionSettingsPref', alias='$type', frozen=True
+    )
+
+
+class StatusView(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    record: 'UnknownType'  #: Record.
+    status: t.Union['models.AppBskyActorStatus.Live', str]  #: The status for the account.
+    embed: t.Optional[
+        te.Annotated[t.Union['models.AppBskyEmbedExternal.View'], Field(default=None, discriminator='py_type')]
+    ] = None  #: An optional embed associated with the status.
+    expires_at: t.Optional[string_formats.DateTime] = (
+        None  #: The date when this status will expire. The application might choose to no longer return the status after expiration.
+    )
+    is_active: t.Optional[bool] = (
+        None  #: True if the status is not expired, false if it is expired. Only present if expiration was set.
+    )
+
+    py_type: t.Literal['app.bsky.actor.defs#statusView'] = Field(
+        default='app.bsky.actor.defs#statusView', alias='$type', frozen=True
     )

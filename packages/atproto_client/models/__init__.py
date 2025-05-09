@@ -7,6 +7,7 @@ from atproto_client.models.app.bsky.actor import profile as AppBskyActorProfile
 from atproto_client.models.app.bsky.actor import put_preferences as AppBskyActorPutPreferences
 from atproto_client.models.app.bsky.actor import search_actors as AppBskyActorSearchActors
 from atproto_client.models.app.bsky.actor import search_actors_typeahead as AppBskyActorSearchActorsTypeahead
+from atproto_client.models.app.bsky.actor import status as AppBskyActorStatus
 from atproto_client.models.app.bsky.embed import defs as AppBskyEmbedDefs
 from atproto_client.models.app.bsky.embed import external as AppBskyEmbedExternal
 from atproto_client.models.app.bsky.embed import images as AppBskyEmbedImages
@@ -240,6 +241,7 @@ from atproto_client.models.tools.ozone.communication import defs as ToolsOzoneCo
 from atproto_client.models.tools.ozone.communication import delete_template as ToolsOzoneCommunicationDeleteTemplate
 from atproto_client.models.tools.ozone.communication import list_templates as ToolsOzoneCommunicationListTemplates
 from atproto_client.models.tools.ozone.communication import update_template as ToolsOzoneCommunicationUpdateTemplate
+from atproto_client.models.tools.ozone.hosting import get_account_history as ToolsOzoneHostingGetAccountHistory
 from atproto_client.models.tools.ozone.moderation import defs as ToolsOzoneModerationDefs
 from atproto_client.models.tools.ozone.moderation import emit_event as ToolsOzoneModerationEmitEvent
 from atproto_client.models.tools.ozone.moderation import get_event as ToolsOzoneModerationGetEvent
@@ -273,6 +275,14 @@ from atproto_client.models.tools.ozone.team import defs as ToolsOzoneTeamDefs
 from atproto_client.models.tools.ozone.team import delete_member as ToolsOzoneTeamDeleteMember
 from atproto_client.models.tools.ozone.team import list_members as ToolsOzoneTeamListMembers
 from atproto_client.models.tools.ozone.team import update_member as ToolsOzoneTeamUpdateMember
+from atproto_client.models.tools.ozone.verification import defs as ToolsOzoneVerificationDefs
+from atproto_client.models.tools.ozone.verification import (
+    grant_verifications as ToolsOzoneVerificationGrantVerifications,
+)
+from atproto_client.models.tools.ozone.verification import list_verifications as ToolsOzoneVerificationListVerifications
+from atproto_client.models.tools.ozone.verification import (
+    revoke_verifications as ToolsOzoneVerificationRevokeVerifications,
+)
 from atproto_client.models.utils import (
     create_strong_ref,
     get_model_as_dict,
@@ -292,6 +302,7 @@ class _Ids:
     AppBskyActorPutPreferences: str = 'app.bsky.actor.putPreferences'
     AppBskyActorSearchActors: str = 'app.bsky.actor.searchActors'
     AppBskyActorSearchActorsTypeahead: str = 'app.bsky.actor.searchActorsTypeahead'
+    AppBskyActorStatus: str = 'app.bsky.actor.status'
     AppBskyEmbedDefs: str = 'app.bsky.embed.defs'
     AppBskyEmbedExternal: str = 'app.bsky.embed.external'
     AppBskyEmbedImages: str = 'app.bsky.embed.images'
@@ -504,6 +515,7 @@ class _Ids:
     ToolsOzoneCommunicationDeleteTemplate: str = 'tools.ozone.communication.deleteTemplate'
     ToolsOzoneCommunicationListTemplates: str = 'tools.ozone.communication.listTemplates'
     ToolsOzoneCommunicationUpdateTemplate: str = 'tools.ozone.communication.updateTemplate'
+    ToolsOzoneHostingGetAccountHistory: str = 'tools.ozone.hosting.getAccountHistory'
     ToolsOzoneModerationDefs: str = 'tools.ozone.moderation.defs'
     ToolsOzoneModerationEmitEvent: str = 'tools.ozone.moderation.emitEvent'
     ToolsOzoneModerationGetEvent: str = 'tools.ozone.moderation.getEvent'
@@ -537,6 +549,10 @@ class _Ids:
     ToolsOzoneTeamDeleteMember: str = 'tools.ozone.team.deleteMember'
     ToolsOzoneTeamListMembers: str = 'tools.ozone.team.listMembers'
     ToolsOzoneTeamUpdateMember: str = 'tools.ozone.team.updateMember'
+    ToolsOzoneVerificationDefs: str = 'tools.ozone.verification.defs'
+    ToolsOzoneVerificationGrantVerifications: str = 'tools.ozone.verification.grantVerifications'
+    ToolsOzoneVerificationListVerifications: str = 'tools.ozone.verification.listVerifications'
+    ToolsOzoneVerificationRevokeVerifications: str = 'tools.ozone.verification.revokeVerifications'
 
 
 ids = _Ids()

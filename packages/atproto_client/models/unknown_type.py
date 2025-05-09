@@ -9,6 +9,7 @@ if t.TYPE_CHECKING:
 
 UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyActorProfile.Record',
+    'models.AppBskyActorStatus.Record',
     'models.AppBskyFeedGenerator.Record',
     'models.AppBskyFeedLike.Record',
     'models.AppBskyFeedPost.Record',
@@ -29,6 +30,7 @@ UnknownRecordType: te.TypeAlias = t.Union[
 UnknownRecordTypePydantic = te.Annotated[
     t.Union[
         'models.AppBskyActorProfile.Record',
+        'models.AppBskyActorStatus.Record',
         'models.AppBskyFeedGenerator.Record',
         'models.AppBskyFeedLike.Record',
         'models.AppBskyFeedPost.Record',
