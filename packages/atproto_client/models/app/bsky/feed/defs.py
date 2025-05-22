@@ -90,6 +90,9 @@ class FeedViewPost(base.ModelBase):
         ]
     ] = None  #: Reason.
     reply: t.Optional['models.AppBskyFeedDefs.ReplyRef'] = None  #: Reply.
+    req_id: t.Optional[str] = Field(
+        default=None, max_length=100
+    )  #: Unique identifier per request that may be passed back alongside interactions.
 
     py_type: t.Literal['app.bsky.feed.defs#feedViewPost'] = Field(
         default='app.bsky.feed.defs#feedViewPost', alias='$type', frozen=True
@@ -319,6 +322,9 @@ class Interaction(base.ModelBase):
         default=None, max_length=2000
     )  #: Context on a feed item that was originally supplied by the feed generator on getFeedSkeleton.
     item: t.Optional[string_formats.AtUri] = None  #: Item.
+    req_id: t.Optional[str] = Field(
+        default=None, max_length=100
+    )  #: Unique identifier per request that may be passed back alongside interactions.
 
     py_type: t.Literal['app.bsky.feed.defs#interaction'] = Field(
         default='app.bsky.feed.defs#interaction', alias='$type', frozen=True

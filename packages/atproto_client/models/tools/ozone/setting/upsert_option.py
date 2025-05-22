@@ -29,6 +29,7 @@ class Data(base.DataModelBase):
         t.Union[
             'models.ToolsOzoneTeamDefs.RoleModerator',
             'models.ToolsOzoneTeamDefs.RoleTriage',
+            'models.ToolsOzoneTeamDefs.RoleVerifier',
             'models.ToolsOzoneTeamDefs.RoleAdmin',
             str,
         ]
@@ -45,6 +46,7 @@ class DataDict(t.TypedDict):
             t.Union[
                 'models.ToolsOzoneTeamDefs.RoleModerator',
                 'models.ToolsOzoneTeamDefs.RoleTriage',
+                'models.ToolsOzoneTeamDefs.RoleVerifier',
                 'models.ToolsOzoneTeamDefs.RoleAdmin',
                 str,
             ]

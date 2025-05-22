@@ -23,6 +23,7 @@ class Response(base.ResponseModelBase):
     blob_divert: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig'] = None  #: Blob divert.
     chat: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig'] = None  #: Chat.
     pds: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig'] = None  #: Pds.
+    verifier_did: t.Optional[string_formats.Did] = None  #: The did of the verifier used for verification.
     viewer: t.Optional['models.ToolsOzoneServerGetConfig.ViewerConfig'] = None  #: Viewer.
 
 
@@ -44,6 +45,7 @@ class ViewerConfig(base.ModelBase):
             'models.ToolsOzoneTeamDefs.RoleAdmin',
             'models.ToolsOzoneTeamDefs.RoleModerator',
             'models.ToolsOzoneTeamDefs.RoleTriage',
+            'models.ToolsOzoneTeamDefs.RoleVerifier',
             str,
         ]
     ] = None  #: Role.

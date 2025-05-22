@@ -33,6 +33,7 @@ class Option(base.ModelBase):
             'models.ToolsOzoneTeamDefs.RoleModerator',
             'models.ToolsOzoneTeamDefs.RoleTriage',
             'models.ToolsOzoneTeamDefs.RoleAdmin',
+            'models.ToolsOzoneTeamDefs.RoleVerifier',
             str,
         ]
     ] = None  #: Manager role.

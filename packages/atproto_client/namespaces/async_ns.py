@@ -185,10 +185,163 @@ class AppBskyActorProfileRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
+class AppBskyActorStatusRecord(AsyncRecordBase):
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyActorStatus.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorStatus.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.actor.status', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.AppBskyActorStatus.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyActorStatus.Record', response_model.value),
+        )
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyActorStatus.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorStatus.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.actor.status',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.AppBskyActorStatus.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.AppBskyActorStatus.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyActorStatus.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyActorStatus.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorStatus.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.actor.status',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.AppBskyActorStatus.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.actor.status',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class AppBskyActorNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
         self.profile = AppBskyActorProfileRecord(self._client)
+        self.status = AppBskyActorStatusRecord(self._client)
 
     async def get_preferences(
         self,
@@ -1694,7 +1847,7 @@ class AppBskyFeedNamespace(AsyncNamespaceBase):
         params: t.Union[models.AppBskyFeedSearchPosts.Params, models.AppBskyFeedSearchPosts.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedSearchPosts.Response':
-        """Find posts matching search criteria, returning views of those posts.
+        """Find posts matching search criteria, returning views of those posts. Note that this API endpoint may require authentication (eg, not public) for some service providers and implementations.
 
         Args:
             params: Parameters.
@@ -7242,12 +7395,14 @@ class ToolsOzoneNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
         self.communication = ToolsOzoneCommunicationNamespace(self._client)
+        self.hosting = ToolsOzoneHostingNamespace(self._client)
         self.moderation = ToolsOzoneModerationNamespace(self._client)
         self.server = ToolsOzoneServerNamespace(self._client)
         self.set = ToolsOzoneSetNamespace(self._client)
         self.setting = ToolsOzoneSettingNamespace(self._client)
         self.signature = ToolsOzoneSignatureNamespace(self._client)
         self.team = ToolsOzoneTeamNamespace(self._client)
+        self.verification = ToolsOzoneVerificationNamespace(self._client)
 
 
 class ToolsOzoneCommunicationNamespace(AsyncNamespaceBase):
@@ -7359,6 +7514,36 @@ class ToolsOzoneCommunicationNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ToolsOzoneCommunicationDefs.TemplateView)
+
+
+class ToolsOzoneHostingNamespace(AsyncNamespaceBase):
+    async def get_account_history(
+        self,
+        params: t.Union[
+            models.ToolsOzoneHostingGetAccountHistory.Params, models.ToolsOzoneHostingGetAccountHistory.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneHostingGetAccountHistory.Response':
+        """Get account history, e.g. log of updated email addresses or other identity information.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneHostingGetAccountHistory.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneHostingGetAccountHistory.Params',
+            get_or_create(params, models.ToolsOzoneHostingGetAccountHistory.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.hosting.getAccountHistory', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneHostingGetAccountHistory.Response)
 
 
 class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
@@ -8126,3 +8311,105 @@ class ToolsOzoneTeamNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ToolsOzoneTeamDefs.Member)
+
+
+class ToolsOzoneVerificationNamespace(AsyncNamespaceBase):
+    async def grant_verifications(
+        self,
+        data: t.Union[
+            models.ToolsOzoneVerificationGrantVerifications.Data,
+            models.ToolsOzoneVerificationGrantVerifications.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneVerificationGrantVerifications.Response':
+        """Grant verifications to multiple subjects. Allows batch processing of up to 100 verifications at once.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneVerificationGrantVerifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneVerificationGrantVerifications.Data',
+            get_or_create(data, models.ToolsOzoneVerificationGrantVerifications.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.verification.grantVerifications',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneVerificationGrantVerifications.Response)
+
+    async def list_verifications(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.ToolsOzoneVerificationListVerifications.Params,
+                models.ToolsOzoneVerificationListVerifications.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneVerificationListVerifications.Response':
+        """List verifications.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneVerificationListVerifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneVerificationListVerifications.Params',
+            get_or_create(params, models.ToolsOzoneVerificationListVerifications.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.verification.listVerifications',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneVerificationListVerifications.Response)
+
+    async def revoke_verifications(
+        self,
+        data: t.Union[
+            models.ToolsOzoneVerificationRevokeVerifications.Data,
+            models.ToolsOzoneVerificationRevokeVerifications.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneVerificationRevokeVerifications.Response':
+        """Revoke previously granted verifications in batches of up to 100.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneVerificationRevokeVerifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneVerificationRevokeVerifications.Data',
+            get_or_create(data, models.ToolsOzoneVerificationRevokeVerifications.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.verification.revokeVerifications',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneVerificationRevokeVerifications.Response)
