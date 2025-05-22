@@ -36,3 +36,6 @@ class Response(base.ResponseModelBase):
 
     feed: t.List['models.AppBskyFeedDefs.SkeletonFeedPost']  #: Feed.
     cursor: t.Optional[str] = None  #: Cursor.
+    req_id: t.Optional[str] = Field(
+        default=None, max_length=100
+    )  #: Unique identifier per request that may be passed back alongside interactions.

@@ -24,6 +24,7 @@ class Member(base.ModelBase):
         'models.ToolsOzoneTeamDefs.RoleAdmin',
         'models.ToolsOzoneTeamDefs.RoleModerator',
         'models.ToolsOzoneTeamDefs.RoleTriage',
+        'models.ToolsOzoneTeamDefs.RoleVerifier',
         str,
     ]  #: Role.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
@@ -46,3 +47,5 @@ RoleModerator = t.Literal['tools.ozone.team.defs#roleModerator']  #: Moderator r
 RoleTriage = t.Literal[
     'tools.ozone.team.defs#roleTriage'
 ]  #: Triage role. Mostly intended for monitoring and escalating issues.
+
+RoleVerifier = t.Literal['tools.ozone.team.defs#roleVerifier']  #: Verifier role. Only allowed to issue verifications.
