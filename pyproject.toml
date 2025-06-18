@@ -127,6 +127,7 @@ extend-select = [
     "INP",
     "ISC",
     "NPY",
+    "PERF",
     "PGH",
     "PIE",
     "RET",

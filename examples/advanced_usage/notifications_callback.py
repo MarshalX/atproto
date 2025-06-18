@@ -29,10 +29,9 @@ async def main() -> None:
             response = await async_client.app.bsky.notification.list_notifications()
 
             # create a task list to run callbacks concurrently
-            on_notification_tasks = []
-            for notification in response.notifications:
-                if not notification.is_read:
-                    on_notification_tasks.append(on_notification(notification))
+            on_notification_tasks = [
+                on_notification(notification) for notification in response.notifications if not notification.is_read
+            ]
 
             # run callback on each notification
             await asyncio.gather(*on_notification_tasks)
