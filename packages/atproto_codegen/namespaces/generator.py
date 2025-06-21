@@ -97,8 +97,9 @@ def _get_init_method(sub_items: t.List[str], *, sync: bool, parent_nodes: t.List
     if for_record:
         get_name = get_record_name
 
-    for sub_item in sub_items:
-        lines.append(f'{_(2)}self.{sub_item} = {get_name([*parent_nodes, sub_item])}(self._client)')
+    lines.extend(
+        f'{_(2)}self.{sub_item} = {get_name([*parent_nodes, sub_item])}(self._client)' for sub_item in sub_items
+    )
 
     return join_code(lines)
 
@@ -333,19 +334,15 @@ def _get_namespace_methods_block(methods_info: t.List[MethodInfo], sync: bool) -
 def _get_record_methods_block(record_info: RecordInfo, sync: bool) -> str:
     d, c = get_sync_async_keywords(sync=sync)
 
-    lines = []
-
-    for method_template in [
-        RECORD_GET_METHOD_TEMPLATE,
-        RECORD_LIST_METHOD_TEMPLATE,
-        RECORD_CREATE_METHOD_TEMPLATE,
-        RECORD_DELETE_METHOD_TEMPLATE,
-    ]:
-        lines.append(
-            method_template.format(
-                record_import=get_import_path(record_info.nsid), collection=record_info.nsid, d=d, c=c
-            )
+    lines = [
+        method_template.format(record_import=get_import_path(record_info.nsid), collection=record_info.nsid, d=d, c=c)
+        for method_template in (
+            RECORD_GET_METHOD_TEMPLATE,
+            RECORD_LIST_METHOD_TEMPLATE,
+            RECORD_CREATE_METHOD_TEMPLATE,
+            RECORD_DELETE_METHOD_TEMPLATE,
         )
+    ]
 
     return join_code(lines)
 
