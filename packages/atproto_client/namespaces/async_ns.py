@@ -3692,6 +3692,36 @@ class AppBskyLabelerNamespace(AsyncNamespaceBase):
 
 
 class AppBskyNotificationNamespace(AsyncNamespaceBase):
+    async def get_preferences(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyNotificationGetPreferences.Params, models.AppBskyNotificationGetPreferences.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyNotificationGetPreferences.Response':
+        """Get notification-related preferences for an account. Requires auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationGetPreferences.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyNotificationGetPreferences.Params',
+            get_or_create(params, models.AppBskyNotificationGetPreferences.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.notification.getPreferences', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyNotificationGetPreferences.Response)
+
     async def get_unread_count(
         self,
         params: t.Optional[
@@ -3778,6 +3808,40 @@ class AppBskyNotificationNamespace(AsyncNamespaceBase):
             'app.bsky.notification.putPreferences', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
+
+    async def put_preferences_v2(
+        self,
+        data: t.Optional[
+            t.Union[
+                models.AppBskyNotificationPutPreferencesV2.Data, models.AppBskyNotificationPutPreferencesV2.DataDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyNotificationPutPreferencesV2.Response':
+        """Set notification-related preferences for an account. Requires auth.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationPutPreferencesV2.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyNotificationPutPreferencesV2.Data',
+            get_or_create(data, models.AppBskyNotificationPutPreferencesV2.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.notification.putPreferencesV2',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyNotificationPutPreferencesV2.Response)
 
     async def register_push(
         self,
@@ -3882,6 +3946,62 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.AppBskyUnspeccedGetPopularFeedGenerators.Response)
+
+    async def get_post_thread_other_v2(
+        self,
+        params: t.Union[
+            models.AppBskyUnspeccedGetPostThreadOtherV2.Params, models.AppBskyUnspeccedGetPostThreadOtherV2.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetPostThreadOtherV2.Response':
+        """(NOTE: this endpoint is under development and WILL change without notice. Don't use it until it is moved out of `unspecced` or your application WILL break) Get additional posts under a thread e.g. replies hidden by threadgate. Based on an anchor post at any depth of the tree, returns top-level replies below that anchor. It does not include ancestors nor the anchor itself. This should be called after exhausting `app.bsky.unspecced.getPostThreadV2`. Does not require auth, but additional metadata and filtering will be applied for authed requests.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetPostThreadOtherV2.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetPostThreadOtherV2.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetPostThreadOtherV2.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getPostThreadOtherV2', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetPostThreadOtherV2.Response)
+
+    async def get_post_thread_v2(
+        self,
+        params: t.Union[
+            models.AppBskyUnspeccedGetPostThreadV2.Params, models.AppBskyUnspeccedGetPostThreadV2.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetPostThreadV2.Response':
+        """(NOTE: this endpoint is under development and WILL change without notice. Don't use it until it is moved out of `unspecced` or your application WILL break) Get posts in a thread. It is based in an anchor post at any depth of the tree, and returns posts above it (recursively resolving the parent, without further branching to their replies) and below it (recursive replies, with branching to their replies). Does not require auth, but additional metadata and filtering will be applied for authed requests.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetPostThreadV2.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetPostThreadV2.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetPostThreadV2.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getPostThreadV2', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetPostThreadV2.Response)
 
     async def get_suggested_feeds(
         self,

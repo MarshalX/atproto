@@ -132,6 +132,8 @@ class ReasonRepost(base.ModelBase):
 
     by: 'models.AppBskyActorDefs.ProfileViewBasic'  #: By.
     indexed_at: string_formats.DateTime  #: Indexed at.
+    cid: t.Optional[string_formats.Cid] = None  #: Cid.
+    uri: t.Optional[string_formats.AtUri] = None  #: Uri.
 
     py_type: t.Literal['app.bsky.feed.defs#reasonRepost'] = Field(
         default='app.bsky.feed.defs#reasonRepost', alias='$type', frozen=True

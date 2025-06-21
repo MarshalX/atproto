@@ -74,9 +74,11 @@ from atproto_client.models.app.bsky.labeler import defs as AppBskyLabelerDefs
 from atproto_client.models.app.bsky.labeler import get_services as AppBskyLabelerGetServices
 from atproto_client.models.app.bsky.labeler import service as AppBskyLabelerService
 from atproto_client.models.app.bsky.notification import defs as AppBskyNotificationDefs
+from atproto_client.models.app.bsky.notification import get_preferences as AppBskyNotificationGetPreferences
 from atproto_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
 from atproto_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
 from atproto_client.models.app.bsky.notification import put_preferences as AppBskyNotificationPutPreferences
+from atproto_client.models.app.bsky.notification import put_preferences_v2 as AppBskyNotificationPutPreferencesV2
 from atproto_client.models.app.bsky.notification import register_push as AppBskyNotificationRegisterPush
 from atproto_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
@@ -85,6 +87,8 @@ from atproto_client.models.app.bsky.unspecced import get_config as AppBskyUnspec
 from atproto_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
 )
+from atproto_client.models.app.bsky.unspecced import get_post_thread_other_v2 as AppBskyUnspeccedGetPostThreadOtherV2
+from atproto_client.models.app.bsky.unspecced import get_post_thread_v2 as AppBskyUnspeccedGetPostThreadV2
 from atproto_client.models.app.bsky.unspecced import get_suggested_feeds as AppBskyUnspeccedGetSuggestedFeeds
 from atproto_client.models.app.bsky.unspecced import (
     get_suggested_feeds_skeleton as AppBskyUnspeccedGetSuggestedFeedsSkeleton,
@@ -367,15 +371,19 @@ class _Ids:
     AppBskyLabelerGetServices: str = 'app.bsky.labeler.getServices'
     AppBskyLabelerService: str = 'app.bsky.labeler.service'
     AppBskyNotificationDefs: str = 'app.bsky.notification.defs'
+    AppBskyNotificationGetPreferences: str = 'app.bsky.notification.getPreferences'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
     AppBskyNotificationListNotifications: str = 'app.bsky.notification.listNotifications'
     AppBskyNotificationPutPreferences: str = 'app.bsky.notification.putPreferences'
+    AppBskyNotificationPutPreferencesV2: str = 'app.bsky.notification.putPreferencesV2'
     AppBskyNotificationRegisterPush: str = 'app.bsky.notification.registerPush'
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
+    AppBskyUnspeccedGetPostThreadOtherV2: str = 'app.bsky.unspecced.getPostThreadOtherV2'
+    AppBskyUnspeccedGetPostThreadV2: str = 'app.bsky.unspecced.getPostThreadV2'
     AppBskyUnspeccedGetSuggestedFeeds: str = 'app.bsky.unspecced.getSuggestedFeeds'
     AppBskyUnspeccedGetSuggestedFeedsSkeleton: str = 'app.bsky.unspecced.getSuggestedFeedsSkeleton'
     AppBskyUnspeccedGetSuggestedStarterPacks: str = 'app.bsky.unspecced.getSuggestedStarterPacks'

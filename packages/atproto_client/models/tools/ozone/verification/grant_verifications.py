@@ -43,7 +43,7 @@ class VerificationInput(base.ModelBase):
     display_name: str  #: Display name of the subject the verification applies to at the moment of verifying.
     handle: string_formats.Handle  #: Handle of the subject the verification applies to at the moment of verifying.
     subject: string_formats.Did  #: The did of the subject being verified.
-    created_at: t.Optional[str] = (
+    created_at: t.Optional[string_formats.DateTime] = (
         None  #: Timestamp for verification record. Defaults to current time when not specified.
     )
 

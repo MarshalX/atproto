@@ -91,3 +91,44 @@ class TrendView(base.ModelBase):
     py_type: t.Literal['app.bsky.unspecced.defs#trendView'] = Field(
         default='app.bsky.unspecced.defs#trendView', alias='$type', frozen=True
     )
+
+
+class ThreadItemPost(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.defs`."""
+
+    hidden_by_threadgate: bool  #: The threadgate created by the author indicates this post as a reply to be hidden for everyone consuming the thread.
+    more_parents: bool  #: This post has more parents that were not present in the response. This is just a boolean, without the number of parents.
+    more_replies: int  #: This post has more replies that were not present in the response. This is a numeric value, which is best-effort and might not be accurate.
+    muted_by_viewer: bool  #: This is by an account muted by the viewer requesting it.
+    op_thread: bool  #: This post is part of a contiguous thread by the OP from the thread root. Many different OP threads can happen in the same thread.
+    post: 'models.AppBskyFeedDefs.PostView'  #: Post.
+
+    py_type: t.Literal['app.bsky.unspecced.defs#threadItemPost'] = Field(
+        default='app.bsky.unspecced.defs#threadItemPost', alias='$type', frozen=True
+    )
+
+
+class ThreadItemNoUnauthenticated(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.defs`."""
+
+    py_type: t.Literal['app.bsky.unspecced.defs#threadItemNoUnauthenticated'] = Field(
+        default='app.bsky.unspecced.defs#threadItemNoUnauthenticated', alias='$type', frozen=True
+    )
+
+
+class ThreadItemNotFound(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.defs`."""
+
+    py_type: t.Literal['app.bsky.unspecced.defs#threadItemNotFound'] = Field(
+        default='app.bsky.unspecced.defs#threadItemNotFound', alias='$type', frozen=True
+    )
+
+
+class ThreadItemBlocked(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.defs`."""
+
+    author: 'models.AppBskyFeedDefs.BlockedAuthor'  #: Author.
+
+    py_type: t.Literal['app.bsky.unspecced.defs#threadItemBlocked'] = Field(
+        default='app.bsky.unspecced.defs#threadItemBlocked', alias='$type', frozen=True
+    )
