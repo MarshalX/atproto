@@ -120,7 +120,11 @@ class SubjectStatusView(base.ModelBase):
     id: int  #: Id.
     review_state: 'models.ToolsOzoneModerationDefs.SubjectReviewState'  #: Review state.
     subject: te.Annotated[
-        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
+        t.Union[
+            'models.ComAtprotoAdminDefs.RepoRef',
+            'models.ComAtprotoRepoStrongRef.Main',
+            'models.ChatBskyConvoDefs.MessageRef',
+        ],
         Field(discriminator='py_type'),
     ]  #: Subject.
     updated_at: (

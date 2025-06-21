@@ -66,8 +66,10 @@ class Notification(base.ModelBase):
         t.Literal['starterpack-joined'],
         t.Literal['verified'],
         t.Literal['unverified'],
+        t.Literal['like-via-repost'],
+        t.Literal['repost-via-repost'],
         str,
-    ]  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', 'quote', 'starterpack-joined', 'verified', and 'unverified'.
+    ]  #: The reason why this notification was delivered - e.g. your post was liked, or you received a new follower.
     record: 'UnknownType'  #: Record.
     uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
