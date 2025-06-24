@@ -24,6 +24,7 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyGraphStarterpack.Record',
     'models.AppBskyGraphVerification.Record',
     'models.AppBskyLabelerService.Record',
+    'models.AppBskyNotificationDeclaration.Record',
     'models.ChatBskyActorDeclaration.Record',
     'models.ComAtprotoLexiconSchema.Record',
 ]
@@ -45,6 +46,7 @@ UnknownRecordTypePydantic = te.Annotated[
         'models.AppBskyGraphStarterpack.Record',
         'models.AppBskyGraphVerification.Record',
         'models.AppBskyLabelerService.Record',
+        'models.AppBskyNotificationDeclaration.Record',
         'models.ChatBskyActorDeclaration.Record',
         'models.ComAtprotoLexiconSchema.Record',
     ],

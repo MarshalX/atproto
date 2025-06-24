@@ -73,10 +73,17 @@ from atproto_client.models.app.bsky.graph import verification as AppBskyGraphVer
 from atproto_client.models.app.bsky.labeler import defs as AppBskyLabelerDefs
 from atproto_client.models.app.bsky.labeler import get_services as AppBskyLabelerGetServices
 from atproto_client.models.app.bsky.labeler import service as AppBskyLabelerService
+from atproto_client.models.app.bsky.notification import declaration as AppBskyNotificationDeclaration
 from atproto_client.models.app.bsky.notification import defs as AppBskyNotificationDefs
 from atproto_client.models.app.bsky.notification import get_preferences as AppBskyNotificationGetPreferences
 from atproto_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
+from atproto_client.models.app.bsky.notification import (
+    list_activity_subscriptions as AppBskyNotificationListActivitySubscriptions,
+)
 from atproto_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
+from atproto_client.models.app.bsky.notification import (
+    put_activity_subscription as AppBskyNotificationPutActivitySubscription,
+)
 from atproto_client.models.app.bsky.notification import put_preferences as AppBskyNotificationPutPreferences
 from atproto_client.models.app.bsky.notification import put_preferences_v2 as AppBskyNotificationPutPreferencesV2
 from atproto_client.models.app.bsky.notification import register_push as AppBskyNotificationRegisterPush
@@ -370,10 +377,13 @@ class _Ids:
     AppBskyLabelerDefs: str = 'app.bsky.labeler.defs'
     AppBskyLabelerGetServices: str = 'app.bsky.labeler.getServices'
     AppBskyLabelerService: str = 'app.bsky.labeler.service'
+    AppBskyNotificationDeclaration: str = 'app.bsky.notification.declaration'
     AppBskyNotificationDefs: str = 'app.bsky.notification.defs'
     AppBskyNotificationGetPreferences: str = 'app.bsky.notification.getPreferences'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
+    AppBskyNotificationListActivitySubscriptions: str = 'app.bsky.notification.listActivitySubscriptions'
     AppBskyNotificationListNotifications: str = 'app.bsky.notification.listNotifications'
+    AppBskyNotificationPutActivitySubscription: str = 'app.bsky.notification.putActivitySubscription'
     AppBskyNotificationPutPreferences: str = 'app.bsky.notification.putPreferences'
     AppBskyNotificationPutPreferencesV2: str = 'app.bsky.notification.putPreferencesV2'
     AppBskyNotificationRegisterPush: str = 'app.bsky.notification.registerPush'
