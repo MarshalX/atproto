@@ -73,10 +73,17 @@ from atproto_client.models.app.bsky.graph import verification as AppBskyGraphVer
 from atproto_client.models.app.bsky.labeler import defs as AppBskyLabelerDefs
 from atproto_client.models.app.bsky.labeler import get_services as AppBskyLabelerGetServices
 from atproto_client.models.app.bsky.labeler import service as AppBskyLabelerService
+from atproto_client.models.app.bsky.notification import declaration as AppBskyNotificationDeclaration
 from atproto_client.models.app.bsky.notification import defs as AppBskyNotificationDefs
 from atproto_client.models.app.bsky.notification import get_preferences as AppBskyNotificationGetPreferences
 from atproto_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
+from atproto_client.models.app.bsky.notification import (
+    list_activity_subscriptions as AppBskyNotificationListActivitySubscriptions,
+)
 from atproto_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
+from atproto_client.models.app.bsky.notification import (
+    put_activity_subscription as AppBskyNotificationPutActivitySubscription,
+)
 from atproto_client.models.app.bsky.notification import put_preferences as AppBskyNotificationPutPreferences
 from atproto_client.models.app.bsky.notification import put_preferences_v2 as AppBskyNotificationPutPreferencesV2
 from atproto_client.models.app.bsky.notification import register_push as AppBskyNotificationRegisterPush
@@ -258,6 +265,12 @@ from atproto_client.models.tools.ozone.moderation import get_subjects as ToolsOz
 from atproto_client.models.tools.ozone.moderation import query_events as ToolsOzoneModerationQueryEvents
 from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
 from atproto_client.models.tools.ozone.moderation import search_repos as ToolsOzoneModerationSearchRepos
+from atproto_client.models.tools.ozone.safelink import add_rule as ToolsOzoneSafelinkAddRule
+from atproto_client.models.tools.ozone.safelink import defs as ToolsOzoneSafelinkDefs
+from atproto_client.models.tools.ozone.safelink import query_events as ToolsOzoneSafelinkQueryEvents
+from atproto_client.models.tools.ozone.safelink import query_rules as ToolsOzoneSafelinkQueryRules
+from atproto_client.models.tools.ozone.safelink import remove_rule as ToolsOzoneSafelinkRemoveRule
+from atproto_client.models.tools.ozone.safelink import update_rule as ToolsOzoneSafelinkUpdateRule
 from atproto_client.models.tools.ozone.server import get_config as ToolsOzoneServerGetConfig
 from atproto_client.models.tools.ozone.set import add_values as ToolsOzoneSetAddValues
 from atproto_client.models.tools.ozone.set import defs as ToolsOzoneSetDefs
@@ -370,10 +383,13 @@ class _Ids:
     AppBskyLabelerDefs: str = 'app.bsky.labeler.defs'
     AppBskyLabelerGetServices: str = 'app.bsky.labeler.getServices'
     AppBskyLabelerService: str = 'app.bsky.labeler.service'
+    AppBskyNotificationDeclaration: str = 'app.bsky.notification.declaration'
     AppBskyNotificationDefs: str = 'app.bsky.notification.defs'
     AppBskyNotificationGetPreferences: str = 'app.bsky.notification.getPreferences'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
+    AppBskyNotificationListActivitySubscriptions: str = 'app.bsky.notification.listActivitySubscriptions'
     AppBskyNotificationListNotifications: str = 'app.bsky.notification.listNotifications'
+    AppBskyNotificationPutActivitySubscription: str = 'app.bsky.notification.putActivitySubscription'
     AppBskyNotificationPutPreferences: str = 'app.bsky.notification.putPreferences'
     AppBskyNotificationPutPreferencesV2: str = 'app.bsky.notification.putPreferencesV2'
     AppBskyNotificationRegisterPush: str = 'app.bsky.notification.registerPush'
@@ -536,6 +552,12 @@ class _Ids:
     ToolsOzoneModerationQueryEvents: str = 'tools.ozone.moderation.queryEvents'
     ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
     ToolsOzoneModerationSearchRepos: str = 'tools.ozone.moderation.searchRepos'
+    ToolsOzoneSafelinkAddRule: str = 'tools.ozone.safelink.addRule'
+    ToolsOzoneSafelinkDefs: str = 'tools.ozone.safelink.defs'
+    ToolsOzoneSafelinkQueryEvents: str = 'tools.ozone.safelink.queryEvents'
+    ToolsOzoneSafelinkQueryRules: str = 'tools.ozone.safelink.queryRules'
+    ToolsOzoneSafelinkRemoveRule: str = 'tools.ozone.safelink.removeRule'
+    ToolsOzoneSafelinkUpdateRule: str = 'tools.ozone.safelink.updateRule'
     ToolsOzoneServerGetConfig: str = 'tools.ozone.server.getConfig'
     ToolsOzoneSetAddValues: str = 'tools.ozone.set.addValues'
     ToolsOzoneSetDefs: str = 'tools.ozone.set.defs'

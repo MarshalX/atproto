@@ -58,6 +58,7 @@ class ModEventView(base.ModelBase):
     ]  #: Subject.
     subject_blob_cids: t.List[str]  #: Subject blob cids.
     creator_handle: t.Optional[str] = None  #: Creator handle.
+    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
     subject_handle: t.Optional[str] = None  #: Subject handle.
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventView'] = Field(
@@ -105,6 +106,7 @@ class ModEventViewDetail(base.ModelBase):
         Field(discriminator='py_type'),
     ]  #: Subject.
     subject_blobs: t.List['models.ToolsOzoneModerationDefs.BlobView']  #: Subject blobs.
+    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventViewDetail'] = Field(
         default='tools.ozone.moderation.defs#modEventViewDetail', alias='$type', frozen=True
@@ -691,4 +693,15 @@ class ReporterStats(base.ModelBase):
 
     py_type: t.Literal['tools.ozone.moderation.defs#reporterStats'] = Field(
         default='tools.ozone.moderation.defs#reporterStats', alias='$type', frozen=True
+    )
+
+
+class ModTool(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Moderation tool information for tracing the source of the action."""
+
+    name: str  #: Name/identifier of the source (e.g., 'automod', 'ozone/workspace').
+    meta: t.Optional['UnknownType'] = None  #: Additional arbitrary metadata about the source.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#modTool'] = Field(
+        default='tools.ozone.moderation.defs#modTool', alias='$type', frozen=True
     )
