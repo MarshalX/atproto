@@ -49,6 +49,7 @@ class Data(base.DataModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
+    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
     subject_blob_cids: t.Optional[t.List[string_formats.Cid]] = None  #: Subject blob cids.
 
 
@@ -82,4 +83,5 @@ class DataDict(t.TypedDict):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
+    mod_tool: te.NotRequired[t.Optional['models.ToolsOzoneModerationDefs.ModTool']]  #: Mod tool.
     subject_blob_cids: te.NotRequired[t.Optional[t.List[string_formats.Cid]]]  #: Subject blob cids.

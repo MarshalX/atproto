@@ -90,6 +90,9 @@ class ProfileViewDetailed(base.ModelBase):
 class ProfileAssociated(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
+    activity_subscription: t.Optional['models.AppBskyActorDefs.ProfileAssociatedActivitySubscription'] = (
+        None  #: Activity subscription.
+    )
     chat: t.Optional['models.AppBskyActorDefs.ProfileAssociatedChat'] = None  #: Chat.
     feedgens: t.Optional[int] = None  #: Feedgens.
     labeler: t.Optional[bool] = None  #: Labeler.
@@ -111,15 +114,32 @@ class ProfileAssociatedChat(base.ModelBase):
     )
 
 
+class ProfileAssociatedActivitySubscription(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    allow_subscriptions: t.Union[
+        t.Literal['followers'], t.Literal['mutuals'], t.Literal['none'], str
+    ]  #: Allow subscriptions.
+
+    py_type: t.Literal['app.bsky.actor.defs#profileAssociatedActivitySubscription'] = Field(
+        default='app.bsky.actor.defs#profileAssociatedActivitySubscription', alias='$type', frozen=True
+    )
+
+
 class ViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`. Metadata about the requesting account's relationship with the subject account. Only has meaningful content for authed requests."""
 
+    activity_subscription: t.Optional['models.AppBskyNotificationDefs.ActivitySubscription'] = (
+        None  #: This property is present only in selected cases, as an optimization.
+    )
     blocked_by: t.Optional[bool] = None  #: Blocked by.
     blocking: t.Optional[string_formats.AtUri] = None  #: Blocking.
     blocking_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Blocking by list.
     followed_by: t.Optional[string_formats.AtUri] = None  #: Followed by.
     following: t.Optional[string_formats.AtUri] = None  #: Following.
-    known_followers: t.Optional['models.AppBskyActorDefs.KnownFollowers'] = None  #: Known followers.
+    known_followers: t.Optional['models.AppBskyActorDefs.KnownFollowers'] = (
+        None  #: This property is present only in selected cases, as an optimization.
+    )
     muted: t.Optional[bool] = None  #: Muted.
     muted_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Muted by list.
 
