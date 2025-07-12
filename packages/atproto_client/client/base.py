@@ -24,7 +24,7 @@ _CONTENT_TYPE_JSON = 'application/json'
 _DEFAULT_CONTENT_TYPE = _CONTENT_TYPE_JSON
 
 
-def _handle_kwagrs(kwargs: dict) -> None:
+def _handle_kwargs(kwargs: dict) -> None:
     """Mutates input data."""
     headers = Headers(kwargs.get('headers'))  # case-insensitive dict
 
@@ -35,7 +35,7 @@ def _handle_kwagrs(kwargs: dict) -> None:
         headers['Content-Type'] = content_type
 
     if content_type == _CONTENT_TYPE_JSON and 'data' in kwargs and kwargs['data']:
-        kwargs['data'] = get_model_as_json(kwargs['data'])
+        kwargs['content'] = get_model_as_json(kwargs.pop('data'))
 
     if kwargs.get('params'):
         kwargs['params'] = get_model_as_dict(kwargs['params'])
@@ -117,7 +117,7 @@ class ClientBase(_ClientCommonMethodsMixin):
         return self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
     def _invoke(self, invoke_type: InvokeType, **kwargs: t.Any) -> Response:
-        _handle_kwagrs(kwargs)
+        _handle_kwargs(kwargs)
 
         if invoke_type is InvokeType.QUERY:
             return self.request.get(**kwargs)
@@ -157,7 +157,7 @@ class AsyncClientBase(_ClientCommonMethodsMixin):
         return await self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
 
     async def _invoke(self, invoke_type: InvokeType, **kwargs: t.Any) -> Response:
-        _handle_kwagrs(kwargs)
+        _handle_kwargs(kwargs)
 
         if invoke_type is InvokeType.QUERY:
             return await self.request.get(**kwargs)
