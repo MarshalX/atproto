@@ -9,6 +9,8 @@ import typing as t
 
 from pydantic import Field
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -75,4 +77,26 @@ class Preferences(base.ModelBase):
 
     py_type: t.Literal['app.bsky.notification.defs#preferences'] = Field(
         default='app.bsky.notification.defs#preferences', alias='$type', frozen=True
+    )
+
+
+class ActivitySubscription(base.ModelBase):
+    """Definition model for :obj:`app.bsky.notification.defs`."""
+
+    post: bool  #: Post.
+    reply: bool  #: Reply.
+
+    py_type: t.Literal['app.bsky.notification.defs#activitySubscription'] = Field(
+        default='app.bsky.notification.defs#activitySubscription', alias='$type', frozen=True
+    )
+
+
+class SubjectActivitySubscription(base.ModelBase):
+    """Definition model for :obj:`app.bsky.notification.defs`. Object used to store activity subscription data in stash."""
+
+    activity_subscription: 'models.AppBskyNotificationDefs.ActivitySubscription'  #: Activity subscription.
+    subject: string_formats.Did  #: Subject.
+
+    py_type: t.Literal['app.bsky.notification.defs#subjectActivitySubscription'] = Field(
+        default='app.bsky.notification.defs#subjectActivitySubscription', alias='$type', frozen=True
     )

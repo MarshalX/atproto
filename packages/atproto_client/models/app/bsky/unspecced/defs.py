@@ -132,3 +132,35 @@ class ThreadItemBlocked(base.ModelBase):
     py_type: t.Literal['app.bsky.unspecced.defs#threadItemBlocked'] = Field(
         default='app.bsky.unspecced.defs#threadItemBlocked', alias='$type', frozen=True
     )
+
+
+class AgeAssuranceState(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.defs`. The computed state of the age assurance process, returned to the user in question on certain authenticated requests."""
+
+    status: t.Union[
+        t.Literal['unknown'], t.Literal['pending'], t.Literal['assured'], t.Literal['blocked'], str
+    ]  #: The status of the age assurance process.
+    last_initiated_at: t.Optional[string_formats.DateTime] = None  #: The timestamp when this state was last updated.
+
+    py_type: t.Literal['app.bsky.unspecced.defs#ageAssuranceState'] = Field(
+        default='app.bsky.unspecced.defs#ageAssuranceState', alias='$type', frozen=True
+    )
+
+
+class AgeAssuranceEvent(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.defs`. Object used to store age assurance data in stash."""
+
+    attempt_id: str  #: The unique identifier for this instance of the age assurance flow, in UUID format.
+    created_at: string_formats.DateTime  #: The date and time of this write operation.
+    status: t.Union[
+        t.Literal['unknown'], t.Literal['pending'], t.Literal['assured'], str
+    ]  #: The status of the age assurance process.
+    complete_ip: t.Optional[str] = None  #: The IP address used when completing the AA flow.
+    complete_ua: t.Optional[str] = None  #: The user agent used when completing the AA flow.
+    email: t.Optional[str] = None  #: The email used for AA.
+    init_ip: t.Optional[str] = None  #: The IP address used when initiating the AA flow.
+    init_ua: t.Optional[str] = None  #: The user agent used when initiating the AA flow.
+
+    py_type: t.Literal['app.bsky.unspecced.defs#ageAssuranceEvent'] = Field(
+        default='app.bsky.unspecced.defs#ageAssuranceEvent', alias='$type', frozen=True
+    )

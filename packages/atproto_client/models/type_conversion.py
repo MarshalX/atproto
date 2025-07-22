@@ -17,6 +17,7 @@ RECORD_TYPE_TO_MODEL_CLASS = {
     'app.bsky.graph.starterpack': models.AppBskyGraphStarterpack.Record,
     'app.bsky.graph.verification': models.AppBskyGraphVerification.Record,
     'app.bsky.labeler.service': models.AppBskyLabelerService.Record,
+    'app.bsky.notification.declaration': models.AppBskyNotificationDeclaration.Record,
     'chat.bsky.actor.declaration': models.ChatBskyActorDeclaration.Record,
     'com.atproto.lexicon.schema': models.ComAtprotoLexiconSchema.Record,
 }

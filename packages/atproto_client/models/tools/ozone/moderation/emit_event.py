@@ -42,6 +42,8 @@ class Data(base.DataModelBase):
             'models.ToolsOzoneModerationDefs.IdentityEvent',
             'models.ToolsOzoneModerationDefs.RecordEvent',
             'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
+            'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
+            'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -49,6 +51,10 @@ class Data(base.DataModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
+    external_id: t.Optional[str] = (
+        None  #: An optional external ID for the event, used to deduplicate events from external systems. Fails when an event of same type with the same external ID exists for the same subject.
+    )
+    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
     subject_blob_cids: t.Optional[t.List[string_formats.Cid]] = None  #: Subject blob cids.
 
 
@@ -75,6 +81,8 @@ class DataDict(t.TypedDict):
             'models.ToolsOzoneModerationDefs.IdentityEvent',
             'models.ToolsOzoneModerationDefs.RecordEvent',
             'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
+            'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
+            'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -82,4 +90,8 @@ class DataDict(t.TypedDict):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
+    external_id: te.NotRequired[
+        t.Optional[str]
+    ]  #: An optional external ID for the event, used to deduplicate events from external systems. Fails when an event of same type with the same external ID exists for the same subject.
+    mod_tool: te.NotRequired[t.Optional['models.ToolsOzoneModerationDefs.ModTool']]  #: Mod tool.
     subject_blob_cids: te.NotRequired[t.Optional[t.List[string_formats.Cid]]]  #: Subject blob cids.

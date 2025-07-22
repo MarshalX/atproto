@@ -44,6 +44,8 @@ class ModEventView(base.ModelBase):
             'models.ToolsOzoneModerationDefs.IdentityEvent',
             'models.ToolsOzoneModerationDefs.RecordEvent',
             'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
+            'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
+            'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -58,6 +60,7 @@ class ModEventView(base.ModelBase):
     ]  #: Subject.
     subject_blob_cids: t.List[str]  #: Subject blob cids.
     creator_handle: t.Optional[str] = None  #: Creator handle.
+    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
     subject_handle: t.Optional[str] = None  #: Subject handle.
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventView'] = Field(
@@ -91,6 +94,8 @@ class ModEventViewDetail(base.ModelBase):
             'models.ToolsOzoneModerationDefs.IdentityEvent',
             'models.ToolsOzoneModerationDefs.RecordEvent',
             'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
+            'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
+            'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -105,6 +110,7 @@ class ModEventViewDetail(base.ModelBase):
         Field(discriminator='py_type'),
     ]  #: Subject.
     subject_blobs: t.List['models.ToolsOzoneModerationDefs.BlobView']  #: Subject blobs.
+    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventViewDetail'] = Field(
         default='tools.ozone.moderation.defs#modEventViewDetail', alias='$type', frozen=True
@@ -132,6 +138,19 @@ class SubjectStatusView(base.ModelBase):
     )  #: Timestamp referencing when the last update was made to the moderation status of the subject.
     account_stats: t.Optional['models.ToolsOzoneModerationDefs.AccountStats'] = (
         None  #: Statistics related to the account subject.
+    )
+    age_assurance_state: t.Optional[
+        t.Union[
+            t.Literal['pending'],
+            t.Literal['assured'],
+            t.Literal['unknown'],
+            t.Literal['reset'],
+            t.Literal['blocked'],
+            str,
+        ]
+    ] = None  #: Current age assurance state of the subject.
+    age_assurance_updated_by: t.Optional[t.Union[t.Literal['admin'], t.Literal['user'], str]] = (
+        None  #: Whether or not the last successful update to age assurance was made by the user or admin.
     )
     appealed: t.Optional[bool] = (
         None  #: True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators.
@@ -326,6 +345,37 @@ class ModEventPriorityScore(base.ModelBase):
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventPriorityScore'] = Field(
         default='tools.ozone.moderation.defs#modEventPriorityScore', alias='$type', frozen=True
+    )
+
+
+class AgeAssuranceEvent(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Age assurance info coming directly from users. Only works on DID subjects."""
+
+    attempt_id: str  #: The unique identifier for this instance of the age assurance flow, in UUID format.
+    created_at: string_formats.DateTime  #: The date and time of this write operation.
+    status: t.Union[
+        t.Literal['unknown'], t.Literal['pending'], t.Literal['assured'], str
+    ]  #: The status of the age assurance process.
+    complete_ip: t.Optional[str] = None  #: The IP address used when completing the AA flow.
+    complete_ua: t.Optional[str] = None  #: The user agent used when completing the AA flow.
+    init_ip: t.Optional[str] = None  #: The IP address used when initiating the AA flow.
+    init_ua: t.Optional[str] = None  #: The user agent used when initiating the AA flow.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#ageAssuranceEvent'] = Field(
+        default='tools.ozone.moderation.defs#ageAssuranceEvent', alias='$type', frozen=True
+    )
+
+
+class AgeAssuranceOverrideEvent(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Age assurance status override by moderators. Only works on DID subjects."""
+
+    comment: str  #: Comment describing the reason for the override.
+    status: t.Union[
+        t.Literal['assured'], t.Literal['reset'], t.Literal['blocked'], str
+    ]  #: The status to be set for the user decided by a moderator, overriding whatever value the user had previously. Use reset to default to original state.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#ageAssuranceOverrideEvent'] = Field(
+        default='tools.ozone.moderation.defs#ageAssuranceOverrideEvent', alias='$type', frozen=True
     )
 
 
@@ -691,4 +741,15 @@ class ReporterStats(base.ModelBase):
 
     py_type: t.Literal['tools.ozone.moderation.defs#reporterStats'] = Field(
         default='tools.ozone.moderation.defs#reporterStats', alias='$type', frozen=True
+    )
+
+
+class ModTool(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Moderation tool information for tracing the source of the action."""
+
+    name: str  #: Name/identifier of the source (e.g., 'automod', 'ozone/workspace').
+    meta: t.Optional['UnknownType'] = None  #: Additional arbitrary metadata about the source.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#modTool'] = Field(
+        default='tools.ozone.moderation.defs#modTool', alias='$type', frozen=True
     )

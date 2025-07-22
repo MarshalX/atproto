@@ -20,6 +20,16 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`tools.ozone.moderation.queryStatuses`."""
 
+    age_assurance_state: t.Optional[
+        t.Union[
+            t.Literal['pending'],
+            t.Literal['assured'],
+            t.Literal['unknown'],
+            t.Literal['reset'],
+            t.Literal['blocked'],
+            str,
+        ]
+    ] = None  #: If specified, only subjects with the given age assurance state will be returned.
     appealed: t.Optional[bool] = None  #: Get subjects in unresolved appealed status.
     collections: t.Optional[t.List[string_formats.Nsid]] = Field(
         default=None, max_length=20
@@ -97,6 +107,18 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(t.TypedDict):
+    age_assurance_state: te.NotRequired[
+        t.Optional[
+            t.Union[
+                t.Literal['pending'],
+                t.Literal['assured'],
+                t.Literal['unknown'],
+                t.Literal['reset'],
+                t.Literal['blocked'],
+                str,
+            ]
+        ]
+    ]  #: If specified, only subjects with the given age assurance state will be returned.
     appealed: te.NotRequired[t.Optional[bool]]  #: Get subjects in unresolved appealed status.
     collections: te.NotRequired[
         t.Optional[t.List[string_formats.Nsid]]
