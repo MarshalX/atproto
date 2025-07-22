@@ -73,16 +73,28 @@ from atproto_client.models.app.bsky.graph import verification as AppBskyGraphVer
 from atproto_client.models.app.bsky.labeler import defs as AppBskyLabelerDefs
 from atproto_client.models.app.bsky.labeler import get_services as AppBskyLabelerGetServices
 from atproto_client.models.app.bsky.labeler import service as AppBskyLabelerService
+from atproto_client.models.app.bsky.notification import declaration as AppBskyNotificationDeclaration
 from atproto_client.models.app.bsky.notification import defs as AppBskyNotificationDefs
 from atproto_client.models.app.bsky.notification import get_preferences as AppBskyNotificationGetPreferences
 from atproto_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
+from atproto_client.models.app.bsky.notification import (
+    list_activity_subscriptions as AppBskyNotificationListActivitySubscriptions,
+)
 from atproto_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
+from atproto_client.models.app.bsky.notification import (
+    put_activity_subscription as AppBskyNotificationPutActivitySubscription,
+)
 from atproto_client.models.app.bsky.notification import put_preferences as AppBskyNotificationPutPreferences
 from atproto_client.models.app.bsky.notification import put_preferences_v2 as AppBskyNotificationPutPreferencesV2
 from atproto_client.models.app.bsky.notification import register_push as AppBskyNotificationRegisterPush
+from atproto_client.models.app.bsky.notification import unregister_push as AppBskyNotificationUnregisterPush
 from atproto_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
+from atproto_client.models.app.bsky.unspecced import (
+    check_handle_availability as AppBskyUnspeccedCheckHandleAvailability,
+)
 from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
+from atproto_client.models.app.bsky.unspecced import get_age_assurance_state as AppBskyUnspeccedGetAgeAssuranceState
 from atproto_client.models.app.bsky.unspecced import get_config as AppBskyUnspeccedGetConfig
 from atproto_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
@@ -108,6 +120,7 @@ from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as A
 from atproto_client.models.app.bsky.unspecced import get_trending_topics as AppBskyUnspeccedGetTrendingTopics
 from atproto_client.models.app.bsky.unspecced import get_trends as AppBskyUnspeccedGetTrends
 from atproto_client.models.app.bsky.unspecced import get_trends_skeleton as AppBskyUnspeccedGetTrendsSkeleton
+from atproto_client.models.app.bsky.unspecced import init_age_assurance as AppBskyUnspeccedInitAgeAssurance
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
 from atproto_client.models.app.bsky.unspecced import (
@@ -258,6 +271,12 @@ from atproto_client.models.tools.ozone.moderation import get_subjects as ToolsOz
 from atproto_client.models.tools.ozone.moderation import query_events as ToolsOzoneModerationQueryEvents
 from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
 from atproto_client.models.tools.ozone.moderation import search_repos as ToolsOzoneModerationSearchRepos
+from atproto_client.models.tools.ozone.safelink import add_rule as ToolsOzoneSafelinkAddRule
+from atproto_client.models.tools.ozone.safelink import defs as ToolsOzoneSafelinkDefs
+from atproto_client.models.tools.ozone.safelink import query_events as ToolsOzoneSafelinkQueryEvents
+from atproto_client.models.tools.ozone.safelink import query_rules as ToolsOzoneSafelinkQueryRules
+from atproto_client.models.tools.ozone.safelink import remove_rule as ToolsOzoneSafelinkRemoveRule
+from atproto_client.models.tools.ozone.safelink import update_rule as ToolsOzoneSafelinkUpdateRule
 from atproto_client.models.tools.ozone.server import get_config as ToolsOzoneServerGetConfig
 from atproto_client.models.tools.ozone.set import add_values as ToolsOzoneSetAddValues
 from atproto_client.models.tools.ozone.set import defs as ToolsOzoneSetDefs
@@ -370,16 +389,22 @@ class _Ids:
     AppBskyLabelerDefs: str = 'app.bsky.labeler.defs'
     AppBskyLabelerGetServices: str = 'app.bsky.labeler.getServices'
     AppBskyLabelerService: str = 'app.bsky.labeler.service'
+    AppBskyNotificationDeclaration: str = 'app.bsky.notification.declaration'
     AppBskyNotificationDefs: str = 'app.bsky.notification.defs'
     AppBskyNotificationGetPreferences: str = 'app.bsky.notification.getPreferences'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
+    AppBskyNotificationListActivitySubscriptions: str = 'app.bsky.notification.listActivitySubscriptions'
     AppBskyNotificationListNotifications: str = 'app.bsky.notification.listNotifications'
+    AppBskyNotificationPutActivitySubscription: str = 'app.bsky.notification.putActivitySubscription'
     AppBskyNotificationPutPreferences: str = 'app.bsky.notification.putPreferences'
     AppBskyNotificationPutPreferencesV2: str = 'app.bsky.notification.putPreferencesV2'
     AppBskyNotificationRegisterPush: str = 'app.bsky.notification.registerPush'
+    AppBskyNotificationUnregisterPush: str = 'app.bsky.notification.unregisterPush'
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
+    AppBskyUnspeccedCheckHandleAvailability: str = 'app.bsky.unspecced.checkHandleAvailability'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
+    AppBskyUnspeccedGetAgeAssuranceState: str = 'app.bsky.unspecced.getAgeAssuranceState'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
     AppBskyUnspeccedGetPostThreadOtherV2: str = 'app.bsky.unspecced.getPostThreadOtherV2'
@@ -395,6 +420,7 @@ class _Ids:
     AppBskyUnspeccedGetTrendingTopics: str = 'app.bsky.unspecced.getTrendingTopics'
     AppBskyUnspeccedGetTrends: str = 'app.bsky.unspecced.getTrends'
     AppBskyUnspeccedGetTrendsSkeleton: str = 'app.bsky.unspecced.getTrendsSkeleton'
+    AppBskyUnspeccedInitAgeAssurance: str = 'app.bsky.unspecced.initAgeAssurance'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
     AppBskyUnspeccedSearchStarterPacksSkeleton: str = 'app.bsky.unspecced.searchStarterPacksSkeleton'
@@ -536,6 +562,12 @@ class _Ids:
     ToolsOzoneModerationQueryEvents: str = 'tools.ozone.moderation.queryEvents'
     ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
     ToolsOzoneModerationSearchRepos: str = 'tools.ozone.moderation.searchRepos'
+    ToolsOzoneSafelinkAddRule: str = 'tools.ozone.safelink.addRule'
+    ToolsOzoneSafelinkDefs: str = 'tools.ozone.safelink.defs'
+    ToolsOzoneSafelinkQueryEvents: str = 'tools.ozone.safelink.queryEvents'
+    ToolsOzoneSafelinkQueryRules: str = 'tools.ozone.safelink.queryRules'
+    ToolsOzoneSafelinkRemoveRule: str = 'tools.ozone.safelink.removeRule'
+    ToolsOzoneSafelinkUpdateRule: str = 'tools.ozone.safelink.updateRule'
     ToolsOzoneServerGetConfig: str = 'tools.ozone.server.getConfig'
     ToolsOzoneSetAddValues: str = 'tools.ozone.set.addValues'
     ToolsOzoneSetDefs: str = 'tools.ozone.set.defs'
