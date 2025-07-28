@@ -39,6 +39,10 @@
             "description": "Self-label values",
             "refs": ["com.atproto.label.defs#selfLabels"]
           },
+          "acceptsInteraction": {
+            "type": "boolean",
+            "description": "Enables feed Feedback"
+          },
           "contentMode": {
             "type": "string",
             "knownValues": [
