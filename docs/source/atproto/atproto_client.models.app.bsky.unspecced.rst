@@ -12,7 +12,6 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   atproto_client.models.app.bsky.unspecced.check_handle_availability
    atproto_client.models.app.bsky.unspecced.defs
    atproto_client.models.app.bsky.unspecced.get_age_assurance_state
    atproto_client.models.app.bsky.unspecced.get_config

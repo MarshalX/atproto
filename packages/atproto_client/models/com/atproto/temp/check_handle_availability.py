@@ -18,7 +18,7 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-    """Parameters model for :obj:`app.bsky.unspecced.checkHandleAvailability`."""
+    """Parameters model for :obj:`com.atproto.temp.checkHandleAvailability`."""
 
     handle: (
         string_formats.Handle
@@ -40,46 +40,46 @@ class ParamsDict(t.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-    """Output data model for :obj:`app.bsky.unspecced.checkHandleAvailability`."""
+    """Output data model for :obj:`com.atproto.temp.checkHandleAvailability`."""
 
     handle: string_formats.Handle  #: Echo of the input handle.
     result: te.Annotated[
         t.Union[
-            'models.AppBskyUnspeccedCheckHandleAvailability.ResultAvailable',
-            'models.AppBskyUnspeccedCheckHandleAvailability.ResultUnavailable',
+            'models.ComAtprotoTempCheckHandleAvailability.ResultAvailable',
+            'models.ComAtprotoTempCheckHandleAvailability.ResultUnavailable',
         ],
         Field(discriminator='py_type'),
     ]  #: Result.
 
 
 class ResultAvailable(base.ModelBase):
-    """Definition model for :obj:`app.bsky.unspecced.checkHandleAvailability`. Indicates the provided handle is available."""
+    """Definition model for :obj:`com.atproto.temp.checkHandleAvailability`. Indicates the provided handle is available."""
 
-    py_type: t.Literal['app.bsky.unspecced.checkHandleAvailability#resultAvailable'] = Field(
-        default='app.bsky.unspecced.checkHandleAvailability#resultAvailable', alias='$type', frozen=True
+    py_type: t.Literal['com.atproto.temp.checkHandleAvailability#resultAvailable'] = Field(
+        default='com.atproto.temp.checkHandleAvailability#resultAvailable', alias='$type', frozen=True
     )
 
 
 class ResultUnavailable(base.ModelBase):
-    """Definition model for :obj:`app.bsky.unspecced.checkHandleAvailability`. Indicates the provided handle is unavailable and gives suggestions of available handles."""
+    """Definition model for :obj:`com.atproto.temp.checkHandleAvailability`. Indicates the provided handle is unavailable and gives suggestions of available handles."""
 
     suggestions: t.List[
-        'models.AppBskyUnspeccedCheckHandleAvailability.Suggestion'
+        'models.ComAtprotoTempCheckHandleAvailability.Suggestion'
     ]  #: List of suggested handles based on the provided inputs.
 
-    py_type: t.Literal['app.bsky.unspecced.checkHandleAvailability#resultUnavailable'] = Field(
-        default='app.bsky.unspecced.checkHandleAvailability#resultUnavailable', alias='$type', frozen=True
+    py_type: t.Literal['com.atproto.temp.checkHandleAvailability#resultUnavailable'] = Field(
+        default='com.atproto.temp.checkHandleAvailability#resultUnavailable', alias='$type', frozen=True
     )
 
 
 class Suggestion(base.ModelBase):
-    """Definition model for :obj:`app.bsky.unspecced.checkHandleAvailability`."""
+    """Definition model for :obj:`com.atproto.temp.checkHandleAvailability`."""
 
     handle: string_formats.Handle  #: Handle.
     method: (
         str  #: Method used to build this suggestion. Should be considered opaque to clients. Can be used for metrics.
     )
 
-    py_type: t.Literal['app.bsky.unspecced.checkHandleAvailability#suggestion'] = Field(
-        default='app.bsky.unspecced.checkHandleAvailability#suggestion', alias='$type', frozen=True
+    py_type: t.Literal['com.atproto.temp.checkHandleAvailability#suggestion'] = Field(
+        default='com.atproto.temp.checkHandleAvailability#suggestion', alias='$type', frozen=True
     )

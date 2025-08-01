@@ -13,6 +13,7 @@ Submodules
    :maxdepth: 4
 
    atproto_client.models.com.atproto.temp.add_reserved_handle
+   atproto_client.models.com.atproto.temp.check_handle_availability
    atproto_client.models.com.atproto.temp.check_signup_queue
    atproto_client.models.com.atproto.temp.fetch_labels
    atproto_client.models.com.atproto.temp.request_phone_verification

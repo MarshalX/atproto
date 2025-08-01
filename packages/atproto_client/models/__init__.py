@@ -90,9 +90,6 @@ from atproto_client.models.app.bsky.notification import register_push as AppBsky
 from atproto_client.models.app.bsky.notification import unregister_push as AppBskyNotificationUnregisterPush
 from atproto_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
-from atproto_client.models.app.bsky.unspecced import (
-    check_handle_availability as AppBskyUnspeccedCheckHandleAvailability,
-)
 from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
 from atproto_client.models.app.bsky.unspecced import get_age_assurance_state as AppBskyUnspeccedGetAgeAssuranceState
 from atproto_client.models.app.bsky.unspecced import get_config as AppBskyUnspeccedGetConfig
@@ -249,6 +246,7 @@ from atproto_client.models.com.atproto.sync import notify_of_update as ComAtprot
 from atproto_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
 from atproto_client.models.com.atproto.temp import add_reserved_handle as ComAtprotoTempAddReservedHandle
+from atproto_client.models.com.atproto.temp import check_handle_availability as ComAtprotoTempCheckHandleAvailability
 from atproto_client.models.com.atproto.temp import check_signup_queue as ComAtprotoTempCheckSignupQueue
 from atproto_client.models.com.atproto.temp import fetch_labels as ComAtprotoTempFetchLabels
 from atproto_client.models.com.atproto.temp import request_phone_verification as ComAtprotoTempRequestPhoneVerification
@@ -402,7 +400,6 @@ class _Ids:
     AppBskyNotificationUnregisterPush: str = 'app.bsky.notification.unregisterPush'
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
-    AppBskyUnspeccedCheckHandleAvailability: str = 'app.bsky.unspecced.checkHandleAvailability'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetAgeAssuranceState: str = 'app.bsky.unspecced.getAgeAssuranceState'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
@@ -541,6 +538,7 @@ class _Ids:
     ComAtprotoSyncRequestCrawl: str = 'com.atproto.sync.requestCrawl'
     ComAtprotoSyncSubscribeRepos: str = 'com.atproto.sync.subscribeRepos'
     ComAtprotoTempAddReservedHandle: str = 'com.atproto.temp.addReservedHandle'
+    ComAtprotoTempCheckHandleAvailability: str = 'com.atproto.temp.checkHandleAvailability'
     ComAtprotoTempCheckSignupQueue: str = 'com.atproto.temp.checkSignupQueue'
     ComAtprotoTempFetchLabels: str = 'com.atproto.temp.fetchLabels'
     ComAtprotoTempRequestPhoneVerification: str = 'com.atproto.temp.requestPhoneVerification'
