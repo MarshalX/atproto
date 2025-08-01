@@ -17,13 +17,11 @@ _VALID_LEX_DEF_TYPES = {LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, Le
 
 
 def _filter_namespace_valid_definitions(definitions: t.Dict[str, LexDefinition]) -> t.Dict[str, LexDefinition]:
-    result = {}
-
-    for def_name, def_content in definitions.items():
-        if def_content.type in _VALID_LEX_DEF_TYPES:
-            result[def_name] = def_content
-
-    return result
+    return {
+        def_name: def_content
+        for def_name, def_content in definitions.items()
+        if def_content.type is LexDefinitionType.NAMESPACE
+    }
 
 
 def get_definition_by_name(name: str, defs: t.Dict[str, LexDefinition]) -> LexDefinition:
