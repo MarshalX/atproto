@@ -4147,38 +4147,6 @@ class AppBskyNotificationNamespace(AsyncNamespaceBase):
 
 
 class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
-    async def check_handle_availability(
-        self,
-        params: t.Union[
-            models.AppBskyUnspeccedCheckHandleAvailability.Params,
-            models.AppBskyUnspeccedCheckHandleAvailability.ParamsDict,
-        ],
-        **kwargs: t.Any,
-    ) -> 'models.AppBskyUnspeccedCheckHandleAvailability.Response':
-        """Checks whether the provided handle is available. If the handle is not available, available suggestions will be returned. Optional inputs will be used to generate suggestions.
-
-        Args:
-            params: Parameters.
-            **kwargs: Arbitrary arguments to HTTP request.
-
-        Returns:
-            :obj:`models.AppBskyUnspeccedCheckHandleAvailability.Response`: Output model.
-
-        Raises:
-            :class:`atproto.exceptions.AtProtocolError`: Base exception.
-        """
-        params_model = t.cast(
-            'models.AppBskyUnspeccedCheckHandleAvailability.Params',
-            get_or_create(params, models.AppBskyUnspeccedCheckHandleAvailability.Params),
-        )
-        response = await self._client.invoke_query(
-            'app.bsky.unspecced.checkHandleAvailability',
-            params=params_model,
-            output_encoding='application/json',
-            **kwargs,
-        )
-        return get_response_model(response, models.AppBskyUnspeccedCheckHandleAvailability.Response)
-
     async def get_age_assurance_state(self, **kwargs: t.Any) -> 'models.AppBskyUnspeccedDefs.AgeAssuranceState':
         """Returns the current state of the age assurance process for an account. This is used to check if the user has completed age assurance or if further action is required.
 
@@ -7761,6 +7729,37 @@ class ComAtprotoTempNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ComAtprotoTempAddReservedHandle.Response)
+
+    async def check_handle_availability(
+        self,
+        params: t.Union[
+            models.ComAtprotoTempCheckHandleAvailability.Params, models.ComAtprotoTempCheckHandleAvailability.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoTempCheckHandleAvailability.Response':
+        """Checks whether the provided handle is available. If the handle is not available, available suggestions will be returned. Optional inputs will be used to generate suggestions.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoTempCheckHandleAvailability.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoTempCheckHandleAvailability.Params',
+            get_or_create(params, models.ComAtprotoTempCheckHandleAvailability.Params),
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.temp.checkHandleAvailability',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoTempCheckHandleAvailability.Response)
 
     async def check_signup_queue(self, **kwargs: t.Any) -> 'models.ComAtprotoTempCheckSignupQueue.Response':
         """Check accounts location in signup queue.
