@@ -753,3 +753,16 @@ class ModTool(base.ModelBase):
     py_type: t.Literal['tools.ozone.moderation.defs#modTool'] = Field(
         default='tools.ozone.moderation.defs#modTool', alias='$type', frozen=True
     )
+
+
+TimelineEventPlcCreate = t.Literal[
+    'tools.ozone.moderation.defs#timelineEventPlcCreate'
+]  #: Moderation event timeline event for a PLC create operation
+
+TimelineEventPlcOperation = t.Literal[
+    'tools.ozone.moderation.defs#timelineEventPlcOperation'
+]  #: Moderation event timeline event for generic PLC operation
+
+TimelineEventPlcTombstone = t.Literal[
+    'tools.ozone.moderation.defs#timelineEventPlcTombstone'
+]  #: Moderation event timeline event for a PLC tombstone operation

@@ -3203,6 +3203,34 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyGraphGetLists.Response)
 
+    async def get_lists_with_membership(
+        self,
+        params: t.Union[
+            models.AppBskyGraphGetListsWithMembership.Params, models.AppBskyGraphGetListsWithMembership.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphGetListsWithMembership.Response':
+        """Enumerates the lists created by the session user, and includes membership information about `actor` in those lists. Only supports curation and moderation lists (no reference lists, used in starter packs). Requires auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetListsWithMembership.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyGraphGetListsWithMembership.Params',
+            get_or_create(params, models.AppBskyGraphGetListsWithMembership.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.graph.getListsWithMembership', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetListsWithMembership.Response)
+
     async def get_mutes(
         self,
         params: t.Optional[t.Union[models.AppBskyGraphGetMutes.Params, models.AppBskyGraphGetMutes.ParamsDict]] = None,
@@ -3304,6 +3332,38 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
             'app.bsky.graph.getStarterPacks', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetStarterPacks.Response)
+
+    async def get_starter_packs_with_membership(
+        self,
+        params: t.Union[
+            models.AppBskyGraphGetStarterPacksWithMembership.Params,
+            models.AppBskyGraphGetStarterPacksWithMembership.ParamsDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphGetStarterPacksWithMembership.Response':
+        """Enumerates the starter packs created by the session user, and includes membership information about `actor` in those starter packs. Requires auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetStarterPacksWithMembership.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyGraphGetStarterPacksWithMembership.Params',
+            get_or_create(params, models.AppBskyGraphGetStarterPacksWithMembership.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.graph.getStarterPacksWithMembership',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyGraphGetStarterPacksWithMembership.Response)
 
     async def get_suggested_follows_by_actor(
         self,
@@ -8025,6 +8085,38 @@ class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ToolsOzoneModerationDefs.ModEventView)
+
+    async def get_account_timeline(
+        self,
+        params: t.Union[
+            models.ToolsOzoneModerationGetAccountTimeline.Params,
+            models.ToolsOzoneModerationGetAccountTimeline.ParamsDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationGetAccountTimeline.Response':
+        """Get timeline of all available events of an account. This includes moderation events, account history and did history.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationGetAccountTimeline.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationGetAccountTimeline.Params',
+            get_or_create(params, models.ToolsOzoneModerationGetAccountTimeline.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.moderation.getAccountTimeline',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationGetAccountTimeline.Response)
 
     async def get_event(
         self,
