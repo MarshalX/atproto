@@ -18,9 +18,9 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-    """Parameters model for :obj:`app.bsky.graph.getLists`."""
+    """Parameters model for :obj:`app.bsky.graph.getListsWithMembership`."""
 
-    actor: string_formats.AtIdentifier  #: The account (actor) to enumerate lists from.
+    actor: string_formats.AtIdentifier  #: The account (actor) to check for membership.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
     purposes: t.Optional[t.List[t.Union[t.Literal['modlist'], t.Literal['curatelist'], str]]] = (
@@ -29,7 +29,7 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(t.TypedDict):
-    actor: string_formats.AtIdentifier  #: The account (actor) to enumerate lists from.
+    actor: string_formats.AtIdentifier  #: The account (actor) to check for membership.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     purposes: te.NotRequired[
@@ -38,7 +38,20 @@ class ParamsDict(t.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-    """Output data model for :obj:`app.bsky.graph.getLists`."""
+    """Output data model for :obj:`app.bsky.graph.getListsWithMembership`."""
 
-    lists: t.List['models.AppBskyGraphDefs.ListView']  #: Lists.
+    lists_with_membership: t.List[
+        'models.AppBskyGraphGetListsWithMembership.ListWithMembership'
+    ]  #: Lists with membership.
     cursor: t.Optional[str] = None  #: Cursor.
+
+
+class ListWithMembership(base.ModelBase):
+    """Definition model for :obj:`app.bsky.graph.getListsWithMembership`. A list and an optional list item indicating membership of a target user to that list."""
+
+    list: 'models.AppBskyGraphDefs.ListView'  #: List.
+    list_item: t.Optional['models.AppBskyGraphDefs.ListItemView'] = None  #: List item.
+
+    py_type: t.Literal['app.bsky.graph.getListsWithMembership#listWithMembership'] = Field(
+        default='app.bsky.graph.getListsWithMembership#listWithMembership', alias='$type', frozen=True
+    )

@@ -51,10 +51,14 @@ from atproto_client.models.app.bsky.graph import get_list as AppBskyGraphGetList
 from atproto_client.models.app.bsky.graph import get_list_blocks as AppBskyGraphGetListBlocks
 from atproto_client.models.app.bsky.graph import get_list_mutes as AppBskyGraphGetListMutes
 from atproto_client.models.app.bsky.graph import get_lists as AppBskyGraphGetLists
+from atproto_client.models.app.bsky.graph import get_lists_with_membership as AppBskyGraphGetListsWithMembership
 from atproto_client.models.app.bsky.graph import get_mutes as AppBskyGraphGetMutes
 from atproto_client.models.app.bsky.graph import get_relationships as AppBskyGraphGetRelationships
 from atproto_client.models.app.bsky.graph import get_starter_pack as AppBskyGraphGetStarterPack
 from atproto_client.models.app.bsky.graph import get_starter_packs as AppBskyGraphGetStarterPacks
+from atproto_client.models.app.bsky.graph import (
+    get_starter_packs_with_membership as AppBskyGraphGetStarterPacksWithMembership,
+)
 from atproto_client.models.app.bsky.graph import (
     get_suggested_follows_by_actor as AppBskyGraphGetSuggestedFollowsByActor,
 )
@@ -259,6 +263,7 @@ from atproto_client.models.tools.ozone.communication import update_template as T
 from atproto_client.models.tools.ozone.hosting import get_account_history as ToolsOzoneHostingGetAccountHistory
 from atproto_client.models.tools.ozone.moderation import defs as ToolsOzoneModerationDefs
 from atproto_client.models.tools.ozone.moderation import emit_event as ToolsOzoneModerationEmitEvent
+from atproto_client.models.tools.ozone.moderation import get_account_timeline as ToolsOzoneModerationGetAccountTimeline
 from atproto_client.models.tools.ozone.moderation import get_event as ToolsOzoneModerationGetEvent
 from atproto_client.models.tools.ozone.moderation import get_record as ToolsOzoneModerationGetRecord
 from atproto_client.models.tools.ozone.moderation import get_records as ToolsOzoneModerationGetRecords
@@ -367,10 +372,12 @@ class _Ids:
     AppBskyGraphGetListBlocks: str = 'app.bsky.graph.getListBlocks'
     AppBskyGraphGetListMutes: str = 'app.bsky.graph.getListMutes'
     AppBskyGraphGetLists: str = 'app.bsky.graph.getLists'
+    AppBskyGraphGetListsWithMembership: str = 'app.bsky.graph.getListsWithMembership'
     AppBskyGraphGetMutes: str = 'app.bsky.graph.getMutes'
     AppBskyGraphGetRelationships: str = 'app.bsky.graph.getRelationships'
     AppBskyGraphGetStarterPack: str = 'app.bsky.graph.getStarterPack'
     AppBskyGraphGetStarterPacks: str = 'app.bsky.graph.getStarterPacks'
+    AppBskyGraphGetStarterPacksWithMembership: str = 'app.bsky.graph.getStarterPacksWithMembership'
     AppBskyGraphGetSuggestedFollowsByActor: str = 'app.bsky.graph.getSuggestedFollowsByActor'
     AppBskyGraphList: str = 'app.bsky.graph.list'
     AppBskyGraphListblock: str = 'app.bsky.graph.listblock'
@@ -550,6 +557,7 @@ class _Ids:
     ToolsOzoneHostingGetAccountHistory: str = 'tools.ozone.hosting.getAccountHistory'
     ToolsOzoneModerationDefs: str = 'tools.ozone.moderation.defs'
     ToolsOzoneModerationEmitEvent: str = 'tools.ozone.moderation.emitEvent'
+    ToolsOzoneModerationGetAccountTimeline: str = 'tools.ozone.moderation.getAccountTimeline'
     ToolsOzoneModerationGetEvent: str = 'tools.ozone.moderation.getEvent'
     ToolsOzoneModerationGetRecord: str = 'tools.ozone.moderation.getRecord'
     ToolsOzoneModerationGetRecords: str = 'tools.ozone.moderation.getRecords'

@@ -14,6 +14,7 @@ Submodules
 
    atproto_client.models.tools.ozone.moderation.defs
    atproto_client.models.tools.ozone.moderation.emit_event
+   atproto_client.models.tools.ozone.moderation.get_account_timeline
    atproto_client.models.tools.ozone.moderation.get_event
    atproto_client.models.tools.ozone.moderation.get_record
    atproto_client.models.tools.ozone.moderation.get_records
