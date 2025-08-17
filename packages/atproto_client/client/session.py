@@ -74,9 +74,10 @@ class SessionDispatcher:
         assert _session_exists(self._session)
         session_copy = self._session.copy()  # Avoid modifying the original session
 
-        coroutines: t.List[t.Coroutine[t.Any, t.Any, None]] = []
-        for on_session_change_async_callback in self._on_session_change_async_callbacks:
-            coroutines.append(on_session_change_async_callback(event, session_copy))
+        coroutines: t.List[t.Coroutine[t.Any, t.Any, None]] = [
+            on_session_change_async_callback(event, session_copy)
+            for on_session_change_async_callback in self._on_session_change_async_callbacks
+        ]
 
         await asyncio.gather(*coroutines)
 
