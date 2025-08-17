@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 0.0.62
+
+**17.08.2025**
+
+**❗ Next release will drop Python 3.8 support**
+
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/603, https://github.com/MarshalX/atproto/pull/607, https://github.com/MarshalX/atproto/pull/615, https://github.com/MarshalX/atproto/pull/617, https://github.com/MarshalX/atproto/pull/618
+* Bump h11 from 0.14.0 to 0.16.0 by @dependabot[bot] in https://github.com/MarshalX/atproto/pull/606
+* Bump urllib3 and requests by @MarshalX in https://github.com/MarshalX/atproto/pull/619
+* Fix codegen for cases where NSID contains V2 by @MarshalX in https://github.com/MarshalX/atproto/pull/611
+
 ## Version 0.0.61
 
 **19.04.2025**
