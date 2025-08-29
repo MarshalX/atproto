@@ -36,6 +36,9 @@ class Params(base.ParamsModelBase):
             str,
         ]
     ] = None  #: If specified, only events where the age assurance state matches the given value are returned.
+    batch_id: t.Optional[str] = (
+        None  #: If specified, only events where the batchId matches the given value are returned.
+    )
     collections: t.Optional[t.List[string_formats.Nsid]] = Field(
         default=None, max_length=20
     )  #: If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
@@ -95,6 +98,9 @@ class ParamsDict(t.TypedDict):
             ]
         ]
     ]  #: If specified, only events where the age assurance state matches the given value are returned.
+    batch_id: te.NotRequired[
+        t.Optional[str]
+    ]  #: If specified, only events where the batchId matches the given value are returned.
     collections: te.NotRequired[
         t.Optional[t.List[string_formats.Nsid]]
     ]  #: If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored.

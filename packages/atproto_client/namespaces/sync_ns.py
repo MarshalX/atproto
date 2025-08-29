@@ -7893,6 +7893,34 @@ class ComAtprotoTempNamespace(NamespaceBase):
         )
         return get_response_model(response, bool)
 
+    def revoke_account_credentials(
+        self,
+        data: t.Union[
+            models.ComAtprotoTempRevokeAccountCredentials.Data, models.ComAtprotoTempRevokeAccountCredentials.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Revoke sessions, password, and app passwords associated with account. May be resolved by a password reset.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ComAtprotoTempRevokeAccountCredentials.Data',
+            get_or_create(data, models.ComAtprotoTempRevokeAccountCredentials.Data),
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.temp.revokeAccountCredentials', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
 
 class ToolsNamespace(NamespaceBase):
     def __init__(self, client: 'ClientRaw') -> None:
