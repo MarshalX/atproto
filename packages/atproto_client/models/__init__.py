@@ -8,6 +8,10 @@ from atproto_client.models.app.bsky.actor import put_preferences as AppBskyActor
 from atproto_client.models.app.bsky.actor import search_actors as AppBskyActorSearchActors
 from atproto_client.models.app.bsky.actor import search_actors_typeahead as AppBskyActorSearchActorsTypeahead
 from atproto_client.models.app.bsky.actor import status as AppBskyActorStatus
+from atproto_client.models.app.bsky.bookmark import create_bookmark as AppBskyBookmarkCreateBookmark
+from atproto_client.models.app.bsky.bookmark import defs as AppBskyBookmarkDefs
+from atproto_client.models.app.bsky.bookmark import delete_bookmark as AppBskyBookmarkDeleteBookmark
+from atproto_client.models.app.bsky.bookmark import get_bookmarks as AppBskyBookmarkGetBookmarks
 from atproto_client.models.app.bsky.embed import defs as AppBskyEmbedDefs
 from atproto_client.models.app.bsky.embed import external as AppBskyEmbedExternal
 from atproto_client.models.app.bsky.embed import images as AppBskyEmbedImages
@@ -254,6 +258,7 @@ from atproto_client.models.com.atproto.temp import check_handle_availability as 
 from atproto_client.models.com.atproto.temp import check_signup_queue as ComAtprotoTempCheckSignupQueue
 from atproto_client.models.com.atproto.temp import fetch_labels as ComAtprotoTempFetchLabels
 from atproto_client.models.com.atproto.temp import request_phone_verification as ComAtprotoTempRequestPhoneVerification
+from atproto_client.models.com.atproto.temp import revoke_account_credentials as ComAtprotoTempRevokeAccountCredentials
 from atproto_client.models.models_loader import load_models
 from atproto_client.models.tools.ozone.communication import create_template as ToolsOzoneCommunicationCreateTemplate
 from atproto_client.models.tools.ozone.communication import defs as ToolsOzoneCommunicationDefs
@@ -274,6 +279,7 @@ from atproto_client.models.tools.ozone.moderation import get_subjects as ToolsOz
 from atproto_client.models.tools.ozone.moderation import query_events as ToolsOzoneModerationQueryEvents
 from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
 from atproto_client.models.tools.ozone.moderation import search_repos as ToolsOzoneModerationSearchRepos
+from atproto_client.models.tools.ozone.report import defs as ToolsOzoneReportDefs
 from atproto_client.models.tools.ozone.safelink import add_rule as ToolsOzoneSafelinkAddRule
 from atproto_client.models.tools.ozone.safelink import defs as ToolsOzoneSafelinkDefs
 from atproto_client.models.tools.ozone.safelink import query_events as ToolsOzoneSafelinkQueryEvents
@@ -329,6 +335,10 @@ class _Ids:
     AppBskyActorSearchActors: str = 'app.bsky.actor.searchActors'
     AppBskyActorSearchActorsTypeahead: str = 'app.bsky.actor.searchActorsTypeahead'
     AppBskyActorStatus: str = 'app.bsky.actor.status'
+    AppBskyBookmarkCreateBookmark: str = 'app.bsky.bookmark.createBookmark'
+    AppBskyBookmarkDefs: str = 'app.bsky.bookmark.defs'
+    AppBskyBookmarkDeleteBookmark: str = 'app.bsky.bookmark.deleteBookmark'
+    AppBskyBookmarkGetBookmarks: str = 'app.bsky.bookmark.getBookmarks'
     AppBskyEmbedDefs: str = 'app.bsky.embed.defs'
     AppBskyEmbedExternal: str = 'app.bsky.embed.external'
     AppBskyEmbedImages: str = 'app.bsky.embed.images'
@@ -549,6 +559,7 @@ class _Ids:
     ComAtprotoTempCheckSignupQueue: str = 'com.atproto.temp.checkSignupQueue'
     ComAtprotoTempFetchLabels: str = 'com.atproto.temp.fetchLabels'
     ComAtprotoTempRequestPhoneVerification: str = 'com.atproto.temp.requestPhoneVerification'
+    ComAtprotoTempRevokeAccountCredentials: str = 'com.atproto.temp.revokeAccountCredentials'
     ToolsOzoneCommunicationCreateTemplate: str = 'tools.ozone.communication.createTemplate'
     ToolsOzoneCommunicationDefs: str = 'tools.ozone.communication.defs'
     ToolsOzoneCommunicationDeleteTemplate: str = 'tools.ozone.communication.deleteTemplate'
@@ -568,6 +579,7 @@ class _Ids:
     ToolsOzoneModerationQueryEvents: str = 'tools.ozone.moderation.queryEvents'
     ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
     ToolsOzoneModerationSearchRepos: str = 'tools.ozone.moderation.searchRepos'
+    ToolsOzoneReportDefs: str = 'tools.ozone.report.defs'
     ToolsOzoneSafelinkAddRule: str = 'tools.ozone.safelink.addRule'
     ToolsOzoneSafelinkDefs: str = 'tools.ozone.safelink.defs'
     ToolsOzoneSafelinkQueryEvents: str = 'tools.ozone.safelink.queryEvents'
