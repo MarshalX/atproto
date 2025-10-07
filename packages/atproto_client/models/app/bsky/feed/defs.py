@@ -26,6 +26,7 @@ class PostView(base.ModelBase):
     indexed_at: string_formats.DateTime  #: Indexed at.
     record: 'UnknownType'  #: Record.
     uri: string_formats.AtUri  #: Uri.
+    bookmark_count: t.Optional[int] = None  #: Bookmark count.
     embed: t.Optional[
         te.Annotated[
             t.Union[
@@ -54,6 +55,7 @@ class PostView(base.ModelBase):
 class ViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`. Metadata about the requesting account's relationship with the subject content. Only has meaningful content for authed requests."""
 
+    bookmarked: t.Optional[bool] = None  #: Bookmarked.
     embedding_disabled: t.Optional[bool] = None  #: Embedding disabled.
     like: t.Optional[string_formats.AtUri] = None  #: Like.
     pinned: t.Optional[bool] = None  #: Pinned.
