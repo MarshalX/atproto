@@ -25,6 +25,7 @@ class AppBskyNamespace(NamespaceBase):
     def __init__(self, client: 'ClientRaw') -> None:
         super().__init__(client)
         self.actor = AppBskyActorNamespace(self._client)
+        self.bookmark = AppBskyBookmarkNamespace(self._client)
         self.feed = AppBskyFeedNamespace(self._client)
         self.graph = AppBskyGraphNamespace(self._client)
         self.labeler = AppBskyLabelerNamespace(self._client)
@@ -528,6 +529,86 @@ class AppBskyActorNamespace(NamespaceBase):
             'app.bsky.actor.searchActorsTypeahead', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyActorSearchActorsTypeahead.Response)
+
+
+class AppBskyBookmarkNamespace(NamespaceBase):
+    def create_bookmark(
+        self,
+        data: t.Union[models.AppBskyBookmarkCreateBookmark.Data, models.AppBskyBookmarkCreateBookmark.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Creates a private bookmark for the specified record. Currently, only `app.bsky.feed.post` records are supported. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyBookmarkCreateBookmark.Data', get_or_create(data, models.AppBskyBookmarkCreateBookmark.Data)
+        )
+        response = self._client.invoke_procedure(
+            'app.bsky.bookmark.createBookmark', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def delete_bookmark(
+        self,
+        data: t.Union[models.AppBskyBookmarkDeleteBookmark.Data, models.AppBskyBookmarkDeleteBookmark.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Deletes a private bookmark for the specified record. Currently, only `app.bsky.feed.post` records are supported. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyBookmarkDeleteBookmark.Data', get_or_create(data, models.AppBskyBookmarkDeleteBookmark.Data)
+        )
+        response = self._client.invoke_procedure(
+            'app.bsky.bookmark.deleteBookmark', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def get_bookmarks(
+        self,
+        params: t.Optional[
+            t.Union[models.AppBskyBookmarkGetBookmarks.Params, models.AppBskyBookmarkGetBookmarks.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyBookmarkGetBookmarks.Response':
+        """Gets views of records bookmarked by the authenticated user. Requires authentication.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyBookmarkGetBookmarks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyBookmarkGetBookmarks.Params',
+            get_or_create(params, models.AppBskyBookmarkGetBookmarks.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.bookmark.getBookmarks', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyBookmarkGetBookmarks.Response)
 
 
 class AppBskyFeedGeneratorRecord(RecordBase):
@@ -4241,6 +4322,74 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetConfig.Response)
 
+    def get_onboarding_suggested_starter_packs(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Params,
+                models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Response':
+        """Get a list of suggested starterpacks for onboarding.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getOnboardingSuggestedStarterPacks',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Response)
+
+    def get_onboarding_suggested_starter_packs_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Params,
+                models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Response':
+        """Get a skeleton of suggested starterpacks for onboarding. Intended to be called and hydrated by app.bsky.unspecced.getOnboardingSuggestedStarterPacks.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getOnboardingSuggestedStarterPacksSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Response)
+
     def get_popular_feed_generators(
         self,
         params: t.Optional[
@@ -7838,6 +7987,32 @@ class ComAtprotoTempNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoTempCheckSignupQueue.Response)
 
+    def dereference_scope(
+        self,
+        params: t.Union[models.ComAtprotoTempDereferenceScope.Params, models.ComAtprotoTempDereferenceScope.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoTempDereferenceScope.Response':
+        """Allows finding the oauth permission scope from a reference.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoTempDereferenceScope.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoTempDereferenceScope.Params',
+            get_or_create(params, models.ComAtprotoTempDereferenceScope.Params),
+        )
+        response = self._client.invoke_query(
+            'com.atproto.temp.dereferenceScope', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoTempDereferenceScope.Response)
+
     def fetch_labels(
         self,
         params: t.Optional[
@@ -7890,6 +8065,34 @@ class ComAtprotoTempNamespace(NamespaceBase):
         )
         response = self._client.invoke_procedure(
             'com.atproto.temp.requestPhoneVerification', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def revoke_account_credentials(
+        self,
+        data: t.Union[
+            models.ComAtprotoTempRevokeAccountCredentials.Data, models.ComAtprotoTempRevokeAccountCredentials.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Revoke sessions, password, and app passwords associated with account. May be resolved by a password reset.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ComAtprotoTempRevokeAccountCredentials.Data',
+            get_or_create(data, models.ComAtprotoTempRevokeAccountCredentials.Data),
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.temp.revokeAccountCredentials', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -8057,6 +8260,39 @@ class ToolsOzoneHostingNamespace(NamespaceBase):
 
 
 class ToolsOzoneModerationNamespace(NamespaceBase):
+    def cancel_scheduled_actions(
+        self,
+        data: t.Union[
+            models.ToolsOzoneModerationCancelScheduledActions.Data,
+            models.ToolsOzoneModerationCancelScheduledActions.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationCancelScheduledActions.CancellationResults':
+        """Cancel all pending scheduled moderation actions for specified subjects.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationCancelScheduledActions.CancellationResults`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneModerationCancelScheduledActions.Data',
+            get_or_create(data, models.ToolsOzoneModerationCancelScheduledActions.Data),
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.moderation.cancelScheduledActions',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationCancelScheduledActions.CancellationResults)
+
     def emit_event(
         self,
         data: t.Union[models.ToolsOzoneModerationEmitEvent.Data, models.ToolsOzoneModerationEmitEvent.DataDict],
@@ -8304,6 +8540,39 @@ class ToolsOzoneModerationNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ToolsOzoneModerationGetSubjects.Response)
 
+    def list_scheduled_actions(
+        self,
+        data: t.Union[
+            models.ToolsOzoneModerationListScheduledActions.Data,
+            models.ToolsOzoneModerationListScheduledActions.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationListScheduledActions.Response':
+        """List scheduled moderation actions with optional filtering.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationListScheduledActions.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneModerationListScheduledActions.Data',
+            get_or_create(data, models.ToolsOzoneModerationListScheduledActions.Data),
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.moderation.listScheduledActions',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationListScheduledActions.Response)
+
     def query_events(
         self,
         params: t.Optional[
@@ -8361,6 +8630,38 @@ class ToolsOzoneModerationNamespace(NamespaceBase):
             'tools.ozone.moderation.queryStatuses', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneModerationQueryStatuses.Response)
+
+    def schedule_action(
+        self,
+        data: t.Union[
+            models.ToolsOzoneModerationScheduleAction.Data, models.ToolsOzoneModerationScheduleAction.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationScheduleAction.ScheduledActionResults':
+        """Schedule a moderation action to be executed at a future time.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationScheduleAction.ScheduledActionResults`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneModerationScheduleAction.Data',
+            get_or_create(data, models.ToolsOzoneModerationScheduleAction.Data),
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.moderation.scheduleAction',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationScheduleAction.ScheduledActionResults)
 
     def search_repos(
         self,

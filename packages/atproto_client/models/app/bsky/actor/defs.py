@@ -28,6 +28,7 @@ class ProfileViewBasic(base.ModelBase):
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    pronouns: t.Optional[str] = None  #: Pronouns.
     status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
     verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
@@ -49,6 +50,7 @@ class ProfileView(base.ModelBase):
     display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
     indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    pronouns: t.Optional[str] = None  #: Pronouns.
     status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
     verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
@@ -78,9 +80,11 @@ class ProfileViewDetailed(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Pinned post.
     posts_count: t.Optional[int] = None  #: Posts count.
+    pronouns: t.Optional[str] = None  #: Pronouns.
     status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
     verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
+    website: t.Optional[string_formats.Uri] = None  #: Website.
 
     py_type: t.Literal['app.bsky.actor.defs#profileViewDetailed'] = Field(
         default='app.bsky.actor.defs#profileViewDetailed', alias='$type', frozen=True

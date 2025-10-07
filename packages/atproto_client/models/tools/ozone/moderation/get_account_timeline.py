@@ -70,6 +70,7 @@ class TimelineItemSummary(base.ModelBase):
         'models.ToolsOzoneModerationDefs.IdentityEvent',
         'models.ToolsOzoneModerationDefs.RecordEvent',
         'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
+        'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
         'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
         'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
         'models.ToolsOzoneModerationDefs.TimelineEventPlcCreate',
@@ -79,6 +80,8 @@ class TimelineItemSummary(base.ModelBase):
         'models.ToolsOzoneHostingGetAccountHistory.EmailConfirmed',
         'models.ToolsOzoneHostingGetAccountHistory.PasswordUpdated',
         'models.ToolsOzoneHostingGetAccountHistory.HandleUpdated',
+        'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
+        'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
         str,
     ]  #: Event type.
 

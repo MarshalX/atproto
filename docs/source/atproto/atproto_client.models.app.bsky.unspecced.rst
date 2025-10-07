@@ -15,6 +15,8 @@ Submodules
    atproto_client.models.app.bsky.unspecced.defs
    atproto_client.models.app.bsky.unspecced.get_age_assurance_state
    atproto_client.models.app.bsky.unspecced.get_config
+   atproto_client.models.app.bsky.unspecced.get_onboarding_suggested_starter_packs
+   atproto_client.models.app.bsky.unspecced.get_onboarding_suggested_starter_packs_skeleton
    atproto_client.models.app.bsky.unspecced.get_popular_feed_generators
    atproto_client.models.app.bsky.unspecced.get_post_thread_other_v2
    atproto_client.models.app.bsky.unspecced.get_post_thread_v2

@@ -46,6 +46,9 @@ class ModEventView(base.ModelBase):
             'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
             'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
             'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
+            'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
+            'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
+            'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -96,6 +99,9 @@ class ModEventViewDetail(base.ModelBase):
             'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
             'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
             'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
+            'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
+            'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
+            'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -379,6 +385,16 @@ class AgeAssuranceOverrideEvent(base.ModelBase):
     )
 
 
+class RevokeAccountCredentialsEvent(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Account credentials revocation by moderators. Only works on DID subjects."""
+
+    comment: str  #: Comment describing the reason for the revocation.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#revokeAccountCredentialsEvent'] = Field(
+        default='tools.ozone.moderation.defs#revokeAccountCredentialsEvent', alias='$type', frozen=True
+    )
+
+
 class ModEventAcknowledge(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
@@ -529,6 +545,29 @@ class RecordEvent(base.ModelBase):
 
     py_type: t.Literal['tools.ozone.moderation.defs#recordEvent'] = Field(
         default='tools.ozone.moderation.defs#recordEvent', alias='$type', frozen=True
+    )
+
+
+class ScheduleTakedownEvent(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Logs a scheduled takedown action for an account."""
+
+    comment: t.Optional[str] = None  #: Comment.
+    execute_after: t.Optional[string_formats.DateTime] = None  #: Execute after.
+    execute_at: t.Optional[string_formats.DateTime] = None  #: Execute at.
+    execute_until: t.Optional[string_formats.DateTime] = None  #: Execute until.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#scheduleTakedownEvent'] = Field(
+        default='tools.ozone.moderation.defs#scheduleTakedownEvent', alias='$type', frozen=True
+    )
+
+
+class CancelScheduledTakedownEvent(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Logs cancellation of a scheduled takedown action for an account."""
+
+    comment: t.Optional[str] = None  #: Comment.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#cancelScheduledTakedownEvent'] = Field(
+        default='tools.ozone.moderation.defs#cancelScheduledTakedownEvent', alias='$type', frozen=True
     )
 
 
@@ -766,3 +805,39 @@ TimelineEventPlcOperation = t.Literal[
 TimelineEventPlcTombstone = t.Literal[
     'tools.ozone.moderation.defs#timelineEventPlcTombstone'
 ]  #: Moderation event timeline event for a PLC tombstone operation
+
+
+class ScheduledActionView(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. View of a scheduled moderation action."""
+
+    action: t.Union[t.Literal['takedown'], str]  #: Type of action to be executed.
+    created_at: string_formats.DateTime  #: When the scheduled action was created.
+    created_by: string_formats.Did  #: DID of the user who created this scheduled action.
+    did: string_formats.Did  #: Subject DID for the action.
+    id: int  #: Auto-incrementing row ID.
+    status: t.Union[
+        t.Literal['pending'], t.Literal['executed'], t.Literal['cancelled'], t.Literal['failed'], str
+    ]  #: Current status of the scheduled action.
+    event_data: t.Optional['UnknownType'] = (
+        None  #: Serialized event object that will be propagated to the event when performed.
+    )
+    execute_after: t.Optional[string_formats.DateTime] = (
+        None  #: Earliest time to execute the action (for randomized scheduling).
+    )
+    execute_at: t.Optional[string_formats.DateTime] = None  #: Exact time to execute the action.
+    execute_until: t.Optional[string_formats.DateTime] = (
+        None  #: Latest time to execute the action (for randomized scheduling).
+    )
+    execution_event_id: t.Optional[int] = (
+        None  #: ID of the moderation event created when action was successfully executed.
+    )
+    last_executed_at: t.Optional[string_formats.DateTime] = None  #: When the action was last attempted to be executed.
+    last_failure_reason: t.Optional[str] = None  #: Reason for the last execution failure.
+    randomize_execution: t.Optional[bool] = (
+        None  #: Whether execution time should be randomized within the specified range.
+    )
+    updated_at: t.Optional[string_formats.DateTime] = None  #: When the scheduled action was last updated.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#scheduledActionView'] = Field(
+        default='tools.ozone.moderation.defs#scheduledActionView', alias='$type', frozen=True
+    )
