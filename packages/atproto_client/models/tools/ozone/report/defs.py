@@ -12,27 +12,24 @@ if t.TYPE_CHECKING:
 
 ReasonType = t.Union[
     'models.ToolsOzoneReportDefs.ReasonAppeal',
-    'models.ToolsOzoneReportDefs.ReasonViolenceAnimalWelfare',
+    'models.ToolsOzoneReportDefs.ReasonOther',
+    'models.ToolsOzoneReportDefs.ReasonViolenceAnimal',
     'models.ToolsOzoneReportDefs.ReasonViolenceThreats',
     'models.ToolsOzoneReportDefs.ReasonViolenceGraphicContent',
-    'models.ToolsOzoneReportDefs.ReasonViolenceSelfHarm',
     'models.ToolsOzoneReportDefs.ReasonViolenceGlorification',
     'models.ToolsOzoneReportDefs.ReasonViolenceExtremistContent',
     'models.ToolsOzoneReportDefs.ReasonViolenceTrafficking',
     'models.ToolsOzoneReportDefs.ReasonViolenceOther',
     'models.ToolsOzoneReportDefs.ReasonSexualAbuseContent',
     'models.ToolsOzoneReportDefs.ReasonSexualNCII',
-    'models.ToolsOzoneReportDefs.ReasonSexualSextortion',
     'models.ToolsOzoneReportDefs.ReasonSexualDeepfake',
     'models.ToolsOzoneReportDefs.ReasonSexualAnimal',
     'models.ToolsOzoneReportDefs.ReasonSexualUnlabeled',
     'models.ToolsOzoneReportDefs.ReasonSexualOther',
     'models.ToolsOzoneReportDefs.ReasonChildSafetyCSAM',
     'models.ToolsOzoneReportDefs.ReasonChildSafetyGroom',
-    'models.ToolsOzoneReportDefs.ReasonChildSafetyMinorPrivacy',
-    'models.ToolsOzoneReportDefs.ReasonChildSafetyEndangerment',
+    'models.ToolsOzoneReportDefs.ReasonChildSafetyPrivacy',
     'models.ToolsOzoneReportDefs.ReasonChildSafetyHarassment',
-    'models.ToolsOzoneReportDefs.ReasonChildSafetyPromotion',
     'models.ToolsOzoneReportDefs.ReasonChildSafetyOther',
     'models.ToolsOzoneReportDefs.ReasonHarassmentTroll',
     'models.ToolsOzoneReportDefs.ReasonHarassmentTargeted',
@@ -43,35 +40,31 @@ ReasonType = t.Union[
     'models.ToolsOzoneReportDefs.ReasonMisleadingImpersonation',
     'models.ToolsOzoneReportDefs.ReasonMisleadingSpam',
     'models.ToolsOzoneReportDefs.ReasonMisleadingScam',
-    'models.ToolsOzoneReportDefs.ReasonMisleadingSyntheticContent',
-    'models.ToolsOzoneReportDefs.ReasonMisleadingMisinformation',
+    'models.ToolsOzoneReportDefs.ReasonMisleadingElections',
     'models.ToolsOzoneReportDefs.ReasonMisleadingOther',
     'models.ToolsOzoneReportDefs.ReasonRuleSiteSecurity',
-    'models.ToolsOzoneReportDefs.ReasonRuleStolenContent',
     'models.ToolsOzoneReportDefs.ReasonRuleProhibitedSales',
     'models.ToolsOzoneReportDefs.ReasonRuleBanEvasion',
     'models.ToolsOzoneReportDefs.ReasonRuleOther',
-    'models.ToolsOzoneReportDefs.ReasonCivicElectoralProcess',
-    'models.ToolsOzoneReportDefs.ReasonCivicDisclosure',
-    'models.ToolsOzoneReportDefs.ReasonCivicInterference',
-    'models.ToolsOzoneReportDefs.ReasonCivicMisinformation',
-    'models.ToolsOzoneReportDefs.ReasonCivicImpersonation',
+    'models.ToolsOzoneReportDefs.ReasonSelfHarmContent',
+    'models.ToolsOzoneReportDefs.ReasonSelfHarmED',
+    'models.ToolsOzoneReportDefs.ReasonSelfHarmStunts',
+    'models.ToolsOzoneReportDefs.ReasonSelfHarmSubstances',
+    'models.ToolsOzoneReportDefs.ReasonSelfHarmOther',
     str,
 ]  #: Reason type
 
 ReasonAppeal = t.Literal['tools.ozone.report.defs#reasonAppeal']  #: Appeal a previously taken moderation action
 
-ReasonViolenceAnimalWelfare = t.Literal[
-    'tools.ozone.report.defs#reasonViolenceAnimalWelfare'
-]  #: Animal welfare violations
+ReasonOther = t.Literal['tools.ozone.report.defs#reasonOther']  #: An issue not included in these options
+
+ReasonViolenceAnimal = t.Literal['tools.ozone.report.defs#reasonViolenceAnimal']  #: Animal welfare violations
 
 ReasonViolenceThreats = t.Literal['tools.ozone.report.defs#reasonViolenceThreats']  #: Threats or incitement
 
 ReasonViolenceGraphicContent = t.Literal[
     'tools.ozone.report.defs#reasonViolenceGraphicContent'
 ]  #: Graphic violent content
-
-ReasonViolenceSelfHarm = t.Literal['tools.ozone.report.defs#reasonViolenceSelfHarm']  #: Self harm
 
 ReasonViolenceGlorification = t.Literal[
     'tools.ozone.report.defs#reasonViolenceGlorification'
@@ -89,8 +82,6 @@ ReasonSexualAbuseContent = t.Literal['tools.ozone.report.defs#reasonSexualAbuseC
 
 ReasonSexualNCII = t.Literal['tools.ozone.report.defs#reasonSexualNCII']  #: Non-consensual intimate imagery
 
-ReasonSexualSextortion = t.Literal['tools.ozone.report.defs#reasonSexualSextortion']  #: Sextortion
-
 ReasonSexualDeepfake = t.Literal['tools.ozone.report.defs#reasonSexualDeepfake']  #: Deepfake adult content
 
 ReasonSexualAnimal = t.Literal['tools.ozone.report.defs#reasonSexualAnimal']  #: Animal sexual abuse
@@ -107,21 +98,13 @@ ReasonChildSafetyGroom = t.Literal[
     'tools.ozone.report.defs#reasonChildSafetyGroom'
 ]  #: Grooming or predatory behavior. These reports will be sent only be sent to the application's Moderation Authority.
 
-ReasonChildSafetyMinorPrivacy = t.Literal[
-    'tools.ozone.report.defs#reasonChildSafetyMinorPrivacy'
+ReasonChildSafetyPrivacy = t.Literal[
+    'tools.ozone.report.defs#reasonChildSafetyPrivacy'
 ]  #: Privacy violation involving a minor
-
-ReasonChildSafetyEndangerment = t.Literal[
-    'tools.ozone.report.defs#reasonChildSafetyEndangerment'
-]  #: Child endangerment. These reports will be sent only be sent to the application's Moderation Authority.
 
 ReasonChildSafetyHarassment = t.Literal[
     'tools.ozone.report.defs#reasonChildSafetyHarassment'
 ]  #: Harassment or bullying of minors
-
-ReasonChildSafetyPromotion = t.Literal[
-    'tools.ozone.report.defs#reasonChildSafetyPromotion'
-]  #: Promotion of child exploitation. These reports will be sent only be sent to the application's Moderation Authority.
 
 ReasonChildSafetyOther = t.Literal[
     'tools.ozone.report.defs#reasonChildSafetyOther'
@@ -147,19 +130,13 @@ ReasonMisleadingSpam = t.Literal['tools.ozone.report.defs#reasonMisleadingSpam']
 
 ReasonMisleadingScam = t.Literal['tools.ozone.report.defs#reasonMisleadingScam']  #: Scam
 
-ReasonMisleadingSyntheticContent = t.Literal[
-    'tools.ozone.report.defs#reasonMisleadingSyntheticContent'
-]  #: Unlabelled gen-AI or synthetic content
-
-ReasonMisleadingMisinformation = t.Literal[
-    'tools.ozone.report.defs#reasonMisleadingMisinformation'
-]  #: Harmful false claims
+ReasonMisleadingElections = t.Literal[
+    'tools.ozone.report.defs#reasonMisleadingElections'
+]  #: False information about elections
 
 ReasonMisleadingOther = t.Literal['tools.ozone.report.defs#reasonMisleadingOther']  #: Other misleading content
 
 ReasonRuleSiteSecurity = t.Literal['tools.ozone.report.defs#reasonRuleSiteSecurity']  #: Hacking or system attacks
-
-ReasonRuleStolenContent = t.Literal['tools.ozone.report.defs#reasonRuleStolenContent']  #: Stolen content
 
 ReasonRuleProhibitedSales = t.Literal[
     'tools.ozone.report.defs#reasonRuleProhibitedSales'
@@ -169,20 +146,16 @@ ReasonRuleBanEvasion = t.Literal['tools.ozone.report.defs#reasonRuleBanEvasion']
 
 ReasonRuleOther = t.Literal['tools.ozone.report.defs#reasonRuleOther']  #: Other
 
-ReasonCivicElectoralProcess = t.Literal[
-    'tools.ozone.report.defs#reasonCivicElectoralProcess'
-]  #: Electoral process violations
+ReasonSelfHarmContent = t.Literal[
+    'tools.ozone.report.defs#reasonSelfHarmContent'
+]  #: Content promoting or depicting self-harm
 
-ReasonCivicDisclosure = t.Literal[
-    'tools.ozone.report.defs#reasonCivicDisclosure'
-]  #: Disclosure & transparency violations
+ReasonSelfHarmED = t.Literal['tools.ozone.report.defs#reasonSelfHarmED']  #: Eating disorders
 
-ReasonCivicInterference = t.Literal[
-    'tools.ozone.report.defs#reasonCivicInterference'
-]  #: Voter intimidation or interference
+ReasonSelfHarmStunts = t.Literal['tools.ozone.report.defs#reasonSelfHarmStunts']  #: Dangerous challenges or activities
 
-ReasonCivicMisinformation = t.Literal['tools.ozone.report.defs#reasonCivicMisinformation']  #: Election misinformation
+ReasonSelfHarmSubstances = t.Literal[
+    'tools.ozone.report.defs#reasonSelfHarmSubstances'
+]  #: Dangerous substances or drug abuse
 
-ReasonCivicImpersonation = t.Literal[
-    'tools.ozone.report.defs#reasonCivicImpersonation'
-]  #: Impersonation of electoral officials/entities
+ReasonSelfHarmOther = t.Literal['tools.ozone.report.defs#reasonSelfHarmOther']  #: Other dangerous content
