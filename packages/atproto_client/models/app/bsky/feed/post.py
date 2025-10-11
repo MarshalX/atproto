@@ -77,13 +77,13 @@ class Record(base.RecordModelBase):
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Self-label values for this post. Effectively content warnings.
-    langs: t.Optional[t.List[string_formats.Language]] = Field(
-        default=None, max_length=3
-    )  #: Indicates human language of post primary text content.
+    langs: te.Annotated[t.Optional[t.List[string_formats.Language]], Field(max_length=3)] = (
+        None  #: Indicates human language of post primary text content.
+    )
     reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None  #: Reply.
-    tags: t.Optional[t.List[str]] = Field(
-        default=None, max_length=8
-    )  #: Additional hashtags, in addition to any included in post text and facets.
+    tags: te.Annotated[t.Optional[t.List[str]], Field(max_length=8)] = (
+        None  #: Additional hashtags, in addition to any included in post text and facets.
+    )
 
     py_type: t.Literal['app.bsky.feed.post'] = Field(default='app.bsky.feed.post', alias='$type', frozen=True)
 

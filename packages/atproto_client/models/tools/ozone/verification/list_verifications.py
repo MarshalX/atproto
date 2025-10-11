@@ -26,16 +26,16 @@ class Params(base.ParamsModelBase):
     )
     cursor: t.Optional[str] = None  #: Pagination cursor.
     is_revoked: t.Optional[bool] = None  #: Filter to verifications that are revoked or not. By default, includes both.
-    issuers: t.Optional[t.List[string_formats.Did]] = Field(
-        default=None, max_length=100
-    )  #: Filter to verifications from specific issuers.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Maximum number of results to return.
+    issuers: te.Annotated[t.Optional[t.List[string_formats.Did]], Field(max_length=100)] = (
+        None  #: Filter to verifications from specific issuers.
+    )
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Maximum number of results to return.
     sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = (
         'desc'  #: Sort direction for creation date.
     )
-    subjects: t.Optional[t.List[string_formats.Did]] = Field(
-        default=None, max_length=100
-    )  #: Filter to specific verified DIDs.
+    subjects: te.Annotated[t.Optional[t.List[string_formats.Did]], Field(max_length=100)] = (
+        None  #: Filter to specific verified DIDs.
+    )
 
 
 class ParamsDict(t.TypedDict):

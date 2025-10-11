@@ -19,7 +19,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getSuggestedUsers`."""
 
     category: t.Optional[str] = None  #: Category of users to get suggestions for.
-    limit: t.Optional[int] = Field(default=25, ge=1, le=50)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=50)] = None  #: Limit.
 
 
 class ParamsDict(t.TypedDict):

@@ -19,7 +19,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.admin.getInviteCodes`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=100, ge=1, le=500)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=500)] = None  #: Limit.
     sort: t.Optional[t.Union[t.Literal['recent'], t.Literal['usage'], str]] = 'recent'  #: Sort.
 
 

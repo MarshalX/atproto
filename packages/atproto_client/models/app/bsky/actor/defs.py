@@ -26,7 +26,7 @@ class ProfileViewBasic(base.ModelBase):
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
-    display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
+    display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     pronouns: t.Optional[str] = None  #: Pronouns.
     status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
@@ -46,8 +46,8 @@ class ProfileView(base.ModelBase):
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
-    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
-    display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
+    description: te.Annotated[t.Optional[str], Field(max_length=2560)] = None  #: Description.
+    display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     pronouns: t.Optional[str] = None  #: Pronouns.
@@ -69,8 +69,8 @@ class ProfileViewDetailed(base.ModelBase):
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     banner: t.Optional[string_formats.Uri] = None  #: Banner.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
-    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
-    display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
+    description: te.Annotated[t.Optional[str], Field(max_length=2560)] = None  #: Description.
+    display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     followers_count: t.Optional[int] = None  #: Followers count.
     follows_count: t.Optional[int] = None  #: Follows count.
     indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
@@ -402,12 +402,12 @@ class BskyAppStatePref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`. A grab bag of state that's specific to the bsky.app program. Third-party apps shouldn't use this."""
 
     active_progress_guide: t.Optional['models.AppBskyActorDefs.BskyAppProgressGuide'] = None  #: Active progress guide.
-    nuxs: t.Optional[t.List['models.AppBskyActorDefs.Nux']] = Field(
-        default=None, max_length=100
-    )  #: Storage for NUXs the user has encountered.
-    queued_nudges: t.Optional[t.List[str]] = Field(
-        default=None, max_length=1000
-    )  #: An array of tokens which identify nudges (modals, popups, tours, highlight dots) that should be shown to the user.
+    nuxs: te.Annotated[t.Optional[t.List['models.AppBskyActorDefs.Nux']], Field(max_length=100)] = (
+        None  #: Storage for NUXs the user has encountered.
+    )
+    queued_nudges: te.Annotated[t.Optional[t.List[str]], Field(max_length=1000)] = (
+        None  #: An array of tokens which identify nudges (modals, popups, tours, highlight dots) that should be shown to the user.
+    )
 
     py_type: t.Literal['app.bsky.actor.defs#bskyAppStatePref'] = Field(
         default='app.bsky.actor.defs#bskyAppStatePref', alias='$type', frozen=True
@@ -429,9 +429,9 @@ class Nux(base.ModelBase):
 
     completed: bool = False  #: Completed.
     id: str = Field(max_length=100)  #: Id.
-    data: t.Optional[str] = Field(
-        default=None, max_length=3000
-    )  #: Arbitrary data for the NUX. The structure is defined by the NUX itself. Limited to 300 characters.
+    data: te.Annotated[t.Optional[str], Field(max_length=3000)] = (
+        None  #: Arbitrary data for the NUX. The structure is defined by the NUX itself. Limited to 300 characters.
+    )
     expires_at: t.Optional[string_formats.DateTime] = (
         None  #: The date and time at which the NUX will expire and should be considered completed.
     )
@@ -455,7 +455,7 @@ class PostInteractionSettingsPref(base.ModelBase):
     postgate_embedding_rules: t.Optional[
         t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
     ] = Field(
-        default=None, max_length=5
+        max_length=5
     )  #: Matches postgate record. List of rules defining who can embed this users posts. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
     threadgate_allow_rules: t.Optional[
         t.List[
@@ -470,7 +470,7 @@ class PostInteractionSettingsPref(base.ModelBase):
             ]
         ]
     ] = Field(
-        default=None, max_length=5
+        max_length=5
     )  #: Matches threadgate record. List of rules defining who can reply to this users posts. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
 
     py_type: t.Literal['app.bsky.actor.defs#postInteractionSettingsPref'] = Field(

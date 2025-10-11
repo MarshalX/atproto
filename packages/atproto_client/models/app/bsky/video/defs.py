@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
@@ -27,7 +28,9 @@ class JobStatus(base.ModelBase):
     blob: t.Optional['BlobRef'] = None  #: Blob.
     error: t.Optional[str] = None  #: Error.
     message: t.Optional[str] = None  #: Message.
-    progress: t.Optional[int] = Field(default=None, ge=0, le=100)  #: Progress within the current processing state.
+    progress: te.Annotated[t.Optional[int], Field(ge=0, le=100)] = (
+        None  #: Progress within the current processing state.
+    )
 
     py_type: t.Literal['app.bsky.video.defs#jobStatus'] = Field(
         default='app.bsky.video.defs#jobStatus', alias='$type', frozen=True

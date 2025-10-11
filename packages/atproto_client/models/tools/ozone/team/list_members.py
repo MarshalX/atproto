@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     disabled: t.Optional[bool] = None  #: Disabled.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     q: t.Optional[str] = None  #: Q.
     roles: t.Optional[t.List[str]] = None  #: Roles.
 

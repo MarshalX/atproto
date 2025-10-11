@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
@@ -32,9 +33,11 @@ class Record(base.RecordModelBase):
     created_at: string_formats.DateTime  #: Created at.
     list: string_formats.AtUri  #: Reference (AT-URI) to the list record.
     name: str = Field(min_length=1, max_length=500)  #: Display name for starter pack; can not be empty.
-    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
+    description: te.Annotated[t.Optional[str], Field(max_length=3000)] = None  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
-    feeds: t.Optional[t.List['models.AppBskyGraphStarterpack.FeedItem']] = Field(default=None, max_length=3)  #: Feeds.
+    feeds: te.Annotated[t.Optional[t.List['models.AppBskyGraphStarterpack.FeedItem']], Field(max_length=3)] = (
+        None  #: Feeds.
+    )
 
     py_type: t.Literal['app.bsky.graph.starterpack'] = Field(
         default='app.bsky.graph.starterpack', alias='$type', frozen=True

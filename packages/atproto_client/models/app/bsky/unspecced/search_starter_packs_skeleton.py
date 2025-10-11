@@ -24,7 +24,7 @@ class Params(base.ParamsModelBase):
     cursor: t.Optional[str] = (
         None  #: Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
     )
-    limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     viewer: t.Optional[string_formats.Did] = (
         None  #: DID of the account making the request (not included for public/unauthenticated queries).
     )

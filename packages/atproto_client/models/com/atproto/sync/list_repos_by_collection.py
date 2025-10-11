@@ -22,9 +22,9 @@ class Params(base.ParamsModelBase):
 
     collection: string_formats.Nsid  #: Collection.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(
-        default=500, ge=1, le=2000
-    )  #: Maximum size of response set. Recommend setting a large maximum (1000+) when enumerating large DID lists.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=2000)] = (
+        None  #: Maximum size of response set. Recommend setting a large maximum (1000+) when enumerating large DID lists.
+    )
 
 
 class ParamsDict(t.TypedDict):

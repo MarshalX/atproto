@@ -18,7 +18,7 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getSuggestedStarterPacks`."""
 
-    limit: t.Optional[int] = Field(default=10, ge=1, le=25)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=25)] = None  #: Limit.
 
 
 class ParamsDict(t.TypedDict):
