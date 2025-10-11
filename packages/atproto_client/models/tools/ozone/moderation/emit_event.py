@@ -44,6 +44,9 @@ class Data(base.DataModelBase):
             'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
             'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
             'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
+            'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
+            'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
+            'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.
@@ -83,6 +86,9 @@ class DataDict(t.TypedDict):
             'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
             'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
             'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
+            'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
+            'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
+            'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
         ],
         Field(discriminator='py_type'),
     ]  #: Event.

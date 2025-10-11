@@ -37,7 +37,10 @@
             "#recordEvent",
             "#modEventPriorityScore",
             "#ageAssuranceEvent",
-            "#ageAssuranceOverrideEvent"
+            "#ageAssuranceOverrideEvent",
+            "#revokeAccountCredentialsEvent",
+            "#scheduleTakedownEvent",
+            "#cancelScheduledTakedownEvent"
           ]
         },
         "subject": {
@@ -91,7 +94,10 @@
             "#recordEvent",
             "#modEventPriorityScore",
             "#ageAssuranceEvent",
-            "#ageAssuranceOverrideEvent"
+            "#ageAssuranceOverrideEvent",
+            "#revokeAccountCredentialsEvent",
+            "#scheduleTakedownEvent",
+            "#cancelScheduledTakedownEvent"
           ]
         },
         "subject": {
@@ -503,6 +509,17 @@
         }
       }
     },
+    "revokeAccountCredentialsEvent": {
+      "type": "object",
+      "description": "Account credentials revocation by moderators. Only works on DID subjects.",
+      "required": ["comment"],
+      "properties": {
+        "comment": {
+          "type": "string",
+          "description": "Comment describing the reason for the revocation."
+        }
+      }
+    },
     "modEventAcknowledge": {
       "type": "object",
       "properties": {
@@ -663,6 +680,23 @@
         },
         "cid": { "type": "string", "format": "cid" },
         "timestamp": { "type": "string", "format": "datetime" }
+      }
+    },
+    "scheduleTakedownEvent": {
+      "type": "object",
+      "description": "Logs a scheduled takedown action for an account.",
+      "properties": {
+        "comment": { "type": "string" },
+        "executeAt": { "type": "string", "format": "datetime" },
+        "executeAfter": { "type": "string", "format": "datetime" },
+        "executeUntil": { "type": "string", "format": "datetime" }
+      }
+    },
+    "cancelScheduledTakedownEvent": {
+      "type": "object",
+      "description": "Logs cancellation of a scheduled takedown action for an account.",
+      "properties": {
+        "comment": { "type": "string" }
       }
     },
     "repoView": {
@@ -976,6 +1010,95 @@
         "meta": {
           "type": "unknown",
           "description": "Additional arbitrary metadata about the source"
+        }
+      }
+    },
+    "timelineEventPlcCreate": {
+      "type": "token",
+      "description": "Moderation event timeline event for a PLC create operation"
+    },
+    "timelineEventPlcOperation": {
+      "type": "token",
+      "description": "Moderation event timeline event for generic PLC operation"
+    },
+    "timelineEventPlcTombstone": {
+      "type": "token",
+      "description": "Moderation event timeline event for a PLC tombstone operation"
+    },
+    "scheduledActionView": {
+      "type": "object",
+      "description": "View of a scheduled moderation action",
+      "required": ["id", "action", "did", "createdBy", "createdAt", "status"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Auto-incrementing row ID"
+        },
+        "action": {
+          "type": "string",
+          "knownValues": ["takedown"],
+          "description": "Type of action to be executed"
+        },
+        "eventData": {
+          "type": "unknown",
+          "description": "Serialized event object that will be propagated to the event when performed"
+        },
+        "did": {
+          "type": "string",
+          "format": "did",
+          "description": "Subject DID for the action"
+        },
+        "executeAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Exact time to execute the action"
+        },
+        "executeAfter": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Earliest time to execute the action (for randomized scheduling)"
+        },
+        "executeUntil": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Latest time to execute the action (for randomized scheduling)"
+        },
+        "randomizeExecution": {
+          "type": "boolean",
+          "description": "Whether execution time should be randomized within the specified range"
+        },
+        "createdBy": {
+          "type": "string",
+          "format": "did",
+          "description": "DID of the user who created this scheduled action"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When the scheduled action was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When the scheduled action was last updated"
+        },
+        "status": {
+          "type": "string",
+          "knownValues": ["pending", "executed", "cancelled", "failed"],
+          "description": "Current status of the scheduled action"
+        },
+        "lastExecutedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When the action was last attempted to be executed"
+        },
+        "lastFailureReason": {
+          "type": "string",
+          "description": "Reason for the last execution failure"
+        },
+        "executionEventId": {
+          "type": "integer",
+          "description": "ID of the moderation event created when action was successfully executed"
         }
       }
     }
