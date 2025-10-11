@@ -63,7 +63,7 @@ class ModEventView(base.ModelBase):
     ]  #: Subject.
     subject_blob_cids: t.List[str]  #: Subject blob cids.
     creator_handle: t.Optional[str] = None  #: Creator handle.
-    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
+    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool']  #: Mod tool.
     subject_handle: t.Optional[str] = None  #: Subject handle.
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventView'] = Field(
@@ -116,7 +116,7 @@ class ModEventViewDetail(base.ModelBase):
         Field(discriminator='py_type'),
     ]  #: Subject.
     subject_blobs: t.List['models.ToolsOzoneModerationDefs.BlobView']  #: Subject blobs.
-    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
+    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool']  #: Mod tool.
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventViewDetail'] = Field(
         default='tools.ozone.moderation.defs#modEventViewDetail', alias='$type', frozen=True
@@ -142,9 +142,9 @@ class SubjectStatusView(base.ModelBase):
     updated_at: (
         string_formats.DateTime
     )  #: Timestamp referencing when the last update was made to the moderation status of the subject.
-    account_stats: t.Optional['models.ToolsOzoneModerationDefs.AccountStats'] = (
-        None  #: Statistics related to the account subject.
-    )
+    account_stats: t.Optional[
+        'models.ToolsOzoneModerationDefs.AccountStats'
+    ]  #: Statistics related to the account subject.
     age_assurance_state: t.Optional[
         t.Union[
             t.Literal['pending'],
@@ -165,9 +165,9 @@ class SubjectStatusView(base.ModelBase):
     hosting: t.Optional[
         te.Annotated[
             t.Union['models.ToolsOzoneModerationDefs.AccountHosting', 'models.ToolsOzoneModerationDefs.RecordHosting'],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
-    ] = None  #: Hosting.
+    ]  #: Hosting.
     last_appealed_at: t.Optional[string_formats.DateTime] = (
         None  #: Timestamp referencing when the author of the subject appealed a moderation action.
     )
@@ -176,12 +176,12 @@ class SubjectStatusView(base.ModelBase):
     last_reviewed_by: t.Optional[string_formats.Did] = None  #: Last reviewed by.
     mute_reporting_until: t.Optional[string_formats.DateTime] = None  #: Mute reporting until.
     mute_until: t.Optional[string_formats.DateTime] = None  #: Mute until.
-    priority_score: t.Optional[int] = Field(
-        default=None, ge=0, le=100
-    )  #: Numeric value representing the level of priority. Higher score means higher priority.
-    records_stats: t.Optional['models.ToolsOzoneModerationDefs.RecordsStats'] = (
-        None  #: Statistics related to the record subjects authored by the subject's account.
+    priority_score: te.Annotated[t.Optional[int], Field(ge=0, le=100)] = (
+        None  #: Numeric value representing the level of priority. Higher score means higher priority.
     )
+    records_stats: t.Optional[
+        'models.ToolsOzoneModerationDefs.RecordsStats'
+    ]  #: Statistics related to the record subjects authored by the subject's account.
     subject_blob_cids: t.Optional[t.List[string_formats.Cid]] = None  #: Subject blob cids.
     subject_repo_handle: t.Optional[str] = None  #: Subject repo handle.
     suspend_until: t.Optional[string_formats.DateTime] = None  #: Suspend until.
@@ -198,10 +198,10 @@ class SubjectView(base.ModelBase):
 
     subject: str  #: Subject.
     type: 'models.ComAtprotoModerationDefs.SubjectType'  #: Type.
-    profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field(default=None)]] = None  #: Profile.
-    record: t.Optional['models.ToolsOzoneModerationDefs.RecordViewDetail'] = None  #: Record.
-    repo: t.Optional['models.ToolsOzoneModerationDefs.RepoViewDetail'] = None  #: Repo.
-    status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView'] = None  #: Status.
+    profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field()]]  #: Profile.
+    record: t.Optional['models.ToolsOzoneModerationDefs.RecordViewDetail']  #: Record.
+    repo: t.Optional['models.ToolsOzoneModerationDefs.RepoViewDetail']  #: Repo.
+    status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView']  #: Status.
 
     py_type: t.Literal['tools.ozone.moderation.defs#subjectView'] = Field(
         default='tools.ozone.moderation.defs#subjectView', alias='$type', frozen=True
@@ -274,9 +274,9 @@ class ModEventTakedown(base.ModelBase):
     duration_in_hours: t.Optional[int] = (
         None  #: Indicates how long the takedown should be in effect before automatically expiring.
     )
-    policies: t.Optional[t.List[str]] = Field(
-        default=None, max_length=5
-    )  #: Names/Keywords of the policies that drove the decision.
+    policies: te.Annotated[t.Optional[t.List[str]], Field(max_length=5)] = (
+        None  #: Names/Keywords of the policies that drove the decision.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventTakedown'] = Field(
         default='tools.ozone.moderation.defs#modEventTakedown', alias='$type', frozen=True
@@ -582,7 +582,7 @@ class RepoView(base.ModelBase):
     deactivated_at: t.Optional[string_formats.DateTime] = None  #: Deactivated at.
     email: t.Optional[str] = None  #: Email.
     invite_note: t.Optional[str] = None  #: Invite note.
-    invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
+    invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode']  #: Invited by.
     invites_disabled: t.Optional[bool] = None  #: Invites disabled.
     threat_signatures: t.Optional[t.List['models.ComAtprotoAdminDefs.ThreatSignature']] = None  #: Threat signatures.
 
@@ -603,7 +603,7 @@ class RepoViewDetail(base.ModelBase):
     email: t.Optional[str] = None  #: Email.
     email_confirmed_at: t.Optional[string_formats.DateTime] = None  #: Email confirmed at.
     invite_note: t.Optional[str] = None  #: Invite note.
-    invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
+    invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode']  #: Invited by.
     invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
     invites_disabled: t.Optional[bool] = None  #: Invites disabled.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
@@ -670,7 +670,7 @@ class RecordViewNotFound(base.ModelBase):
 class Moderation(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    subject_status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView'] = None  #: Subject status.
+    subject_status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView']  #: Subject status.
 
     py_type: t.Literal['tools.ozone.moderation.defs#moderation'] = Field(
         default='tools.ozone.moderation.defs#moderation', alias='$type', frozen=True
@@ -680,7 +680,7 @@ class Moderation(base.ModelBase):
 class ModerationDetail(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`."""
 
-    subject_status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView'] = None  #: Subject status.
+    subject_status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView']  #: Subject status.
 
     py_type: t.Literal['tools.ozone.moderation.defs#moderationDetail'] = Field(
         default='tools.ozone.moderation.defs#moderationDetail', alias='$type', frozen=True
@@ -697,10 +697,10 @@ class BlobView(base.ModelBase):
     details: t.Optional[
         te.Annotated[
             t.Union['models.ToolsOzoneModerationDefs.ImageDetails', 'models.ToolsOzoneModerationDefs.VideoDetails'],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
-    ] = None  #: Details.
-    moderation: t.Optional['models.ToolsOzoneModerationDefs.Moderation'] = None  #: Moderation.
+    ]  #: Details.
+    moderation: t.Optional['models.ToolsOzoneModerationDefs.Moderation']  #: Moderation.
 
     py_type: t.Literal['tools.ozone.moderation.defs#blobView'] = Field(
         default='tools.ozone.moderation.defs#blobView', alias='$type', frozen=True

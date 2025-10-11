@@ -30,6 +30,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.notification.putActivitySubscription`."""
 
     subject: string_formats.Did  #: Subject.
-    activity_subscription: t.Optional['models.AppBskyNotificationDefs.ActivitySubscription'] = (
-        None  #: Activity subscription.
-    )
+    activity_subscription: t.Optional['models.AppBskyNotificationDefs.ActivitySubscription']  #: Activity subscription.

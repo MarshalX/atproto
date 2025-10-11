@@ -26,8 +26,8 @@ class Data(base.DataModelBase):
         ],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    deactivated: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Deactivated.
-    takedown: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Takedown.
+    deactivated: t.Optional['models.ComAtprotoAdminDefs.StatusAttr']  #: Deactivated.
+    takedown: t.Optional['models.ComAtprotoAdminDefs.StatusAttr']  #: Takedown.
 
 
 class DataDict(t.TypedDict):
@@ -54,4 +54,4 @@ class Response(base.ResponseModelBase):
         ],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    takedown: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Takedown.
+    takedown: t.Optional['models.ComAtprotoAdminDefs.StatusAttr']  #: Takedown.

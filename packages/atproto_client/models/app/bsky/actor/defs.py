@@ -23,15 +23,15 @@ class ProfileViewBasic(base.ModelBase):
 
     did: string_formats.Did  #: Did.
     handle: string_formats.Handle  #: Handle.
-    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
+    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated']  #: Associated.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
-    display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
+    display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     pronouns: t.Optional[str] = None  #: Pronouns.
-    status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
-    verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
-    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
+    status: t.Optional['models.AppBskyActorDefs.StatusView']  #: Status.
+    verification: t.Optional['models.AppBskyActorDefs.VerificationState']  #: Verification.
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState']  #: Viewer.
 
     py_type: t.Literal['app.bsky.actor.defs#profileViewBasic'] = Field(
         default='app.bsky.actor.defs#profileViewBasic', alias='$type', frozen=True
@@ -43,17 +43,17 @@ class ProfileView(base.ModelBase):
 
     did: string_formats.Did  #: Did.
     handle: string_formats.Handle  #: Handle.
-    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
+    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated']  #: Associated.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
-    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
-    display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
+    description: te.Annotated[t.Optional[str], Field(max_length=2560)] = None  #: Description.
+    display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     pronouns: t.Optional[str] = None  #: Pronouns.
-    status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
-    verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
-    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
+    status: t.Optional['models.AppBskyActorDefs.StatusView']  #: Status.
+    verification: t.Optional['models.AppBskyActorDefs.VerificationState']  #: Verification.
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState']  #: Viewer.
 
     py_type: t.Literal['app.bsky.actor.defs#profileView'] = Field(
         default='app.bsky.actor.defs#profileView', alias='$type', frozen=True
@@ -65,25 +65,23 @@ class ProfileViewDetailed(base.ModelBase):
 
     did: string_formats.Did  #: Did.
     handle: string_formats.Handle  #: Handle.
-    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
+    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated']  #: Associated.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     banner: t.Optional[string_formats.Uri] = None  #: Banner.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
-    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Description.
-    display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
+    description: te.Annotated[t.Optional[str], Field(max_length=2560)] = None  #: Description.
+    display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     followers_count: t.Optional[int] = None  #: Followers count.
     follows_count: t.Optional[int] = None  #: Follows count.
     indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
-    joined_via_starter_pack: t.Optional['models.AppBskyGraphDefs.StarterPackViewBasic'] = (
-        None  #: Joined via starter pack.
-    )
+    joined_via_starter_pack: t.Optional['models.AppBskyGraphDefs.StarterPackViewBasic']  #: Joined via starter pack.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Pinned post.
+    pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main']  #: Pinned post.
     posts_count: t.Optional[int] = None  #: Posts count.
     pronouns: t.Optional[str] = None  #: Pronouns.
-    status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
-    verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
-    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
+    status: t.Optional['models.AppBskyActorDefs.StatusView']  #: Status.
+    verification: t.Optional['models.AppBskyActorDefs.VerificationState']  #: Verification.
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState']  #: Viewer.
     website: t.Optional[string_formats.Uri] = None  #: Website.
 
     py_type: t.Literal['app.bsky.actor.defs#profileViewDetailed'] = Field(
@@ -94,10 +92,10 @@ class ProfileViewDetailed(base.ModelBase):
 class ProfileAssociated(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    activity_subscription: t.Optional['models.AppBskyActorDefs.ProfileAssociatedActivitySubscription'] = (
-        None  #: Activity subscription.
-    )
-    chat: t.Optional['models.AppBskyActorDefs.ProfileAssociatedChat'] = None  #: Chat.
+    activity_subscription: t.Optional[
+        'models.AppBskyActorDefs.ProfileAssociatedActivitySubscription'
+    ]  #: Activity subscription.
+    chat: t.Optional['models.AppBskyActorDefs.ProfileAssociatedChat']  #: Chat.
     feedgens: t.Optional[int] = None  #: Feedgens.
     labeler: t.Optional[bool] = None  #: Labeler.
     lists: t.Optional[int] = None  #: Lists.
@@ -133,19 +131,19 @@ class ProfileAssociatedActivitySubscription(base.ModelBase):
 class ViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`. Metadata about the requesting account's relationship with the subject account. Only has meaningful content for authed requests."""
 
-    activity_subscription: t.Optional['models.AppBskyNotificationDefs.ActivitySubscription'] = (
-        None  #: This property is present only in selected cases, as an optimization.
-    )
+    activity_subscription: t.Optional[
+        'models.AppBskyNotificationDefs.ActivitySubscription'
+    ]  #: This property is present only in selected cases, as an optimization.
     blocked_by: t.Optional[bool] = None  #: Blocked by.
     blocking: t.Optional[string_formats.AtUri] = None  #: Blocking.
-    blocking_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Blocking by list.
+    blocking_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic']  #: Blocking by list.
     followed_by: t.Optional[string_formats.AtUri] = None  #: Followed by.
     following: t.Optional[string_formats.AtUri] = None  #: Following.
-    known_followers: t.Optional['models.AppBskyActorDefs.KnownFollowers'] = (
-        None  #: This property is present only in selected cases, as an optimization.
-    )
+    known_followers: t.Optional[
+        'models.AppBskyActorDefs.KnownFollowers'
+    ]  #: This property is present only in selected cases, as an optimization.
     muted: t.Optional[bool] = None  #: Muted.
-    muted_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Muted by list.
+    muted_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic']  #: Muted by list.
 
     py_type: t.Literal['app.bsky.actor.defs#viewerState'] = Field(
         default='app.bsky.actor.defs#viewerState', alias='$type', frozen=True
@@ -401,13 +399,13 @@ class LabelerPrefItem(base.ModelBase):
 class BskyAppStatePref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`. A grab bag of state that's specific to the bsky.app program. Third-party apps shouldn't use this."""
 
-    active_progress_guide: t.Optional['models.AppBskyActorDefs.BskyAppProgressGuide'] = None  #: Active progress guide.
-    nuxs: t.Optional[t.List['models.AppBskyActorDefs.Nux']] = Field(
-        default=None, max_length=100
-    )  #: Storage for NUXs the user has encountered.
-    queued_nudges: t.Optional[t.List[str]] = Field(
-        default=None, max_length=1000
-    )  #: An array of tokens which identify nudges (modals, popups, tours, highlight dots) that should be shown to the user.
+    active_progress_guide: t.Optional['models.AppBskyActorDefs.BskyAppProgressGuide']  #: Active progress guide.
+    nuxs: te.Annotated[t.Optional[t.List['models.AppBskyActorDefs.Nux']], Field(max_length=100)] = (
+        None  #: Storage for NUXs the user has encountered.
+    )
+    queued_nudges: te.Annotated[t.Optional[t.List[str]], Field(max_length=1000)] = (
+        None  #: An array of tokens which identify nudges (modals, popups, tours, highlight dots) that should be shown to the user.
+    )
 
     py_type: t.Literal['app.bsky.actor.defs#bskyAppStatePref'] = Field(
         default='app.bsky.actor.defs#bskyAppStatePref', alias='$type', frozen=True
@@ -429,9 +427,9 @@ class Nux(base.ModelBase):
 
     completed: bool = False  #: Completed.
     id: str = Field(max_length=100)  #: Id.
-    data: t.Optional[str] = Field(
-        default=None, max_length=3000
-    )  #: Arbitrary data for the NUX. The structure is defined by the NUX itself. Limited to 300 characters.
+    data: te.Annotated[t.Optional[str], Field(max_length=3000)] = (
+        None  #: Arbitrary data for the NUX. The structure is defined by the NUX itself. Limited to 300 characters.
+    )
     expires_at: t.Optional[string_formats.DateTime] = (
         None  #: The date and time at which the NUX will expire and should be considered completed.
     )
@@ -455,7 +453,7 @@ class PostInteractionSettingsPref(base.ModelBase):
     postgate_embedding_rules: t.Optional[
         t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
     ] = Field(
-        default=None, max_length=5
+        max_length=5
     )  #: Matches postgate record. List of rules defining who can embed this users posts. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
     threadgate_allow_rules: t.Optional[
         t.List[
@@ -470,7 +468,7 @@ class PostInteractionSettingsPref(base.ModelBase):
             ]
         ]
     ] = Field(
-        default=None, max_length=5
+        max_length=5
     )  #: Matches threadgate record. List of rules defining who can reply to this users posts. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
 
     py_type: t.Literal['app.bsky.actor.defs#postInteractionSettingsPref'] = Field(
@@ -484,8 +482,8 @@ class StatusView(base.ModelBase):
     record: 'UnknownType'  #: Record.
     status: t.Union['models.AppBskyActorStatus.Live', str]  #: The status for the account.
     embed: t.Optional[
-        te.Annotated[t.Union['models.AppBskyEmbedExternal.View'], Field(default=None, discriminator='py_type')]
-    ] = None  #: An optional embed associated with the status.
+        te.Annotated[t.Union['models.AppBskyEmbedExternal.View'], Field(discriminator='py_type')]
+    ]  #: An optional embed associated with the status.
     expires_at: t.Optional[string_formats.DateTime] = (
         None  #: The date when this status will expire. The application might choose to no longer return the status after expiration.
     )

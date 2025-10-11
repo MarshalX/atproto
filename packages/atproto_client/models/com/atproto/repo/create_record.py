@@ -24,7 +24,7 @@ class Data(base.DataModelBase):
     collection: string_formats.Nsid  #: The NSID of the record collection.
     record: 'UnknownInputType'  #: The record itself. Must contain a $type field.
     repo: string_formats.AtIdentifier  #: The handle or DID of the repo (aka, current account).
-    rkey: t.Optional[string_formats.RecordKey] = Field(default=None, max_length=512)  #: The Record Key.
+    rkey: te.Annotated[t.Optional[string_formats.RecordKey], Field(max_length=512)] = None  #: The Record Key.
     swap_commit: t.Optional[string_formats.Cid] = None  #: Compare and swap with the previous commit by CID.
     validate_: t.Optional[bool] = (
         None  #: Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons.
@@ -47,5 +47,5 @@ class Response(base.ResponseModelBase):
 
     cid: string_formats.Cid  #: Cid.
     uri: string_formats.AtUri  #: Uri.
-    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta'] = None  #: Commit.
+    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta']  #: Commit.
     validation_status: t.Optional[t.Union[t.Literal['valid'], t.Literal['unknown'], str]] = None  #: Validation status.

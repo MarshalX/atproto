@@ -36,16 +36,16 @@ class PostView(base.ModelBase):
                 'models.AppBskyEmbedRecord.View',
                 'models.AppBskyEmbedRecordWithMedia.View',
             ],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
-    ] = None  #: Embed.
+    ]  #: Embed.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: t.Optional[int] = None  #: Like count.
     quote_count: t.Optional[int] = None  #: Quote count.
     reply_count: t.Optional[int] = None  #: Reply count.
     repost_count: t.Optional[int] = None  #: Repost count.
-    threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.
-    viewer: t.Optional['models.AppBskyFeedDefs.ViewerState'] = None  #: Viewer.
+    threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView']  #: Threadgate.
+    viewer: t.Optional['models.AppBskyFeedDefs.ViewerState']  #: Viewer.
 
     py_type: t.Literal['app.bsky.feed.defs#postView'] = Field(
         default='app.bsky.feed.defs#postView', alias='$type', frozen=True
@@ -82,19 +82,19 @@ class FeedViewPost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     post: 'models.AppBskyFeedDefs.PostView'  #: Post.
-    feed_context: t.Optional[str] = Field(
-        default=None, max_length=2000
-    )  #: Context provided by feed generator that may be passed back alongside interactions.
+    feed_context: te.Annotated[t.Optional[str], Field(max_length=2000)] = (
+        None  #: Context provided by feed generator that may be passed back alongside interactions.
+    )
     reason: t.Optional[
         te.Annotated[
             t.Union['models.AppBskyFeedDefs.ReasonRepost', 'models.AppBskyFeedDefs.ReasonPin'],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
-    ] = None  #: Reason.
-    reply: t.Optional['models.AppBskyFeedDefs.ReplyRef'] = None  #: Reply.
-    req_id: t.Optional[str] = Field(
-        default=None, max_length=100
-    )  #: Unique identifier per request that may be passed back alongside interactions.
+    ]  #: Reason.
+    reply: t.Optional['models.AppBskyFeedDefs.ReplyRef']  #: Reply.
+    req_id: te.Annotated[t.Optional[str], Field(max_length=100)] = (
+        None  #: Unique identifier per request that may be passed back alongside interactions.
+    )
 
     py_type: t.Literal['app.bsky.feed.defs#feedViewPost'] = Field(
         default='app.bsky.feed.defs#feedViewPost', alias='$type', frozen=True
@@ -120,9 +120,9 @@ class ReplyRef(base.ModelBase):
         ],
         Field(discriminator='py_type'),
     ]  #: Root.
-    grandparent_author: t.Optional['models.AppBskyActorDefs.ProfileViewBasic'] = (
-        None  #: When parent is a reply to another post, this is the author of that post.
-    )
+    grandparent_author: t.Optional[
+        'models.AppBskyActorDefs.ProfileViewBasic'
+    ]  #: When parent is a reply to another post, this is the author of that post.
 
     py_type: t.Literal['app.bsky.feed.defs#replyRef'] = Field(
         default='app.bsky.feed.defs#replyRef', alias='$type', frozen=True
@@ -161,9 +161,9 @@ class ThreadViewPost(base.ModelBase):
                 'models.AppBskyFeedDefs.NotFoundPost',
                 'models.AppBskyFeedDefs.BlockedPost',
             ],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
-    ] = None  #: Parent.
+    ]  #: Parent.
     replies: t.Optional[
         t.List[
             te.Annotated[
@@ -176,7 +176,7 @@ class ThreadViewPost(base.ModelBase):
             ]
         ]
     ] = None  #: Replies.
-    thread_context: t.Optional['models.AppBskyFeedDefs.ThreadContext'] = None  #: Thread context.
+    thread_context: t.Optional['models.AppBskyFeedDefs.ThreadContext']  #: Thread context.
 
     py_type: t.Literal['app.bsky.feed.defs#threadViewPost'] = Field(
         default='app.bsky.feed.defs#threadViewPost', alias='$type', frozen=True
@@ -210,7 +210,7 @@ class BlockedAuthor(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     did: string_formats.Did  #: Did.
-    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState']  #: Viewer.
 
     py_type: t.Literal['app.bsky.feed.defs#blockedAuthor'] = Field(
         default='app.bsky.feed.defs#blockedAuthor', alias='$type', frozen=True
@@ -231,11 +231,11 @@ class GeneratorView(base.ModelBase):
     content_mode: t.Optional[
         t.Union['models.AppBskyFeedDefs.ContentModeUnspecified', 'models.AppBskyFeedDefs.ContentModeVideo', str]
     ] = None  #: Content mode.
-    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
+    description: te.Annotated[t.Optional[str], Field(max_length=3000)] = None  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
-    viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState'] = None  #: Viewer.
+    like_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Like count.
+    viewer: t.Optional['models.AppBskyFeedDefs.GeneratorViewerState']  #: Viewer.
 
     py_type: t.Literal['app.bsky.feed.defs#generatorView'] = Field(
         default='app.bsky.feed.defs#generatorView', alias='$type', frozen=True
@@ -256,15 +256,15 @@ class SkeletonFeedPost(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
     post: string_formats.AtUri  #: Post.
-    feed_context: t.Optional[str] = Field(
-        default=None, max_length=2000
-    )  #: Context that will be passed through to client and may be passed to feed generator back alongside interactions.
+    feed_context: te.Annotated[t.Optional[str], Field(max_length=2000)] = (
+        None  #: Context that will be passed through to client and may be passed to feed generator back alongside interactions.
+    )
     reason: t.Optional[
         te.Annotated[
             t.Union['models.AppBskyFeedDefs.SkeletonReasonRepost', 'models.AppBskyFeedDefs.SkeletonReasonPin'],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
-    ] = None  #: Reason.
+    ]  #: Reason.
 
     py_type: t.Literal['app.bsky.feed.defs#skeletonFeedPost'] = Field(
         default='app.bsky.feed.defs#skeletonFeedPost', alias='$type', frozen=True
@@ -322,13 +322,13 @@ class Interaction(base.ModelBase):
             str,
         ]
     ] = None  #: Event.
-    feed_context: t.Optional[str] = Field(
-        default=None, max_length=2000
-    )  #: Context on a feed item that was originally supplied by the feed generator on getFeedSkeleton.
+    feed_context: te.Annotated[t.Optional[str], Field(max_length=2000)] = (
+        None  #: Context on a feed item that was originally supplied by the feed generator on getFeedSkeleton.
+    )
     item: t.Optional[string_formats.AtUri] = None  #: Item.
-    req_id: t.Optional[str] = Field(
-        default=None, max_length=100
-    )  #: Unique identifier per request that may be passed back alongside interactions.
+    req_id: te.Annotated[t.Optional[str], Field(max_length=100)] = (
+        None  #: Unique identifier per request that may be passed back alongside interactions.
+    )
 
     py_type: t.Literal['app.bsky.feed.defs#interaction'] = Field(
         default='app.bsky.feed.defs#interaction', alias='$type', frozen=True

@@ -23,8 +23,8 @@ class Record(base.RecordModelBase):
     created_at: string_formats.DateTime  #: Created at.
     policies: 'models.AppBskyLabelerDefs.LabelerPolicies'  #: Policies.
     labels: t.Optional[
-        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
-    ] = None  #: Labels.
+        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(discriminator='py_type')]
+    ]  #: Labels.
     reason_types: t.Optional[t.List['models.ComAtprotoModerationDefs.ReasonType']] = (
         None  #: The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed.
     )

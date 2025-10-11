@@ -18,7 +18,7 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.actor.searchActorsTypeahead`."""
 
-    limit: t.Optional[int] = Field(default=10, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     q: t.Optional[str] = None  #: Search query prefix; not a full query string.
     term: t.Optional[str] = None  #: DEPRECATED: use 'q' instead.
 

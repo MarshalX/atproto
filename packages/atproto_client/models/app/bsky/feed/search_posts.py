@@ -33,7 +33,7 @@ class Params(base.ParamsModelBase):
     lang: t.Optional[string_formats.Language] = (
         None  #: Filter to posts in the given language. Expected to be based on post language field, though server may override language detection.
     )
-    limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     mentions: t.Optional[string_formats.AtIdentifier] = (
         None  #: Filter to posts which mention the given account. Handles are resolved to DID before query-time. Only matches rich-text facet mentions.
     )

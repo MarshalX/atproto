@@ -21,11 +21,11 @@ class Response(base.ResponseModelBase):
 
     available_user_domains: t.List[str]  #: List of domain suffixes that can be used in account handles.
     did: string_formats.Did  #: Did.
-    contact: t.Optional['models.ComAtprotoServerDescribeServer.Contact'] = None  #: Contact information.
+    contact: t.Optional['models.ComAtprotoServerDescribeServer.Contact']  #: Contact information.
     invite_code_required: t.Optional[bool] = (
         None  #: If true, an invite code must be supplied to create an account on this instance.
     )
-    links: t.Optional['models.ComAtprotoServerDescribeServer.Links'] = None  #: URLs of service policy documents.
+    links: t.Optional['models.ComAtprotoServerDescribeServer.Links']  #: URLs of service policy documents.
     phone_verification_required: t.Optional[bool] = (
         None  #: If true, a phone verification token must be supplied to create an account on this instance.
     )

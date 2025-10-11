@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
@@ -21,13 +22,13 @@ class ProfileViewBasic(base.ModelBase):
 
     did: string_formats.Did  #: Did.
     handle: string_formats.Handle  #: Handle.
-    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
+    associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated']  #: Associated.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     chat_disabled: t.Optional[bool] = None  #: Set to true when the actor cannot actively participate in conversations.
-    display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
+    display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
-    viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
+    verification: t.Optional['models.AppBskyActorDefs.VerificationState']  #: Verification.
+    viewer: t.Optional['models.AppBskyActorDefs.ViewerState']  #: Viewer.
 
     py_type: t.Literal['chat.bsky.actor.defs#profileViewBasic'] = Field(
         default='chat.bsky.actor.defs#profileViewBasic', alias='$type', frozen=True

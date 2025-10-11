@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
 
     actor: string_formats.AtIdentifier  #: The account (actor) to check for membership.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     purposes: t.Optional[t.List[t.Union[t.Literal['modlist'], t.Literal['curatelist'], str]]] = (
         None  #: Optional filter by list purpose. If not specified, all supported types are returned.
     )
@@ -50,7 +50,7 @@ class ListWithMembership(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.getListsWithMembership`. A list and an optional list item indicating membership of a target user to that list."""
 
     list: 'models.AppBskyGraphDefs.ListView'  #: List.
-    list_item: t.Optional['models.AppBskyGraphDefs.ListItemView'] = None  #: List item.
+    list_item: t.Optional['models.AppBskyGraphDefs.ListItemView']  #: List item.
 
     py_type: t.Literal['app.bsky.graph.getListsWithMembership#listWithMembership'] = Field(
         default='app.bsky.graph.getListsWithMembership#listWithMembership', alias='$type', frozen=True

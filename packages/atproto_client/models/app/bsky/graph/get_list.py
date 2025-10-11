@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
 
     list: string_formats.AtUri  #: Reference (AT-URI) of the list record to hydrate.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
 
 
 class ParamsDict(t.TypedDict):

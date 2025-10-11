@@ -38,7 +38,7 @@ class AccountView(base.ModelBase):
     email: t.Optional[str] = None  #: Email.
     email_confirmed_at: t.Optional[string_formats.DateTime] = None  #: Email confirmed at.
     invite_note: t.Optional[str] = None  #: Invite note.
-    invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode'] = None  #: Invited by.
+    invited_by: t.Optional['models.ComAtprotoServerDefs.InviteCode']  #: Invited by.
     invites: t.Optional[t.List['models.ComAtprotoServerDefs.InviteCode']] = None  #: Invites.
     invites_disabled: t.Optional[bool] = None  #: Invites disabled.
     related_records: t.Optional[t.List['UnknownType']] = None  #: Related records.

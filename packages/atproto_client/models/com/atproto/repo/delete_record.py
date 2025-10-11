@@ -37,4 +37,4 @@ class DataDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.repo.deleteRecord`."""
 
-    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta'] = None  #: Commit.
+    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta']  #: Commit.

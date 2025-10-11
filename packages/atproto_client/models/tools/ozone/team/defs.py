@@ -30,7 +30,7 @@ class Member(base.ModelBase):
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     disabled: t.Optional[bool] = None  #: Disabled.
     last_updated_by: t.Optional[str] = None  #: Last updated by.
-    profile: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed'] = None  #: Profile.
+    profile: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed']  #: Profile.
     updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
 
     py_type: t.Literal['tools.ozone.team.defs#member'] = Field(

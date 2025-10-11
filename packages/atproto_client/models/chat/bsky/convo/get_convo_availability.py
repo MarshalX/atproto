@@ -30,4 +30,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`chat.bsky.convo.getConvoAvailability`."""
 
     can_chat: bool  #: Can chat.
-    convo: t.Optional['models.ChatBskyConvoDefs.ConvoView'] = None  #: Convo.
+    convo: t.Optional['models.ChatBskyConvoDefs.ConvoView']  #: Convo.

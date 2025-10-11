@@ -24,12 +24,12 @@ class Record(base.RecordModelBase):
 
     created_at: string_formats.DateTime  #: Created at.
     status: t.Union['models.AppBskyActorStatus.Live', str]  #: The status for the account.
-    duration_minutes: t.Optional[int] = Field(
-        default=None, ge=1
-    )  #: The duration of the status in minutes. Applications can choose to impose minimum and maximum limits.
+    duration_minutes: te.Annotated[t.Optional[int], Field(ge=1)] = (
+        None  #: The duration of the status in minutes. Applications can choose to impose minimum and maximum limits.
+    )
     embed: t.Optional[
-        te.Annotated[t.Union['models.AppBskyEmbedExternal.Main'], Field(default=None, discriminator='py_type')]
-    ] = None  #: An optional embed associated with the status.
+        te.Annotated[t.Union['models.AppBskyEmbedExternal.Main'], Field(discriminator='py_type')]
+    ]  #: An optional embed associated with the status.
 
     py_type: t.Literal['app.bsky.actor.status'] = Field(default='app.bsky.actor.status', alias='$type', frozen=True)
 

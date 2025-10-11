@@ -26,33 +26,29 @@ class VerificationView(base.ModelBase):
     issuer: string_formats.Did  #: The user who issued this verification.
     subject: string_formats.Did  #: The subject of the verification.
     uri: string_formats.AtUri  #: The AT-URI of the verification record.
-    issuer_profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field(default=None)]] = (
-        None  #: Issuer profile.
-    )
+    issuer_profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field()]]  #: Issuer profile.
     issuer_repo: t.Optional[
         te.Annotated[
             t.Union[
                 'models.ToolsOzoneModerationDefs.RepoViewDetail', 'models.ToolsOzoneModerationDefs.RepoViewNotFound'
             ],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
-    ] = None  #: Issuer repo.
+    ]  #: Issuer repo.
     revoke_reason: t.Optional[str] = (
         None  #: Describes the reason for revocation, also indicating that the verification is no longer valid.
     )
     revoked_at: t.Optional[string_formats.DateTime] = None  #: Timestamp when the verification was revoked.
     revoked_by: t.Optional[string_formats.Did] = None  #: The user who revoked this verification.
-    subject_profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field(default=None)]] = (
-        None  #: Subject profile.
-    )
+    subject_profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field()]]  #: Subject profile.
     subject_repo: t.Optional[
         te.Annotated[
             t.Union[
                 'models.ToolsOzoneModerationDefs.RepoViewDetail', 'models.ToolsOzoneModerationDefs.RepoViewNotFound'
             ],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
-    ] = None  #: Subject repo.
+    ]  #: Subject repo.
 
     py_type: t.Literal['tools.ozone.verification.defs#verificationView'] = Field(
         default='tools.ozone.verification.defs#verificationView', alias='$type', frozen=True

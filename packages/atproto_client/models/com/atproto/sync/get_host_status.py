@@ -32,4 +32,4 @@ class Response(base.ResponseModelBase):
     seq: t.Optional[int] = (
         None  #: Recent repo stream event sequence number. May be delayed from actual stream processing (eg, persisted cursor not in-memory cursor).
     )
-    status: t.Optional['models.ComAtprotoSyncDefs.HostStatus'] = None  #: Status.
+    status: t.Optional['models.ComAtprotoSyncDefs.HostStatus']  #: Status.

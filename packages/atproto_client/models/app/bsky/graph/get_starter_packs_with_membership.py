@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
 
     actor: string_formats.AtIdentifier  #: The account (actor) to check for membership.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
 
 
 class ParamsDict(t.TypedDict):
@@ -44,7 +44,7 @@ class StarterPackWithMembership(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.getStarterPacksWithMembership`. A starter pack and an optional list item indicating membership of a target user to that starter pack."""
 
     starter_pack: 'models.AppBskyGraphDefs.StarterPackView'  #: Starter pack.
-    list_item: t.Optional['models.AppBskyGraphDefs.ListItemView'] = None  #: List item.
+    list_item: t.Optional['models.AppBskyGraphDefs.ListItemView']  #: List item.
 
     py_type: t.Literal['app.bsky.graph.getStarterPacksWithMembership#starterPackWithMembership'] = Field(
         default='app.bsky.graph.getStarterPacksWithMembership#starterPackWithMembership', alias='$type', frozen=True

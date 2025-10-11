@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
@@ -21,11 +22,13 @@ class Main(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.video`."""
 
     video: 'BlobRef'  #: The mp4 video file. May be up to 100mb, formerly limited to 50mb.
-    alt: t.Optional[str] = Field(
-        default=None, max_length=10000
-    )  #: Alt text description of the video, for accessibility.
-    aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None  #: Aspect ratio.
-    captions: t.Optional[t.List['models.AppBskyEmbedVideo.Caption']] = Field(default=None, max_length=20)  #: Captions.
+    alt: te.Annotated[t.Optional[str], Field(max_length=10000)] = (
+        None  #: Alt text description of the video, for accessibility.
+    )
+    aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio']  #: Aspect ratio.
+    captions: te.Annotated[t.Optional[t.List['models.AppBskyEmbedVideo.Caption']], Field(max_length=20)] = (
+        None  #: Captions.
+    )
 
     py_type: t.Literal['app.bsky.embed.video'] = Field(default='app.bsky.embed.video', alias='$type', frozen=True)
 
@@ -46,8 +49,8 @@ class View(base.ModelBase):
 
     cid: string_formats.Cid  #: Cid.
     playlist: string_formats.Uri  #: Playlist.
-    alt: t.Optional[str] = Field(default=None, max_length=10000)  #: Alt.
-    aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None  #: Aspect ratio.
+    alt: te.Annotated[t.Optional[str], Field(max_length=10000)] = None  #: Alt.
+    aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio']  #: Aspect ratio.
     thumbnail: t.Optional[string_formats.Uri] = None  #: Thumbnail.
 
     py_type: t.Literal['app.bsky.embed.video#view'] = Field(

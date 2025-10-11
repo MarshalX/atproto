@@ -24,7 +24,7 @@ class Params(base.ParamsModelBase):
     collection: string_formats.Nsid  #: The NSID of the record type.
     repo: string_formats.AtIdentifier  #: The handle or DID of the repo.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: The number of records to return.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: The number of records to return.
     reverse: t.Optional[bool] = None  #: Flag to reverse the order of the returned records.
 
 

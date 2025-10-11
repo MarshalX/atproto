@@ -16,7 +16,7 @@ from atproto_client.models import base, string_formats
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getSuggestedStarterPacksSkeleton`."""
 
-    limit: t.Optional[int] = Field(default=10, ge=1, le=25)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=25)] = None  #: Limit.
     viewer: t.Optional[string_formats.Did] = (
         None  #: DID of the account making the request (not included for public/unauthenticated queries).
     )

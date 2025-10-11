@@ -19,7 +19,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.listHosts`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=200, ge=1, le=1000)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=1000)] = None  #: Limit.
 
 
 class ParamsDict(t.TypedDict):
@@ -44,7 +44,7 @@ class Host(base.ModelBase):
     seq: t.Optional[int] = (
         None  #: Recent repo stream event sequence number. May be delayed from actual stream processing (eg, persisted cursor not in-memory cursor).
     )
-    status: t.Optional['models.ComAtprotoSyncDefs.HostStatus'] = None  #: Status.
+    status: t.Optional['models.ComAtprotoSyncDefs.HostStatus']  #: Status.
 
     py_type: t.Literal['com.atproto.sync.listHosts#host'] = Field(
         default='com.atproto.sync.listHosts#host', alias='$type', frozen=True

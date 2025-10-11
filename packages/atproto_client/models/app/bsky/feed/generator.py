@@ -31,11 +31,11 @@ class Record(base.RecordModelBase):
     content_mode: t.Optional[
         t.Union['models.AppBskyFeedDefs.ContentModeUnspecified', 'models.AppBskyFeedDefs.ContentModeVideo', str]
     ] = None  #: Content mode.
-    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
+    description: te.Annotated[t.Optional[str], Field(max_length=3000)] = None  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[
-        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
-    ] = None  #: Self-label values.
+        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(discriminator='py_type')]
+    ]  #: Self-label values.
 
     py_type: t.Literal['app.bsky.feed.generator'] = Field(default='app.bsky.feed.generator', alias='$type', frozen=True)
 

@@ -21,7 +21,7 @@ class Response(base.ResponseModelBase):
 
     did: string_formats.Did  #: Did.
     feeds: t.List['models.AppBskyFeedDescribeFeedGenerator.Feed']  #: Feeds.
-    links: t.Optional['models.AppBskyFeedDescribeFeedGenerator.Links'] = None  #: Links.
+    links: t.Optional['models.AppBskyFeedDescribeFeedGenerator.Links']  #: Links.
 
 
 class Feed(base.ModelBase):

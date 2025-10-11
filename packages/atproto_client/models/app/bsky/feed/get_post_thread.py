@@ -21,12 +21,12 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.feed.getPostThread`."""
 
     uri: string_formats.AtUri  #: Reference (AT-URI) to post record.
-    depth: t.Optional[int] = Field(
-        default=6, ge=0, le=1000
-    )  #: How many levels of reply depth should be included in response.
-    parent_height: t.Optional[int] = Field(
-        default=80, ge=0, le=1000
-    )  #: How many levels of parent (and grandparent, etc) post to include.
+    depth: te.Annotated[t.Optional[int], Field(ge=0, le=1000)] = (
+        None  #: How many levels of reply depth should be included in response.
+    )
+    parent_height: te.Annotated[t.Optional[int], Field(ge=0, le=1000)] = (
+        None  #: How many levels of parent (and grandparent, etc) post to include.
+    )
 
 
 class ParamsDict(t.TypedDict):
@@ -46,4 +46,4 @@ class Response(base.ResponseModelBase):
         ],
         Field(discriminator='py_type'),
     ]  #: Thread.
-    threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.
+    threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView']  #: Threadgate.
