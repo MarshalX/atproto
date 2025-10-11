@@ -29,7 +29,7 @@ class ListViewBasic(base.ModelBase):
     indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     list_item_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: List item count.
-    viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState']  #: Viewer.
+    viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.graph.defs#listViewBasic'] = Field(
         default='app.bsky.graph.defs#listViewBasic', alias='$type', frozen=True
@@ -50,7 +50,7 @@ class ListView(base.ModelBase):
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     list_item_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: List item count.
-    viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState']  #: Viewer.
+    viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.graph.defs#listView'] = Field(
         default='app.bsky.graph.defs#listView', alias='$type', frozen=True
@@ -82,7 +82,7 @@ class StarterPackView(base.ModelBase):
     joined_all_time_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Joined all time count.
     joined_week_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Joined week count.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    list: t.Optional['models.AppBskyGraphDefs.ListViewBasic']  #: List.
+    list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: List.
     list_items_sample: te.Annotated[
         t.Optional[t.List['models.AppBskyGraphDefs.ListItemView']], Field(max_length=12)
     ] = None  #: List items sample.

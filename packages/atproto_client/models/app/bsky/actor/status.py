@@ -28,8 +28,8 @@ class Record(base.RecordModelBase):
         None  #: The duration of the status in minutes. Applications can choose to impose minimum and maximum limits.
     )
     embed: t.Optional[
-        te.Annotated[t.Union['models.AppBskyEmbedExternal.Main'], Field(discriminator='py_type')]
-    ]  #: An optional embed associated with the status.
+        te.Annotated[t.Union['models.AppBskyEmbedExternal.Main'], Field(default=None, discriminator='py_type')]
+    ] = None  #: An optional embed associated with the status.
 
     py_type: t.Literal['app.bsky.actor.status'] = Field(default='app.bsky.actor.status', alias='$type', frozen=True)
 

@@ -17,19 +17,19 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`app.bsky.notification.putPreferencesV2`."""
 
-    chat: t.Optional['models.AppBskyNotificationDefs.ChatPreference']  #: Chat.
-    follow: t.Optional['models.AppBskyNotificationDefs.FilterablePreference']  #: Follow.
-    like: t.Optional['models.AppBskyNotificationDefs.FilterablePreference']  #: Like.
-    like_via_repost: t.Optional['models.AppBskyNotificationDefs.FilterablePreference']  #: Like via repost.
-    mention: t.Optional['models.AppBskyNotificationDefs.FilterablePreference']  #: Mention.
-    quote: t.Optional['models.AppBskyNotificationDefs.FilterablePreference']  #: Quote.
-    reply: t.Optional['models.AppBskyNotificationDefs.FilterablePreference']  #: Reply.
-    repost: t.Optional['models.AppBskyNotificationDefs.FilterablePreference']  #: Repost.
-    repost_via_repost: t.Optional['models.AppBskyNotificationDefs.FilterablePreference']  #: Repost via repost.
-    starterpack_joined: t.Optional['models.AppBskyNotificationDefs.Preference']  #: Starterpack joined.
-    subscribed_post: t.Optional['models.AppBskyNotificationDefs.Preference']  #: Subscribed post.
-    unverified: t.Optional['models.AppBskyNotificationDefs.Preference']  #: Unverified.
-    verified: t.Optional['models.AppBskyNotificationDefs.Preference']  #: Verified.
+    chat: t.Optional['models.AppBskyNotificationDefs.ChatPreference'] = None  #: Chat.
+    follow: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Follow.
+    like: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Like.
+    like_via_repost: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Like via repost.
+    mention: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Mention.
+    quote: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Quote.
+    reply: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Reply.
+    repost: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Repost.
+    repost_via_repost: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Repost via repost.
+    starterpack_joined: t.Optional['models.AppBskyNotificationDefs.Preference'] = None  #: Starterpack joined.
+    subscribed_post: t.Optional['models.AppBskyNotificationDefs.Preference'] = None  #: Subscribed post.
+    unverified: t.Optional['models.AppBskyNotificationDefs.Preference'] = None  #: Unverified.
+    verified: t.Optional['models.AppBskyNotificationDefs.Preference'] = None  #: Verified.
 
 
 class DataDict(t.TypedDict):

@@ -44,7 +44,7 @@ class Host(base.ModelBase):
     seq: t.Optional[int] = (
         None  #: Recent repo stream event sequence number. May be delayed from actual stream processing (eg, persisted cursor not in-memory cursor).
     )
-    status: t.Optional['models.ComAtprotoSyncDefs.HostStatus']  #: Status.
+    status: t.Optional['models.ComAtprotoSyncDefs.HostStatus'] = None  #: Status.
 
     py_type: t.Literal['com.atproto.sync.listHosts#host'] = Field(
         default='com.atproto.sync.listHosts#host', alias='$type', frozen=True

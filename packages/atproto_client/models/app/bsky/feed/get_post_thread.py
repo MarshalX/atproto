@@ -46,4 +46,4 @@ class Response(base.ResponseModelBase):
         ],
         Field(discriminator='py_type'),
     ]  #: Thread.
-    threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView']  #: Threadgate.
+    threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.

@@ -28,7 +28,7 @@ class Data(base.DataModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    mod_tool: t.Optional['models.ComAtprotoModerationCreateReport.ModTool']  #: Mod tool.
+    mod_tool: t.Optional['models.ComAtprotoModerationCreateReport.ModTool'] = None  #: Mod tool.
     reason: te.Annotated[t.Optional[str], Field(max_length=20000)] = (
         None  #: Additional context about the content and violation.
     )

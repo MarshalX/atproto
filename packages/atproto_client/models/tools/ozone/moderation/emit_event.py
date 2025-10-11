@@ -57,7 +57,7 @@ class Data(base.DataModelBase):
     external_id: t.Optional[str] = (
         None  #: An optional external ID for the event, used to deduplicate events from external systems. Fails when an event of same type with the same external ID exists for the same subject.
     )
-    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool']  #: Mod tool.
+    mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
     subject_blob_cids: t.Optional[t.List[string_formats.Cid]] = None  #: Subject blob cids.
 
 

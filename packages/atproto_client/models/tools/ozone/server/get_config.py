@@ -19,12 +19,12 @@ from atproto_client.models import base
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`tools.ozone.server.getConfig`."""
 
-    appview: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig']  #: Appview.
-    blob_divert: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig']  #: Blob divert.
-    chat: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig']  #: Chat.
-    pds: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig']  #: Pds.
+    appview: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig'] = None  #: Appview.
+    blob_divert: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig'] = None  #: Blob divert.
+    chat: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig'] = None  #: Chat.
+    pds: t.Optional['models.ToolsOzoneServerGetConfig.ServiceConfig'] = None  #: Pds.
     verifier_did: t.Optional[string_formats.Did] = None  #: The did of the verifier used for verification.
-    viewer: t.Optional['models.ToolsOzoneServerGetConfig.ViewerConfig']  #: Viewer.
+    viewer: t.Optional['models.ToolsOzoneServerGetConfig.ViewerConfig'] = None  #: Viewer.
 
 
 class ServiceConfig(base.ModelBase):

@@ -44,7 +44,7 @@ class StarterPackWithMembership(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.getStarterPacksWithMembership`. A starter pack and an optional list item indicating membership of a target user to that starter pack."""
 
     starter_pack: 'models.AppBskyGraphDefs.StarterPackView'  #: Starter pack.
-    list_item: t.Optional['models.AppBskyGraphDefs.ListItemView']  #: List item.
+    list_item: t.Optional['models.AppBskyGraphDefs.ListItemView'] = None  #: List item.
 
     py_type: t.Literal['app.bsky.graph.getStarterPacksWithMembership#starterPackWithMembership'] = Field(
         default='app.bsky.graph.getStarterPacksWithMembership#starterPackWithMembership', alias='$type', frozen=True

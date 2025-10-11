@@ -34,8 +34,8 @@ class MessageInput(base.ModelBase):
 
     text: str = Field(max_length=10000)  #: Text.
     embed: t.Optional[
-        te.Annotated[t.Union['models.AppBskyEmbedRecord.Main'], Field(discriminator='py_type')]
-    ]  #: Embed.
+        te.Annotated[t.Union['models.AppBskyEmbedRecord.Main'], Field(default=None, discriminator='py_type')]
+    ] = None  #: Embed.
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
@@ -54,8 +54,8 @@ class MessageView(base.ModelBase):
     sent_at: string_formats.DateTime  #: Sent at.
     text: str = Field(max_length=10000)  #: Text.
     embed: t.Optional[
-        te.Annotated[t.Union['models.AppBskyEmbedRecord.View'], Field(discriminator='py_type')]
-    ]  #: Embed.
+        te.Annotated[t.Union['models.AppBskyEmbedRecord.View'], Field(default=None, discriminator='py_type')]
+    ] = None  #: Embed.
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
@@ -135,12 +135,14 @@ class ConvoView(base.ModelBase):
     last_message: t.Optional[
         te.Annotated[
             t.Union['models.ChatBskyConvoDefs.MessageView', 'models.ChatBskyConvoDefs.DeletedMessageView'],
-            Field(discriminator='py_type'),
+            Field(default=None, discriminator='py_type'),
         ]
-    ]  #: Last message.
+    ] = None  #: Last message.
     last_reaction: t.Optional[
-        te.Annotated[t.Union['models.ChatBskyConvoDefs.MessageAndReactionView'], Field(discriminator='py_type')]
-    ]  #: Last reaction.
+        te.Annotated[
+            t.Union['models.ChatBskyConvoDefs.MessageAndReactionView'], Field(default=None, discriminator='py_type')
+        ]
+    ] = None  #: Last reaction.
     status: t.Optional[t.Union[t.Literal['request'], t.Literal['accepted'], str]] = None  #: Status.
 
     py_type: t.Literal['chat.bsky.convo.defs#convoView'] = Field(

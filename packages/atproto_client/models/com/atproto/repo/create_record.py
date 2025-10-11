@@ -47,5 +47,5 @@ class Response(base.ResponseModelBase):
 
     cid: string_formats.Cid  #: Cid.
     uri: string_formats.AtUri  #: Uri.
-    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta']  #: Commit.
+    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta'] = None  #: Commit.
     validation_status: t.Optional[t.Union[t.Literal['valid'], t.Literal['unknown'], str]] = None  #: Validation status.

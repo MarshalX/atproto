@@ -21,7 +21,7 @@ class Record(base.RecordModelBase):
 
     created_at: string_formats.DateTime  #: Created at.
     subject: 'models.ComAtprotoRepoStrongRef.Main'  #: Subject.
-    via: t.Optional['models.ComAtprotoRepoStrongRef.Main']  #: Via.
+    via: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Via.
 
     py_type: t.Literal['app.bsky.feed.like'] = Field(default='app.bsky.feed.like', alias='$type', frozen=True)
 

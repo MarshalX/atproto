@@ -63,7 +63,7 @@ class DataDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.repo.applyWrites`."""
 
-    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta']  #: Commit.
+    commit: t.Optional['models.ComAtprotoRepoDefs.CommitMeta'] = None  #: Commit.
     results: t.Optional[
         t.List[
             te.Annotated[

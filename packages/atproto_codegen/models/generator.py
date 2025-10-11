@@ -221,9 +221,11 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, o
 
     if is_unknown_union:
         # unknown type does not compatible with discriminator because $type is unknown :)
-        def_field_meta = 'Field()' if optional else 'Field()'
+        def_field_meta = 'Field(default=None)' if optional else 'Field()'
     else:
-        def_field_meta = 'Field(discriminator="py_type")'
+        def_field_meta = (
+            'Field(default=None, discriminator="py_type")' if optional else 'Field(discriminator="py_type")'
+        )
 
     annotated_union = f'te.Annotated[t.Union[{def_names}], {def_field_meta}]'
     return _get_optional_typehint(annotated_union, optional=optional)
@@ -351,10 +353,7 @@ def _get_model_field_value(  # noqa: C901
     }
 
     # Check if there are any field constraints besides default
-    has_field_constraints = any(
-        value is not not_set and name != 'default'
-        for name, value in field_params.items()
-    )
+    has_field_constraints = any(value is not not_set and name != 'default' for name, value in field_params.items())
 
     values = []
     only_default = default is not not_set
@@ -493,7 +492,13 @@ def _get_model(
             value_def = ' = None'
         else:
             # Simple assignment
-            value_def = f" = {field_value_info['value']}" if field_value_info['value'] else ''
+            if field_value_info['value']:
+                value_def = f" = {field_value_info['value']}"
+            elif is_optional:
+                # Optional fields without Field constraints still need = None
+                value_def = ' = None'
+            else:
+                value_def = ''
 
         field_def = f'{_(1)}{snake_cased_field_name}: {type_hint}{value_def} #: {description}'
 

@@ -50,7 +50,7 @@ class ListWithMembership(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.getListsWithMembership`. A list and an optional list item indicating membership of a target user to that list."""
 
     list: 'models.AppBskyGraphDefs.ListView'  #: List.
-    list_item: t.Optional['models.AppBskyGraphDefs.ListItemView']  #: List item.
+    list_item: t.Optional['models.AppBskyGraphDefs.ListItemView'] = None  #: List item.
 
     py_type: t.Literal['app.bsky.graph.getListsWithMembership#listWithMembership'] = Field(
         default='app.bsky.graph.getListsWithMembership#listWithMembership', alias='$type', frozen=True

@@ -26,7 +26,7 @@ class LabelerView(base.ModelBase):
     uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Like count.
-    viewer: t.Optional['models.AppBskyLabelerDefs.LabelerViewerState']  #: Viewer.
+    viewer: t.Optional['models.AppBskyLabelerDefs.LabelerViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.labeler.defs#labelerView'] = Field(
         default='app.bsky.labeler.defs#labelerView', alias='$type', frozen=True
@@ -52,7 +52,7 @@ class LabelerViewDetailed(base.ModelBase):
     subject_types: t.Optional[t.List['models.ComAtprotoModerationDefs.SubjectType']] = (
         None  #: The set of subject types (account, record, etc) this service accepts reports on.
     )
-    viewer: t.Optional['models.AppBskyLabelerDefs.LabelerViewerState']  #: Viewer.
+    viewer: t.Optional['models.AppBskyLabelerDefs.LabelerViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.labeler.defs#labelerViewDetailed'] = Field(
         default='app.bsky.labeler.defs#labelerViewDetailed', alias='$type', frozen=True

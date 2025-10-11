@@ -65,9 +65,9 @@ class Record(base.RecordModelBase):
                 'models.AppBskyEmbedRecord.Main',
                 'models.AppBskyEmbedRecordWithMedia.Main',
             ],
-            Field(discriminator='py_type'),
+            Field(default=None, discriminator='py_type'),
         ]
-    ]  #: Embed.
+    ] = None  #: Embed.
     entities: t.Optional[t.List['models.AppBskyFeedPost.Entity']] = (
         None  #: DEPRECATED: replaced by app.bsky.richtext.facet.
     )
@@ -75,12 +75,12 @@ class Record(base.RecordModelBase):
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
     labels: t.Optional[
-        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(discriminator='py_type')]
-    ]  #: Self-label values for this post. Effectively content warnings.
+        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
+    ] = None  #: Self-label values for this post. Effectively content warnings.
     langs: te.Annotated[t.Optional[t.List[string_formats.Language]], Field(max_length=3)] = (
         None  #: Indicates human language of post primary text content.
     )
-    reply: t.Optional['models.AppBskyFeedPost.ReplyRef']  #: Reply.
+    reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None  #: Reply.
     tags: te.Annotated[t.Optional[t.List[str]], Field(max_length=8)] = (
         None  #: Additional hashtags, in addition to any included in post text and facets.
     )

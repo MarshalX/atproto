@@ -58,7 +58,7 @@ class Response(base.ResponseModelBase):
     thread: t.List[
         'models.AppBskyUnspeccedGetPostThreadV2.ThreadItem'
     ]  #: A flat list of thread items. The depth of each item is indicated by the depth property inside the item.
-    threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView']  #: Threadgate.
+    threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.
 
 
 class ThreadItem(base.ModelBase):
