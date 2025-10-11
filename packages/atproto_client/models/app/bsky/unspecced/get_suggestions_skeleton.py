@@ -21,7 +21,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getSuggestionsSkeleton`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     relative_to_did: t.Optional[string_formats.Did] = (
         None  #: DID of the account to get suggestions relative to. If not provided, suggestions will be based on the viewer.
     )

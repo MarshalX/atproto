@@ -31,7 +31,7 @@ class Record(base.RecordModelBase):
     content_mode: t.Optional[
         t.Union['models.AppBskyFeedDefs.ContentModeUnspecified', 'models.AppBskyFeedDefs.ContentModeVideo', str]
     ] = None  #: Content mode.
-    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
+    description: te.Annotated[t.Optional[str], Field(max_length=3000)] = None  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]

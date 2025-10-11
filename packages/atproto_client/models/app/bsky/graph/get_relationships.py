@@ -21,9 +21,9 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.graph.getRelationships`."""
 
     actor: string_formats.AtIdentifier  #: Primary account requesting relationships for.
-    others: t.Optional[t.List[string_formats.AtIdentifier]] = Field(
-        default=None, max_length=30
-    )  #: List of 'other' accounts to be related back to the primary.
+    others: te.Annotated[t.Optional[t.List[string_formats.AtIdentifier]], Field(max_length=30)] = (
+        None  #: List of 'other' accounts to be related back to the primary.
+    )
 
 
 class ParamsDict(t.TypedDict):

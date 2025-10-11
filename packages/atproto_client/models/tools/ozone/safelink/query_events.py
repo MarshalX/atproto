@@ -19,7 +19,7 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.safelink.queryEvents`."""
 
     cursor: t.Optional[str] = None  #: Cursor for pagination.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Maximum number of results to return.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Maximum number of results to return.
     pattern_type: t.Optional[str] = None  #: Filter by pattern type.
     sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc'], str]] = 'desc'  #: Sort direction.
     urls: t.Optional[t.List[str]] = None  #: Filter by specific URLs or domains.

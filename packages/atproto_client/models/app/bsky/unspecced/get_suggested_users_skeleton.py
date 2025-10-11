@@ -17,7 +17,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getSuggestedUsersSkeleton`."""
 
     category: t.Optional[str] = None  #: Category of users to get suggestions for.
-    limit: t.Optional[int] = Field(default=25, ge=1, le=50)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=50)] = None  #: Limit.
     viewer: t.Optional[string_formats.Did] = (
         None  #: DID of the account making the request (not included for public/unauthenticated queries).
     )

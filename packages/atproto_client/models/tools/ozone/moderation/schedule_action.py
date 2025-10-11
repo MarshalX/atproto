@@ -53,9 +53,9 @@ class Takedown(base.ModelBase):
     duration_in_hours: t.Optional[int] = (
         None  #: Indicates how long the takedown should be in effect before automatically expiring.
     )
-    policies: t.Optional[t.List[str]] = Field(
-        default=None, max_length=5
-    )  #: Names/Keywords of the policies that drove the decision.
+    policies: te.Annotated[t.Optional[t.List[str]], Field(max_length=5)] = (
+        None  #: Names/Keywords of the policies that drove the decision.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.scheduleAction#takedown'] = Field(
         default='tools.ozone.moderation.scheduleAction#takedown', alias='$type', frozen=True

@@ -23,9 +23,9 @@ class Data(base.DataModelBase):
     uris: t.List[string_formats.AtUri] = Field(
         max_length=100
     )  #: Array of verification record uris to revoke. The AT-URI of the verification record to revoke.
-    revoke_reason: t.Optional[str] = Field(
-        default=None, max_length=1000
-    )  #: Reason for revoking the verification. This is optional and can be omitted if not needed.
+    revoke_reason: te.Annotated[t.Optional[str], Field(max_length=1000)] = (
+        None  #: Reason for revoking the verification. This is optional and can be omitted if not needed.
+    )
 
 
 class DataDict(t.TypedDict):

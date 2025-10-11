@@ -18,7 +18,7 @@ class Params(base.ParamsModelBase):
 
     did: string_formats.Did  #: The DID of the repo.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=500, ge=1, le=1000)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=1000)] = None  #: Limit.
     since: t.Optional[string_formats.Tid] = None  #: Optional revision of the repo to list blobs since.
 
 
