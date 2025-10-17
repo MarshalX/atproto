@@ -19,27 +19,24 @@ ReasonType = t.Union[
     'models.ComAtprotoModerationDefs.ReasonOther',
     'models.ComAtprotoModerationDefs.ReasonAppeal',
     'models.ToolsOzoneReportDefs.ReasonAppeal',
-    'models.ToolsOzoneReportDefs.ReasonViolenceAnimalWelfare',
+    'models.ToolsOzoneReportDefs.ReasonOther',
+    'models.ToolsOzoneReportDefs.ReasonViolenceAnimal',
     'models.ToolsOzoneReportDefs.ReasonViolenceThreats',
     'models.ToolsOzoneReportDefs.ReasonViolenceGraphicContent',
-    'models.ToolsOzoneReportDefs.ReasonViolenceSelfHarm',
     'models.ToolsOzoneReportDefs.ReasonViolenceGlorification',
     'models.ToolsOzoneReportDefs.ReasonViolenceExtremistContent',
     'models.ToolsOzoneReportDefs.ReasonViolenceTrafficking',
     'models.ToolsOzoneReportDefs.ReasonViolenceOther',
     'models.ToolsOzoneReportDefs.ReasonSexualAbuseContent',
     'models.ToolsOzoneReportDefs.ReasonSexualNCII',
-    'models.ToolsOzoneReportDefs.ReasonSexualSextortion',
     'models.ToolsOzoneReportDefs.ReasonSexualDeepfake',
     'models.ToolsOzoneReportDefs.ReasonSexualAnimal',
     'models.ToolsOzoneReportDefs.ReasonSexualUnlabeled',
     'models.ToolsOzoneReportDefs.ReasonSexualOther',
     'models.ToolsOzoneReportDefs.ReasonChildSafetyCSAM',
     'models.ToolsOzoneReportDefs.ReasonChildSafetyGroom',
-    'models.ToolsOzoneReportDefs.ReasonChildSafetyMinorPrivacy',
-    'models.ToolsOzoneReportDefs.ReasonChildSafetyEndangerment',
+    'models.ToolsOzoneReportDefs.ReasonChildSafetyPrivacy',
     'models.ToolsOzoneReportDefs.ReasonChildSafetyHarassment',
-    'models.ToolsOzoneReportDefs.ReasonChildSafetyPromotion',
     'models.ToolsOzoneReportDefs.ReasonChildSafetyOther',
     'models.ToolsOzoneReportDefs.ReasonHarassmentTroll',
     'models.ToolsOzoneReportDefs.ReasonHarassmentTargeted',
@@ -50,19 +47,17 @@ ReasonType = t.Union[
     'models.ToolsOzoneReportDefs.ReasonMisleadingImpersonation',
     'models.ToolsOzoneReportDefs.ReasonMisleadingSpam',
     'models.ToolsOzoneReportDefs.ReasonMisleadingScam',
-    'models.ToolsOzoneReportDefs.ReasonMisleadingSyntheticContent',
-    'models.ToolsOzoneReportDefs.ReasonMisleadingMisinformation',
+    'models.ToolsOzoneReportDefs.ReasonMisleadingElections',
     'models.ToolsOzoneReportDefs.ReasonMisleadingOther',
     'models.ToolsOzoneReportDefs.ReasonRuleSiteSecurity',
-    'models.ToolsOzoneReportDefs.ReasonRuleStolenContent',
     'models.ToolsOzoneReportDefs.ReasonRuleProhibitedSales',
     'models.ToolsOzoneReportDefs.ReasonRuleBanEvasion',
     'models.ToolsOzoneReportDefs.ReasonRuleOther',
-    'models.ToolsOzoneReportDefs.ReasonCivicElectoralProcess',
-    'models.ToolsOzoneReportDefs.ReasonCivicDisclosure',
-    'models.ToolsOzoneReportDefs.ReasonCivicInterference',
-    'models.ToolsOzoneReportDefs.ReasonCivicMisinformation',
-    'models.ToolsOzoneReportDefs.ReasonCivicImpersonation',
+    'models.ToolsOzoneReportDefs.ReasonSelfHarmContent',
+    'models.ToolsOzoneReportDefs.ReasonSelfHarmED',
+    'models.ToolsOzoneReportDefs.ReasonSelfHarmStunts',
+    'models.ToolsOzoneReportDefs.ReasonSelfHarmSubstances',
+    'models.ToolsOzoneReportDefs.ReasonSelfHarmOther',
     str,
 ]  #: Reason type
 
@@ -88,7 +83,7 @@ ReasonRude = t.Literal[
 
 ReasonOther = t.Literal[
     'com.atproto.moderation.defs#reasonOther'
-]  #: Reports not falling under another report category. Prefer new lexicon definition `tools.ozone.report.defs#reasonRuleOther`.
+]  #: Reports not falling under another report category. Prefer new lexicon definition `tools.ozone.report.defs#reasonOther`.
 
 ReasonAppeal = t.Literal['com.atproto.moderation.defs#reasonAppeal']  #: Appeal a previously taken moderation action
 
