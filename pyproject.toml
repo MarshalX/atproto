@@ -65,7 +65,7 @@ mypy = "1.18.2"
 pyright = "1.1.406"
 
 [tool.poetry.group.docs.dependencies]
-sphinx = "7.4.7" # they dropped Python 3.9 support in 8.0.0
+sphinx = "7.1.2" # newer sphinx works incorrectly with autodoc-pydantic
 myst-parser = "3.0.1"
 furo = "2025.9.25"
 autodoc-pydantic = "2.2.0"
