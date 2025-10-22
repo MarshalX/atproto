@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.notification.listNotifications`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     priority: t.Optional[bool] = None  #: Priority.
     reasons: t.Optional[t.List[str]] = (
         None  #: Notification reasons to include in response. A reason that matches the reason property of #notification.

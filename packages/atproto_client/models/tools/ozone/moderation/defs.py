@@ -176,9 +176,9 @@ class SubjectStatusView(base.ModelBase):
     last_reviewed_by: t.Optional[string_formats.Did] = None  #: Last reviewed by.
     mute_reporting_until: t.Optional[string_formats.DateTime] = None  #: Mute reporting until.
     mute_until: t.Optional[string_formats.DateTime] = None  #: Mute until.
-    priority_score: t.Optional[int] = Field(
-        default=None, ge=0, le=100
-    )  #: Numeric value representing the level of priority. Higher score means higher priority.
+    priority_score: te.Annotated[t.Optional[int], Field(ge=0, le=100)] = (
+        None  #: Numeric value representing the level of priority. Higher score means higher priority.
+    )
     records_stats: t.Optional['models.ToolsOzoneModerationDefs.RecordsStats'] = (
         None  #: Statistics related to the record subjects authored by the subject's account.
     )
@@ -274,9 +274,9 @@ class ModEventTakedown(base.ModelBase):
     duration_in_hours: t.Optional[int] = (
         None  #: Indicates how long the takedown should be in effect before automatically expiring.
     )
-    policies: t.Optional[t.List[str]] = Field(
-        default=None, max_length=5
-    )  #: Names/Keywords of the policies that drove the decision.
+    policies: te.Annotated[t.Optional[t.List[str]], Field(max_length=5)] = (
+        None  #: Names/Keywords of the policies that drove the decision.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventTakedown'] = Field(
         default='tools.ozone.moderation.defs#modEventTakedown', alias='$type', frozen=True

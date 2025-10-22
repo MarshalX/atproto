@@ -39,9 +39,9 @@ class Params(base.ParamsModelBase):
     batch_id: t.Optional[str] = (
         None  #: If specified, only events where the batchId matches the given value are returned.
     )
-    collections: t.Optional[t.List[string_formats.Nsid]] = Field(
-        default=None, max_length=20
-    )  #: If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
+    collections: te.Annotated[t.Optional[t.List[string_formats.Nsid]], Field(max_length=20)] = (
+        None  #: If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
+    )
     comment: t.Optional[str] = (
         None  #: If specified, only events with comments containing the keyword are returned. Apply || separator to use multiple keywords and match using OR condition.
     )
@@ -53,7 +53,7 @@ class Params(base.ParamsModelBase):
     include_all_user_records: t.Optional[bool] = (
         False  #: If true, events on all record types (posts, lists, profile etc.) or records from given 'collections' param, owned by the did are returned.
     )
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     mod_tool: t.Optional[t.List[str]] = (
         None  #: If specified, only events where the modTool name matches any of the given values are returned.
     )

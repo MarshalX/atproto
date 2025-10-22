@@ -29,9 +29,9 @@ class Data(base.DataModelBase):
         Field(discriminator='py_type'),
     ]  #: Subject.
     mod_tool: t.Optional['models.ComAtprotoModerationCreateReport.ModTool'] = None  #: Mod tool.
-    reason: t.Optional[str] = Field(
-        default=None, max_length=20000
-    )  #: Additional context about the content and violation.
+    reason: te.Annotated[t.Optional[str], Field(max_length=20000)] = (
+        None  #: Additional context about the content and violation.
+    )
 
 
 class DataDict(t.TypedDict):
@@ -57,7 +57,7 @@ class Response(base.ResponseModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    reason: t.Optional[str] = Field(default=None, max_length=20000)  #: Reason.
+    reason: te.Annotated[t.Optional[str], Field(max_length=20000)] = None  #: Reason.
 
 
 class ModTool(base.ModelBase):

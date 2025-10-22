@@ -19,7 +19,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.actor.searchActors`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     q: t.Optional[str] = (
         None  #: Search query string. Syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
     )

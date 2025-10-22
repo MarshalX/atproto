@@ -22,10 +22,12 @@ class Params(base.ParamsModelBase):
 
     anchor: string_formats.AtUri  #: Reference (AT-URI) to post record. This is the anchor post, and the thread will be built around it. It can be any post in the tree, not necessarily a root post.
     above: t.Optional[bool] = True  #: Whether to include parents above the anchor.
-    below: t.Optional[int] = Field(default=6, ge=0, le=20)  #: How many levels of replies to include below the anchor.
-    branching_factor: t.Optional[int] = Field(
-        default=10, ge=0, le=100
-    )  #: Maximum of replies to include at each level of the thread, except for the direct replies to the anchor, which are (NOTE: currently, during unspecced phase) all returned (NOTE: later they might be paginated).
+    below: te.Annotated[t.Optional[int], Field(ge=0, le=20)] = (
+        None  #: How many levels of replies to include below the anchor.
+    )
+    branching_factor: te.Annotated[t.Optional[int], Field(ge=0, le=100)] = (
+        None  #: Maximum of replies to include at each level of the thread, except for the direct replies to the anchor, which are (NOTE: currently, during unspecced phase) all returned (NOTE: later they might be paginated).
+    )
     prioritize_followed_users: t.Optional[bool] = (
         False  #: Whether to prioritize posts from followed users. It only has effect when the user is authenticated.
     )

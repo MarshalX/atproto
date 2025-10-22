@@ -25,11 +25,11 @@ class Data(base.DataModelBase):
     ] = Field(min_length=1)  #: Filter actions by status.
     cursor: t.Optional[str] = None  #: Cursor for pagination.
     ends_before: t.Optional[string_formats.DateTime] = None  #: Filter actions scheduled to execute before this time.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Maximum number of results to return.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Maximum number of results to return.
     starts_after: t.Optional[string_formats.DateTime] = None  #: Filter actions scheduled to execute after this time.
-    subjects: t.Optional[t.List[string_formats.Did]] = Field(
-        default=None, max_length=100
-    )  #: Filter actions for specific DID subjects.
+    subjects: te.Annotated[t.Optional[t.List[string_formats.Did]], Field(max_length=100)] = (
+        None  #: Filter actions for specific DID subjects.
+    )
 
 
 class DataDict(t.TypedDict):

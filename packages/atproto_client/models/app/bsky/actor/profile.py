@@ -26,14 +26,14 @@ class Record(base.RecordModelBase):
     )
     banner: t.Optional['BlobRef'] = None  #: Larger horizontal image to display behind profile view.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
-    description: t.Optional[str] = Field(default=None, max_length=2560)  #: Free-form profile description text.
-    display_name: t.Optional[str] = Field(default=None, max_length=640)  #: Display name.
+    description: te.Annotated[t.Optional[str], Field(max_length=2560)] = None  #: Free-form profile description text.
+    display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     joined_via_starter_pack: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Joined via starter pack.
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
     ] = None  #: Self-label values, specific to the Bluesky application, on the overall account.
     pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Pinned post.
-    pronouns: t.Optional[str] = Field(default=None, max_length=200)  #: Free-form pronouns text.
+    pronouns: te.Annotated[t.Optional[str], Field(max_length=200)] = None  #: Free-form pronouns text.
     website: t.Optional[string_formats.Uri] = None  #: Website.
 
     py_type: t.Literal['app.bsky.actor.profile'] = Field(default='app.bsky.actor.profile', alias='$type', frozen=True)
