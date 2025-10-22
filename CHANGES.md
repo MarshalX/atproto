@@ -1,5 +1,24 @@
 # Change Log
 
+## Version 0.0.63
+
+**22.10.2025**
+
+**Breaking changes**
+
+* Drop support for Python 3.8 by @zzstoatzz in https://github.com/MarshalX/atproto/pull/605
+
+Notes:
+* Since we updated `websockets` lib to v15, which uses the new async client, differences in stability are possible. Please report your findings!
+* Since we updated `pydantic` lib, new strange warnings coming from it are possible. Please report your findings!
+
+**What's Changed**
+* Add Python 3.14 support by @MarshalX in https://github.com/MarshalX/atproto/pull/629
+* Update lexicons fetched by @MarshalX in https://github.com/MarshalX/atproto/pull/621 and https://github.com/MarshalX/atproto/pull/626
+* Update `websockets` to v15 by @zzstoatzz in https://github.com/MarshalX/atproto/pull/605
+* Fix `httpx` deprecation warnings by @zzstoatzz in https://github.com/MarshalX/atproto/pull/614
+* Fix `pydantic` field warnings for optional fields with constraints by @zzstoatzz in https://github.com/MarshalX/atproto/pull/627
+
 ## Version 0.0.62
 
 **17.08.2025**
