@@ -71,7 +71,7 @@ class Record(base.RecordModelBase):
     ] = Field(
         max_length=5
     )  #: List of rules defining who can reply to this post. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
-    hidden_replies: te.Annotated[t.Optional[t.List[string_formats.AtUri]], Field(max_length=50)] = (
+    hidden_replies: te.Annotated[t.Optional[t.List[string_formats.AtUri]], Field(max_length=300)] = (
         None  #: List of hidden reply URIs.
     )
 
