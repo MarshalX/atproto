@@ -33,9 +33,9 @@ class MessageInput(base.ModelBase):
     """Definition model for :obj:`chat.bsky.convo.defs`."""
 
     text: str = Field(max_length=10000)  #: Text.
-    embed: t.Optional[
-        te.Annotated[t.Union['models.AppBskyEmbedRecord.Main'], Field(default=None, discriminator='py_type')]
-    ] = None  #: Embed.
+    embed: t.Optional[te.Annotated[t.Union['models.AppBskyEmbedRecord.Main'], Field(discriminator='py_type')]] = (
+        None  #: Embed.
+    )
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
@@ -53,9 +53,9 @@ class MessageView(base.ModelBase):
     sender: 'models.ChatBskyConvoDefs.MessageViewSender'  #: Sender.
     sent_at: string_formats.DateTime  #: Sent at.
     text: str = Field(max_length=10000)  #: Text.
-    embed: t.Optional[
-        te.Annotated[t.Union['models.AppBskyEmbedRecord.View'], Field(default=None, discriminator='py_type')]
-    ] = None  #: Embed.
+    embed: t.Optional[te.Annotated[t.Union['models.AppBskyEmbedRecord.View'], Field(discriminator='py_type')]] = (
+        None  #: Embed.
+    )
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
@@ -135,13 +135,11 @@ class ConvoView(base.ModelBase):
     last_message: t.Optional[
         te.Annotated[
             t.Union['models.ChatBskyConvoDefs.MessageView', 'models.ChatBskyConvoDefs.DeletedMessageView'],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
     ] = None  #: Last message.
     last_reaction: t.Optional[
-        te.Annotated[
-            t.Union['models.ChatBskyConvoDefs.MessageAndReactionView'], Field(default=None, discriminator='py_type')
-        ]
+        te.Annotated[t.Union['models.ChatBskyConvoDefs.MessageAndReactionView'], Field(discriminator='py_type')]
     ] = None  #: Last reaction.
     status: t.Optional[t.Union[t.Literal['request'], t.Literal['accepted'], str]] = None  #: Status.
 

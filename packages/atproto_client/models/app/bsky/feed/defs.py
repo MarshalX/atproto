@@ -36,7 +36,7 @@ class PostView(base.ModelBase):
                 'models.AppBskyEmbedRecord.View',
                 'models.AppBskyEmbedRecordWithMedia.View',
             ],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
     ] = None  #: Embed.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
@@ -88,7 +88,7 @@ class FeedViewPost(base.ModelBase):
     reason: t.Optional[
         te.Annotated[
             t.Union['models.AppBskyFeedDefs.ReasonRepost', 'models.AppBskyFeedDefs.ReasonPin'],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
     ] = None  #: Reason.
     reply: t.Optional['models.AppBskyFeedDefs.ReplyRef'] = None  #: Reply.
@@ -161,7 +161,7 @@ class ThreadViewPost(base.ModelBase):
                 'models.AppBskyFeedDefs.NotFoundPost',
                 'models.AppBskyFeedDefs.BlockedPost',
             ],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
     ] = None  #: Parent.
     replies: t.Optional[
@@ -262,7 +262,7 @@ class SkeletonFeedPost(base.ModelBase):
     reason: t.Optional[
         te.Annotated[
             t.Union['models.AppBskyFeedDefs.SkeletonReasonRepost', 'models.AppBskyFeedDefs.SkeletonReasonPin'],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
     ] = None  #: Reason.
 

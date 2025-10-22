@@ -26,15 +26,13 @@ class VerificationView(base.ModelBase):
     issuer: string_formats.Did  #: The user who issued this verification.
     subject: string_formats.Did  #: The subject of the verification.
     uri: string_formats.AtUri  #: The AT-URI of the verification record.
-    issuer_profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field(default=None)]] = (
-        None  #: Issuer profile.
-    )
+    issuer_profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field()]] = None  #: Issuer profile.
     issuer_repo: t.Optional[
         te.Annotated[
             t.Union[
                 'models.ToolsOzoneModerationDefs.RepoViewDetail', 'models.ToolsOzoneModerationDefs.RepoViewNotFound'
             ],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
     ] = None  #: Issuer repo.
     revoke_reason: t.Optional[str] = (
@@ -42,15 +40,13 @@ class VerificationView(base.ModelBase):
     )
     revoked_at: t.Optional[string_formats.DateTime] = None  #: Timestamp when the verification was revoked.
     revoked_by: t.Optional[string_formats.Did] = None  #: The user who revoked this verification.
-    subject_profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field(default=None)]] = (
-        None  #: Subject profile.
-    )
+    subject_profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field()]] = None  #: Subject profile.
     subject_repo: t.Optional[
         te.Annotated[
             t.Union[
                 'models.ToolsOzoneModerationDefs.RepoViewDetail', 'models.ToolsOzoneModerationDefs.RepoViewNotFound'
             ],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
     ] = None  #: Subject repo.
 
