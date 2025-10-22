@@ -12,7 +12,7 @@ build:
     post_create_environment:
       - python -m pip install poetry
     post_install:
-      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install
+      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install && pip install pydantic==2.9.2
 
 sphinx:
   configuration: docs/source/conf.py
