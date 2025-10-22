@@ -13,15 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Run Cimon (eBPF).
-        uses: cycodelabs/cimon-action@v0
-        with:
-          prevent: true
-          allowed-hosts: >
-            files.pythonhosted.org
-            install.python-poetry.org
-            pypi.org
-
       - name: Checkout repository.
         uses: actions/checkout@v4
 

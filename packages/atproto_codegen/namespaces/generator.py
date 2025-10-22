@@ -154,7 +154,7 @@ def _get_namespace_method_body(method_info: QueryInfo, *, sync: bool) -> str: ..
 
 
 def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
-    d, c = get_sync_async_keywords(sync=sync)
+    _, c = get_sync_async_keywords(sync=sync)
 
     lines = [_get_method_docstring(method_info)]
 
@@ -307,7 +307,7 @@ def _get_namespace_method_return_type(method_info: MethodInfo) -> t.Tuple[str, b
 
 
 def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> str:
-    d, c = get_sync_async_keywords(sync=sync)
+    d, _ = get_sync_async_keywords(sync=sync)
 
     name = convert_camel_case_to_snake_case(method_info.name)
     args = _get_namespace_method_signature_args(method_info)

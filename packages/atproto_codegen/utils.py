@@ -41,11 +41,11 @@ def _write_code(filepath: Path, code: str, *, append: bool = False) -> None:
 
 
 def get_file_path_parts(nsid: NSID) -> t.List[str]:
-    return nsid.segments[:-1] + [f'{convert_camel_case_to_snake_case(nsid.name)}.py']
+    return [*nsid.segments[:-1], f'{convert_camel_case_to_snake_case(nsid.name)}.py']
 
 
 def get_import_path_old(nsid: NSID) -> str:
-    return '.'.join(nsid.segments[:-1] + [f'{convert_camel_case_to_snake_case(nsid.name)}'])
+    return '.'.join([*nsid.segments[:-1], f'{convert_camel_case_to_snake_case(nsid.name)}'])
 
 
 def get_import_path(nsid: NSID) -> str:

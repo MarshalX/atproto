@@ -13,17 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Run Cimon (eBPF).
-        uses: cycodelabs/cimon-action@v0
-        with:
-          prevent: true
-          allowed-hosts: >
-            files.pythonhosted.org
-            install.python-poetry.org
-            pypi.org
-            upload.pypi.org
-            *.sigstore.dev
-
       - name: Checkout repository.
         uses: actions/checkout@v4
         with:
@@ -37,7 +26,7 @@ jobs:
       - name: Setup Poetry.
         uses: snok/install-poetry@v1
         with:
-          version: 1.8.3
+          version: 2.2.1
 
       - name: Install Poetry Plugin.
         run: poetry self add "poetry-dynamic-versioning[plugin]"

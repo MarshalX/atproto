@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [ macos-latest, ubuntu-latest, windows-latest ]
-        python-version: [ "3.9", "3.10", "3.11", "3.12", "3.13" ]
+        python-version: [ "3.9", "3.10", "3.11", "3.12", "3.13", "3.14" ]
 
     runs-on: ${{matrix.os}}
 
@@ -19,19 +19,6 @@ jobs:
         shell: bash
 
     steps:
-      - name: Run Cimon (eBPF).
-        if: runner.os == 'Linux'
-        uses: cycodelabs/cimon-action@v0
-        with:
-          prevent: true
-          allowed-hosts: >
-            files.pythonhosted.org
-            install.python-poetry.org
-            pypi.org
-            *.atproto.blue
-            *.marshal.dev
-            plc.directory
-
       - name: Checkout repository.
         uses: actions/checkout@v4
 
@@ -43,7 +30,7 @@ jobs:
       - name: Setup Poetry.
         uses: snok/install-poetry@v1
         with:
-          version: 1.8.3
+          version: 2.2.1
 
       - name: Install dependencies.
         run: poetry install --without docs

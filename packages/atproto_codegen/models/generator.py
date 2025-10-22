@@ -158,7 +158,7 @@ def _get_str_enum_typehint(nsid: NSID, field_type_def: models.LexString, *, opti
 
     # known_values is not closed enum
     closed_enum = '' if field_type_def.enum else ', str'
-    return f"t.Union[{', '.join(union_type_parts)}{closed_enum}]"
+    return f't.Union[{", ".join(union_type_parts)}{closed_enum}]'
 
 
 def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional: bool) -> str:
@@ -488,12 +488,12 @@ def _get_model(
         # Skip if type hint already uses Annotated (e.g., ref unions)
         if field_value_info['needs_annotated'] and 'te.Annotated[' not in type_hint:
             # Wrap type in Annotated and add Field metadata
-            type_hint = f"te.Annotated[{type_hint}, {field_value_info['value']}]"
+            type_hint = f'te.Annotated[{type_hint}, {field_value_info["value"]}]'
             value_def = ' = None'
         else:
             # Simple assignment
             if field_value_info['value']:
-                value_def = f" = {field_value_info['value']}"
+                value_def = f' = {field_value_info["value"]}'
             elif is_optional:
                 # Optional fields without Field constraints still need = None
                 value_def = ' = None'
@@ -583,7 +583,7 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
             lines.append(_get_model_docstring(nsid, body.schema_, model_type))
             lines.append(_get_model(nsid, body.schema_, is_input_type=(model_type is ModelType.DATA)))
         elif isinstance(body.schema_, models.LexRef):
-            model_path, _ = _resolve_nsid_ref(nsid, body.schema_.ref)
+            _, __ = _resolve_nsid_ref(nsid, body.schema_.ref)
 
             # here we can generate input and output model alises from the reference
             # but instead we just resolve reference inplace without intermediate model
@@ -884,7 +884,7 @@ def _generate_import_aliases(root_package_path: Path) -> None:
             alias_name = ''.join([p.capitalize() for p in [*nsid_parts, *method_name_parts]])
 
             camel_case_method_name = method_name_parts[0] + ''.join(ele.title() for ele in method_name_parts[1:])
-            method_path = f"{'.'.join(nsid_parts)}.{camel_case_method_name}"
+            method_path = f'{".".join(nsid_parts)}.{camel_case_method_name}'
             ids_db.append(f"{_(1)}{alias_name}: str = '{method_path}'")
 
             import_lines.append(f'from {from_import} import {file[:-3]} as {alias_name}')

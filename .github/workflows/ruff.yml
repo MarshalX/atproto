@@ -10,14 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Run Cimon (eBPF).
-        uses: cycodelabs/cimon-action@v0
-        with:
-          prevent: true
-          allowed-hosts: >
-            files.pythonhosted.org
-            pypi.org
-
       - name: Checkout repository.
         uses: actions/checkout@v4
 
@@ -29,10 +21,10 @@ jobs:
       - name: Run linter check.
         uses: astral-sh/ruff-action@v3
         with:
-          version: 0.7.0
+          version: 0.14.1
 
       - name: Run code style check.
         uses: astral-sh/ruff-action@v3
         with:
-          version: 0.7.0
+          version: 0.14.1
           args: "format --check"

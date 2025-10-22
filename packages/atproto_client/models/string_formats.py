@@ -3,14 +3,16 @@
 import re
 from datetime import datetime
 from functools import wraps
-from typing import Callable, Mapping, Set, Union, cast
+from typing import TYPE_CHECKING, Callable, Mapping, Set, Union, cast
 from urllib.parse import urlparse
 
 from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import validate_nsid as atproto_core_validate_nsid
 from pydantic import BeforeValidator, Field, ValidationInfo
-from pydantic_core import core_schema
 from typing_extensions import Annotated, Literal
+
+if TYPE_CHECKING:
+    from pydantic_core import core_schema
 
 _OPT_IN_KEY: Literal['strict_string_format'] = 'strict_string_format'
 
@@ -82,7 +84,7 @@ def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., st
     def wrapper(v: str, info: ValidationInfo) -> str:
         """Could likely be generalized to support arbitrary signatures."""
         if info and isinstance(info.context, Mapping) and info.context.get(_OPT_IN_KEY, False):
-            return cast(core_schema.WithInfoValidatorFunction, validate_fn)(v, info)
+            return cast('core_schema.WithInfoValidatorFunction', validate_fn)(v, info)
         return v
 
     return wrapper

@@ -31,7 +31,7 @@ from atproto_server.auth.jwt import (
     verify_jwt_async,
 )
 
-__all__ = [
+__all__ = [  # noqa: RUF022
     # client
     'AsyncClient',
     'Client',
