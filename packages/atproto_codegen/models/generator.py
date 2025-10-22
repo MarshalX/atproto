@@ -219,13 +219,10 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, o
 
     def_names = ', '.join([f"'{name}'" for name in def_names])
 
-    if is_unknown_union:
-        # unknown type does not compatible with discriminator because $type is unknown :)
-        def_field_meta = 'Field(default=None)' if optional else 'Field()'
-    else:
-        def_field_meta = (
-            'Field(default=None, discriminator="py_type")' if optional else 'Field(discriminator="py_type")'
-        )
+    # For discriminated unions, optionality is handled by Optional[] wrapper, not Field(default=None)
+    # Pydantic 2.12.3+ warns that default=None has no effect in union context
+    # Unknown unions can't use discriminator because $type is unknown
+    def_field_meta = 'Field()' if is_unknown_union else 'Field(discriminator="py_type")'
 
     annotated_union = f'te.Annotated[t.Union[{def_names}], {def_field_meta}]'
     return _get_optional_typehint(annotated_union, optional=optional)

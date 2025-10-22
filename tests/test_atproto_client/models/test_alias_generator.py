@@ -7,13 +7,13 @@ def test_alias_generator() -> None:
     assert _alias_generator('test_field_') == 'testField'
 
 
-class TestModel(ModelBase):
+class SampleModel(ModelBase):
     test_field: str
     validate_: bool  # with underscore because collide with pydantic's "validate" method
 
 
 def test_model_base_aliases() -> None:
-    model = TestModel(testField='test', validate=True)
+    model = SampleModel(testField='test', validate=True)
     assert model.test_field == 'test'
     assert model.validate_ is True
 

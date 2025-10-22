@@ -483,9 +483,9 @@ class StatusView(base.ModelBase):
 
     record: 'UnknownType'  #: Record.
     status: t.Union['models.AppBskyActorStatus.Live', str]  #: The status for the account.
-    embed: t.Optional[
-        te.Annotated[t.Union['models.AppBskyEmbedExternal.View'], Field(default=None, discriminator='py_type')]
-    ] = None  #: An optional embed associated with the status.
+    embed: t.Optional[te.Annotated[t.Union['models.AppBskyEmbedExternal.View'], Field(discriminator='py_type')]] = (
+        None  #: An optional embed associated with the status.
+    )
     expires_at: t.Optional[string_formats.DateTime] = (
         None  #: The date when this status will expire. The application might choose to no longer return the status after expiration.
     )
