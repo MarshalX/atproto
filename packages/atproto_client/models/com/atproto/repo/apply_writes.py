@@ -83,9 +83,9 @@ class Create(base.ModelBase):
 
     collection: string_formats.Nsid  #: Collection.
     value: 'UnknownType'  #: Value.
-    rkey: t.Optional[string_formats.RecordKey] = Field(
-        default=None, max_length=512
-    )  #: NOTE: maxLength is redundant with record-key format. Keeping it temporarily to ensure backwards compatibility.
+    rkey: te.Annotated[t.Optional[string_formats.RecordKey], Field(max_length=512)] = (
+        None  #: NOTE: maxLength is redundant with record-key format. Keeping it temporarily to ensure backwards compatibility.
+    )
 
     py_type: t.Literal['com.atproto.repo.applyWrites#create'] = Field(
         default='com.atproto.repo.applyWrites#create', alias='$type', frozen=True

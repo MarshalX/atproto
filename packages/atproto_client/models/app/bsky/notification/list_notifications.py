@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.notification.listNotifications`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     priority: t.Optional[bool] = None  #: Priority.
     reasons: t.Optional[t.List[str]] = (
         None  #: Notification reasons to include in response. A reason that matches the reason property of #notification.
@@ -66,8 +66,11 @@ class Notification(base.ModelBase):
         t.Literal['starterpack-joined'],
         t.Literal['verified'],
         t.Literal['unverified'],
+        t.Literal['like-via-repost'],
+        t.Literal['repost-via-repost'],
+        t.Literal['subscribed-post'],
         str,
-    ]  #: Expected values are 'like', 'repost', 'follow', 'mention', 'reply', 'quote', 'starterpack-joined', 'verified', and 'unverified'.
+    ]  #: The reason why this notification was delivered - e.g. your post was liked, or you received a new follower.
     record: 'UnknownType'  #: Record.
     uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.

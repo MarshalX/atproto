@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
@@ -27,12 +28,13 @@ class Option(base.ModelBase):
     scope: t.Union[t.Literal['instance'], t.Literal['personal'], str]  #: Scope.
     value: 'UnknownType'  #: Value.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
-    description: t.Optional[str] = Field(default=None, max_length=10240)  #: Description.
+    description: te.Annotated[t.Optional[str], Field(max_length=10240)] = None  #: Description.
     manager_role: t.Optional[
         t.Union[
             'models.ToolsOzoneTeamDefs.RoleModerator',
             'models.ToolsOzoneTeamDefs.RoleTriage',
             'models.ToolsOzoneTeamDefs.RoleAdmin',
+            'models.ToolsOzoneTeamDefs.RoleVerifier',
             str,
         ]
     ] = None  #: Manager role.

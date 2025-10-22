@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
 
     feed: string_formats.AtUri  #: Reference to feed generator record describing the specific feed being requested.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
 
 
 class ParamsDict(t.TypedDict):
@@ -36,3 +36,6 @@ class Response(base.ResponseModelBase):
 
     feed: t.List['models.AppBskyFeedDefs.SkeletonFeedPost']  #: Feed.
     cursor: t.Optional[str] = None  #: Cursor.
+    req_id: te.Annotated[t.Optional[str], Field(max_length=100)] = (
+        None  #: Unique identifier per request that may be passed back alongside interactions.
+    )

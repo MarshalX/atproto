@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
@@ -24,7 +25,7 @@ class LabelerView(base.ModelBase):
     indexed_at: string_formats.DateTime  #: Indexed at.
     uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
+    like_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Like count.
     viewer: t.Optional['models.AppBskyLabelerDefs.LabelerViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.labeler.defs#labelerView'] = Field(
@@ -41,7 +42,7 @@ class LabelerViewDetailed(base.ModelBase):
     policies: 'models.AppBskyLabelerDefs.LabelerPolicies'  #: Policies.
     uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    like_count: t.Optional[int] = Field(default=None, ge=0)  #: Like count.
+    like_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Like count.
     reason_types: t.Optional[t.List['models.ComAtprotoModerationDefs.ReasonType']] = (
         None  #: The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed.
     )

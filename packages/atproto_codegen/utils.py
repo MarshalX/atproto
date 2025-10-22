@@ -59,8 +59,7 @@ def convert_camel_case_to_snake_case(string: str) -> str:
 
 
 def camel_case_split(string: str) -> t.List[str]:
-    # regex by chatgpt
-    return re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)', string)
+    return ''.join(['_' + x if x.isupper() else x for x in string]).split('_')
 
 
 def gen_description_by_camel_case_name(name: str) -> str:

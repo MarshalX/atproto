@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
 
     q: str  #: Search query string. Syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=25, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
 
 
 class ParamsDict(t.TypedDict):

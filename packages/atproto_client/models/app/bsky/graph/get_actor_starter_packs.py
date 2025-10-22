@@ -22,7 +22,7 @@ class Params(base.ParamsModelBase):
 
     actor: string_formats.AtIdentifier  #: Actor.
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
 
 
 class ParamsDict(t.TypedDict):

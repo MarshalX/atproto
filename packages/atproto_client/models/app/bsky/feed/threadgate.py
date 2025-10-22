@@ -69,11 +69,11 @@ class Record(base.RecordModelBase):
             ]
         ]
     ] = Field(
-        default=None, max_length=5
+        max_length=5
     )  #: List of rules defining who can reply to this post. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
-    hidden_replies: t.Optional[t.List[string_formats.AtUri]] = Field(
-        default=None, max_length=50
-    )  #: List of hidden reply URIs.
+    hidden_replies: te.Annotated[t.Optional[t.List[string_formats.AtUri]], Field(max_length=300)] = (
+        None  #: List of hidden reply URIs.
+    )
 
     py_type: t.Literal['app.bsky.feed.threadgate'] = Field(
         default='app.bsky.feed.threadgate', alias='$type', frozen=True

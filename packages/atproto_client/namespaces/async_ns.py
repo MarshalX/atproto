@@ -25,6 +25,7 @@ class AppBskyNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
         self.actor = AppBskyActorNamespace(self._client)
+        self.bookmark = AppBskyBookmarkNamespace(self._client)
         self.feed = AppBskyFeedNamespace(self._client)
         self.graph = AppBskyGraphNamespace(self._client)
         self.labeler = AppBskyLabelerNamespace(self._client)
@@ -185,10 +186,163 @@ class AppBskyActorProfileRecord(AsyncRecordBase):
         return get_response_model(response, bool)
 
 
+class AppBskyActorStatusRecord(AsyncRecordBase):
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyActorStatus.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorStatus.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.actor.status', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.AppBskyActorStatus.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyActorStatus.Record', response_model.value),
+        )
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyActorStatus.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorStatus.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.actor.status',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.AppBskyActorStatus.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.AppBskyActorStatus.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyActorStatus.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyActorStatus.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyActorStatus.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.actor.status',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.AppBskyActorStatus.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.actor.status',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class AppBskyActorNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
         self.profile = AppBskyActorProfileRecord(self._client)
+        self.status = AppBskyActorStatusRecord(self._client)
 
     async def get_preferences(
         self,
@@ -375,6 +529,86 @@ class AppBskyActorNamespace(AsyncNamespaceBase):
             'app.bsky.actor.searchActorsTypeahead', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyActorSearchActorsTypeahead.Response)
+
+
+class AppBskyBookmarkNamespace(AsyncNamespaceBase):
+    async def create_bookmark(
+        self,
+        data: t.Union[models.AppBskyBookmarkCreateBookmark.Data, models.AppBskyBookmarkCreateBookmark.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Creates a private bookmark for the specified record. Currently, only `app.bsky.feed.post` records are supported. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyBookmarkCreateBookmark.Data', get_or_create(data, models.AppBskyBookmarkCreateBookmark.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.bookmark.createBookmark', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def delete_bookmark(
+        self,
+        data: t.Union[models.AppBskyBookmarkDeleteBookmark.Data, models.AppBskyBookmarkDeleteBookmark.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Deletes a private bookmark for the specified record. Currently, only `app.bsky.feed.post` records are supported. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyBookmarkDeleteBookmark.Data', get_or_create(data, models.AppBskyBookmarkDeleteBookmark.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.bookmark.deleteBookmark', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def get_bookmarks(
+        self,
+        params: t.Optional[
+            t.Union[models.AppBskyBookmarkGetBookmarks.Params, models.AppBskyBookmarkGetBookmarks.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyBookmarkGetBookmarks.Response':
+        """Gets views of records bookmarked by the authenticated user. Requires authentication.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyBookmarkGetBookmarks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyBookmarkGetBookmarks.Params',
+            get_or_create(params, models.AppBskyBookmarkGetBookmarks.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.bookmark.getBookmarks', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyBookmarkGetBookmarks.Response)
 
 
 class AppBskyFeedGeneratorRecord(AsyncRecordBase):
@@ -1694,7 +1928,7 @@ class AppBskyFeedNamespace(AsyncNamespaceBase):
         params: t.Union[models.AppBskyFeedSearchPosts.Params, models.AppBskyFeedSearchPosts.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyFeedSearchPosts.Response':
-        """Find posts matching search criteria, returning views of those posts.
+        """Find posts matching search criteria, returning views of those posts. Note that this API endpoint may require authentication (eg, not public) for some service providers and implementations.
 
         Args:
             params: Parameters.
@@ -3050,6 +3284,34 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyGraphGetLists.Response)
 
+    async def get_lists_with_membership(
+        self,
+        params: t.Union[
+            models.AppBskyGraphGetListsWithMembership.Params, models.AppBskyGraphGetListsWithMembership.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphGetListsWithMembership.Response':
+        """Enumerates the lists created by the session user, and includes membership information about `actor` in those lists. Only supports curation and moderation lists (no reference lists, used in starter packs). Requires auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetListsWithMembership.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyGraphGetListsWithMembership.Params',
+            get_or_create(params, models.AppBskyGraphGetListsWithMembership.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.graph.getListsWithMembership', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphGetListsWithMembership.Response)
+
     async def get_mutes(
         self,
         params: t.Optional[t.Union[models.AppBskyGraphGetMutes.Params, models.AppBskyGraphGetMutes.ParamsDict]] = None,
@@ -3151,6 +3413,38 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
             'app.bsky.graph.getStarterPacks', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyGraphGetStarterPacks.Response)
+
+    async def get_starter_packs_with_membership(
+        self,
+        params: t.Union[
+            models.AppBskyGraphGetStarterPacksWithMembership.Params,
+            models.AppBskyGraphGetStarterPacksWithMembership.ParamsDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphGetStarterPacksWithMembership.Response':
+        """Enumerates the starter packs created by the session user, and includes membership information about `actor` in those starter packs. Requires auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphGetStarterPacksWithMembership.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyGraphGetStarterPacksWithMembership.Params',
+            get_or_create(params, models.AppBskyGraphGetStarterPacksWithMembership.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.graph.getStarterPacksWithMembership',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyGraphGetStarterPacksWithMembership.Response)
 
     async def get_suggested_follows_by_actor(
         self,
@@ -3538,7 +3832,195 @@ class AppBskyLabelerNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.AppBskyLabelerGetServices.Response)
 
 
+class AppBskyNotificationDeclarationRecord(AsyncRecordBase):
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.AppBskyNotificationDeclaration.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationDeclaration.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='app.bsky.notification.declaration', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.AppBskyNotificationDeclaration.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.AppBskyNotificationDeclaration.Record', response_model.value),
+        )
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyNotificationDeclaration.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationDeclaration.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='app.bsky.notification.declaration',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.AppBskyNotificationDeclaration.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.AppBskyNotificationDeclaration.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.AppBskyNotificationDeclaration.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyNotificationDeclaration.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationDeclaration.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='app.bsky.notification.declaration',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.AppBskyNotificationDeclaration.CreateRecordResponse(
+            uri=response_model.uri, cid=response_model.cid
+        )
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='app.bsky.notification.declaration',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class AppBskyNotificationNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        super().__init__(client)
+        self.declaration = AppBskyNotificationDeclarationRecord(self._client)
+
+    async def get_preferences(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyNotificationGetPreferences.Params, models.AppBskyNotificationGetPreferences.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyNotificationGetPreferences.Response':
+        """Get notification-related preferences for an account. Requires auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationGetPreferences.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyNotificationGetPreferences.Params',
+            get_or_create(params, models.AppBskyNotificationGetPreferences.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.notification.getPreferences', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyNotificationGetPreferences.Response)
+
     async def get_unread_count(
         self,
         params: t.Optional[
@@ -3568,6 +4050,40 @@ class AppBskyNotificationNamespace(AsyncNamespaceBase):
             'app.bsky.notification.getUnreadCount', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyNotificationGetUnreadCount.Response)
+
+    async def list_activity_subscriptions(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyNotificationListActivitySubscriptions.Params,
+                models.AppBskyNotificationListActivitySubscriptions.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyNotificationListActivitySubscriptions.Response':
+        """Enumerate all accounts to which the requesting account is subscribed to receive notifications for. Requires auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationListActivitySubscriptions.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyNotificationListActivitySubscriptions.Params',
+            get_or_create(params, models.AppBskyNotificationListActivitySubscriptions.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.notification.listActivitySubscriptions',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyNotificationListActivitySubscriptions.Response)
 
     async def list_notifications(
         self,
@@ -3600,6 +4116,39 @@ class AppBskyNotificationNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyNotificationListNotifications.Response)
 
+    async def put_activity_subscription(
+        self,
+        data: t.Union[
+            models.AppBskyNotificationPutActivitySubscription.Data,
+            models.AppBskyNotificationPutActivitySubscription.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyNotificationPutActivitySubscription.Response':
+        """Puts an activity subscription entry. The key should be omitted for creation and provided for updates. Requires auth.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationPutActivitySubscription.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyNotificationPutActivitySubscription.Data',
+            get_or_create(data, models.AppBskyNotificationPutActivitySubscription.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.notification.putActivitySubscription',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyNotificationPutActivitySubscription.Response)
+
     async def put_preferences(
         self,
         data: t.Union[models.AppBskyNotificationPutPreferences.Data, models.AppBskyNotificationPutPreferences.DataDict],
@@ -3626,6 +4175,40 @@ class AppBskyNotificationNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
+    async def put_preferences_v2(
+        self,
+        data: t.Optional[
+            t.Union[
+                models.AppBskyNotificationPutPreferencesV2.Data, models.AppBskyNotificationPutPreferencesV2.DataDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyNotificationPutPreferencesV2.Response':
+        """Set notification-related preferences for an account. Requires auth.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationPutPreferencesV2.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyNotificationPutPreferencesV2.Data',
+            get_or_create(data, models.AppBskyNotificationPutPreferencesV2.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.notification.putPreferencesV2',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyNotificationPutPreferencesV2.Response)
+
     async def register_push(
         self,
         data: t.Union[models.AppBskyNotificationRegisterPush.Data, models.AppBskyNotificationRegisterPush.DataDict],
@@ -3649,6 +4232,32 @@ class AppBskyNotificationNamespace(AsyncNamespaceBase):
         )
         response = await self._client.invoke_procedure(
             'app.bsky.notification.registerPush', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def unregister_push(
+        self,
+        data: t.Union[models.AppBskyNotificationUnregisterPush.Data, models.AppBskyNotificationUnregisterPush.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """The inverse of registerPush - inform a specified service that push notifications should no longer be sent to the given token for the requesting account. Requires auth.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyNotificationUnregisterPush.Data',
+            get_or_create(data, models.AppBskyNotificationUnregisterPush.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.notification.unregisterPush', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 
@@ -3679,6 +4288,23 @@ class AppBskyNotificationNamespace(AsyncNamespaceBase):
 
 
 class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
+    async def get_age_assurance_state(self, **kwargs: t.Any) -> 'models.AppBskyUnspeccedDefs.AgeAssuranceState':
+        """Returns the current state of the age assurance process for an account. This is used to check if the user has completed age assurance or if further action is required.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedDefs.AgeAssuranceState`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getAgeAssuranceState', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedDefs.AgeAssuranceState)
+
     async def get_config(self, **kwargs: t.Any) -> 'models.AppBskyUnspeccedGetConfig.Response':
         """Get miscellaneous runtime configuration.
 
@@ -3695,6 +4321,74 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
             'app.bsky.unspecced.getConfig', output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyUnspeccedGetConfig.Response)
+
+    async def get_onboarding_suggested_starter_packs(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Params,
+                models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Response':
+        """Get a list of suggested starterpacks for onboarding.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getOnboardingSuggestedStarterPacks',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks.Response)
+
+    async def get_onboarding_suggested_starter_packs_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Params,
+                models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Response':
+        """Get a skeleton of suggested starterpacks for onboarding. Intended to be called and hydrated by app.bsky.unspecced.getOnboardingSuggestedStarterPacks.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getOnboardingSuggestedStarterPacksSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Response)
 
     async def get_popular_feed_generators(
         self,
@@ -3729,6 +4423,62 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.AppBskyUnspeccedGetPopularFeedGenerators.Response)
+
+    async def get_post_thread_other_v2(
+        self,
+        params: t.Union[
+            models.AppBskyUnspeccedGetPostThreadOtherV2.Params, models.AppBskyUnspeccedGetPostThreadOtherV2.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetPostThreadOtherV2.Response':
+        """(NOTE: this endpoint is under development and WILL change without notice. Don't use it until it is moved out of `unspecced` or your application WILL break) Get additional posts under a thread e.g. replies hidden by threadgate. Based on an anchor post at any depth of the tree, returns top-level replies below that anchor. It does not include ancestors nor the anchor itself. This should be called after exhausting `app.bsky.unspecced.getPostThreadV2`. Does not require auth, but additional metadata and filtering will be applied for authed requests.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetPostThreadOtherV2.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetPostThreadOtherV2.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetPostThreadOtherV2.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getPostThreadOtherV2', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetPostThreadOtherV2.Response)
+
+    async def get_post_thread_v2(
+        self,
+        params: t.Union[
+            models.AppBskyUnspeccedGetPostThreadV2.Params, models.AppBskyUnspeccedGetPostThreadV2.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetPostThreadV2.Response':
+        """(NOTE: this endpoint is under development and WILL change without notice. Don't use it until it is moved out of `unspecced` or your application WILL break) Get posts in a thread. It is based in an anchor post at any depth of the tree, and returns posts above it (recursively resolving the parent, without further branching to their replies) and below it (recursive replies, with branching to their replies). Does not require auth, but additional metadata and filtering will be applied for authed requests.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetPostThreadV2.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetPostThreadV2.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetPostThreadV2.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getPostThreadV2', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetPostThreadV2.Response)
 
     async def get_suggested_feeds(
         self,
@@ -4077,6 +4827,36 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
             'app.bsky.unspecced.getTrendsSkeleton', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyUnspeccedGetTrendsSkeleton.Response)
+
+    async def init_age_assurance(
+        self,
+        data: t.Union[models.AppBskyUnspeccedInitAgeAssurance.Data, models.AppBskyUnspeccedInitAgeAssurance.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedDefs.AgeAssuranceState':
+        """Initiate age assurance for an account. This is a one-time action that will start the process of verifying the user's age.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedDefs.AgeAssuranceState`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyUnspeccedInitAgeAssurance.Data',
+            get_or_create(data, models.AppBskyUnspeccedInitAgeAssurance.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.unspecced.initAgeAssurance',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedDefs.AgeAssuranceState)
 
     async def search_actors_skeleton(
         self,
@@ -7159,6 +7939,37 @@ class ComAtprotoTempNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ComAtprotoTempAddReservedHandle.Response)
 
+    async def check_handle_availability(
+        self,
+        params: t.Union[
+            models.ComAtprotoTempCheckHandleAvailability.Params, models.ComAtprotoTempCheckHandleAvailability.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoTempCheckHandleAvailability.Response':
+        """Checks whether the provided handle is available. If the handle is not available, available suggestions will be returned. Optional inputs will be used to generate suggestions.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoTempCheckHandleAvailability.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoTempCheckHandleAvailability.Params',
+            get_or_create(params, models.ComAtprotoTempCheckHandleAvailability.Params),
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.temp.checkHandleAvailability',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoTempCheckHandleAvailability.Response)
+
     async def check_signup_queue(self, **kwargs: t.Any) -> 'models.ComAtprotoTempCheckSignupQueue.Response':
         """Check accounts location in signup queue.
 
@@ -7175,6 +7986,32 @@ class ComAtprotoTempNamespace(AsyncNamespaceBase):
             'com.atproto.temp.checkSignupQueue', output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ComAtprotoTempCheckSignupQueue.Response)
+
+    async def dereference_scope(
+        self,
+        params: t.Union[models.ComAtprotoTempDereferenceScope.Params, models.ComAtprotoTempDereferenceScope.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoTempDereferenceScope.Response':
+        """Allows finding the oauth permission scope from a reference.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoTempDereferenceScope.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoTempDereferenceScope.Params',
+            get_or_create(params, models.ComAtprotoTempDereferenceScope.Params),
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.temp.dereferenceScope', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoTempDereferenceScope.Response)
 
     async def fetch_labels(
         self,
@@ -7231,6 +8068,34 @@ class ComAtprotoTempNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, bool)
 
+    async def revoke_account_credentials(
+        self,
+        data: t.Union[
+            models.ComAtprotoTempRevokeAccountCredentials.Data, models.ComAtprotoTempRevokeAccountCredentials.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Revoke sessions, password, and app passwords associated with account. May be resolved by a password reset.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ComAtprotoTempRevokeAccountCredentials.Data',
+            get_or_create(data, models.ComAtprotoTempRevokeAccountCredentials.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.temp.revokeAccountCredentials', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
 
 class ToolsNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
@@ -7242,12 +8107,15 @@ class ToolsOzoneNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
         self.communication = ToolsOzoneCommunicationNamespace(self._client)
+        self.hosting = ToolsOzoneHostingNamespace(self._client)
         self.moderation = ToolsOzoneModerationNamespace(self._client)
+        self.safelink = ToolsOzoneSafelinkNamespace(self._client)
         self.server = ToolsOzoneServerNamespace(self._client)
         self.set = ToolsOzoneSetNamespace(self._client)
         self.setting = ToolsOzoneSettingNamespace(self._client)
         self.signature = ToolsOzoneSignatureNamespace(self._client)
         self.team = ToolsOzoneTeamNamespace(self._client)
+        self.verification = ToolsOzoneVerificationNamespace(self._client)
 
 
 class ToolsOzoneCommunicationNamespace(AsyncNamespaceBase):
@@ -7361,7 +8229,70 @@ class ToolsOzoneCommunicationNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ToolsOzoneCommunicationDefs.TemplateView)
 
 
+class ToolsOzoneHostingNamespace(AsyncNamespaceBase):
+    async def get_account_history(
+        self,
+        params: t.Union[
+            models.ToolsOzoneHostingGetAccountHistory.Params, models.ToolsOzoneHostingGetAccountHistory.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneHostingGetAccountHistory.Response':
+        """Get account history, e.g. log of updated email addresses or other identity information.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneHostingGetAccountHistory.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneHostingGetAccountHistory.Params',
+            get_or_create(params, models.ToolsOzoneHostingGetAccountHistory.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.hosting.getAccountHistory', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneHostingGetAccountHistory.Response)
+
+
 class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
+    async def cancel_scheduled_actions(
+        self,
+        data: t.Union[
+            models.ToolsOzoneModerationCancelScheduledActions.Data,
+            models.ToolsOzoneModerationCancelScheduledActions.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationCancelScheduledActions.CancellationResults':
+        """Cancel all pending scheduled moderation actions for specified subjects.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationCancelScheduledActions.CancellationResults`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneModerationCancelScheduledActions.Data',
+            get_or_create(data, models.ToolsOzoneModerationCancelScheduledActions.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.moderation.cancelScheduledActions',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationCancelScheduledActions.CancellationResults)
+
     async def emit_event(
         self,
         data: t.Union[models.ToolsOzoneModerationEmitEvent.Data, models.ToolsOzoneModerationEmitEvent.DataDict],
@@ -7390,6 +8321,38 @@ class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ToolsOzoneModerationDefs.ModEventView)
+
+    async def get_account_timeline(
+        self,
+        params: t.Union[
+            models.ToolsOzoneModerationGetAccountTimeline.Params,
+            models.ToolsOzoneModerationGetAccountTimeline.ParamsDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationGetAccountTimeline.Response':
+        """Get timeline of all available events of an account. This includes moderation events, account history and did history.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationGetAccountTimeline.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationGetAccountTimeline.Params',
+            get_or_create(params, models.ToolsOzoneModerationGetAccountTimeline.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.moderation.getAccountTimeline',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationGetAccountTimeline.Response)
 
     async def get_event(
         self,
@@ -7577,6 +8540,39 @@ class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ToolsOzoneModerationGetSubjects.Response)
 
+    async def list_scheduled_actions(
+        self,
+        data: t.Union[
+            models.ToolsOzoneModerationListScheduledActions.Data,
+            models.ToolsOzoneModerationListScheduledActions.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationListScheduledActions.Response':
+        """List scheduled moderation actions with optional filtering.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationListScheduledActions.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneModerationListScheduledActions.Data',
+            get_or_create(data, models.ToolsOzoneModerationListScheduledActions.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.moderation.listScheduledActions',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationListScheduledActions.Response)
+
     async def query_events(
         self,
         params: t.Optional[
@@ -7635,6 +8631,38 @@ class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ToolsOzoneModerationQueryStatuses.Response)
 
+    async def schedule_action(
+        self,
+        data: t.Union[
+            models.ToolsOzoneModerationScheduleAction.Data, models.ToolsOzoneModerationScheduleAction.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationScheduleAction.ScheduledActionResults':
+        """Schedule a moderation action to be executed at a future time.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationScheduleAction.ScheduledActionResults`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneModerationScheduleAction.Data',
+            get_or_create(data, models.ToolsOzoneModerationScheduleAction.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.moderation.scheduleAction',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationScheduleAction.ScheduledActionResults)
+
     async def search_repos(
         self,
         params: t.Optional[
@@ -7662,6 +8690,157 @@ class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
             'tools.ozone.moderation.searchRepos', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneModerationSearchRepos.Response)
+
+
+class ToolsOzoneSafelinkNamespace(AsyncNamespaceBase):
+    async def add_rule(
+        self,
+        data: t.Union[models.ToolsOzoneSafelinkAddRule.Data, models.ToolsOzoneSafelinkAddRule.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSafelinkDefs.Event':
+        """Add a new URL safety rule.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSafelinkDefs.Event`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneSafelinkAddRule.Data', get_or_create(data, models.ToolsOzoneSafelinkAddRule.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.safelink.addRule',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSafelinkDefs.Event)
+
+    async def query_events(
+        self,
+        data: t.Optional[
+            t.Union[models.ToolsOzoneSafelinkQueryEvents.Data, models.ToolsOzoneSafelinkQueryEvents.DataDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSafelinkQueryEvents.Response':
+        """Query URL safety audit events.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSafelinkQueryEvents.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneSafelinkQueryEvents.Data', get_or_create(data, models.ToolsOzoneSafelinkQueryEvents.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.safelink.queryEvents',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSafelinkQueryEvents.Response)
+
+    async def query_rules(
+        self,
+        data: t.Optional[
+            t.Union[models.ToolsOzoneSafelinkQueryRules.Data, models.ToolsOzoneSafelinkQueryRules.DataDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSafelinkQueryRules.Response':
+        """Query URL safety rules.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSafelinkQueryRules.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneSafelinkQueryRules.Data', get_or_create(data, models.ToolsOzoneSafelinkQueryRules.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.safelink.queryRules',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSafelinkQueryRules.Response)
+
+    async def remove_rule(
+        self,
+        data: t.Union[models.ToolsOzoneSafelinkRemoveRule.Data, models.ToolsOzoneSafelinkRemoveRule.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSafelinkDefs.Event':
+        """Remove an existing URL safety rule.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSafelinkDefs.Event`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneSafelinkRemoveRule.Data', get_or_create(data, models.ToolsOzoneSafelinkRemoveRule.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.safelink.removeRule',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSafelinkDefs.Event)
+
+    async def update_rule(
+        self,
+        data: t.Union[models.ToolsOzoneSafelinkUpdateRule.Data, models.ToolsOzoneSafelinkUpdateRule.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSafelinkDefs.Event':
+        """Update an existing URL safety rule.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSafelinkDefs.Event`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneSafelinkUpdateRule.Data', get_or_create(data, models.ToolsOzoneSafelinkUpdateRule.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.safelink.updateRule',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSafelinkDefs.Event)
 
 
 class ToolsOzoneServerNamespace(AsyncNamespaceBase):
@@ -8126,3 +9305,105 @@ class ToolsOzoneTeamNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ToolsOzoneTeamDefs.Member)
+
+
+class ToolsOzoneVerificationNamespace(AsyncNamespaceBase):
+    async def grant_verifications(
+        self,
+        data: t.Union[
+            models.ToolsOzoneVerificationGrantVerifications.Data,
+            models.ToolsOzoneVerificationGrantVerifications.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneVerificationGrantVerifications.Response':
+        """Grant verifications to multiple subjects. Allows batch processing of up to 100 verifications at once.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneVerificationGrantVerifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneVerificationGrantVerifications.Data',
+            get_or_create(data, models.ToolsOzoneVerificationGrantVerifications.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.verification.grantVerifications',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneVerificationGrantVerifications.Response)
+
+    async def list_verifications(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.ToolsOzoneVerificationListVerifications.Params,
+                models.ToolsOzoneVerificationListVerifications.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneVerificationListVerifications.Response':
+        """List verifications.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneVerificationListVerifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneVerificationListVerifications.Params',
+            get_or_create(params, models.ToolsOzoneVerificationListVerifications.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.verification.listVerifications',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneVerificationListVerifications.Response)
+
+    async def revoke_verifications(
+        self,
+        data: t.Union[
+            models.ToolsOzoneVerificationRevokeVerifications.Data,
+            models.ToolsOzoneVerificationRevokeVerifications.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneVerificationRevokeVerifications.Response':
+        """Revoke previously granted verifications in batches of up to 100.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneVerificationRevokeVerifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneVerificationRevokeVerifications.Data',
+            get_or_create(data, models.ToolsOzoneVerificationRevokeVerifications.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.verification.revokeVerifications',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneVerificationRevokeVerifications.Response)

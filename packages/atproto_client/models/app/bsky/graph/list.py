@@ -25,7 +25,7 @@ class Record(base.RecordModelBase):
     name: str = Field(min_length=1, max_length=64)  #: Display name for list; can not be empty.
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Defines the purpose of the list (aka, moderation-oriented or curration-oriented).
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
-    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
+    description: te.Annotated[t.Optional[str], Field(max_length=3000)] = None  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[
         te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]

@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
@@ -27,7 +28,7 @@ class ListViewBasic(base.ModelBase):
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    list_item_count: t.Optional[int] = Field(default=None, ge=0)  #: List item count.
+    list_item_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: List item count.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.graph.defs#listViewBasic'] = Field(
@@ -45,10 +46,10 @@ class ListView(base.ModelBase):
     purpose: 'models.AppBskyGraphDefs.ListPurpose'  #: Purpose.
     uri: string_formats.AtUri  #: Uri.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
-    description: t.Optional[str] = Field(default=None, max_length=3000)  #: Description.
+    description: te.Annotated[t.Optional[str], Field(max_length=3000)] = None  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    list_item_count: t.Optional[int] = Field(default=None, ge=0)  #: List item count.
+    list_item_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: List item count.
     viewer: t.Optional['models.AppBskyGraphDefs.ListViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.graph.defs#listView'] = Field(
@@ -75,14 +76,16 @@ class StarterPackView(base.ModelBase):
     indexed_at: string_formats.DateTime  #: Indexed at.
     record: 'UnknownType'  #: Record.
     uri: string_formats.AtUri  #: Uri.
-    feeds: t.Optional[t.List['models.AppBskyFeedDefs.GeneratorView']] = Field(default=None, max_length=3)  #: Feeds.
-    joined_all_time_count: t.Optional[int] = Field(default=None, ge=0)  #: Joined all time count.
-    joined_week_count: t.Optional[int] = Field(default=None, ge=0)  #: Joined week count.
+    feeds: te.Annotated[t.Optional[t.List['models.AppBskyFeedDefs.GeneratorView']], Field(max_length=3)] = (
+        None  #: Feeds.
+    )
+    joined_all_time_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Joined all time count.
+    joined_week_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Joined week count.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: List.
-    list_items_sample: t.Optional[t.List['models.AppBskyGraphDefs.ListItemView']] = Field(
-        default=None, max_length=12
-    )  #: List items sample.
+    list_items_sample: te.Annotated[
+        t.Optional[t.List['models.AppBskyGraphDefs.ListItemView']], Field(max_length=12)
+    ] = None  #: List items sample.
 
     py_type: t.Literal['app.bsky.graph.defs#starterPackView'] = Field(
         default='app.bsky.graph.defs#starterPackView', alias='$type', frozen=True
@@ -97,10 +100,10 @@ class StarterPackViewBasic(base.ModelBase):
     indexed_at: string_formats.DateTime  #: Indexed at.
     record: 'UnknownType'  #: Record.
     uri: string_formats.AtUri  #: Uri.
-    joined_all_time_count: t.Optional[int] = Field(default=None, ge=0)  #: Joined all time count.
-    joined_week_count: t.Optional[int] = Field(default=None, ge=0)  #: Joined week count.
+    joined_all_time_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Joined all time count.
+    joined_week_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Joined week count.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
-    list_item_count: t.Optional[int] = Field(default=None, ge=0)  #: List item count.
+    list_item_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: List item count.
 
     py_type: t.Literal['app.bsky.graph.defs#starterPackViewBasic'] = Field(
         default='app.bsky.graph.defs#starterPackViewBasic', alias='$type', frozen=True

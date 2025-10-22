@@ -24,11 +24,12 @@ class Data(base.DataModelBase):
     key: string_formats.Nsid  #: Key.
     scope: t.Union[t.Literal['instance'], t.Literal['personal'], str]  #: Scope.
     value: 'UnknownInputType'  #: Value.
-    description: t.Optional[str] = Field(default=None, max_length=2000)  #: Description.
+    description: te.Annotated[t.Optional[str], Field(max_length=2000)] = None  #: Description.
     manager_role: t.Optional[
         t.Union[
             'models.ToolsOzoneTeamDefs.RoleModerator',
             'models.ToolsOzoneTeamDefs.RoleTriage',
+            'models.ToolsOzoneTeamDefs.RoleVerifier',
             'models.ToolsOzoneTeamDefs.RoleAdmin',
             str,
         ]
@@ -45,6 +46,7 @@ class DataDict(t.TypedDict):
             t.Union[
                 'models.ToolsOzoneTeamDefs.RoleModerator',
                 'models.ToolsOzoneTeamDefs.RoleTriage',
+                'models.ToolsOzoneTeamDefs.RoleVerifier',
                 'models.ToolsOzoneTeamDefs.RoleAdmin',
                 str,
             ]

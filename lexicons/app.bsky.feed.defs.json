@@ -23,6 +23,7 @@
             "app.bsky.embed.recordWithMedia#view"
           ]
         },
+        "bookmarkCount": { "type": "integer" },
         "replyCount": { "type": "integer" },
         "repostCount": { "type": "integer" },
         "likeCount": { "type": "integer" },
@@ -42,6 +43,7 @@
       "properties": {
         "repost": { "type": "string", "format": "at-uri" },
         "like": { "type": "string", "format": "at-uri" },
+        "bookmarked": { "type": "boolean" },
         "threadMuted": { "type": "boolean" },
         "replyDisabled": { "type": "boolean" },
         "embeddingDisabled": { "type": "boolean" },
@@ -66,6 +68,11 @@
           "type": "string",
           "description": "Context provided by feed generator that may be passed back alongside interactions.",
           "maxLength": 2000
+        },
+        "reqId": {
+          "type": "string",
+          "description": "Unique identifier per request that may be passed back alongside interactions.",
+          "maxLength": 100
         }
       }
     },
@@ -93,6 +100,8 @@
       "required": ["by", "indexedAt"],
       "properties": {
         "by": { "type": "ref", "ref": "app.bsky.actor.defs#profileViewBasic" },
+        "uri": { "type": "string", "format": "at-uri" },
+        "cid": { "type": "string", "format": "cid" },
         "indexedAt": { "type": "string", "format": "datetime" }
       }
     },
@@ -250,6 +259,11 @@
           "type": "string",
           "description": "Context on a feed item that was originally supplied by the feed generator on getFeedSkeleton.",
           "maxLength": 2000
+        },
+        "reqId": {
+          "type": "string",
+          "description": "Unique identifier per request that may be passed back alongside interactions.",
+          "maxLength": 100
         }
       }
     },

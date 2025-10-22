@@ -7,6 +7,11 @@ from atproto_client.models.app.bsky.actor import profile as AppBskyActorProfile
 from atproto_client.models.app.bsky.actor import put_preferences as AppBskyActorPutPreferences
 from atproto_client.models.app.bsky.actor import search_actors as AppBskyActorSearchActors
 from atproto_client.models.app.bsky.actor import search_actors_typeahead as AppBskyActorSearchActorsTypeahead
+from atproto_client.models.app.bsky.actor import status as AppBskyActorStatus
+from atproto_client.models.app.bsky.bookmark import create_bookmark as AppBskyBookmarkCreateBookmark
+from atproto_client.models.app.bsky.bookmark import defs as AppBskyBookmarkDefs
+from atproto_client.models.app.bsky.bookmark import delete_bookmark as AppBskyBookmarkDeleteBookmark
+from atproto_client.models.app.bsky.bookmark import get_bookmarks as AppBskyBookmarkGetBookmarks
 from atproto_client.models.app.bsky.embed import defs as AppBskyEmbedDefs
 from atproto_client.models.app.bsky.embed import external as AppBskyEmbedExternal
 from atproto_client.models.app.bsky.embed import images as AppBskyEmbedImages
@@ -50,10 +55,14 @@ from atproto_client.models.app.bsky.graph import get_list as AppBskyGraphGetList
 from atproto_client.models.app.bsky.graph import get_list_blocks as AppBskyGraphGetListBlocks
 from atproto_client.models.app.bsky.graph import get_list_mutes as AppBskyGraphGetListMutes
 from atproto_client.models.app.bsky.graph import get_lists as AppBskyGraphGetLists
+from atproto_client.models.app.bsky.graph import get_lists_with_membership as AppBskyGraphGetListsWithMembership
 from atproto_client.models.app.bsky.graph import get_mutes as AppBskyGraphGetMutes
 from atproto_client.models.app.bsky.graph import get_relationships as AppBskyGraphGetRelationships
 from atproto_client.models.app.bsky.graph import get_starter_pack as AppBskyGraphGetStarterPack
 from atproto_client.models.app.bsky.graph import get_starter_packs as AppBskyGraphGetStarterPacks
+from atproto_client.models.app.bsky.graph import (
+    get_starter_packs_with_membership as AppBskyGraphGetStarterPacksWithMembership,
+)
 from atproto_client.models.app.bsky.graph import (
     get_suggested_follows_by_actor as AppBskyGraphGetSuggestedFollowsByActor,
 )
@@ -72,18 +81,37 @@ from atproto_client.models.app.bsky.graph import verification as AppBskyGraphVer
 from atproto_client.models.app.bsky.labeler import defs as AppBskyLabelerDefs
 from atproto_client.models.app.bsky.labeler import get_services as AppBskyLabelerGetServices
 from atproto_client.models.app.bsky.labeler import service as AppBskyLabelerService
+from atproto_client.models.app.bsky.notification import declaration as AppBskyNotificationDeclaration
 from atproto_client.models.app.bsky.notification import defs as AppBskyNotificationDefs
+from atproto_client.models.app.bsky.notification import get_preferences as AppBskyNotificationGetPreferences
 from atproto_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
+from atproto_client.models.app.bsky.notification import (
+    list_activity_subscriptions as AppBskyNotificationListActivitySubscriptions,
+)
 from atproto_client.models.app.bsky.notification import list_notifications as AppBskyNotificationListNotifications
+from atproto_client.models.app.bsky.notification import (
+    put_activity_subscription as AppBskyNotificationPutActivitySubscription,
+)
 from atproto_client.models.app.bsky.notification import put_preferences as AppBskyNotificationPutPreferences
+from atproto_client.models.app.bsky.notification import put_preferences_v2 as AppBskyNotificationPutPreferencesV2
 from atproto_client.models.app.bsky.notification import register_push as AppBskyNotificationRegisterPush
+from atproto_client.models.app.bsky.notification import unregister_push as AppBskyNotificationUnregisterPush
 from atproto_client.models.app.bsky.notification import update_seen as AppBskyNotificationUpdateSeen
 from atproto_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
 from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
+from atproto_client.models.app.bsky.unspecced import get_age_assurance_state as AppBskyUnspeccedGetAgeAssuranceState
 from atproto_client.models.app.bsky.unspecced import get_config as AppBskyUnspeccedGetConfig
+from atproto_client.models.app.bsky.unspecced import (
+    get_onboarding_suggested_starter_packs as AppBskyUnspeccedGetOnboardingSuggestedStarterPacks,
+)
+from atproto_client.models.app.bsky.unspecced import (
+    get_onboarding_suggested_starter_packs_skeleton as AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton,
+)
 from atproto_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
 )
+from atproto_client.models.app.bsky.unspecced import get_post_thread_other_v2 as AppBskyUnspeccedGetPostThreadOtherV2
+from atproto_client.models.app.bsky.unspecced import get_post_thread_v2 as AppBskyUnspeccedGetPostThreadV2
 from atproto_client.models.app.bsky.unspecced import get_suggested_feeds as AppBskyUnspeccedGetSuggestedFeeds
 from atproto_client.models.app.bsky.unspecced import (
     get_suggested_feeds_skeleton as AppBskyUnspeccedGetSuggestedFeedsSkeleton,
@@ -103,6 +131,7 @@ from atproto_client.models.app.bsky.unspecced import get_tagged_suggestions as A
 from atproto_client.models.app.bsky.unspecced import get_trending_topics as AppBskyUnspeccedGetTrendingTopics
 from atproto_client.models.app.bsky.unspecced import get_trends as AppBskyUnspeccedGetTrends
 from atproto_client.models.app.bsky.unspecced import get_trends_skeleton as AppBskyUnspeccedGetTrendsSkeleton
+from atproto_client.models.app.bsky.unspecced import init_age_assurance as AppBskyUnspeccedInitAgeAssurance
 from atproto_client.models.app.bsky.unspecced import search_actors_skeleton as AppBskyUnspeccedSearchActorsSkeleton
 from atproto_client.models.app.bsky.unspecced import search_posts_skeleton as AppBskyUnspeccedSearchPostsSkeleton
 from atproto_client.models.app.bsky.unspecced import (
@@ -231,17 +260,25 @@ from atproto_client.models.com.atproto.sync import notify_of_update as ComAtprot
 from atproto_client.models.com.atproto.sync import request_crawl as ComAtprotoSyncRequestCrawl
 from atproto_client.models.com.atproto.sync import subscribe_repos as ComAtprotoSyncSubscribeRepos
 from atproto_client.models.com.atproto.temp import add_reserved_handle as ComAtprotoTempAddReservedHandle
+from atproto_client.models.com.atproto.temp import check_handle_availability as ComAtprotoTempCheckHandleAvailability
 from atproto_client.models.com.atproto.temp import check_signup_queue as ComAtprotoTempCheckSignupQueue
+from atproto_client.models.com.atproto.temp import dereference_scope as ComAtprotoTempDereferenceScope
 from atproto_client.models.com.atproto.temp import fetch_labels as ComAtprotoTempFetchLabels
 from atproto_client.models.com.atproto.temp import request_phone_verification as ComAtprotoTempRequestPhoneVerification
+from atproto_client.models.com.atproto.temp import revoke_account_credentials as ComAtprotoTempRevokeAccountCredentials
 from atproto_client.models.models_loader import load_models
 from atproto_client.models.tools.ozone.communication import create_template as ToolsOzoneCommunicationCreateTemplate
 from atproto_client.models.tools.ozone.communication import defs as ToolsOzoneCommunicationDefs
 from atproto_client.models.tools.ozone.communication import delete_template as ToolsOzoneCommunicationDeleteTemplate
 from atproto_client.models.tools.ozone.communication import list_templates as ToolsOzoneCommunicationListTemplates
 from atproto_client.models.tools.ozone.communication import update_template as ToolsOzoneCommunicationUpdateTemplate
+from atproto_client.models.tools.ozone.hosting import get_account_history as ToolsOzoneHostingGetAccountHistory
+from atproto_client.models.tools.ozone.moderation import (
+    cancel_scheduled_actions as ToolsOzoneModerationCancelScheduledActions,
+)
 from atproto_client.models.tools.ozone.moderation import defs as ToolsOzoneModerationDefs
 from atproto_client.models.tools.ozone.moderation import emit_event as ToolsOzoneModerationEmitEvent
+from atproto_client.models.tools.ozone.moderation import get_account_timeline as ToolsOzoneModerationGetAccountTimeline
 from atproto_client.models.tools.ozone.moderation import get_event as ToolsOzoneModerationGetEvent
 from atproto_client.models.tools.ozone.moderation import get_record as ToolsOzoneModerationGetRecord
 from atproto_client.models.tools.ozone.moderation import get_records as ToolsOzoneModerationGetRecords
@@ -249,9 +286,20 @@ from atproto_client.models.tools.ozone.moderation import get_repo as ToolsOzoneM
 from atproto_client.models.tools.ozone.moderation import get_reporter_stats as ToolsOzoneModerationGetReporterStats
 from atproto_client.models.tools.ozone.moderation import get_repos as ToolsOzoneModerationGetRepos
 from atproto_client.models.tools.ozone.moderation import get_subjects as ToolsOzoneModerationGetSubjects
+from atproto_client.models.tools.ozone.moderation import (
+    list_scheduled_actions as ToolsOzoneModerationListScheduledActions,
+)
 from atproto_client.models.tools.ozone.moderation import query_events as ToolsOzoneModerationQueryEvents
 from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
+from atproto_client.models.tools.ozone.moderation import schedule_action as ToolsOzoneModerationScheduleAction
 from atproto_client.models.tools.ozone.moderation import search_repos as ToolsOzoneModerationSearchRepos
+from atproto_client.models.tools.ozone.report import defs as ToolsOzoneReportDefs
+from atproto_client.models.tools.ozone.safelink import add_rule as ToolsOzoneSafelinkAddRule
+from atproto_client.models.tools.ozone.safelink import defs as ToolsOzoneSafelinkDefs
+from atproto_client.models.tools.ozone.safelink import query_events as ToolsOzoneSafelinkQueryEvents
+from atproto_client.models.tools.ozone.safelink import query_rules as ToolsOzoneSafelinkQueryRules
+from atproto_client.models.tools.ozone.safelink import remove_rule as ToolsOzoneSafelinkRemoveRule
+from atproto_client.models.tools.ozone.safelink import update_rule as ToolsOzoneSafelinkUpdateRule
 from atproto_client.models.tools.ozone.server import get_config as ToolsOzoneServerGetConfig
 from atproto_client.models.tools.ozone.set import add_values as ToolsOzoneSetAddValues
 from atproto_client.models.tools.ozone.set import defs as ToolsOzoneSetDefs
@@ -273,6 +321,14 @@ from atproto_client.models.tools.ozone.team import defs as ToolsOzoneTeamDefs
 from atproto_client.models.tools.ozone.team import delete_member as ToolsOzoneTeamDeleteMember
 from atproto_client.models.tools.ozone.team import list_members as ToolsOzoneTeamListMembers
 from atproto_client.models.tools.ozone.team import update_member as ToolsOzoneTeamUpdateMember
+from atproto_client.models.tools.ozone.verification import defs as ToolsOzoneVerificationDefs
+from atproto_client.models.tools.ozone.verification import (
+    grant_verifications as ToolsOzoneVerificationGrantVerifications,
+)
+from atproto_client.models.tools.ozone.verification import list_verifications as ToolsOzoneVerificationListVerifications
+from atproto_client.models.tools.ozone.verification import (
+    revoke_verifications as ToolsOzoneVerificationRevokeVerifications,
+)
 from atproto_client.models.utils import (
     create_strong_ref,
     get_model_as_dict,
@@ -292,6 +348,11 @@ class _Ids:
     AppBskyActorPutPreferences: str = 'app.bsky.actor.putPreferences'
     AppBskyActorSearchActors: str = 'app.bsky.actor.searchActors'
     AppBskyActorSearchActorsTypeahead: str = 'app.bsky.actor.searchActorsTypeahead'
+    AppBskyActorStatus: str = 'app.bsky.actor.status'
+    AppBskyBookmarkCreateBookmark: str = 'app.bsky.bookmark.createBookmark'
+    AppBskyBookmarkDefs: str = 'app.bsky.bookmark.defs'
+    AppBskyBookmarkDeleteBookmark: str = 'app.bsky.bookmark.deleteBookmark'
+    AppBskyBookmarkGetBookmarks: str = 'app.bsky.bookmark.getBookmarks'
     AppBskyEmbedDefs: str = 'app.bsky.embed.defs'
     AppBskyEmbedExternal: str = 'app.bsky.embed.external'
     AppBskyEmbedImages: str = 'app.bsky.embed.images'
@@ -335,10 +396,12 @@ class _Ids:
     AppBskyGraphGetListBlocks: str = 'app.bsky.graph.getListBlocks'
     AppBskyGraphGetListMutes: str = 'app.bsky.graph.getListMutes'
     AppBskyGraphGetLists: str = 'app.bsky.graph.getLists'
+    AppBskyGraphGetListsWithMembership: str = 'app.bsky.graph.getListsWithMembership'
     AppBskyGraphGetMutes: str = 'app.bsky.graph.getMutes'
     AppBskyGraphGetRelationships: str = 'app.bsky.graph.getRelationships'
     AppBskyGraphGetStarterPack: str = 'app.bsky.graph.getStarterPack'
     AppBskyGraphGetStarterPacks: str = 'app.bsky.graph.getStarterPacks'
+    AppBskyGraphGetStarterPacksWithMembership: str = 'app.bsky.graph.getStarterPacksWithMembership'
     AppBskyGraphGetSuggestedFollowsByActor: str = 'app.bsky.graph.getSuggestedFollowsByActor'
     AppBskyGraphList: str = 'app.bsky.graph.list'
     AppBskyGraphListblock: str = 'app.bsky.graph.listblock'
@@ -355,16 +418,29 @@ class _Ids:
     AppBskyLabelerDefs: str = 'app.bsky.labeler.defs'
     AppBskyLabelerGetServices: str = 'app.bsky.labeler.getServices'
     AppBskyLabelerService: str = 'app.bsky.labeler.service'
+    AppBskyNotificationDeclaration: str = 'app.bsky.notification.declaration'
     AppBskyNotificationDefs: str = 'app.bsky.notification.defs'
+    AppBskyNotificationGetPreferences: str = 'app.bsky.notification.getPreferences'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
+    AppBskyNotificationListActivitySubscriptions: str = 'app.bsky.notification.listActivitySubscriptions'
     AppBskyNotificationListNotifications: str = 'app.bsky.notification.listNotifications'
+    AppBskyNotificationPutActivitySubscription: str = 'app.bsky.notification.putActivitySubscription'
     AppBskyNotificationPutPreferences: str = 'app.bsky.notification.putPreferences'
+    AppBskyNotificationPutPreferencesV2: str = 'app.bsky.notification.putPreferencesV2'
     AppBskyNotificationRegisterPush: str = 'app.bsky.notification.registerPush'
+    AppBskyNotificationUnregisterPush: str = 'app.bsky.notification.unregisterPush'
     AppBskyNotificationUpdateSeen: str = 'app.bsky.notification.updateSeen'
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
+    AppBskyUnspeccedGetAgeAssuranceState: str = 'app.bsky.unspecced.getAgeAssuranceState'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
+    AppBskyUnspeccedGetOnboardingSuggestedStarterPacks: str = 'app.bsky.unspecced.getOnboardingSuggestedStarterPacks'
+    AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton: str = (
+        'app.bsky.unspecced.getOnboardingSuggestedStarterPacksSkeleton'
+    )
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
+    AppBskyUnspeccedGetPostThreadOtherV2: str = 'app.bsky.unspecced.getPostThreadOtherV2'
+    AppBskyUnspeccedGetPostThreadV2: str = 'app.bsky.unspecced.getPostThreadV2'
     AppBskyUnspeccedGetSuggestedFeeds: str = 'app.bsky.unspecced.getSuggestedFeeds'
     AppBskyUnspeccedGetSuggestedFeedsSkeleton: str = 'app.bsky.unspecced.getSuggestedFeedsSkeleton'
     AppBskyUnspeccedGetSuggestedStarterPacks: str = 'app.bsky.unspecced.getSuggestedStarterPacks'
@@ -376,6 +452,7 @@ class _Ids:
     AppBskyUnspeccedGetTrendingTopics: str = 'app.bsky.unspecced.getTrendingTopics'
     AppBskyUnspeccedGetTrends: str = 'app.bsky.unspecced.getTrends'
     AppBskyUnspeccedGetTrendsSkeleton: str = 'app.bsky.unspecced.getTrendsSkeleton'
+    AppBskyUnspeccedInitAgeAssurance: str = 'app.bsky.unspecced.initAgeAssurance'
     AppBskyUnspeccedSearchActorsSkeleton: str = 'app.bsky.unspecced.searchActorsSkeleton'
     AppBskyUnspeccedSearchPostsSkeleton: str = 'app.bsky.unspecced.searchPostsSkeleton'
     AppBskyUnspeccedSearchStarterPacksSkeleton: str = 'app.bsky.unspecced.searchStarterPacksSkeleton'
@@ -496,16 +573,22 @@ class _Ids:
     ComAtprotoSyncRequestCrawl: str = 'com.atproto.sync.requestCrawl'
     ComAtprotoSyncSubscribeRepos: str = 'com.atproto.sync.subscribeRepos'
     ComAtprotoTempAddReservedHandle: str = 'com.atproto.temp.addReservedHandle'
+    ComAtprotoTempCheckHandleAvailability: str = 'com.atproto.temp.checkHandleAvailability'
     ComAtprotoTempCheckSignupQueue: str = 'com.atproto.temp.checkSignupQueue'
+    ComAtprotoTempDereferenceScope: str = 'com.atproto.temp.dereferenceScope'
     ComAtprotoTempFetchLabels: str = 'com.atproto.temp.fetchLabels'
     ComAtprotoTempRequestPhoneVerification: str = 'com.atproto.temp.requestPhoneVerification'
+    ComAtprotoTempRevokeAccountCredentials: str = 'com.atproto.temp.revokeAccountCredentials'
     ToolsOzoneCommunicationCreateTemplate: str = 'tools.ozone.communication.createTemplate'
     ToolsOzoneCommunicationDefs: str = 'tools.ozone.communication.defs'
     ToolsOzoneCommunicationDeleteTemplate: str = 'tools.ozone.communication.deleteTemplate'
     ToolsOzoneCommunicationListTemplates: str = 'tools.ozone.communication.listTemplates'
     ToolsOzoneCommunicationUpdateTemplate: str = 'tools.ozone.communication.updateTemplate'
+    ToolsOzoneHostingGetAccountHistory: str = 'tools.ozone.hosting.getAccountHistory'
+    ToolsOzoneModerationCancelScheduledActions: str = 'tools.ozone.moderation.cancelScheduledActions'
     ToolsOzoneModerationDefs: str = 'tools.ozone.moderation.defs'
     ToolsOzoneModerationEmitEvent: str = 'tools.ozone.moderation.emitEvent'
+    ToolsOzoneModerationGetAccountTimeline: str = 'tools.ozone.moderation.getAccountTimeline'
     ToolsOzoneModerationGetEvent: str = 'tools.ozone.moderation.getEvent'
     ToolsOzoneModerationGetRecord: str = 'tools.ozone.moderation.getRecord'
     ToolsOzoneModerationGetRecords: str = 'tools.ozone.moderation.getRecords'
@@ -513,9 +596,18 @@ class _Ids:
     ToolsOzoneModerationGetReporterStats: str = 'tools.ozone.moderation.getReporterStats'
     ToolsOzoneModerationGetRepos: str = 'tools.ozone.moderation.getRepos'
     ToolsOzoneModerationGetSubjects: str = 'tools.ozone.moderation.getSubjects'
+    ToolsOzoneModerationListScheduledActions: str = 'tools.ozone.moderation.listScheduledActions'
     ToolsOzoneModerationQueryEvents: str = 'tools.ozone.moderation.queryEvents'
     ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
+    ToolsOzoneModerationScheduleAction: str = 'tools.ozone.moderation.scheduleAction'
     ToolsOzoneModerationSearchRepos: str = 'tools.ozone.moderation.searchRepos'
+    ToolsOzoneReportDefs: str = 'tools.ozone.report.defs'
+    ToolsOzoneSafelinkAddRule: str = 'tools.ozone.safelink.addRule'
+    ToolsOzoneSafelinkDefs: str = 'tools.ozone.safelink.defs'
+    ToolsOzoneSafelinkQueryEvents: str = 'tools.ozone.safelink.queryEvents'
+    ToolsOzoneSafelinkQueryRules: str = 'tools.ozone.safelink.queryRules'
+    ToolsOzoneSafelinkRemoveRule: str = 'tools.ozone.safelink.removeRule'
+    ToolsOzoneSafelinkUpdateRule: str = 'tools.ozone.safelink.updateRule'
     ToolsOzoneServerGetConfig: str = 'tools.ozone.server.getConfig'
     ToolsOzoneSetAddValues: str = 'tools.ozone.set.addValues'
     ToolsOzoneSetDefs: str = 'tools.ozone.set.defs'
@@ -537,6 +629,10 @@ class _Ids:
     ToolsOzoneTeamDeleteMember: str = 'tools.ozone.team.deleteMember'
     ToolsOzoneTeamListMembers: str = 'tools.ozone.team.listMembers'
     ToolsOzoneTeamUpdateMember: str = 'tools.ozone.team.updateMember'
+    ToolsOzoneVerificationDefs: str = 'tools.ozone.verification.defs'
+    ToolsOzoneVerificationGrantVerifications: str = 'tools.ozone.verification.grantVerifications'
+    ToolsOzoneVerificationListVerifications: str = 'tools.ozone.verification.listVerifications'
+    ToolsOzoneVerificationRevokeVerifications: str = 'tools.ozone.verification.revokeVerifications'
 
 
 ids = _Ids()

@@ -14,6 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
+    from atproto_client.models.unknown_type import UnknownType
 from atproto_client.models import base
 
 
@@ -27,9 +28,10 @@ class Data(base.DataModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    reason: t.Optional[str] = Field(
-        default=None, max_length=20000
-    )  #: Additional context about the content and violation.
+    mod_tool: t.Optional['models.ComAtprotoModerationCreateReport.ModTool'] = None  #: Mod tool.
+    reason: te.Annotated[t.Optional[str], Field(max_length=20000)] = (
+        None  #: Additional context about the content and violation.
+    )
 
 
 class DataDict(t.TypedDict):
@@ -40,6 +42,7 @@ class DataDict(t.TypedDict):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
+    mod_tool: te.NotRequired[t.Optional['models.ComAtprotoModerationCreateReport.ModTool']]  #: Mod tool.
     reason: te.NotRequired[t.Optional[str]]  #: Additional context about the content and violation.
 
 
@@ -54,4 +57,15 @@ class Response(base.ResponseModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
         Field(discriminator='py_type'),
     ]  #: Subject.
-    reason: t.Optional[str] = Field(default=None, max_length=20000)  #: Reason.
+    reason: te.Annotated[t.Optional[str], Field(max_length=20000)] = None  #: Reason.
+
+
+class ModTool(base.ModelBase):
+    """Definition model for :obj:`com.atproto.moderation.createReport`. Moderation tool information for tracing the source of the action."""
+
+    name: str  #: Name/identifier of the source (e.g., 'bsky-app/android', 'bsky-web/chrome').
+    meta: t.Optional['UnknownType'] = None  #: Additional arbitrary metadata about the source.
+
+    py_type: t.Literal['com.atproto.moderation.createReport#modTool'] = Field(
+        default='com.atproto.moderation.createReport#modTool', alias='$type', frozen=True
+    )

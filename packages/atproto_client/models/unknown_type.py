@@ -9,6 +9,7 @@ if t.TYPE_CHECKING:
 
 UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyActorProfile.Record',
+    'models.AppBskyActorStatus.Record',
     'models.AppBskyFeedGenerator.Record',
     'models.AppBskyFeedLike.Record',
     'models.AppBskyFeedPost.Record',
@@ -23,12 +24,14 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyGraphStarterpack.Record',
     'models.AppBskyGraphVerification.Record',
     'models.AppBskyLabelerService.Record',
+    'models.AppBskyNotificationDeclaration.Record',
     'models.ChatBskyActorDeclaration.Record',
     'models.ComAtprotoLexiconSchema.Record',
 ]
 UnknownRecordTypePydantic = te.Annotated[
     t.Union[
         'models.AppBskyActorProfile.Record',
+        'models.AppBskyActorStatus.Record',
         'models.AppBskyFeedGenerator.Record',
         'models.AppBskyFeedLike.Record',
         'models.AppBskyFeedPost.Record',
@@ -43,6 +46,7 @@ UnknownRecordTypePydantic = te.Annotated[
         'models.AppBskyGraphStarterpack.Record',
         'models.AppBskyGraphVerification.Record',
         'models.AppBskyLabelerService.Record',
+        'models.AppBskyNotificationDeclaration.Record',
         'models.ChatBskyActorDeclaration.Record',
         'models.ComAtprotoLexiconSchema.Record',
     ],

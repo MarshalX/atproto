@@ -20,7 +20,7 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     email: t.Optional[str] = None  #: Email.
-    limit: t.Optional[int] = Field(default=50, ge=1, le=100)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
 
 
 class ParamsDict(t.TypedDict):

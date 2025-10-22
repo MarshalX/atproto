@@ -19,7 +19,7 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.sync.listHosts`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    limit: t.Optional[int] = Field(default=200, ge=1, le=1000)  #: Limit.
+    limit: te.Annotated[t.Optional[int], Field(ge=1, le=1000)] = None  #: Limit.
 
 
 class ParamsDict(t.TypedDict):
