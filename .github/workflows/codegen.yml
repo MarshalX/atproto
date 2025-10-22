@@ -18,16 +18,6 @@ jobs:
         shell: bash
 
     steps:
-      - name: Run Cimon (eBPF).
-        if: runner.os == 'Linux'
-        uses: cycodelabs/cimon-action@v0
-        with:
-          prevent: true
-          allowed-hosts: >
-            files.pythonhosted.org
-            install.python-poetry.org
-            pypi.org
-
       - name: Checkout repository.
         uses: actions/checkout@v4
 
@@ -39,7 +29,7 @@ jobs:
       - name: Setup Poetry.
         uses: snok/install-poetry@v1
         with:
-          version: 1.8.3
+          version: 2.2.1
 
       - name: Install dependencies.
         run: poetry install --no-interaction

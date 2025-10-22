@@ -73,7 +73,7 @@ class DidResolver(_DidResolverBase, BaseResolver):
         Returns:
             :obj:`dict`: DID document or ``None`` if DID not found.
         """
-        base_resolver = t.cast(BaseResolver, self._get_resolver_method(did))
+        base_resolver = t.cast('BaseResolver', self._get_resolver_method(did))
         return base_resolver.resolve_without_validation(did)
 
 
@@ -114,5 +114,5 @@ class AsyncDidResolver(_DidResolverBase, AsyncBaseResolver):
         Returns:
             :obj:`dict`: DID document or ``None`` if DID not found.
         """
-        async_base_resolver = t.cast(AsyncBaseResolver, self._get_resolver_method(did))
+        async_base_resolver = t.cast('AsyncBaseResolver', self._get_resolver_method(did))
         return await async_base_resolver.resolve_without_validation(did)

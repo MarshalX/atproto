@@ -6,7 +6,7 @@ from atproto_client.client.session import Session, SessionEvent
 __all__ = [
     'AsyncClient',
     'Client',
-    'models',
-    'SessionEvent',
     'Session',
+    'SessionEvent',
+    'models',
 ]

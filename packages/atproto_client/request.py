@@ -98,7 +98,7 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
     )
     error_content = load_json(response.content, strict=False)
     if error_content:
-        error_response.content = t.cast(XrpcError, get_or_create(error_content, XrpcError, strict=False))
+        error_response.content = t.cast('XrpcError', get_or_create(error_content, XrpcError, strict=False))
 
     if response.status_code in {401, 403}:
         raise exceptions.UnauthorizedError(error_response)

@@ -87,7 +87,7 @@ def _get_or_create(
             return None
 
         # we are sure that this is dict because of check above
-        model_data = t.cast(t.Dict[str, t.Any], model_data)
+        model_data = t.cast('t.Dict[str, t.Any]', model_data)
 
         # resolve a record model by type and try to deserialize
         record_type: t.Any = model_data.get(_TYPE_SERVICE_FIELD)
@@ -95,7 +95,7 @@ def _get_or_create(
             return None
 
         # now we are sure that this is str because it's in RECORD_TYPE_TO_MODEL_CLASS
-        record_type = t.cast(str, record_type)
+        record_type = t.cast('str', record_type)
 
         return get_or_create(
             model_data,
@@ -120,15 +120,15 @@ def _get_or_create(
 def get_response_model(response: 'Response', model: t.Type[M]) -> M:
     if model is bool:
         # Could not be False? Because the exception with errors will be raised from the server
-        return t.cast(M, response.success)
+        return t.cast('M', response.success)
     if model is bytes:
-        return t.cast(M, response.content)
+        return t.cast('M', response.content)
 
     if not isinstance(response.content, dict):
         raise ModelError("Can't properly parse response model because JSON is expected in response")
 
     # casting to M because of enabled strict mode
-    return t.cast(M, get_or_create(response.content, model, strict=True))
+    return t.cast('M', get_or_create(response.content, model, strict=True))
 
 
 def get_model_as_dict(model: t.Union[DotDict, BlobRef, ModelBase]) -> t.Dict[str, t.Any]:
