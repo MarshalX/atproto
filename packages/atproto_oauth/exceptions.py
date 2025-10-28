@@ -1,21 +1,16 @@
 """OAuth-specific exceptions."""
 
+from atproto_core.exceptions import AtProtocolError
 
-class OAuthError(Exception):
+
+class OAuthError(AtProtocolError):
     """Base exception for OAuth errors."""
 
 
-class OAuthStateError(OAuthError):
-    """OAuth state validation error."""
+class OAuthStateError(OAuthError): ...
 
 
-class OAuthTokenError(OAuthError):
-    """OAuth token request error."""
+class OAuthTokenError(OAuthError): ...
 
 
-class UnsupportedAuthServerError(OAuthError):
-    """Authorization server does not meet ATProto OAuth requirements."""
-
-
-class DPoPNonceError(OAuthError):
-    """DPoP nonce error requiring retry."""
+class UnsupportedAuthServerError(OAuthError): ...

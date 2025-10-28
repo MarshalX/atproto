@@ -278,9 +278,9 @@ class OAuthClient:
                     dpop_key=session.dpop_private_key,
                     dpop_nonce=session.dpop_authserver_nonce,
                 )
-            except (OAuthTokenError, ValueError) as e:
-                # Log but don't fail revocation (could add proper logging here)
-                pass  # Intentionally silent - revocation is best effort
+            except (OAuthTokenError, ValueError):
+                # Best-effort revocation; failures are intentionally silent
+                pass
 
         # Delete local session
         await self.session_store.delete_session(session.did)
