@@ -142,3 +142,98 @@ def test_extract_nonce_from_response() -> None:
     response = httpx.Response(status_code=200)
     nonce = DPoPManager.extract_nonce_from_response(response)
     assert nonce is None
+
+
+def test_dpop_signature_format() -> None:
+    """Test that DPoP signature uses IEEE P1363 format (64 bytes for ES256)."""
+    key = DPoPManager.generate_keypair()
+
+    proof = DPoPManager.create_proof(
+        method='POST',
+        url='https://example.com/token',
+        private_key=key,
+    )
+
+    # Decode signature
+    import base64
+
+    parts = proof.split('.')
+    # Add padding if needed
+    signature_b64 = parts[2] + '=' * (4 - len(parts[2]) % 4)
+    signature_bytes = base64.urlsafe_b64decode(signature_b64)
+
+    # ES256 signature should be 64 bytes (32 for r, 32 for s)
+    assert len(signature_bytes) == 64, f'Signature length is {len(signature_bytes)}, expected 64'
+
+
+def test_dpop_htu_strips_query_and_fragment() -> None:
+    """Test that htu field strips query and fragment per RFC 9449."""
+    key = DPoPManager.generate_keypair()
+
+    # Test with query parameters
+    proof = DPoPManager.create_proof(
+        method='POST',
+        url='https://example.com/token?param=value&other=test',
+        private_key=key,
+    )
+
+    import base64
+
+    parts = proof.split('.')
+    payload_json = base64.urlsafe_b64decode(parts[1] + '==')
+    payload = json.loads(payload_json)
+
+    assert payload['htu'] == 'https://example.com/token'
+
+    # Test with fragment
+    proof = DPoPManager.create_proof(
+        method='GET',
+        url='https://example.com/api#section',
+        private_key=key,
+    )
+
+    parts = proof.split('.')
+    payload_json = base64.urlsafe_b64decode(parts[1] + '==')
+    payload = json.loads(payload_json)
+
+    assert payload['htu'] == 'https://example.com/api'
+
+    # Test with both query and fragment
+    proof = DPoPManager.create_proof(
+        method='GET',
+        url='https://example.com/api?foo=bar#section',
+        private_key=key,
+    )
+
+    parts = proof.split('.')
+    payload_json = base64.urlsafe_b64decode(parts[1] + '==')
+    payload = json.loads(payload_json)
+
+    assert payload['htu'] == 'https://example.com/api'
+
+
+def test_dpop_jwk_format() -> None:
+    """Test that JWK in header is properly formatted."""
+    key = DPoPManager.generate_keypair()
+
+    proof = DPoPManager.create_proof(
+        method='POST',
+        url='https://example.com/token',
+        private_key=key,
+    )
+
+    import base64
+
+    parts = proof.split('.')
+    header_json = base64.urlsafe_b64decode(parts[0] + '==')
+    header = json.loads(header_json)
+
+    jwk = header['jwk']
+
+    # Verify JWK structure
+    assert jwk['kty'] == 'EC'
+    assert jwk['crv'] == 'P-256'
+    assert 'x' in jwk
+    assert 'y' in jwk
+    # Must NOT contain private key
+    assert 'd' not in jwk

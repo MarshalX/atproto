@@ -6,9 +6,11 @@ import secrets
 import time
 import typing as t
 from base64 import urlsafe_b64encode
+from urllib.parse import urlparse
 
 import httpx
 from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives.asymmetric.utils import decode_dss_signature
 
 if t.TYPE_CHECKING:
     from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePrivateKey
@@ -82,11 +84,20 @@ class DPoPManager:
         # Create signing input
         signing_input = f'{header_b64}.{payload_b64}'.encode()
 
-        # Sign
-        signature = private_key.sign(signing_input, ec.ECDSA(hashes.SHA256()))
+        # Sign (returns DER-encoded signature)
+        der_signature = private_key.sign(signing_input, ec.ECDSA(hashes.SHA256()))
 
-        # Encode signature
-        signature_b64 = urlsafe_b64encode(signature).decode().rstrip('=')
+        # Convert DER signature to IEEE P1363 format (raw r|s concatenated)
+        # ES256 uses P-256 curve, so r and s are each 32 bytes
+        r, s = decode_dss_signature(der_signature)
+
+        # Convert r and s to 32-byte big-endian sequences
+        r_bytes = r.to_bytes(32, 'big')
+        s_bytes = s.to_bytes(32, 'big')
+
+        # Concatenate and encode
+        raw_signature = r_bytes + s_bytes
+        signature_b64 = urlsafe_b64encode(raw_signature).decode().rstrip('=')
 
         return f'{header_b64}.{payload_b64}.{signature_b64}'
 
@@ -121,12 +132,16 @@ class DPoPManager:
             'jwk': public_jwk,
         }
 
+        # Strip query and fragment from URL per RFC 9449
+        parsed_url = urlparse(url)
+        htu = f'{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}'
+
         # Create payload
         now = int(time.time())
         payload = {
             'jti': secrets.token_urlsafe(16),
             'htm': method.upper(),
-            'htu': url,
+            'htu': htu,
             'iat': now,
             'exp': now + 60,  # Valid for 60 seconds
         }

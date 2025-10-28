@@ -74,12 +74,22 @@ class OAuthClient:
             OAuthError: If authorization server discovery or PAR fails.
         """
         # 1. Resolve identity
-        did, handle, did_doc = await self._id_resolver.did.resolve(handle_or_did)
-        if not did_doc:
-            raise ValueError(f'Failed to resolve identity: {handle_or_did}')
+        if handle_or_did.startswith('did:'):
+            # Input is a DID
+            did = handle_or_did
+        else:
+            # Input is a handle - resolve to DID first
+            resolved_did = await self._id_resolver.handle.resolve(handle_or_did)
+            if not resolved_did:
+                raise ValueError(f'Failed to resolve handle: {handle_or_did}')
+            did = resolved_did
 
-        # 2. Extract PDS endpoint
-        pds_url = self._get_pds_endpoint(did_doc)
+        # 2. Resolve DID to get ATProto data (includes PDS, handle, etc.)
+        atproto_data = await self._id_resolver.did.resolve_atproto_data(did)
+
+        handle = atproto_data.handle or handle_or_did
+        pds_url = atproto_data.pds
+
         if not pds_url:
             raise ValueError(f'No PDS endpoint found in DID document for {did}')
 
@@ -501,12 +511,3 @@ class OAuthClient:
         }
 
         return self._dpop._sign_jwt(header, payload, self.client_secret_key)
-
-    @staticmethod
-    def _get_pds_endpoint(did_doc: t.Dict[str, t.Any]) -> t.Optional[str]:
-        """Extract PDS endpoint from DID document."""
-        services = did_doc.get('service', [])
-        for service in services:
-            if service.get('id') == '#atproto_pds':
-                return service.get('serviceEndpoint')
-        return None
