@@ -83,7 +83,7 @@ coverage = "7.6.1"
 [tool.poetry-dynamic-versioning]
 # poetry self add "poetry-dynamic-versioning[plugin]"
 enable = true
-strict = true
+strict = false
 bump = true
 metadata = false
 fix-shallow-repository = true
