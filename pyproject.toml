@@ -35,6 +35,7 @@ packages = [
     { include = "atproto_firehose", from = "packages" },
     { include = "atproto_identity", from = "packages" },
     { include = "atproto_lexicon", from = "packages" },
+    { include = "atproto_oauth", from = "packages" },
     { include = "atproto_server", from = "packages" },
 ]
 
@@ -153,7 +154,13 @@ ignore = [
     "D105", "D104", "D100", "D107", "D103", "D415", # missing docstring
     "D101", "D102", # missing docstring in public class and method
 ]
-"tests/*.py" = ["D"]
+"packages/atproto_oauth/*.py" = [
+    "S105", # hardcoded password (false positives for token_type literals)
+    "S104", # binding to 0.0.0.0 (SSRF protection list)
+    "BLE001", # broad exception (intentional for robustness)
+    "S110", # try-except-pass (intentional silent failures)
+]
+"tests/*.py" = ["D", "S105"]  # docstrings, hardcoded password (test tokens)
 "docs/*.py" = ["T201", "INP001", "ERA001", "E501", "D"]
 "examples/*.py" = ["T201", "INP001", "ERA001", "D"]
 "packages/atproto/exceptions.py" = ["F403"]
