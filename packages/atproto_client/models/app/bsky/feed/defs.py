@@ -27,6 +27,7 @@ class PostView(base.ModelBase):
     record: 'UnknownType'  #: Record.
     uri: string_formats.AtUri  #: Uri.
     bookmark_count: t.Optional[int] = None  #: Bookmark count.
+    debug: t.Optional['UnknownType'] = None  #: Debug information for internal development.
     embed: t.Optional[
         te.Annotated[
             t.Union[

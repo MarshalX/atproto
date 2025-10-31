@@ -77,6 +77,7 @@ class Params(base.ParamsModelBase):
     types: t.Optional[t.List[str]] = (
         None  #: The types of events (fully qualified string in the format of tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned.
     )
+    with_strike: t.Optional[bool] = None  #: If specified, only events where strikeCount value is set are returned.
 
 
 class ParamsDict(t.TypedDict):
@@ -143,6 +144,9 @@ class ParamsDict(t.TypedDict):
     types: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: The types of events (fully qualified string in the format of tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned.
+    with_strike: te.NotRequired[
+        t.Optional[bool]
+    ]  #: If specified, only events where strikeCount value is set are returned.
 
 
 class Response(base.ResponseModelBase):
