@@ -6,6 +6,8 @@ from pathlib import Path
 from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import NSID
 
+from atproto_codegen.models import builder
+
 
 def format_code(filepath: Path, quiet: bool = True) -> None:
     if not isinstance(filepath, Path):
@@ -102,12 +104,20 @@ def get_def_model_name(method_name: str) -> str:
     return f'{capitalize_first_symbol(method_name)}'
 
 
-def get_record_model_name(_: str) -> str:
+def get_record_model_name(_: t.Optional[str] = None) -> str:
     return 'Record'
 
 
 def get_model_path(nsid: NSID, method_name: str) -> str:
-    return f'models.{get_import_path(nsid)}.{get_def_model_name(method_name)}'
+    record_models_for_nsid = builder.build_record_models().get(nsid, {})
+    is_main_record_model = method_name == 'Main' and record_models_for_nsid.get('main')
+
+    # edge case since we name classes "Record" for record types,
+    # but references in schemes are still pointer to #main ("Main"),
+    # so we need to rename Main to Record here
+    model_name = get_record_model_name() if is_main_record_model else get_def_model_name(method_name)
+
+    return f'models.{get_import_path(nsid)}.{model_name}'
 
 
 def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> t.Tuple[str, str]:
