@@ -21,6 +21,7 @@ class Record(base.RecordModelBase):
 
     created_at: string_formats.DateTime  #: Created at.
     subject: string_formats.Did  #: Subject.
+    via: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Via.
 
     py_type: t.Literal['app.bsky.graph.follow'] = Field(default='app.bsky.graph.follow', alias='$type', frozen=True)
 

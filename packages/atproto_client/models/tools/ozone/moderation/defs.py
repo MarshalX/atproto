@@ -145,6 +145,9 @@ class SubjectStatusView(base.ModelBase):
     account_stats: t.Optional['models.ToolsOzoneModerationDefs.AccountStats'] = (
         None  #: Statistics related to the account subject.
     )
+    account_strike: t.Optional['models.ToolsOzoneModerationDefs.AccountStrike'] = (
+        None  #: Strike information for the account (account-level only).
+    )
     age_assurance_state: t.Optional[
         t.Union[
             t.Literal['pending'],
@@ -239,6 +242,19 @@ class RecordsStats(base.ModelBase):
     )
 
 
+class AccountStrike(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Strike information for an account."""
+
+    active_strike_count: t.Optional[int] = None  #: Current number of active strikes (excluding expired strikes).
+    first_strike_at: t.Optional[string_formats.DateTime] = None  #: Timestamp of the first strike received.
+    last_strike_at: t.Optional[string_formats.DateTime] = None  #: Timestamp of the most recent strike received.
+    total_strike_count: t.Optional[int] = None  #: Total number of strikes ever received (including expired strikes).
+
+    py_type: t.Literal['tools.ozone.moderation.defs#accountStrike'] = Field(
+        default='tools.ozone.moderation.defs#accountStrike', alias='$type', frozen=True
+    )
+
+
 SubjectReviewState = t.Union[
     'models.ToolsOzoneModerationDefs.ReviewOpen',
     'models.ToolsOzoneModerationDefs.ReviewEscalated',
@@ -277,6 +293,11 @@ class ModEventTakedown(base.ModelBase):
     policies: te.Annotated[t.Optional[t.List[str]], Field(max_length=5)] = (
         None  #: Names/Keywords of the policies that drove the decision.
     )
+    severity_level: t.Optional[str] = None  #: Severity level of the violation (e.g., 'sev-0', 'sev-1', 'sev-2', etc.).
+    strike_count: t.Optional[int] = None  #: Number of strikes to assign to the user for this violation.
+    strike_expires_at: t.Optional[string_formats.DateTime] = (
+        None  #: When the strike should expire. If not provided, the strike never expires.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventTakedown'] = Field(
         default='tools.ozone.moderation.defs#modEventTakedown', alias='$type', frozen=True
@@ -287,6 +308,15 @@ class ModEventReverseTakedown(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`. Revert take down action on a subject."""
 
     comment: t.Optional[str] = None  #: Describe reasoning behind the reversal.
+    policies: te.Annotated[t.Optional[t.List[str]], Field(max_length=5)] = (
+        None  #: Names/Keywords of the policy infraction for which takedown is being reversed.
+    )
+    severity_level: t.Optional[str] = (
+        None  #: Severity level of the violation. Usually set from the last policy infraction's severity.
+    )
+    strike_count: t.Optional[int] = (
+        None  #: Number of strikes to subtract from the user's strike count. Usually set from the last policy infraction's severity.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventReverseTakedown'] = Field(
         default='tools.ozone.moderation.defs#modEventReverseTakedown', alias='$type', frozen=True
@@ -468,6 +498,18 @@ class ModEventEmail(base.ModelBase):
     subject_line: str  #: The subject line of the email sent to the user.
     comment: t.Optional[str] = None  #: Additional comment about the outgoing comm.
     content: t.Optional[str] = None  #: The content of the email sent to the user.
+    policies: te.Annotated[t.Optional[t.List[str]], Field(max_length=5)] = (
+        None  #: Names/Keywords of the policies that necessitated the email.
+    )
+    severity_level: t.Optional[str] = (
+        None  #: Severity level of the violation. Normally 'sev-1' that adds strike on repeat offense.
+    )
+    strike_count: t.Optional[int] = (
+        None  #: Number of strikes to assign to the user for this violation. Normally 0 as an indicator of a warning and only added as a strike on a repeat offense.
+    )
+    strike_expires_at: t.Optional[string_formats.DateTime] = (
+        None  #: When the strike should expire. If not provided, the strike never expires.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventEmail'] = Field(
         default='tools.ozone.moderation.defs#modEventEmail', alias='$type', frozen=True

@@ -21,16 +21,10 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getPostThreadOtherV2`."""
 
     anchor: string_formats.AtUri  #: Reference (AT-URI) to post record. This is the anchor post.
-    prioritize_followed_users: t.Optional[bool] = (
-        False  #: Whether to prioritize posts from followed users. It only has effect when the user is authenticated.
-    )
 
 
 class ParamsDict(t.TypedDict):
     anchor: string_formats.AtUri  #: Reference (AT-URI) to post record. This is the anchor post.
-    prioritize_followed_users: te.NotRequired[
-        t.Optional[bool]
-    ]  #: Whether to prioritize posts from followed users. It only has effect when the user is authenticated.
 
 
 class Response(base.ResponseModelBase):

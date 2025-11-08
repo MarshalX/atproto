@@ -70,6 +70,9 @@ class Params(base.ParamsModelBase):
     min_reported_records_count: t.Optional[int] = (
         None  #: If specified, only subjects that belong to an account that has at least this many reported records will be returned.
     )
+    min_strike_count: te.Annotated[t.Optional[int], Field(ge=1)] = (
+        None  #: If specified, only subjects that belong to an account that has at least this many active strikes will be returned.
+    )
     min_takendown_records_count: t.Optional[int] = (
         None  #: If specified, only subjects that belong to an account that has at least this many taken down records will be returned.
     )
@@ -161,6 +164,9 @@ class ParamsDict(t.TypedDict):
     min_reported_records_count: te.NotRequired[
         t.Optional[int]
     ]  #: If specified, only subjects that belong to an account that has at least this many reported records will be returned.
+    min_strike_count: te.NotRequired[
+        t.Optional[int]
+    ]  #: If specified, only subjects that belong to an account that has at least this many active strikes will be returned.
     min_takendown_records_count: te.NotRequired[
         t.Optional[int]
     ]  #: If specified, only subjects that belong to an account that has at least this many taken down records will be returned.
