@@ -109,13 +109,13 @@ def get_record_model_name(_: t.Optional[str] = None) -> str:
 
 
 def get_model_path(nsid: NSID, method_name: str) -> str:
-    all_record_models = builder.build_record_models().get(nsid, {})
-    is_record_model = method_name == 'Main' and all_record_models.get('main')
+    record_models_for_nsid = builder.build_record_models().get(nsid, {})
+    is_main_record_model = method_name == 'Main' and record_models_for_nsid.get('main')
 
     # edge case since we name classes "Record" for record types,
     # but references in schemes are still pointer to #main ("Main"),
     # so we need to rename Main to Record here
-    model_name = get_record_model_name() if is_record_model else get_def_model_name(method_name)
+    model_name = get_record_model_name() if is_main_record_model else get_def_model_name(method_name)
 
     return f'models.{get_import_path(nsid)}.{model_name}'
 
