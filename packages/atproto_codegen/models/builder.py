@@ -1,4 +1,5 @@
 import typing as t
+from functools import lru_cache
 from pathlib import Path
 
 from atproto_core.nsid import NSID
@@ -64,6 +65,7 @@ BuiltParamsModels = t.Dict[
 ]
 
 
+@lru_cache(maxsize=128)
 def build_params_models() -> BuiltParamsModels:
     _LEX_DEF_TYPES_FOR_PARAMS = {
         models.LexDefinitionType.QUERY,
@@ -76,6 +78,7 @@ def build_params_models() -> BuiltParamsModels:
 BuiltDataModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexXrpcProcedure]]]
 
 
+@lru_cache(maxsize=128)
 def build_data_models() -> BuiltDataModels:
     _LEX_DEF_TYPES_FOR_DATA = {models.LexDefinitionType.PROCEDURE}
     return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_DATA)
@@ -84,6 +87,7 @@ def build_data_models() -> BuiltDataModels:
 BuiltResponseModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexXrpcQuery, models.LexXrpcProcedure]]]
 
 
+@lru_cache(maxsize=128)
 def build_response_models() -> BuiltResponseModels:
     _LEX_DEF_TYPES_FOR_RESPONSES = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
     return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_RESPONSES)
@@ -94,6 +98,7 @@ BuiltDefModels = t.Dict[
 ]
 
 
+@lru_cache(maxsize=128)
 def build_def_models() -> BuiltDefModels:
     _LEX_DEF_TYPES_FOR_DEF = {
         models.LexDefinitionType.OBJECT,
@@ -107,6 +112,7 @@ def build_def_models() -> BuiltDefModels:
 BuiltRecordModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexRecord]]]
 
 
+@lru_cache(maxsize=128)
 def build_record_models() -> BuiltRecordModels:
     _LEX_DEF_TYPES_FOR_RECORDS = {models.LexDefinitionType.RECORD}
     return _build_nsid_to_defs_map(lexicon_parse_dir(lexicon_dir.get()), _LEX_DEF_TYPES_FOR_RECORDS)
