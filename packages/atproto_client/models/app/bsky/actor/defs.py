@@ -26,6 +26,7 @@ class ProfileViewBasic(base.ModelBase):
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
+    debug: t.Optional['UnknownType'] = None  #: Debug information for internal development.
     display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     pronouns: t.Optional[str] = None  #: Pronouns.
@@ -46,6 +47,7 @@ class ProfileView(base.ModelBase):
     associated: t.Optional['models.AppBskyActorDefs.ProfileAssociated'] = None  #: Associated.
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
+    debug: t.Optional['UnknownType'] = None  #: Debug information for internal development.
     description: te.Annotated[t.Optional[str], Field(max_length=2560)] = None  #: Description.
     display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     indexed_at: t.Optional[string_formats.DateTime] = None  #: Indexed at.
@@ -69,6 +71,7 @@ class ProfileViewDetailed(base.ModelBase):
     avatar: t.Optional[string_formats.Uri] = None  #: Avatar.
     banner: t.Optional[string_formats.Uri] = None  #: Banner.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
+    debug: t.Optional['UnknownType'] = None  #: Debug information for internal development.
     description: te.Annotated[t.Optional[str], Field(max_length=2560)] = None  #: Description.
     display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     followers_count: t.Optional[int] = None  #: Followers count.
@@ -308,7 +311,6 @@ class FeedViewPref(base.ModelBase):
 class ThreadViewPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    prioritize_followed_users: t.Optional[bool] = None  #: Show followed users at the top of all replies.
     sort: t.Optional[
         t.Union[
             t.Literal['oldest'],

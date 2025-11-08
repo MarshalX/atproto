@@ -6643,6 +6643,34 @@ class ComAtprotoLexiconNamespace(AsyncNamespaceBase):
         super().__init__(client)
         self.schema = ComAtprotoLexiconSchemaRecord(self._client)
 
+    async def resolve_lexicon(
+        self,
+        params: t.Union[
+            models.ComAtprotoLexiconResolveLexicon.Params, models.ComAtprotoLexiconResolveLexicon.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoLexiconResolveLexicon.Response':
+        """Resolves an atproto lexicon (NSID) to a schema.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoLexiconResolveLexicon.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ComAtprotoLexiconResolveLexicon.Params',
+            get_or_create(params, models.ComAtprotoLexiconResolveLexicon.Params),
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.lexicon.resolveLexicon', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoLexiconResolveLexicon.Response)
+
 
 class ComAtprotoModerationNamespace(AsyncNamespaceBase):
     async def create_report(

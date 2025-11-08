@@ -28,9 +28,6 @@ class Params(base.ParamsModelBase):
     branching_factor: te.Annotated[t.Optional[int], Field(ge=0, le=100)] = (
         None  #: Maximum of replies to include at each level of the thread, except for the direct replies to the anchor, which are (NOTE: currently, during unspecced phase) all returned (NOTE: later they might be paginated).
     )
-    prioritize_followed_users: t.Optional[bool] = (
-        False  #: Whether to prioritize posts from followed users. It only has effect when the user is authenticated.
-    )
     sort: t.Optional[t.Union[t.Literal['newest'], t.Literal['oldest'], t.Literal['top'], str]] = (
         'oldest'  #: Sorting for the thread replies.
     )
@@ -43,9 +40,6 @@ class ParamsDict(t.TypedDict):
     branching_factor: te.NotRequired[
         t.Optional[int]
     ]  #: Maximum of replies to include at each level of the thread, except for the direct replies to the anchor, which are (NOTE: currently, during unspecced phase) all returned (NOTE: later they might be paginated).
-    prioritize_followed_users: te.NotRequired[
-        t.Optional[bool]
-    ]  #: Whether to prioritize posts from followed users. It only has effect when the user is authenticated.
     sort: te.NotRequired[
         t.Optional[t.Union[t.Literal['newest'], t.Literal['oldest'], t.Literal['top'], str]]
     ]  #: Sorting for the thread replies.
