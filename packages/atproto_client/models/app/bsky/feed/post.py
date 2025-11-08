@@ -65,7 +65,7 @@ class Record(base.RecordModelBase):
                 'models.AppBskyEmbedRecord.Main',
                 'models.AppBskyEmbedRecordWithMedia.Main',
             ],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
     ] = None  #: Embed.
     entities: t.Optional[t.List['models.AppBskyFeedPost.Entity']] = (
@@ -75,7 +75,7 @@ class Record(base.RecordModelBase):
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
     labels: t.Optional[
-        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(default=None, discriminator='py_type')]
+        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(discriminator='py_type')]
     ] = None  #: Self-label values for this post. Effectively content warnings.
     langs: te.Annotated[t.Optional[t.List[string_formats.Language]], Field(max_length=3)] = (
         None  #: Indicates human language of post primary text content.

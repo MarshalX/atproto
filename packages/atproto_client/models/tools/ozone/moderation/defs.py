@@ -165,7 +165,7 @@ class SubjectStatusView(base.ModelBase):
     hosting: t.Optional[
         te.Annotated[
             t.Union['models.ToolsOzoneModerationDefs.AccountHosting', 'models.ToolsOzoneModerationDefs.RecordHosting'],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
     ] = None  #: Hosting.
     last_appealed_at: t.Optional[string_formats.DateTime] = (
@@ -198,7 +198,7 @@ class SubjectView(base.ModelBase):
 
     subject: str  #: Subject.
     type: 'models.ComAtprotoModerationDefs.SubjectType'  #: Type.
-    profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field(default=None)]] = None  #: Profile.
+    profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field()]] = None  #: Profile.
     record: t.Optional['models.ToolsOzoneModerationDefs.RecordViewDetail'] = None  #: Record.
     repo: t.Optional['models.ToolsOzoneModerationDefs.RepoViewDetail'] = None  #: Repo.
     status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView'] = None  #: Status.
@@ -697,7 +697,7 @@ class BlobView(base.ModelBase):
     details: t.Optional[
         te.Annotated[
             t.Union['models.ToolsOzoneModerationDefs.ImageDetails', 'models.ToolsOzoneModerationDefs.VideoDetails'],
-            Field(default=None, discriminator='py_type'),
+            Field(discriminator='py_type'),
         ]
     ] = None  #: Details.
     moderation: t.Optional['models.ToolsOzoneModerationDefs.Moderation'] = None  #: Moderation.
