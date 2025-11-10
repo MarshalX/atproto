@@ -22,7 +22,7 @@ For sync:
 from atproto import Client
 
 client = Client()
-# By default, it uses the server of bsky.app. To change this behavior, pass the base api URL to constructor
+# By default, it uses the server of bsky.social. To change this behavior, pass the base api URL to constructor
 # Client('https://example.com')
 ```
 
@@ -32,9 +32,11 @@ For async:
 from atproto import AsyncClient
 
 client = AsyncClient()
-# By default, it uses the server of bsky.app. To change this behavior, pass the base api URL to constructor
+# By default, it uses the server of bsky.social. To change this behavior, pass the base api URL to constructor
 # AsyncClient('https://example.com')
 ```
+
+A list of available BlueSky api urls can be found at [https://docs.bsky.app/docs/advanced-guides/api-directory](https://docs.bsky.app/docs/advanced-guides/api-directory).
 
 In the snippets below, only the sync version will be presented.
 
