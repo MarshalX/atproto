@@ -36,7 +36,7 @@ client = AsyncClient()
 # AsyncClient('https://example.com')
 ```
 
-A list of available BlueSky api urls can be found at [https://docs.bsky.app/docs/advanced-guides/api-directory](https://docs.bsky.app/docs/advanced-guides/api-directory).
+A list of available Bluesky API URLs can be found at [https://docs.bsky.app/docs/advanced-guides/api-directory](https://docs.bsky.app/docs/advanced-guides/api-directory).
 
 In the snippets below, only the sync version will be presented.
 
