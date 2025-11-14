@@ -23,10 +23,12 @@ REDIRECT_URI = 'http://127.0.0.1:5000/callback'
 SCOPE = 'atproto'
 
 # Create client_id for localhost testing
-CLIENT_ID = 'http://localhost?' + urlencode({
-    'redirect_uri': REDIRECT_URI,
-    'scope': SCOPE,
-})
+CLIENT_ID = 'http://localhost?' + urlencode(
+    {
+        'redirect_uri': REDIRECT_URI,
+        'scope': SCOPE,
+    }
+)
 
 # Initialize OAuth client with memory stores (for demo only!)
 oauth_client = OAuthClient(
@@ -77,6 +79,7 @@ def login() -> str:
     try:
         # Start OAuth authorization
         import asyncio
+
         auth_url, state = asyncio.run(oauth_client.start_authorization(handle))
 
         # Store state in session for verification
@@ -87,11 +90,9 @@ def login() -> str:
 
     except Exception:  # noqa: BLE001
         import traceback
+
         error_msg = traceback.format_exc()
-        return (
-            f'<html><body><h1>Login Error</h1><pre>{error_msg}</pre>'
-            f'<p><a href="/">Back</a></p></body></html>'
-        ), 500
+        return (f'<html><body><h1>Login Error</h1><pre>{error_msg}</pre><p><a href="/">Back</a></p></body></html>'), 500
 
 
 @app.route('/callback')
@@ -121,6 +122,7 @@ def callback() -> str:
     try:
         # Complete OAuth flow
         import asyncio
+
         oauth_session = asyncio.run(oauth_client.handle_callback(code, state, iss))
 
         # Store user info in session
@@ -143,6 +145,7 @@ def logout() -> str:
         try:
             # Revoke OAuth session
             import asyncio
+
             oauth_session = asyncio.run(oauth_client.session_store.get_session(user_did))
             if oauth_session:
                 asyncio.run(oauth_client.revoke_session(oauth_session))
@@ -170,11 +173,13 @@ def api_profile() -> tuple:
             return jsonify({'error': 'Session not found'}), 401
 
         # Make authenticated request to PDS
-        response = asyncio.run(oauth_client.make_authenticated_request(
-            session=oauth_session,
-            method='GET',
-            url=f'{oauth_session.pds_url}/xrpc/com.atproto.repo.describeRepo?repo={user_did}',
-        ))
+        response = asyncio.run(
+            oauth_client.make_authenticated_request(
+                session=oauth_session,
+                method='GET',
+                url=f'{oauth_session.pds_url}/xrpc/com.atproto.repo.describeRepo?repo={user_did}',
+            )
+        )
 
         if response.status_code != 200:
             return jsonify({'error': 'PDS request failed', 'status': response.status_code}), 500
