@@ -8,12 +8,11 @@ Run with:
 """
 
 import os
-from urllib.parse import urlencode, urlparse
-
-from flask import Flask, redirect, request, session, jsonify
+from urllib.parse import urlencode
 
 from atproto_oauth import OAuthClient
 from atproto_oauth.stores import MemorySessionStore, MemoryStateStore
+from flask import Flask, jsonify, redirect, request, session
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'development-secret-key-change-in-production')
@@ -40,10 +39,10 @@ oauth_client = OAuthClient(
 
 
 @app.route('/')
-def index():
+def index() -> str:
     """Homepage."""
     if 'user_did' in session:
-        return f'''
+        return f"""
         <html>
             <body>
                 <h1>ATProto OAuth Demo</h1>
@@ -51,9 +50,9 @@ def index():
                 <p><a href="/logout">Logout</a></p>
             </body>
         </html>
-        '''
+        """
 
-    return '''
+    return """
     <html>
         <body>
             <h1>ATProto OAuth Demo</h1>
@@ -64,11 +63,11 @@ def index():
             </form>
         </body>
     </html>
-    '''
+    """
 
 
 @app.route('/login', methods=['POST'])
-def login():
+def login() -> str:
     """Start OAuth flow."""
     handle = request.form.get('handle', '').strip().removeprefix('@')
 
@@ -86,17 +85,25 @@ def login():
         # Redirect user to authorization server
         return redirect(auth_url)
 
-    except Exception as e:
-        return f'<html><body><h1>Login Error</h1><p>{str(e)}</p><p><a href="/">Back</a></p></body></html>', 500
+    except Exception:  # noqa: BLE001
+        import traceback
+        error_msg = traceback.format_exc()
+        return (
+            f'<html><body><h1>Login Error</h1><pre>{error_msg}</pre>'
+            f'<p><a href="/">Back</a></p></body></html>'
+        ), 500
 
 
 @app.route('/callback')
-def callback():
+def callback() -> str:
     """Handle OAuth callback."""
     # Check for errors
     if error := request.args.get('error'):
         error_desc = request.args.get('error_description', '')
-        return f'<html><body><h1>Authorization Error</h1><p>{error}: {error_desc}</p><p><a href="/">Back</a></p></body></html>', 400
+        return (
+            f'<html><body><h1>Authorization Error</h1><p>{error}: {error_desc}</p>'
+            f'<p><a href="/">Back</a></p></body></html>'
+        ), 400
 
     # Get authorization code and parameters
     code = request.args.get('code')
@@ -123,12 +130,12 @@ def callback():
 
         return redirect('/')
 
-    except Exception as e:
-        return f'<html><body><h1>Callback Error</h1><p>{str(e)}</p><p><a href="/">Back</a></p></body></html>', 500
+    except Exception as e:  # noqa: BLE001
+        return f'<html><body><h1>Callback Error</h1><p>{e!s}</p><p><a href="/">Back</a></p></body></html>', 500
 
 
 @app.route('/logout')
-def logout():
+def logout() -> str:
     """Logout and revoke OAuth session."""
     user_did = session.get('user_did')
 
@@ -139,7 +146,7 @@ def logout():
             oauth_session = asyncio.run(oauth_client.session_store.get_session(user_did))
             if oauth_session:
                 asyncio.run(oauth_client.revoke_session(oauth_session))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f'Error revoking session: {e}')
 
     # Clear browser session
@@ -148,7 +155,7 @@ def logout():
 
 
 @app.route('/api/profile')
-def api_profile():
+def api_profile() -> tuple:
     """Example API endpoint using OAuth session."""
     user_did = session.get('user_did')
     if not user_did:
@@ -174,13 +181,13 @@ def api_profile():
 
         return jsonify(response.json())
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':
     print('Starting ATProto OAuth Flask demo...')
-    print(f'Visit http://127.0.0.1:5000 to test OAuth flow')
+    print('Visit http://127.0.0.1:5000 to test OAuth flow')
     print()
     print('Note: This is a development demo. For production:')
     print('  - Use persistent state/session stores (not memory)')
@@ -188,4 +195,4 @@ if __name__ == '__main__':
     print('  - Use HTTPS')
     print('  - Set a strong secret key')
     print()
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000)  # noqa: S201
