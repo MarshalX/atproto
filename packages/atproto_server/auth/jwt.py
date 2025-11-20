@@ -180,7 +180,7 @@ def _verify_signature(signing_key: str, signing_input: bytes, signature: bytes) 
 
 
 def verify_jwt(
-    jwt: str, get_signing_key_callback: GetSigningKeyCallback, own_did: t.Optional[str] = None
+    jwt: str, get_signing_key_callback: GetSigningKeyCallback, own_did: t.Optional[str] = None, leeway: int = 0
 ) -> JwtPayload:
     """Verify the given JWT.
 
@@ -188,6 +188,7 @@ def verify_jwt(
         jwt: The JWT to verify.
         get_signing_key_callback: The callback to get the signing key.
         own_did: The DID of the service (aud).
+        leeway: The leeway in seconds to accept when verifying time claims (exp, iat).
 
     Returns:
         :obj:`JwtPayload`: The payload of the given JWT.
@@ -203,7 +204,7 @@ def verify_jwt(
     plain_payload, signing_input, _, signature = parse_jwt(jwt)
 
     payload = decode_jwt_payload(plain_payload)
-    validate_jwt_payload(payload)
+    validate_jwt_payload(payload, leeway)
 
     if own_did and payload.aud != own_did:
         raise TokenInvalidAudienceError('Invalid subject')
@@ -228,7 +229,7 @@ def verify_jwt(
 
 
 async def verify_jwt_async(
-    jwt: str, get_signing_key_callback: GetSigningKeyCallbackAsync, own_did: t.Optional[str] = None
+    jwt: str, get_signing_key_callback: GetSigningKeyCallbackAsync, own_did: t.Optional[str] = None, leeway: int = 0
 ) -> JwtPayload:
     """Asynchronously verifies the given JWT.
 
@@ -236,6 +237,7 @@ async def verify_jwt_async(
         jwt: The JWT to verify.
         get_signing_key_callback: The callback to get the signing key.
         own_did: The DID of the service (aud).
+        leeway: The leeway in seconds to accept when verifying time claims (exp, iat).
 
     Returns:
         :obj:`JwtPayload`: The payload of the given JWT.
@@ -251,7 +253,7 @@ async def verify_jwt_async(
     plain_payload, signing_input, _, signature = parse_jwt(jwt)
 
     payload = decode_jwt_payload(plain_payload)
-    validate_jwt_payload(payload)
+    validate_jwt_payload(payload, leeway)
 
     if own_did and payload.aud != own_did:
         raise TokenInvalidAudienceError('Invalid subject')
