@@ -13,6 +13,7 @@ Subpackages
    :maxdepth: 4
 
    atproto_client.models.app.bsky.actor
+   atproto_client.models.app.bsky.ageassurance
    atproto_client.models.app.bsky.bookmark
    atproto_client.models.app.bsky.embed
    atproto_client.models.app.bsky.feed

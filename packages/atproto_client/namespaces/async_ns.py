@@ -25,6 +25,7 @@ class AppBskyNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)
         self.actor = AppBskyActorNamespace(self._client)
+        self.ageassurance = AppBskyAgeassuranceNamespace(self._client)
         self.bookmark = AppBskyBookmarkNamespace(self._client)
         self.feed = AppBskyFeedNamespace(self._client)
         self.graph = AppBskyGraphNamespace(self._client)
@@ -529,6 +530,80 @@ class AppBskyActorNamespace(AsyncNamespaceBase):
             'app.bsky.actor.searchActorsTypeahead', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyActorSearchActorsTypeahead.Response)
+
+
+class AppBskyAgeassuranceNamespace(AsyncNamespaceBase):
+    async def begin(
+        self,
+        data: t.Union[models.AppBskyAgeassuranceBegin.Data, models.AppBskyAgeassuranceBegin.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyAgeassuranceDefs.State':
+        """Initiate Age Assurance for an account.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyAgeassuranceDefs.State`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyAgeassuranceBegin.Data', get_or_create(data, models.AppBskyAgeassuranceBegin.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.ageassurance.begin',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyAgeassuranceDefs.State)
+
+    async def get_config(self, **kwargs: t.Any) -> 'models.AppBskyAgeassuranceDefs.Config':
+        """Returns Age Assurance configuration for use on the client.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyAgeassuranceDefs.Config`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = await self._client.invoke_query(
+            'app.bsky.ageassurance.getConfig', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyAgeassuranceDefs.Config)
+
+    async def get_state(
+        self,
+        params: t.Union[models.AppBskyAgeassuranceGetState.Params, models.AppBskyAgeassuranceGetState.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyAgeassuranceGetState.Response':
+        """Returns server-computed Age Assurance state, if available, and any additional metadata needed to compute Age Assurance state client-side.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyAgeassuranceGetState.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyAgeassuranceGetState.Params',
+            get_or_create(params, models.AppBskyAgeassuranceGetState.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.ageassurance.getState', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyAgeassuranceGetState.Response)
 
 
 class AppBskyBookmarkNamespace(AsyncNamespaceBase):
