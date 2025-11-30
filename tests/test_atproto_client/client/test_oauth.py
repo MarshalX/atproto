@@ -1,11 +1,11 @@
 """Tests for OAuth mixin and related components."""
 
 import json
+import typing as t
 from base64 import urlsafe_b64decode
 from unittest.mock import MagicMock
 
 import pytest
-
 from atproto_client.client.client import Client
 from atproto_client.client.methods_mixin.dpop import DPoPManager
 from atproto_client.client.methods_mixin.pkce import PKCEManager
@@ -71,7 +71,9 @@ class TestDPoPManager:
             (200, {}, None, False),
         ],
     )
-    def test_is_dpop_nonce_error(self, status_code, headers, json_body, expected) -> None:
+    def test_is_dpop_nonce_error(
+        self, status_code: int, headers: dict, json_body: t.Optional[dict], expected: bool
+    ) -> None:
         """Should detect DPoP nonce errors from various response formats."""
         mock_response = MagicMock()
         mock_response.status_code = status_code
@@ -88,7 +90,7 @@ class TestDPoPManager:
             ({}, None),
         ],
     )
-    def test_extract_nonce_from_response(self, headers, expected_nonce) -> None:
+    def test_extract_nonce_from_response(self, headers: dict, expected_nonce: t.Optional[str]) -> None:
         """Should extract DPoP nonce from response headers."""
         mock_response = MagicMock()
         mock_response.status_code = 200

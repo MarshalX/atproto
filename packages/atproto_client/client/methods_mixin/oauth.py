@@ -517,7 +517,7 @@ class OauthSessionMethodsMixin:
 
         # Revoke both access and refresh tokens
         for token_type in ['access_token', 'refresh_token']:
-            token = session.access_jwt if token_type == 'access_token' else session.refresh_jwt
+            token = session.access_jwt if token_type == 'access_token' else session.refresh_jwt  # noqa: S105 - token type identifier, not a password
             if not token:
                 continue
 

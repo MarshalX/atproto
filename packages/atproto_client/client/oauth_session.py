@@ -15,7 +15,7 @@ DEFAULT_TIMEOUT = 5.0
 MAX_REDIRECTS = 3
 ALLOWED_SCHEMES = {'https', 'http'}  # http only for localhost
 BLOCKED_HOSTS = {
-    '0.0.0.0',
+    '0.0.0.0',  # noqa: S104 - blocking connections to this IP, not binding to this address
     '127.0.0.1',
     'localhost',
     '::1',
@@ -23,47 +23,46 @@ BLOCKED_HOSTS = {
     'metadata.google.internal',  # GCP metadata
 }
 
+def _is_private_ip(hostname: str) -> bool:
+    """Check if hostname is a private IP address."""
+    if hostname.startswith('10.'):
+        return True
+    if hostname.startswith('172.'):
+        try:
+            second_octet = int(hostname.split('.')[1])
+            if 16 <= second_octet <= 31:
+                return True
+        except (IndexError, ValueError):
+            pass
+    return hostname.startswith('192.168.')
+
+
 def is_safe_url(url: str, allow_localhost: bool = False) -> bool:
     """Validate URL for security (SSRF protection).
 
     Args:
-    url: URL to validate.
-    allow_localhost: Whether to allow localhost URLs.
+        url: URL to validate.
+        allow_localhost: Whether to allow localhost URLs.
 
     Returns:
-    True if URL is safe to use.
+        True if URL is safe to use.
     """
     try:
         parsed = urlparse(url)
-
-        # Check scheme
-        if parsed.scheme not in ALLOWED_SCHEMES:
-            return False
-
-        # For http, only allow if allow_localhost and is actually localhost
-        if parsed.scheme == 'http':
-            if not allow_localhost:
-                return False
-            if parsed.hostname not in ('localhost', '127.0.0.1', '::1'):
-                return False
-
-        # Check for blocked hosts
-        if parsed.hostname in BLOCKED_HOSTS and not allow_localhost:
-            return False
-
-        # Check for IP addresses in private ranges (basic check)
-        if parsed.hostname:
-            # Block obvious private IPs
-            if parsed.hostname.startswith('10.'):
-                return False
-            if parsed.hostname.startswith('172.') and 16 <= int(parsed.hostname.split('.')[1]) <= 31:
-                return False
-            if parsed.hostname.startswith('192.168.'):
-                return False
-
-        return True
-    except (ValueError, IndexError, TypeError):
+    except ValueError:
         return False
+
+    if parsed.scheme not in ALLOWED_SCHEMES:
+        return False
+
+    # For http, only allow localhost if explicitly permitted
+    if parsed.scheme == 'http' and (not allow_localhost or parsed.hostname not in ('localhost', '127.0.0.1', '::1')):
+        return False
+
+    if parsed.hostname in BLOCKED_HOSTS and not allow_localhost:
+        return False
+
+    return not (parsed.hostname and _is_private_ip(parsed.hostname))
 
 def validate_authserver_metadata(metadata: t.Dict[str, t.Any], fetch_url: str) -> None:
     """Validate authorization server metadata against ATProto requirements.
@@ -210,7 +209,7 @@ def fetch_authserver_metadata(authserver_url: str, timeout: float = 5.0) -> Auth
 
     fetch_url = f'{authserver_url}/.well-known/oauth-authorization-server'
 
-    with httpx.AsyncClient(timeout=timeout) as client:
+    with httpx.Client(timeout=timeout) as client:
         response = client.get(fetch_url)
         response.raise_for_status()
 

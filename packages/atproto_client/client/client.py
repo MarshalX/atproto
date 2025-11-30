@@ -19,7 +19,13 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 
-class Client(OauthSessionMethodsMixin, SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, HeadersConfigurationMethodsMixin, ClientRaw):
+class Client(OauthSessionMethodsMixin,
+             SessionDispatchMixin,
+             SessionMethodsMixin,
+             TimeMethodsMixin,
+             HeadersConfigurationMethodsMixin,
+             ClientRaw
+             ):
     """High-level client for XRPC of ATProto."""
 
     def __init__(self, base_url: t.Optional[str] = None, *args: t.Any, **kwargs: t.Any) -> None:
