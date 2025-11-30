@@ -38,3 +38,23 @@ class BadRequestError(RequestErrorBase): ...
 class LoginRequiredError(AtProtocolError):
     def __init__(self, message: t.Optional[str] = _DEFAULT_LOGING_REQUIRED_ERROR_MESSAGE) -> None:
         super().__init__(message)
+
+"""OAuth-specific exceptions."""
+
+from atproto_core.exceptions import AtProtocolError
+
+
+class OAuthError(AtProtocolError):
+    """Base exception for OAuth errors."""
+
+
+class OAuthStateError(OAuthError): ...
+
+
+class OAuthTokenError(OAuthError): ...
+
+
+class UnsupportedAuthServerError(OAuthError): ...
+
+
+class AuthServerMetadata(OAuthError): ...
