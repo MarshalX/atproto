@@ -1,7 +1,5 @@
 import typing as t
 from threading import Lock
-import time
-import httpx
 
 from atproto_client.client.methods_mixin.oauth import OauthSessionMethodsMixin
 from atproto_core.uri import AtUri
@@ -74,8 +72,6 @@ class Client(OauthSessionMethodsMixin, SessionDispatchMixin, SessionMethodsMixin
         self._set_session(SessionEvent.IMPORT, import_session)
 
         return import_session
-
-
 
     def login(
         self,
@@ -767,86 +763,3 @@ class Client(OauthSessionMethodsMixin, SessionDispatchMixin, SessionMethodsMixin
     post = send_post
     #: Alias for :attr:`delete_post`
     unsend = delete_post
-
-def _make_token_request(
-        self,
-        token_url: str,
-        params: t.Dict[str, str],
-        dpop_key: 'EllipticCurvePrivateKey',
-        dpop_nonce: str,
-) -> t.Tuple[str, httpx.Response]:
-    """Make token request with DPoP and client assertion.
-
-Handles DPoP nonce rotation automatically.
-
-Returns:
-Tuple of (updated_dpop_nonce, response).
-    """
-    if not is_safe_url(token_url):
-        raise ValueError(f'Unsafe token URL: {token_url}')
-
-    # Add client authentication
-    if self.client_secret_key:
-        # Confidential client - use client assertion
-        client_assertion = self._create_client_assertion(token_url)
-        params['client_id'] = self.client_id
-        params['client_assertion_type'] = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-        params['client_assertion'] = client_assertion
-    else:
-        # Public client
-        params['client_id'] = self.client_id
-
-    # Try request with DPoP nonce retry
-    current_nonce = dpop_nonce
-    for attempt in range(2):
-        # Create DPoP proof
-        dpop_proof = self._dpop.create_proof(
-            method='POST',
-            url=token_url,
-            private_key=dpop_key,
-            nonce=current_nonce if current_nonce else None,
-        )
-
-        # Make request
-        with httpx.Client() as client:
-            response = client.post(
-                token_url,
-                data=params,
-                headers={'DPoP': dpop_proof},
-            )
-
-        # Check for DPoP nonce error
-        if self._dpop.is_dpop_nonce_error(response):
-            new_nonce = self._dpop.extract_nonce_from_response(response)
-            if new_nonce and attempt == 0:
-                current_nonce = new_nonce
-                continue  # Retry with new nonce
-
-        # Extract final nonce
-        final_nonce = self._dpop.extract_nonce_from_response(response) or current_nonce
-
-        return final_nonce, response
-
-    return current_nonce, response
-
-def _create_client_assertion(self, audience: str) -> str:
-    """Create client assertion JWT for confidential client."""
-    if not self.client_secret_key:
-        raise ValueError('Client secret key required for client assertion')
-
-    header = {
-        'alg': 'ES256',
-        'typ': 'JWT',
-    }
-
-    now = int(time.time())
-    payload = {
-        'iss': self.client_id,
-        'sub': self.client_id,
-        'aud': audience,
-        'jti': secrets.token_urlsafe(16),
-        'iat': now,
-        'exp': now + 60,  # Valid for 60 seconds
-    }
-
-    return self._dpop._sign_jwt(header, payload, self.client_secret_key)

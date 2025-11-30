@@ -6,7 +6,6 @@ from enum import Enum
 
 import typing_extensions as te
 
-from atproto_client.client.oauth_session import OAuthSession
 from atproto_core.did_doc import DidDocument, is_valid_did_doc
 from atproto_server.auth.jwt import get_jwt_payload
 
@@ -29,7 +28,6 @@ SessionResponse: te.TypeAlias = t.Union[
     'models.ComAtprotoServerCreateSession.Response',
     'models.ComAtprotoServerRefreshSession.Response',
     'Session',
-    'OAuthSession'
 ]
 
 SessionChangeCallback = t.Callable[[SessionEvent, 'Session'], None]
@@ -143,9 +141,6 @@ def get_session_pds_endpoint(session: 'SessionResponse') -> t.Optional[str]:
     """
     if isinstance(session, Session):
         return session.pds_endpoint
-
-    if isinstance(session, OAuthSession):
-        return session.pds_url
 
     if session.did_doc and is_valid_did_doc(session.did_doc):
         doc = DidDocument.from_dict(session.did_doc)

@@ -40,13 +40,8 @@ class LoginRequiredError(AtProtocolError):
         super().__init__(message)
 
 """OAuth-specific exceptions."""
-
-from atproto_core.exceptions import AtProtocolError
-
-
 class OAuthError(AtProtocolError):
     """Base exception for OAuth errors."""
-
 
 class OAuthStateError(OAuthError): ...
 
