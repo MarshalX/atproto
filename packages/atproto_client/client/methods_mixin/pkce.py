@@ -13,14 +13,14 @@ class PKCEManager:
     def generate_verifier(length: int = 128) -> str:
         """Generate a PKCE code verifier.
 
-Args:
-length: Length of the verifier (43-128 characters).
+        Args:
+        length: Length of the verifier (43-128 characters).
 
-Returns:
-Base64url-encoded verifier string.
+        Returns:
+        Base64url-encoded verifier string.
 
-Raises:
-ValueError: If length is not between 43 and 128.
+        Raises:
+        ValueError: If length is not between 43 and 128.
         """
         if not 43 <= length <= 128:
             raise ValueError('PKCE verifier length must be between 43 and 128')
@@ -33,11 +33,11 @@ ValueError: If length is not between 43 and 128.
     def generate_challenge(verifier: str) -> str:
         """Generate S256 PKCE code challenge from verifier.
 
-Args:
-verifier: The code verifier string.
+        Args:
+        verifier: The code verifier string.
 
-Returns:
-Base64url-encoded SHA256 hash of the verifier.
+        Returns:
+        Base64url-encoded SHA256 hash of the verifier.
         """
         digest = hashlib.sha256(verifier.encode('utf-8')).digest()
         return base64.urlsafe_b64encode(digest).decode('utf-8').rstrip('=')
@@ -46,11 +46,11 @@ Base64url-encoded SHA256 hash of the verifier.
     def generate_pair(cls, length: int = 128) -> t.Tuple[str, str]:
         """Generate both verifier and challenge.
 
-Args:
-length: Length of the verifier.
+        Args:
+        length: Length of the verifier.
 
-Returns:
-Tuple of (verifier, challenge).
+        Returns:
+        Tuple of (verifier, challenge).
         """
         verifier = cls.generate_verifier(length)
         challenge = cls.generate_challenge(verifier)

@@ -1,12 +1,12 @@
 import typing as t
 from threading import Lock
 
-from atproto_client.client.methods_mixin.oauth import OauthSessionMethodsMixin
 from atproto_core.uri import AtUri
 
 from atproto_client import models
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
 from atproto_client.client.methods_mixin.headers import HeadersConfigurationMethodsMixin
+from atproto_client.client.methods_mixin.oauth import OauthSessionMethodsMixin
 from atproto_client.client.methods_mixin.session import SessionDispatchMixin
 from atproto_client.client.raw import ClientRaw
 from atproto_client.client.session import Session, SessionEvent, SessionResponse

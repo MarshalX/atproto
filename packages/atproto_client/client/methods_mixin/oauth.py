@@ -1,19 +1,34 @@
-from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePrivateKey
+import contextlib
+import logging
+import secrets
+import time
+import typing as t
+from urllib.parse import urlencode
+
+import httpx
+from atproto_identity.resolver import IdResolver
 
 from atproto_client.client.base import InvokeType
+
+if t.TYPE_CHECKING:
+    from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePrivateKey
+
+    from atproto_client.request import Response
+
 from atproto_client.client.methods_mixin.dpop import DPoPManager
 from atproto_client.client.methods_mixin.pkce import PKCEManager
-from atproto_client.client.oauth_session import OAuthSession, fetch_authserver_metadata, OAuthState, \
-discover_authserver_from_pds, is_safe_url, TokenResponse, AuthServerMetadata
+from atproto_client.client.oauth_session import (
+    AuthServerMetadata,
+    OAuthSession,
+    OAuthState,
+    TokenResponse,
+    discover_authserver_from_pds,
+    fetch_authserver_metadata,
+    is_safe_url,
+)
 from atproto_client.client.session import SessionEvent
-from atproto_client.exceptions import OAuthTokenError, OAuthStateError
-from atproto_identity.resolver import IdResolver
-import typing as t
-import time
-import secrets
-import httpx
-from urllib.parse import urlencode
-import logging
+from atproto_client.exceptions import OAuthStateError, OAuthTokenError
+
 logger = logging.getLogger(__name__)
 
 
@@ -99,10 +114,10 @@ class OauthSessionMethodsMixin:
             except UnauthorizedError as e:
                 # Check if it's a DPoP nonce error that we can retry
                 response = e.response
-                logger.info(f"DPoP caught UnauthorizedError, status: {response.status_code}")
+                logger.info(f'DPoP caught UnauthorizedError, status: {response.status_code}')
 
                 is_nonce_error = self._dpop.is_dpop_nonce_error(response)
-                logger.info(f"is_nonce_error: {is_nonce_error}")
+                logger.info(f'is_nonce_error: {is_nonce_error}')
 
                 if is_nonce_error:
                     new_nonce = self._dpop.extract_nonce_from_response(response)
@@ -137,10 +152,10 @@ class OauthSessionMethodsMixin:
     ) -> t.Tuple[str, httpx.Response]:
         """Make token request with DPoP and client assertion.
 
-            Handles DPoP nonce rotation automatically.
+        Handles DPoP nonce rotation automatically.
 
-            Returns:
-            Tuple of (updated_dpop_nonce, response).
+        Returns:
+        Tuple of (updated_dpop_nonce, response).
         """
         self._ensure_oauth_initialized()
         if not is_safe_url(token_url):
@@ -229,21 +244,19 @@ class OauthSessionMethodsMixin:
         OAuthError: If authorization server discovery or PAR fails.
         """
         self._ensure_oauth_initialized()
-        id_resolver = self._id_resolver
         # 1. Resolve identity
         if handle_or_did.startswith('did:'):
             # Input is a DID
             did = handle_or_did
         else:
             # Input is a handle - resolve to DID first
-            resolved_did = id_resolver.handle.resolve(handle_or_did)
-            # resolved_did = self._id_resolver.handle.resolve(handle_or_did)
+            resolved_did = self._id_resolver.handle.resolve(handle_or_did)
             if not resolved_did:
                 raise ValueError(f'Failed to resolve handle: {handle_or_did}')
             did = resolved_did
 
         # 2. Resolve DID to get ATProto data (includes PDS, handle, etc.)
-        atproto_data = id_resolver.did.resolve_atproto_data(did)
+        atproto_data = self._id_resolver.did.resolve_atproto_data(did)
 
         handle = atproto_data.handle or handle_or_did
         pds_url = atproto_data.pds
@@ -289,7 +302,6 @@ class OauthSessionMethodsMixin:
             handle=handle,
             pds_url=pds_url,
         )
-        # self.state_store.save_state(oauth_state)
 
         # 10. Build authorization URL
         auth_params = {
@@ -310,8 +322,8 @@ class OauthSessionMethodsMixin:
     ) -> t.Tuple[TokenResponse, str]:
         """Exchange authorization code for tokens.
 
-            Returns:
-            Tuple of (token_response, dpop_nonce).
+        Returns:
+        Tuple of (token_response, dpop_nonce).
         """
         # Fetch metadata again (could have changed)
         authserver_meta = fetch_authserver_metadata(oauth_state.authserver_iss)
@@ -349,34 +361,29 @@ class OauthSessionMethodsMixin:
     def handle_callback(
             self,
             code: str,
-            state: str,
             iss: str,
             oauth_state: OAuthState
     ) -> OAuthSession:
         """Handle OAuth callback and complete authorization.
 
-            Args:
+        Args:
             code: Authorization code from callback.
-            state: State parameter from callback.
             iss: Issuer parameter from callback.
+            oauth_state: OAuth state object from start_authorization.
 
-            Returns:
+        Returns:
             OAuth session with tokens.
 
-            Raises:
+        Raises:
             OAuthStateError: If state validation fails.
-            OAuthTokenError: If token exchange fails.
+        OAuthTokenError: If token exchange fails.
         """
         # 1. Retrieve and verify state
-        # oauth_state = await self.state_store.get_state(state)
-        # if not oauth_state:
-        #     raise OAuthStateError('Invalid or expired state parameter')
+        if not oauth_state:
+            raise OAuthStateError('Invalid or expired state parameter')
 
         if oauth_state.authserver_iss != iss:
             raise OAuthStateError(f'Issuer mismatch: expected {oauth_state.authserver_iss}, got {iss}')
-
-        # # Delete state (one-time use)
-        # await self.state_store.delete_state(state)
 
         # 2. Exchange code for tokens
         token_response, dpop_nonce = self._exchange_code_for_tokens(
@@ -417,8 +424,8 @@ class OauthSessionMethodsMixin:
                           ) -> t.Tuple[str, str]:
         """Send Pushed Authorization Request.
 
-            Returns:
-            Tuple of (request_uri, dpop_nonce).
+        Returns:
+        Tuple of (request_uri, dpop_nonce).
         """
         par_url = authserver_meta.pushed_authorization_request_endpoint
 
@@ -450,14 +457,14 @@ class OauthSessionMethodsMixin:
     def refresh_session(self, session: OAuthSession) -> OAuthSession:
         """Refresh OAuth session tokens.
 
-    Args:
-    session: Current OAuth session.
+        Args:
+        session: Current OAuth session.
 
-    Returns:
-    Updated OAuth session with new tokens.
+        Returns:
+        Updated OAuth session with new tokens.
 
-    Raises:
-    OAuthTokenError: If token refresh fails.
+        Raises:
+        OAuthTokenError: If token refresh fails.
         """
         # Fetch current auth server metadata
         authserver_meta = fetch_authserver_metadata(session.authserver_iss)
@@ -494,21 +501,18 @@ class OauthSessionMethodsMixin:
         session.refresh_jwt = token_response.refresh_token
         session.dpop_authserver_nonce = dpop_nonce
 
-        # await self.session_store.save_session(session)
-
         return session
 
     def revoke_session(self, session: OAuthSession) -> None:
         """Revoke OAuth session tokens.
 
-            Args:
-            session: OAuth session to revoke.
+        Args:
+        session: OAuth session to revoke.
         """
         authserver_meta = fetch_authserver_metadata(session.authserver_iss)
 
         if not authserver_meta.revocation_endpoint:
-            # Revocation not supported, just delete local session
-            # await self.session_store.delete_session(session.did)
+            # Revocation not supported
             return
 
         # Revoke both access and refresh tokens
@@ -522,18 +526,14 @@ class OauthSessionMethodsMixin:
                 'token_type_hint': token_type,
             }
 
-            try:
-
+            # Best-effort revocation; failures are intentionally silent
+            with contextlib.suppress(OAuthTokenError, ValueError):
                 self._make_token_request(
                     token_url=authserver_meta.revocation_endpoint,
                     params=params,
                     dpop_key=session.dpop_private_key,
                     dpop_nonce=session.dpop_authserver_nonce,
                 )
-
-            except (OAuthTokenError, ValueError):
-                # Best-effort revocation; failures are intentionally silent
-                pass
 
 
     def import_oauth_session(self, session: OAuthSession) -> None:
@@ -559,9 +559,9 @@ class OauthSessionMethodsMixin:
                 expires_at=session.expires_at,
                 created_at=session.created_at
             )
-            # self._session_dispatcher.set_session(self._oauth_session)
+
         else:
-            logger.info("_set_oauth_session: session {}".format(self._oauth_session))
+            logger.info('_set_oauth_session: session {}'.format(self._oauth_session))
             self._oauth_session.access_jwt = session.access_jwt
             self._oauth_session.refresh_jwt = session.refresh_jwt
             self._oauth_session.authserver_iss = session.authserver_iss
@@ -575,6 +575,5 @@ class OauthSessionMethodsMixin:
             self._oauth_session.expires_at = session.expires_at
             self._oauth_session.created_at = session.created_at
 
-        # self._call_on_session_change_callbacks(event)
-    def _is_oauth_session(self):
-        return self._oauth_session.dpop_private_key and self._oauth_session.dpop_authserver_nonce
+    def _is_oauth_session(self) -> bool:
+        return self._oauth_session is not None

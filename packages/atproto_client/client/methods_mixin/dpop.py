@@ -1,5 +1,6 @@
 """DPoP (Demonstrating Proof-of-Possession) implementation."""
 
+import contextlib
 import hashlib
 import json
 import secrets
@@ -23,8 +24,8 @@ class DPoPManager:
     def generate_keypair() -> 'EllipticCurvePrivateKey':
         """Generate ES256 keypair for DPoP.
 
-Returns:
-EC private key (P-256 curve).
+        Returns:
+        EC private key (P-256 curve).
         """
         return ec.generate_private_key(ec.SECP256R1())
 
@@ -32,12 +33,12 @@ EC private key (P-256 curve).
     def _key_to_jwk(private_key: 'EllipticCurvePrivateKey', include_private: bool = False) -> t.Dict[str, t.Any]:
         """Convert EC private key to JWK format.
 
-Args:
-private_key: The EC private key.
-include_private: Whether to include private key components.
+        Args:
+        private_key: The EC private key.
+        include_private: Whether to include private key components.
 
-Returns:
-JWK dictionary.
+        Returns:
+        JWK dictionary.
         """
         public_key = private_key.public_key()
         public_numbers = public_key.public_numbers()
@@ -66,13 +67,13 @@ JWK dictionary.
     ) -> str:
         """Sign a JWT using ES256.
 
-Args:
-header: JWT header.
-payload: JWT payload.
-private_key: EC private key for signing.
+        Args:
+        header: JWT header.
+        payload: JWT payload.
+        private_key: EC private key for signing.
 
-Returns:
-Complete JWT string.
+        Returns:
+        Complete JWT string.
         """
         from cryptography.hazmat.primitives import hashes
         from cryptography.hazmat.primitives.asymmetric import ec
@@ -112,15 +113,15 @@ Complete JWT string.
     ) -> str:
         """Generate DPoP proof JWT.
 
-Args:
-method: HTTP method (e.g., 'GET', 'POST').
-url: Full URL of the request.
-private_key: EC private key for signing.
-nonce: Optional server-provided nonce.
-access_token: Optional access token (for 'ath' claim).
+        Args:
+        method: HTTP method (e.g., 'GET', 'POST').
+        url: Full URL of the request.
+        private_key: EC private key for signing.
+        nonce: Optional server-provided nonce.
+        access_token: Optional access token (for 'ath' claim).
 
-Returns:
-DPoP proof JWT string.
+        Returns:
+        DPoP proof JWT string.
         """
         # Get public key JWK
         public_jwk = cls._key_to_jwk(private_key, include_private=False)
@@ -161,13 +162,13 @@ DPoP proof JWT string.
     def extract_nonce_from_response(response: t.Union[httpx.Response, t.Any]) -> t.Optional[str]:
         """Extract DPoP nonce from HTTP response.
 
-Checks both the 'DPoP-Nonce' header and error responses.
+        Checks both the 'DPoP-Nonce' header and error responses.
 
-Args:
-response: HTTP response object (httpx.Response or atproto Response).
+        Args:
+        response: HTTP response object (httpx.Response or atproto Response).
 
-Returns:
-DPoP nonce string if present, None otherwise.
+        Returns:
+        DPoP nonce string if present, None otherwise.
         """
         # Handle both httpx.Response and wrapped Response objects
         headers = response.headers
@@ -178,7 +179,7 @@ DPoP nonce string if present, None otherwise.
 
         # Check for error response with use_dpop_nonce
         if response.status_code in (400, 401):
-            try:
+            with contextlib.suppress(json.JSONDecodeError, AttributeError, TypeError):
                 # Handle both httpx.Response (.json()) and wrapped Response (.content)
                 if hasattr(response, 'json'):
                     error_body = response.json()
@@ -190,8 +191,6 @@ DPoP nonce string if present, None otherwise.
                             return headers.get('DPoP-Nonce') or headers.get('dpop-nonce')
                     elif isinstance(error_body, dict) and error_body.get('error') == 'use_dpop_nonce':
                         return headers.get('DPoP-Nonce') or headers.get('dpop-nonce')
-            except Exception:
-                pass
 
         return None
 
@@ -215,7 +214,7 @@ DPoP nonce string if present, None otherwise.
             return True
 
         # Check error response
-        try:
+        with contextlib.suppress(json.JSONDecodeError, AttributeError, TypeError):
             # Handle both httpx.Response (.json()) and wrapped Response (.content)
             if hasattr(response, 'json'):
                 error_body = response.json()
@@ -226,7 +225,5 @@ DPoP nonce string if present, None otherwise.
                     return error_body.error == 'use_dpop_nonce'
             if isinstance(error_body, dict) and error_body.get('error') == 'use_dpop_nonce':
                 return True
-        except Exception:
-            pass
 
         return False

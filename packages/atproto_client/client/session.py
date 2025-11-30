@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from enum import Enum
 
 import typing_extensions as te
-
 from atproto_core.did_doc import DidDocument, is_valid_did_doc
 from atproto_server.auth.jwt import get_jwt_payload
 
