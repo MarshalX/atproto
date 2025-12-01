@@ -46,3 +46,4 @@ Documentation
    AT Protocol Docs <https://atproto.com/>
    Bluesky Docs <https://docs.bsky.app/>
    Discord Bluesky API <https://discord.gg/PCyVJXU9jN>
+   🟢 Hire me (CV) <https://marshal.dev>

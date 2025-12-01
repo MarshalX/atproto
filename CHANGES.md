@@ -1,5 +1,17 @@
 # Change Log
 
+## Version 0.0.64
+
+**01.12.2025**
+
+⚡ The underlying lib for **CAR decoding got a x2 speed boost** for your custom feeds and firehose in general! Update it now with `pip install -U libipld`. More info and benchmarks: https://github.com/MarshalX/python-libipld/releases/tag/v3.3.0
+
+* Add `leeway` argument to `verify_jwt` function by @MarshalX in https://github.com/MarshalX/atproto/pull/638
+* Add caching to model building functions and fix record model name resolution in refs by @MarshalX in https://github.com/MarshalX/atproto/pull/633
+* Update quickstart documentation to clarify base API URLs by @paulopperman in https://github.com/MarshalX/atproto/pull/635
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/631 and https://github.com/MarshalX/atproto/pull/639
+* Fix pydantic field warnings for optional fields with constraints  by @zzstoatzz in https://github.com/MarshalX/atproto/pull/630
+
 ## Version 0.0.63
 
 **22.10.2025**
