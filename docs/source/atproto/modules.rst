@@ -13,4 +13,5 @@ packages
    atproto_firehose
    atproto_identity
    atproto_lexicon
+   atproto_oauth
    atproto_server
