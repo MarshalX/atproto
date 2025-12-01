@@ -8,6 +8,10 @@ from atproto_client.models.app.bsky.actor import put_preferences as AppBskyActor
 from atproto_client.models.app.bsky.actor import search_actors as AppBskyActorSearchActors
 from atproto_client.models.app.bsky.actor import search_actors_typeahead as AppBskyActorSearchActorsTypeahead
 from atproto_client.models.app.bsky.actor import status as AppBskyActorStatus
+from atproto_client.models.app.bsky.ageassurance import begin as AppBskyAgeassuranceBegin
+from atproto_client.models.app.bsky.ageassurance import defs as AppBskyAgeassuranceDefs
+from atproto_client.models.app.bsky.ageassurance import get_config as AppBskyAgeassuranceGetConfig
+from atproto_client.models.app.bsky.ageassurance import get_state as AppBskyAgeassuranceGetState
 from atproto_client.models.app.bsky.bookmark import create_bookmark as AppBskyBookmarkCreateBookmark
 from atproto_client.models.app.bsky.bookmark import defs as AppBskyBookmarkDefs
 from atproto_client.models.app.bsky.bookmark import delete_bookmark as AppBskyBookmarkDeleteBookmark
@@ -350,6 +354,10 @@ class _Ids:
     AppBskyActorSearchActors: str = 'app.bsky.actor.searchActors'
     AppBskyActorSearchActorsTypeahead: str = 'app.bsky.actor.searchActorsTypeahead'
     AppBskyActorStatus: str = 'app.bsky.actor.status'
+    AppBskyAgeassuranceBegin: str = 'app.bsky.ageassurance.begin'
+    AppBskyAgeassuranceDefs: str = 'app.bsky.ageassurance.defs'
+    AppBskyAgeassuranceGetConfig: str = 'app.bsky.ageassurance.getConfig'
+    AppBskyAgeassuranceGetState: str = 'app.bsky.ageassurance.getState'
     AppBskyBookmarkCreateBookmark: str = 'app.bsky.bookmark.createBookmark'
     AppBskyBookmarkDefs: str = 'app.bsky.bookmark.defs'
     AppBskyBookmarkDeleteBookmark: str = 'app.bsky.bookmark.deleteBookmark'

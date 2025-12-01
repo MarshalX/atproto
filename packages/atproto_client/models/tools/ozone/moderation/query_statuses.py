@@ -86,7 +86,15 @@ class Params(base.ParamsModelBase):
     queue_seed: t.Optional[str] = None  #: A seeder to shuffle/balance the queue items.
     reported_after: t.Optional[string_formats.DateTime] = None  #: Search subjects reported after a given timestamp.
     reported_before: t.Optional[string_formats.DateTime] = None  #: Search subjects reported before a given timestamp.
-    review_state: t.Optional[str] = None  #: Specify when fetching subjects in a certain state.
+    review_state: t.Optional[
+        t.Union[
+            'models.ToolsOzoneModerationDefs.ReviewOpen',
+            'models.ToolsOzoneModerationDefs.ReviewClosed',
+            'models.ToolsOzoneModerationDefs.ReviewEscalated',
+            'models.ToolsOzoneModerationDefs.ReviewNone',
+            str,
+        ]
+    ] = None  #: Specify when fetching subjects in a certain state.
     reviewed_after: t.Optional[string_formats.DateTime] = None  #: Search subjects reviewed after a given timestamp.
     reviewed_before: t.Optional[string_formats.DateTime] = None  #: Search subjects reviewed before a given timestamp.
     sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = 'desc'  #: Sort direction.
@@ -186,7 +194,17 @@ class ParamsDict(t.TypedDict):
     reported_before: te.NotRequired[
         t.Optional[string_formats.DateTime]
     ]  #: Search subjects reported before a given timestamp.
-    review_state: te.NotRequired[t.Optional[str]]  #: Specify when fetching subjects in a certain state.
+    review_state: te.NotRequired[
+        t.Optional[
+            t.Union[
+                'models.ToolsOzoneModerationDefs.ReviewOpen',
+                'models.ToolsOzoneModerationDefs.ReviewClosed',
+                'models.ToolsOzoneModerationDefs.ReviewEscalated',
+                'models.ToolsOzoneModerationDefs.ReviewNone',
+                str,
+            ]
+        ]
+    ]  #: Specify when fetching subjects in a certain state.
     reviewed_after: te.NotRequired[
         t.Optional[string_formats.DateTime]
     ]  #: Search subjects reviewed after a given timestamp.

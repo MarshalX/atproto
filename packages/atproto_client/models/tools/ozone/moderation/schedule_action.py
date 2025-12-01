@@ -53,8 +53,15 @@ class Takedown(base.ModelBase):
     duration_in_hours: t.Optional[int] = (
         None  #: Indicates how long the takedown should be in effect before automatically expiring.
     )
+    email_content: t.Optional[str] = None  #: Email content to be sent to the user upon takedown.
+    email_subject: t.Optional[str] = None  #: Subject of the email to be sent to the user upon takedown.
     policies: te.Annotated[t.Optional[t.List[str]], Field(max_length=5)] = (
         None  #: Names/Keywords of the policies that drove the decision.
+    )
+    severity_level: t.Optional[str] = None  #: Severity level of the violation (e.g., 'sev-0', 'sev-1', 'sev-2', etc.).
+    strike_count: t.Optional[int] = None  #: Number of strikes to assign to the user when takedown is applied.
+    strike_expires_at: t.Optional[string_formats.DateTime] = (
+        None  #: When the strike should expire. If not provided, the strike never expires.
     )
 
     py_type: t.Literal['tools.ozone.moderation.scheduleAction#takedown'] = Field(
