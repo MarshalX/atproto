@@ -298,6 +298,9 @@ class ModEventTakedown(base.ModelBase):
     strike_expires_at: t.Optional[string_formats.DateTime] = (
         None  #: When the strike should expire. If not provided, the strike never expires.
     )
+    target_services: t.Optional[t.List[t.Union[t.Literal['appview'], t.Literal['pds'], str]]] = (
+        None  #: List of services where the takedown should be applied. If empty or not provided, takedown is applied on all configured services.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventTakedown'] = Field(
         default='tools.ozone.moderation.defs#modEventTakedown', alias='$type', frozen=True
@@ -391,11 +394,16 @@ class AgeAssuranceEvent(base.ModelBase):
     created_at: string_formats.DateTime  #: The date and time of this write operation.
     status: t.Union[
         t.Literal['unknown'], t.Literal['pending'], t.Literal['assured'], str
-    ]  #: The status of the age assurance process.
+    ]  #: The status of the Age Assurance process.
+    access: t.Optional['models.AppBskyAgeassuranceDefs.Access'] = None  #: Access.
     complete_ip: t.Optional[str] = None  #: The IP address used when completing the AA flow.
     complete_ua: t.Optional[str] = None  #: The user agent used when completing the AA flow.
+    country_code: t.Optional[str] = (
+        None  #: The ISO 3166-1 alpha-2 country code provided when beginning the Age Assurance flow.
+    )
     init_ip: t.Optional[str] = None  #: The IP address used when initiating the AA flow.
     init_ua: t.Optional[str] = None  #: The user agent used when initiating the AA flow.
+    region_code: t.Optional[str] = None  #: The ISO 3166-2 region code provided when beginning the Age Assurance flow.
 
     py_type: t.Literal['tools.ozone.moderation.defs#ageAssuranceEvent'] = Field(
         default='tools.ozone.moderation.defs#ageAssuranceEvent', alias='$type', frozen=True
@@ -409,6 +417,7 @@ class AgeAssuranceOverrideEvent(base.ModelBase):
     status: t.Union[
         t.Literal['assured'], t.Literal['reset'], t.Literal['blocked'], str
     ]  #: The status to be set for the user decided by a moderator, overriding whatever value the user had previously. Use reset to default to original state.
+    access: t.Optional['models.AppBskyAgeassuranceDefs.Access'] = None  #: Access.
 
     py_type: t.Literal['tools.ozone.moderation.defs#ageAssuranceOverrideEvent'] = Field(
         default='tools.ozone.moderation.defs#ageAssuranceOverrideEvent', alias='$type', frozen=True
@@ -498,6 +507,9 @@ class ModEventEmail(base.ModelBase):
     subject_line: str  #: The subject line of the email sent to the user.
     comment: t.Optional[str] = None  #: Additional comment about the outgoing comm.
     content: t.Optional[str] = None  #: The content of the email sent to the user.
+    is_delivered: t.Optional[bool] = (
+        None  #: Indicates whether the email was successfully delivered to the user's inbox.
+    )
     policies: te.Annotated[t.Optional[t.List[str]], Field(max_length=5)] = (
         None  #: Names/Keywords of the policies that necessitated the email.
     )

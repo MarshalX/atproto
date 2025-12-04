@@ -29,7 +29,7 @@ source_suffix = {
 # -- Project information -----------------------------------------------------
 
 project = 'The AT Protocol SDK'
-copyright = '2024 Ilya (Marshal) <https://github.com/MarshalX>'
+copyright = '2025 Ilya (Marshal) <https://github.com/MarshalX>'
 author = 'Ilya (Marshal)'
 
 language = 'en'
