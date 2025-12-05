@@ -156,6 +156,18 @@ class Relationship(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.defs`. lists the bi-directional graph relationships between one actor (not indicated in the object), and the target actors (the DID included in the object)."""
 
     did: string_formats.Did  #: Did.
+    blocked_by: t.Optional[string_formats.AtUri] = (
+        None  #: If the actor is blocked by this DID, contains the AT-URI of the block record.
+    )
+    blocked_by_list: t.Optional[string_formats.AtUri] = (
+        None  #: If the actor is blocked by this DID via a block list, contains the AT-URI of the listblock record.
+    )
+    blocking: t.Optional[string_formats.AtUri] = (
+        None  #: If the actor blocks this DID, this is the AT-URI of the block record.
+    )
+    blocking_by_list: t.Optional[string_formats.AtUri] = (
+        None  #: If the actor blocks this DID via a block list, this is the AT-URI of the listblock record.
+    )
     followed_by: t.Optional[string_formats.AtUri] = (
         None  #: If the actor is followed by this DID, contains the AT-URI of the follow record.
     )
