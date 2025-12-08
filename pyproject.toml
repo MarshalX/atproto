@@ -1,16 +1,17 @@
-[tool.poetry]
+[project]
 name = "atproto"
-version = "0.0.0" # This is a placeholder. Dynamic version from Git Tag will be used.
+dynamic = ["dependencies", "version"]
 description = "The AT Protocol SDK"
-authors = ["Ilya (Marshal) <ilya@marshal.dev>"]
+authors = [
+    {name = "Ilya (Marshal)", email = "ilya@marshal.dev"}
+]
 license = "MIT"
-repository = "https://github.com/MarshalX/atproto"
+requires-python = ">=3.9,<3.15"
 readme = "README.md"
 keywords = ["library", "sdk", "codegen", "xrpc", "xrpc-client", "atprotocol", "atproto", "lexicon", "parser", "schema", "bluesky", "bluesky-api", "at", "uri", "atp", "nsid", "did", "cid"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
@@ -25,6 +26,21 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Pre-processors",
 ]
+
+[project.scripts]
+atp = "atproto_cli:atproto_cli"
+atproto = "atproto_cli:atproto_cli"
+
+[project.urls]
+homepage = "https://atproto.blue"
+repository = "https://github.com/MarshalX/atproto"
+documentation = "https://atproto.blue"
+changes = "https://github.com/MarshalX/atproto/blob/main/CHANGES.md"
+issues = "https://github.com/MarshalX/atproto/issues"
+sponsoring = "https://github.com/sponsors/MarshalX"
+
+[tool.poetry]
+requires-poetry = ">=2.0"
 packages = [
     { include = "atproto", from = "packages" },
     { include = "atproto_cli", from = "packages" },
@@ -37,19 +53,9 @@ packages = [
     { include = "atproto_lexicon", from = "packages" },
     { include = "atproto_server", from = "packages" },
 ]
-
-[tool.poetry.urls]
-"Documentation" = "https://atproto.blue"
-"Changes" = "https://github.com/MarshalX/atproto/blob/main/CHANGES.md"
-"Tracker" = "https://github.com/MarshalX/atproto/issues"
-"Author" = "https://github.com/MarshalX"
-
-[tool.poetry.scripts]
-atp = "atproto_cli:atproto_cli"
-atproto = "atproto_cli:atproto_cli"
+version = "0.0.0" # This is a placeholder. Dynamic version from Git Tag will be used.
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.15"
 httpx = ">=0.25.0,<0.29.0"
 typing-extensions = ">=4.8.0,<5"
 click = ">=8.1.3,<9"
@@ -90,7 +96,7 @@ vcs = "git"
 style = "pep440"
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+requires = ["poetry-core>=2.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
 build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.mypy]
@@ -134,7 +140,7 @@ extend-select = [
     "RUF",
     "SIM",
     "T20",
-    "TCH",
+    "TC",
     "TID",
     "YTT",
 ]
