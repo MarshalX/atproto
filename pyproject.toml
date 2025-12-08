@@ -140,6 +140,7 @@ extend-select = [
     "RUF",
     "SIM",
     "T20",
+    "TC",
     "TID",
     "YTT",
 ]
