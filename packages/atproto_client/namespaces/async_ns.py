@@ -27,6 +27,7 @@ class AppBskyNamespace(AsyncNamespaceBase):
         self.actor = AppBskyActorNamespace(self._client)
         self.ageassurance = AppBskyAgeassuranceNamespace(self._client)
         self.bookmark = AppBskyBookmarkNamespace(self._client)
+        self.contact = AppBskyContactNamespace(self._client)
         self.feed = AppBskyFeedNamespace(self._client)
         self.graph = AppBskyGraphNamespace(self._client)
         self.labeler = AppBskyLabelerNamespace(self._client)
@@ -684,6 +685,213 @@ class AppBskyBookmarkNamespace(AsyncNamespaceBase):
             'app.bsky.bookmark.getBookmarks', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.AppBskyBookmarkGetBookmarks.Response)
+
+
+class AppBskyContactNamespace(AsyncNamespaceBase):
+    async def dismiss_match(
+        self,
+        data: t.Union[models.AppBskyContactDismissMatch.Data, models.AppBskyContactDismissMatch.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyContactDismissMatch.Response':
+        """WARNING: This is unstable and under active development, don't use it while this warning is here. Removes a match that was found via contact import. It shouldn't appear again if the same contact is re-imported. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyContactDismissMatch.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyContactDismissMatch.Data', get_or_create(data, models.AppBskyContactDismissMatch.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.contact.dismissMatch',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyContactDismissMatch.Response)
+
+    async def get_matches(
+        self,
+        params: t.Optional[
+            t.Union[models.AppBskyContactGetMatches.Params, models.AppBskyContactGetMatches.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyContactGetMatches.Response':
+        """WARNING: This is unstable and under active development, don't use it while this warning is here. Returns the matched contacts (contacts that were mutually imported). Excludes dismissed matches. Requires authentication.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyContactGetMatches.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyContactGetMatches.Params', get_or_create(params, models.AppBskyContactGetMatches.Params)
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.contact.getMatches', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyContactGetMatches.Response)
+
+    async def get_sync_status(
+        self,
+        params: t.Optional[
+            t.Union[models.AppBskyContactGetSyncStatus.Params, models.AppBskyContactGetSyncStatus.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyContactGetSyncStatus.Response':
+        """WARNING: This is unstable and under active development, don't use it while this warning is here. Gets the user's current contact import status. Requires authentication.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyContactGetSyncStatus.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyContactGetSyncStatus.Params',
+            get_or_create(params, models.AppBskyContactGetSyncStatus.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.contact.getSyncStatus', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyContactGetSyncStatus.Response)
+
+    async def import_contacts(
+        self,
+        data: t.Union[models.AppBskyContactImportContacts.Data, models.AppBskyContactImportContacts.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyContactImportContacts.Response':
+        """WARNING: This is unstable and under active development, don't use it while this warning is here. Import contacts for securely matching with other users. This follows the protocol explained in https://docs.bsky.app/blog/contact-import-rfc. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyContactImportContacts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyContactImportContacts.Data', get_or_create(data, models.AppBskyContactImportContacts.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.contact.importContacts',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyContactImportContacts.Response)
+
+    async def remove_data(
+        self,
+        data: t.Optional[
+            t.Union[models.AppBskyContactRemoveData.Data, models.AppBskyContactRemoveData.DataDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyContactRemoveData.Response':
+        """WARNING: This is unstable and under active development, don't use it while this warning is here. Removes all stored hashes used for contact matching, existing matches, and sync status. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyContactRemoveData.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyContactRemoveData.Data', get_or_create(data, models.AppBskyContactRemoveData.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.contact.removeData',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyContactRemoveData.Response)
+
+    async def start_phone_verification(
+        self,
+        data: t.Union[
+            models.AppBskyContactStartPhoneVerification.Data, models.AppBskyContactStartPhoneVerification.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyContactStartPhoneVerification.Response':
+        """WARNING: This is unstable and under active development, don't use it while this warning is here. Starts a phone verification flow. The phone passed will receive a code via SMS that should be passed to `app.bsky.contact.verifyPhone`. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyContactStartPhoneVerification.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyContactStartPhoneVerification.Data',
+            get_or_create(data, models.AppBskyContactStartPhoneVerification.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.contact.startPhoneVerification',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyContactStartPhoneVerification.Response)
+
+    async def verify_phone(
+        self,
+        data: t.Union[models.AppBskyContactVerifyPhone.Data, models.AppBskyContactVerifyPhone.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyContactVerifyPhone.Response':
+        """WARNING: This is unstable and under active development, don't use it while this warning is here. Verifies control over a phone number with a code received via SMS and starts a contact import session. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyContactVerifyPhone.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyContactVerifyPhone.Data', get_or_create(data, models.AppBskyContactVerifyPhone.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.contact.verifyPhone',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyContactVerifyPhone.Response)
 
 
 class AppBskyFeedGeneratorRecord(AsyncRecordBase):
