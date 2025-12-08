@@ -63,7 +63,7 @@ websockets = ">=15,<16"
 pydantic = ">=2.7,<3"
 libipld = ">=3.0.1,<4"
 dnspython = ">=2.4.0,<3"
-cryptography = ">=41.0.7,<46"
+cryptography = ">=41.0.7,<47"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "0.14.1"
