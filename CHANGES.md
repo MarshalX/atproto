@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.0.65
+
+**08.12.2025**
+
+* Migrate to PEP 621 (use `project` section in `pyproject.toml`) by @MarshalX in https://github.com/MarshalX/atproto/pull/645
+* Update lexicons fetched from 380aa3b committed 2025-12-08T14:47:20Z by @MarshalX in https://github.com/MarshalX/atproto/pull/643
+* Bump `urllib3` and other deps by @MarshalX in https://github.com/MarshalX/atproto/pull/646
+
 ## Version 0.0.64
 
 **01.12.2025**
