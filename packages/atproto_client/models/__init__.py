@@ -16,6 +16,14 @@ from atproto_client.models.app.bsky.bookmark import create_bookmark as AppBskyBo
 from atproto_client.models.app.bsky.bookmark import defs as AppBskyBookmarkDefs
 from atproto_client.models.app.bsky.bookmark import delete_bookmark as AppBskyBookmarkDeleteBookmark
 from atproto_client.models.app.bsky.bookmark import get_bookmarks as AppBskyBookmarkGetBookmarks
+from atproto_client.models.app.bsky.contact import defs as AppBskyContactDefs
+from atproto_client.models.app.bsky.contact import dismiss_match as AppBskyContactDismissMatch
+from atproto_client.models.app.bsky.contact import get_matches as AppBskyContactGetMatches
+from atproto_client.models.app.bsky.contact import get_sync_status as AppBskyContactGetSyncStatus
+from atproto_client.models.app.bsky.contact import import_contacts as AppBskyContactImportContacts
+from atproto_client.models.app.bsky.contact import remove_data as AppBskyContactRemoveData
+from atproto_client.models.app.bsky.contact import start_phone_verification as AppBskyContactStartPhoneVerification
+from atproto_client.models.app.bsky.contact import verify_phone as AppBskyContactVerifyPhone
 from atproto_client.models.app.bsky.embed import defs as AppBskyEmbedDefs
 from atproto_client.models.app.bsky.embed import external as AppBskyEmbedExternal
 from atproto_client.models.app.bsky.embed import images as AppBskyEmbedImages
@@ -362,6 +370,14 @@ class _Ids:
     AppBskyBookmarkDefs: str = 'app.bsky.bookmark.defs'
     AppBskyBookmarkDeleteBookmark: str = 'app.bsky.bookmark.deleteBookmark'
     AppBskyBookmarkGetBookmarks: str = 'app.bsky.bookmark.getBookmarks'
+    AppBskyContactDefs: str = 'app.bsky.contact.defs'
+    AppBskyContactDismissMatch: str = 'app.bsky.contact.dismissMatch'
+    AppBskyContactGetMatches: str = 'app.bsky.contact.getMatches'
+    AppBskyContactGetSyncStatus: str = 'app.bsky.contact.getSyncStatus'
+    AppBskyContactImportContacts: str = 'app.bsky.contact.importContacts'
+    AppBskyContactRemoveData: str = 'app.bsky.contact.removeData'
+    AppBskyContactStartPhoneVerification: str = 'app.bsky.contact.startPhoneVerification'
+    AppBskyContactVerifyPhone: str = 'app.bsky.contact.verifyPhone'
     AppBskyEmbedDefs: str = 'app.bsky.embed.defs'
     AppBskyEmbedExternal: str = 'app.bsky.embed.external'
     AppBskyEmbedImages: str = 'app.bsky.embed.images'

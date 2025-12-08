@@ -413,7 +413,7 @@ class AgeAssuranceEvent(base.ModelBase):
 class AgeAssuranceOverrideEvent(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`. Age assurance status override by moderators. Only works on DID subjects."""
 
-    comment: str  #: Comment describing the reason for the override.
+    comment: str = Field(min_length=1)  #: Comment describing the reason for the override.
     status: t.Union[
         t.Literal['assured'], t.Literal['reset'], t.Literal['blocked'], str
     ]  #: The status to be set for the user decided by a moderator, overriding whatever value the user had previously. Use reset to default to original state.
@@ -427,7 +427,7 @@ class AgeAssuranceOverrideEvent(base.ModelBase):
 class RevokeAccountCredentialsEvent(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`. Account credentials revocation by moderators. Only works on DID subjects."""
 
-    comment: str  #: Comment describing the reason for the revocation.
+    comment: str = Field(min_length=1)  #: Comment describing the reason for the revocation.
 
     py_type: t.Literal['tools.ozone.moderation.defs#revokeAccountCredentialsEvent'] = Field(
         default='tools.ozone.moderation.defs#revokeAccountCredentialsEvent', alias='$type', frozen=True
