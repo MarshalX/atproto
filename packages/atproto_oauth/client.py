@@ -233,6 +233,7 @@ class OAuthClient:
             params=params,
             dpop_key=session.dpop_private_key,
             dpop_nonce=session.dpop_authserver_nonce,
+            issuer=authserver_meta.issuer,
         )
 
         if response.status_code not in (200, 201):
@@ -287,6 +288,7 @@ class OAuthClient:
                     params=params,
                     dpop_key=session.dpop_private_key,
                     dpop_nonce=session.dpop_authserver_nonce,
+                    issuer=authserver_meta.issuer,
                 )
             except (OAuthTokenError, ValueError):
                 # Best-effort revocation; failures are intentionally silent
@@ -379,6 +381,7 @@ class OAuthClient:
             params=params,
             dpop_key=dpop_key,
             dpop_nonce='',  # Initial request has no nonce
+            issuer=authserver_meta.issuer,
         )
 
         if response.status_code not in (200, 201):
@@ -412,6 +415,7 @@ class OAuthClient:
             params=params,
             dpop_key=oauth_state.dpop_private_key,
             dpop_nonce=oauth_state.dpop_authserver_nonce,
+            issuer=authserver_meta.issuer,
         )
 
         if response.status_code not in (200, 201):
@@ -435,10 +439,19 @@ class OAuthClient:
         params: t.Dict[str, str],
         dpop_key: 'EllipticCurvePrivateKey',
         dpop_nonce: str,
+        issuer: t.Optional[str] = None,
     ) -> t.Tuple[str, httpx.Response]:
         """Make token request with DPoP and client assertion.
 
         Handles DPoP nonce rotation automatically.
+
+        Args:
+            token_url: The token endpoint URL.
+            params: Request parameters.
+            dpop_key: DPoP private key.
+            dpop_nonce: Current DPoP nonce.
+            issuer: Authorization server issuer (required for confidential clients).
+                    Per ATProto OAuth spec, the aud claim must be the issuer.
 
         Returns:
             Tuple of (updated_dpop_nonce, response).
@@ -449,7 +462,11 @@ class OAuthClient:
         # Add client authentication
         if self.client_secret_key:
             # Confidential client - use client assertion
-            client_assertion = self._create_client_assertion(token_url)
+            # Per ATProto OAuth spec: "The aud claim (audience) of the client
+            # assertion JWT must be the Authorization Server's issuer."
+            if not issuer:
+                raise ValueError('issuer required for confidential client authentication')
+            client_assertion = self._create_client_assertion(issuer)
             params['client_id'] = self.client_id
             params['client_assertion_type'] = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
             params['client_assertion'] = client_assertion
