@@ -35,6 +35,7 @@ class OAuthClient:
         state_store: Store for temporary OAuth state.
         session_store: Store for OAuth sessions.
         client_secret_key: Optional EC private key for confidential clients.
+        client_secret_kid: Key ID for the client secret key (required if client_secret_key is provided).
     """
 
     def __init__(
@@ -45,6 +46,7 @@ class OAuthClient:
         state_store: StateStore,
         session_store: SessionStore,
         client_secret_key: t.Optional['EllipticCurvePrivateKey'] = None,
+        client_secret_kid: t.Optional[str] = None,
     ) -> None:
         self.client_id = client_id
         self.redirect_uri = redirect_uri
@@ -52,6 +54,7 @@ class OAuthClient:
         self.state_store = state_store
         self.session_store = session_store
         self.client_secret_key = client_secret_key
+        self.client_secret_kid = client_secret_kid
 
         self._id_resolver = AsyncIdResolver()
         self._dpop = DPoPManager()
@@ -511,10 +514,13 @@ class OAuthClient:
         """Create client assertion JWT for confidential client."""
         if not self.client_secret_key:
             raise ValueError('Client secret key required for client assertion')
+        if not self.client_secret_kid:
+            raise ValueError('Client secret kid required for client assertion')
 
         header = {
             'alg': 'ES256',
             'typ': 'JWT',
+            'kid': self.client_secret_kid,
         }
 
         now = int(time.time())
