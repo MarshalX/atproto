@@ -23,6 +23,7 @@ ALIASES_DB = {
     'models.AppBskyContactGetSyncStatus': 'atproto_client.models.app.bsky.contact.get_sync_status',
     'models.AppBskyContactImportContacts': 'atproto_client.models.app.bsky.contact.import_contacts',
     'models.AppBskyContactRemoveData': 'atproto_client.models.app.bsky.contact.remove_data',
+    'models.AppBskyContactSendNotification': 'atproto_client.models.app.bsky.contact.send_notification',
     'models.AppBskyContactStartPhoneVerification': 'atproto_client.models.app.bsky.contact.start_phone_verification',
     'models.AppBskyContactVerifyPhone': 'atproto_client.models.app.bsky.contact.verify_phone',
     'models.AppBskyEmbedDefs': 'atproto_client.models.app.bsky.embed.defs',

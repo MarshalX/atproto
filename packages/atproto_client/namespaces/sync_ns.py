@@ -693,7 +693,7 @@ class AppBskyContactNamespace(NamespaceBase):
         data: t.Union[models.AppBskyContactDismissMatch.Data, models.AppBskyContactDismissMatch.DataDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyContactDismissMatch.Response':
-        """WARNING: This is unstable and under active development, don't use it while this warning is here. Removes a match that was found via contact import. It shouldn't appear again if the same contact is re-imported. Requires authentication.
+        """Removes a match that was found via contact import. It shouldn't appear again if the same contact is re-imported. Requires authentication.
 
         Args:
             data: Input data.
@@ -724,7 +724,7 @@ class AppBskyContactNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyContactGetMatches.Response':
-        """WARNING: This is unstable and under active development, don't use it while this warning is here. Returns the matched contacts (contacts that were mutually imported). Excludes dismissed matches. Requires authentication.
+        """Returns the matched contacts (contacts that were mutually imported). Excludes dismissed matches. Requires authentication.
 
         Args:
             params: Parameters.
@@ -751,7 +751,7 @@ class AppBskyContactNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyContactGetSyncStatus.Response':
-        """WARNING: This is unstable and under active development, don't use it while this warning is here. Gets the user's current contact import status. Requires authentication.
+        """Gets the user's current contact import status. Requires authentication.
 
         Args:
             params: Parameters.
@@ -777,7 +777,7 @@ class AppBskyContactNamespace(NamespaceBase):
         data: t.Union[models.AppBskyContactImportContacts.Data, models.AppBskyContactImportContacts.DataDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyContactImportContacts.Response':
-        """WARNING: This is unstable and under active development, don't use it while this warning is here. Import contacts for securely matching with other users. This follows the protocol explained in https://docs.bsky.app/blog/contact-import-rfc. Requires authentication.
+        """Import contacts for securely matching with other users. This follows the protocol explained in https://docs.bsky.app/blog/contact-import-rfc. Requires authentication.
 
         Args:
             data: Input data.
@@ -808,7 +808,7 @@ class AppBskyContactNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyContactRemoveData.Response':
-        """WARNING: This is unstable and under active development, don't use it while this warning is here. Removes all stored hashes used for contact matching, existing matches, and sync status. Requires authentication.
+        """Removes all stored hashes used for contact matching, existing matches, and sync status. Requires authentication.
 
         Args:
             data: Input data.
@@ -832,6 +832,36 @@ class AppBskyContactNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyContactRemoveData.Response)
 
+    def send_notification(
+        self,
+        data: t.Union[models.AppBskyContactSendNotification.Data, models.AppBskyContactSendNotification.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyContactSendNotification.Response':
+        """System endpoint to send notifications related to contact imports. Requires role authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyContactSendNotification.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyContactSendNotification.Data',
+            get_or_create(data, models.AppBskyContactSendNotification.Data),
+        )
+        response = self._client.invoke_procedure(
+            'app.bsky.contact.sendNotification',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyContactSendNotification.Response)
+
     def start_phone_verification(
         self,
         data: t.Union[
@@ -839,7 +869,7 @@ class AppBskyContactNamespace(NamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.AppBskyContactStartPhoneVerification.Response':
-        """WARNING: This is unstable and under active development, don't use it while this warning is here. Starts a phone verification flow. The phone passed will receive a code via SMS that should be passed to `app.bsky.contact.verifyPhone`. Requires authentication.
+        """Starts a phone verification flow. The phone passed will receive a code via SMS that should be passed to `app.bsky.contact.verifyPhone`. Requires authentication.
 
         Args:
             data: Input data.
@@ -869,7 +899,7 @@ class AppBskyContactNamespace(NamespaceBase):
         data: t.Union[models.AppBskyContactVerifyPhone.Data, models.AppBskyContactVerifyPhone.DataDict],
         **kwargs: t.Any,
     ) -> 'models.AppBskyContactVerifyPhone.Response':
-        """WARNING: This is unstable and under active development, don't use it while this warning is here. Verifies control over a phone number with a code received via SMS and starts a contact import session. Requires authentication.
+        """Verifies control over a phone number with a code received via SMS and starts a contact import session. Requires authentication.
 
         Args:
             data: Input data.

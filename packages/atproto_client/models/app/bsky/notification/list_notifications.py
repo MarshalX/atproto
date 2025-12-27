@@ -69,6 +69,7 @@ class Notification(base.ModelBase):
         t.Literal['like-via-repost'],
         t.Literal['repost-via-repost'],
         t.Literal['subscribed-post'],
+        t.Literal['contact-match'],
         str,
     ]  #: The reason why this notification was delivered - e.g. your post was liked, or you received a new follower.
     record: 'UnknownType'  #: Record.
