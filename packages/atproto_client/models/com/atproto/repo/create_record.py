@@ -37,7 +37,7 @@ class DataDict(t.TypedDict):
     repo: string_formats.AtIdentifier  #: The handle or DID of the repo (aka, current account).
     rkey: te.NotRequired[t.Optional[string_formats.RecordKey]]  #: The Record Key.
     swap_commit: te.NotRequired[t.Optional[string_formats.Cid]]  #: Compare and swap with the previous commit by CID.
-    validate: te.NotRequired[
+    validate_: te.NotRequired[
         t.Optional[bool]
     ]  #: Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons.
 
