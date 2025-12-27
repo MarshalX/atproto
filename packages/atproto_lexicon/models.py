@@ -22,6 +22,9 @@ class LexDefinitionType:
 
     STRING = 'string'  # TODO(MarshalX): definitions could be primitives?
 
+    PERMISSION = 'permission'
+    PERMISSION_SET = 'permission-set'
+
 
 class LexPrimitiveType:
     BOOLEAN = 'boolean'
@@ -234,6 +237,26 @@ class LexXrpcProcedure(LexDefinitionBase):
     errors: t.Optional[t.List[LexXrpcError]] = None
 
 
+class LexPermission(LexDefinitionBase):
+    model_config = ConfigDict(extra='allow', populate_by_name=True, strict=True)
+
+    type: te.Literal['permission'] = Field(default=LexDefinitionType.PERMISSION, frozen=True)
+    resource: str
+
+
+LexLang = te.Dict[str, te.Optional[str]]
+
+
+class LexPermissionSet(LexDefinitionBase):
+    type: te.Literal['permission-set'] = Field(default=LexDefinitionType.PERMISSION_SET, frozen=True)
+    description: te.Optional[str] = None
+    title: te.Optional[str] = None
+    title_lang: te.Optional[LexLang] = Field(default=None, alias='title:lang')
+    detail: te.Optional[str] = None
+    detail_lang: te.Optional[LexLang] = Field(default=None, alias='detail:lang')
+    permissions: te.List[LexPermission]
+
+
 LexDefinition = te.Annotated[
     t.Union[
         LexBlob,
@@ -245,6 +268,7 @@ LexDefinition = te.Annotated[
         LexSubscription,
         LexXrpcQuery,
         LexXrpcProcedure,
+        LexPermissionSet,
         LexString,  # actually it's primitive
     ],
     Field(discriminator='type'),
