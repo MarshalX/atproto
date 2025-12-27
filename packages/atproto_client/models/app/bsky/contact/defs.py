@@ -38,3 +38,14 @@ class SyncStatus(base.ModelBase):
     py_type: t.Literal['app.bsky.contact.defs#syncStatus'] = Field(
         default='app.bsky.contact.defs#syncStatus', alias='$type', frozen=True
     )
+
+
+class Notification(base.ModelBase):
+    """Definition model for :obj:`app.bsky.contact.defs`. A stash object to be sent via bsync representing a notification to be created."""
+
+    from_: string_formats.Did  #: The DID of who this notification comes from.
+    to: string_formats.Did  #: The DID of who this notification should go to.
+
+    py_type: t.Literal['app.bsky.contact.defs#notification'] = Field(
+        default='app.bsky.contact.defs#notification', alias='$type', frozen=True
+    )
