@@ -43,7 +43,7 @@ class DataDict(t.TypedDict):
     swap_record: te.NotRequired[
         t.Optional[string_formats.Cid]
     ]  #: Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause problems with golang implementation.
-    validate: te.NotRequired[
+    validate_: te.NotRequired[
         t.Optional[bool]
     ]  #: Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons.
 

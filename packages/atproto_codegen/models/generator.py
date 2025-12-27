@@ -1,3 +1,4 @@
+import keyword
 import os
 import typing as t
 from enum import Enum
@@ -443,8 +444,12 @@ def _get_pydantic_reserved_names() -> t.Set[str]:
     return {name for name in dir(instance) if not name.startswith('_')}
 
 
-def _is_reserved_pydantic_name(name: str) -> bool:
-    return name in _get_pydantic_reserved_names()
+def _get_python_reserved_names() -> t.Sequence[str]:
+    return keyword.kwlist
+
+
+def _is_reserved_variable_name(name: str) -> bool:
+    return name in _get_pydantic_reserved_names() or name in _get_python_reserved_names()
 
 
 def _get_model(
@@ -470,7 +475,7 @@ def _get_model(
             alias_name = field_name
         """
 
-        if _is_reserved_pydantic_name(snake_cased_field_name):
+        if _is_reserved_variable_name(snake_cased_field_name):
             # make aliases for fields with reserved names
             snake_cased_field_name += '_'  # add underscore to the end
 
@@ -526,6 +531,9 @@ def _get_typeddict(
         is_optional = field_name not in required_fields
 
         snake_cased_field_name = convert_camel_case_to_snake_case(field_name)
+        if _is_reserved_variable_name(snake_cased_field_name):
+            # make aliases for fields with reserved names
+            snake_cased_field_name += '_'  # add underscore to the end
 
         type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional, is_input_type=is_input_type)
         description = _get_field_docstring(field_name, field_type_def)
