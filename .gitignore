@@ -45,3 +45,4 @@ docs/_build/
 # Caches
 .ruff_cache/
 .mypy_cache/
+.sandbox/
