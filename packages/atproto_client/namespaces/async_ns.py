@@ -7536,7 +7536,7 @@ class ComAtprotoServerNamespace(AsyncNamespaceBase):
         return get_response_model(response, bool)
 
     async def delete_session(self, **kwargs: t.Any) -> bool:
-        """Delete the current session. Requires auth.
+        """Delete the current session. Requires auth using the 'refreshJwt' (not the 'accessJwt').
 
         Args:
             **kwargs: Arbitrary arguments to HTTP request.

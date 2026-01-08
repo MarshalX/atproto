@@ -498,6 +498,7 @@ class StatusView(base.ModelBase):
 
     record: 'UnknownType'  #: Record.
     status: t.Union['models.AppBskyActorStatus.Live', str]  #: The status for the account.
+    cid: t.Optional[string_formats.Cid] = None  #: Cid.
     embed: t.Optional[te.Annotated[t.Union['models.AppBskyEmbedExternal.View'], Field(discriminator='py_type')]] = (
         None  #: An optional embed associated with the status.
     )
@@ -507,6 +508,7 @@ class StatusView(base.ModelBase):
     is_active: t.Optional[bool] = (
         None  #: True if the status is not expired, false if it is expired. Only present if expiration was set.
     )
+    uri: t.Optional[string_formats.AtUri] = None  #: Uri.
 
     py_type: t.Literal['app.bsky.actor.defs#statusView'] = Field(
         default='app.bsky.actor.defs#statusView', alias='$type', frozen=True

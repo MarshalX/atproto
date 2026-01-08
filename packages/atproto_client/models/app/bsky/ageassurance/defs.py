@@ -61,6 +61,7 @@ class ConfigRegion(base.ModelBase):
     """Definition model for :obj:`app.bsky.ageassurance.defs`. The Age Assurance configuration for a specific region."""
 
     country_code: str  #: The ISO 3166-1 alpha-2 country code this configuration applies to.
+    min_access_age: int  #: The minimum age (as a whole integer) required to use Bluesky in this region.
     rules: t.List[
         te.Annotated[
             t.Union[
