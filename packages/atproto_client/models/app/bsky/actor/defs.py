@@ -215,6 +215,7 @@ Preferences = t.List[
             'models.AppBskyActorDefs.LabelersPref',
             'models.AppBskyActorDefs.PostInteractionSettingsPref',
             'models.AppBskyActorDefs.VerificationPrefs',
+            'models.AppBskyActorDefs.LiveEventPreferences',
         ],
         Field(discriminator='py_type'),
     ]
@@ -464,6 +465,17 @@ class VerificationPrefs(base.ModelBase):
     )
 
 
+class LiveEventPreferences(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`. Preferences for live events."""
+
+    hidden_feed_ids: t.Optional[t.List[str]] = None  #: A list of feed IDs that the user has hidden from live events.
+    hide_all_feeds: t.Optional[bool] = False  #: Whether to hide all feeds from live events.
+
+    py_type: t.Literal['app.bsky.actor.defs#liveEventPreferences'] = Field(
+        default='app.bsky.actor.defs#liveEventPreferences', alias='$type', frozen=True
+    )
+
+
 class PostInteractionSettingsPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`. Default post interaction settings for the account. These values should be applied as default values when creating new posts. These refs should mirror the threadgate and postgate records exactly."""
 
@@ -507,6 +519,9 @@ class StatusView(base.ModelBase):
     )
     is_active: t.Optional[bool] = (
         None  #: True if the status is not expired, false if it is expired. Only present if expiration was set.
+    )
+    is_disabled: t.Optional[bool] = (
+        None  #: True if the user's go-live access has been disabled by a moderator, false otherwise.
     )
     uri: t.Optional[string_formats.AtUri] = None  #: Uri.
 

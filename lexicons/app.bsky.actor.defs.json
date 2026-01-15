@@ -285,7 +285,8 @@
           "#bskyAppStatePref",
           "#labelersPref",
           "#postInteractionSettingsPref",
-          "#verificationPrefs"
+          "#verificationPrefs",
+          "#liveEventPreferences"
         ]
       }
     },
@@ -606,6 +607,22 @@
         }
       }
     },
+    "liveEventPreferences": {
+      "type": "object",
+      "description": "Preferences for live events.",
+      "properties": {
+        "hiddenFeedIds": {
+          "description": "A list of feed IDs that the user has hidden from live events.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "hideAllFeeds": {
+          "description": "Whether to hide all feeds from live events.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
     "postInteractionSettingsPref": {
       "type": "object",
       "description": "Default post interaction settings for the account. These values should be applied as default values when creating new posts. These refs should mirror the threadgate and postgate records exactly.",
@@ -661,6 +678,10 @@
         "isActive": {
           "type": "boolean",
           "description": "True if the status is not expired, false if it is expired. Only present if expiration was set."
+        },
+        "isDisabled": {
+          "type": "boolean",
+          "description": "True if the user's go-live access has been disabled by a moderator, false otherwise."
         }
       }
     }

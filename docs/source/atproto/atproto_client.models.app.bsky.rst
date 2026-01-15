@@ -16,6 +16,7 @@ Subpackages
    atproto_client.models.app.bsky.ageassurance
    atproto_client.models.app.bsky.bookmark
    atproto_client.models.app.bsky.contact
+   atproto_client.models.app.bsky.draft
    atproto_client.models.app.bsky.embed
    atproto_client.models.app.bsky.feed
    atproto_client.models.app.bsky.graph

@@ -25,6 +25,11 @@ from atproto_client.models.app.bsky.contact import remove_data as AppBskyContact
 from atproto_client.models.app.bsky.contact import send_notification as AppBskyContactSendNotification
 from atproto_client.models.app.bsky.contact import start_phone_verification as AppBskyContactStartPhoneVerification
 from atproto_client.models.app.bsky.contact import verify_phone as AppBskyContactVerifyPhone
+from atproto_client.models.app.bsky.draft import create_draft as AppBskyDraftCreateDraft
+from atproto_client.models.app.bsky.draft import defs as AppBskyDraftDefs
+from atproto_client.models.app.bsky.draft import delete_draft as AppBskyDraftDeleteDraft
+from atproto_client.models.app.bsky.draft import get_drafts as AppBskyDraftGetDrafts
+from atproto_client.models.app.bsky.draft import update_draft as AppBskyDraftUpdateDraft
 from atproto_client.models.app.bsky.embed import defs as AppBskyEmbedDefs
 from atproto_client.models.app.bsky.embed import external as AppBskyEmbedExternal
 from atproto_client.models.app.bsky.embed import images as AppBskyEmbedImages
@@ -380,6 +385,11 @@ class _Ids:
     AppBskyContactSendNotification: str = 'app.bsky.contact.sendNotification'
     AppBskyContactStartPhoneVerification: str = 'app.bsky.contact.startPhoneVerification'
     AppBskyContactVerifyPhone: str = 'app.bsky.contact.verifyPhone'
+    AppBskyDraftCreateDraft: str = 'app.bsky.draft.createDraft'
+    AppBskyDraftDefs: str = 'app.bsky.draft.defs'
+    AppBskyDraftDeleteDraft: str = 'app.bsky.draft.deleteDraft'
+    AppBskyDraftGetDrafts: str = 'app.bsky.draft.getDrafts'
+    AppBskyDraftUpdateDraft: str = 'app.bsky.draft.updateDraft'
     AppBskyEmbedDefs: str = 'app.bsky.embed.defs'
     AppBskyEmbedExternal: str = 'app.bsky.embed.external'
     AppBskyEmbedImages: str = 'app.bsky.embed.images'

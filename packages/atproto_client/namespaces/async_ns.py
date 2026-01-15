@@ -28,6 +28,7 @@ class AppBskyNamespace(AsyncNamespaceBase):
         self.ageassurance = AppBskyAgeassuranceNamespace(self._client)
         self.bookmark = AppBskyBookmarkNamespace(self._client)
         self.contact = AppBskyContactNamespace(self._client)
+        self.draft = AppBskyDraftNamespace(self._client)
         self.feed = AppBskyFeedNamespace(self._client)
         self.graph = AppBskyGraphNamespace(self._client)
         self.labeler = AppBskyLabelerNamespace(self._client)
@@ -922,6 +923,114 @@ class AppBskyContactNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.AppBskyContactVerifyPhone.Response)
+
+
+class AppBskyDraftNamespace(AsyncNamespaceBase):
+    async def create_draft(
+        self,
+        data: t.Union[models.AppBskyDraftCreateDraft.Data, models.AppBskyDraftCreateDraft.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyDraftCreateDraft.Response':
+        """Inserts a draft using private storage (stash). An upper limit of drafts might be enforced. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyDraftCreateDraft.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyDraftCreateDraft.Data', get_or_create(data, models.AppBskyDraftCreateDraft.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.draft.createDraft',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyDraftCreateDraft.Response)
+
+    async def delete_draft(
+        self,
+        data: t.Union[models.AppBskyDraftDeleteDraft.Data, models.AppBskyDraftDeleteDraft.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Deletes a draft by ID. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyDraftDeleteDraft.Data', get_or_create(data, models.AppBskyDraftDeleteDraft.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.draft.deleteDraft', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def get_drafts(
+        self,
+        params: t.Optional[
+            t.Union[models.AppBskyDraftGetDrafts.Params, models.AppBskyDraftGetDrafts.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyDraftGetDrafts.Response':
+        """Gets views of user drafts. Requires authentication.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyDraftGetDrafts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyDraftGetDrafts.Params', get_or_create(params, models.AppBskyDraftGetDrafts.Params)
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.draft.getDrafts', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyDraftGetDrafts.Response)
+
+    async def update_draft(
+        self,
+        data: t.Union[models.AppBskyDraftUpdateDraft.Data, models.AppBskyDraftUpdateDraft.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Updates a draft using private storage (stash). If the draft ID points to a non-existing ID, the update will be silently ignored. This is done because updates don't enforce draft limit, so it accepts all writes, but will ignore invalid ones. Requires authentication.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.AppBskyDraftUpdateDraft.Data', get_or_create(data, models.AppBskyDraftUpdateDraft.Data)
+        )
+        response = await self._client.invoke_procedure(
+            'app.bsky.draft.updateDraft', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
 
 
 class AppBskyFeedGeneratorRecord(AsyncRecordBase):
