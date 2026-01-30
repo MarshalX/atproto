@@ -102,6 +102,7 @@ class ProfileAssociated(base.ModelBase):
     )
     chat: t.Optional['models.AppBskyActorDefs.ProfileAssociatedChat'] = None  #: Chat.
     feedgens: t.Optional[int] = None  #: Feedgens.
+    germ: t.Optional['models.AppBskyActorDefs.ProfileAssociatedGerm'] = None  #: Germ.
     labeler: t.Optional[bool] = None  #: Labeler.
     lists: t.Optional[int] = None  #: Lists.
     starter_packs: t.Optional[int] = None  #: Starter packs.
@@ -118,6 +119,17 @@ class ProfileAssociatedChat(base.ModelBase):
 
     py_type: t.Literal['app.bsky.actor.defs#profileAssociatedChat'] = Field(
         default='app.bsky.actor.defs#profileAssociatedChat', alias='$type', frozen=True
+    )
+
+
+class ProfileAssociatedGerm(base.ModelBase):
+    """Definition model for :obj:`app.bsky.actor.defs`."""
+
+    message_me_url: string_formats.Uri  #: Message me url.
+    show_button_to: t.Union[t.Literal['usersIFollow'], t.Literal['everyone'], str]  #: Show button to.
+
+    py_type: t.Literal['app.bsky.actor.defs#profileAssociatedGerm'] = Field(
+        default='app.bsky.actor.defs#profileAssociatedGerm', alias='$type', frozen=True
     )
 
 

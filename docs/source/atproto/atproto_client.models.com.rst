@@ -13,3 +13,4 @@ Subpackages
    :maxdepth: 4
 
    atproto_client.models.com.atproto
+   atproto_client.models.com.germnetwork

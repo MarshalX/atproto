@@ -256,6 +256,7 @@ ALIASES_DB = {
     'models.ComAtprotoTempFetchLabels': 'atproto_client.models.com.atproto.temp.fetch_labels',
     'models.ComAtprotoTempRequestPhoneVerification': 'atproto_client.models.com.atproto.temp.request_phone_verification',
     'models.ComAtprotoTempRevokeAccountCredentials': 'atproto_client.models.com.atproto.temp.revoke_account_credentials',
+    'models.ComGermnetworkDeclaration': 'atproto_client.models.com.germnetwork.declaration',
     'models.ToolsOzoneCommunicationCreateTemplate': 'atproto_client.models.tools.ozone.communication.create_template',
     'models.ToolsOzoneCommunicationDefs': 'atproto_client.models.tools.ozone.communication.defs',
     'models.ToolsOzoneCommunicationDeleteTemplate': 'atproto_client.models.tools.ozone.communication.delete_template',

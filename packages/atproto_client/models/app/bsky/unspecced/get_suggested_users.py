@@ -31,4 +31,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.unspecced.getSuggestedUsers`."""
 
     actors: t.List['models.AppBskyActorDefs.ProfileView']  #: Actors.
-    rec_id: t.Optional[int] = None  #: Snowflake for this recommendation, use when submitting recommendation events.
+    rec_id: t.Optional[str] = None  #: Snowflake for this recommendation, use when submitting recommendation events.

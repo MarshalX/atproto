@@ -20,4 +20,5 @@ RECORD_TYPE_TO_MODEL_CLASS = {
     'app.bsky.notification.declaration': models.AppBskyNotificationDeclaration.Record,
     'chat.bsky.actor.declaration': models.ChatBskyActorDeclaration.Record,
     'com.atproto.lexicon.schema': models.ComAtprotoLexiconSchema.Record,
+    'com.germnetwork.declaration': models.ComGermnetworkDeclaration.Record,
 }

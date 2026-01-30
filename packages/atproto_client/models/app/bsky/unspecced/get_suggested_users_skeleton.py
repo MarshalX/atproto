@@ -35,4 +35,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.unspecced.getSuggestedUsersSkeleton`."""
 
     dids: t.List[string_formats.Did]  #: Dids.
-    rec_id: t.Optional[int] = None  #: Snowflake for this recommendation, use when submitting recommendation events.
+    rec_id: t.Optional[str] = None  #: Snowflake for this recommendation, use when submitting recommendation events.

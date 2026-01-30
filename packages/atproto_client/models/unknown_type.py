@@ -27,6 +27,7 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyNotificationDeclaration.Record',
     'models.ChatBskyActorDeclaration.Record',
     'models.ComAtprotoLexiconSchema.Record',
+    'models.ComGermnetworkDeclaration.Record',
 ]
 UnknownRecordTypePydantic = te.Annotated[
     t.Union[
@@ -49,6 +50,7 @@ UnknownRecordTypePydantic = te.Annotated[
         'models.AppBskyNotificationDeclaration.Record',
         'models.ChatBskyActorDeclaration.Record',
         'models.ComAtprotoLexiconSchema.Record',
+        'models.ComGermnetworkDeclaration.Record',
     ],
     Field(discriminator='py_type'),
 ]

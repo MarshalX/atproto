@@ -29,6 +29,9 @@ class Main(base.ModelBase):
     captions: te.Annotated[t.Optional[t.List['models.AppBskyEmbedVideo.Caption']], Field(max_length=20)] = (
         None  #: Captions.
     )
+    presentation: t.Optional[t.Union[t.Literal['default'], t.Literal['gif'], str]] = (
+        None  #: A hint to the client about how to present the video.
+    )
 
     py_type: t.Literal['app.bsky.embed.video'] = Field(default='app.bsky.embed.video', alias='$type', frozen=True)
 
@@ -51,6 +54,9 @@ class View(base.ModelBase):
     playlist: string_formats.Uri  #: Playlist.
     alt: te.Annotated[t.Optional[str], Field(max_length=10000)] = None  #: Alt.
     aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None  #: Aspect ratio.
+    presentation: t.Optional[t.Union[t.Literal['default'], t.Literal['gif'], str]] = (
+        None  #: A hint to the client about how to present the video.
+    )
     thumbnail: t.Optional[string_formats.Uri] = None  #: Thumbnail.
 
     py_type: t.Literal['app.bsky.embed.video#view'] = Field(

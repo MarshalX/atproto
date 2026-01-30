@@ -285,6 +285,7 @@ from atproto_client.models.com.atproto.temp import dereference_scope as ComAtpro
 from atproto_client.models.com.atproto.temp import fetch_labels as ComAtprotoTempFetchLabels
 from atproto_client.models.com.atproto.temp import request_phone_verification as ComAtprotoTempRequestPhoneVerification
 from atproto_client.models.com.atproto.temp import revoke_account_credentials as ComAtprotoTempRevokeAccountCredentials
+from atproto_client.models.com.germnetwork import declaration as ComGermnetworkDeclaration
 from atproto_client.models.models_loader import load_models
 from atproto_client.models.tools.ozone.communication import create_template as ToolsOzoneCommunicationCreateTemplate
 from atproto_client.models.tools.ozone.communication import defs as ToolsOzoneCommunicationDefs
@@ -617,6 +618,7 @@ class _Ids:
     ComAtprotoTempFetchLabels: str = 'com.atproto.temp.fetchLabels'
     ComAtprotoTempRequestPhoneVerification: str = 'com.atproto.temp.requestPhoneVerification'
     ComAtprotoTempRevokeAccountCredentials: str = 'com.atproto.temp.revokeAccountCredentials'
+    ComGermnetworkDeclaration: str = 'com.germnetwork.declaration'
     ToolsOzoneCommunicationCreateTemplate: str = 'tools.ozone.communication.createTemplate'
     ToolsOzoneCommunicationDefs: str = 'tools.ozone.communication.defs'
     ToolsOzoneCommunicationDeleteTemplate: str = 'tools.ozone.communication.deleteTemplate'
