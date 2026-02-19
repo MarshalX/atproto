@@ -126,6 +126,9 @@ from atproto_client.models.app.bsky.unspecced import (
     get_onboarding_suggested_starter_packs_skeleton as AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton,
 )
 from atproto_client.models.app.bsky.unspecced import (
+    get_onboarding_suggested_users_skeleton as AppBskyUnspeccedGetOnboardingSuggestedUsersSkeleton,
+)
+from atproto_client.models.app.bsky.unspecced import (
     get_popular_feed_generators as AppBskyUnspeccedGetPopularFeedGenerators,
 )
 from atproto_client.models.app.bsky.unspecced import get_post_thread_other_v2 as AppBskyUnspeccedGetPostThreadOtherV2
@@ -133,6 +136,9 @@ from atproto_client.models.app.bsky.unspecced import get_post_thread_v2 as AppBs
 from atproto_client.models.app.bsky.unspecced import get_suggested_feeds as AppBskyUnspeccedGetSuggestedFeeds
 from atproto_client.models.app.bsky.unspecced import (
     get_suggested_feeds_skeleton as AppBskyUnspeccedGetSuggestedFeedsSkeleton,
+)
+from atproto_client.models.app.bsky.unspecced import (
+    get_suggested_onboarding_users as AppBskyUnspeccedGetSuggestedOnboardingUsers,
 )
 from atproto_client.models.app.bsky.unspecced import (
     get_suggested_starter_packs as AppBskyUnspeccedGetSuggestedStarterPacks,
@@ -476,11 +482,13 @@ class _Ids:
     AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton: str = (
         'app.bsky.unspecced.getOnboardingSuggestedStarterPacksSkeleton'
     )
+    AppBskyUnspeccedGetOnboardingSuggestedUsersSkeleton: str = 'app.bsky.unspecced.getOnboardingSuggestedUsersSkeleton'
     AppBskyUnspeccedGetPopularFeedGenerators: str = 'app.bsky.unspecced.getPopularFeedGenerators'
     AppBskyUnspeccedGetPostThreadOtherV2: str = 'app.bsky.unspecced.getPostThreadOtherV2'
     AppBskyUnspeccedGetPostThreadV2: str = 'app.bsky.unspecced.getPostThreadV2'
     AppBskyUnspeccedGetSuggestedFeeds: str = 'app.bsky.unspecced.getSuggestedFeeds'
     AppBskyUnspeccedGetSuggestedFeedsSkeleton: str = 'app.bsky.unspecced.getSuggestedFeedsSkeleton'
+    AppBskyUnspeccedGetSuggestedOnboardingUsers: str = 'app.bsky.unspecced.getSuggestedOnboardingUsers'
     AppBskyUnspeccedGetSuggestedStarterPacks: str = 'app.bsky.unspecced.getSuggestedStarterPacks'
     AppBskyUnspeccedGetSuggestedStarterPacksSkeleton: str = 'app.bsky.unspecced.getSuggestedStarterPacksSkeleton'
     AppBskyUnspeccedGetSuggestedUsers: str = 'app.bsky.unspecced.getSuggestedUsers'

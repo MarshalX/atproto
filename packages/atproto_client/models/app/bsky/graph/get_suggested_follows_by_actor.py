@@ -31,4 +31,5 @@ class Response(base.ResponseModelBase):
     is_fallback: t.Optional[bool] = (
         False  #: If true, response has fallen-back to generic results, and is not scoped using relativeToDid.
     )
-    rec_id: t.Optional[int] = None  #: Snowflake for this recommendation, use when submitting recommendation events.
+    rec_id: t.Optional[int] = None  #: DEPRECATED: use recIdStr instead.
+    rec_id_str: t.Optional[str] = None  #: Snowflake for this recommendation, use when submitting recommendation events.

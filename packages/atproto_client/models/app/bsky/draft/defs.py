@@ -34,6 +34,12 @@ class Draft(base.ModelBase):
     posts: t.List['models.AppBskyDraftDefs.DraftPost'] = Field(
         min_length=1, max_length=100
     )  #: Array of draft posts that compose this draft.
+    device_id: te.Annotated[t.Optional[str], Field(max_length=100)] = (
+        None  #: UUIDv4 identifier of the device that created this draft.
+    )
+    device_name: te.Annotated[t.Optional[str], Field(max_length=100)] = (
+        None  #: The device and/or platform on which the draft was created.
+    )
     langs: te.Annotated[t.Optional[t.List[string_formats.Language]], Field(max_length=3)] = (
         None  #: Indicates human language of posts primary text content.
     )
@@ -62,7 +68,9 @@ class Draft(base.ModelBase):
 class DraftPost(base.ModelBase):
     """Definition model for :obj:`app.bsky.draft.defs`. One of the posts that compose a draft."""
 
-    text: str = Field(max_length=3000)  #: The primary post content.
+    text: str = Field(
+        max_length=10000
+    )  #: The primary post content. It has a higher limit than post contents to allow storing a larger text that can later be refined into smaller posts.
     embed_externals: te.Annotated[
         t.Optional[t.List['models.AppBskyDraftDefs.DraftEmbedExternal']], Field(max_length=1)
     ] = None  #: Embed externals.

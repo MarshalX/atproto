@@ -4812,6 +4812,40 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton.Response)
 
+    def get_onboarding_suggested_users_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetOnboardingSuggestedUsersSkeleton.Params,
+                models.AppBskyUnspeccedGetOnboardingSuggestedUsersSkeleton.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetOnboardingSuggestedUsersSkeleton.Response':
+        """Get a skeleton of suggested users for onboarding. Intended to be called and hydrated by app.bsky.unspecced.getSuggestedOnboardingUsers.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetOnboardingSuggestedUsersSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetOnboardingSuggestedUsersSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetOnboardingSuggestedUsersSkeleton.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getOnboardingSuggestedUsersSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetOnboardingSuggestedUsersSkeleton.Response)
+
     def get_popular_feed_generators(
         self,
         params: t.Optional[
@@ -4965,6 +4999,40 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.AppBskyUnspeccedGetSuggestedFeedsSkeleton.Response)
+
+    def get_suggested_onboarding_users(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedOnboardingUsers.Params,
+                models.AppBskyUnspeccedGetSuggestedOnboardingUsers.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedOnboardingUsers.Response':
+        """Get a list of suggested users for onboarding.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedOnboardingUsers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedOnboardingUsers.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedOnboardingUsers.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedOnboardingUsers',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedOnboardingUsers.Response)
 
     def get_suggested_starter_packs(
         self,
