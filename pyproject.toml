@@ -160,7 +160,7 @@ ignore = [
     "D105", "D104", "D100", "D107", "D103", "D415", # missing docstring
     "D101", "D102", # missing docstring in public class and method
 ]
-"tests/*.py" = ["D", "S105"]
+"tests/*.py" = ["D", "S105", "S106"]
 "docs/*.py" = ["T201", "INP001", "ERA001", "E501", "D"]
 "examples/*.py" = ["T201", "INP001", "ERA001", "D"]
 "packages/atproto/exceptions.py" = ["F403"]
