@@ -1,10 +1,11 @@
 """Tests for OAuth client implementation."""
 
 import typing as t
+from datetime import datetime, timedelta, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-from atproto_oauth import OAuthClient, PromptType
+from atproto_oauth import OAuthClient, OAuthState, PromptType
 from atproto_oauth.stores.memory import MemorySessionStore, MemoryStateStore
 
 
@@ -132,3 +133,119 @@ async def test_prompt_in_par_params(
         assert captured_params['prompt'] == prompt
     else:
         assert 'prompt' not in captured_params
+
+
+@pytest.mark.asyncio
+async def test_handle_callback_sets_expires_at(oauth_client: OAuthClient) -> None:
+    """Test that handle_callback computes expires_at from expires_in."""
+    from cryptography.hazmat.primitives.asymmetric import ec
+
+    dpop_key = ec.generate_private_key(ec.SECP256R1())
+
+    # Store a state so handle_callback can find it
+    state = OAuthState(
+        state='test-state',
+        pkce_verifier='verifier123',
+        redirect_uri='https://example.com/callback',
+        scope='atproto',
+        authserver_iss='https://auth.example.com',
+        dpop_private_key=dpop_key,
+        dpop_authserver_nonce='nonce',
+        did='did:plc:test123',
+        handle='test.bsky.social',
+        pds_url='https://pds.example.com',
+    )
+    await oauth_client.state_store.save_state(state)
+
+    token_response_data = {
+        'access_token': 'access-token-123',
+        'token_type': 'DPoP',
+        'scope': 'atproto',
+        'sub': 'did:plc:test123',
+        'refresh_token': 'refresh-token-123',
+        'expires_in': 3600,
+    }
+
+    async def mock_make_token_request(
+        token_url: str, params: dict, dpop_key: t.Any, dpop_nonce: str, issuer: t.Optional[str] = None
+    ) -> tuple[str, MagicMock]:
+        response = MagicMock()
+        response.status_code = 200
+        response.json.return_value = token_response_data
+        return 'nonce-updated', response
+
+    oauth_client._make_token_request = mock_make_token_request  # type: ignore[method-assign]
+
+    with patch(
+        'atproto_oauth.client.fetch_authserver_metadata_async',
+        new=AsyncMock(
+            return_value=MagicMock(
+                issuer='https://auth.example.com',
+                token_endpoint='https://auth.example.com/token',
+            )
+        ),
+    ):
+        before = datetime.now(timezone.utc)
+        session = await oauth_client.handle_callback(
+            code='auth-code-123', state='test-state', iss='https://auth.example.com'
+        )
+        after = datetime.now(timezone.utc)
+
+    assert session.expires_at is not None
+    expected_min = before + timedelta(seconds=3600)
+    expected_max = after + timedelta(seconds=3600)
+    assert expected_min <= session.expires_at <= expected_max
+
+
+@pytest.mark.asyncio
+async def test_handle_callback_no_expires_in(oauth_client: OAuthClient) -> None:
+    """Test that expires_at is None when server omits expires_in."""
+    from cryptography.hazmat.primitives.asymmetric import ec
+
+    dpop_key = ec.generate_private_key(ec.SECP256R1())
+
+    state = OAuthState(
+        state='test-state-2',
+        pkce_verifier='verifier123',
+        redirect_uri='https://example.com/callback',
+        scope='atproto',
+        authserver_iss='https://auth.example.com',
+        dpop_private_key=dpop_key,
+        dpop_authserver_nonce='nonce',
+        did='did:plc:test123',
+        handle='test.bsky.social',
+        pds_url='https://pds.example.com',
+    )
+    await oauth_client.state_store.save_state(state)
+
+    token_response_data = {
+        'access_token': 'access-token-456',
+        'token_type': 'DPoP',
+        'scope': 'atproto',
+        'sub': 'did:plc:test123',
+    }
+
+    async def mock_make_token_request(
+        token_url: str, params: dict, dpop_key: t.Any, dpop_nonce: str, issuer: t.Optional[str] = None
+    ) -> tuple[str, MagicMock]:
+        response = MagicMock()
+        response.status_code = 200
+        response.json.return_value = token_response_data
+        return 'nonce-updated', response
+
+    oauth_client._make_token_request = mock_make_token_request  # type: ignore[method-assign]
+
+    with patch(
+        'atproto_oauth.client.fetch_authserver_metadata_async',
+        new=AsyncMock(
+            return_value=MagicMock(
+                issuer='https://auth.example.com',
+                token_endpoint='https://auth.example.com/token',
+            )
+        ),
+    ):
+        session = await oauth_client.handle_callback(
+            code='auth-code-456', state='test-state-2', iss='https://auth.example.com'
+        )
+
+    assert session.expires_at is None

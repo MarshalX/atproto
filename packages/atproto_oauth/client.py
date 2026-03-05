@@ -3,6 +3,7 @@
 import secrets
 import time
 import typing as t
+from datetime import datetime, timedelta, timezone
 from urllib.parse import urlencode
 
 import httpx
@@ -248,6 +249,10 @@ class OAuthClient:
             raise OAuthTokenError(f'Scope mismatch: expected {self.scope}, got {token_response.scope}')
 
         # 4. Create and store session
+        expires_at = None
+        if token_response.expires_in is not None:
+            expires_at = datetime.now(timezone.utc) + timedelta(seconds=token_response.expires_in)
+
         session = OAuthSession(
             did=oauth_state.did or token_response.sub,
             handle=oauth_state.handle or '',
@@ -258,6 +263,7 @@ class OAuthClient:
             dpop_private_key=oauth_state.dpop_private_key,
             dpop_authserver_nonce=dpop_nonce,
             scope=token_response.scope,
+            expires_at=expires_at,
         )
 
         await self.session_store.save_session(session)
@@ -316,6 +322,10 @@ class OAuthClient:
         session.refresh_token = token_response.refresh_token
         session.dpop_authserver_nonce = dpop_nonce
         session.scope = token_response.scope
+        if token_response.expires_in is not None:
+            session.expires_at = datetime.now(timezone.utc) + timedelta(seconds=token_response.expires_in)
+        else:
+            session.expires_at = None
 
         await self.session_store.save_session(session)
 
