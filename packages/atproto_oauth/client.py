@@ -17,7 +17,10 @@ from atproto_oauth.metadata import (
 )
 from atproto_oauth.models import AuthServerMetadata, OAuthSession, OAuthState, TokenResponse
 from atproto_oauth.pkce import PKCEManager
-from atproto_oauth.security import is_safe_url
+from atproto_oauth.security import (
+    get_hardened_async_client,
+    is_safe_url,
+)
 from atproto_oauth.stores.base import SessionStore, StateStore
 
 if t.TYPE_CHECKING:
@@ -51,7 +54,7 @@ def _scopes_are_equivalent(requested: str, granted: str) -> bool:
     requested_parts = set(requested.split())
     granted_parts = set(granted.split())
 
-    # The bare 'atproto' token is implicit
+    # Remove 'atproto' (required by spec, always present on both sides)
     requested_parts.discard('atproto')
     granted_parts.discard('atproto')
 
@@ -241,14 +244,28 @@ class OAuthClient:
             oauth_state=oauth_state,
         )
 
-        # 3. Verify token response (skip DID check for account creation where did is unknown)
+        # 3. Verify token response
         if oauth_state.did is not None and token_response.sub != oauth_state.did:
             raise OAuthTokenError(f'DID mismatch in token: expected {oauth_state.did}, got {token_response.sub}')
 
         if not _scopes_are_equivalent(self.scope, token_response.scope):
             raise OAuthTokenError(f'Scope mismatch: expected {self.scope}, got {token_response.scope}')
 
-        # 4. Create and store session
+        # 4. Re-verify DID->PDS->AuthServer chain (no cache) to prevent impersonation
+        verified_did = oauth_state.did or token_response.sub
+        atproto_data = await self._id_resolver.did.resolve_atproto_data(verified_did, force_refresh=True)
+        if not atproto_data.pds:
+            raise OAuthTokenError(f'No PDS endpoint found for {verified_did}')
+
+        verified_authserver = await discover_authserver_from_pds_async(atproto_data.pds)
+        verified_authserver = verified_authserver.rstrip('/')
+        if verified_authserver != oauth_state.authserver_iss:
+            raise OAuthTokenError(
+                f'Auth server mismatch on re-verification: '
+                f'expected {oauth_state.authserver_iss}, got {verified_authserver}'
+            )
+
+        # 5. Create and store session
         expires_at = None
         if token_response.expires_in is not None:
             expires_at = datetime.now(timezone.utc) + timedelta(seconds=token_response.expires_in)
@@ -411,7 +428,7 @@ class OAuthClient:
             headers['DPoP'] = dpop_proof
 
             # Make request
-            async with httpx.AsyncClient() as client:
+            async with get_hardened_async_client() as client:
                 response = await client.request(method, url, headers=headers, **kwargs)
 
             # Check for DPoP nonce error
@@ -574,7 +591,7 @@ class OAuthClient:
             )
 
             # Make request
-            async with httpx.AsyncClient() as client:
+            async with get_hardened_async_client() as client:
                 response = await client.post(
                     token_url,
                     data=params,
@@ -602,14 +619,14 @@ class OAuthClient:
         if not self.client_secret_kid:
             raise ValueError('Client secret kid required for client assertion')
 
-        header = {
+        header: t.Dict[str, str] = {
             'alg': 'ES256',
             'typ': 'JWT',
             'kid': self.client_secret_kid,
         }
 
         now = int(time.time())
-        payload = {
+        payload: t.Dict[str, t.Union[str, int]] = {
             'iss': self.client_id,
             'sub': self.client_id,
             'aud': audience,

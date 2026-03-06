@@ -97,7 +97,7 @@ The built-in ``MemoryStateStore`` and ``MemorySessionStore`` work for developmen
 Confidential clients
 --------------------
 
-Server-side applications can use confidential client authentication with ``private_key_jwt`` for stronger security. Provide your signing key when creating the client:
+Server-side applications can use confidential client authentication with ``private_key_jwt`` for stronger security. See the `AT Protocol OAuth spec on confidential clients <https://atproto.com/specs/oauth#confidential-clients>`_ for details. Provide your signing key when creating the client:
 
 ..  code-block:: python
 

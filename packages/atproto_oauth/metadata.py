@@ -1,10 +1,13 @@
 """Authorization server metadata discovery."""
 
-import httpx
-
 from atproto_oauth.exceptions import UnsupportedAuthServerError
 from atproto_oauth.models import AuthServerMetadata
-from atproto_oauth.security import is_safe_url, validate_authserver_metadata
+from atproto_oauth.security import (
+    get_hardened_async_client,
+    get_hardened_client,
+    is_safe_url,
+    validate_authserver_metadata,
+)
 
 
 async def discover_authserver_from_pds_async(pds_url: str, timeout: float = 5.0) -> str:
@@ -24,7 +27,7 @@ async def discover_authserver_from_pds_async(pds_url: str, timeout: float = 5.0)
     if not is_safe_url(pds_url):
         raise ValueError(f'Unsafe PDS URL: {pds_url}')
 
-    async with httpx.AsyncClient(timeout=timeout) as client:
+    async with get_hardened_async_client(timeout=timeout) as client:
         response = await client.get(f'{pds_url}/.well-known/oauth-protected-resource')
         response.raise_for_status()
 
@@ -55,7 +58,7 @@ def discover_authserver_from_pds(pds_url: str, timeout: float = 5.0) -> str:
     if not is_safe_url(pds_url):
         raise ValueError(f'Unsafe PDS URL: {pds_url}')
 
-    with httpx.Client(timeout=timeout) as client:
+    with get_hardened_client(timeout=timeout) as client:
         response = client.get(f'{pds_url}/.well-known/oauth-protected-resource')
         response.raise_for_status()
 
@@ -93,7 +96,7 @@ async def fetch_authserver_metadata_async(authserver_url: str, timeout: float = 
 
     fetch_url = f'{authserver_url}/.well-known/oauth-authorization-server'
 
-    async with httpx.AsyncClient(timeout=timeout) as client:
+    async with get_hardened_async_client(timeout=timeout) as client:
         response = await client.get(fetch_url)
         response.raise_for_status()
 
@@ -146,7 +149,7 @@ def fetch_authserver_metadata(authserver_url: str, timeout: float = 5.0) -> Auth
 
     fetch_url = f'{authserver_url}/.well-known/oauth-authorization-server'
 
-    with httpx.Client(timeout=timeout) as client:
+    with get_hardened_client(timeout=timeout) as client:
         response = client.get(fetch_url)
         response.raise_for_status()
 
