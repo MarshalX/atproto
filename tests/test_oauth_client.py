@@ -176,13 +176,23 @@ async def test_handle_callback_sets_expires_at(oauth_client: OAuthClient) -> Non
 
     oauth_client._make_token_request = mock_make_token_request  # type: ignore[method-assign]
 
-    with patch(
-        'atproto_oauth.client.fetch_authserver_metadata_async',
-        new=AsyncMock(
-            return_value=MagicMock(
-                issuer='https://auth.example.com',
-                token_endpoint='https://auth.example.com/token',
-            )
+    # Mock the identity resolver for re-verification step
+    mock_atproto_data = MagicMock(pds='https://pds.example.com')
+    oauth_client._id_resolver.did.resolve_atproto_data = AsyncMock(return_value=mock_atproto_data)
+
+    with (
+        patch(
+            'atproto_oauth.client.fetch_authserver_metadata_async',
+            new=AsyncMock(
+                return_value=MagicMock(
+                    issuer='https://auth.example.com',
+                    token_endpoint='https://auth.example.com/token',
+                )
+            ),
+        ),
+        patch(
+            'atproto_oauth.client.discover_authserver_from_pds_async',
+            new=AsyncMock(return_value='https://auth.example.com'),
         ),
     ):
         before = datetime.now(timezone.utc)
@@ -235,13 +245,23 @@ async def test_handle_callback_no_expires_in(oauth_client: OAuthClient) -> None:
 
     oauth_client._make_token_request = mock_make_token_request  # type: ignore[method-assign]
 
-    with patch(
-        'atproto_oauth.client.fetch_authserver_metadata_async',
-        new=AsyncMock(
-            return_value=MagicMock(
-                issuer='https://auth.example.com',
-                token_endpoint='https://auth.example.com/token',
-            )
+    # Mock the identity resolver for re-verification step
+    mock_atproto_data = MagicMock(pds='https://pds.example.com')
+    oauth_client._id_resolver.did.resolve_atproto_data = AsyncMock(return_value=mock_atproto_data)
+
+    with (
+        patch(
+            'atproto_oauth.client.fetch_authserver_metadata_async',
+            new=AsyncMock(
+                return_value=MagicMock(
+                    issuer='https://auth.example.com',
+                    token_endpoint='https://auth.example.com/token',
+                )
+            ),
+        ),
+        patch(
+            'atproto_oauth.client.discover_authserver_from_pds_async',
+            new=AsyncMock(return_value='https://auth.example.com'),
         ),
     ):
         session = await oauth_client.handle_callback(

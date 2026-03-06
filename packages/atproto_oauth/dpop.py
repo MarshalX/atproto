@@ -179,7 +179,7 @@ class DPoPManager:
                 error_body = response.json()
                 if isinstance(error_body, dict) and error_body.get('error') == 'use_dpop_nonce':
                     return response.headers.get('DPoP-Nonce')
-            except Exception:
+            except (ValueError, KeyError):
                 pass
 
         return None
@@ -207,7 +207,7 @@ class DPoPManager:
             error_body = response.json()
             if isinstance(error_body, dict) and error_body.get('error') == 'use_dpop_nonce':
                 return True
-        except Exception:
+        except (ValueError, KeyError):
             pass
 
         return False
