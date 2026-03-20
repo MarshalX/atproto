@@ -46,6 +46,7 @@ class ModEventView(base.ModelBase):
             'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
             'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
             'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
+            'models.ToolsOzoneModerationDefs.AgeAssurancePurgeEvent',
             'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
             'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
             'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
@@ -99,6 +100,7 @@ class ModEventViewDetail(base.ModelBase):
             'models.ToolsOzoneModerationDefs.ModEventPriorityScore',
             'models.ToolsOzoneModerationDefs.AgeAssuranceEvent',
             'models.ToolsOzoneModerationDefs.AgeAssuranceOverrideEvent',
+            'models.ToolsOzoneModerationDefs.AgeAssurancePurgeEvent',
             'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
             'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
             'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
@@ -421,6 +423,16 @@ class AgeAssuranceOverrideEvent(base.ModelBase):
 
     py_type: t.Literal['tools.ozone.moderation.defs#ageAssuranceOverrideEvent'] = Field(
         default='tools.ozone.moderation.defs#ageAssuranceOverrideEvent', alias='$type', frozen=True
+    )
+
+
+class AgeAssurancePurgeEvent(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`. Purges all age assurance events for the subject. Only works on DID subjects. Moderator-only."""
+
+    comment: str = Field(min_length=1)  #: Comment describing the reason for the purge.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#ageAssurancePurgeEvent'] = Field(
+        default='tools.ozone.moderation.defs#ageAssurancePurgeEvent', alias='$type', frozen=True
     )
 
 

@@ -32,4 +32,5 @@ class Response(base.ResponseModelBase):
 
     actors: t.List['models.AppBskyActorDefs.ProfileView']  #: Actors.
     cursor: t.Optional[str] = None  #: Cursor.
-    rec_id: t.Optional[int] = None  #: Snowflake for this recommendation, use when submitting recommendation events.
+    rec_id: t.Optional[int] = None  #: DEPRECATED: use recIdStr instead.
+    rec_id_str: t.Optional[str] = None  #: Snowflake for this recommendation, use when submitting recommendation events.

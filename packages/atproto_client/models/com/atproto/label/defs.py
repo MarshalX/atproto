@@ -99,15 +99,12 @@ class LabelValueDefinitionStrings(base.ModelBase):
 
 LabelValue = t.Union[
     t.Literal['!hide'],
-    t.Literal['!no-promote'],
     t.Literal['!warn'],
     t.Literal['!no-unauthenticated'],
-    t.Literal['dmca-violation'],
-    t.Literal['doxxing'],
     t.Literal['porn'],
     t.Literal['sexual'],
     t.Literal['nudity'],
-    t.Literal['nsfl'],
-    t.Literal['gore'],
+    t.Literal['graphic-media'],
+    t.Literal['bot'],
     str,
 ]  #: Label value
