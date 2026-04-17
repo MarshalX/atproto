@@ -29,7 +29,7 @@ class Image(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.images`."""
 
     alt: str  #: Alt text description of the image, for accessibility.
-    image: 'BlobRef'  #: Image.
+    image: 'BlobRef'  #: The raw image file. May be up to 2 MB, formerly limited to 1 MB.
     aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None  #: Aspect ratio.
 
     py_type: t.Literal['app.bsky.embed.images#image'] = Field(

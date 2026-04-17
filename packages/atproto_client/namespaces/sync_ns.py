@@ -5132,6 +5132,210 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetSuggestedUsers.Response)
 
+    def get_suggested_users_for_discover(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedUsersForDiscover.Params,
+                models.AppBskyUnspeccedGetSuggestedUsersForDiscover.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedUsersForDiscover.Response':
+        """Get a list of suggested users for the Discover page.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedUsersForDiscover.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedUsersForDiscover.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedUsersForDiscover.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedUsersForDiscover',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedUsersForDiscover.Response)
+
+    def get_suggested_users_for_discover_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedUsersForDiscoverSkeleton.Params,
+                models.AppBskyUnspeccedGetSuggestedUsersForDiscoverSkeleton.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedUsersForDiscoverSkeleton.Response':
+        """Get a skeleton of suggested users for the Discover page. Intended to be called and hydrated by app.bsky.unspecced.getSuggestedUsersForDiscover.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedUsersForDiscoverSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedUsersForDiscoverSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedUsersForDiscoverSkeleton.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedUsersForDiscoverSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedUsersForDiscoverSkeleton.Response)
+
+    def get_suggested_users_for_explore(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedUsersForExplore.Params,
+                models.AppBskyUnspeccedGetSuggestedUsersForExplore.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedUsersForExplore.Response':
+        """Get a list of suggested users for the Explore page.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedUsersForExplore.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedUsersForExplore.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedUsersForExplore.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedUsersForExplore',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedUsersForExplore.Response)
+
+    def get_suggested_users_for_explore_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedUsersForExploreSkeleton.Params,
+                models.AppBskyUnspeccedGetSuggestedUsersForExploreSkeleton.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedUsersForExploreSkeleton.Response':
+        """Get a skeleton of suggested users for the Explore page. Intended to be called and hydrated by app.bsky.unspecced.getSuggestedUsersForExplore.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedUsersForExploreSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedUsersForExploreSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedUsersForExploreSkeleton.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedUsersForExploreSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedUsersForExploreSkeleton.Response)
+
+    def get_suggested_users_for_see_more(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedUsersForSeeMore.Params,
+                models.AppBskyUnspeccedGetSuggestedUsersForSeeMore.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedUsersForSeeMore.Response':
+        """Get a list of suggested users for the See More page.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedUsersForSeeMore.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedUsersForSeeMore.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedUsersForSeeMore.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedUsersForSeeMore',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedUsersForSeeMore.Response)
+
+    def get_suggested_users_for_see_more_skeleton(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetSuggestedUsersForSeeMoreSkeleton.Params,
+                models.AppBskyUnspeccedGetSuggestedUsersForSeeMoreSkeleton.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetSuggestedUsersForSeeMoreSkeleton.Response':
+        """Get a skeleton of suggested users for the See More page. Intended to be called and hydrated by app.bsky.unspecced.getSuggestedUsersForSeeMore.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetSuggestedUsersForSeeMoreSkeleton.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetSuggestedUsersForSeeMoreSkeleton.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetSuggestedUsersForSeeMoreSkeleton.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getSuggestedUsersForSeeMoreSkeleton',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetSuggestedUsersForSeeMoreSkeleton.Response)
+
     def get_suggested_users_skeleton(
         self,
         params: t.Optional[
@@ -5516,6 +5720,7 @@ class ChatBskyNamespace(NamespaceBase):
         super().__init__(client)
         self.actor = ChatBskyActorNamespace(self._client)
         self.convo = ChatBskyConvoNamespace(self._client)
+        self.group = ChatBskyGroupNamespace(self._client)
         self.moderation = ChatBskyModerationNamespace(self._client)
 
 
@@ -5717,7 +5922,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         data: t.Union[models.ChatBskyConvoAcceptConvo.Data, models.ChatBskyConvoAcceptConvo.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoAcceptConvo.Response':
-        """Accept convo.
+        """Marks a conversation as accepted, so it is shown in the list of accepted convos instead on the request convos.
 
         Args:
             data: Input data.
@@ -5775,7 +5980,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         data: t.Union[models.ChatBskyConvoDeleteMessageForSelf.Data, models.ChatBskyConvoDeleteMessageForSelf.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoDefs.DeletedMessageView':
-        """Delete message for self.
+        """Marks a message as deleted for the viewer, so they won't see that message in future enumerations.
 
         Args:
             data: Input data.
@@ -5805,7 +6010,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         params: t.Union[models.ChatBskyConvoGetConvo.Params, models.ChatBskyConvoGetConvo.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoGetConvo.Response':
-        """Get convo.
+        """Gets an existing conversation by its ID.
 
         Args:
             params: Parameters.
@@ -5832,7 +6037,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoGetConvoAvailability.Response':
-        """Get whether the requester and the other members can chat. If an existing convo is found for these members, it is returned.
+        """Check whether the requester and the other members can start a 1-1 chat. Only applicable to direct (non-group) conversations. If an existing convo is found for these members, it is returned. Does not create a new convo if it doesn't exist.
 
         Args:
             params: Parameters.
@@ -5860,7 +6065,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoGetConvoForMembers.Response':
-        """Get convo for members.
+        """Get or create a 1-1 conversation for the given members. Always returns the same direct (non-group) conversation. To create a group conversation, use createGroup.
 
         Args:
             params: Parameters.
@@ -5911,7 +6116,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         params: t.Union[models.ChatBskyConvoGetMessages.Params, models.ChatBskyConvoGetMessages.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoGetMessages.Response':
-        """Get messages.
+        """Returns a page of messages from a conversation.
 
         Args:
             params: Parameters.
@@ -5936,7 +6141,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         data: t.Union[models.ChatBskyConvoLeaveConvo.Data, models.ChatBskyConvoLeaveConvo.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoLeaveConvo.Response':
-        """Leave convo.
+        """Leaves a conversation (direct or group). For group, this effectively removes membership. For direct, membership is never removed, only changed to remove from enumerations by the user who left.
 
         Args:
             data: Input data.
@@ -5960,6 +6165,34 @@ class ChatBskyConvoNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ChatBskyConvoLeaveConvo.Response)
 
+    def list_convo_requests(
+        self,
+        params: t.Optional[
+            t.Union[models.ChatBskyConvoListConvoRequests.Params, models.ChatBskyConvoListConvoRequests.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyConvoListConvoRequests.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a page of incoming conversation requests for the user. Direct convo requests are returned as convoView; group join requests are returned as joinRequestView.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyConvoListConvoRequests.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ChatBskyConvoListConvoRequests.Params',
+            get_or_create(params, models.ChatBskyConvoListConvoRequests.Params),
+        )
+        response = self._client.invoke_query(
+            'chat.bsky.convo.listConvoRequests', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyConvoListConvoRequests.Response)
+
     def list_convos(
         self,
         params: t.Optional[
@@ -5967,7 +6200,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoListConvos.Response':
-        """List convos.
+        """Returns a page of conversations (direct or group) for the user.
 
         Args:
             params: Parameters.
@@ -5987,10 +6220,37 @@ class ChatBskyConvoNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ChatBskyConvoListConvos.Response)
 
+    def lock_convo(
+        self, data: t.Union[models.ChatBskyConvoLockConvo.Data, models.ChatBskyConvoLockConvo.DataDict], **kwargs: t.Any
+    ) -> 'models.ChatBskyConvoLockConvo.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Locks a group convo so no more content (messages, reactions) can be added to it.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyConvoLockConvo.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyConvoLockConvo.Data', get_or_create(data, models.ChatBskyConvoLockConvo.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.convo.lockConvo',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyConvoLockConvo.Response)
+
     def mute_convo(
         self, data: t.Union[models.ChatBskyConvoMuteConvo.Data, models.ChatBskyConvoMuteConvo.DataDict], **kwargs: t.Any
     ) -> 'models.ChatBskyConvoMuteConvo.Response':
-        """Mute convo.
+        """Mutes a conversation, preventing notifications related to it.
 
         Args:
             data: Input data.
@@ -6048,7 +6308,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         data: t.Union[models.ChatBskyConvoSendMessage.Data, models.ChatBskyConvoSendMessage.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoDefs.MessageView':
-        """Send message.
+        """Sends a message to a conversation.
 
         Args:
             data: Input data.
@@ -6077,7 +6337,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         data: t.Union[models.ChatBskyConvoSendMessageBatch.Data, models.ChatBskyConvoSendMessageBatch.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoSendMessageBatch.Response':
-        """Send message batch.
+        """Sends a batch of messages to a conversation.
 
         Args:
             data: Input data.
@@ -6101,12 +6361,41 @@ class ChatBskyConvoNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ChatBskyConvoSendMessageBatch.Response)
 
+    def unlock_convo(
+        self,
+        data: t.Union[models.ChatBskyConvoUnlockConvo.Data, models.ChatBskyConvoUnlockConvo.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyConvoUnlockConvo.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Unlocks a group convo so it is able to receive new content.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyConvoUnlockConvo.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyConvoUnlockConvo.Data', get_or_create(data, models.ChatBskyConvoUnlockConvo.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.convo.unlockConvo',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyConvoUnlockConvo.Response)
+
     def unmute_convo(
         self,
         data: t.Union[models.ChatBskyConvoUnmuteConvo.Data, models.ChatBskyConvoUnmuteConvo.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoUnmuteConvo.Response':
-        """Unmute convo.
+        """Unmutes a conversation, allowing notifications related to it.
 
         Args:
             data: Input data.
@@ -6137,7 +6426,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoUpdateAllRead.Response':
-        """Update all read.
+        """Sets conversations from a user as read to the latest message, with filters.
 
         Args:
             data: Input data.
@@ -6166,7 +6455,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         data: t.Union[models.ChatBskyConvoUpdateRead.Data, models.ChatBskyConvoUpdateRead.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoUpdateRead.Response':
-        """Update read.
+        """Updates the read state of a conversation from, optionally specifying the last read message.
 
         Args:
             data: Input data.
@@ -6189,6 +6478,381 @@ class ChatBskyConvoNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ChatBskyConvoUpdateRead.Response)
+
+
+class ChatBskyGroupNamespace(NamespaceBase):
+    def add_members(
+        self,
+        data: t.Union[models.ChatBskyGroupAddMembers.Data, models.ChatBskyGroupAddMembers.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupAddMembers.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Adds members to a group. The members are added in 'request' status, so they have to accept it. This creates convo memberships.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupAddMembers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupAddMembers.Data', get_or_create(data, models.ChatBskyGroupAddMembers.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.addMembers',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupAddMembers.Response)
+
+    def approve_join_request(
+        self,
+        data: t.Union[models.ChatBskyGroupApproveJoinRequest.Data, models.ChatBskyGroupApproveJoinRequest.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupApproveJoinRequest.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Approves a request to join a group (via join link) the user owns. Action taken by the group owner.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupApproveJoinRequest.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupApproveJoinRequest.Data',
+            get_or_create(data, models.ChatBskyGroupApproveJoinRequest.Data),
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.approveJoinRequest',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupApproveJoinRequest.Response)
+
+    def create_group(
+        self,
+        data: t.Union[models.ChatBskyGroupCreateGroup.Data, models.ChatBskyGroupCreateGroup.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupCreateGroup.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Creates a group convo, specifying the members to be added to it. Unlike getConvoForMembers, this isn't idempotent. It will create new groups even if the membership is identical to pre-existing groups. Will create 'pending' membership for all members, except the owner who is 'accepted'.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupCreateGroup.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupCreateGroup.Data', get_or_create(data, models.ChatBskyGroupCreateGroup.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.createGroup',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupCreateGroup.Response)
+
+    def create_join_link(
+        self,
+        data: t.Union[models.ChatBskyGroupCreateJoinLink.Data, models.ChatBskyGroupCreateJoinLink.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupCreateJoinLink.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Creates a join link for the group convo.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupCreateJoinLink.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupCreateJoinLink.Data', get_or_create(data, models.ChatBskyGroupCreateJoinLink.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.createJoinLink',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupCreateJoinLink.Response)
+
+    def disable_join_link(
+        self,
+        data: t.Union[models.ChatBskyGroupDisableJoinLink.Data, models.ChatBskyGroupDisableJoinLink.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupDisableJoinLink.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Disables the active join link for the group convo.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupDisableJoinLink.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupDisableJoinLink.Data', get_or_create(data, models.ChatBskyGroupDisableJoinLink.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.disableJoinLink',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupDisableJoinLink.Response)
+
+    def edit_group(
+        self, data: t.Union[models.ChatBskyGroupEditGroup.Data, models.ChatBskyGroupEditGroup.DataDict], **kwargs: t.Any
+    ) -> 'models.ChatBskyGroupEditGroup.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Edits group settings.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupEditGroup.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupEditGroup.Data', get_or_create(data, models.ChatBskyGroupEditGroup.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.editGroup',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupEditGroup.Response)
+
+    def edit_join_link(
+        self,
+        data: t.Union[models.ChatBskyGroupEditJoinLink.Data, models.ChatBskyGroupEditJoinLink.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupEditJoinLink.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Edits the existing join link settings for the group convo.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupEditJoinLink.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupEditJoinLink.Data', get_or_create(data, models.ChatBskyGroupEditJoinLink.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.editJoinLink',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupEditJoinLink.Response)
+
+    def enable_join_link(
+        self,
+        data: t.Union[models.ChatBskyGroupEnableJoinLink.Data, models.ChatBskyGroupEnableJoinLink.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupEnableJoinLink.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Re-enables a previously disabled join link for the group convo.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupEnableJoinLink.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupEnableJoinLink.Data', get_or_create(data, models.ChatBskyGroupEnableJoinLink.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.enableJoinLink',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupEnableJoinLink.Response)
+
+    def get_group_public_info(
+        self,
+        params: t.Union[
+            models.ChatBskyGroupGetGroupPublicInfo.Params, models.ChatBskyGroupGetGroupPublicInfo.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupGetGroupPublicInfo.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Get public information about a group from an join link.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupGetGroupPublicInfo.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ChatBskyGroupGetGroupPublicInfo.Params',
+            get_or_create(params, models.ChatBskyGroupGetGroupPublicInfo.Params),
+        )
+        response = self._client.invoke_query(
+            'chat.bsky.group.getGroupPublicInfo', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyGroupGetGroupPublicInfo.Response)
+
+    def list_join_requests(
+        self,
+        params: t.Union[models.ChatBskyGroupListJoinRequests.Params, models.ChatBskyGroupListJoinRequests.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupListJoinRequests.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Lists a page of request to join a group (via join link) the user owns. Shows the data from the owner's point of view.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupListJoinRequests.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ChatBskyGroupListJoinRequests.Params',
+            get_or_create(params, models.ChatBskyGroupListJoinRequests.Params),
+        )
+        response = self._client.invoke_query(
+            'chat.bsky.group.listJoinRequests', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyGroupListJoinRequests.Response)
+
+    def reject_join_request(
+        self,
+        data: t.Union[models.ChatBskyGroupRejectJoinRequest.Data, models.ChatBskyGroupRejectJoinRequest.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupRejectJoinRequest.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Rejects a request to join a group (via join link) the user owns. Action taken by the group owner.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupRejectJoinRequest.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupRejectJoinRequest.Data',
+            get_or_create(data, models.ChatBskyGroupRejectJoinRequest.Data),
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.rejectJoinRequest',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupRejectJoinRequest.Response)
+
+    def remove_members(
+        self,
+        data: t.Union[models.ChatBskyGroupRemoveMembers.Data, models.ChatBskyGroupRemoveMembers.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupRemoveMembers.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Removes members from a group. This deletes convo memberships, doesn't just set a status.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupRemoveMembers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupRemoveMembers.Data', get_or_create(data, models.ChatBskyGroupRemoveMembers.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.removeMembers',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupRemoveMembers.Response)
+
+    def request_join(
+        self,
+        data: t.Union[models.ChatBskyGroupRequestJoin.Data, models.ChatBskyGroupRequestJoin.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupRequestJoin.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Sends a request to join a group (via join link) to the group owner. Action taken by the prospective group member.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupRequestJoin.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupRequestJoin.Data', get_or_create(data, models.ChatBskyGroupRequestJoin.Data)
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.requestJoin',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupRequestJoin.Response)
 
 
 class ChatBskyModerationNamespace(NamespaceBase):

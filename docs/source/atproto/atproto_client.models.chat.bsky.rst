@@ -14,4 +14,5 @@ Subpackages
 
    atproto_client.models.chat.bsky.actor
    atproto_client.models.chat.bsky.convo
+   atproto_client.models.chat.bsky.group
    atproto_client.models.chat.bsky.moderation

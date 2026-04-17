@@ -27,6 +27,12 @@ Submodules
    atproto_client.models.app.bsky.unspecced.get_suggested_starter_packs
    atproto_client.models.app.bsky.unspecced.get_suggested_starter_packs_skeleton
    atproto_client.models.app.bsky.unspecced.get_suggested_users
+   atproto_client.models.app.bsky.unspecced.get_suggested_users_for_discover
+   atproto_client.models.app.bsky.unspecced.get_suggested_users_for_discover_skeleton
+   atproto_client.models.app.bsky.unspecced.get_suggested_users_for_explore
+   atproto_client.models.app.bsky.unspecced.get_suggested_users_for_explore_skeleton
+   atproto_client.models.app.bsky.unspecced.get_suggested_users_for_see_more
+   atproto_client.models.app.bsky.unspecced.get_suggested_users_for_see_more_skeleton
    atproto_client.models.app.bsky.unspecced.get_suggested_users_skeleton
    atproto_client.models.app.bsky.unspecced.get_suggestions_skeleton
    atproto_client.models.app.bsky.unspecced.get_tagged_suggestions

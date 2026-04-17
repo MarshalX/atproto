@@ -535,6 +535,7 @@ class StatusView(base.ModelBase):
     is_disabled: t.Optional[bool] = (
         None  #: True if the user's go-live access has been disabled by a moderator, false otherwise.
     )
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     uri: t.Optional[string_formats.AtUri] = None  #: Uri.
 
     py_type: t.Literal['app.bsky.actor.defs#statusView'] = Field(

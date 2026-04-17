@@ -34,7 +34,11 @@ class Response(base.ResponseModelBase):
 
     messages: t.List[
         te.Annotated[
-            t.Union['models.ChatBskyConvoDefs.MessageView', 'models.ChatBskyConvoDefs.DeletedMessageView'],
+            t.Union[
+                'models.ChatBskyConvoDefs.MessageView',
+                'models.ChatBskyConvoDefs.DeletedMessageView',
+                'models.ChatBskyConvoDefs.SystemMessageView',
+            ],
             Field(discriminator='py_type'),
         ]
     ]  #: Messages.

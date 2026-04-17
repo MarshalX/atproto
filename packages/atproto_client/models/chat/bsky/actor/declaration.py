@@ -18,6 +18,9 @@ class Record(base.RecordModelBase):
     """Record model for :obj:`chat.bsky.actor.declaration`."""
 
     allow_incoming: t.Union[t.Literal['all'], t.Literal['none'], t.Literal['following'], str]  #: Allow incoming.
+    allow_group_invites: t.Optional[t.Union[t.Literal['all'], t.Literal['none'], t.Literal['following'], str]] = (
+        None  #: [NOTE: This is under active development and should be considered unstable while this note is here]. Declaration about group chat invitation preferences for the record owner.
+    )
 
     py_type: t.Literal['chat.bsky.actor.declaration'] = Field(
         default='chat.bsky.actor.declaration', alias='$type', frozen=True

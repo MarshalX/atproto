@@ -22,11 +22,14 @@ Submodules
    atproto_client.models.chat.bsky.convo.get_log
    atproto_client.models.chat.bsky.convo.get_messages
    atproto_client.models.chat.bsky.convo.leave_convo
+   atproto_client.models.chat.bsky.convo.list_convo_requests
    atproto_client.models.chat.bsky.convo.list_convos
+   atproto_client.models.chat.bsky.convo.lock_convo
    atproto_client.models.chat.bsky.convo.mute_convo
    atproto_client.models.chat.bsky.convo.remove_reaction
    atproto_client.models.chat.bsky.convo.send_message
    atproto_client.models.chat.bsky.convo.send_message_batch
+   atproto_client.models.chat.bsky.convo.unlock_convo
    atproto_client.models.chat.bsky.convo.unmute_convo
    atproto_client.models.chat.bsky.convo.update_all_read
    atproto_client.models.chat.bsky.convo.update_read

@@ -148,6 +148,24 @@ from atproto_client.models.app.bsky.unspecced import (
 )
 from atproto_client.models.app.bsky.unspecced import get_suggested_users as AppBskyUnspeccedGetSuggestedUsers
 from atproto_client.models.app.bsky.unspecced import (
+    get_suggested_users_for_discover as AppBskyUnspeccedGetSuggestedUsersForDiscover,
+)
+from atproto_client.models.app.bsky.unspecced import (
+    get_suggested_users_for_discover_skeleton as AppBskyUnspeccedGetSuggestedUsersForDiscoverSkeleton,
+)
+from atproto_client.models.app.bsky.unspecced import (
+    get_suggested_users_for_explore as AppBskyUnspeccedGetSuggestedUsersForExplore,
+)
+from atproto_client.models.app.bsky.unspecced import (
+    get_suggested_users_for_explore_skeleton as AppBskyUnspeccedGetSuggestedUsersForExploreSkeleton,
+)
+from atproto_client.models.app.bsky.unspecced import (
+    get_suggested_users_for_see_more as AppBskyUnspeccedGetSuggestedUsersForSeeMore,
+)
+from atproto_client.models.app.bsky.unspecced import (
+    get_suggested_users_for_see_more_skeleton as AppBskyUnspeccedGetSuggestedUsersForSeeMoreSkeleton,
+)
+from atproto_client.models.app.bsky.unspecced import (
     get_suggested_users_skeleton as AppBskyUnspeccedGetSuggestedUsersSkeleton,
 )
 from atproto_client.models.app.bsky.unspecced import get_suggestions_skeleton as AppBskyUnspeccedGetSuggestionsSkeleton
@@ -179,16 +197,34 @@ from atproto_client.models.chat.bsky.convo import get_convo_for_members as ChatB
 from atproto_client.models.chat.bsky.convo import get_log as ChatBskyConvoGetLog
 from atproto_client.models.chat.bsky.convo import get_messages as ChatBskyConvoGetMessages
 from atproto_client.models.chat.bsky.convo import leave_convo as ChatBskyConvoLeaveConvo
+from atproto_client.models.chat.bsky.convo import list_convo_requests as ChatBskyConvoListConvoRequests
 from atproto_client.models.chat.bsky.convo import list_convos as ChatBskyConvoListConvos
+from atproto_client.models.chat.bsky.convo import lock_convo as ChatBskyConvoLockConvo
 from atproto_client.models.chat.bsky.convo import mute_convo as ChatBskyConvoMuteConvo
 from atproto_client.models.chat.bsky.convo import remove_reaction as ChatBskyConvoRemoveReaction
 from atproto_client.models.chat.bsky.convo import send_message as ChatBskyConvoSendMessage
 from atproto_client.models.chat.bsky.convo import send_message_batch as ChatBskyConvoSendMessageBatch
+from atproto_client.models.chat.bsky.convo import unlock_convo as ChatBskyConvoUnlockConvo
 from atproto_client.models.chat.bsky.convo import unmute_convo as ChatBskyConvoUnmuteConvo
 from atproto_client.models.chat.bsky.convo import update_all_read as ChatBskyConvoUpdateAllRead
 from atproto_client.models.chat.bsky.convo import update_read as ChatBskyConvoUpdateRead
+from atproto_client.models.chat.bsky.group import add_members as ChatBskyGroupAddMembers
+from atproto_client.models.chat.bsky.group import approve_join_request as ChatBskyGroupApproveJoinRequest
+from atproto_client.models.chat.bsky.group import create_group as ChatBskyGroupCreateGroup
+from atproto_client.models.chat.bsky.group import create_join_link as ChatBskyGroupCreateJoinLink
+from atproto_client.models.chat.bsky.group import defs as ChatBskyGroupDefs
+from atproto_client.models.chat.bsky.group import disable_join_link as ChatBskyGroupDisableJoinLink
+from atproto_client.models.chat.bsky.group import edit_group as ChatBskyGroupEditGroup
+from atproto_client.models.chat.bsky.group import edit_join_link as ChatBskyGroupEditJoinLink
+from atproto_client.models.chat.bsky.group import enable_join_link as ChatBskyGroupEnableJoinLink
+from atproto_client.models.chat.bsky.group import get_group_public_info as ChatBskyGroupGetGroupPublicInfo
+from atproto_client.models.chat.bsky.group import list_join_requests as ChatBskyGroupListJoinRequests
+from atproto_client.models.chat.bsky.group import reject_join_request as ChatBskyGroupRejectJoinRequest
+from atproto_client.models.chat.bsky.group import remove_members as ChatBskyGroupRemoveMembers
+from atproto_client.models.chat.bsky.group import request_join as ChatBskyGroupRequestJoin
 from atproto_client.models.chat.bsky.moderation import get_actor_metadata as ChatBskyModerationGetActorMetadata
 from atproto_client.models.chat.bsky.moderation import get_message_context as ChatBskyModerationGetMessageContext
+from atproto_client.models.chat.bsky.moderation import subscribe_mod_events as ChatBskyModerationSubscribeModEvents
 from atproto_client.models.chat.bsky.moderation import update_actor_access as ChatBskyModerationUpdateActorAccess
 from atproto_client.models.com.atproto.admin import defs as ComAtprotoAdminDefs
 from atproto_client.models.com.atproto.admin import delete_account as ComAtprotoAdminDeleteAccount
@@ -492,6 +528,14 @@ class _Ids:
     AppBskyUnspeccedGetSuggestedStarterPacks: str = 'app.bsky.unspecced.getSuggestedStarterPacks'
     AppBskyUnspeccedGetSuggestedStarterPacksSkeleton: str = 'app.bsky.unspecced.getSuggestedStarterPacksSkeleton'
     AppBskyUnspeccedGetSuggestedUsers: str = 'app.bsky.unspecced.getSuggestedUsers'
+    AppBskyUnspeccedGetSuggestedUsersForDiscover: str = 'app.bsky.unspecced.getSuggestedUsersForDiscover'
+    AppBskyUnspeccedGetSuggestedUsersForDiscoverSkeleton: str = (
+        'app.bsky.unspecced.getSuggestedUsersForDiscoverSkeleton'
+    )
+    AppBskyUnspeccedGetSuggestedUsersForExplore: str = 'app.bsky.unspecced.getSuggestedUsersForExplore'
+    AppBskyUnspeccedGetSuggestedUsersForExploreSkeleton: str = 'app.bsky.unspecced.getSuggestedUsersForExploreSkeleton'
+    AppBskyUnspeccedGetSuggestedUsersForSeeMore: str = 'app.bsky.unspecced.getSuggestedUsersForSeeMore'
+    AppBskyUnspeccedGetSuggestedUsersForSeeMoreSkeleton: str = 'app.bsky.unspecced.getSuggestedUsersForSeeMoreSkeleton'
     AppBskyUnspeccedGetSuggestedUsersSkeleton: str = 'app.bsky.unspecced.getSuggestedUsersSkeleton'
     AppBskyUnspeccedGetSuggestionsSkeleton: str = 'app.bsky.unspecced.getSuggestionsSkeleton'
     AppBskyUnspeccedGetTaggedSuggestions: str = 'app.bsky.unspecced.getTaggedSuggestions'
@@ -520,16 +564,34 @@ class _Ids:
     ChatBskyConvoGetLog: str = 'chat.bsky.convo.getLog'
     ChatBskyConvoGetMessages: str = 'chat.bsky.convo.getMessages'
     ChatBskyConvoLeaveConvo: str = 'chat.bsky.convo.leaveConvo'
+    ChatBskyConvoListConvoRequests: str = 'chat.bsky.convo.listConvoRequests'
     ChatBskyConvoListConvos: str = 'chat.bsky.convo.listConvos'
+    ChatBskyConvoLockConvo: str = 'chat.bsky.convo.lockConvo'
     ChatBskyConvoMuteConvo: str = 'chat.bsky.convo.muteConvo'
     ChatBskyConvoRemoveReaction: str = 'chat.bsky.convo.removeReaction'
     ChatBskyConvoSendMessage: str = 'chat.bsky.convo.sendMessage'
     ChatBskyConvoSendMessageBatch: str = 'chat.bsky.convo.sendMessageBatch'
+    ChatBskyConvoUnlockConvo: str = 'chat.bsky.convo.unlockConvo'
     ChatBskyConvoUnmuteConvo: str = 'chat.bsky.convo.unmuteConvo'
     ChatBskyConvoUpdateAllRead: str = 'chat.bsky.convo.updateAllRead'
     ChatBskyConvoUpdateRead: str = 'chat.bsky.convo.updateRead'
+    ChatBskyGroupAddMembers: str = 'chat.bsky.group.addMembers'
+    ChatBskyGroupApproveJoinRequest: str = 'chat.bsky.group.approveJoinRequest'
+    ChatBskyGroupCreateGroup: str = 'chat.bsky.group.createGroup'
+    ChatBskyGroupCreateJoinLink: str = 'chat.bsky.group.createJoinLink'
+    ChatBskyGroupDefs: str = 'chat.bsky.group.defs'
+    ChatBskyGroupDisableJoinLink: str = 'chat.bsky.group.disableJoinLink'
+    ChatBskyGroupEditGroup: str = 'chat.bsky.group.editGroup'
+    ChatBskyGroupEditJoinLink: str = 'chat.bsky.group.editJoinLink'
+    ChatBskyGroupEnableJoinLink: str = 'chat.bsky.group.enableJoinLink'
+    ChatBskyGroupGetGroupPublicInfo: str = 'chat.bsky.group.getGroupPublicInfo'
+    ChatBskyGroupListJoinRequests: str = 'chat.bsky.group.listJoinRequests'
+    ChatBskyGroupRejectJoinRequest: str = 'chat.bsky.group.rejectJoinRequest'
+    ChatBskyGroupRemoveMembers: str = 'chat.bsky.group.removeMembers'
+    ChatBskyGroupRequestJoin: str = 'chat.bsky.group.requestJoin'
     ChatBskyModerationGetActorMetadata: str = 'chat.bsky.moderation.getActorMetadata'
     ChatBskyModerationGetMessageContext: str = 'chat.bsky.moderation.getMessageContext'
+    ChatBskyModerationSubscribeModEvents: str = 'chat.bsky.moderation.subscribeModEvents'
     ChatBskyModerationUpdateActorAccess: str = 'chat.bsky.moderation.updateActorAccess'
     ComAtprotoAdminDefs: str = 'com.atproto.admin.defs'
     ComAtprotoAdminDeleteAccount: str = 'com.atproto.admin.deleteAccount'

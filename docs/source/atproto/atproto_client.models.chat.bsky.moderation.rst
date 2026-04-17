@@ -14,4 +14,5 @@ Submodules
 
    atproto_client.models.chat.bsky.moderation.get_actor_metadata
    atproto_client.models.chat.bsky.moderation.get_message_context
+   atproto_client.models.chat.bsky.moderation.subscribe_mod_events
    atproto_client.models.chat.bsky.moderation.update_actor_access
