@@ -32,3 +32,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`chat.bsky.group.addMembers`."""
 
     convo: 'models.ChatBskyConvoDefs.ConvoView'  #: Convo.
+    added_members: t.Optional[t.List['models.ChatBskyActorDefs.ProfileViewBasic']] = None  #: Added members.

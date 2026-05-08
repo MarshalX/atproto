@@ -116,6 +116,9 @@ class ProfileAssociatedChat(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
     allow_incoming: t.Union[t.Literal['all'], t.Literal['none'], t.Literal['following'], str]  #: Allow incoming.
+    allow_group_invites: t.Optional[t.Union[t.Literal['all'], t.Literal['none'], t.Literal['following'], str]] = (
+        None  #: Allow group invites.
+    )
 
     py_type: t.Literal['app.bsky.actor.defs#profileAssociatedChat'] = Field(
         default='app.bsky.actor.defs#profileAssociatedChat', alias='$type', frozen=True

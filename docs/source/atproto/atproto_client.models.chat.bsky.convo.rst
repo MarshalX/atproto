@@ -19,6 +19,7 @@ Submodules
    atproto_client.models.chat.bsky.convo.get_convo
    atproto_client.models.chat.bsky.convo.get_convo_availability
    atproto_client.models.chat.bsky.convo.get_convo_for_members
+   atproto_client.models.chat.bsky.convo.get_convo_members
    atproto_client.models.chat.bsky.convo.get_log
    atproto_client.models.chat.bsky.convo.get_messages
    atproto_client.models.chat.bsky.convo.leave_convo

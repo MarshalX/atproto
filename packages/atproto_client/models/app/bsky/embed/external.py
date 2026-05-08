@@ -31,6 +31,9 @@ class External(base.ModelBase):
     description: str  #: Description.
     title: str  #: Title.
     uri: string_formats.Uri  #: Uri.
+    associated_record: t.Optional[string_formats.AtUri] = (
+        None  #: The URI of the Atmosphere record representing this external content, if it exists. Example: a site.standard.document record.
+    )
     thumb: t.Optional['BlobRef'] = None  #: Thumb.
 
     py_type: t.Literal['app.bsky.embed.external#external'] = Field(

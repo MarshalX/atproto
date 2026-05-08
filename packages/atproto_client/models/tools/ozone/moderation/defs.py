@@ -556,6 +556,9 @@ class ModEventTag(base.ModelBase):
     add: t.List[str]  #: Tags to be added to the subject. If already exists, won't be duplicated.
     remove: t.List[str]  #: Tags to be removed to the subject. Ignores a tag If it doesn't exist, won't be duplicated.
     comment: t.Optional[str] = None  #: Additional comment about added/removed tags.
+    duration_in_hours: t.Optional[int] = (
+        None  #: Indicates how long the tags being added should remain before automatically being removed. Only applies to tags being added.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventTag'] = Field(
         default='tools.ozone.moderation.defs#modEventTag', alias='$type', frozen=True

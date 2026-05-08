@@ -6086,6 +6086,32 @@ class ChatBskyConvoNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ChatBskyConvoGetConvoForMembers.Response)
 
+    async def get_convo_members(
+        self,
+        params: t.Union[models.ChatBskyConvoGetConvoMembers.Params, models.ChatBskyConvoGetConvoMembers.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyConvoGetConvoMembers.Response':
+        """Returns a paginated list of members from a conversation.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyConvoGetConvoMembers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ChatBskyConvoGetConvoMembers.Params',
+            get_or_create(params, models.ChatBskyConvoGetConvoMembers.Params),
+        )
+        response = await self._client.invoke_query(
+            'chat.bsky.convo.getConvoMembers', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyConvoGetConvoMembers.Response)
+
     async def get_log(
         self,
         params: t.Optional[t.Union[models.ChatBskyConvoGetLog.Params, models.ChatBskyConvoGetLog.ParamsDict]] = None,

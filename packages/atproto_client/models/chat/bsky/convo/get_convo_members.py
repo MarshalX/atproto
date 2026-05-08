@@ -16,7 +16,7 @@ from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-    """Parameters model for :obj:`chat.bsky.convo.getMessages`."""
+    """Parameters model for :obj:`chat.bsky.convo.getConvoMembers`."""
 
     convo_id: str  #: Convo id.
     cursor: t.Optional[str] = None  #: Cursor.
@@ -30,19 +30,7 @@ class ParamsDict(t.TypedDict):
 
 
 class Response(base.ResponseModelBase):
-    """Output data model for :obj:`chat.bsky.convo.getMessages`."""
+    """Output data model for :obj:`chat.bsky.convo.getConvoMembers`."""
 
-    messages: t.List[
-        te.Annotated[
-            t.Union[
-                'models.ChatBskyConvoDefs.MessageView',
-                'models.ChatBskyConvoDefs.DeletedMessageView',
-                'models.ChatBskyConvoDefs.SystemMessageView',
-            ],
-            Field(discriminator='py_type'),
-        ]
-    ]  #: Messages.
+    members: t.List['models.ChatBskyActorDefs.ProfileViewBasic']  #: Members.
     cursor: t.Optional[str] = None  #: Cursor.
-    related_profiles: t.Optional[t.List['models.ChatBskyActorDefs.ProfileViewBasic']] = (
-        None  #: Set of all members who authored or reacted to the returned messages. Members referred to by system messages are also included.
-    )

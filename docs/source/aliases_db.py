@@ -155,6 +155,7 @@ ALIASES_DB = {
     'models.ChatBskyConvoGetConvo': 'atproto_client.models.chat.bsky.convo.get_convo',
     'models.ChatBskyConvoGetConvoAvailability': 'atproto_client.models.chat.bsky.convo.get_convo_availability',
     'models.ChatBskyConvoGetConvoForMembers': 'atproto_client.models.chat.bsky.convo.get_convo_for_members',
+    'models.ChatBskyConvoGetConvoMembers': 'atproto_client.models.chat.bsky.convo.get_convo_members',
     'models.ChatBskyConvoGetLog': 'atproto_client.models.chat.bsky.convo.get_log',
     'models.ChatBskyConvoGetMessages': 'atproto_client.models.chat.bsky.convo.get_messages',
     'models.ChatBskyConvoLeaveConvo': 'atproto_client.models.chat.bsky.convo.leave_convo',

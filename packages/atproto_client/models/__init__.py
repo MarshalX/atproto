@@ -194,6 +194,7 @@ from atproto_client.models.chat.bsky.convo import delete_message_for_self as Cha
 from atproto_client.models.chat.bsky.convo import get_convo as ChatBskyConvoGetConvo
 from atproto_client.models.chat.bsky.convo import get_convo_availability as ChatBskyConvoGetConvoAvailability
 from atproto_client.models.chat.bsky.convo import get_convo_for_members as ChatBskyConvoGetConvoForMembers
+from atproto_client.models.chat.bsky.convo import get_convo_members as ChatBskyConvoGetConvoMembers
 from atproto_client.models.chat.bsky.convo import get_log as ChatBskyConvoGetLog
 from atproto_client.models.chat.bsky.convo import get_messages as ChatBskyConvoGetMessages
 from atproto_client.models.chat.bsky.convo import leave_convo as ChatBskyConvoLeaveConvo
@@ -561,6 +562,7 @@ class _Ids:
     ChatBskyConvoGetConvo: str = 'chat.bsky.convo.getConvo'
     ChatBskyConvoGetConvoAvailability: str = 'chat.bsky.convo.getConvoAvailability'
     ChatBskyConvoGetConvoForMembers: str = 'chat.bsky.convo.getConvoForMembers'
+    ChatBskyConvoGetConvoMembers: str = 'chat.bsky.convo.getConvoMembers'
     ChatBskyConvoGetLog: str = 'chat.bsky.convo.getLog'
     ChatBskyConvoGetMessages: str = 'chat.bsky.convo.getMessages'
     ChatBskyConvoLeaveConvo: str = 'chat.bsky.convo.leaveConvo'

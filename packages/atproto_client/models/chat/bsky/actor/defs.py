@@ -31,7 +31,11 @@ class ProfileViewBasic(base.ModelBase):
     display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     kind: t.Optional[
         te.Annotated[
-            t.Union['models.ChatBskyActorDefs.DirectConvoMember', 'models.ChatBskyActorDefs.GroupConvoMember'],
+            t.Union[
+                'models.ChatBskyActorDefs.DirectConvoMember',
+                'models.ChatBskyActorDefs.GroupConvoMember',
+                'models.ChatBskyActorDefs.PastGroupConvoMember',
+            ],
             Field(discriminator='py_type'),
         ]
     ] = None  #: Union field that has data specific to different kinds of convos.
@@ -53,7 +57,7 @@ class DirectConvoMember(base.ModelBase):
 
 
 class GroupConvoMember(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.actor.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]."""
+    """Definition model for :obj:`chat.bsky.actor.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. A current group convo member."""
 
     role: 'models.ChatBskyActorDefs.MemberRole'  #: The member's role within this conversation. Only present in group conversation member lists.
     added_by: t.Optional['models.ChatBskyActorDefs.ProfileViewBasic'] = (
@@ -62,4 +66,12 @@ class GroupConvoMember(base.ModelBase):
 
     py_type: t.Literal['chat.bsky.actor.defs#groupConvoMember'] = Field(
         default='chat.bsky.actor.defs#groupConvoMember', alias='$type', frozen=True
+    )
+
+
+class PastGroupConvoMember(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.actor.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. A past group convo member."""
+
+    py_type: t.Literal['chat.bsky.actor.defs#pastGroupConvoMember'] = Field(
+        default='chat.bsky.actor.defs#pastGroupConvoMember', alias='$type', frozen=True
     )
