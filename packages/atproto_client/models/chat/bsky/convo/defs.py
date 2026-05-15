@@ -25,6 +25,17 @@ ConvoLockStatus = t.Union[
 ConvoStatus = t.Union[t.Literal['request'], t.Literal['accepted'], str]  #: Convo status
 
 
+class ConvoRef(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
+
+    convo_id: str  #: Convo id.
+    did: string_formats.Did  #: Did.
+
+    py_type: t.Literal['chat.bsky.convo.defs#convoRef'] = Field(
+        default='chat.bsky.convo.defs#convoRef', alias='$type', frozen=True
+    )
+
+
 class MessageRef(base.ModelBase):
     """Definition model for :obj:`chat.bsky.convo.defs`."""
 

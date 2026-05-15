@@ -218,7 +218,7 @@ from atproto_client.models.chat.bsky.group import disable_join_link as ChatBskyG
 from atproto_client.models.chat.bsky.group import edit_group as ChatBskyGroupEditGroup
 from atproto_client.models.chat.bsky.group import edit_join_link as ChatBskyGroupEditJoinLink
 from atproto_client.models.chat.bsky.group import enable_join_link as ChatBskyGroupEnableJoinLink
-from atproto_client.models.chat.bsky.group import get_group_public_info as ChatBskyGroupGetGroupPublicInfo
+from atproto_client.models.chat.bsky.group import get_join_link_preview as ChatBskyGroupGetJoinLinkPreview
 from atproto_client.models.chat.bsky.group import list_join_requests as ChatBskyGroupListJoinRequests
 from atproto_client.models.chat.bsky.group import reject_join_request as ChatBskyGroupRejectJoinRequest
 from atproto_client.models.chat.bsky.group import remove_members as ChatBskyGroupRemoveMembers
@@ -356,7 +356,28 @@ from atproto_client.models.tools.ozone.moderation import query_events as ToolsOz
 from atproto_client.models.tools.ozone.moderation import query_statuses as ToolsOzoneModerationQueryStatuses
 from atproto_client.models.tools.ozone.moderation import schedule_action as ToolsOzoneModerationScheduleAction
 from atproto_client.models.tools.ozone.moderation import search_repos as ToolsOzoneModerationSearchRepos
+from atproto_client.models.tools.ozone.queue import assign_moderator as ToolsOzoneQueueAssignModerator
+from atproto_client.models.tools.ozone.queue import create_queue as ToolsOzoneQueueCreateQueue
+from atproto_client.models.tools.ozone.queue import defs as ToolsOzoneQueueDefs
+from atproto_client.models.tools.ozone.queue import delete_queue as ToolsOzoneQueueDeleteQueue
+from atproto_client.models.tools.ozone.queue import get_assignments as ToolsOzoneQueueGetAssignments
+from atproto_client.models.tools.ozone.queue import list_queues as ToolsOzoneQueueListQueues
+from atproto_client.models.tools.ozone.queue import route_reports as ToolsOzoneQueueRouteReports
+from atproto_client.models.tools.ozone.queue import unassign_moderator as ToolsOzoneQueueUnassignModerator
+from atproto_client.models.tools.ozone.queue import update_queue as ToolsOzoneQueueUpdateQueue
+from atproto_client.models.tools.ozone.report import assign_moderator as ToolsOzoneReportAssignModerator
+from atproto_client.models.tools.ozone.report import create_activity as ToolsOzoneReportCreateActivity
 from atproto_client.models.tools.ozone.report import defs as ToolsOzoneReportDefs
+from atproto_client.models.tools.ozone.report import get_assignments as ToolsOzoneReportGetAssignments
+from atproto_client.models.tools.ozone.report import get_historical_stats as ToolsOzoneReportGetHistoricalStats
+from atproto_client.models.tools.ozone.report import get_latest_report as ToolsOzoneReportGetLatestReport
+from atproto_client.models.tools.ozone.report import get_live_stats as ToolsOzoneReportGetLiveStats
+from atproto_client.models.tools.ozone.report import get_report as ToolsOzoneReportGetReport
+from atproto_client.models.tools.ozone.report import list_activities as ToolsOzoneReportListActivities
+from atproto_client.models.tools.ozone.report import query_reports as ToolsOzoneReportQueryReports
+from atproto_client.models.tools.ozone.report import reassign_queue as ToolsOzoneReportReassignQueue
+from atproto_client.models.tools.ozone.report import refresh_stats as ToolsOzoneReportRefreshStats
+from atproto_client.models.tools.ozone.report import unassign_moderator as ToolsOzoneReportUnassignModerator
 from atproto_client.models.tools.ozone.safelink import add_rule as ToolsOzoneSafelinkAddRule
 from atproto_client.models.tools.ozone.safelink import defs as ToolsOzoneSafelinkDefs
 from atproto_client.models.tools.ozone.safelink import query_events as ToolsOzoneSafelinkQueryEvents
@@ -586,7 +607,7 @@ class _Ids:
     ChatBskyGroupEditGroup: str = 'chat.bsky.group.editGroup'
     ChatBskyGroupEditJoinLink: str = 'chat.bsky.group.editJoinLink'
     ChatBskyGroupEnableJoinLink: str = 'chat.bsky.group.enableJoinLink'
-    ChatBskyGroupGetGroupPublicInfo: str = 'chat.bsky.group.getGroupPublicInfo'
+    ChatBskyGroupGetJoinLinkPreview: str = 'chat.bsky.group.getJoinLinkPreview'
     ChatBskyGroupListJoinRequests: str = 'chat.bsky.group.listJoinRequests'
     ChatBskyGroupRejectJoinRequest: str = 'chat.bsky.group.rejectJoinRequest'
     ChatBskyGroupRemoveMembers: str = 'chat.bsky.group.removeMembers'
@@ -713,7 +734,28 @@ class _Ids:
     ToolsOzoneModerationQueryStatuses: str = 'tools.ozone.moderation.queryStatuses'
     ToolsOzoneModerationScheduleAction: str = 'tools.ozone.moderation.scheduleAction'
     ToolsOzoneModerationSearchRepos: str = 'tools.ozone.moderation.searchRepos'
+    ToolsOzoneQueueAssignModerator: str = 'tools.ozone.queue.assignModerator'
+    ToolsOzoneQueueCreateQueue: str = 'tools.ozone.queue.createQueue'
+    ToolsOzoneQueueDefs: str = 'tools.ozone.queue.defs'
+    ToolsOzoneQueueDeleteQueue: str = 'tools.ozone.queue.deleteQueue'
+    ToolsOzoneQueueGetAssignments: str = 'tools.ozone.queue.getAssignments'
+    ToolsOzoneQueueListQueues: str = 'tools.ozone.queue.listQueues'
+    ToolsOzoneQueueRouteReports: str = 'tools.ozone.queue.routeReports'
+    ToolsOzoneQueueUnassignModerator: str = 'tools.ozone.queue.unassignModerator'
+    ToolsOzoneQueueUpdateQueue: str = 'tools.ozone.queue.updateQueue'
+    ToolsOzoneReportAssignModerator: str = 'tools.ozone.report.assignModerator'
+    ToolsOzoneReportCreateActivity: str = 'tools.ozone.report.createActivity'
     ToolsOzoneReportDefs: str = 'tools.ozone.report.defs'
+    ToolsOzoneReportGetAssignments: str = 'tools.ozone.report.getAssignments'
+    ToolsOzoneReportGetHistoricalStats: str = 'tools.ozone.report.getHistoricalStats'
+    ToolsOzoneReportGetLatestReport: str = 'tools.ozone.report.getLatestReport'
+    ToolsOzoneReportGetLiveStats: str = 'tools.ozone.report.getLiveStats'
+    ToolsOzoneReportGetReport: str = 'tools.ozone.report.getReport'
+    ToolsOzoneReportListActivities: str = 'tools.ozone.report.listActivities'
+    ToolsOzoneReportQueryReports: str = 'tools.ozone.report.queryReports'
+    ToolsOzoneReportReassignQueue: str = 'tools.ozone.report.reassignQueue'
+    ToolsOzoneReportRefreshStats: str = 'tools.ozone.report.refreshStats'
+    ToolsOzoneReportUnassignModerator: str = 'tools.ozone.report.unassignModerator'
     ToolsOzoneSafelinkAddRule: str = 'tools.ozone.safelink.addRule'
     ToolsOzoneSafelinkDefs: str = 'tools.ozone.safelink.defs'
     ToolsOzoneSafelinkQueryEvents: str = 'tools.ozone.safelink.queryEvents'
