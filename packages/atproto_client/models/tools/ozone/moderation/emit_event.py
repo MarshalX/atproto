@@ -59,6 +59,9 @@ class Data(base.DataModelBase):
         None  #: An optional external ID for the event, used to deduplicate events from external systems. Fails when an event of same type with the same external ID exists for the same subject.
     )
     mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
+    report_action: t.Optional['models.ToolsOzoneModerationEmitEvent.ReportAction'] = (
+        None  #: Optional report-level targeting. If provided, this event will be linked to specific reports and reporters may be notified.
+    )
     subject_blob_cids: t.Optional[t.List[string_formats.Cid]] = None  #: Subject blob cids.
 
 
@@ -102,4 +105,22 @@ class DataDict(t.TypedDict):
         t.Optional[str]
     ]  #: An optional external ID for the event, used to deduplicate events from external systems. Fails when an event of same type with the same external ID exists for the same subject.
     mod_tool: te.NotRequired[t.Optional['models.ToolsOzoneModerationDefs.ModTool']]  #: Mod tool.
+    report_action: te.NotRequired[
+        t.Optional['models.ToolsOzoneModerationEmitEvent.ReportAction']
+    ]  #: Optional report-level targeting. If provided, this event will be linked to specific reports and reporters may be notified.
     subject_blob_cids: te.NotRequired[t.Optional[t.List[string_formats.Cid]]]  #: Subject blob cids.
+
+
+class ReportAction(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.emitEvent`. Target specific reports when emitting a moderation event."""
+
+    all: t.Optional[bool] = None  #: Target ALL reports on the subject.
+    ids: t.Optional[t.List[int]] = None  #: Target specific report IDs.
+    note: t.Optional[str] = None  #: Note to send to reporter(s) when actioning their report.
+    types: t.Optional[t.List[str]] = (
+        None  #: Target reports matching these report types on the subject (fully qualified NSIDs).
+    )
+
+    py_type: t.Literal['tools.ozone.moderation.emitEvent#reportAction'] = Field(
+        default='tools.ozone.moderation.emitEvent#reportAction', alias='$type', frozen=True
+    )

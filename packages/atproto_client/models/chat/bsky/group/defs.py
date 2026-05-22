@@ -34,16 +34,19 @@ class JoinLinkView(base.ModelBase):
     )
 
 
-class GroupPublicView(base.ModelBase):
+class JoinLinkPreviewView(base.ModelBase):
     """Definition model for :obj:`chat.bsky.group.defs`."""
 
     member_count: int  #: Member count.
     name: str  #: Name.
     owner: 'models.ChatBskyActorDefs.ProfileViewBasic'  #: Owner.
     require_approval: bool  #: Require approval.
+    convo: t.Optional['models.ChatBskyConvoDefs.ConvoView'] = (
+        None  #: Present only if the request is authenticated and the user is a member of the group.
+    )
 
-    py_type: t.Literal['chat.bsky.group.defs#groupPublicView'] = Field(
-        default='chat.bsky.group.defs#groupPublicView', alias='$type', frozen=True
+    py_type: t.Literal['chat.bsky.group.defs#joinLinkPreviewView'] = Field(
+        default='chat.bsky.group.defs#joinLinkPreviewView', alias='$type', frozen=True
     )
 
 

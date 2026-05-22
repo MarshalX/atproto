@@ -7,22 +7,14 @@
 
 import typing as t
 
-if t.TYPE_CHECKING:
-    from atproto_client import models
 from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-    """Parameters model for :obj:`chat.bsky.group.getGroupPublicInfo`."""
+    """Parameters model for :obj:`tools.ozone.report.getReport`."""
 
-    code: str  #: Code.
+    id: int  #: The ID of the report to retrieve.
 
 
 class ParamsDict(t.TypedDict):
-    code: str  #: Code.
-
-
-class Response(base.ResponseModelBase):
-    """Output data model for :obj:`chat.bsky.group.getGroupPublicInfo`."""
-
-    group: 'models.ChatBskyGroupDefs.GroupPublicView'  #: Group.
+    id: int  #: The ID of the report to retrieve.

@@ -6738,13 +6738,13 @@ class ChatBskyGroupNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ChatBskyGroupEnableJoinLink.Response)
 
-    def get_group_public_info(
+    def get_join_link_preview(
         self,
         params: t.Union[
-            models.ChatBskyGroupGetGroupPublicInfo.Params, models.ChatBskyGroupGetGroupPublicInfo.ParamsDict
+            models.ChatBskyGroupGetJoinLinkPreview.Params, models.ChatBskyGroupGetJoinLinkPreview.ParamsDict
         ],
         **kwargs: t.Any,
-    ) -> 'models.ChatBskyGroupGetGroupPublicInfo.Response':
+    ) -> 'models.ChatBskyGroupGetJoinLinkPreview.Response':
         """[NOTE: This is under active development and should be considered unstable while this note is here]. Get public information about a group from an join link.
 
         Args:
@@ -6752,19 +6752,19 @@ class ChatBskyGroupNamespace(NamespaceBase):
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ChatBskyGroupGetGroupPublicInfo.Response`: Output model.
+            :obj:`models.ChatBskyGroupGetJoinLinkPreview.Response`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         params_model = t.cast(
-            'models.ChatBskyGroupGetGroupPublicInfo.Params',
-            get_or_create(params, models.ChatBskyGroupGetGroupPublicInfo.Params),
+            'models.ChatBskyGroupGetJoinLinkPreview.Params',
+            get_or_create(params, models.ChatBskyGroupGetJoinLinkPreview.Params),
         )
         response = self._client.invoke_query(
-            'chat.bsky.group.getGroupPublicInfo', params=params_model, output_encoding='application/json', **kwargs
+            'chat.bsky.group.getJoinLinkPreview', params=params_model, output_encoding='application/json', **kwargs
         )
-        return get_response_model(response, models.ChatBskyGroupGetGroupPublicInfo.Response)
+        return get_response_model(response, models.ChatBskyGroupGetJoinLinkPreview.Response)
 
     def list_join_requests(
         self,
@@ -9476,6 +9476,8 @@ class ToolsOzoneNamespace(NamespaceBase):
         self.communication = ToolsOzoneCommunicationNamespace(self._client)
         self.hosting = ToolsOzoneHostingNamespace(self._client)
         self.moderation = ToolsOzoneModerationNamespace(self._client)
+        self.queue = ToolsOzoneQueueNamespace(self._client)
+        self.report = ToolsOzoneReportNamespace(self._client)
         self.safelink = ToolsOzoneSafelinkNamespace(self._client)
         self.server = ToolsOzoneServerNamespace(self._client)
         self.set = ToolsOzoneSetNamespace(self._client)
@@ -10057,6 +10059,576 @@ class ToolsOzoneModerationNamespace(NamespaceBase):
             'tools.ozone.moderation.searchRepos', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneModerationSearchRepos.Response)
+
+
+class ToolsOzoneQueueNamespace(NamespaceBase):
+    def assign_moderator(
+        self,
+        data: t.Union[models.ToolsOzoneQueueAssignModerator.Data, models.ToolsOzoneQueueAssignModerator.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneQueueDefs.AssignmentView':
+        """Assign a user to a queue.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneQueueDefs.AssignmentView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneQueueAssignModerator.Data',
+            get_or_create(data, models.ToolsOzoneQueueAssignModerator.Data),
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.queue.assignModerator',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneQueueDefs.AssignmentView)
+
+    def create_queue(
+        self,
+        data: t.Union[models.ToolsOzoneQueueCreateQueue.Data, models.ToolsOzoneQueueCreateQueue.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneQueueCreateQueue.Response':
+        """Create a new moderation queue. Will fail if the queue configuration conflicts with an existing queue.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneQueueCreateQueue.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneQueueCreateQueue.Data', get_or_create(data, models.ToolsOzoneQueueCreateQueue.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.queue.createQueue',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneQueueCreateQueue.Response)
+
+    def delete_queue(
+        self,
+        data: t.Union[models.ToolsOzoneQueueDeleteQueue.Data, models.ToolsOzoneQueueDeleteQueue.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneQueueDeleteQueue.Response':
+        """Delete a moderation queue. Optionally migrate reports to another queue.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneQueueDeleteQueue.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneQueueDeleteQueue.Data', get_or_create(data, models.ToolsOzoneQueueDeleteQueue.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.queue.deleteQueue',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneQueueDeleteQueue.Response)
+
+    def get_assignments(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneQueueGetAssignments.Params, models.ToolsOzoneQueueGetAssignments.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneQueueGetAssignments.Response':
+        """Get moderator assignments, optionally filtered by active status, queue, or moderator.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneQueueGetAssignments.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneQueueGetAssignments.Params',
+            get_or_create(params, models.ToolsOzoneQueueGetAssignments.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.queue.getAssignments', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneQueueGetAssignments.Response)
+
+    def list_queues(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneQueueListQueues.Params, models.ToolsOzoneQueueListQueues.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneQueueListQueues.Response':
+        """List all configured moderation queues with statistics.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneQueueListQueues.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneQueueListQueues.Params', get_or_create(params, models.ToolsOzoneQueueListQueues.Params)
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.queue.listQueues', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneQueueListQueues.Response)
+
+    def route_reports(
+        self,
+        data: t.Union[models.ToolsOzoneQueueRouteReports.Data, models.ToolsOzoneQueueRouteReports.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneQueueRouteReports.Response':
+        """Route reports within an ID range to matching queues based.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneQueueRouteReports.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneQueueRouteReports.Data', get_or_create(data, models.ToolsOzoneQueueRouteReports.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.queue.routeReports',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneQueueRouteReports.Response)
+
+    def unassign_moderator(
+        self,
+        data: t.Union[models.ToolsOzoneQueueUnassignModerator.Data, models.ToolsOzoneQueueUnassignModerator.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Remove a user's assignment from a queue.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneQueueUnassignModerator.Data',
+            get_or_create(data, models.ToolsOzoneQueueUnassignModerator.Data),
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.queue.unassignModerator', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    def update_queue(
+        self,
+        data: t.Union[models.ToolsOzoneQueueUpdateQueue.Data, models.ToolsOzoneQueueUpdateQueue.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneQueueUpdateQueue.Response':
+        """Update queue properties. Currently only supports updating the name and enabled status to prevent configuration conflicts.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneQueueUpdateQueue.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneQueueUpdateQueue.Data', get_or_create(data, models.ToolsOzoneQueueUpdateQueue.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.queue.updateQueue',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneQueueUpdateQueue.Response)
+
+
+class ToolsOzoneReportNamespace(NamespaceBase):
+    def assign_moderator(
+        self,
+        data: t.Union[models.ToolsOzoneReportAssignModerator.Data, models.ToolsOzoneReportAssignModerator.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportDefs.AssignmentView':
+        """Assign a report to a user. Defaults to the caller. Admins may assign to any moderator.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportDefs.AssignmentView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneReportAssignModerator.Data',
+            get_or_create(data, models.ToolsOzoneReportAssignModerator.Data),
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.report.assignModerator',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneReportDefs.AssignmentView)
+
+    def create_activity(
+        self,
+        data: t.Union[models.ToolsOzoneReportCreateActivity.Data, models.ToolsOzoneReportCreateActivity.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportCreateActivity.Response':
+        """Register an activity on a report. For state-change activity types, validates the transition and updates report.status atomically.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportCreateActivity.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneReportCreateActivity.Data',
+            get_or_create(data, models.ToolsOzoneReportCreateActivity.Data),
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.report.createActivity',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneReportCreateActivity.Response)
+
+    def get_assignments(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneReportGetAssignments.Params, models.ToolsOzoneReportGetAssignments.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportGetAssignments.Response':
+        """Get assignments for reports.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportGetAssignments.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneReportGetAssignments.Params',
+            get_or_create(params, models.ToolsOzoneReportGetAssignments.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.report.getAssignments', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneReportGetAssignments.Response)
+
+    def get_historical_stats(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.ToolsOzoneReportGetHistoricalStats.Params, models.ToolsOzoneReportGetHistoricalStats.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportGetHistoricalStats.Response':
+        """Get historical daily report statistics. Returns a paginated list of daily stat snapshots, newest first. Filter by queue, moderator, or report type.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportGetHistoricalStats.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneReportGetHistoricalStats.Params',
+            get_or_create(params, models.ToolsOzoneReportGetHistoricalStats.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.report.getHistoricalStats', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneReportGetHistoricalStats.Response)
+
+    def get_latest_report(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneReportGetLatestReport.Params, models.ToolsOzoneReportGetLatestReport.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportGetLatestReport.Response':
+        """Get the most recent report.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportGetLatestReport.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneReportGetLatestReport.Params',
+            get_or_create(params, models.ToolsOzoneReportGetLatestReport.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.report.getLatestReport', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneReportGetLatestReport.Response)
+
+    def get_live_stats(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneReportGetLiveStats.Params, models.ToolsOzoneReportGetLiveStats.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportGetLiveStats.Response':
+        """Get live report statistics from the past 24 hours. Filter by queue, moderator, or report type. Omit all parameters for aggregate stats.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportGetLiveStats.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneReportGetLiveStats.Params',
+            get_or_create(params, models.ToolsOzoneReportGetLiveStats.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.report.getLiveStats', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneReportGetLiveStats.Response)
+
+    def get_report(
+        self,
+        params: t.Union[models.ToolsOzoneReportGetReport.Params, models.ToolsOzoneReportGetReport.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportDefs.ReportView':
+        """Get details about a single moderation report by ID.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportDefs.ReportView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneReportGetReport.Params', get_or_create(params, models.ToolsOzoneReportGetReport.Params)
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.report.getReport', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneReportDefs.ReportView)
+
+    def list_activities(
+        self,
+        params: t.Union[models.ToolsOzoneReportListActivities.Params, models.ToolsOzoneReportListActivities.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportListActivities.Response':
+        """List all activities for a report, sorted most-recent-first.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportListActivities.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneReportListActivities.Params',
+            get_or_create(params, models.ToolsOzoneReportListActivities.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.report.listActivities', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneReportListActivities.Response)
+
+    def query_reports(
+        self,
+        params: t.Union[models.ToolsOzoneReportQueryReports.Params, models.ToolsOzoneReportQueryReports.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportQueryReports.Response':
+        """View moderation reports. Reports are individual instances of content being reported, as opposed to subject statuses which aggregate reports at the subject level.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportQueryReports.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneReportQueryReports.Params',
+            get_or_create(params, models.ToolsOzoneReportQueryReports.Params),
+        )
+        response = self._client.invoke_query(
+            'tools.ozone.report.queryReports', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneReportQueryReports.Response)
+
+    def reassign_queue(
+        self,
+        data: t.Union[models.ToolsOzoneReportReassignQueue.Data, models.ToolsOzoneReportReassignQueue.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportReassignQueue.Response':
+        """Manually reassign a report to a different queue (or unassign it). Records a queueActivity entry on the report.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportReassignQueue.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneReportReassignQueue.Data', get_or_create(data, models.ToolsOzoneReportReassignQueue.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.report.reassignQueue',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneReportReassignQueue.Response)
+
+    def refresh_stats(
+        self,
+        data: t.Union[models.ToolsOzoneReportRefreshStats.Data, models.ToolsOzoneReportRefreshStats.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportRefreshStats.Response':
+        """Recompute report statistics for a date range. Useful for backfilling after failures or data corrections.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportRefreshStats.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneReportRefreshStats.Data', get_or_create(data, models.ToolsOzoneReportRefreshStats.Data)
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.report.refreshStats',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneReportRefreshStats.Response)
+
+    def unassign_moderator(
+        self,
+        data: t.Union[models.ToolsOzoneReportUnassignModerator.Data, models.ToolsOzoneReportUnassignModerator.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportDefs.AssignmentView':
+        """Remove report assignment.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportDefs.AssignmentView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneReportUnassignModerator.Data',
+            get_or_create(data, models.ToolsOzoneReportUnassignModerator.Data),
+        )
+        response = self._client.invoke_procedure(
+            'tools.ozone.report.unassignModerator',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneReportDefs.AssignmentView)
 
 
 class ToolsOzoneSafelinkNamespace(NamespaceBase):
