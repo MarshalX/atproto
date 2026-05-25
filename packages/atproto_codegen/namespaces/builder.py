@@ -15,6 +15,9 @@ from atproto_lexicon.parser import lexicon_parse_dir
 
 _VALID_LEX_DEF_TYPES = {LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, LexDefinitionType.RECORD}
 
+# dict key used to attach a namespace's own methods/records alongside its child namespaces
+METHODS_KEY = ''
+
 
 def _filter_namespace_valid_definitions(definitions: t.Dict[str, LexDefinition]) -> t.Dict[str, LexDefinition]:
     result = {}
@@ -58,7 +61,7 @@ class RecordInfo(ObjectInfo):
 
 
 def _enrich_namespace_tree(root: dict, nsid: NSID, defs: t.Dict[str, LexDefinition]) -> None:
-    root_node: t.Union[dict, list] = root
+    root_node: dict = root
 
     segments_count = len(nsid.segments)
     for path_level, segment in enumerate(nsid.segments):
@@ -78,18 +81,10 @@ def _enrich_namespace_tree(root: dict, nsid: NSID, defs: t.Dict[str, LexDefiniti
 
             # TODO(MarshalX): fake records as namespaces with methods to be able to reuse code of generator?
 
-            if model_class:
-                root_node.append(model_class(name=segment, nsid=nsid, definition=definition))
-
+            root_node.setdefault(METHODS_KEY, []).append(model_class(name=segment, nsid=nsid, definition=definition))
             continue
 
-        if segment not in root_node:
-            # if end of method's path
-            if path_level == segments_count - 2:
-                root_node[segment] = []
-            else:
-                root_node[segment] = {}
-        root_node = root_node[segment]
+        root_node = root_node.setdefault(segment, {})
 
 
 def build_namespace_tree(lexicons: t.List[LexiconDoc]) -> dict:
