@@ -29,6 +29,7 @@ class AppBskyNamespace(NamespaceBase):
         self.bookmark = AppBskyBookmarkNamespace(self._client)
         self.contact = AppBskyContactNamespace(self._client)
         self.draft = AppBskyDraftNamespace(self._client)
+        self.embed = AppBskyEmbedNamespace(self._client)
         self.feed = AppBskyFeedNamespace(self._client)
         self.graph = AppBskyGraphNamespace(self._client)
         self.labeler = AppBskyLabelerNamespace(self._client)
@@ -1031,6 +1032,36 @@ class AppBskyDraftNamespace(NamespaceBase):
             'app.bsky.draft.updateDraft', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
+
+
+class AppBskyEmbedNamespace(NamespaceBase):
+    def get_embed_external_view(
+        self,
+        params: t.Union[
+            models.AppBskyEmbedGetEmbedExternalView.Params, models.AppBskyEmbedGetEmbedExternalView.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyEmbedGetEmbedExternalView.Response':
+        """Resolve one or more AT-URIs into the data needed to render an enhanced external embed. Returns `associatedRefs` (strongRefs to embed into a post's external.associatedRefs), the raw `associatedRecords`, and a hydrated `view`. The response is empty (`{}`) when no records were resolvable, or when validation determined the resolved records don't actually back the requested URL; clients should fall back to their own link-card rendering in that case and skip writing strongRefs to the post.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyEmbedGetEmbedExternalView.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyEmbedGetEmbedExternalView.Params',
+            get_or_create(params, models.AppBskyEmbedGetEmbedExternalView.Params),
+        )
+        response = self._client.invoke_query(
+            'app.bsky.embed.getEmbedExternalView', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyEmbedGetEmbedExternalView.Response)
 
 
 class AppBskyFeedGeneratorRecord(RecordBase):
@@ -5915,6 +5946,21 @@ class ChatBskyActorNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ChatBskyActorExportAccountData.Response)
 
+    def get_status(self, **kwargs: t.Any) -> 'models.ChatBskyActorGetStatus.Response':
+        """Get the authenticated viewer's chat status: whether their account is chat-disabled and whether their group-membership additions are restricted to accounts they follow.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyActorGetStatus.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = self._client.invoke_query('chat.bsky.actor.getStatus', output_encoding='application/json', **kwargs)
+        return get_response_model(response, models.ChatBskyActorGetStatus.Response)
+
 
 class ChatBskyConvoNamespace(NamespaceBase):
     def accept_convo(
@@ -6198,7 +6244,7 @@ class ChatBskyConvoNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoListConvoRequests.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a page of incoming conversation requests for the user. Direct convo requests are returned as convoView; group join requests are returned as joinRequestView.
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a page of incoming conversation requests for the user. Direct convo requests are returned as convoView; group join requests made by the user are returned as joinRequestConvoView.
 
         Args:
             params: Parameters.
@@ -6738,33 +6784,33 @@ class ChatBskyGroupNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ChatBskyGroupEnableJoinLink.Response)
 
-    def get_join_link_preview(
+    def get_join_link_previews(
         self,
         params: t.Union[
-            models.ChatBskyGroupGetJoinLinkPreview.Params, models.ChatBskyGroupGetJoinLinkPreview.ParamsDict
+            models.ChatBskyGroupGetJoinLinkPreviews.Params, models.ChatBskyGroupGetJoinLinkPreviews.ParamsDict
         ],
         **kwargs: t.Any,
-    ) -> 'models.ChatBskyGroupGetJoinLinkPreview.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Get public information about a group from an join link.
+    ) -> 'models.ChatBskyGroupGetJoinLinkPreviews.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Get public information about groups from join links. Invalid or disabled codes are silently omitted from results.
 
         Args:
             params: Parameters.
             **kwargs: Arbitrary arguments to HTTP request.
 
         Returns:
-            :obj:`models.ChatBskyGroupGetJoinLinkPreview.Response`: Output model.
+            :obj:`models.ChatBskyGroupGetJoinLinkPreviews.Response`: Output model.
 
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
         params_model = t.cast(
-            'models.ChatBskyGroupGetJoinLinkPreview.Params',
-            get_or_create(params, models.ChatBskyGroupGetJoinLinkPreview.Params),
+            'models.ChatBskyGroupGetJoinLinkPreviews.Params',
+            get_or_create(params, models.ChatBskyGroupGetJoinLinkPreviews.Params),
         )
         response = self._client.invoke_query(
-            'chat.bsky.group.getJoinLinkPreview', params=params_model, output_encoding='application/json', **kwargs
+            'chat.bsky.group.getJoinLinkPreviews', params=params_model, output_encoding='application/json', **kwargs
         )
-        return get_response_model(response, models.ChatBskyGroupGetJoinLinkPreview.Response)
+        return get_response_model(response, models.ChatBskyGroupGetJoinLinkPreviews.Response)
 
     def list_join_requests(
         self,
@@ -6791,6 +6837,32 @@ class ChatBskyGroupNamespace(NamespaceBase):
             'chat.bsky.group.listJoinRequests', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ChatBskyGroupListJoinRequests.Response)
+
+    def list_mutual_groups(
+        self,
+        params: t.Union[models.ChatBskyGroupListMutualGroups.Params, models.ChatBskyGroupListMutualGroups.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupListMutualGroups.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a page of group conversations that both the requester and the specified actor are members of.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupListMutualGroups.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ChatBskyGroupListMutualGroups.Params',
+            get_or_create(params, models.ChatBskyGroupListMutualGroups.Params),
+        )
+        response = self._client.invoke_query(
+            'chat.bsky.group.listMutualGroups', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyGroupListMutualGroups.Response)
 
     def reject_join_request(
         self,
@@ -9462,6 +9534,794 @@ class ComGermnetworkNamespace(NamespaceBase):
     def __init__(self, client: 'ClientRaw') -> None:
         super().__init__(client)
         self.declaration = ComGermnetworkDeclarationRecord(self._client)
+
+
+class SiteNamespace(NamespaceBase):
+    def __init__(self, client: 'ClientRaw') -> None:
+        super().__init__(client)
+        self.standard = SiteStandardNamespace(self._client)
+
+
+class SiteStandardDocumentRecord(RecordBase):
+    def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.SiteStandardDocument.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardDocument.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='site.standard.document', repo=repo, rkey=rkey, cid=cid
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.SiteStandardDocument.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.SiteStandardDocument.Record', response_model.value),
+        )
+
+    def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.SiteStandardDocument.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardDocument.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='site.standard.document',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.SiteStandardDocument.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.SiteStandardDocument.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    def create(
+        self,
+        repo: str,
+        record: 'models.SiteStandardDocument.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.SiteStandardDocument.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardDocument.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='site.standard.document',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.SiteStandardDocument.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='site.standard.document',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class SiteStandardPublicationRecord(RecordBase):
+    def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.SiteStandardPublication.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardPublication.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='site.standard.publication', repo=repo, rkey=rkey, cid=cid
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.SiteStandardPublication.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.SiteStandardPublication.Record', response_model.value),
+        )
+
+    def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.SiteStandardPublication.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardPublication.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='site.standard.publication',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.SiteStandardPublication.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.SiteStandardPublication.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    def create(
+        self,
+        repo: str,
+        record: 'models.SiteStandardPublication.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.SiteStandardPublication.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardPublication.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='site.standard.publication',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.SiteStandardPublication.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='site.standard.publication',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class SiteStandardNamespace(NamespaceBase):
+    def __init__(self, client: 'ClientRaw') -> None:
+        super().__init__(client)
+        self.graph = SiteStandardGraphNamespace(self._client)
+        self.theme = SiteStandardThemeNamespace(self._client)
+        self.document = SiteStandardDocumentRecord(self._client)
+        self.publication = SiteStandardPublicationRecord(self._client)
+
+
+class SiteStandardGraphRecommendRecord(RecordBase):
+    def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.SiteStandardGraphRecommend.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardGraphRecommend.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='site.standard.graph.recommend', repo=repo, rkey=rkey, cid=cid
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.SiteStandardGraphRecommend.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.SiteStandardGraphRecommend.Record', response_model.value),
+        )
+
+    def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.SiteStandardGraphRecommend.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardGraphRecommend.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='site.standard.graph.recommend',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.SiteStandardGraphRecommend.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.SiteStandardGraphRecommend.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    def create(
+        self,
+        repo: str,
+        record: 'models.SiteStandardGraphRecommend.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.SiteStandardGraphRecommend.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardGraphRecommend.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='site.standard.graph.recommend',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.SiteStandardGraphRecommend.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='site.standard.graph.recommend',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class SiteStandardGraphSubscriptionRecord(RecordBase):
+    def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.SiteStandardGraphSubscription.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardGraphSubscription.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='site.standard.graph.subscription', repo=repo, rkey=rkey, cid=cid
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.SiteStandardGraphSubscription.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.SiteStandardGraphSubscription.Record', response_model.value),
+        )
+
+    def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.SiteStandardGraphSubscription.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardGraphSubscription.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='site.standard.graph.subscription',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.SiteStandardGraphSubscription.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.SiteStandardGraphSubscription.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    def create(
+        self,
+        repo: str,
+        record: 'models.SiteStandardGraphSubscription.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.SiteStandardGraphSubscription.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardGraphSubscription.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='site.standard.graph.subscription',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.SiteStandardGraphSubscription.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='site.standard.graph.subscription',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class SiteStandardGraphNamespace(NamespaceBase):
+    def __init__(self, client: 'ClientRaw') -> None:
+        super().__init__(client)
+        self.recommend = SiteStandardGraphRecommendRecord(self._client)
+        self.subscription = SiteStandardGraphSubscriptionRecord(self._client)
+
+
+class SiteStandardThemeBasicRecord(RecordBase):
+    def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.SiteStandardThemeBasic.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardThemeBasic.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='site.standard.theme.basic', repo=repo, rkey=rkey, cid=cid
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.SiteStandardThemeBasic.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.SiteStandardThemeBasic.Record', response_model.value),
+        )
+
+    def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.SiteStandardThemeBasic.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardThemeBasic.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='site.standard.theme.basic',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.SiteStandardThemeBasic.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.SiteStandardThemeBasic.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    def create(
+        self,
+        repo: str,
+        record: 'models.SiteStandardThemeBasic.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.SiteStandardThemeBasic.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.SiteStandardThemeBasic.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='site.standard.theme.basic',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.SiteStandardThemeBasic.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='site.standard.theme.basic',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class SiteStandardThemeNamespace(NamespaceBase):
+    def __init__(self, client: 'ClientRaw') -> None:
+        super().__init__(client)
+        self.basic = SiteStandardThemeBasicRecord(self._client)
 
 
 class ToolsNamespace(NamespaceBase):

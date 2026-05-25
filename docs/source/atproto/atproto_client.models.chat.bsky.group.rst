@@ -21,8 +21,9 @@ Submodules
    atproto_client.models.chat.bsky.group.edit_group
    atproto_client.models.chat.bsky.group.edit_join_link
    atproto_client.models.chat.bsky.group.enable_join_link
-   atproto_client.models.chat.bsky.group.get_join_link_preview
+   atproto_client.models.chat.bsky.group.get_join_link_previews
    atproto_client.models.chat.bsky.group.list_join_requests
+   atproto_client.models.chat.bsky.group.list_mutual_groups
    atproto_client.models.chat.bsky.group.reject_join_request
    atproto_client.models.chat.bsky.group.remove_members
    atproto_client.models.chat.bsky.group.request_join

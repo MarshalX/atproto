@@ -32,6 +32,7 @@ from atproto_client.models.app.bsky.draft import get_drafts as AppBskyDraftGetDr
 from atproto_client.models.app.bsky.draft import update_draft as AppBskyDraftUpdateDraft
 from atproto_client.models.app.bsky.embed import defs as AppBskyEmbedDefs
 from atproto_client.models.app.bsky.embed import external as AppBskyEmbedExternal
+from atproto_client.models.app.bsky.embed import get_embed_external_view as AppBskyEmbedGetEmbedExternalView
 from atproto_client.models.app.bsky.embed import images as AppBskyEmbedImages
 from atproto_client.models.app.bsky.embed import record as AppBskyEmbedRecord
 from atproto_client.models.app.bsky.embed import record_with_media as AppBskyEmbedRecordWithMedia
@@ -187,6 +188,7 @@ from atproto_client.models.chat.bsky.actor import declaration as ChatBskyActorDe
 from atproto_client.models.chat.bsky.actor import defs as ChatBskyActorDefs
 from atproto_client.models.chat.bsky.actor import delete_account as ChatBskyActorDeleteAccount
 from atproto_client.models.chat.bsky.actor import export_account_data as ChatBskyActorExportAccountData
+from atproto_client.models.chat.bsky.actor import get_status as ChatBskyActorGetStatus
 from atproto_client.models.chat.bsky.convo import accept_convo as ChatBskyConvoAcceptConvo
 from atproto_client.models.chat.bsky.convo import add_reaction as ChatBskyConvoAddReaction
 from atproto_client.models.chat.bsky.convo import defs as ChatBskyConvoDefs
@@ -218,8 +220,9 @@ from atproto_client.models.chat.bsky.group import disable_join_link as ChatBskyG
 from atproto_client.models.chat.bsky.group import edit_group as ChatBskyGroupEditGroup
 from atproto_client.models.chat.bsky.group import edit_join_link as ChatBskyGroupEditJoinLink
 from atproto_client.models.chat.bsky.group import enable_join_link as ChatBskyGroupEnableJoinLink
-from atproto_client.models.chat.bsky.group import get_join_link_preview as ChatBskyGroupGetJoinLinkPreview
+from atproto_client.models.chat.bsky.group import get_join_link_previews as ChatBskyGroupGetJoinLinkPreviews
 from atproto_client.models.chat.bsky.group import list_join_requests as ChatBskyGroupListJoinRequests
+from atproto_client.models.chat.bsky.group import list_mutual_groups as ChatBskyGroupListMutualGroups
 from atproto_client.models.chat.bsky.group import reject_join_request as ChatBskyGroupRejectJoinRequest
 from atproto_client.models.chat.bsky.group import remove_members as ChatBskyGroupRemoveMembers
 from atproto_client.models.chat.bsky.group import request_join as ChatBskyGroupRequestJoin
@@ -330,6 +333,12 @@ from atproto_client.models.com.atproto.temp import request_phone_verification as
 from atproto_client.models.com.atproto.temp import revoke_account_credentials as ComAtprotoTempRevokeAccountCredentials
 from atproto_client.models.com.germnetwork import declaration as ComGermnetworkDeclaration
 from atproto_client.models.models_loader import load_models
+from atproto_client.models.site.standard import document as SiteStandardDocument
+from atproto_client.models.site.standard import publication as SiteStandardPublication
+from atproto_client.models.site.standard.graph import recommend as SiteStandardGraphRecommend
+from atproto_client.models.site.standard.graph import subscription as SiteStandardGraphSubscription
+from atproto_client.models.site.standard.theme import basic as SiteStandardThemeBasic
+from atproto_client.models.site.standard.theme import color as SiteStandardThemeColor
 from atproto_client.models.tools.ozone.communication import create_template as ToolsOzoneCommunicationCreateTemplate
 from atproto_client.models.tools.ozone.communication import defs as ToolsOzoneCommunicationDefs
 from atproto_client.models.tools.ozone.communication import delete_template as ToolsOzoneCommunicationDeleteTemplate
@@ -457,6 +466,7 @@ class _Ids:
     AppBskyDraftUpdateDraft: str = 'app.bsky.draft.updateDraft'
     AppBskyEmbedDefs: str = 'app.bsky.embed.defs'
     AppBskyEmbedExternal: str = 'app.bsky.embed.external'
+    AppBskyEmbedGetEmbedExternalView: str = 'app.bsky.embed.getEmbedExternalView'
     AppBskyEmbedImages: str = 'app.bsky.embed.images'
     AppBskyEmbedRecord: str = 'app.bsky.embed.record'
     AppBskyEmbedRecordWithMedia: str = 'app.bsky.embed.recordWithMedia'
@@ -576,6 +586,7 @@ class _Ids:
     ChatBskyActorDefs: str = 'chat.bsky.actor.defs'
     ChatBskyActorDeleteAccount: str = 'chat.bsky.actor.deleteAccount'
     ChatBskyActorExportAccountData: str = 'chat.bsky.actor.exportAccountData'
+    ChatBskyActorGetStatus: str = 'chat.bsky.actor.getStatus'
     ChatBskyConvoAcceptConvo: str = 'chat.bsky.convo.acceptConvo'
     ChatBskyConvoAddReaction: str = 'chat.bsky.convo.addReaction'
     ChatBskyConvoDefs: str = 'chat.bsky.convo.defs'
@@ -607,8 +618,9 @@ class _Ids:
     ChatBskyGroupEditGroup: str = 'chat.bsky.group.editGroup'
     ChatBskyGroupEditJoinLink: str = 'chat.bsky.group.editJoinLink'
     ChatBskyGroupEnableJoinLink: str = 'chat.bsky.group.enableJoinLink'
-    ChatBskyGroupGetJoinLinkPreview: str = 'chat.bsky.group.getJoinLinkPreview'
+    ChatBskyGroupGetJoinLinkPreviews: str = 'chat.bsky.group.getJoinLinkPreviews'
     ChatBskyGroupListJoinRequests: str = 'chat.bsky.group.listJoinRequests'
+    ChatBskyGroupListMutualGroups: str = 'chat.bsky.group.listMutualGroups'
     ChatBskyGroupRejectJoinRequest: str = 'chat.bsky.group.rejectJoinRequest'
     ChatBskyGroupRemoveMembers: str = 'chat.bsky.group.removeMembers'
     ChatBskyGroupRequestJoin: str = 'chat.bsky.group.requestJoin'
@@ -712,6 +724,12 @@ class _Ids:
     ComAtprotoTempRequestPhoneVerification: str = 'com.atproto.temp.requestPhoneVerification'
     ComAtprotoTempRevokeAccountCredentials: str = 'com.atproto.temp.revokeAccountCredentials'
     ComGermnetworkDeclaration: str = 'com.germnetwork.declaration'
+    SiteStandardDocument: str = 'site.standard.document'
+    SiteStandardPublication: str = 'site.standard.publication'
+    SiteStandardGraphRecommend: str = 'site.standard.graph.recommend'
+    SiteStandardGraphSubscription: str = 'site.standard.graph.subscription'
+    SiteStandardThemeBasic: str = 'site.standard.theme.basic'
+    SiteStandardThemeColor: str = 'site.standard.theme.color'
     ToolsOzoneCommunicationCreateTemplate: str = 'tools.ozone.communication.createTemplate'
     ToolsOzoneCommunicationDefs: str = 'tools.ozone.communication.defs'
     ToolsOzoneCommunicationDeleteTemplate: str = 'tools.ozone.communication.deleteTemplate'

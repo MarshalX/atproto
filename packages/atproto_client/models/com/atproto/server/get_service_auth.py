@@ -8,6 +8,7 @@
 import typing as t
 
 import typing_extensions as te
+from pydantic import Field
 
 from atproto_client.models import base, string_formats
 
@@ -15,7 +16,9 @@ from atproto_client.models import base, string_formats
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`com.atproto.server.getServiceAuth`."""
 
-    aud: string_formats.Did  #: The DID of the service that the token will be used to authenticate with.
+    aud: str = Field(
+        max_length=2048
+    )  #: The DID or `did#serviceId` reference of the service that the token will be used to authenticate with.
     exp: t.Optional[int] = (
         None  #: The time in Unix Epoch seconds that the JWT expires. Defaults to 60 seconds in the future. The service may enforce certain time bounds on tokens depending on the requested scope.
     )
@@ -23,7 +26,7 @@ class Params(base.ParamsModelBase):
 
 
 class ParamsDict(t.TypedDict):
-    aud: string_formats.Did  #: The DID of the service that the token will be used to authenticate with.
+    aud: str  #: The DID or `did#serviceId` reference of the service that the token will be used to authenticate with.
     exp: te.NotRequired[
         t.Optional[int]
     ]  #: The time in Unix Epoch seconds that the JWT expires. Defaults to 60 seconds in the future. The service may enforce certain time bounds on tokens depending on the requested scope.

@@ -7,22 +7,24 @@
 
 import typing as t
 
+from pydantic import Field
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
-    """Parameters model for :obj:`chat.bsky.group.getJoinLinkPreview`."""
+    """Parameters model for :obj:`chat.bsky.group.getJoinLinkPreviews`."""
 
-    code: str  #: Code.
+    codes: t.List[str] = Field(min_length=1, max_length=50)  #: Codes.
 
 
 class ParamsDict(t.TypedDict):
-    code: str  #: Code.
+    codes: t.List[str]  #: Codes.
 
 
 class Response(base.ResponseModelBase):
-    """Output data model for :obj:`chat.bsky.group.getJoinLinkPreview`."""
+    """Output data model for :obj:`chat.bsky.group.getJoinLinkPreviews`."""
 
-    join_link_preview: 'models.ChatBskyGroupDefs.JoinLinkPreviewView'  #: Join link preview.
+    join_link_previews: t.List['models.ChatBskyGroupDefs.JoinLinkPreviewView']  #: Join link previews.

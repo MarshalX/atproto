@@ -21,4 +21,9 @@ RECORD_TYPE_TO_MODEL_CLASS = {
     'chat.bsky.actor.declaration': models.ChatBskyActorDeclaration.Record,
     'com.atproto.lexicon.schema': models.ComAtprotoLexiconSchema.Record,
     'com.germnetwork.declaration': models.ComGermnetworkDeclaration.Record,
+    'site.standard.document': models.SiteStandardDocument.Record,
+    'site.standard.graph.recommend': models.SiteStandardGraphRecommend.Record,
+    'site.standard.graph.subscription': models.SiteStandardGraphSubscription.Record,
+    'site.standard.publication': models.SiteStandardPublication.Record,
+    'site.standard.theme.basic': models.SiteStandardThemeBasic.Record,
 }
