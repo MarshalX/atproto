@@ -32,7 +32,7 @@ class Response(base.ResponseModelBase):
 
     requests: t.List[
         te.Annotated[
-            t.Union['models.ChatBskyConvoDefs.ConvoView', 'models.ChatBskyGroupDefs.JoinRequestView'],
+            t.Union['models.ChatBskyConvoDefs.ConvoView', 'models.ChatBskyGroupDefs.JoinRequestConvoView'],
             Field(discriminator='py_type'),
         ]
     ]  #: Requests.

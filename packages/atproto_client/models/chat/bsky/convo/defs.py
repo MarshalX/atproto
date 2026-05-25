@@ -310,7 +310,7 @@ class ConvoView(base.ModelBase):
     id: str  #: Id.
     members: t.List[
         'models.ChatBskyActorDefs.ProfileViewBasic'
-    ]  #: Members of this conversation. For direct convos, it will be an immutable list of the 2 members. For group convos, it will a list of important members (the first few members, the viewer, the member who invited the viewer, the member who sent the last message, the member who sent the last reaction), but will not contain the full list of members. Use chat.bsky.convo.getConvoMembers to list all members.
+    ]  #: Members of this conversation. For direct convos, it will be an immutable list of the 2 members. For group convos, it will a list of important members (the first few members, the viewer, the member who added the viewer, the member who sent the last message, the member who sent the last reaction), but will not contain the full list of members. Use chat.bsky.convo.getConvoMembers to list all members.
     muted: bool  #: Muted.
     rev: str  #: Rev.
     unread_count: int  #: Unread count.
@@ -356,8 +356,12 @@ class GroupConvo(base.ModelBase):
     created_at: string_formats.DateTime  #: Created at.
     lock_status: 'models.ChatBskyConvoDefs.ConvoLockStatus'  #: The lock status of the conversation.
     member_count: int  #: The total number of members in the group conversation.
+    member_limit: int  #: The maximum number of members allowed in the group conversation.
     name: str = Field(max_length=1280)  #: The display name of the group conversation.
     join_link: t.Optional['models.ChatBskyGroupDefs.JoinLinkView'] = None  #: Join link.
+    join_request_count: t.Optional[int] = (
+        None  #: The total number of pending join requests for the group conversation. Only present for the owner. Capped at 21.
+    )
 
     py_type: t.Literal['chat.bsky.convo.defs#groupConvo'] = Field(
         default='chat.bsky.convo.defs#groupConvo', alias='$type', frozen=True

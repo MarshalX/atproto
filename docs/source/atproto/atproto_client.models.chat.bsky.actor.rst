@@ -16,3 +16,4 @@ Submodules
    atproto_client.models.chat.bsky.actor.defs
    atproto_client.models.chat.bsky.actor.delete_account
    atproto_client.models.chat.bsky.actor.export_account_data
+   atproto_client.models.chat.bsky.actor.get_status

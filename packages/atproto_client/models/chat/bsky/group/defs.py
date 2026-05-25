@@ -37,16 +37,31 @@ class JoinLinkView(base.ModelBase):
 class JoinLinkPreviewView(base.ModelBase):
     """Definition model for :obj:`chat.bsky.group.defs`."""
 
+    code: str  #: Code.
+    enabled_status: 'models.ChatBskyGroupDefs.LinkEnabledStatus'  #: Enabled status.
+    join_rule: 'models.ChatBskyGroupDefs.JoinRule'  #: Join rule.
     member_count: int  #: Member count.
+    member_limit: int  #: Member limit.
     name: str  #: Name.
     owner: 'models.ChatBskyActorDefs.ProfileViewBasic'  #: Owner.
     require_approval: bool  #: Require approval.
     convo: t.Optional['models.ChatBskyConvoDefs.ConvoView'] = (
         None  #: Present only if the request is authenticated and the user is a member of the group.
     )
+    viewer: t.Optional['models.ChatBskyGroupDefs.JoinLinkViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['chat.bsky.group.defs#joinLinkPreviewView'] = Field(
         default='chat.bsky.group.defs#joinLinkPreviewView', alias='$type', frozen=True
+    )
+
+
+class JoinLinkViewerState(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.group.defs`."""
+
+    requested_at: t.Optional[string_formats.DateTime] = None  #: Requested at.
+
+    py_type: t.Literal['chat.bsky.group.defs#joinLinkViewerState'] = Field(
+        default='chat.bsky.group.defs#joinLinkViewerState', alias='$type', frozen=True
     )
 
 
@@ -59,4 +74,19 @@ class JoinRequestView(base.ModelBase):
 
     py_type: t.Literal['chat.bsky.group.defs#joinRequestView'] = Field(
         default='chat.bsky.group.defs#joinRequestView', alias='$type', frozen=True
+    )
+
+
+class JoinRequestConvoView(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.group.defs`. A join request from the perspective of the requester, including enough group context to render the request in a list (e.g. group name, owner, member count)."""
+
+    convo_id: str  #: Convo id.
+    member_count: int  #: Member count.
+    member_limit: int  #: Member limit.
+    name: str  #: Name.
+    owner: 'models.ChatBskyActorDefs.ProfileViewBasic'  #: Owner.
+    requested_at: string_formats.DateTime  #: Requested at.
+
+    py_type: t.Literal['chat.bsky.group.defs#joinRequestConvoView'] = Field(
+        default='chat.bsky.group.defs#joinRequestConvoView', alias='$type', frozen=True
     )
