@@ -18,7 +18,14 @@ from atproto_codegen.consts import (
     PARAMS_DICT,
     PARAMS_MODEL,
 )
-from atproto_codegen.namespaces.builder import MethodInfo, ProcedureInfo, QueryInfo, RecordInfo, build_namespaces
+from atproto_codegen.namespaces.builder import (
+    METHODS_KEY,
+    MethodInfo,
+    ProcedureInfo,
+    QueryInfo,
+    RecordInfo,
+    build_namespaces,
+)
 from atproto_codegen.record_templates import (
     RECORD_CREATE_METHOD_TEMPLATE,
     RECORD_DELETE_METHOD_TEMPLATE,
@@ -86,19 +93,24 @@ def _get_record_class_def(name_parts: t.List[str], *, sync: bool) -> str:
     return join_code(lines)
 
 
-def _get_init_method(sub_items: t.List[str], *, sync: bool, parent_nodes: t.List[str], for_record: bool = False) -> str:
-    if not sub_items:
+def _get_init_method(
+    sub_namespaces: t.List[str],
+    *,
+    sync: bool,
+    parent_nodes: t.List[str],
+    record_names: t.Optional[t.List[str]] = None,
+) -> str:
+    record_names = record_names or []
+    if not sub_namespaces and not record_names:
         return ''
 
     client_typehint = "'ClientRaw'" if sync else "'AsyncClientRaw'"
     lines = [f'{_(1)}def __init__(self, client: {client_typehint}) -> None:', f'{_(2)}super().__init__(client)']
 
-    get_name = get_namespace_name
-    if for_record:
-        get_name = get_record_name
-
-    for sub_item in sub_items:
-        lines.append(f'{_(2)}self.{sub_item} = {get_name([*parent_nodes, sub_item])}(self._client)')
+    for sub_namespace in sub_namespaces:
+        lines.append(f'{_(2)}self.{sub_namespace} = {get_namespace_name([*parent_nodes, sub_namespace])}(self._client)')
+    for record_name in record_names:
+        lines.append(f'{_(2)}self.{record_name} = {get_record_name([*parent_nodes, record_name])}(self._client)')
 
     return join_code(lines)
 
@@ -363,29 +375,35 @@ def _get_record_class(records_info: t.List[RecordInfo], sync: bool) -> str:
 def _generate_namespace_in_output(
     namespace_tree: dict, output: t.List[str], *, sync: bool, parent_nodes: t.List[str]
 ) -> None:
-    for node_name, sub_node in namespace_tree.items():
+    for node_name, sub_node in sort_dict_by_key(namespace_tree).items():
+        if node_name == METHODS_KEY:
+            # methods/records for parent namespace are emitted by the parent iteration
+            continue
+
         nodes_path = [*parent_nodes, node_name]
 
-        if isinstance(sub_node, dict):
-            output.append(_get_namespace_class_def(nodes_path, sync=sync))
+        own_methods = sub_node.get(METHODS_KEY, [])
+        child_namespaces = {k: v for k, v in sub_node.items() if k != METHODS_KEY}
 
-            sub_nodes_names = list(sort_dict_by_key(sub_node).keys())
-            output.append(_get_init_method(sub_nodes_names, sync=sync, parent_nodes=nodes_path))
+        records = [info for info in own_methods if isinstance(info, RecordInfo)]
+        methods = [info for info in own_methods if isinstance(info, (ProcedureInfo, QueryInfo))]
 
-            _generate_namespace_in_output(sub_node, output, sync=sync, parent_nodes=nodes_path)
-
-        if isinstance(sub_node, list):
-            records = [info for info in sub_node if isinstance(info, RecordInfo)]
-            methods = [info for info in sub_node if isinstance(info, (ProcedureInfo, QueryInfo))]
-
+        if records:
             output.append(_get_record_class(records, sync=sync))
 
-            output.append(_get_namespace_class_def(nodes_path, sync=sync))
+        output.append(_get_namespace_class_def(nodes_path, sync=sync))
 
-            record_names = sorted([record.name for record in records])
-            output.append(_get_init_method(record_names, sync=sync, parent_nodes=nodes_path, for_record=True))
+        sub_namespace_names = list(sort_dict_by_key(child_namespaces).keys())
+        record_names = sorted(record.name for record in records)
+        output.append(
+            _get_init_method(sub_namespace_names, sync=sync, parent_nodes=nodes_path, record_names=record_names)
+        )
 
+        if methods:
             output.append(_get_namespace_methods_block(methods, sync=sync))
+
+        if child_namespaces:
+            _generate_namespace_in_output(sub_node, output, sync=sync, parent_nodes=nodes_path)
 
 
 def generate_namespaces(
