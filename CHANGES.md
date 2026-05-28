@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.0.67
+
+**28.05.2026**
+
+* Add [Standard.site](https://standard.site/) lexicon entrypoints by @MarshalX in https://github.com/MarshalX/atproto/pull/673
+
 ## Version 0.0.66
 
 **28.05.2026**
