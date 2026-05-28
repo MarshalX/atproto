@@ -206,6 +206,8 @@ class VerificationView(base.ModelBase):
     is_valid: bool  #: True if the verification passes validation, otherwise false.
     issuer: string_formats.Did  #: The user who issued this verification.
     uri: string_formats.AtUri  #: The AT-URI of the verification record.
+    issuer_display_name: t.Optional[str] = None  #: The display name of the issuer.
+    issuer_handle: t.Optional[string_formats.Handle] = None  #: The handle of the issuer.
 
     py_type: t.Literal['app.bsky.actor.defs#verificationView'] = Field(
         default='app.bsky.actor.defs#verificationView', alias='$type', frozen=True

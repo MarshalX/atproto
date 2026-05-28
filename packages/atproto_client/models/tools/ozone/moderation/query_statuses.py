@@ -108,8 +108,8 @@ class Params(base.ParamsModelBase):
         ]
     ] = 'lastReportedAt'  #: Sort field.
     subject: t.Optional[string_formats.Uri] = None  #: The subject to get the status for.
-    subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]] = (
-        None  #: If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
+    subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['conversation'], str]] = (
+        None  #: If specified, subjects of the given type (account, record, or conversation) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     )
     tags: te.Annotated[t.Optional[t.List[str]], Field(max_length=25)] = (
         None  #: Tags. Items in this array are applied with OR filters. To apply AND filter, put all tags in the same string and separate using && characters.
@@ -225,8 +225,8 @@ class ParamsDict(t.TypedDict):
     ]  #: Sort field.
     subject: te.NotRequired[t.Optional[string_formats.Uri]]  #: The subject to get the status for.
     subject_type: te.NotRequired[
-        t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]]
-    ]  #: If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
+        t.Optional[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['conversation'], str]]
+    ]  #: If specified, subjects of the given type (account, record, or conversation) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     tags: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: Tags. Items in this array are applied with OR filters. To apply AND filter, put all tags in the same string and separate using && characters.

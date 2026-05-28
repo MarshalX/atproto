@@ -71,8 +71,8 @@ class Params(base.ParamsModelBase):
         'desc'  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     )
     subject: t.Optional[string_formats.Uri] = None  #: Subject.
-    subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]] = (
-        None  #: If specified, only events where the subject is of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
+    subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['conversation'], str]] = (
+        None  #: If specified, only events where the subject is of the given type (account, record, or conversation) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     )
     types: t.Optional[t.List[str]] = (
         None  #: The types of events (fully qualified string in the format of tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned.
@@ -139,8 +139,8 @@ class ParamsDict(t.TypedDict):
     ]  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     subject: te.NotRequired[t.Optional[string_formats.Uri]]  #: Subject.
     subject_type: te.NotRequired[
-        t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]]
-    ]  #: If specified, only events where the subject is of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
+        t.Optional[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['conversation'], str]]
+    ]  #: If specified, only events where the subject is of the given type (account, record, or conversation) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     types: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: The types of events (fully qualified string in the format of tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned.
