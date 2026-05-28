@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 0.0.66
+
+**28.05.2026**
+
+* Add support for [Standard.site](https://standard.site) long-form publishing lexicons!
+* Add `LexPermission` and `LexPermissionSet` support to the lexicon parser. Fix model generator with reserved Python keywords by @MarshalX in https://github.com/MarshalX/atproto/pull/648
+* Fix codegen to support namespaces with both records and child namespaces by @MarshalX in https://github.com/MarshalX/atproto/pull/668
+* Update copyright year by @MarshalX in https://github.com/MarshalX/atproto/pull/671
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/649, https://github.com/MarshalX/atproto/pull/650, https://github.com/MarshalX/atproto/pull/651, https://github.com/MarshalX/atproto/pull/653, https://github.com/MarshalX/atproto/pull/655, https://github.com/MarshalX/atproto/pull/661, https://github.com/MarshalX/atproto/pull/662, https://github.com/MarshalX/atproto/pull/665, https://github.com/MarshalX/atproto/pull/666, https://github.com/MarshalX/atproto/pull/667, https://github.com/MarshalX/atproto/pull/669, https://github.com/MarshalX/atproto/pull/670
+
 ## Version 0.0.65
 
 **08.12.2025**
