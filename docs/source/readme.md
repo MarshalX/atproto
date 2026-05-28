@@ -1,7 +1,5 @@
 # Getting Started
 
-**🟢 The maintainer is looking for a job! CV: https://marshal.dev**
-
 ## The AT Protocol SDK
 
 > ⚠️ Under construction. Until the 1.0.0 release compatibility between versions is not guaranteed.

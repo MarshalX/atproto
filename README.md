@@ -20,8 +20,6 @@
 
 ## The AT Protocol SDK
 
-**🟢 The maintainer is looking for a job! CV: https://marshal.dev**
-
 > ⚠️ Under construction. Until the 1.0.0 release compatibility between versions is not guaranteed. 
 
 Code snippet:
