@@ -59,6 +59,7 @@ class ModEventView(base.ModelBase):
             'models.ComAtprotoAdminDefs.RepoRef',
             'models.ComAtprotoRepoStrongRef.Main',
             'models.ChatBskyConvoDefs.MessageRef',
+            'models.ChatBskyConvoDefs.ConvoRef',
         ],
         Field(discriminator='py_type'),
     ]  #: Subject.
@@ -114,6 +115,7 @@ class ModEventViewDetail(base.ModelBase):
             'models.ToolsOzoneModerationDefs.RepoViewNotFound',
             'models.ToolsOzoneModerationDefs.RecordView',
             'models.ToolsOzoneModerationDefs.RecordViewNotFound',
+            'models.ToolsOzoneModerationDefs.ConvoView',
         ],
         Field(discriminator='py_type'),
     ]  #: Subject.
@@ -138,6 +140,7 @@ class SubjectStatusView(base.ModelBase):
             'models.ComAtprotoAdminDefs.RepoRef',
             'models.ComAtprotoRepoStrongRef.Main',
             'models.ChatBskyConvoDefs.MessageRef',
+            'models.ChatBskyConvoDefs.ConvoRef',
         ],
         Field(discriminator='py_type'),
     ]  #: Subject.
@@ -733,6 +736,17 @@ class RecordViewNotFound(base.ModelBase):
 
     py_type: t.Literal['tools.ozone.moderation.defs#recordViewNotFound'] = Field(
         default='tools.ozone.moderation.defs#recordViewNotFound', alias='$type', frozen=True
+    )
+
+
+class ConvoView(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.moderation.defs`."""
+
+    convo_id: str  #: Convo id.
+    did: string_formats.Did  #: Did.
+
+    py_type: t.Literal['tools.ozone.moderation.defs#convoView'] = Field(
+        default='tools.ozone.moderation.defs#convoView', alias='$type', frozen=True
     )
 
 
