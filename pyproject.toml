@@ -52,6 +52,7 @@ packages = [
     { include = "atproto_identity", from = "packages" },
     { include = "atproto_lexicon", from = "packages" },
     { include = "atproto_server", from = "packages" },
+    { include = "atproto_oauth", from = "packages" },
 ]
 version = "0.0.0" # This is a placeholder. Dynamic version from Git Tag will be used.
 
@@ -159,10 +160,13 @@ ignore = [
     "D105", "D104", "D100", "D107", "D103", "D415", # missing docstring
     "D101", "D102", # missing docstring in public class and method
 ]
-"tests/*.py" = ["D"]
+"tests/*.py" = ["D", "S105", "S106"]
 "docs/*.py" = ["T201", "INP001", "ERA001", "E501", "D"]
 "examples/*.py" = ["T201", "INP001", "ERA001", "D"]
 "packages/atproto/exceptions.py" = ["F403"]
+"packages/atproto_oauth/*.py" = [
+    "S105", "S104", "BLE001", "S110", "SIM105", "SIM102", "C901",
+]
 "packages/atproto_client/models/__init__.py" = ["F401", "F811"]
 "packages/atproto_client/models/*/*.py" = ["E501", "D401"]
 "packages/atproto_client/namespaces/async_ns.py" = ["E501", "D401"]
