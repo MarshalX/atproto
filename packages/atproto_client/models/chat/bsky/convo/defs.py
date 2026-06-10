@@ -52,9 +52,12 @@ class MessageInput(base.ModelBase):
     """Definition model for :obj:`chat.bsky.convo.defs`."""
 
     text: str = Field(max_length=10000)  #: Text.
-    embed: t.Optional[te.Annotated[t.Union['models.AppBskyEmbedRecord.Main'], Field(discriminator='py_type')]] = (
-        None  #: Embed.
-    )
+    embed: t.Optional[
+        te.Annotated[
+            t.Union['models.AppBskyEmbedRecord.Main', 'models.ChatBskyEmbedJoinLink.Main'],
+            Field(discriminator='py_type'),
+        ]
+    ] = None  #: Embed.
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
@@ -72,9 +75,12 @@ class MessageView(base.ModelBase):
     sender: 'models.ChatBskyConvoDefs.MessageViewSender'  #: Sender.
     sent_at: string_formats.DateTime  #: Sent at.
     text: str = Field(max_length=10000)  #: Text.
-    embed: t.Optional[te.Annotated[t.Union['models.AppBskyEmbedRecord.View'], Field(discriminator='py_type')]] = (
-        None  #: Embed.
-    )
+    embed: t.Optional[
+        te.Annotated[
+            t.Union['models.AppBskyEmbedRecord.View', 'models.ChatBskyEmbedJoinLink.View'],
+            Field(discriminator='py_type'),
+        ]
+    ] = None  #: Embed.
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
@@ -355,12 +361,16 @@ class GroupConvo(base.ModelBase):
 
     created_at: string_formats.DateTime  #: Created at.
     lock_status: 'models.ChatBskyConvoDefs.ConvoLockStatus'  #: The lock status of the conversation.
+    lock_status_moderation_override: bool  #: Whether the lock status is being forced by a moderation override (account inactivation or convo takedown) rather than the owner's own setting.
     member_count: int  #: The total number of members in the group conversation.
     member_limit: int  #: The maximum number of members allowed in the group conversation.
     name: str = Field(max_length=1280)  #: The display name of the group conversation.
     join_link: t.Optional['models.ChatBskyGroupDefs.JoinLinkView'] = None  #: Join link.
     join_request_count: t.Optional[int] = (
         None  #: The total number of pending join requests for the group conversation. Only present for the owner. Capped at 21.
+    )
+    unread_join_request_count: t.Optional[int] = (
+        None  #: The number of unread join requests for the group conversation. Only present for the owner.
     )
 
     py_type: t.Literal['chat.bsky.convo.defs#groupConvo'] = Field(
@@ -726,11 +736,45 @@ class LogRejectJoinRequest(base.ModelBase):
 
 
 class LogOutgoingJoinRequest(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was made by the viewer."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was made by the requester. Only requester actor gets this."""
 
     convo_id: str  #: Convo id.
     rev: str  #: Rev.
 
     py_type: t.Literal['chat.bsky.convo.defs#logOutgoingJoinRequest'] = Field(
         default='chat.bsky.convo.defs#logOutgoingJoinRequest', alias='$type', frozen=True
+    )
+
+
+class LogWithdrawIncomingJoinRequest(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a prospective member withdrew their join request. Only the owner gets this."""
+
+    convo_id: str  #: Convo id.
+    member: 'models.ChatBskyActorDefs.ProfileViewBasic'  #: Prospective member who withdrew their join request.
+    rev: str  #: Rev.
+
+    py_type: t.Literal['chat.bsky.convo.defs#logWithdrawIncomingJoinRequest'] = Field(
+        default='chat.bsky.convo.defs#logWithdrawIncomingJoinRequest', alias='$type', frozen=True
+    )
+
+
+class LogWithdrawOutgoingJoinRequest(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating the viewer withdrew their own join request. Only requester actor gets this."""
+
+    convo_id: str  #: Convo id.
+    rev: str  #: Rev.
+
+    py_type: t.Literal['chat.bsky.convo.defs#logWithdrawOutgoingJoinRequest'] = Field(
+        default='chat.bsky.convo.defs#logWithdrawOutgoingJoinRequest', alias='$type', frozen=True
+    )
+
+
+class LogReadJoinRequests(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating the group owner marked join requests as read. Only the owner gets this."""
+
+    convo_id: str  #: Convo id.
+    rev: str  #: Rev.
+
+    py_type: t.Literal['chat.bsky.convo.defs#logReadJoinRequests'] = Field(
+        default='chat.bsky.convo.defs#logReadJoinRequests', alias='$type', frozen=True
     )

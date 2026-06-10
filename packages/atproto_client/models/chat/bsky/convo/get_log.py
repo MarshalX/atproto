@@ -58,6 +58,9 @@ class Response(base.ResponseModelBase):
                 'models.ChatBskyConvoDefs.LogApproveJoinRequest',
                 'models.ChatBskyConvoDefs.LogRejectJoinRequest',
                 'models.ChatBskyConvoDefs.LogOutgoingJoinRequest',
+                'models.ChatBskyConvoDefs.LogWithdrawIncomingJoinRequest',
+                'models.ChatBskyConvoDefs.LogWithdrawOutgoingJoinRequest',
+                'models.ChatBskyConvoDefs.LogReadJoinRequests',
             ],
             Field(discriminator='py_type'),
         ]

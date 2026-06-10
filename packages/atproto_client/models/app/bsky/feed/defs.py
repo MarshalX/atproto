@@ -33,6 +33,7 @@ class PostView(base.ModelBase):
             t.Union[
                 'models.AppBskyEmbedImages.View',
                 'models.AppBskyEmbedVideo.View',
+                'models.AppBskyEmbedGallery.View',
                 'models.AppBskyEmbedExternal.View',
                 'models.AppBskyEmbedRecord.View',
                 'models.AppBskyEmbedRecordWithMedia.View',

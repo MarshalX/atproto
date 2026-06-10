@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
@@ -27,4 +28,13 @@ class ParamsDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`chat.bsky.group.getJoinLinkPreviews`."""
 
-    join_link_previews: t.List['models.ChatBskyGroupDefs.JoinLinkPreviewView']  #: Join link previews.
+    join_link_previews: t.List[
+        te.Annotated[
+            t.Union[
+                'models.ChatBskyGroupDefs.JoinLinkPreviewView',
+                'models.ChatBskyGroupDefs.DisabledJoinLinkPreviewView',
+                'models.ChatBskyGroupDefs.InvalidJoinLinkPreviewView',
+            ],
+            Field(discriminator='py_type'),
+        ]
+    ]  #: Join link previews.

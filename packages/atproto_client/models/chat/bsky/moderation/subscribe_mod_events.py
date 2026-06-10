@@ -234,6 +234,7 @@ class EventGroupChatUpdated(base.ModelBase):
             t.Literal['owner_suspended'],
             t.Literal['owner_taken_down'],
             t.Literal['label_applied'],
+            t.Literal['convo_taken_down'],
             str,
         ]
     ] = None  #: Why the group was locked. Only present when updateType is 'locked'.
@@ -242,4 +243,17 @@ class EventGroupChatUpdated(base.ModelBase):
 
     py_type: t.Literal['chat.bsky.moderation.subscribeModEvents#eventGroupChatUpdated'] = Field(
         default='chat.bsky.moderation.subscribeModEvents#eventGroupChatUpdated', alias='$type', frozen=True
+    )
+
+
+class EventRateLimitExceeded(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.moderation.subscribeModEvents`. Fired when a user exceeds a rate limit."""
+
+    actor_did: string_formats.Did  #: The DID of the user who hit the rate limit.
+    created_at: string_formats.DateTime  #: Created at.
+    endpoint: str  #: The NSID of the endpoint that was rate limited.
+    rev: str  #: Rev.
+
+    py_type: t.Literal['chat.bsky.moderation.subscribeModEvents#eventRateLimitExceeded'] = Field(
+        default='chat.bsky.moderation.subscribeModEvents#eventRateLimitExceeded', alias='$type', frozen=True
     )

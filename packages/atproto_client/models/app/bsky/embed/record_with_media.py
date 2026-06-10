@@ -19,7 +19,12 @@ class Main(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
     media: te.Annotated[
-        t.Union['models.AppBskyEmbedImages.Main', 'models.AppBskyEmbedVideo.Main', 'models.AppBskyEmbedExternal.Main'],
+        t.Union[
+            'models.AppBskyEmbedImages.Main',
+            'models.AppBskyEmbedVideo.Main',
+            'models.AppBskyEmbedGallery.Main',
+            'models.AppBskyEmbedExternal.Main',
+        ],
         Field(discriminator='py_type'),
     ]  #: Media.
     record: 'models.AppBskyEmbedRecord.Main'  #: Record.
@@ -33,7 +38,12 @@ class View(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
     media: te.Annotated[
-        t.Union['models.AppBskyEmbedImages.View', 'models.AppBskyEmbedVideo.View', 'models.AppBskyEmbedExternal.View'],
+        t.Union[
+            'models.AppBskyEmbedImages.View',
+            'models.AppBskyEmbedVideo.View',
+            'models.AppBskyEmbedGallery.View',
+            'models.AppBskyEmbedExternal.View',
+        ],
         Field(discriminator='py_type'),
     ]  #: Media.
     record: 'models.AppBskyEmbedRecord.View'  #: Record.
