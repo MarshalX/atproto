@@ -61,6 +61,7 @@ class Record(base.RecordModelBase):
             t.Union[
                 'models.AppBskyEmbedImages.Main',
                 'models.AppBskyEmbedVideo.Main',
+                'models.AppBskyEmbedGallery.Main',
                 'models.AppBskyEmbedExternal.Main',
                 'models.AppBskyEmbedRecord.Main',
                 'models.AppBskyEmbedRecordWithMedia.Main',

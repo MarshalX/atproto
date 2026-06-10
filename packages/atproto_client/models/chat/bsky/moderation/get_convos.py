@@ -9,26 +9,22 @@ import typing as t
 
 from pydantic import Field
 
-from atproto_client.models import string_formats
-
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
 
 
-class Data(base.DataModelBase):
-    """Input data model for :obj:`chat.bsky.group.createGroup`."""
+class Params(base.ParamsModelBase):
+    """Parameters model for :obj:`chat.bsky.moderation.getConvos`."""
 
-    members: t.List[string_formats.Did] = Field(max_length=49)  #: Members.
-    name: str = Field(min_length=1, max_length=500)  #: Name.
+    convo_ids: t.List[str] = Field(min_length=1, max_length=100)  #: Convo ids.
 
 
-class DataDict(t.TypedDict):
-    members: t.List[string_formats.Did]  #: Members.
-    name: str  #: Name.
+class ParamsDict(t.TypedDict):
+    convo_ids: t.List[str]  #: Convo ids.
 
 
 class Response(base.ResponseModelBase):
-    """Output data model for :obj:`chat.bsky.group.createGroup`."""
+    """Output data model for :obj:`chat.bsky.moderation.getConvos`."""
 
-    convo: 'models.ChatBskyConvoDefs.ConvoView'  #: Convo.
+    convos: t.List['models.ChatBskyModerationDefs.ConvoView']  #: Convos.

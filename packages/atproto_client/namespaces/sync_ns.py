@@ -6791,7 +6791,7 @@ class ChatBskyGroupNamespace(NamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupGetJoinLinkPreviews.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Get public information about groups from join links. Invalid or disabled codes are silently omitted from results.
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Get public information about groups from join links. The output array matches the input codes one-to-one by position (and each view also carries its 'code'). Disabled codes return a disabledJoinLinkPreviewView, and codes that do not map to a previewable link return an invalidJoinLinkPreviewView.
 
         Args:
             params: Parameters.
@@ -6952,6 +6952,68 @@ class ChatBskyGroupNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ChatBskyGroupRequestJoin.Response)
 
+    def update_join_requests_read(
+        self,
+        data: t.Union[
+            models.ChatBskyGroupUpdateJoinRequestsRead.Data, models.ChatBskyGroupUpdateJoinRequestsRead.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupUpdateJoinRequestsRead.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Marks all join requests as read for the group owner.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupUpdateJoinRequestsRead.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupUpdateJoinRequestsRead.Data',
+            get_or_create(data, models.ChatBskyGroupUpdateJoinRequestsRead.Data),
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.updateJoinRequestsRead',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupUpdateJoinRequestsRead.Response)
+
+    def withdraw_join_request(
+        self,
+        data: t.Union[models.ChatBskyGroupWithdrawJoinRequest.Data, models.ChatBskyGroupWithdrawJoinRequest.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyGroupWithdrawJoinRequest.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Withdraws a pending request to join a group. Action taken by the prospective member who originally requested to join.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyGroupWithdrawJoinRequest.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyGroupWithdrawJoinRequest.Data',
+            get_or_create(data, models.ChatBskyGroupWithdrawJoinRequest.Data),
+        )
+        response = self._client.invoke_procedure(
+            'chat.bsky.group.withdrawJoinRequest',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyGroupWithdrawJoinRequest.Response)
+
 
 class ChatBskyModerationNamespace(NamespaceBase):
     def get_actor_metadata(
@@ -6981,6 +7043,85 @@ class ChatBskyModerationNamespace(NamespaceBase):
             'chat.bsky.moderation.getActorMetadata', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ChatBskyModerationGetActorMetadata.Response)
+
+    def get_convo(
+        self,
+        params: t.Union[models.ChatBskyModerationGetConvo.Params, models.ChatBskyModerationGetConvo.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyModerationGetConvo.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Gets an existing conversation by its ID, for moderation purposes. Does not require the requester to be a member of the conversation.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyModerationGetConvo.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ChatBskyModerationGetConvo.Params', get_or_create(params, models.ChatBskyModerationGetConvo.Params)
+        )
+        response = self._client.invoke_query(
+            'chat.bsky.moderation.getConvo', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyModerationGetConvo.Response)
+
+    def get_convo_members(
+        self,
+        params: t.Union[
+            models.ChatBskyModerationGetConvoMembers.Params, models.ChatBskyModerationGetConvoMembers.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyModerationGetConvoMembers.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a paginated list of members from a conversation, for moderation purposes. Does not require the requester to be a member of the conversation.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyModerationGetConvoMembers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ChatBskyModerationGetConvoMembers.Params',
+            get_or_create(params, models.ChatBskyModerationGetConvoMembers.Params),
+        )
+        response = self._client.invoke_query(
+            'chat.bsky.moderation.getConvoMembers', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyModerationGetConvoMembers.Response)
+
+    def get_convos(
+        self,
+        params: t.Union[models.ChatBskyModerationGetConvos.Params, models.ChatBskyModerationGetConvos.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyModerationGetConvos.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Gets existing conversations by their IDs, for moderation purposes. Does not require the requester to be a member of the conversations. Unknown IDs are silently omitted from the response.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyModerationGetConvos.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ChatBskyModerationGetConvos.Params',
+            get_or_create(params, models.ChatBskyModerationGetConvos.Params),
+        )
+        response = self._client.invoke_query(
+            'chat.bsky.moderation.getConvos', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyModerationGetConvos.Response)
 
     def get_message_context(
         self,

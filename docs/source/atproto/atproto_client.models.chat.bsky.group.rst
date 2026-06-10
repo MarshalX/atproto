@@ -27,3 +27,5 @@ Submodules
    atproto_client.models.chat.bsky.group.reject_join_request
    atproto_client.models.chat.bsky.group.remove_members
    atproto_client.models.chat.bsky.group.request_join
+   atproto_client.models.chat.bsky.group.update_join_requests_read
+   atproto_client.models.chat.bsky.group.withdraw_join_request

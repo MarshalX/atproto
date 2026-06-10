@@ -74,6 +74,7 @@ class DraftPost(base.ModelBase):
     embed_externals: te.Annotated[
         t.Optional[t.List['models.AppBskyDraftDefs.DraftEmbedExternal']], Field(max_length=1)
     ] = None  #: Embed externals.
+    embed_gallery: t.Optional['models.AppBskyDraftDefs.DraftEmbedGallery'] = None  #: Embed gallery.
     embed_images: te.Annotated[t.Optional[t.List['models.AppBskyDraftDefs.DraftEmbedImage']], Field(max_length=4)] = (
         None  #: Embed images.
     )
@@ -126,6 +127,21 @@ class DraftEmbedCaption(base.ModelBase):
     py_type: t.Literal['app.bsky.draft.defs#draftEmbedCaption'] = Field(
         default='app.bsky.draft.defs#draftEmbedCaption', alias='$type', frozen=True
     )
+
+
+class DraftEmbedGallery(base.ModelBase):
+    """Definition model for :obj:`app.bsky.draft.defs`."""
+
+    items: 'models.AppBskyDraftDefs.DraftEmbedGalleryItems'  #: Items.
+
+    py_type: t.Literal['app.bsky.draft.defs#draftEmbedGallery'] = Field(
+        default='app.bsky.draft.defs#draftEmbedGallery', alias='$type', frozen=True
+    )
+
+
+DraftEmbedGalleryItems = t.List[
+    te.Annotated[t.Union['models.AppBskyDraftDefs.DraftEmbedImage'], Field(discriminator='py_type')]
+]
 
 
 class DraftEmbedImage(base.ModelBase):

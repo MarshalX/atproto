@@ -32,6 +32,7 @@ from atproto_client.models.app.bsky.draft import get_drafts as AppBskyDraftGetDr
 from atproto_client.models.app.bsky.draft import update_draft as AppBskyDraftUpdateDraft
 from atproto_client.models.app.bsky.embed import defs as AppBskyEmbedDefs
 from atproto_client.models.app.bsky.embed import external as AppBskyEmbedExternal
+from atproto_client.models.app.bsky.embed import gallery as AppBskyEmbedGallery
 from atproto_client.models.app.bsky.embed import get_embed_external_view as AppBskyEmbedGetEmbedExternalView
 from atproto_client.models.app.bsky.embed import images as AppBskyEmbedImages
 from atproto_client.models.app.bsky.embed import record as AppBskyEmbedRecord
@@ -211,6 +212,7 @@ from atproto_client.models.chat.bsky.convo import unlock_convo as ChatBskyConvoU
 from atproto_client.models.chat.bsky.convo import unmute_convo as ChatBskyConvoUnmuteConvo
 from atproto_client.models.chat.bsky.convo import update_all_read as ChatBskyConvoUpdateAllRead
 from atproto_client.models.chat.bsky.convo import update_read as ChatBskyConvoUpdateRead
+from atproto_client.models.chat.bsky.embed import join_link as ChatBskyEmbedJoinLink
 from atproto_client.models.chat.bsky.group import add_members as ChatBskyGroupAddMembers
 from atproto_client.models.chat.bsky.group import approve_join_request as ChatBskyGroupApproveJoinRequest
 from atproto_client.models.chat.bsky.group import create_group as ChatBskyGroupCreateGroup
@@ -226,7 +228,13 @@ from atproto_client.models.chat.bsky.group import list_mutual_groups as ChatBsky
 from atproto_client.models.chat.bsky.group import reject_join_request as ChatBskyGroupRejectJoinRequest
 from atproto_client.models.chat.bsky.group import remove_members as ChatBskyGroupRemoveMembers
 from atproto_client.models.chat.bsky.group import request_join as ChatBskyGroupRequestJoin
+from atproto_client.models.chat.bsky.group import update_join_requests_read as ChatBskyGroupUpdateJoinRequestsRead
+from atproto_client.models.chat.bsky.group import withdraw_join_request as ChatBskyGroupWithdrawJoinRequest
+from atproto_client.models.chat.bsky.moderation import defs as ChatBskyModerationDefs
 from atproto_client.models.chat.bsky.moderation import get_actor_metadata as ChatBskyModerationGetActorMetadata
+from atproto_client.models.chat.bsky.moderation import get_convo as ChatBskyModerationGetConvo
+from atproto_client.models.chat.bsky.moderation import get_convo_members as ChatBskyModerationGetConvoMembers
+from atproto_client.models.chat.bsky.moderation import get_convos as ChatBskyModerationGetConvos
 from atproto_client.models.chat.bsky.moderation import get_message_context as ChatBskyModerationGetMessageContext
 from atproto_client.models.chat.bsky.moderation import subscribe_mod_events as ChatBskyModerationSubscribeModEvents
 from atproto_client.models.chat.bsky.moderation import update_actor_access as ChatBskyModerationUpdateActorAccess
@@ -466,6 +474,7 @@ class _Ids:
     AppBskyDraftUpdateDraft: str = 'app.bsky.draft.updateDraft'
     AppBskyEmbedDefs: str = 'app.bsky.embed.defs'
     AppBskyEmbedExternal: str = 'app.bsky.embed.external'
+    AppBskyEmbedGallery: str = 'app.bsky.embed.gallery'
     AppBskyEmbedGetEmbedExternalView: str = 'app.bsky.embed.getEmbedExternalView'
     AppBskyEmbedImages: str = 'app.bsky.embed.images'
     AppBskyEmbedRecord: str = 'app.bsky.embed.record'
@@ -609,6 +618,7 @@ class _Ids:
     ChatBskyConvoUnmuteConvo: str = 'chat.bsky.convo.unmuteConvo'
     ChatBskyConvoUpdateAllRead: str = 'chat.bsky.convo.updateAllRead'
     ChatBskyConvoUpdateRead: str = 'chat.bsky.convo.updateRead'
+    ChatBskyEmbedJoinLink: str = 'chat.bsky.embed.joinLink'
     ChatBskyGroupAddMembers: str = 'chat.bsky.group.addMembers'
     ChatBskyGroupApproveJoinRequest: str = 'chat.bsky.group.approveJoinRequest'
     ChatBskyGroupCreateGroup: str = 'chat.bsky.group.createGroup'
@@ -624,7 +634,13 @@ class _Ids:
     ChatBskyGroupRejectJoinRequest: str = 'chat.bsky.group.rejectJoinRequest'
     ChatBskyGroupRemoveMembers: str = 'chat.bsky.group.removeMembers'
     ChatBskyGroupRequestJoin: str = 'chat.bsky.group.requestJoin'
+    ChatBskyGroupUpdateJoinRequestsRead: str = 'chat.bsky.group.updateJoinRequestsRead'
+    ChatBskyGroupWithdrawJoinRequest: str = 'chat.bsky.group.withdrawJoinRequest'
+    ChatBskyModerationDefs: str = 'chat.bsky.moderation.defs'
     ChatBskyModerationGetActorMetadata: str = 'chat.bsky.moderation.getActorMetadata'
+    ChatBskyModerationGetConvo: str = 'chat.bsky.moderation.getConvo'
+    ChatBskyModerationGetConvoMembers: str = 'chat.bsky.moderation.getConvoMembers'
+    ChatBskyModerationGetConvos: str = 'chat.bsky.moderation.getConvos'
     ChatBskyModerationGetMessageContext: str = 'chat.bsky.moderation.getMessageContext'
     ChatBskyModerationSubscribeModEvents: str = 'chat.bsky.moderation.subscribeModEvents'
     ChatBskyModerationUpdateActorAccess: str = 'chat.bsky.moderation.updateActorAccess'

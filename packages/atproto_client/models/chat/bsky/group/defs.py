@@ -21,7 +21,7 @@ JoinRule = t.Union[t.Literal['anyone'], t.Literal['followedByOwner'], str]  #: J
 
 
 class JoinLinkView(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.group.defs`."""
+    """Definition model for :obj:`chat.bsky.group.defs`. Join link view to be used within a group view, so the convo is surrounding, not specified inside this view."""
 
     code: str  #: Code.
     created_at: string_formats.DateTime  #: Created at.
@@ -35,10 +35,10 @@ class JoinLinkView(base.ModelBase):
 
 
 class JoinLinkPreviewView(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.group.defs`."""
+    """Definition model for :obj:`chat.bsky.group.defs`. Preview that can be shown in feeds, including to unauthenticated viewers."""
 
     code: str  #: Code.
-    enabled_status: 'models.ChatBskyGroupDefs.LinkEnabledStatus'  #: Enabled status.
+    convo_id: str  #: Convo id.
     join_rule: 'models.ChatBskyGroupDefs.JoinRule'  #: Join rule.
     member_count: int  #: Member count.
     member_limit: int  #: Member limit.
@@ -55,6 +55,26 @@ class JoinLinkPreviewView(base.ModelBase):
     )
 
 
+class DisabledJoinLinkPreviewView(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.group.defs`. Preview for a disabled join link. Carries only the code so clients can correlate with the input and render a disabled state."""
+
+    code: str  #: Code.
+
+    py_type: t.Literal['chat.bsky.group.defs#disabledJoinLinkPreviewView'] = Field(
+        default='chat.bsky.group.defs#disabledJoinLinkPreviewView', alias='$type', frozen=True
+    )
+
+
+class InvalidJoinLinkPreviewView(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.group.defs`. Preview for a join link code that does not map to an existing link. Carries only the code so clients can correlate with the input and render an invalid state."""
+
+    code: str  #: Code.
+
+    py_type: t.Literal['chat.bsky.group.defs#invalidJoinLinkPreviewView'] = Field(
+        default='chat.bsky.group.defs#invalidJoinLinkPreviewView', alias='$type', frozen=True
+    )
+
+
 class JoinLinkViewerState(base.ModelBase):
     """Definition model for :obj:`chat.bsky.group.defs`."""
 
@@ -66,7 +86,7 @@ class JoinLinkViewerState(base.ModelBase):
 
 
 class JoinRequestView(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.group.defs`."""
+    """Definition model for :obj:`chat.bsky.group.defs`. A join request from the perspective of the group owner."""
 
     convo_id: str  #: Convo id.
     requested_at: string_formats.DateTime  #: Requested at.
@@ -85,7 +105,7 @@ class JoinRequestConvoView(base.ModelBase):
     member_limit: int  #: Member limit.
     name: str  #: Name.
     owner: 'models.ChatBskyActorDefs.ProfileViewBasic'  #: Owner.
-    requested_at: string_formats.DateTime  #: Requested at.
+    viewer: 'models.ChatBskyGroupDefs.JoinLinkViewerState'  #: Viewer.
 
     py_type: t.Literal['chat.bsky.group.defs#joinRequestConvoView'] = Field(
         default='chat.bsky.group.defs#joinRequestConvoView', alias='$type', frozen=True
