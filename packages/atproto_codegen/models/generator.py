@@ -5,6 +5,7 @@ from enum import Enum
 from functools import lru_cache
 from pathlib import Path
 
+from atproto_client.models.models_loader import _UTILS_EXPORTS
 from atproto_core.nsid import NSID
 from atproto_lexicon import models
 
@@ -864,10 +865,13 @@ def _generate_empty_init_files(root_package_path: Path) -> None:
 
 
 def _generate_import_aliases(root_package_path: Path) -> None:
-    # is generates __init__.py file if models dir with aliases like this:
-    # from atproto_client.models.app.bsky.actor import defs as AppBskyActorDefs # noqa: ERA001
+    """Generate the models package __init__.py.
 
-    import_lines = []
+    The package defines ~1k pydantic models across hundreds of modules. Importing all of them
+    eagerly used to make `import atproto` take several seconds. Instead, every model
+    module is exposed lazily via a module-level __getattr__.
+    """
+    type_checking_imports = []
     ids_db = ['class _Ids:']
     for root, __, files in sorted(os.walk(root_package_path)):
         root_path = Path(root)
@@ -884,32 +888,34 @@ def _generate_import_aliases(root_package_path: Path) -> None:
             import_parts = root_path.parts[root_path.parts.index(_MODELS_OUTPUT_DIR.parent.name) :]
             from_import = '.'.join(import_parts)
 
+            module_name = file[:-3]
+
             nsid_parts = list(root_path.parts[root_path.parts.index('models') + 1 :])
-            method_name_parts = file[:-3].split('_')
+            method_name_parts = module_name.split('_')
             alias_name = ''.join([p.capitalize() for p in [*nsid_parts, *method_name_parts]])
 
             camel_case_method_name = method_name_parts[0] + ''.join(ele.title() for ele in method_name_parts[1:])
             method_path = f'{".".join(nsid_parts)}.{camel_case_method_name}'
             ids_db.append(f"{_(1)}{alias_name}: str = '{method_path}'")
 
-            import_lines.append(f'from {from_import} import {file[:-3]} as {alias_name}')
+            type_checking_imports.append(f'{_(1)}from {from_import} import {module_name} as {alias_name}')
 
-    import_lines.append(
-        'from atproto_client.models.utils import '
-        'create_strong_ref, '
-        'get_model_as_dict, '
-        'get_model_as_json, '
-        'get_or_create, '
-        'is_record_type'
-    )
-    import_lines.append('from atproto_client.models.models_loader import load_models')
+    # The TYPE_CHECKING import block (so type checkers/IDEs resolve every `models.Alias` symbol)
+    # The _Ids registry (alias -> NSID, from which the runtime derives module paths)
+    lines = [
+        'import typing as t',
+        'from atproto_client.models.models_loader import make_lazy_accessors',
+        'if t.TYPE_CHECKING:',
+        *type_checking_imports,
+        f'{_(1)}from atproto_client.models.utils import (',
+        *[f'{_(2)}{name},' for name in sorted(_UTILS_EXPORTS)],
+        f'{_(1)})',
+        '__getattr__, __dir__ = make_lazy_accessors(__name__)',
+        *ids_db,
+        'ids = _Ids()',
+    ]
 
-    ids_db.append('ids = _Ids()')
-    import_lines.extend(ids_db)
-
-    import_lines.append('load_models()')
-
-    write_code(_MODELS_OUTPUT_DIR.joinpath('__init__.py'), join_code(import_lines))
+    write_code(_MODELS_OUTPUT_DIR.joinpath('__init__.py'), join_code(lines))
 
 
 def generate_models(lexicon_dir: t.Optional[Path] = None, output_dir: t.Optional[Path] = None) -> None:
