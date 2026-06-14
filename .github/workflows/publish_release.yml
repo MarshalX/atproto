@@ -2,7 +2,18 @@ name: Publish PyPI Release
 
 on:
   release:
-    types: [ created ]
+    types: [ created, edited ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to (re)generate the changelog PR for. Leave empty for the latest release.'
+        required: false
+        default: ''
+      force:
+        description: 'Overwrite the section in CHANGES.md if this version already exists.'
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   id-token: write
@@ -10,6 +21,7 @@ permissions:
 
 jobs:
   publish_release:
+    if: github.event.action == 'created'
     runs-on: ubuntu-latest
 
     steps:
@@ -50,3 +62,75 @@ jobs:
 
       - name: Publish a Python distribution to PyPI.
         uses: pypa/gh-action-pypi-publish@release/v1
+
+  update_changelog:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    env:
+      POETRY_VIRTUALENVS_IN_PROJECT: "true"
+
+    steps:
+      - name: Checkout repository.
+        uses: actions/checkout@v5
+
+      - name: Set up Python.
+        id: setup-python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.9'
+
+      - name: Load cached Poetry installation.
+        id: cached-poetry
+        uses: actions/cache@v5
+        with:
+          path: ~/.local
+          key: poetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-2.2.1  # bump the suffix to reset the cache
+
+      - name: Setup Poetry.
+        if: steps.cached-poetry.outputs.cache-hit != 'true'
+        uses: snok/install-poetry@v1
+        with:
+          version: 2.2.1
+
+      - name: Add Poetry to PATH.
+        run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Load cached venv.
+        id: cached-venv
+        # "full" prefix shares the venv with codegen.yml and update_lexicons.yml (same full install).
+        uses: actions/cache@v5
+        with:
+          path: .venv
+          key: venv-full-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies.
+        if: steps.cached-venv.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction
+
+      - name: Update CHANGES.md from the release notes.
+        id: changelog
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+          RELEASE_DATE: ${{ github.event.release.published_at }}
+          RELEASE_BODY: ${{ github.event.release.body }}
+          FORCE: ${{ inputs.force }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: poetry run python update_changelog.py
+
+      - name: Create Pull Request.
+        if: steps.changelog.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.PAT }}
+          committer: Ilya (Marshal) <ilya@marshal.dev>
+          author: Ilya (Marshal) <ilya@marshal.dev>
+          commit-message: ${{ steps.changelog.outputs.commit_message }}
+          body: This PR was automatically generated from the release notes
+          base: main
+          branch: update-changelog-v${{ steps.changelog.outputs.version }}
+          title: ${{ steps.changelog.outputs.commit_message }}
+          assignees: MarshalX
