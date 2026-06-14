@@ -6208,6 +6208,34 @@ class ChatBskyConvoNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ChatBskyConvoGetMessages.Response)
 
+    def get_unread_counts(
+        self,
+        params: t.Optional[
+            t.Union[models.ChatBskyConvoGetUnreadCounts.Params, models.ChatBskyConvoGetUnreadCounts.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyConvoGetUnreadCounts.Response':
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Returns unread conversation counts for conversations that are unlocked, not muted, split by convo status. Direct convos are excluded when a block relationship exists between the actor and the other member, or when the other member's account is deleted or deactivated. Group convos are considered unread if they have unread join request counts.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyConvoGetUnreadCounts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ChatBskyConvoGetUnreadCounts.Params',
+            get_or_create(params, models.ChatBskyConvoGetUnreadCounts.Params),
+        )
+        response = self._client.invoke_query(
+            'chat.bsky.convo.getUnreadCounts', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyConvoGetUnreadCounts.Response)
+
     def leave_convo(
         self,
         data: t.Union[models.ChatBskyConvoLeaveConvo.Data, models.ChatBskyConvoLeaveConvo.DataDict],
@@ -6617,7 +6645,7 @@ class ChatBskyGroupNamespace(NamespaceBase):
         data: t.Union[models.ChatBskyGroupCreateGroup.Data, models.ChatBskyGroupCreateGroup.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupCreateGroup.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Creates a group convo, specifying the members to be added to it. Unlike getConvoForMembers, this isn't idempotent. It will create new groups even if the membership is identical to pre-existing groups. Will create 'pending' membership for all members, except the owner who is 'accepted'.
+        """[NOTE: This is under active development and should be considered unstable while this note is here]. Creates a group convo, specifying the members to be added to it. Unlike getConvoForMembers, this isn't idempotent. It will create new groups even if the membership is identical to pre-existing groups. Will create 'request' membership for all members, except the owner who is 'accepted'.
 
         Args:
             data: Input data.
@@ -9675,6 +9703,46 @@ class ComGermnetworkNamespace(NamespaceBase):
     def __init__(self, client: 'ClientRaw') -> None:
         super().__init__(client)
         self.declaration = ComGermnetworkDeclarationRecord(self._client)
+
+
+class InternalNamespace(NamespaceBase):
+    def __init__(self, client: 'ClientRaw') -> None:
+        super().__init__(client)
+        self.bsky = InternalBskyNamespace(self._client)
+
+
+class InternalBskyNamespace(NamespaceBase):
+    def __init__(self, client: 'ClientRaw') -> None:
+        super().__init__(client)
+        self.actor = InternalBskyActorNamespace(self._client)
+
+
+class InternalBskyActorNamespace(NamespaceBase):
+    def get_profiles(
+        self,
+        params: t.Union[models.InternalBskyActorGetProfiles.Params, models.InternalBskyActorGetProfiles.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.InternalBskyActorGetProfiles.Response':
+        """Get detailed profile views of multiple actors, hydrating social proof (known followers) only for a subset of them. Intended for internal service-to-service use.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.InternalBskyActorGetProfiles.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.InternalBskyActorGetProfiles.Params',
+            get_or_create(params, models.InternalBskyActorGetProfiles.Params),
+        )
+        response = self._client.invoke_query(
+            'internal.bsky.actor.getProfiles', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.InternalBskyActorGetProfiles.Response)
 
 
 class SiteNamespace(NamespaceBase):

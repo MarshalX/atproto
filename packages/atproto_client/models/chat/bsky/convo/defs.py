@@ -61,9 +61,22 @@ class MessageInput(base.ModelBase):
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
+    reply_to: t.Optional['models.ChatBskyConvoDefs.ReplyRef'] = (
+        None  #: If set, the message this message is replying to. The referenced message must be in the same convo.
+    )
 
     py_type: t.Literal['chat.bsky.convo.defs#messageInput'] = Field(
         default='chat.bsky.convo.defs#messageInput', alias='$type', frozen=True
+    )
+
+
+class ReplyRef(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`. A reference to another message within the same convo, used to indicate that a message is a reply to it."""
+
+    message_id: str  #: Message id.
+
+    py_type: t.Literal['chat.bsky.convo.defs#replyRef'] = Field(
+        default='chat.bsky.convo.defs#replyRef', alias='$type', frozen=True
     )
 
 
@@ -87,6 +100,12 @@ class MessageView(base.ModelBase):
     reactions: t.Optional[t.List['models.ChatBskyConvoDefs.ReactionView']] = (
         None  #: Reactions to this message, in ascending order of creation time.
     )
+    reply_to: t.Optional[
+        te.Annotated[
+            t.Union['models.ChatBskyConvoDefs.MessageView', 'models.ChatBskyConvoDefs.DeletedMessageView'],
+            Field(discriminator='py_type'),
+        ]
+    ] = None  #: If set, the message this message is replying to. The full view of the referenced message is embedded so the client can render it inline. Only a single level is embedded: the embedded message will not itself have a populated 'replyTo' field even if it was also a reply.
 
     py_type: t.Literal['chat.bsky.convo.defs#messageView'] = Field(
         default='chat.bsky.convo.defs#messageView', alias='$type', frozen=True
