@@ -209,6 +209,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models.chat.bsky.convo import get_convo_members as ChatBskyConvoGetConvoMembers
     from atproto_client.models.chat.bsky.convo import get_log as ChatBskyConvoGetLog
     from atproto_client.models.chat.bsky.convo import get_messages as ChatBskyConvoGetMessages
+    from atproto_client.models.chat.bsky.convo import get_unread_counts as ChatBskyConvoGetUnreadCounts
     from atproto_client.models.chat.bsky.convo import leave_convo as ChatBskyConvoLeaveConvo
     from atproto_client.models.chat.bsky.convo import list_convo_requests as ChatBskyConvoListConvoRequests
     from atproto_client.models.chat.bsky.convo import list_convos as ChatBskyConvoListConvos
@@ -359,6 +360,7 @@ if t.TYPE_CHECKING:
         revoke_account_credentials as ComAtprotoTempRevokeAccountCredentials,
     )
     from atproto_client.models.com.germnetwork import declaration as ComGermnetworkDeclaration
+    from atproto_client.models.internal.bsky.actor import get_profiles as InternalBskyActorGetProfiles
     from atproto_client.models.site.standard import document as SiteStandardDocument
     from atproto_client.models.site.standard import publication as SiteStandardPublication
     from atproto_client.models.site.standard.graph import recommend as SiteStandardGraphRecommend
@@ -631,6 +633,7 @@ class _Ids:
     ChatBskyConvoGetConvoMembers: str = 'chat.bsky.convo.getConvoMembers'
     ChatBskyConvoGetLog: str = 'chat.bsky.convo.getLog'
     ChatBskyConvoGetMessages: str = 'chat.bsky.convo.getMessages'
+    ChatBskyConvoGetUnreadCounts: str = 'chat.bsky.convo.getUnreadCounts'
     ChatBskyConvoLeaveConvo: str = 'chat.bsky.convo.leaveConvo'
     ChatBskyConvoListConvoRequests: str = 'chat.bsky.convo.listConvoRequests'
     ChatBskyConvoListConvos: str = 'chat.bsky.convo.listConvos'
@@ -765,6 +768,7 @@ class _Ids:
     ComAtprotoTempRequestPhoneVerification: str = 'com.atproto.temp.requestPhoneVerification'
     ComAtprotoTempRevokeAccountCredentials: str = 'com.atproto.temp.revokeAccountCredentials'
     ComGermnetworkDeclaration: str = 'com.germnetwork.declaration'
+    InternalBskyActorGetProfiles: str = 'internal.bsky.actor.getProfiles'
     SiteStandardDocument: str = 'site.standard.document'
     SiteStandardPublication: str = 'site.standard.publication'
     SiteStandardGraphRecommend: str = 'site.standard.graph.recommend'
