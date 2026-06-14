@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.0.68
+
+**10.06.2026**
+
+* Update lexicons fetched from 24c7311 committed 2026-06-09T20:20:05Z (adds `AppBskyEmbedGallery` support) by @MarshalX in https://github.com/MarshalX/atproto/pull/676
+
 ## Version 0.0.67
 
 **28.05.2026**
