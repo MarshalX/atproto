@@ -54,9 +54,10 @@ jobs:
         run: poetry install --no-interaction
 
       - name: Update lexicons and regen.
+        id: regen
         run: |
-          source $(poetry env info -p)/bin/activate
-          echo "COMMIT_MESSAGE=$(poetry run python update_lexicons.py)" >> $GITHUB_ENV
+          source "$(poetry env info -p)/bin/activate"
+          poetry run python update_lexicons.py
 
       - name: Create Pull Request.
         uses: peter-evans/create-pull-request@v8
@@ -64,9 +65,9 @@ jobs:
           token: ${{ secrets.PAT }}
           committer: Ilya (Marshal) <ilya@marshal.dev>
           author: Ilya (Marshal) <ilya@marshal.dev>
-          commit-message: ${{ env.COMMIT_MESSAGE }}
+          commit-message: ${{ steps.regen.outputs.commit_message }}
           body: This PR was automatically generated
           base: main
           branch: update-lexicons
-          title: ${{ env.COMMIT_MESSAGE }}
+          title: ${{ steps.regen.outputs.commit_message }}
           assignees: MarshalX

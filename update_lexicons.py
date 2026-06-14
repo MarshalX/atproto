@@ -4,6 +4,7 @@
 import os
 import subprocess
 import sys
+import traceback
 import typing as t
 import zipfile
 from io import BytesIO
@@ -123,10 +124,33 @@ def _remove_content_in_path(path: Path) -> None:
             child.unlink()
 
 
+def _emit_github_error(message: str, title: str = 'update_lexicons.py failed') -> None:
+    """Surface a failure as a GitHub Actions error annotation (no-op outside CI)."""
+    if 'CI' not in os.environ:
+        return
+
+    # Escape per the GitHub workflow-command spec so multi-line tracebacks render.
+    escaped = message.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+    print(f'::error title={title}::{escaped}')  # noqa: T201
+
+
+def _set_commit_message_output(commit_message: str) -> None:
+    """Expose the commit message to later workflow steps via $GITHUB_OUTPUT."""
+    github_output = os.environ.get('GITHUB_OUTPUT')
+    if not github_output:
+        return
+
+    with open(github_output, 'a', encoding='UTF-8') as f:
+        f.write(f'commit_message={commit_message}\n')
+
+
 def _run_subprocess(command: t.List[str]) -> None:
-    result = subprocess.run(command)  # noqa: S603
+    result = subprocess.run(command, stderr=subprocess.PIPE, text=True)  # noqa: S603
+    if result.stderr:
+        sys.stderr.write(result.stderr)
     if result.returncode != 0:
-        exit(result.returncode)
+        _emit_github_error(f'`{" ".join(command)}` exited with {result.returncode}\n{result.stderr}')
+        sys.exit(result.returncode)
 
 
 def _print(*args) -> None:
@@ -167,8 +191,13 @@ def main() -> None:
     commit_message = f'Update lexicons fetched from {sha[:7]} committed {commit_date}'
     _print(f'Commit message: {commit_message}')
 
+    _set_commit_message_output(commit_message)
     print(commit_message)  # noqa: T201
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception:
+        _emit_github_error(traceback.format_exc())
+        raise
