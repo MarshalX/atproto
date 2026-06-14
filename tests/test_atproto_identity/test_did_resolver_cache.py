@@ -1,8 +1,6 @@
 from atproto_identity.cache.in_memory_cache import DidInMemoryCache
 from atproto_identity.did.resolver import DidResolver
 
-# THESE TESTS ARE NOT MOCKED WITH TEST SERVERS. IT PERFORMS REAL REQUESTS TO THE INTERNET.
-
 
 def test_did_resolver_cache_with_web_feed() -> None:
     feed_url = 'feed.atproto.blue'

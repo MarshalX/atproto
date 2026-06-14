@@ -2,8 +2,6 @@ import pytest
 from atproto_identity.cache.in_memory_cache import AsyncDidInMemoryCache
 from atproto_identity.did.resolver import AsyncDidResolver
 
-# THESE TESTS ARE NOT MOCKED WITH TEST SERVERS. IT PERFORMS REAL REQUESTS TO THE INTERNET.
-
 
 @pytest.mark.asyncio
 async def test_did_resolver_cache_with_web_feed() -> None:

@@ -2,8 +2,6 @@ import pytest
 from atproto_identity.did.resolver import DidResolver
 from atproto_identity.exceptions import DidNotFoundError, DidWebResolverError, UnsupportedDidWebPathError
 
-# THESE TESTS ARE NOT MOCKED WITH TEST SERVERS. IT PERFORMS REAL REQUESTS TO THE INTERNET.
-
 
 def test_did_resolver_with_web_feed() -> None:
     feed_url = 'feed.atproto.blue'
