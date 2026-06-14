@@ -1,7 +1,5 @@
 from atproto_identity.did.resolver import DidResolver
 
-# THESE TESTS ARE NOT MOCKED WITH TEST SERVERS. IT PERFORMS REAL REQUESTS TO THE INTERNET.
-
 
 def test_atproto_data_resolve_atproto_data() -> None:
     expected_did = 'did:plc:kvwvcn5iqfooopmyzvb4qzba'

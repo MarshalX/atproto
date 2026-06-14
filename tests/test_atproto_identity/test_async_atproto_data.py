@@ -1,8 +1,6 @@
 import pytest
 from atproto_identity.did.resolver import AsyncDidResolver
 
-# THESE TESTS ARE NOT MOCKED WITH TEST SERVERS. IT PERFORMS REAL REQUESTS TO THE INTERNET.
-
 
 @pytest.mark.asyncio
 async def test_atproto_data_resolve_atproto_data() -> None:

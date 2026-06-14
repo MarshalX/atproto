@@ -2,8 +2,6 @@ import pytest
 from atproto_identity.exceptions import DidNotFoundError
 from atproto_identity.handle.resolver import HandleResolver
 
-# THESE TESTS ARE NOT MOCKED WITH TEST SERVERS. IT PERFORMS REAL REQUESTS TO THE INTERNET.
-
 
 def test_handle_resolver() -> None:
     expected_handle = 'test.marshal.dev'

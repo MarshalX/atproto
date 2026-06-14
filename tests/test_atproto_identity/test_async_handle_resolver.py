@@ -2,8 +2,6 @@ import pytest
 from atproto_identity.exceptions import DidNotFoundError
 from atproto_identity.handle.resolver import AsyncHandleResolver
 
-# THESE TESTS ARE NOT MOCKED WITH TEST SERVERS. IT PERFORMS REAL REQUESTS TO THE INTERNET.
-
 
 @pytest.mark.asyncio
 async def test_handle_resolver() -> None:
