@@ -5,7 +5,6 @@ from enum import Enum
 from functools import lru_cache
 from pathlib import Path
 
-from atproto_client.models.models_loader import _UTILS_EXPORTS
 from atproto_core.nsid import NSID
 from atproto_lexicon import models
 
@@ -40,6 +39,18 @@ from atproto_codegen.utils import (
 from atproto_codegen.utils import get_code_intent as _
 
 _MODELS_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('atproto_client', 'models')
+
+# Mirror of models_loader._UTILS_EXPORTS. Duplicated (not imported) so that codegen never imports atproto_client,
+# which would eagerly resolve generated models that may not exist yet during regeneration
+_UTILS_EXPORTS = frozenset(
+    {
+        'create_strong_ref',
+        'get_model_as_dict',
+        'get_model_as_json',
+        'get_or_create',
+        'is_record_type',
+    }
+)
 
 
 class ModelType(Enum):
