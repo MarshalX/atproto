@@ -14,25 +14,52 @@ jobs:
 
     runs-on: ${{matrix.os}}
 
+    env:
+      POETRY_VIRTUALENVS_IN_PROJECT: "true"
+
     defaults:
       run:
         shell: bash
 
     steps:
       - name: Checkout repository.
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python.
-        uses: actions/setup-python@v4
+        id: setup-python
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Load cached Poetry installation.
+        id: cached-poetry
+        if: runner.os != 'Windows'
+        uses: actions/cache@v5
+        with:
+          path: ~/.local
+          key: poetry-${{ runner.os }}-2.2.1  # bump the suffix to reset the cache
+
       - name: Setup Poetry.
+        if: steps.cached-poetry.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
         with:
           version: 2.2.1
 
+      - name: Add Poetry to PATH.
+        if: runner.os != 'Windows'
+        run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Load cached venv.
+        id: cached-venv
+        # caching the venv stalls for hours on Windows runners
+        if: runner.os != 'Windows'
+        uses: actions/cache@v5
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
       - name: Install dependencies.
+        if: steps.cached-venv.outputs.cache-hit != 'true'
         run: poetry install --without docs
 
       - name: Run Tests.

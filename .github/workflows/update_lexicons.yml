@@ -12,21 +12,45 @@ jobs:
   update_lexicons:
     runs-on: ubuntu-latest
 
+    env:
+      POETRY_VIRTUALENVS_IN_PROJECT: "true"
+
     steps:
       - name: Checkout repository.
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python.
-        uses: actions/setup-python@v4
+        id: setup-python
+        uses: actions/setup-python@v6
         with:
           python-version: '3.9'
 
+      - name: Load cached Poetry installation.
+        id: cached-poetry
+        uses: actions/cache@v5
+        with:
+          path: ~/.local
+          key: poetry-${{ runner.os }}-2.2.1  # bump the suffix to reset the cache
+
       - name: Setup Poetry.
+        if: steps.cached-poetry.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
         with:
           version: 2.2.1
 
+      - name: Add Poetry to PATH.
+        run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Load cached venv.
+        id: cached-venv
+        # "full" prefix shares the venv with codegen.yml (same full install).
+        uses: actions/cache@v5
+        with:
+          path: .venv
+          key: venv-full-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
       - name: Install dependencies.
+        if: steps.cached-venv.outputs.cache-hit != 'true'
         run: poetry install --no-interaction
 
       - name: Update lexicons and regen.
@@ -35,7 +59,7 @@ jobs:
           echo "COMMIT_MESSAGE=$(poetry run python update_lexicons.py)" >> $GITHUB_ENV
 
       - name: Create Pull Request.
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.PAT }}
           committer: Ilya (Marshal) <ilya@marshal.dev>
