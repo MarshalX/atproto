@@ -1,5 +1,20 @@
 # Change Log
 
+## Version 0.0.69
+
+**24.06.2026**
+
+⚡ Speed up imports by loading generated models lazily: **12x faster** load time (2.6s → 0.21s), **6x lower** memory usage (375MB → 57MB)
+
+* Add CHANGES.md update automation using GitHub Actions by @MarshalX in https://github.com/MarshalX/atproto/pull/686
+* Add network mocking for identity resolver tests by @MarshalX in https://github.com/MarshalX/atproto/pull/680
+* Add caching and bump actions for CI/CD pipelines by @MarshalX in https://github.com/MarshalX/atproto/pull/681
+* Speed up imports by loading generated models lazily by @MarshalX in https://github.com/MarshalX/atproto/pull/679
+* Improve errors visibility in update_lexicons GHA workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/682
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/685 and https://github.com/MarshalX/atproto/pull/689
+* Fix `update_lexicons` codegen failing due to lazy-loading regression by @MarshalX in https://github.com/MarshalX/atproto/pull/683
+* Fix GHA cache by @MarshalX in https://github.com/MarshalX/atproto/pull/684
+
 ## Version 0.0.68
 
 **10.06.2026**
