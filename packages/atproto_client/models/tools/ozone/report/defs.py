@@ -352,6 +352,9 @@ class ReportActivityView(base.ModelBase):
         None  #: Full member record of the moderator who created this activity.
     )
     public_note: t.Optional[str] = None  #: Optional public note, potentially visible to the reporter.
+    report: t.Optional['models.ToolsOzoneReportDefs.ReportView'] = (
+        None  #: Full view of the report this activity belongs to.
+    )
 
     py_type: t.Literal['tools.ozone.report.defs#reportActivityView'] = Field(
         default='tools.ozone.report.defs#reportActivityView', alias='$type', frozen=True

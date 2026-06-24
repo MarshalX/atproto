@@ -102,7 +102,11 @@ class MessageView(base.ModelBase):
     )
     reply_to: t.Optional[
         te.Annotated[
-            t.Union['models.ChatBskyConvoDefs.MessageView', 'models.ChatBskyConvoDefs.DeletedMessageView'],
+            t.Union[
+                'models.ChatBskyConvoDefs.MessageView',
+                'models.ChatBskyConvoDefs.DeletedMessageView',
+                'models.ChatBskyConvoDefs.MessageBeforeUserJoinedGroupView',
+            ],
             Field(discriminator='py_type'),
         ]
     ] = None  #: If set, the message this message is replying to. The full view of the referenced message is embedded so the client can render it inline. Only a single level is embedded: the embedded message will not itself have a populated 'replyTo' field even if it was also a reply.
@@ -123,7 +127,7 @@ class SystemMessageReferredUser(base.ModelBase):
 
 
 class SystemMessageView(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]."""
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
 
     data: te.Annotated[
         t.Union[
@@ -152,7 +156,7 @@ class SystemMessageView(base.ModelBase):
 
 
 class SystemMessageDataAddMember(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating a user was added to the group convo."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating a user was added to the group convo."""
 
     added_by: 'models.ChatBskyConvoDefs.SystemMessageReferredUser'  #: Added by.
     member: 'models.ChatBskyConvoDefs.SystemMessageReferredUser'  #: Current view of the member who was added.
@@ -164,7 +168,7 @@ class SystemMessageDataAddMember(base.ModelBase):
 
 
 class SystemMessageDataRemoveMember(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating a user was removed from the group convo."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating a user was removed from the group convo."""
 
     member: 'models.ChatBskyConvoDefs.SystemMessageReferredUser'  #: Current view of the member who was removed.
     removed_by: 'models.ChatBskyConvoDefs.SystemMessageReferredUser'  #: Removed by.
@@ -175,7 +179,7 @@ class SystemMessageDataRemoveMember(base.ModelBase):
 
 
 class SystemMessageDataMemberJoin(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating a user joined the group convo via join link."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating a user joined the group convo via join link."""
 
     member: 'models.ChatBskyConvoDefs.SystemMessageReferredUser'  #: Current view of the member who joined.
     role: 'models.ChatBskyActorDefs.MemberRole'  #: Role the user was added to the group with. The role from 'member' will reflect the current data, not historical.
@@ -189,7 +193,7 @@ class SystemMessageDataMemberJoin(base.ModelBase):
 
 
 class SystemMessageDataMemberLeave(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating a user voluntarily left the group convo."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating a user voluntarily left the group convo."""
 
     member: 'models.ChatBskyConvoDefs.SystemMessageReferredUser'  #: Current view of the member who left the group.
 
@@ -199,7 +203,7 @@ class SystemMessageDataMemberLeave(base.ModelBase):
 
 
 class SystemMessageDataLockConvo(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group convo was locked."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating the group convo was locked."""
 
     locked_by: 'models.ChatBskyConvoDefs.SystemMessageReferredUser'  #: Current view of the member who locked the group.
 
@@ -209,7 +213,7 @@ class SystemMessageDataLockConvo(base.ModelBase):
 
 
 class SystemMessageDataUnlockConvo(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group convo was unlocked."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating the group convo was unlocked."""
 
     unlocked_by: (
         'models.ChatBskyConvoDefs.SystemMessageReferredUser'  #: Current view of the member who unlocked the group.
@@ -221,7 +225,7 @@ class SystemMessageDataUnlockConvo(base.ModelBase):
 
 
 class SystemMessageDataLockConvoPermanently(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group convo was locked permanently."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating the group convo was locked permanently."""
 
     locked_by: 'models.ChatBskyConvoDefs.SystemMessageReferredUser'  #: Current view of the member who locked the group.
 
@@ -231,7 +235,7 @@ class SystemMessageDataLockConvoPermanently(base.ModelBase):
 
 
 class SystemMessageDataEditGroup(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group info was edited."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating the group info was edited."""
 
     new_name: t.Optional[str] = None  #: Group name that replaced the old.
     old_name: t.Optional[str] = None  #: Group name that was replaced.
@@ -242,7 +246,7 @@ class SystemMessageDataEditGroup(base.ModelBase):
 
 
 class SystemMessageDataCreateJoinLink(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group join link was created."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating the group join link was created."""
 
     py_type: t.Literal['chat.bsky.convo.defs#systemMessageDataCreateJoinLink'] = Field(
         default='chat.bsky.convo.defs#systemMessageDataCreateJoinLink', alias='$type', frozen=True
@@ -250,7 +254,7 @@ class SystemMessageDataCreateJoinLink(base.ModelBase):
 
 
 class SystemMessageDataEditJoinLink(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group join link was edited."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating the group join link was edited."""
 
     py_type: t.Literal['chat.bsky.convo.defs#systemMessageDataEditJoinLink'] = Field(
         default='chat.bsky.convo.defs#systemMessageDataEditJoinLink', alias='$type', frozen=True
@@ -258,7 +262,7 @@ class SystemMessageDataEditJoinLink(base.ModelBase):
 
 
 class SystemMessageDataEnableJoinLink(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group join link was enabled."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating the group join link was enabled."""
 
     py_type: t.Literal['chat.bsky.convo.defs#systemMessageDataEnableJoinLink'] = Field(
         default='chat.bsky.convo.defs#systemMessageDataEnableJoinLink', alias='$type', frozen=True
@@ -266,7 +270,7 @@ class SystemMessageDataEnableJoinLink(base.ModelBase):
 
 
 class SystemMessageDataDisableJoinLink(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group join link was disabled."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. System message indicating the group join link was disabled."""
 
     py_type: t.Literal['chat.bsky.convo.defs#systemMessageDataDisableJoinLink'] = Field(
         default='chat.bsky.convo.defs#systemMessageDataDisableJoinLink', alias='$type', frozen=True
@@ -283,6 +287,14 @@ class DeletedMessageView(base.ModelBase):
 
     py_type: t.Literal['chat.bsky.convo.defs#deletedMessageView'] = Field(
         default='chat.bsky.convo.defs#deletedMessageView', alias='$type', frozen=True
+    )
+
+
+class MessageBeforeUserJoinedGroupView(base.ModelBase):
+    """Definition model for :obj:`chat.bsky.convo.defs`. Placeholder embedded in place of a reply's parent message when that parent was sent before the viewer joined the group convo. The viewer has no access to that history, so no message data is carried."""
+
+    py_type: t.Literal['chat.bsky.convo.defs#messageBeforeUserJoinedGroupView'] = Field(
+        default='chat.bsky.convo.defs#messageBeforeUserJoinedGroupView', alias='$type', frozen=True
     )
 
 
@@ -368,7 +380,7 @@ class ConvoView(base.ModelBase):
 
 
 class DirectConvo(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]."""
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
 
     py_type: t.Literal['chat.bsky.convo.defs#directConvo'] = Field(
         default='chat.bsky.convo.defs#directConvo', alias='$type', frozen=True
@@ -376,7 +388,7 @@ class DirectConvo(base.ModelBase):
 
 
 class GroupConvo(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]."""
+    """Definition model for :obj:`chat.bsky.convo.defs`."""
 
     created_at: string_formats.DateTime  #: Created at.
     lock_status: 'models.ChatBskyConvoDefs.ConvoLockStatus'  #: The lock status of the conversation.
@@ -543,7 +555,7 @@ class LogRemoveReaction(base.ModelBase):
 
 
 class LogReadConvo(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a convo was read up to a certain message."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a convo was read up to a certain message."""
 
     convo_id: str  #: Convo id.
     message: te.Annotated[
@@ -562,7 +574,7 @@ class LogReadConvo(base.ModelBase):
 
 
 class LogAddMember(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member was added to a group convo. The member who was added gets a logBeginConvo (to create the convo) but also a logAddMember (to show the system message as the first message the user sees)."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a member was added to a group convo. The member who was added gets a logBeginConvo (to create the convo) but also a logAddMember (to show the system message as the first message the user sees)."""
 
     convo_id: str  #: Convo id.
     message: (
@@ -577,7 +589,7 @@ class LogAddMember(base.ModelBase):
 
 
 class LogRemoveMember(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member was removed from a group convo. The member who was removed gets a logLeaveConvo (to leave the convo) but not a logRemoveMember (because they already left, so can't see the system message)."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a member was removed from a group convo. The member who was removed gets a logLeaveConvo (to leave the convo) but not a logRemoveMember (because they already left, so can't see the system message)."""
 
     convo_id: str  #: Convo id.
     message: 'models.ChatBskyConvoDefs.SystemMessageView'  #: A system message with data of type #systemMessageDataRemoveMember.
@@ -590,7 +602,7 @@ class LogRemoveMember(base.ModelBase):
 
 
 class LogMemberJoin(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member joined a group convo via join link. The member who was added gets a logBeginConvo (to create the convo) but also a logMemberJoin (to show the system message as the first message the user sees)."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a member joined a group convo via join link. The member who was added gets a logBeginConvo (to create the convo) but also a logMemberJoin (to show the system message as the first message the user sees)."""
 
     convo_id: str  #: Convo id.
     message: 'models.ChatBskyConvoDefs.SystemMessageView'  #: A system message with data of type #systemMessageDataMemberJoin.
@@ -603,7 +615,7 @@ class LogMemberJoin(base.ModelBase):
 
 
 class LogMemberLeave(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member voluntarily left a group convo. The member who was removed gets a logLeaveConvo (to leave the convo) but not a logMemberLeave (because they already left, so can't see the system message)."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a member voluntarily left a group convo. The member who was removed gets a logLeaveConvo (to leave the convo) but not a logMemberLeave (because they already left, so can't see the system message)."""
 
     convo_id: str  #: Convo id.
     message: 'models.ChatBskyConvoDefs.SystemMessageView'  #: A system message with data of type #systemMessageDataMemberLeave.
@@ -616,7 +628,7 @@ class LogMemberLeave(base.ModelBase):
 
 
 class LogLockConvo(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a group convo was locked."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a group convo was locked."""
 
     convo_id: str  #: Convo id.
     message: (
@@ -631,7 +643,7 @@ class LogLockConvo(base.ModelBase):
 
 
 class LogUnlockConvo(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a group convo was unlocked."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a group convo was unlocked."""
 
     convo_id: str  #: Convo id.
     message: 'models.ChatBskyConvoDefs.SystemMessageView'  #: A system message with data of type #systemMessageDataUnlockConvo.
@@ -644,7 +656,7 @@ class LogUnlockConvo(base.ModelBase):
 
 
 class LogLockConvoPermanently(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a group convo was locked permanently."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a group convo was locked permanently."""
 
     convo_id: str  #: Convo id.
     message: 'models.ChatBskyConvoDefs.SystemMessageView'  #: A system message with data of type #systemMessageDataLockConvoPermanently.
@@ -657,7 +669,7 @@ class LogLockConvoPermanently(base.ModelBase):
 
 
 class LogEditGroup(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating info about group convo was edited."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating info about group convo was edited."""
 
     convo_id: str  #: Convo id.
     message: (
@@ -671,7 +683,7 @@ class LogEditGroup(base.ModelBase):
 
 
 class LogCreateJoinLink(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join link was created for a group convo."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a join link was created for a group convo."""
 
     convo_id: str  #: Convo id.
     message: 'models.ChatBskyConvoDefs.SystemMessageView'  #: A system message with data of type #systemMessageDataCreateJoinLink.
@@ -683,7 +695,7 @@ class LogCreateJoinLink(base.ModelBase):
 
 
 class LogEditJoinLink(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a settings about a join link for a group convo were edited."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a settings about a join link for a group convo were edited."""
 
     convo_id: str  #: Convo id.
     message: 'models.ChatBskyConvoDefs.SystemMessageView'  #: A system message with data of type #systemMessageDataEditJoinLink.
@@ -695,7 +707,7 @@ class LogEditJoinLink(base.ModelBase):
 
 
 class LogEnableJoinLink(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join link was enabled for a group convo."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a join link was enabled for a group convo."""
 
     convo_id: str  #: Convo id.
     message: 'models.ChatBskyConvoDefs.SystemMessageView'  #: A system message with data of type #systemMessageDataEnableJoinLink.
@@ -707,7 +719,7 @@ class LogEnableJoinLink(base.ModelBase):
 
 
 class LogDisableJoinLink(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join link was disabled for a group convo."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a join link was disabled for a group convo."""
 
     convo_id: str  #: Convo id.
     message: 'models.ChatBskyConvoDefs.SystemMessageView'  #: A system message with data of type #systemMessageDataDisableJoinLink.
@@ -719,7 +731,7 @@ class LogDisableJoinLink(base.ModelBase):
 
 
 class LogIncomingJoinRequest(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was made to a group the viewer owns. Only the owner gets this."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a join request was made to a group the viewer owns. Only the owner gets this."""
 
     convo_id: str  #: Convo id.
     member: 'models.ChatBskyActorDefs.ProfileViewBasic'  #: Prospective member who requested to join.
@@ -731,7 +743,7 @@ class LogIncomingJoinRequest(base.ModelBase):
 
 
 class LogApproveJoinRequest(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was approved by the viewer. Only the owner gets this. The approved member gets a logBeginConvo."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a join request was approved by the viewer. Only the owner gets this. The approved member gets a logBeginConvo."""
 
     convo_id: str  #: Convo id.
     member: 'models.ChatBskyActorDefs.ProfileViewBasic'  #: Prospective member who requested to join.
@@ -743,7 +755,7 @@ class LogApproveJoinRequest(base.ModelBase):
 
 
 class LogRejectJoinRequest(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was rejected by the viewer. Only the owner gets this."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a join request was rejected by the viewer. Only the owner gets this."""
 
     convo_id: str  #: Convo id.
     member: 'models.ChatBskyActorDefs.ProfileViewBasic'  #: Prospective member who requested to join.
@@ -755,7 +767,7 @@ class LogRejectJoinRequest(base.ModelBase):
 
 
 class LogOutgoingJoinRequest(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was made by the requester. Only requester actor gets this."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a join request was made by the requester. Only requester actor gets this."""
 
     convo_id: str  #: Convo id.
     rev: str  #: Rev.
@@ -766,7 +778,7 @@ class LogOutgoingJoinRequest(base.ModelBase):
 
 
 class LogWithdrawIncomingJoinRequest(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a prospective member withdrew their join request. Only the owner gets this."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating a prospective member withdrew their join request. Only the owner gets this."""
 
     convo_id: str  #: Convo id.
     member: 'models.ChatBskyActorDefs.ProfileViewBasic'  #: Prospective member who withdrew their join request.
@@ -778,7 +790,7 @@ class LogWithdrawIncomingJoinRequest(base.ModelBase):
 
 
 class LogWithdrawOutgoingJoinRequest(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating the viewer withdrew their own join request. Only requester actor gets this."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating the viewer withdrew their own join request. Only requester actor gets this."""
 
     convo_id: str  #: Convo id.
     rev: str  #: Rev.
@@ -789,7 +801,7 @@ class LogWithdrawOutgoingJoinRequest(base.ModelBase):
 
 
 class LogReadJoinRequests(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.convo.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating the group owner marked join requests as read. Only the owner gets this."""
+    """Definition model for :obj:`chat.bsky.convo.defs`. Event indicating the group owner marked join requests as read. Only the owner gets this."""
 
     convo_id: str  #: Convo id.
     rev: str  #: Rev.

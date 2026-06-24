@@ -2401,6 +2401,33 @@ class AppBskyFeedNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyFeedSearchPosts.Response)
 
+    async def search_posts_v2(
+        self,
+        params: t.Optional[
+            t.Union[models.AppBskyFeedSearchPostsV2.Params, models.AppBskyFeedSearchPostsV2.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyFeedSearchPostsV2.Response':
+        """Find posts matching a search query or filters, returning search hits for matching post records.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyFeedSearchPostsV2.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyFeedSearchPostsV2.Params', get_or_create(params, models.AppBskyFeedSearchPostsV2.Params)
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.feed.searchPostsV2', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyFeedSearchPostsV2.Response)
+
     async def send_interactions(
         self,
         data: t.Union[models.AppBskyFeedSendInteractions.Data, models.AppBskyFeedSendInteractions.DataDict],
@@ -5753,6 +5780,7 @@ class ChatBskyNamespace(AsyncNamespaceBase):
         self.convo = ChatBskyConvoNamespace(self._client)
         self.group = ChatBskyGroupNamespace(self._client)
         self.moderation = ChatBskyModerationNamespace(self._client)
+        self.notification = ChatBskyNotificationNamespace(self._client)
 
 
 class ChatBskyActorDeclarationRecord(AsyncRecordBase):
@@ -6217,7 +6245,7 @@ class ChatBskyConvoNamespace(AsyncNamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoGetUnreadCounts.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Returns unread conversation counts for conversations that are unlocked, not muted, split by convo status. Direct convos are excluded when a block relationship exists between the actor and the other member, or when the other member's account is deleted or deactivated. Group convos are considered unread if they have unread join request counts.
+        """Returns unread conversation counts for conversations that are unlocked, not muted, split by convo status. Direct convos are excluded when a block relationship exists between the actor and the other member, or when the other member's account is deleted or deactivated. Group convos are considered unread if they have unread join request counts.
 
         Args:
             params: Parameters.
@@ -6274,7 +6302,7 @@ class ChatBskyConvoNamespace(AsyncNamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoListConvoRequests.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a page of incoming conversation requests for the user. Direct convo requests are returned as convoView; group join requests made by the user are returned as joinRequestConvoView.
+        """Returns a page of incoming conversation requests for the user. Direct convo requests are returned as convoView; group join requests made by the user are returned as joinRequestConvoView.
 
         Args:
             params: Parameters.
@@ -6325,7 +6353,7 @@ class ChatBskyConvoNamespace(AsyncNamespaceBase):
     async def lock_convo(
         self, data: t.Union[models.ChatBskyConvoLockConvo.Data, models.ChatBskyConvoLockConvo.DataDict], **kwargs: t.Any
     ) -> 'models.ChatBskyConvoLockConvo.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Locks a group convo so no more content (messages, reactions) can be added to it.
+        """Locks a group convo so no more content (messages, reactions) can be added to it.
 
         Args:
             data: Input data.
@@ -6468,7 +6496,7 @@ class ChatBskyConvoNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyConvoUnlockConvo.Data, models.ChatBskyConvoUnlockConvo.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyConvoUnlockConvo.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Unlocks a group convo so it is able to receive new content.
+        """Unlocks a group convo so it is able to receive new content.
 
         Args:
             data: Input data.
@@ -6588,7 +6616,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupAddMembers.Data, models.ChatBskyGroupAddMembers.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupAddMembers.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Adds members to a group. The members are added in 'request' status, so they have to accept it. This creates convo memberships.
+        """Adds members to a group. The members are added in 'request' status, so they have to accept it. This creates convo memberships.
 
         Args:
             data: Input data.
@@ -6617,7 +6645,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupApproveJoinRequest.Data, models.ChatBskyGroupApproveJoinRequest.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupApproveJoinRequest.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Approves a request to join a group (via join link) the user owns. Action taken by the group owner.
+        """Approves a request to join a group (via join link) the user owns. Action taken by the group owner.
 
         Args:
             data: Input data.
@@ -6647,7 +6675,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupCreateGroup.Data, models.ChatBskyGroupCreateGroup.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupCreateGroup.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Creates a group convo, specifying the members to be added to it. Unlike getConvoForMembers, this isn't idempotent. It will create new groups even if the membership is identical to pre-existing groups. Will create 'request' membership for all members, except the owner who is 'accepted'.
+        """Creates a group convo, specifying the members to be added to it. Unlike getConvoForMembers, this isn't idempotent. It will create new groups even if the membership is identical to pre-existing groups. Will create 'request' membership for all members, except the owner who is 'accepted'.
 
         Args:
             data: Input data.
@@ -6676,7 +6704,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupCreateJoinLink.Data, models.ChatBskyGroupCreateJoinLink.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupCreateJoinLink.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Creates a join link for the group convo.
+        """Creates a join link for the group convo.
 
         Args:
             data: Input data.
@@ -6705,7 +6733,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupDisableJoinLink.Data, models.ChatBskyGroupDisableJoinLink.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupDisableJoinLink.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Disables the active join link for the group convo.
+        """Disables the active join link for the group convo.
 
         Args:
             data: Input data.
@@ -6732,7 +6760,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
     async def edit_group(
         self, data: t.Union[models.ChatBskyGroupEditGroup.Data, models.ChatBskyGroupEditGroup.DataDict], **kwargs: t.Any
     ) -> 'models.ChatBskyGroupEditGroup.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Edits group settings.
+        """Edits group settings.
 
         Args:
             data: Input data.
@@ -6761,7 +6789,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupEditJoinLink.Data, models.ChatBskyGroupEditJoinLink.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupEditJoinLink.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Edits the existing join link settings for the group convo.
+        """Edits the existing join link settings for the group convo.
 
         Args:
             data: Input data.
@@ -6790,7 +6818,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupEnableJoinLink.Data, models.ChatBskyGroupEnableJoinLink.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupEnableJoinLink.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Re-enables a previously disabled join link for the group convo.
+        """Re-enables a previously disabled join link for the group convo.
 
         Args:
             data: Input data.
@@ -6821,7 +6849,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupGetJoinLinkPreviews.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Get public information about groups from join links. The output array matches the input codes one-to-one by position (and each view also carries its 'code'). Disabled codes return a disabledJoinLinkPreviewView, and codes that do not map to a previewable link return an invalidJoinLinkPreviewView.
+        """Get public information about groups from join links. The output array matches the input codes one-to-one by position (and each view also carries its 'code'). Disabled codes return a disabledJoinLinkPreviewView, and codes that do not map to a previewable link return an invalidJoinLinkPreviewView.
 
         Args:
             params: Parameters.
@@ -6847,7 +6875,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         params: t.Union[models.ChatBskyGroupListJoinRequests.Params, models.ChatBskyGroupListJoinRequests.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupListJoinRequests.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Lists a page of request to join a group (via join link) the user owns. Shows the data from the owner's point of view.
+        """Lists a page of request to join a group (via join link) the user owns. Shows the data from the owner's point of view.
 
         Args:
             params: Parameters.
@@ -6873,7 +6901,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         params: t.Union[models.ChatBskyGroupListMutualGroups.Params, models.ChatBskyGroupListMutualGroups.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupListMutualGroups.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a page of group conversations that both the requester and the specified actor are members of.
+        """Returns a page of group conversations that both the requester and the specified actor are members of.
 
         Args:
             params: Parameters.
@@ -6899,7 +6927,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupRejectJoinRequest.Data, models.ChatBskyGroupRejectJoinRequest.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupRejectJoinRequest.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Rejects a request to join a group (via join link) the user owns. Action taken by the group owner.
+        """Rejects a request to join a group (via join link) the user owns. Action taken by the group owner.
 
         Args:
             data: Input data.
@@ -6929,7 +6957,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupRemoveMembers.Data, models.ChatBskyGroupRemoveMembers.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupRemoveMembers.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Removes members from a group. This deletes convo memberships, doesn't just set a status.
+        """Removes members from a group. This deletes convo memberships, doesn't just set a status.
 
         Args:
             data: Input data.
@@ -6958,7 +6986,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupRequestJoin.Data, models.ChatBskyGroupRequestJoin.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupRequestJoin.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Sends a request to join a group (via join link) to the group owner. Action taken by the prospective group member.
+        """Sends a request to join a group (via join link) to the group owner. Action taken by the prospective group member.
 
         Args:
             data: Input data.
@@ -6989,7 +7017,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupUpdateJoinRequestsRead.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Marks all join requests as read for the group owner.
+        """Marks all join requests as read for the group owner.
 
         Args:
             data: Input data.
@@ -7019,7 +7047,7 @@ class ChatBskyGroupNamespace(AsyncNamespaceBase):
         data: t.Union[models.ChatBskyGroupWithdrawJoinRequest.Data, models.ChatBskyGroupWithdrawJoinRequest.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyGroupWithdrawJoinRequest.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Withdraws a pending request to join a group. Action taken by the prospective member who originally requested to join.
+        """Withdraws a pending request to join a group. Action taken by the prospective member who originally requested to join.
 
         Args:
             data: Input data.
@@ -7079,7 +7107,7 @@ class ChatBskyModerationNamespace(AsyncNamespaceBase):
         params: t.Union[models.ChatBskyModerationGetConvo.Params, models.ChatBskyModerationGetConvo.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyModerationGetConvo.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Gets an existing conversation by its ID, for moderation purposes. Does not require the requester to be a member of the conversation.
+        """Gets an existing conversation by its ID, for moderation purposes. Does not require the requester to be a member of the conversation.
 
         Args:
             params: Parameters.
@@ -7106,7 +7134,7 @@ class ChatBskyModerationNamespace(AsyncNamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyModerationGetConvoMembers.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a paginated list of members from a conversation, for moderation purposes. Does not require the requester to be a member of the conversation.
+        """Returns a paginated list of members from a conversation, for moderation purposes. Does not require the requester to be a member of the conversation.
 
         Args:
             params: Parameters.
@@ -7132,7 +7160,7 @@ class ChatBskyModerationNamespace(AsyncNamespaceBase):
         params: t.Union[models.ChatBskyModerationGetConvos.Params, models.ChatBskyModerationGetConvos.ParamsDict],
         **kwargs: t.Any,
     ) -> 'models.ChatBskyModerationGetConvos.Response':
-        """[NOTE: This is under active development and should be considered unstable while this note is here]. Gets existing conversations by their IDs, for moderation purposes. Does not require the requester to be a member of the conversations. Unknown IDs are silently omitted from the response.
+        """Gets existing conversations by their IDs, for moderation purposes. Does not require the requester to be a member of the conversations. Unknown IDs are silently omitted from the response.
 
         Args:
             params: Parameters.
@@ -7208,6 +7236,57 @@ class ChatBskyModerationNamespace(AsyncNamespaceBase):
             'chat.bsky.moderation.updateActorAccess', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
+
+
+class ChatBskyNotificationNamespace(AsyncNamespaceBase):
+    async def get_preferences(self, **kwargs: t.Any) -> 'models.ChatBskyNotificationGetPreferences.Response':
+        """Get the requesting account's chat notification preferences. Defaults are returned for accounts that have not set any preferences. Requires auth.
+
+        Args:
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyNotificationGetPreferences.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = await self._client.invoke_query(
+            'chat.bsky.notification.getPreferences', output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ChatBskyNotificationGetPreferences.Response)
+
+    async def put_preferences(
+        self,
+        data: t.Optional[
+            t.Union[models.ChatBskyNotificationPutPreferences.Data, models.ChatBskyNotificationPutPreferences.DataDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ChatBskyNotificationPutPreferences.Response':
+        """Set the requesting account's chat notification preferences. Only the provided preferences are updated; omitted preferences are left unchanged.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ChatBskyNotificationPutPreferences.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ChatBskyNotificationPutPreferences.Data',
+            get_or_create(data, models.ChatBskyNotificationPutPreferences.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'chat.bsky.notification.putPreferences',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ChatBskyNotificationPutPreferences.Response)
 
 
 class ComNamespace(AsyncNamespaceBase):
@@ -11586,6 +11665,34 @@ class ToolsOzoneReportNamespace(AsyncNamespaceBase):
             'tools.ozone.report.listActivities', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneReportListActivities.Response)
+
+    async def query_activities(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneReportQueryActivities.Params, models.ToolsOzoneReportQueryActivities.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportQueryActivities.Response':
+        """Query report activities across all reports, ordered by createdAt. Used by downstream pollers; for per-report activity history use listActivities.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportQueryActivities.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneReportQueryActivities.Params',
+            get_or_create(params, models.ToolsOzoneReportQueryActivities.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.report.queryActivities', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneReportQueryActivities.Response)
 
     async def query_reports(
         self,

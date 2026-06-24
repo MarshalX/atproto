@@ -17,3 +17,4 @@ Subpackages
    atproto_client.models.chat.bsky.embed
    atproto_client.models.chat.bsky.group
    atproto_client.models.chat.bsky.moderation
+   atproto_client.models.chat.bsky.notification

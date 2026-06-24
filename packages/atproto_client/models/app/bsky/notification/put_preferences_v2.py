@@ -17,7 +17,9 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`app.bsky.notification.putPreferencesV2`."""
 
-    chat: t.Optional['models.AppBskyNotificationDefs.ChatPreference'] = None  #: Chat.
+    chat: t.Optional['models.AppBskyNotificationDefs.ChatPreference'] = (
+        None  #: Deprecated: use chat.bsky.notification preferences instead. Setting this won't stick and the default values will be returned.
+    )
     follow: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Follow.
     like: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Like.
     like_via_repost: t.Optional['models.AppBskyNotificationDefs.FilterablePreference'] = None  #: Like via repost.
@@ -33,7 +35,9 @@ class Data(base.DataModelBase):
 
 
 class DataDict(t.TypedDict):
-    chat: te.NotRequired[t.Optional['models.AppBskyNotificationDefs.ChatPreference']]  #: Chat.
+    chat: te.NotRequired[
+        t.Optional['models.AppBskyNotificationDefs.ChatPreference']
+    ]  #: Deprecated: use chat.bsky.notification preferences instead. Setting this won't stick and the default values will be returned.
     follow: te.NotRequired[t.Optional['models.AppBskyNotificationDefs.FilterablePreference']]  #: Follow.
     like: te.NotRequired[t.Optional['models.AppBskyNotificationDefs.FilterablePreference']]  #: Like.
     like_via_repost: te.NotRequired[

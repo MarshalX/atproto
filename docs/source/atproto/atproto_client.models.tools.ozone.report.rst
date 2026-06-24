@@ -21,6 +21,7 @@ Submodules
    atproto_client.models.tools.ozone.report.get_live_stats
    atproto_client.models.tools.ozone.report.get_report
    atproto_client.models.tools.ozone.report.list_activities
+   atproto_client.models.tools.ozone.report.query_activities
    atproto_client.models.tools.ozone.report.query_reports
    atproto_client.models.tools.ozone.report.reassign_queue
    atproto_client.models.tools.ozone.report.refresh_stats

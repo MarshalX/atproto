@@ -18,7 +18,7 @@ from atproto_client.models import base
 
 
 class ConvoView(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.moderation.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. A view of a conversation for moderation purposes. Unlike chat.bsky.convo.defs#convoView, it does not include viewer-specific data (such as muted, unreadCount, status, lastMessage, lastReaction), since the requester is a moderator and not a member of the conversation. The member list is not included; use chat.bsky.moderation.getConvoMembers to list members."""
+    """Definition model for :obj:`chat.bsky.moderation.defs`. A view of a conversation for moderation purposes. Unlike chat.bsky.convo.defs#convoView, it does not include viewer-specific data (such as muted, unreadCount, status, lastMessage, lastReaction), since the requester is a moderator and not a member of the conversation. The member list is not included; use chat.bsky.moderation.getConvoMembers to list members."""
 
     id: str  #: Id.
     rev: str  #: Rev.
@@ -35,7 +35,7 @@ class ConvoView(base.ModelBase):
 
 
 class DirectConvo(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.moderation.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Data specific to a direct conversation, for moderation purposes."""
+    """Definition model for :obj:`chat.bsky.moderation.defs`. Data specific to a direct conversation, for moderation purposes."""
 
     py_type: t.Literal['chat.bsky.moderation.defs#directConvo'] = Field(
         default='chat.bsky.moderation.defs#directConvo', alias='$type', frozen=True
@@ -43,7 +43,7 @@ class DirectConvo(base.ModelBase):
 
 
 class GroupConvo(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.moderation.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. Data specific to a group conversation, for moderation purposes. Unlike chat.bsky.convo.defs#groupConvo, it does not include viewer-specific data (such as unreadJoinRequestCount), since the requester is a moderator and not a member of the conversation."""
+    """Definition model for :obj:`chat.bsky.moderation.defs`. Data specific to a group conversation, for moderation purposes. Unlike chat.bsky.convo.defs#groupConvo, it does not include viewer-specific data (such as unreadJoinRequestCount), since the requester is a moderator and not a member of the conversation."""
 
     created_at: string_formats.DateTime  #: Created at.
     join_request_count: int  #: The total number of pending join requests for the group conversation. This information is only visible to the owner and to moderators. Capped at 21.

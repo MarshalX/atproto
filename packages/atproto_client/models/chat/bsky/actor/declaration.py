@@ -19,7 +19,7 @@ class Record(base.RecordModelBase):
 
     allow_incoming: t.Union[t.Literal['all'], t.Literal['none'], t.Literal['following'], str]  #: Allow incoming.
     allow_group_invites: t.Optional[t.Union[t.Literal['all'], t.Literal['none'], t.Literal['following'], str]] = (
-        None  #: [NOTE: This is under active development and should be considered unstable while this note is here]. Declaration about group chat invitation preferences for the record owner.
+        None  #: Declaration about group chat invitation preferences for the record owner.
     )
 
     py_type: t.Literal['chat.bsky.actor.declaration'] = Field(

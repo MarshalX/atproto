@@ -25,7 +25,7 @@ class RecordDeleted(base.ModelBase):
 
 
 class ChatPreference(base.ModelBase):
-    """Definition model for :obj:`app.bsky.notification.defs`."""
+    """Definition model for :obj:`app.bsky.notification.defs`. Deprecated: use chat.bsky.notification preferences instead. This will only return a default value."""
 
     include: t.Union[t.Literal['all'], t.Literal['accepted'], str]  #: Include.
     push: bool  #: Push.
@@ -61,7 +61,7 @@ class Preference(base.ModelBase):
 class Preferences(base.ModelBase):
     """Definition model for :obj:`app.bsky.notification.defs`."""
 
-    chat: 'models.AppBskyNotificationDefs.ChatPreference'  #: Chat.
+    chat: 'models.AppBskyNotificationDefs.ChatPreference'  #: Deprecated: use chat.bsky.notification preferences instead. This will only return a default value.
     follow: 'models.AppBskyNotificationDefs.FilterablePreference'  #: Follow.
     like: 'models.AppBskyNotificationDefs.FilterablePreference'  #: Like.
     like_via_repost: 'models.AppBskyNotificationDefs.FilterablePreference'  #: Like via repost.
