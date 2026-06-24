@@ -66,6 +66,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.feed import postgate as AppBskyFeedPostgate
     from atproto_client.models.app.bsky.feed import repost as AppBskyFeedRepost
     from atproto_client.models.app.bsky.feed import search_posts as AppBskyFeedSearchPosts
+    from atproto_client.models.app.bsky.feed import search_posts_v2 as AppBskyFeedSearchPostsV2
     from atproto_client.models.app.bsky.feed import send_interactions as AppBskyFeedSendInteractions
     from atproto_client.models.app.bsky.feed import threadgate as AppBskyFeedThreadgate
     from atproto_client.models.app.bsky.graph import block as AppBskyGraphBlock
@@ -248,6 +249,9 @@ if t.TYPE_CHECKING:
     from atproto_client.models.chat.bsky.moderation import get_message_context as ChatBskyModerationGetMessageContext
     from atproto_client.models.chat.bsky.moderation import subscribe_mod_events as ChatBskyModerationSubscribeModEvents
     from atproto_client.models.chat.bsky.moderation import update_actor_access as ChatBskyModerationUpdateActorAccess
+    from atproto_client.models.chat.bsky.notification import defs as ChatBskyNotificationDefs
+    from atproto_client.models.chat.bsky.notification import get_preferences as ChatBskyNotificationGetPreferences
+    from atproto_client.models.chat.bsky.notification import put_preferences as ChatBskyNotificationPutPreferences
     from atproto_client.models.com.atproto.admin import defs as ComAtprotoAdminDefs
     from atproto_client.models.com.atproto.admin import delete_account as ComAtprotoAdminDeleteAccount
     from atproto_client.models.com.atproto.admin import disable_account_invites as ComAtprotoAdminDisableAccountInvites
@@ -413,6 +417,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models.tools.ozone.report import get_live_stats as ToolsOzoneReportGetLiveStats
     from atproto_client.models.tools.ozone.report import get_report as ToolsOzoneReportGetReport
     from atproto_client.models.tools.ozone.report import list_activities as ToolsOzoneReportListActivities
+    from atproto_client.models.tools.ozone.report import query_activities as ToolsOzoneReportQueryActivities
     from atproto_client.models.tools.ozone.report import query_reports as ToolsOzoneReportQueryReports
     from atproto_client.models.tools.ozone.report import reassign_queue as ToolsOzoneReportReassignQueue
     from atproto_client.models.tools.ozone.report import refresh_stats as ToolsOzoneReportRefreshStats
@@ -530,6 +535,7 @@ class _Ids:
     AppBskyFeedPostgate: str = 'app.bsky.feed.postgate'
     AppBskyFeedRepost: str = 'app.bsky.feed.repost'
     AppBskyFeedSearchPosts: str = 'app.bsky.feed.searchPosts'
+    AppBskyFeedSearchPostsV2: str = 'app.bsky.feed.searchPostsV2'
     AppBskyFeedSendInteractions: str = 'app.bsky.feed.sendInteractions'
     AppBskyFeedThreadgate: str = 'app.bsky.feed.threadgate'
     AppBskyGraphBlock: str = 'app.bsky.graph.block'
@@ -672,6 +678,9 @@ class _Ids:
     ChatBskyModerationGetMessageContext: str = 'chat.bsky.moderation.getMessageContext'
     ChatBskyModerationSubscribeModEvents: str = 'chat.bsky.moderation.subscribeModEvents'
     ChatBskyModerationUpdateActorAccess: str = 'chat.bsky.moderation.updateActorAccess'
+    ChatBskyNotificationDefs: str = 'chat.bsky.notification.defs'
+    ChatBskyNotificationGetPreferences: str = 'chat.bsky.notification.getPreferences'
+    ChatBskyNotificationPutPreferences: str = 'chat.bsky.notification.putPreferences'
     ComAtprotoAdminDefs: str = 'com.atproto.admin.defs'
     ComAtprotoAdminDeleteAccount: str = 'com.atproto.admin.deleteAccount'
     ComAtprotoAdminDisableAccountInvites: str = 'com.atproto.admin.disableAccountInvites'
@@ -815,6 +824,7 @@ class _Ids:
     ToolsOzoneReportGetLiveStats: str = 'tools.ozone.report.getLiveStats'
     ToolsOzoneReportGetReport: str = 'tools.ozone.report.getReport'
     ToolsOzoneReportListActivities: str = 'tools.ozone.report.listActivities'
+    ToolsOzoneReportQueryActivities: str = 'tools.ozone.report.queryActivities'
     ToolsOzoneReportQueryReports: str = 'tools.ozone.report.queryReports'
     ToolsOzoneReportReassignQueue: str = 'tools.ozone.report.reassignQueue'
     ToolsOzoneReportRefreshStats: str = 'tools.ozone.report.refreshStats'

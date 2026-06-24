@@ -49,7 +49,7 @@ class ProfileViewBasic(base.ModelBase):
 
 
 class DirectConvoMember(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.actor.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]."""
+    """Definition model for :obj:`chat.bsky.actor.defs`."""
 
     py_type: t.Literal['chat.bsky.actor.defs#directConvoMember'] = Field(
         default='chat.bsky.actor.defs#directConvoMember', alias='$type', frozen=True
@@ -57,7 +57,7 @@ class DirectConvoMember(base.ModelBase):
 
 
 class GroupConvoMember(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.actor.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. A current group convo member."""
+    """Definition model for :obj:`chat.bsky.actor.defs`. A current group convo member."""
 
     role: 'models.ChatBskyActorDefs.MemberRole'  #: The member's role within this conversation. Only present in group conversation member lists.
     added_by: t.Optional['models.ChatBskyActorDefs.ProfileViewBasic'] = (
@@ -70,7 +70,7 @@ class GroupConvoMember(base.ModelBase):
 
 
 class PastGroupConvoMember(base.ModelBase):
-    """Definition model for :obj:`chat.bsky.actor.defs`. [NOTE: This is under active development and should be considered unstable while this note is here]. A past group convo member."""
+    """Definition model for :obj:`chat.bsky.actor.defs`. A past group convo member."""
 
     py_type: t.Literal['chat.bsky.actor.defs#pastGroupConvoMember'] = Field(
         default='chat.bsky.actor.defs#pastGroupConvoMember', alias='$type', frozen=True
