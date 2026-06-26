@@ -25,5 +25,5 @@ class ParamsDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`chat.bsky.convo.getUnreadCounts`."""
 
-    unread_accepted_convos: int  #: Number of unread, unlocked accepted convos. Counts convos with unread messages and unread join requests. Capped at 31, where 31 means more than 30.
-    unread_request_convos: int  #: Number of unread, unlocked request convos. Includes convos with unread messages, but not with unread join request, since only the owner of a group has join requests to read, and the group would necessarily be accepted. Capped at 11, where 11 means more than 10.
+    unread_accepted_convos: int  #: Number of unread, unlocked accepted convos. Counts convos with unread messages and unread join requests. Capped at 100, where 100 means more than 99.
+    unread_request_convos: int  #: Number of unread, unlocked request convos. Includes convos with unread messages, but not with unread join request, since only the owner of a group has join requests to read, and the group would necessarily be accepted. Capped at 100, where 100 means more than 99.
