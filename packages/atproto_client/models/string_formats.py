@@ -42,7 +42,7 @@ DID_RE = re.compile(
 )
 LANG_RE = re.compile(r'^(i|[a-z]{2,3})(-[A-Za-z0-9-]+)?$')
 RKEY_RE = re.compile(r'^[A-Za-z0-9._:~-]{1,512}$')
-TID_RE = re.compile(rf'^[2-7a-z]{{{TID_LENGTH}}}$')
+TID_RE = re.compile(rf'^[234567abcdefghij][234567abcdefghijklmnopqrstuvwxyz]{{{TID_LENGTH - 1}}}$')
 CID_RE = re.compile(r'^[A-Za-z0-9+]{8,}$')
 AT_URI_RE = re.compile(
     r'^at://'  # Must start with at://
@@ -424,9 +424,10 @@ def validate_tid(v: str, _: ValidationInfo) -> str:
 
     - Exactly 13 characters
 
-    - Only lowercase letters and numbers 2-7
+    - Only lowercase letters and numbers 2-7 (base32-sortable alphabet)
 
-    - First byte's high bit (0x40) must be 0
+    - First character must be one of 234567abcdefghij so that the high bit
+      of the underlying 64-bit integer is 0
 
     Args:
         v: The TID to validate (e.g. 3jxtb5w2hkt2m)
@@ -437,7 +438,7 @@ def validate_tid(v: str, _: ValidationInfo) -> str:
     Raises:
         ValueError: If TID format is invalid
     """
-    if not TID_RE.match(v) or (ord(v[0]) & 0x40):
+    if not TID_RE.match(v):
         raise ValueError(f'Invalid TID: must be exactly {TID_LENGTH} lowercase letters/numbers')
     return v
 
