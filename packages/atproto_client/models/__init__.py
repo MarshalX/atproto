@@ -99,6 +99,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.graph import mute_actor_list as AppBskyGraphMuteActorList
     from atproto_client.models.app.bsky.graph import mute_thread as AppBskyGraphMuteThread
     from atproto_client.models.app.bsky.graph import search_starter_packs as AppBskyGraphSearchStarterPacks
+    from atproto_client.models.app.bsky.graph import search_starter_packs_v2 as AppBskyGraphSearchStarterPacksV2
     from atproto_client.models.app.bsky.graph import starterpack as AppBskyGraphStarterpack
     from atproto_client.models.app.bsky.graph import unmute_actor as AppBskyGraphUnmuteActor
     from atproto_client.models.app.bsky.graph import unmute_actor_list as AppBskyGraphUnmuteActorList
@@ -564,6 +565,7 @@ class _Ids:
     AppBskyGraphMuteActorList: str = 'app.bsky.graph.muteActorList'
     AppBskyGraphMuteThread: str = 'app.bsky.graph.muteThread'
     AppBskyGraphSearchStarterPacks: str = 'app.bsky.graph.searchStarterPacks'
+    AppBskyGraphSearchStarterPacksV2: str = 'app.bsky.graph.searchStarterPacksV2'
     AppBskyGraphStarterpack: str = 'app.bsky.graph.starterpack'
     AppBskyGraphUnmuteActor: str = 'app.bsky.graph.unmuteActor'
     AppBskyGraphUnmuteActorList: str = 'app.bsky.graph.unmuteActorList'

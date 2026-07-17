@@ -25,7 +25,9 @@ class Params(base.ParamsModelBase):
     report_types: te.Annotated[t.Optional[t.List[str]], Field(max_length=10)] = (
         None  #: Filter queues that handle any of these report reason types.
     )
-    subject_type: t.Optional[str] = None  #: Filter queues that handle this subject type ('account' or 'record').
+    subject_type: t.Optional[str] = (
+        None  #: Filter queues that handle this subject type ('account', 'record', 'message', or 'conversation').
+    )
 
 
 class ParamsDict(t.TypedDict):
@@ -38,7 +40,7 @@ class ParamsDict(t.TypedDict):
     ]  #: Filter queues that handle any of these report reason types.
     subject_type: te.NotRequired[
         t.Optional[str]
-    ]  #: Filter queues that handle this subject type ('account' or 'record').
+    ]  #: Filter queues that handle this subject type ('account', 'record', 'message', or 'conversation').
 
 
 class Response(base.ResponseModelBase):

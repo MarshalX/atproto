@@ -204,6 +204,7 @@ class ReportView(base.ModelBase):
         None  #: Information about moderator currently assigned to this report (if any).
     )
     comment: t.Optional[str] = None  #: Comment provided by the reporter.
+    is_automated: t.Optional[bool] = False  #: Whether this report was emitted by automated tooling.
     is_muted: t.Optional[bool] = (
         None  #: Whether this report is muted. A report is muted if the reporter was muted or the subject was muted at the time the report was created.
     )

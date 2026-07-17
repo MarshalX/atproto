@@ -50,7 +50,7 @@ class GroupConvo(base.ModelBase):
     lock_status: 'models.ChatBskyConvoDefs.ConvoLockStatus'  #: The lock status of the conversation.
     member_count: int  #: The total number of members in the group conversation.
     member_limit: int  #: The maximum number of members allowed in the group conversation.
-    name: str = Field(max_length=1280)  #: The display name of the group conversation.
+    name: str = Field(max_length=500)  #: The display name of the group conversation.
     join_link: t.Optional['models.ChatBskyGroupDefs.JoinLinkView'] = None  #: Join link.
 
     py_type: t.Literal['chat.bsky.moderation.defs#groupConvo'] = Field(

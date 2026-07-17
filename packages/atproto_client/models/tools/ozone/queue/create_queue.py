@@ -21,26 +21,32 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.queue.createQueue`."""
 
     name: str  #: Display name for the queue (must be unique).
-    report_types: t.List[str] = Field(min_length=1, max_length=25)  #: Report reason types (fully qualified NSIDs).
-    subject_types: t.List[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], str]] = Field(
-        min_length=1
-    )  #: Subject types this queue accepts.
     collection: t.Optional[string_formats.Nsid] = (
         None  #: Collection name for record subjects. Required if subjectTypes includes 'record'.
     )
     description: t.Optional[str] = None  #: Optional description of the queue.
+    report_types: te.Annotated[t.Optional[t.List[str]], Field(max_length=25)] = (
+        None  #: Report reason types (fully qualified NSIDs).
+    )
+    subject_types: t.Optional[
+        t.List[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]]
+    ] = None  #: Subject types this queue accepts.
 
 
 class DataDict(t.TypedDict):
     name: str  #: Display name for the queue (must be unique).
-    report_types: t.List[str]  #: Report reason types (fully qualified NSIDs).
-    subject_types: t.List[
-        t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], str]
-    ]  #: Subject types this queue accepts.
     collection: te.NotRequired[
         t.Optional[string_formats.Nsid]
     ]  #: Collection name for record subjects. Required if subjectTypes includes 'record'.
     description: te.NotRequired[t.Optional[str]]  #: Optional description of the queue.
+    report_types: te.NotRequired[t.Optional[t.List[str]]]  #: Report reason types (fully qualified NSIDs).
+    subject_types: te.NotRequired[
+        t.Optional[
+            t.List[
+                t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]
+            ]
+        ]
+    ]  #: Subject types this queue accepts.
 
 
 class Response(base.ResponseModelBase):

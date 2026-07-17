@@ -46,9 +46,9 @@ class Params(base.ParamsModelBase):
     sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = 'desc'  #: Sort direction.
     sort_field: t.Optional[t.Union[t.Literal['createdAt'], t.Literal['updatedAt']]] = 'createdAt'  #: Sort field.
     subject: t.Optional[string_formats.Uri] = None  #: Filter by subject DID or AT-URI.
-    subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]] = (
-        None  #: If specified, reports of the given type (account or record) will be returned.
-    )
+    subject_type: t.Optional[
+        t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]
+    ] = None  #: If specified, reports of the given subject type will be returned.
 
 
 class ParamsDict(t.TypedDict):
@@ -83,8 +83,10 @@ class ParamsDict(t.TypedDict):
     sort_field: te.NotRequired[t.Optional[t.Union[t.Literal['createdAt'], t.Literal['updatedAt']]]]  #: Sort field.
     subject: te.NotRequired[t.Optional[string_formats.Uri]]  #: Filter by subject DID or AT-URI.
     subject_type: te.NotRequired[
-        t.Optional[t.Union[t.Literal['account'], t.Literal['record'], str]]
-    ]  #: If specified, reports of the given type (account or record) will be returned.
+        t.Optional[
+            t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]
+        ]
+    ]  #: If specified, reports of the given subject type will be returned.
 
 
 class Response(base.ResponseModelBase):
