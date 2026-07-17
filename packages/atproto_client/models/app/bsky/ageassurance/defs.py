@@ -76,6 +76,9 @@ class ConfigRegion(base.ModelBase):
             Field(discriminator='py_type'),
         ]
     ]  #: The ordered list of Age Assurance rules that apply to this region. Rules should be applied in order, and the first matching rule determines the access level granted. The rules array should always include a default rule as the last item.
+    additional_verification_methods: t.Optional[t.List[t.Union[t.Literal['device'], str]]] = (
+        None  #: Verification methods permitted in this region in addition to the third-party (KWS) flow, which is always supported. `device` permits using the native on-device age APIs (e.g. Apple Declared Age Range, Google Play Age Signals).
+    )
     region_code: t.Optional[str] = (
         None  #: The ISO 3166-2 region code this configuration applies to. If omitted, the configuration applies to the entire country.
     )

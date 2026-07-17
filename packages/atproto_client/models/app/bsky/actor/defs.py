@@ -435,6 +435,7 @@ class BskyAppStatePref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`. A grab bag of state that's specific to the bsky.app program. Third-party apps shouldn't use this."""
 
     active_progress_guide: t.Optional['models.AppBskyActorDefs.BskyAppProgressGuide'] = None  #: Active progress guide.
+    is_beta_user: t.Optional[bool] = None  #: Indicates if the user is participating in the beta features program.
     nuxs: te.Annotated[t.Optional[t.List['models.AppBskyActorDefs.Nux']], Field(max_length=100)] = (
         None  #: Storage for NUXs the user has encountered.
     )

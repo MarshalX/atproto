@@ -18,7 +18,7 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`chat.bsky.group.editGroup`."""
 
     convo_id: str  #: Convo id.
-    name: str = Field(min_length=1, max_length=1280)  #: Name.
+    name: str = Field(min_length=1, max_length=500)  #: Name.
 
 
 class DataDict(t.TypedDict):

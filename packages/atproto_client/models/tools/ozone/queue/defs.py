@@ -24,17 +24,17 @@ class QueueView(base.ModelBase):
     enabled: bool  #: Whether this queue is currently active.
     id: int  #: Queue ID.
     name: str  #: Display name of the queue.
-    report_types: t.List[str] = Field(min_length=1)  #: Report reason types this queue accepts (fully qualified NSIDs).
     stats: 'models.ToolsOzoneQueueDefs.QueueStats'  #: Statistics about this queue.
-    subject_types: t.List[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], str]] = Field(
-        min_length=1
-    )  #: Subject types this queue accepts.
     updated_at: string_formats.DateTime  #: Updated at.
     collection: t.Optional[string_formats.Nsid] = (
         None  #: Collection name for record subjects (e.g., 'app.bsky.feed.post').
     )
     deleted_at: t.Optional[string_formats.DateTime] = None  #: When the queue was deleted, if applicable.
     description: t.Optional[str] = None  #: Optional description of the queue.
+    report_types: t.Optional[t.List[str]] = None  #: Report reason types this queue accepts (fully qualified NSIDs).
+    subject_types: t.Optional[
+        t.List[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]]
+    ] = None  #: Subject types this queue accepts.
 
     py_type: t.Literal['tools.ozone.queue.defs#queueView'] = Field(
         default='tools.ozone.queue.defs#queueView', alias='$type', frozen=True

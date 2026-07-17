@@ -37,6 +37,9 @@ class Params(base.ParamsModelBase):
     exclude_hashtags: t.Optional[t.List[str]] = (
         None  #: Exclude posts tagged with any of these hashtags. Do not include the hash (#) prefix.
     )
+    exclude_languages: t.Optional[t.List[string_formats.Language]] = (
+        None  #: Exclude posts whose language matches any of these language codes.
+    )
     exclude_mentions: t.Optional[t.List[string_formats.AtIdentifier]] = (
         None  #: Exclude posts that mention any of these accounts. Handles are resolved to DIDs before searching.
     )
@@ -48,7 +51,9 @@ class Params(base.ParamsModelBase):
     hashtags: t.Optional[t.List[str]] = (
         None  #: Include posts tagged with any of these hashtags. Do not include the hash (#) prefix.
     )
-    language: t.Optional[string_formats.Language] = None  #: Include posts whose language matches this language code.
+    languages: t.Optional[t.List[string_formats.Language]] = (
+        None  #: Include posts whose language matches any of these language codes.
+    )
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Maximum number of results to return.
     mentions: t.Optional[t.List[string_formats.AtIdentifier]] = (
         None  #: Include posts that mention any of these accounts. Handles are resolved to DIDs before searching.
@@ -59,15 +64,17 @@ class Params(base.ParamsModelBase):
     ] = None  #: Language analyzer hint for the query text. If unset, the server auto-detects when possible.
     replies_only: t.Optional[bool] = None  #: Include only replies. Mutually exclusive with excludeReplies.
     reply_parent_uri: t.Optional[string_formats.AtUri] = None  #: Include only direct replies to this parent post URI.
-    since: t.Optional[string_formats.DateTime] = None  #: Include posts indexed at or after this timestamp.
+    since: t.Optional[str] = (
+        None  #: Include posts indexed at or after this timestamp. Can be a datetime, or just an ISO date (YYYY-MM-DD).
+    )
     sort: t.Optional[t.Union[t.Literal['recent'], t.Literal['top'], str]] = (
         None  #: Ranking order for results. 'recent' sorts by recency; 'top' uses search ranking.
     )
     thread_root_uri: t.Optional[string_formats.AtUri] = (
         None  #: Include only posts in the thread rooted at this post URI.
     )
-    until: t.Optional[string_formats.DateTime] = (
-        None  #: Include posts indexed before this timestamp. Defaults to the current time.
+    until: t.Optional[str] = (
+        None  #: Include posts indexed before this timestamp. Defaults to the current time. Can be a datetime, or just an ISO date (YYYY-MM-DD).
     )
     urls: t.Optional[t.List[string_formats.Uri]] = None  #: Include posts that link to any of these URLs.
 
@@ -92,6 +99,9 @@ class ParamsDict(t.TypedDict):
     exclude_hashtags: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: Exclude posts tagged with any of these hashtags. Do not include the hash (#) prefix.
+    exclude_languages: te.NotRequired[
+        t.Optional[t.List[string_formats.Language]]
+    ]  #: Exclude posts whose language matches any of these language codes.
     exclude_mentions: te.NotRequired[
         t.Optional[t.List[string_formats.AtIdentifier]]
     ]  #: Exclude posts that mention any of these accounts. Handles are resolved to DIDs before searching.
@@ -107,9 +117,9 @@ class ParamsDict(t.TypedDict):
     hashtags: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: Include posts tagged with any of these hashtags. Do not include the hash (#) prefix.
-    language: te.NotRequired[
-        t.Optional[string_formats.Language]
-    ]  #: Include posts whose language matches this language code.
+    languages: te.NotRequired[
+        t.Optional[t.List[string_formats.Language]]
+    ]  #: Include posts whose language matches any of these language codes.
     limit: te.NotRequired[t.Optional[int]]  #: Maximum number of results to return.
     mentions: te.NotRequired[
         t.Optional[t.List[string_formats.AtIdentifier]]
@@ -122,7 +132,9 @@ class ParamsDict(t.TypedDict):
     reply_parent_uri: te.NotRequired[
         t.Optional[string_formats.AtUri]
     ]  #: Include only direct replies to this parent post URI.
-    since: te.NotRequired[t.Optional[string_formats.DateTime]]  #: Include posts indexed at or after this timestamp.
+    since: te.NotRequired[
+        t.Optional[str]
+    ]  #: Include posts indexed at or after this timestamp. Can be a datetime, or just an ISO date (YYYY-MM-DD).
     sort: te.NotRequired[
         t.Optional[t.Union[t.Literal['recent'], t.Literal['top'], str]]
     ]  #: Ranking order for results. 'recent' sorts by recency; 'top' uses search ranking.
@@ -130,8 +142,8 @@ class ParamsDict(t.TypedDict):
         t.Optional[string_formats.AtUri]
     ]  #: Include only posts in the thread rooted at this post URI.
     until: te.NotRequired[
-        t.Optional[string_formats.DateTime]
-    ]  #: Include posts indexed before this timestamp. Defaults to the current time.
+        t.Optional[str]
+    ]  #: Include posts indexed before this timestamp. Defaults to the current time. Can be a datetime, or just an ISO date (YYYY-MM-DD).
     urls: te.NotRequired[t.Optional[t.List[string_formats.Uri]]]  #: Include posts that link to any of these URLs.
 
 

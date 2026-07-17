@@ -4053,6 +4053,34 @@ class AppBskyGraphNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyGraphSearchStarterPacks.Response)
 
+    async def search_starter_packs_v2(
+        self,
+        params: t.Union[
+            models.AppBskyGraphSearchStarterPacksV2.Params, models.AppBskyGraphSearchStarterPacksV2.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyGraphSearchStarterPacksV2.Response':
+        """Find starter packs matching search criteria. Does not require auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyGraphSearchStarterPacksV2.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyGraphSearchStarterPacksV2.Params',
+            get_or_create(params, models.AppBskyGraphSearchStarterPacksV2.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.graph.searchStarterPacksV2', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyGraphSearchStarterPacksV2.Response)
+
     async def unmute_actor(
         self,
         data: t.Union[models.AppBskyGraphUnmuteActor.Data, models.AppBskyGraphUnmuteActor.DataDict],
@@ -11247,7 +11275,7 @@ class ToolsOzoneQueueNamespace(AsyncNamespaceBase):
         data: t.Union[models.ToolsOzoneQueueCreateQueue.Data, models.ToolsOzoneQueueCreateQueue.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ToolsOzoneQueueCreateQueue.Response':
-        """Create a new moderation queue. Will fail if the queue configuration conflicts with an existing queue.
+        """Create a new moderation queue. A queue can have optional matching criteria that ozone's queue router will use to match reports. A queue with no criteria must have reports assigned to it manually via (1) `modTool.meta.queueId` in `tools.ozone.moderation.emitEvent` or (2) `tools.ozone.report.reassignQueue`.
 
         Args:
             data: Input data.
