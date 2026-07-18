@@ -124,7 +124,7 @@ def test_string_format_validation_with_valid(field_name: str, valid_value: str) 
     assert validated == valid_value
 
 
-@pytest.mark.parametrize('valid_tid', ['a222222222222', 'j222222222222', 'aaaaaaaaaaaaa'])
+@pytest.mark.parametrize('valid_tid', ['a222222222222', 'j222222222222', 'aaaaaaaaaaaaa', '2222222222222'])
 def test_tid_valid_first_letters(valid_tid: str) -> None:
     """Test that TIDs starting with a-j (high bit of the 64-bit value is 0) are accepted.
 
