@@ -1,7 +1,7 @@
 import shutil
 from pathlib import Path
 
-from atproto_lexicon.parser import _PATH_TO_LEXICONS, lexicon_parse_file, lexicon_parse_dir  # noqa
+from atproto_lexicon.parser import _PATH_TO_LEXICONS, lexicon_parse_dir, lexicon_parse_file
 
 
 def test_lexicon_parse_file() -> None:
