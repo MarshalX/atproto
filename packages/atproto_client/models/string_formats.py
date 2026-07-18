@@ -426,8 +426,8 @@ def validate_tid(v: str, _: ValidationInfo) -> str:
 
     - Only lowercase letters and numbers 2-7 (base32-sortable alphabet)
 
-    - First character must be one of 234567abcdefghij so that the high bit
-      of the underlying 64-bit integer is 0
+    - First character must be one of 234567abcdefghij so that the 65-bit
+      base32 encoding fits in a 64-bit integer
 
     Args:
         v: The TID to validate (e.g. 3jxtb5w2hkt2m)
