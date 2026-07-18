@@ -38,12 +38,12 @@ def lexicon_parse_dir(
 
     parsed_lexicons = []
 
-    for _, _, lexicons in sorted(os.walk(lexicon_dir_path)):
+    for root, _, lexicons in sorted(os.walk(lexicon_dir_path)):
         for lexicon in sorted(lexicons):
             if not lexicon.endswith(_LEXICON_FILE_EXT):
                 continue
 
-            lexicon_path = lexicon_dir_path.joinpath(lexicon)
+            lexicon_path = Path(root).joinpath(lexicon)
             parsed_lexicon = lexicon_parse_file(lexicon_path, soft_fail=soft_fail)
             if parsed_lexicon:
                 parsed_lexicons.append(parsed_lexicon)
