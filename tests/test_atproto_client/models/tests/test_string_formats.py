@@ -124,6 +124,24 @@ def test_string_format_validation_with_valid(field_name: str, valid_value: str) 
     assert validated == valid_value
 
 
+@pytest.mark.parametrize('valid_tid', ['a222222222222', 'j222222222222', 'aaaaaaaaaaaaa', '2222222222222'])
+def test_tid_valid_first_letters(valid_tid: str) -> None:
+    """Test that TIDs starting with a-j (high bit of the 64-bit value is 0) are accepted.
+
+    The interop test files do not cover valid TIDs starting with a letter.
+    """
+    TidTypeAdapter = TypeAdapter(string_formats.Tid)
+    assert TidTypeAdapter.validate_python(valid_tid, context={_OPT_IN_KEY: True}) == valid_tid
+
+
+@pytest.mark.parametrize('invalid_tid', ['k222222222222', '1222222222222', '8222222222222'])
+def test_tid_invalid_first_letters(invalid_tid: str) -> None:
+    """Test that TIDs starting with k-z or non-base32-sortable chars are rejected."""
+    TidTypeAdapter = TypeAdapter(string_formats.Tid)
+    with pytest.raises(ValidationError):
+        TidTypeAdapter.validate_python(invalid_tid, context={_OPT_IN_KEY: True})
+
+
 @pytest.mark.parametrize(
     'valid_value',
     [
