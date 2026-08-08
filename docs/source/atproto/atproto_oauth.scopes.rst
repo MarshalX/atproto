@@ -5,7 +5,6 @@ atproto\_oauth.scopes
    :members:
    :undoc-members:
    :show-inheritance:
-   :noindex:
 
 Submodules
 ----------

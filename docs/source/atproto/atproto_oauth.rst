@@ -5,7 +5,6 @@ atproto\_oauth
    :members:
    :undoc-members:
    :show-inheritance:
-   :noindex:
 
 Subpackages
 -----------
