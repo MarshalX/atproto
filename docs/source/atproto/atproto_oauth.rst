@@ -5,6 +5,7 @@ atproto\_oauth
    :members:
    :undoc-members:
    :show-inheritance:
+   :noindex:
 
 Subpackages
 -----------
@@ -12,6 +13,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   atproto_oauth.scopes
    atproto_oauth.stores
 
 Submodules

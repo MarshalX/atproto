@@ -167,6 +167,10 @@ ignore = [
 "packages/atproto_oauth/*.py" = [
     "S105", "S104", "BLE001", "S110", "SIM105", "SIM102", "C901",
 ]
+"packages/atproto_oauth/scopes/*.py" = [
+    "SIM103", "SIM108", "SIM110", "SIM118", # ported from TS reference; keep structure close
+    "C401", # set() with generator matches TS style
+]
 "packages/atproto_client/models/__init__.py" = ["E501", "F401", "F811"]
 "packages/atproto_client/models/*/*.py" = ["E501", "D401"]
 "packages/atproto_client/namespaces/async_ns.py" = ["E501", "D401"]
