@@ -49,8 +49,8 @@ class ScopesSet:
 
     Example::
 
-        scopes = ScopesSet.from_string("atproto repo:fm.plyr.track blob:*/*")
-        scopes.matches('repo', collection='fm.plyr.track', action='create')  # True
+        scopes = ScopesSet.from_string("atproto repo:com.example.record blob:*/*")
+        scopes.matches('repo', collection='com.example.record', action='create')  # True
         scopes.matches('blob', mime='image/png')  # True
     """
 

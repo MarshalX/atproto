@@ -18,8 +18,8 @@ class ScopePermissions:
 
     Example::
 
-        perms = ScopePermissions("atproto repo:fm.plyr.track blob:*/*")
-        perms.allows_repo(collection='fm.plyr.track', action='create')  # True
+        perms = ScopePermissions("atproto repo:com.example.record blob:*/*")
+        perms.allows_repo(collection='com.example.record', action='create')  # True
     """
 
     def __init__(self, scope: t.Optional[str] = None) -> None:
