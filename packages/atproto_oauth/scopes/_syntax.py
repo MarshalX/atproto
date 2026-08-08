@@ -5,8 +5,8 @@ into structured parts.
 
 Examples::
 
-    ScopeStringSyntax.from_string("repo:fm.plyr.track?action=create")
-    # -> prefix="repo", positional="fm.plyr.track", params={"action": ["create"]}
+    ScopeStringSyntax.from_string("repo:com.example.record?action=create")
+    # -> prefix="repo", positional="com.example.record", params={"action": ["create"]}
 
     ScopeStringSyntax.from_string("repo?collection=a.b.c&collection=d.e.f")
     # -> prefix="repo", positional=None, params={"collection": ["a.b.c", "d.e.f"]}

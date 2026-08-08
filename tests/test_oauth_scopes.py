@@ -548,28 +548,28 @@ class TestIncludeScope:
     """Tests for include scope parsing."""
 
     def test_parse(self) -> None:
-        scope = IncludeScope.from_string('include:fm.plyr.authFullApp')
+        scope = IncludeScope.from_string('include:com.example.appPermissions')
         assert scope is not None
-        assert scope.nsid == 'fm.plyr.authFullApp'
+        assert scope.nsid == 'com.example.appPermissions'
         assert scope.aud is None
 
     def test_parse_with_aud(self) -> None:
-        scope = IncludeScope.from_string('include:fm.plyr.authFullApp?aud=did:web:example.com')
+        scope = IncludeScope.from_string('include:com.example.appPermissions?aud=did:web:example.com')
         assert scope is not None
-        assert scope.nsid == 'fm.plyr.authFullApp'
+        assert scope.nsid == 'com.example.appPermissions'
         assert scope.aud == 'did:web:example.com'
 
     def test_is_parent_authority_of_same_namespace(self) -> None:
-        scope = IncludeScope(nsid='fm.plyr.authFullApp')
-        assert scope.is_parent_authority_of('fm.plyr.track')
-        assert scope.is_parent_authority_of('fm.plyr.like')
+        scope = IncludeScope(nsid='com.example.appPermissions')
+        assert scope.is_parent_authority_of('com.example.record')
+        assert scope.is_parent_authority_of('com.example.like')
 
     def test_is_parent_authority_of_different_namespace(self) -> None:
-        scope = IncludeScope(nsid='fm.plyr.authFullApp')
+        scope = IncludeScope(nsid='com.example.appPermissions')
         assert not scope.is_parent_authority_of('com.other.thing')
 
     def test_is_parent_authority_of_wildcard(self) -> None:
-        scope = IncludeScope(nsid='fm.plyr.authFullApp')
+        scope = IncludeScope(nsid='com.example.appPermissions')
         assert not scope.is_parent_authority_of('*')
 
     def test_rejects_invalid_nsid(self) -> None:
@@ -577,8 +577,8 @@ class TestIncludeScope:
         assert IncludeScope.from_string('include:a.b') is None
 
     def test_format_roundtrip(self) -> None:
-        scope = IncludeScope(nsid='fm.plyr.authFullApp')
-        assert str(scope) == 'include:fm.plyr.authFullApp'
+        scope = IncludeScope(nsid='com.example.appPermissions')
+        assert str(scope) == 'include:com.example.appPermissions'
 
 
 # ---------------------------------------------------------------------------
@@ -726,46 +726,46 @@ class TestScopesAreEquivalent:
 
     def test_exact_match(self) -> None:
         assert _scopes_are_equivalent(
-            'atproto repo:fm.plyr.track',
-            'atproto repo:fm.plyr.track',
+            'atproto repo:com.example.record',
+            'atproto repo:com.example.record',
         )
 
     def test_format_equivalence(self) -> None:
         """repo:nsid == repo?collection=nsid."""
         assert _scopes_are_equivalent(
-            'atproto repo:fm.plyr.track',
-            'atproto repo?collection=fm.plyr.track',
+            'atproto repo:com.example.record',
+            'atproto repo?collection=com.example.record',
         )
 
     def test_include_expansion(self) -> None:
         """include:namespace.permSet is satisfied by repo?collection= in that namespace."""
         assert _scopes_are_equivalent(
-            'atproto include:fm.plyr.authFullApp',
-            'atproto repo?collection=fm.plyr.track&collection=fm.plyr.like',
+            'atproto include:com.example.appPermissions',
+            'atproto repo?collection=com.example.record&collection=com.example.like',
         )
 
     def test_include_expansion_with_positional(self) -> None:
         """include:namespace.permSet is satisfied by repo:ns.collection."""
         assert _scopes_are_equivalent(
-            'atproto include:fm.plyr.authFullApp',
-            'atproto repo:fm.plyr.track repo:fm.plyr.like',
+            'atproto include:com.example.appPermissions',
+            'atproto repo:com.example.record repo:com.example.like',
         )
 
     def test_missing_scope(self) -> None:
         assert not _scopes_are_equivalent(
-            'atproto repo:fm.plyr.track repo:fm.plyr.like',
-            'atproto repo:fm.plyr.track',
+            'atproto repo:com.example.record repo:com.example.like',
+            'atproto repo:com.example.record',
         )
 
     def test_extra_granted_ok(self) -> None:
         assert _scopes_are_equivalent(
-            'atproto repo:fm.plyr.track',
-            'atproto repo:fm.plyr.track repo:fm.plyr.like blob:*/*',
+            'atproto repo:com.example.record',
+            'atproto repo:com.example.record repo:com.example.like blob:*/*',
         )
 
     def test_include_wrong_namespace(self) -> None:
         assert not _scopes_are_equivalent(
-            'atproto include:fm.plyr.authFullApp',
+            'atproto include:com.example.appPermissions',
             'atproto repo?collection=com.other.thing',
         )
 
@@ -793,15 +793,15 @@ class TestScopesAreEquivalent:
     def test_repo_wildcard_covers_specific(self) -> None:
         """repo:* should cover any specific collection."""
         assert _scopes_are_equivalent(
-            'atproto repo:fm.plyr.track',
+            'atproto repo:com.example.record',
             'atproto repo:*',
         )
 
     def test_action_mismatch(self) -> None:
         """repo with limited actions should not cover all-action request."""
         assert not _scopes_are_equivalent(
-            'atproto repo:fm.plyr.track',
-            'atproto repo:fm.plyr.track?action=create',
+            'atproto repo:com.example.record',
+            'atproto repo:com.example.record?action=create',
         )
 
     def test_blob_wildcard_covers_specific(self) -> None:
@@ -814,8 +814,8 @@ class TestScopesAreEquivalent:
     def test_granted_superset_actions(self) -> None:
         """granted all-actions should cover limited-action request."""
         assert _scopes_are_equivalent(
-            'atproto repo:fm.plyr.track?action=create',
-            'atproto repo:fm.plyr.track',
+            'atproto repo:com.example.record?action=create',
+            'atproto repo:com.example.record',
         )
 
 
