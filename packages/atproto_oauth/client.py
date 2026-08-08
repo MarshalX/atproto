@@ -37,17 +37,27 @@ PromptType = t.Literal['login', 'select_account', 'consent', 'none']
 def _scopes_are_equivalent(requested: str, granted: str) -> bool:
     """Check if granted scopes satisfy requested scopes.
 
-    Uses set comparison: every non-``atproto`` token in *requested* must appear
-    in *granted*, or (for ``include:`` scopes) at least one granted token must
-    share the same NSID authority prefix.
+    Handles permission set expansion where PDS expands ``include:namespace.permissionSet``
+    into ``repo?collection=...`` format, and equivalence between positional
+    (``repo:nsid``) and query (``repo?collection=nsid``) forms.
 
     Args:
-        requested: The scope string originally requested.
-        granted: The scope string returned by the authorization server.
+        requested: The scope string originally requested (may contain ``include:`` scopes).
+        granted: The scope string returned by the PDS (with expanded permissions).
 
     Returns:
-        True if granted scopes cover all requested scopes.
+        True if granted scopes satisfy all requested permissions.
     """
+    from atproto_oauth.scopes.permissions import (
+        AccountPermission,
+        BlobPermission,
+        IdentityPermission,
+        IncludeScope,
+        RepoPermission,
+        RpcPermission,
+    )
+
+    # fast path: exact match
     if requested == granted:
         return True
 
@@ -58,19 +68,81 @@ def _scopes_are_equivalent(requested: str, granted: str) -> bool:
     requested_parts.discard('atproto')
     granted_parts.discard('atproto')
 
-    for req in requested_parts:
-        if req in granted_parts:
+    # Parse all granted scopes into permission objects by type
+    granted_repo: t.List[RepoPermission] = []
+    granted_blob: t.List[BlobPermission] = []
+    granted_rpc: t.List[RpcPermission] = []
+    granted_account: t.List[AccountPermission] = []
+    granted_identity: t.List[IdentityPermission] = []
+
+    for scope in granted_parts:
+        if (p := RepoPermission.from_string(scope)) is not None:
+            granted_repo.append(p)
+        elif (p := BlobPermission.from_string(scope)) is not None:
+            granted_blob.append(p)
+        elif (p := RpcPermission.from_string(scope)) is not None:
+            granted_rpc.append(p)
+        elif (p := AccountPermission.from_string(scope)) is not None:
+            granted_account.append(p)
+        elif (p := IdentityPermission.from_string(scope)) is not None:
+            granted_identity.append(p)
+        # transition: and other tokens are kept as-is for exact matching
+
+    for req_scope in requested_parts:
+        # Transition scopes: exact match
+        if req_scope.startswith('transition:'):
+            if req_scope not in granted_parts:
+                return False
             continue
 
-        # include:namespace.permissionSet — the PDS expands these into
-        # resource-specific scopes (repo?collection=..., rpc?lxm=...).
-        # Accept if any granted scope contains the namespace authority.
-        if req.startswith('include:'):
-            authority = req.split(':', 1)[1].rsplit('.', 1)[0]  # e.g. 'app.bsky.feed'
-            if any(authority in g for g in granted_parts):
-                continue
+        # Include scopes: verify PDS expanded them into matching repo/rpc scopes
+        if (inc := IncludeScope.from_string(req_scope)) is not None:
+            # Check if any granted repo scope has a collection in this namespace
+            found = any(any(inc.is_parent_authority_of(c) for c in rp.collection) for rp in granted_repo)
+            if not found:
+                # Also check granted rpc scopes
+                found = any(any(inc.is_parent_authority_of(lxm) for lxm in rp.lxm) for rp in granted_rpc)
+            if not found:
+                return False
+            continue
 
-        return False
+        # Resource permissions: parse and compare
+        if (req_perm := RepoPermission.from_string(req_scope)) is not None:
+            # Check if any granted repo permission covers all collection+action combos
+            for coll in req_perm.collection:
+                for action in req_perm.action:
+                    if not any(gp.matches(coll, action) for gp in granted_repo):
+                        return False
+            continue
+
+        if (req_perm := BlobPermission.from_string(req_scope)) is not None:
+            if req_scope in granted_parts:
+                continue
+            # Check if any granted blob permission covers all requested MIME types
+            if all(any(gp.matches(accept) for gp in granted_blob) for accept in req_perm.accept):
+                continue
+            return False
+
+        if (req_perm := RpcPermission.from_string(req_scope)) is not None:
+            for lxm in req_perm.lxm:
+                if not any(gp.matches(lxm, req_perm.aud) for gp in granted_rpc):
+                    return False
+            continue
+
+        if (req_perm := AccountPermission.from_string(req_scope)) is not None:
+            for action in req_perm.action:
+                if not any(gp.matches(req_perm.attr, action) for gp in granted_account):
+                    return False
+            continue
+
+        if (req_perm := IdentityPermission.from_string(req_scope)) is not None:
+            if not any(gp.matches(req_perm.attr) for gp in granted_identity):
+                return False
+            continue
+
+        # Unknown scope token: require exact match
+        if req_scope not in granted_parts:
+            return False
 
     return True
 
