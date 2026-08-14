@@ -76,6 +76,9 @@ class Notification(base.ModelBase):
     uri: string_formats.AtUri  #: Uri.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     reason_subject: t.Optional[string_formats.AtUri] = None  #: Reason subject.
+    starter_pack: t.Optional['models.AppBskyGraphDefs.StarterPackViewBasic'] = (
+        None  #: The starter pack associated with this notification. Present when the notification is for a follow originating from a starter pack.
+    )
 
     py_type: t.Literal['app.bsky.notification.listNotifications#notification'] = Field(
         default='app.bsky.notification.listNotifications#notification', alias='$type', frozen=True

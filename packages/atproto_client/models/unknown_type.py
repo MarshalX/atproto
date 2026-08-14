@@ -8,6 +8,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models import dot_dict
 
 UnknownRecordType: te.TypeAlias = t.Union[
+    'models.AppBskyActorContentVisibilityDeclaration.Record',
     'models.AppBskyActorProfile.Record',
     'models.AppBskyActorStatus.Record',
     'models.AppBskyFeedGenerator.Record',
@@ -36,6 +37,7 @@ UnknownRecordType: te.TypeAlias = t.Union[
 ]
 UnknownRecordTypePydantic = te.Annotated[
     t.Union[
+        'models.AppBskyActorContentVisibilityDeclaration.Record',
         'models.AppBskyActorProfile.Record',
         'models.AppBskyActorStatus.Record',
         'models.AppBskyFeedGenerator.Record',

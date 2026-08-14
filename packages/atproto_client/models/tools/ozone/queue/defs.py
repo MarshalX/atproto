@@ -31,6 +31,9 @@ class QueueView(base.ModelBase):
     )
     deleted_at: t.Optional[string_formats.DateTime] = None  #: When the queue was deleted, if applicable.
     description: t.Optional[str] = None  #: Optional description of the queue.
+    recommended_policies: t.Optional[t.List[str]] = (
+        None  #: Policy keys recommended when actioning reports in this queue.
+    )
     report_types: t.Optional[t.List[str]] = None  #: Report reason types this queue accepts (fully qualified NSIDs).
     subject_types: t.Optional[
         t.List[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]]

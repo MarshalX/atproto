@@ -1,6 +1,7 @@
 from atproto_client import models
 
 RECORD_TYPE_TO_MODEL_CLASS = {
+    'app.bsky.actor.contentVisibilityDeclaration': models.AppBskyActorContentVisibilityDeclaration.Record,
     'app.bsky.actor.profile': models.AppBskyActorProfile.Record,
     'app.bsky.actor.status': models.AppBskyActorStatus.Record,
     'app.bsky.feed.generator': models.AppBskyFeedGenerator.Record,

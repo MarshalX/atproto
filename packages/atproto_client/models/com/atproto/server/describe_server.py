@@ -21,6 +21,9 @@ class Response(base.ResponseModelBase):
 
     available_user_domains: t.List[str]  #: List of domain suffixes that can be used in account handles.
     did: string_formats.Did  #: Did.
+    blob_upload_limit: t.Optional[int] = (
+        None  #: Maximum size of a blob that can be uploaded via com.atproto.repo.uploadBlob, in bytes.
+    )
     contact: t.Optional['models.ComAtprotoServerDescribeServer.Contact'] = None  #: Contact information.
     invite_code_required: t.Optional[bool] = (
         None  #: If true, an invite code must be supplied to create an account on this instance.

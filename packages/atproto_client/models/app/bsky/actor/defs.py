@@ -162,8 +162,16 @@ class ViewerState(base.ModelBase):
     known_followers: t.Optional['models.AppBskyActorDefs.KnownFollowers'] = (
         None  #: This property is present only in selected cases, as an optimization.
     )
-    muted: t.Optional[bool] = None  #: Muted.
+    muted: t.Optional[bool] = (
+        None  #: Whether the account is fully muted, directly or via a mutelist. False when the mute is scoped to specific kinds; see mutedOnlyReposts and mutedOnlyQuoteposts.
+    )
     muted_by_list: t.Optional['models.AppBskyGraphDefs.ListViewBasic'] = None  #: Muted by list.
+    muted_only_quoteposts: t.Optional[bool] = (
+        None  #: Whether the account's quote posts are muted. Scoped mutes are exclusive with muted: this can be true while muted is false. If muted is true, this will be false.
+    )
+    muted_only_reposts: t.Optional[bool] = (
+        None  #: Whether the account's reposts are muted. Scoped mutes are exclusive with muted: this can be true while muted is false. If muted is true, this will be false.
+    )
 
     py_type: t.Literal['app.bsky.actor.defs#viewerState'] = Field(
         default='app.bsky.actor.defs#viewerState', alias='$type', frozen=True

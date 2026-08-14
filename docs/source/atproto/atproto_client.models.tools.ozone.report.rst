@@ -13,6 +13,7 @@ Submodules
    :maxdepth: 4
 
    atproto_client.models.tools.ozone.report.assign_moderator
+   atproto_client.models.tools.ozone.report.close_reports
    atproto_client.models.tools.ozone.report.create_activity
    atproto_client.models.tools.ozone.report.defs
    atproto_client.models.tools.ozone.report.get_assignments
