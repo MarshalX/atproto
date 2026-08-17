@@ -48,7 +48,7 @@ jobs:
         if: steps.cached-poetry.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
         with:
-          version: 2.2.1
+          version: 2.4.1
 
       - name: Add Poetry to PATH.
         run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
@@ -94,7 +94,7 @@ jobs:
         if: steps.cached-poetry.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
         with:
-          version: 2.2.1
+          version: 2.4.1
 
       - name: Add Poetry to PATH.
         run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
