@@ -187,6 +187,17 @@ async def _delayed_send(ws: t.Any, connection_no: int) -> None:
     await asyncio.sleep(_IDLE_SEC)
 
 
+async def _always_drops(ws: t.Any, connection_no: int) -> None:
+    """An overloaded server: accepts, delivers one frame, drops. Never settles."""
+    await ws.send(message_frame(connection_no))
+    await ws.close(1011, 'overloaded')
+
+
+async def _idle(ws: t.Any, connection_no: int) -> None:
+    """Holds the connection open and sends nothing, parking the client in recv()."""
+    await asyncio.sleep(_IDLE_SEC)
+
+
 SCENARIOS: t.Dict[str, t.Callable[[t.Any, int], t.Coroutine[t.Any, t.Any, None]]] = {
     'three_messages_then_close': _three_messages_then_close,
     'error_frame': _error_frame,
@@ -200,6 +211,8 @@ SCENARIOS: t.Dict[str, t.Callable[[t.Any, int], t.Coroutine[t.Any, t.Any, None]]
     'fragmented_message': _fragmented_message,
     'silent_then_normal': _silent_then_normal,
     'delayed_send': _delayed_send,
+    'always_drops': _always_drops,
+    'idle': _idle,
 }
 
 

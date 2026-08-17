@@ -6,12 +6,21 @@ framing, reconnection, and which errors are fatal versus recoverable.
 
 import asyncio
 import contextlib
+import errno
+import socket
+import ssl
 import threading
+import time
 import typing as t
 
 import libipld
 import pytest
-from atproto_firehose.client import _AsyncWebsocketClient, _WebsocketClient
+from atproto_firehose import client as client_module
+from atproto_firehose.client import (
+    _AsyncWebsocketClient,
+    _handle_websocket_error_or_stop,
+    _WebsocketClient,
+)
 from atproto_firehose.exceptions import FirehoseError
 from atproto_firehose.models import MessageFrame
 from websockets.asyncio.client import connect
@@ -40,10 +49,13 @@ def run_sync(
     params: t.Optional[dict] = None,
     recv_timeout: t.Optional[float] = None,
     stop_after: int = 1,
+    configure: t.Optional[t.Callable[[t.Any], None]] = None,
 ) -> Outcome:
     """Run the sync client until ``stop_after`` frames arrive or it stops on its own."""
     client = _WebsocketClient(method, server.base_uri, params, recv_timeout=recv_timeout)
     _shrink_backoff(client)
+    if configure is not None:
+        configure(client)
 
     frames: t.List[MessageFrame] = []
     raised: t.List[BaseException] = []
@@ -75,10 +87,13 @@ async def run_async(
     params: t.Optional[dict] = None,
     recv_timeout: t.Optional[float] = None,
     stop_after: int = 1,
+    configure: t.Optional[t.Callable[[t.Any], None]] = None,
 ) -> Outcome:
     """Run the async client until ``stop_after`` frames arrive or it stops on its own."""
     client = _AsyncWebsocketClient(method, server.base_uri, params, recv_timeout=recv_timeout)
     _shrink_backoff(client)
+    if configure is not None:
+        configure(client)
 
     frames: t.List[MessageFrame] = []
     raised: t.List[BaseException] = []
@@ -284,3 +299,155 @@ async def test_recv_cancellation_does_not_lose_messages(server: FirehoseTestServ
 
     assert isinstance(data, bytes)
     assert libipld.decode_dag_cbor_multi(data)[1]['seq'] == 42
+
+
+#: Errors a long-running consumer is expected to survive. Each of these used to be fatal.
+TRANSIENT_ERRORS = [
+    pytest.param(OSError(errno.ENETUNREACH, 'Network is unreachable'), id='enetunreach'),
+    pytest.param(OSError(errno.EHOSTUNREACH, 'No route to host'), id='ehostunreach'),
+    pytest.param(ssl.SSLError('handshake failure'), id='ssl-error'),
+    pytest.param(ssl.SSLEOFError('EOF'), id='ssl-eof'),
+    pytest.param(socket.herror('host error'), id='herror'),
+    pytest.param(socket.gaierror('name resolution'), id='gaierror'),
+    pytest.param(ConnectionResetError(), id='connection-reset'),
+    pytest.param(TimeoutError(), id='timeout'),
+    pytest.param(asyncio.TimeoutError(), id='asyncio-timeout'),
+]
+
+
+@pytest.mark.parametrize('exception', TRANSIENT_ERRORS)
+def test_transient_network_errors_are_recoverable(exception: Exception) -> None:
+    """A dropped network must reconnect the client, not stop it."""
+    assert _handle_websocket_error_or_stop(exception) is False
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('runner', RUNNERS)
+async def test_reconnects_when_network_is_unreachable(runner: t.Any, server: FirehoseTestServer) -> None:
+    """The first connect attempt fails the way a sleeping laptop fails."""
+    method = server.new_method('text_then_message')
+
+    def configure(client: t.Any) -> None:
+        attempts = []
+
+        def fail_once(original: t.Callable[[], t.Any]) -> t.Callable[[], t.Any]:
+            def factory() -> t.Any:
+                attempts.append(1)
+                if len(attempts) == 1:
+                    raise OSError(errno.ENETUNREACH, 'Network is unreachable')
+                return original()
+
+            return factory
+
+        client._get_client = fail_once(client._get_client)
+        client._get_async_client = fail_once(client._get_async_client)
+
+    outcome = await _run(runner, server, method, configure=configure)
+
+    assert outcome.exception is None
+    assert len(outcome.frames) == 1
+
+
+def test_unexpected_exception_keeps_its_message() -> None:
+    """An unrecognised error must not surface as a blank FirehoseError."""
+    cause = ValueError('something specific went wrong')
+
+    with pytest.raises(FirehoseError) as exc_info:
+        _handle_websocket_error_or_stop(cause)
+
+    assert 'something specific went wrong' in str(exc_info.value)
+    assert exc_info.value.__cause__ is cause
+
+
+def _record_backoff(client: t.Any, attempts: t.List[int]) -> None:
+    """Capture the reconnect counter at each delay, without actually sleeping."""
+
+    def delay() -> float:
+        attempts.append(client._reconnect_no)
+        return 0.01
+
+    client._get_reconnection_delay = delay
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('runner', RUNNERS)
+async def test_backoff_escalates_against_a_flapping_server(runner: t.Any, server: FirehoseTestServer) -> None:
+    """A server that accepts then immediately drops must not be hammered at a fixed rate."""
+    method = server.new_method('always_drops')
+    attempts: t.List[int] = []
+
+    outcome = await _run(runner, server, method, stop_after=4, configure=lambda c: _record_backoff(c, attempts))
+
+    assert outcome.exception is None
+    assert attempts[:3] == [1, 2, 3]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('runner', RUNNERS)
+async def test_backoff_resets_after_a_healthy_connection(
+    runner: t.Any, server: FirehoseTestServer, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A long-lived connection dropping is a one-off, not evidence of a failing server."""
+    monkeypatch.setattr(client_module, '_HEALTHY_CONNECTION_SEC', 0.0)
+    method = server.new_method('always_drops')
+    attempts: t.List[int] = []
+
+    outcome = await _run(runner, server, method, stop_after=4, configure=lambda c: _record_backoff(c, attempts))
+
+    assert outcome.exception is None
+    assert attempts[:3] == [1, 1, 1]
+
+
+def _wait_for_connection(server: FirehoseTestServer, method: str) -> None:
+    deadline = time.monotonic() + _TEST_TIMEOUT_SEC
+    while time.monotonic() < deadline:
+        if server.state(method).connections:
+            time.sleep(0.1)  # let the client settle into recv()
+            return
+        time.sleep(0.02)
+    raise AssertionError('the client never connected')
+
+
+def test_sync_stop_interrupts_an_idle_connection(server: FirehoseTestServer) -> None:
+    """``stop()`` from another thread must not wait for a frame that may never arrive."""
+    method = server.new_method('idle')
+    client = _WebsocketClient(method, server.base_uri)
+    _shrink_backoff(client)
+    finished = threading.Event()
+
+    def target() -> None:
+        client.start(lambda _: None)
+        finished.set()
+
+    threading.Thread(target=target, daemon=True).start()
+    _wait_for_connection(server, method)
+
+    client.stop()
+
+    assert finished.wait(5), 'start() did not return after stop()'
+
+
+@pytest.mark.asyncio
+async def test_async_stop_interrupts_an_idle_connection(server: FirehoseTestServer) -> None:
+    """``stop()`` from another task must not wait for a frame that may never arrive."""
+    method = server.new_method('idle')
+    client = _AsyncWebsocketClient(method, server.base_uri)
+    _shrink_backoff(client)
+
+    async def on_message(_: MessageFrame) -> None:
+        return None
+
+    task = asyncio.ensure_future(client.start(on_message))
+    await asyncio.get_running_loop().run_in_executor(None, _wait_for_connection, server, method)
+
+    await client.stop()
+
+    await asyncio.wait_for(task, timeout=5)
+
+
+def test_sync_client_enables_keepalive(server: FirehoseTestServer) -> None:
+    """Without pings, a connection that is open but no longer delivering is undetectable."""
+    client = _WebsocketClient(server.new_method('idle'), server.base_uri)
+
+    with client._get_client() as connection:
+        assert connection.ping_interval is not None
