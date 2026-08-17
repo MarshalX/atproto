@@ -374,6 +374,16 @@ if t.TYPE_CHECKING:
     )
     from atproto_client.models.com.germnetwork import declaration as ComGermnetworkDeclaration
     from atproto_client.models.internal.bsky.actor import get_profiles as InternalBskyActorGetProfiles
+    from atproto_client.models.network.bsky.jetstream import get_block as NetworkBskyJetstreamGetBlock
+    from atproto_client.models.network.bsky.jetstream import get_import_status as NetworkBskyJetstreamGetImportStatus
+    from atproto_client.models.network.bsky.jetstream import get_segment as NetworkBskyJetstreamGetSegment
+    from atproto_client.models.network.bsky.jetstream import (
+        get_zstd_dictionary as NetworkBskyJetstreamGetZstdDictionary,
+    )
+    from atproto_client.models.network.bsky.jetstream import import_timestamps as NetworkBskyJetstreamImportTimestamps
+    from atproto_client.models.network.bsky.jetstream import list_segments as NetworkBskyJetstreamListSegments
+    from atproto_client.models.network.bsky.jetstream import plan_snapshot as NetworkBskyJetstreamPlanSnapshot
+    from atproto_client.models.network.bsky.jetstream import subscribe_events as NetworkBskyJetstreamSubscribeEvents
     from atproto_client.models.site.standard import document as SiteStandardDocument
     from atproto_client.models.site.standard import publication as SiteStandardPublication
     from atproto_client.models.site.standard.graph import recommend as SiteStandardGraphRecommend
@@ -795,6 +805,14 @@ class _Ids:
     ComAtprotoTempRevokeAccountCredentials: str = 'com.atproto.temp.revokeAccountCredentials'
     ComGermnetworkDeclaration: str = 'com.germnetwork.declaration'
     InternalBskyActorGetProfiles: str = 'internal.bsky.actor.getProfiles'
+    NetworkBskyJetstreamGetBlock: str = 'network.bsky.jetstream.getBlock'
+    NetworkBskyJetstreamGetImportStatus: str = 'network.bsky.jetstream.getImportStatus'
+    NetworkBskyJetstreamGetSegment: str = 'network.bsky.jetstream.getSegment'
+    NetworkBskyJetstreamGetZstdDictionary: str = 'network.bsky.jetstream.getZstdDictionary'
+    NetworkBskyJetstreamImportTimestamps: str = 'network.bsky.jetstream.importTimestamps'
+    NetworkBskyJetstreamListSegments: str = 'network.bsky.jetstream.listSegments'
+    NetworkBskyJetstreamPlanSnapshot: str = 'network.bsky.jetstream.planSnapshot'
+    NetworkBskyJetstreamSubscribeEvents: str = 'network.bsky.jetstream.subscribeEvents'
     SiteStandardDocument: str = 'site.standard.document'
     SiteStandardPublication: str = 'site.standard.publication'
     SiteStandardGraphRecommend: str = 'site.standard.graph.recommend'

@@ -176,8 +176,14 @@ def _get_str_enum_typehint(nsid: NSID, field_type_def: models.LexString, *, opti
         union_type_parts[literals_index] = f't.Literal[{", ".join(literals)}]'
 
     # known_values is not closed enum
-    closed_enum = '' if field_type_def.enum else ', str'
-    return f't.Union[{", ".join(union_type_parts)}{closed_enum}]'
+    if not field_type_def.enum:
+        union_type_parts.append('str')
+
+    if len(union_type_parts) == 1:
+        # t.Union of a single member is invalid for type checkers
+        return union_type_parts[0]
+
+    return f't.Union[{", ".join(union_type_parts)}]'
 
 
 def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional: bool) -> str:

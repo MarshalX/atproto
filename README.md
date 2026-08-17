@@ -154,6 +154,7 @@ The SDK is built upon the following components:
 | `atproto_core`     | Tools to work with NSID, AT URI Schemes, CID, CAR files, and DID Documents. |
 | `atproto_crypto`   | Crypto utils like multibase, signature verification, work with DID keys.    |
 | `atproto_firehose` | Firehose (data streaming) client and models.                                |
+| `atproto_jetstream` | Jetstream v2 (data streaming) client and models.                           |
 | `atproto_identity` | Identity resolvers for DID, Handle, AT Protocol data, signing keys.         |
 | `atproto_lexicon`  | Lexicon parser.                                                             |
 | `atproto_server`   | Server-side utils like JWT.                                                 |

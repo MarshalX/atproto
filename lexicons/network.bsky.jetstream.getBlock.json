@@ -1,0 +1,30 @@
+{
+  "lexicon": 1,
+  "id": "network.bsky.jetstream.getBlock",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Download a single block within a sealed segment file by index. Returns the raw zstd-compressed block frame exactly as stored on disk.",
+      "parameters": {
+        "type": "params",
+        "required": ["segment", "blockIndex"],
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "The sealed segment filename, e.g. seg_000000002a.jss."
+          },
+          "blockIndex": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Zero-based block index within the segment. Must be < the segment's block_count."
+          }
+        }
+      },
+      "output": { "encoding": "application/octet-stream" },
+      "errors": [
+        { "name": "SegmentNotFound", "description": "No sealed segment exists for the given name." },
+        { "name": "BlockNotFound", "description": "blockIndex is >= the segment's block_count." }
+      ]
+    }
+  }
+}

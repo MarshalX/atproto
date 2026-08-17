@@ -21,6 +21,12 @@ from atproto_firehose import models as firehose_models
 from atproto_identity.cache.in_memory_cache import AsyncDidInMemoryCache, DidInMemoryCache
 from atproto_identity.did.atproto_data import AtprotoData
 from atproto_identity.resolver import AsyncIdResolver, IdResolver
+from atproto_jetstream import (
+    AsyncJetstreamClient,
+    JetstreamClient,
+    parse_subscribe_events_message,
+)
+from atproto_jetstream import models as jetstream_models
 from atproto_server.auth.jwt import (
     JwtPayload,
     decode_jwt_payload,
@@ -62,6 +68,11 @@ __all__ = [  # noqa: RUF022
     'parse_subscribe_labels_message',
     'parse_subscribe_repos_message',
     'firehose_models',
+    # jetstream
+    'AsyncJetstreamClient',
+    'JetstreamClient',
+    'parse_subscribe_events_message',
+    'jetstream_models',
     # identity
     'AtprotoData',
     'AsyncDidInMemoryCache',

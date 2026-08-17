@@ -1,0 +1,26 @@
+{
+  "lexicon": 1,
+  "id": "network.bsky.jetstream.getSegment",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Download a sealed segment file by name.",
+      "parameters": {
+        "type": "params",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The segment filename, e.g. seg_000000002a.jss"
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/octet-stream"
+      },
+      "errors": [
+        { "name": "SegmentNotFound" }
+      ]
+    }
+  }
+}

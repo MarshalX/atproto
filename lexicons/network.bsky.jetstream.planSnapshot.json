@@ -1,0 +1,113 @@
+{
+  "lexicon": 1,
+  "id": "network.bsky.jetstream.planSnapshot",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Build a download plan for the desired data pattern. The plan lists whole segments or block ranges that might contain events for the requested kinds, DIDs, and collections.",
+      "input": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "kinds": {
+              "type": "array",
+              "maxLength": 4,
+              "description": "Event kinds to include. Omit this field or pass an empty array to include all kinds.",
+              "items": { "type": "string", "enum": ["commit", "identity", "account", "sync"] }
+            },
+            "dids": {
+              "type": "array",
+              "maxLength": 10000,
+              "description": "Only include data for these DIDs. Omit this field or pass an empty array to include all DIDs.",
+              "items": { "type": "string", "format": "did" }
+            },
+            "collections": {
+              "type": "array",
+              "maxLength": 100,
+              "description": "Collection NSIDs or namespace wildcards such as app.bsky.feed.*; constrains commit events only. Non-commit kinds are unaffected, so combine with kinds=commit for a commits-only collection plan. Rejected when kinds is set and excludes commit. Omit or pass an empty array to include all collections.",
+              "items": { "type": "string" }
+            },
+            "afterSeq": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Start after this sequence number. Events at or below it are not included."
+            },
+            "beforeSeq": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Stop at this sequence number. Events above it are not included."
+            }
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": ["plannedThroughSeq", "sealedTipSeq", "segments", "stats"],
+          "properties": {
+            "plannedThroughSeq": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "The last sealed sequence covered by this page. Use this value as afterSeq for the next page. If the response hits the server's page limit, this is the maxSeq of the last item returned; otherwise it equals sealedTipSeq. Planning is complete when plannedThroughSeq reaches sealedTipSeq."
+            },
+            "sealedTipSeq": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "The end of the sealed archive for this snapshot, capped by beforeSeq when provided. Use this value as beforeSeq on later pages so the snapshot does not move while it is being downloaded."
+            },
+            "segments": {
+              "type": "array",
+              "items": { "type": "ref", "ref": "#segment" }
+            },
+            "stats": { "type": "ref", "ref": "#stats" }
+          }
+        }
+      }
+    },
+    "segment": {
+      "type": "object",
+      "required": ["name", "index", "checksum", "minSeq", "maxSeq", "mode"],
+      "properties": {
+        "name": { "type": "string", "description": "Segment filename to pass to getSegment or getBlock." },
+        "index": { "type": "integer", "minimum": 0, "description": "Zero-based segment index." },
+        "checksum": { "type": "string", "minLength": 16, "maxLength": 16, "description": "The segment's xxh3 metadata checksum, encoded as 16 hexadecimal characters." },
+        "minSeq": { "type": "integer", "minimum": 0 },
+        "maxSeq": { "type": "integer", "minimum": 0 },
+        "mode": {
+          "type": "string",
+          "knownValues": ["segment", "blocks"],
+          "description": "How to download this segment. For segment, download the whole file with getSegment. For blocks, download the ranges listed in blocks with getBlock."
+        },
+        "blocks": {
+          "type": "array",
+          "description": "Block ranges to download, including both endpoints. This field is present only when mode is blocks.",
+          "items": { "type": "ref", "ref": "#blockRange" }
+        }
+      }
+    },
+    "blockRange": {
+      "type": "object",
+      "required": ["first", "last"],
+      "properties": {
+        "first": { "type": "integer", "minimum": 0, "description": "Index of the first block in the range." },
+        "last": { "type": "integer", "minimum": 0, "description": "Index of the last block in the range." }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "required": ["segmentsExamined", "segmentsMatched", "blocksMatched", "entries"],
+      "properties": {
+        "segmentsExamined": { "type": "integer", "minimum": 0 },
+        "segmentsMatched": { "type": "integer", "minimum": 0 },
+        "blocksMatched": { "type": "integer", "minimum": 0 },
+        "entries": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of items counted toward the server's per-page plan limit."
+        }
+      }
+    }
+  }
+}
