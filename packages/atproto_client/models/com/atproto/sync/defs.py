@@ -7,6 +7,4 @@
 
 import typing as t
 
-HostStatus = t.Union[
-    t.Literal['active'], t.Literal['idle'], t.Literal['offline'], t.Literal['throttled'], t.Literal['banned'], str
-]  #: Host status
+HostStatus = t.Union[t.Literal['active', 'idle', 'offline', 'throttled', 'banned'], str]  #: Host status

@@ -18,7 +18,7 @@ class Record(base.RecordModelBase):
     """Record model for :obj:`app.bsky.notification.declaration`."""
 
     allow_subscriptions: t.Union[
-        t.Literal['followers'], t.Literal['mutuals'], t.Literal['none'], str
+        t.Literal['followers', 'mutuals', 'none'], str
     ]  #: A declaration of the user's preference for allowing activity subscriptions from other users. Absence of a record implies 'followers'.
 
     py_type: t.Literal['app.bsky.notification.declaration'] = Field(

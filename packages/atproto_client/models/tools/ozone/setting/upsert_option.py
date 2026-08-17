@@ -22,7 +22,7 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.setting.upsertOption`."""
 
     key: string_formats.Nsid  #: Key.
-    scope: t.Union[t.Literal['instance'], t.Literal['personal'], str]  #: Scope.
+    scope: t.Union[t.Literal['instance', 'personal'], str]  #: Scope.
     value: 'UnknownInputType'  #: Value.
     description: te.Annotated[t.Optional[str], Field(max_length=2000)] = None  #: Description.
     manager_role: t.Optional[
@@ -38,7 +38,7 @@ class Data(base.DataModelBase):
 
 class DataDict(t.TypedDict):
     key: string_formats.Nsid  #: Key.
-    scope: t.Union[t.Literal['instance'], t.Literal['personal'], str]  #: Scope.
+    scope: t.Union[t.Literal['instance', 'personal'], str]  #: Scope.
     value: 'UnknownInputType'  #: Value.
     description: te.NotRequired[t.Optional[str]]  #: Description.
     manager_role: te.NotRequired[

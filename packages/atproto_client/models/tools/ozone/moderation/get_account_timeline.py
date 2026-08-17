@@ -47,9 +47,7 @@ class TimelineItemSummary(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.getAccountTimeline`."""
 
     count: int  #: Count.
-    event_subject_type: t.Union[
-        t.Literal['account'], t.Literal['record'], t.Literal['chat'], str
-    ]  #: Event subject type.
+    event_subject_type: t.Union[t.Literal['account', 'record', 'chat'], str]  #: Event subject type.
     event_type: t.Union[
         'models.ToolsOzoneModerationDefs.ModEventTakedown',
         'models.ToolsOzoneModerationDefs.ModEventReverseTakedown',

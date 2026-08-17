@@ -27,7 +27,7 @@ class RecordDeleted(base.ModelBase):
 class ChatPreference(base.ModelBase):
     """Definition model for :obj:`app.bsky.notification.defs`. Deprecated: use chat.bsky.notification preferences instead. This will only return a default value."""
 
-    include: t.Union[t.Literal['all'], t.Literal['accepted'], str]  #: Include.
+    include: t.Union[t.Literal['all', 'accepted'], str]  #: Include.
     push: bool  #: Push.
 
     py_type: t.Literal['app.bsky.notification.defs#chatPreference'] = Field(
@@ -38,7 +38,7 @@ class ChatPreference(base.ModelBase):
 class FilterablePreference(base.ModelBase):
     """Definition model for :obj:`app.bsky.notification.defs`."""
 
-    include: t.Union[t.Literal['all'], t.Literal['follows'], str]  #: Include.
+    include: t.Union[t.Literal['all', 'follows'], str]  #: Include.
     list: bool  #: List.
     push: bool  #: Push.
 

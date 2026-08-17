@@ -28,7 +28,7 @@ class Preferences(base.ModelBase):
 class ChatPreference(base.ModelBase):
     """Definition model for :obj:`chat.bsky.notification.defs`."""
 
-    include: t.Union[t.Literal['all'], t.Literal['follows'], str]  #: Include.
+    include: t.Union[t.Literal['all', 'follows'], str]  #: Include.
     push: bool  #: Push.
 
     py_type: t.Literal['chat.bsky.notification.defs#chatPreference'] = Field(

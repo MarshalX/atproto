@@ -1,15 +1,16 @@
 """AT Protocol string format validation."""
 
 import re
+from collections.abc import Mapping
 from datetime import datetime
 from functools import wraps
-from typing import TYPE_CHECKING, Callable, Mapping, Set, Union, cast
+from typing import TYPE_CHECKING, Annotated, Callable, Union, cast
 from urllib.parse import urlparse
 
 from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import validate_nsid as atproto_core_validate_nsid
 from pydantic import BeforeValidator, Field, ValidationInfo
-from typing_extensions import Annotated, Literal
+from typing_extensions import Literal
 
 if TYPE_CHECKING:
     from pydantic_core import core_schema
@@ -22,7 +23,7 @@ MAX_RECORD_KEY_LENGTH: int = 512
 MAX_URI_LENGTH: int = 8 * 1024
 MIN_CID_LENGTH: int = 8
 TID_LENGTH: int = 13
-INVALID_RECORD_KEYS: Set[str] = {'.', '..'}
+INVALID_RECORD_KEYS: set[str] = {'.', '..'}
 MAX_DID_LENGTH: int = 2048  # Method-specific identifier max length
 MAX_AT_URI_LENGTH: int = 8 * 1024
 

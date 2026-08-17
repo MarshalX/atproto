@@ -20,13 +20,13 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=500)] = None  #: Limit.
-    sort: t.Optional[t.Union[t.Literal['recent'], t.Literal['usage'], str]] = 'recent'  #: Sort.
+    sort: t.Optional[t.Union[t.Literal['recent', 'usage'], str]] = 'recent'  #: Sort.
 
 
 class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
-    sort: te.NotRequired[t.Optional[t.Union[t.Literal['recent'], t.Literal['usage'], str]]]  #: Sort.
+    sort: te.NotRequired[t.Optional[t.Union[t.Literal['recent', 'usage'], str]]]  #: Sort.
 
 
 class Response(base.ResponseModelBase):

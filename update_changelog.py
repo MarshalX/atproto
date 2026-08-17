@@ -57,7 +57,7 @@ def _require_env(name: str) -> str:
 
 
 def _normalize_version(tag: str) -> str:
-    return tag[1:] if tag.startswith('v') else tag
+    return tag.removeprefix('v')
 
 
 def _format_date(published_at: str) -> str:

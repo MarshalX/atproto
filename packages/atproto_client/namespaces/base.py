@@ -7,19 +7,19 @@ if t.TYPE_CHECKING:
 
 class NamespaceBase:
     def __init__(self, client: 'ClientRaw') -> None:
-        self._client: 'ClientRaw' = client
+        self._client: ClientRaw = client
 
 
 class AsyncNamespaceBase:
     def __init__(self, client: 'AsyncClientRaw') -> None:
-        self._client: 'AsyncClientRaw' = client
+        self._client: AsyncClientRaw = client
 
 
 class RecordBase:
     def __init__(self, client: 'ClientRaw') -> None:
-        self._client: 'ClientRaw' = client
+        self._client: ClientRaw = client
 
 
 class AsyncRecordBase:
     def __init__(self, client: 'AsyncClientRaw') -> None:
-        self._client: 'AsyncClientRaw' = client
+        self._client: AsyncClientRaw = client

@@ -67,7 +67,7 @@ class NSID:
     def __hash__(self) -> int:
         return hash(str(self))
 
-    def __eq__(self, other: t.Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, NSID):
             return hash(self) == hash(other)
 
@@ -166,8 +166,8 @@ def validate_nsid(nsid: str, *, soft_fail: bool = False) -> bool:
     """
     try:
         return _validate_nsid(nsid)
-    except InvalidNsidError as e:
+    except InvalidNsidError:
         if soft_fail:
             return False
 
-        raise e
+        raise

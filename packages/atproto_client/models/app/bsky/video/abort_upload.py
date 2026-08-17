@@ -26,9 +26,7 @@ class DataDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.video.abortUpload`."""
 
-    state: t.Union[t.Literal['aborted'], t.Literal['completed'], t.Literal['failed'], t.Literal['expired'], str] = (
-        Field(max_length=32)
-    )  #: State.
+    state: t.Union[t.Literal['aborted', 'completed', 'failed', 'expired'], str] = Field(max_length=32)  #: State.
     completed_job_id: te.Annotated[t.Optional[str], Field(min_length=1, max_length=256)] = (
         None  #: Present only when state is completed.
     )

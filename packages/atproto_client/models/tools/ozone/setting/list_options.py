@@ -26,7 +26,7 @@ class Params(base.ParamsModelBase):
     )
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
     prefix: t.Optional[str] = None  #: Filter keys by prefix.
-    scope: t.Optional[t.Union[t.Literal['instance'], t.Literal['personal'], str]] = 'instance'  #: Scope.
+    scope: t.Optional[t.Union[t.Literal['instance', 'personal'], str]] = 'instance'  #: Scope.
 
 
 class ParamsDict(t.TypedDict):
@@ -36,7 +36,7 @@ class ParamsDict(t.TypedDict):
     ]  #: Filter for only the specified keys. Ignored if prefix is provided.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     prefix: te.NotRequired[t.Optional[str]]  #: Filter keys by prefix.
-    scope: te.NotRequired[t.Optional[t.Union[t.Literal['instance'], t.Literal['personal'], str]]]  #: Scope.
+    scope: te.NotRequired[t.Optional[t.Union[t.Literal['instance', 'personal'], str]]]  #: Scope.
 
 
 class Response(base.ResponseModelBase):

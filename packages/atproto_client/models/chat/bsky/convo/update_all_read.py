@@ -15,11 +15,11 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`chat.bsky.convo.updateAllRead`."""
 
-    status: t.Optional[t.Union[t.Literal['request'], t.Literal['accepted'], str]] = None  #: Status.
+    status: t.Optional[t.Union[t.Literal['request', 'accepted'], str]] = None  #: Status.
 
 
 class DataDict(t.TypedDict):
-    status: te.NotRequired[t.Optional[t.Union[t.Literal['request'], t.Literal['accepted'], str]]]  #: Status.
+    status: te.NotRequired[t.Optional[t.Union[t.Literal['request', 'accepted'], str]]]  #: Status.
 
 
 class Response(base.ResponseModelBase):

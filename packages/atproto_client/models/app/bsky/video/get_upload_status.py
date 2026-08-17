@@ -35,15 +35,9 @@ class Response(base.ResponseModelBase):
     part_count: int  #: Part count.
     part_size_bytes: int  #: Part size bytes.
     received_parts: t.List[int]  #: Received parts.
-    state: t.Union[
-        t.Literal['created'],
-        t.Literal['finishing'],
-        t.Literal['completed'],
-        t.Literal['failed'],
-        t.Literal['aborted'],
-        t.Literal['expired'],
-        str,
-    ] = Field(max_length=32)  #: State.
+    state: t.Union[t.Literal['created', 'finishing', 'completed', 'failed', 'aborted', 'expired'], str] = Field(
+        max_length=32
+    )  #: State.
     completed_job_id: te.Annotated[t.Optional[str], Field(min_length=1, max_length=256)] = (
         None  #: Present only when state is completed; may differ from jobId on deduplication.
     )

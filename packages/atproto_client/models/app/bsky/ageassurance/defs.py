@@ -17,11 +17,11 @@ if t.TYPE_CHECKING:
 from atproto_client.models import base
 
 Access = t.Union[
-    t.Literal['unknown'], t.Literal['none'], t.Literal['safe'], t.Literal['full'], str
+    t.Literal['unknown', 'none', 'safe', 'full'], str
 ]  #: The access level granted based on Age Assurance data we've processed.
 
 Status = t.Union[
-    t.Literal['unknown'], t.Literal['pending'], t.Literal['assured'], t.Literal['blocked'], str
+    t.Literal['unknown', 'pending', 'assured', 'blocked'], str
 ]  #: The status of the Age Assurance process.
 
 
@@ -79,7 +79,7 @@ class ConfigRegion(base.ModelBase):
     additional_verification_methods: t.Optional[t.List[t.Union[t.Literal['device'], str]]] = (
         None  #: Verification methods permitted in this region in addition to the third-party (KWS) flow, which is always supported. `device` permits using the native on-device age APIs (e.g. Apple Declared Age Range, Google Play Age Signals).
     )
-    platforms: t.Optional[t.List[t.Union[t.Literal['web'], t.Literal['ios'], t.Literal['android'], str]]] = (
+    platforms: t.Optional[t.List[t.Union[t.Literal['web', 'ios', 'android'], str]]] = (
         None  #: The platforms this configuration applies to. If omitted, the configuration applies to all platforms.
     )
     region_code: t.Optional[str] = (
@@ -171,13 +171,13 @@ class Event(base.ModelBase):
     """Definition model for :obj:`app.bsky.ageassurance.defs`. Object used to store Age Assurance data in stash."""
 
     access: t.Union[
-        t.Literal['unknown'], t.Literal['none'], t.Literal['safe'], t.Literal['full'], str
+        t.Literal['unknown', 'none', 'safe', 'full'], str
     ]  #: The access level granted based on Age Assurance data we've processed.
     attempt_id: str  #: The unique identifier for this instance of the Age Assurance flow, in UUID format.
     country_code: str  #: The ISO 3166-1 alpha-2 country code provided when beginning the Age Assurance flow.
     created_at: string_formats.DateTime  #: The date and time of this write operation.
     status: t.Union[
-        t.Literal['unknown'], t.Literal['pending'], t.Literal['assured'], t.Literal['blocked'], str
+        t.Literal['unknown', 'pending', 'assured', 'blocked'], str
     ]  #: The status of the Age Assurance process.
     complete_ip: t.Optional[str] = None  #: The IP address used when completing the Age Assurance flow.
     complete_ua: t.Optional[str] = None  #: The user agent used when completing the Age Assurance flow.

@@ -101,15 +101,7 @@ class Account(base.ModelBase):
     seq: int  #: Seq.
     time: string_formats.DateTime  #: Time.
     status: t.Optional[
-        t.Union[
-            t.Literal['takendown'],
-            t.Literal['suspended'],
-            t.Literal['deleted'],
-            t.Literal['deactivated'],
-            t.Literal['desynchronized'],
-            t.Literal['throttled'],
-            str,
-        ]
+        t.Union[t.Literal['takendown', 'suspended', 'deleted', 'deactivated', 'desynchronized', 'throttled'], str]
     ] = None  #: If active=false, this optional field indicates a reason for why the account is not active.
 
     py_type: t.Literal['com.atproto.sync.subscribeRepos#account'] = Field(
@@ -131,7 +123,7 @@ class Info(base.ModelBase):
 class RepoOp(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`. A repo operation, ie a mutation of a single record."""
 
-    action: t.Union[t.Literal['create'], t.Literal['update'], t.Literal['delete'], str]  #: Action.
+    action: t.Union[t.Literal['create', 'update', 'delete'], str]  #: Action.
     path: str  #: Path.
     cid: t.Optional['CIDType'] = None  #: For creates and updates, the new record CID. For deletions, null.
     prev: t.Optional['CIDType'] = (

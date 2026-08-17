@@ -51,9 +51,10 @@ sponsoring = "https://github.com/sponsors/MarshalX"
 
 [dependency-groups]
 dev = [
-    "ruff==0.14.1",
-    "mypy==1.18.2",
-    "pyright==1.1.406",
+    "ruff==0.16.3",
+    # mypy itself requires Python 3.10+ to run; it still type checks our 3.9 target.
+    "mypy==2.3.1; python_version >= '3.10'",
+    "pyright==1.1.411",
 ]
 docs = [
     "sphinx==7.1.2", # newer sphinx works incorrectly with autodoc-pydantic
@@ -154,6 +155,12 @@ ignore = [
     "D213", # we are using the first line for summary
     "D406", "D407", # we are using google style docstring
     "S101", # allow asserting; we are using it for type checks
+    # Pydantic resolves annotations at runtime; PEP 563 lazy annotations break model building
+    # on forward refs that are not importable at runtime. Not worth it for a Pydantic-heavy SDK.
+    "FA100", "FA102",
+    # TODO(MarshalX) enable together with UP007/UP045 once Python 3.9 support is dropped.
+    # Doing it now gives a half-migrated style (t.Optional[list[str]]) across the whole codegen output.
+    "UP006",
 ]
 
 [tool.ruff.lint.per-file-ignores]

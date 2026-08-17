@@ -1,5 +1,6 @@
 import multiprocessing
 import signal
+import sys
 import time
 from collections import defaultdict
 from types import FrameType
@@ -109,7 +110,7 @@ def signal_handler(_: int, __: FrameType) -> None:
     pool.terminate()
     pool.join()
 
-    exit(0)
+    sys.exit(0)
 
 
 if __name__ == '__main__':

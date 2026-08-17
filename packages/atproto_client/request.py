@@ -204,7 +204,7 @@ class Request(RequestBase):
             return _handle_response(response)
         except Exception as e:
             _handle_request_errors(e)
-            raise e
+            raise
 
     def close(self) -> None:
         self._client.close()
@@ -235,7 +235,7 @@ class AsyncRequest(RequestBase):
             return _handle_response(response)
         except Exception as e:
             _handle_request_errors(e)
-            raise e
+            raise
 
     async def close(self) -> None:
         await self._client.aclose()

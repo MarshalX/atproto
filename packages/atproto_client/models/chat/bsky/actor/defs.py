@@ -16,7 +16,7 @@ if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
 
-MemberRole = t.Union[t.Literal['owner'], t.Literal['standard'], str]  #: Member role
+MemberRole = t.Union[t.Literal['owner', 'standard'], str]  #: Member role
 
 
 class ProfileViewBasic(base.ModelBase):

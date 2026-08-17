@@ -140,7 +140,7 @@ class AtUri:
     def __hash__(self) -> int:
         return hash(str(self))
 
-    def __eq__(self, other: t.Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, AtUri):
             return hash(self) == hash(other)
 

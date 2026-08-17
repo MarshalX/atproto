@@ -23,7 +23,7 @@ class Params(base.ParamsModelBase):
     actor: string_formats.AtIdentifier  #: The account (actor) to enumerate lists from.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
-    purposes: t.Optional[t.List[t.Union[t.Literal['modlist'], t.Literal['curatelist'], str]]] = (
+    purposes: t.Optional[t.List[t.Union[t.Literal['modlist', 'curatelist'], str]]] = (
         None  #: Optional filter by list purpose. If not specified, all supported types are returned.
     )
 
@@ -33,7 +33,7 @@ class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     purposes: te.NotRequired[
-        t.Optional[t.List[t.Union[t.Literal['modlist'], t.Literal['curatelist'], str]]]
+        t.Optional[t.List[t.Union[t.Literal['modlist', 'curatelist'], str]]]
     ]  #: Optional filter by list purpose. If not specified, all supported types are returned.
 
 

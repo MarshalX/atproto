@@ -34,15 +34,13 @@ class Event(base.ModelBase):
     )
 
 
-EventType = t.Union[t.Literal['addRule'], t.Literal['updateRule'], t.Literal['removeRule'], str]  #: Event type
+EventType = t.Union[t.Literal['addRule', 'updateRule', 'removeRule'], str]  #: Event type
 
-PatternType = t.Union[t.Literal['domain'], t.Literal['url'], str]  #: Pattern type
+PatternType = t.Union[t.Literal['domain', 'url'], str]  #: Pattern type
 
-ActionType = t.Union[t.Literal['block'], t.Literal['warn'], t.Literal['whitelist'], str]  #: Action type
+ActionType = t.Union[t.Literal['block', 'warn', 'whitelist'], str]  #: Action type
 
-ReasonType = t.Union[
-    t.Literal['csam'], t.Literal['spam'], t.Literal['phishing'], t.Literal['none'], str
-]  #: Reason type
+ReasonType = t.Union[t.Literal['csam', 'spam', 'phishing', 'none'], str]  #: Reason type
 
 
 class UrlRule(base.ModelBase):

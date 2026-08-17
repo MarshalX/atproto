@@ -103,6 +103,7 @@ from atproto import Client, SessionEvent, Session
 
 client = Client()
 
+
 @client.on_session_change
 def on_session_change(event: SessionEvent, session: Session):
     print(event, session)
@@ -115,6 +116,7 @@ from atproto import AsyncClient, SessionEvent, Session
 
 
 client = AsyncClient()
+
 
 @client.on_session_change
 async def on_session_change(event: SessionEvent, session: Session):
@@ -141,8 +143,8 @@ client.login(session_string='exportedSession')
 
 REFRESH:
 ```python
-# whenever SDK will refresh the access token, 
-# the on_session_change will be triggered 
+# whenever SDK will refresh the access token,
+# the on_session_change will be triggered
 # with SessionEvent.REFRESH event
 ```
 

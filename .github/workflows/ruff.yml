@@ -21,10 +21,10 @@ jobs:
       - name: Run linter check.
         uses: astral-sh/ruff-action@v3
         with:
-          version: 0.14.1
+          version: 0.16.3
 
       - name: Run code style check.
         uses: astral-sh/ruff-action@v3
         with:
-          version: 0.14.1
+          version: 0.16.3
           args: "format --check"

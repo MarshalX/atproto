@@ -30,9 +30,7 @@ class Params(base.ParamsModelBase):
         None  #: Filter to verifications from specific issuers.
     )
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Maximum number of results to return.
-    sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = (
-        'desc'  #: Sort direction for creation date.
-    )
+    sort_direction: t.Optional[t.Union[t.Literal['asc', 'desc']]] = 'desc'  #: Sort direction for creation date.
     subjects: te.Annotated[t.Optional[t.List[string_formats.Did]], Field(max_length=100)] = (
         None  #: Filter to specific verified DIDs.
     )
@@ -51,9 +49,7 @@ class ParamsDict(t.TypedDict):
     ]  #: Filter to verifications that are revoked or not. By default, includes both.
     issuers: te.NotRequired[t.Optional[t.List[string_formats.Did]]]  #: Filter to verifications from specific issuers.
     limit: te.NotRequired[t.Optional[int]]  #: Maximum number of results to return.
-    sort_direction: te.NotRequired[
-        t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]
-    ]  #: Sort direction for creation date.
+    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc', 'desc']]]]  #: Sort direction for creation date.
     subjects: te.NotRequired[t.Optional[t.List[string_formats.Did]]]  #: Filter to specific verified DIDs.
 
 

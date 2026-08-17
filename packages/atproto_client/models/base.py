@@ -8,12 +8,7 @@ from atproto_client.exceptions import ModelFieldNotFoundError
 
 
 def _alias_generator(name: str) -> str:
-    camel_name = alias_generators.to_camel(name)
-
-    if camel_name.endswith('_'):
-        camel_name = camel_name[:-1]
-
-    return camel_name
+    return alias_generators.to_camel(name).removesuffix('_')
 
 
 class AtProtocolBase: ...

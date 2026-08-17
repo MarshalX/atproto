@@ -2,7 +2,7 @@ import keyword
 import os
 import typing as t
 from enum import Enum
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 
 from atproto_core.nsid import NSID
@@ -158,16 +158,22 @@ def _get_str_enum_typehint(nsid: NSID, field_type_def: models.LexString, *, opti
     values = field_type_def.known_values or field_type_def.enum or []
 
     union_type_parts = []
+    literals = []
+    literals_index = None
     for value in values:
         if '#' in value:
             # reference to literal (token)
             model_path, _ = _resolve_nsid_ref(nsid, value)
-            type_ = f"'{model_path}'"
+            union_type_parts.append(f"'{model_path}'")
         else:
-            # literal
-            type_ = f"t.Literal['{value}']"
+            # literal; all of them are merged into a single multi-member t.Literal
+            if literals_index is None:
+                literals_index = len(union_type_parts)
+                union_type_parts.append('')
+            literals.append(f"'{value}'")
 
-        union_type_parts.append(type_)
+    if literals_index is not None:
+        union_type_parts[literals_index] = f't.Literal[{", ".join(literals)}]'
 
     # known_values is not closed enum
     closed_enum = '' if field_type_def.enum else ', str'
@@ -444,7 +450,7 @@ def _get_model_docstring(
     return join_code(doc_string)
 
 
-@lru_cache(maxsize=None)
+@cache
 def _get_pydantic_reserved_names() -> t.Set[str]:
     from pydantic import BaseModel
 
@@ -738,7 +744,9 @@ def _generate_def_models(lex_db: builder.BuiltDefModels) -> None:
             elif isinstance(def_model, models.LexArray):
                 save_code_part(nsid, _generate_def_array(nsid, def_name, def_model))
             else:
-                raise ValueError(f'Unhandled type {type(def_model)}')
+                # TRY004 is suppressed: this is an invalid lexicon schema, not a Python type
+                # error; the rest of the generator reports such cases as ValueError too
+                raise ValueError(f'Unhandled type {type(def_model)}')  # noqa: TRY004
 
 
 def _generate_record_sugar_models(nsid: NSID) -> str:
