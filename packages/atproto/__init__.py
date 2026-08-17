@@ -26,6 +26,7 @@ from atproto_jetstream import (
     JetstreamClient,
     parse_subscribe_events_message,
 )
+from atproto_jetstream import archive as jetstream_archive
 from atproto_jetstream import models as jetstream_models
 from atproto_server.auth.jwt import (
     JwtPayload,
@@ -73,6 +74,7 @@ __all__ = [  # noqa: RUF022
     'JetstreamClient',
     'parse_subscribe_events_message',
     'jetstream_models',
+    'jetstream_archive',
     # identity
     'AtprotoData',
     'AsyncDidInMemoryCache',

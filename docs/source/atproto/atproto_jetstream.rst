@@ -6,6 +6,14 @@ atproto\_jetstream
    :undoc-members:
    :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   atproto_jetstream.archive
+
 Submodules
 ----------
 
