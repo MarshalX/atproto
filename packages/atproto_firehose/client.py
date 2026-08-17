@@ -1,6 +1,6 @@
 import asyncio
+import contextlib
 import random
-import socket
 import time
 import traceback
 import typing as t
@@ -25,6 +25,7 @@ from atproto_firehose.exceptions import FirehoseDecodingError, FirehoseError
 from atproto_firehose.models import ErrorFrame, Frame, MessageFrame
 
 _MAX_MESSAGE_SIZE_BYTES = 1024 * 1024 * 5  # 5MB
+_HEALTHY_CONNECTION_SEC = 60
 
 OnMessageCallback = t.Callable[['MessageFrame'], None]
 AsyncOnMessageCallback = t.Callable[['MessageFrame'], t.Coroutine[t.Any, t.Any, None]]
@@ -33,19 +34,20 @@ OnCallbackErrorCallback = t.Callable[[BaseException], None]
 AsyncOnCallbackErrorCallback = t.Callable[[BaseException], t.Coroutine[t.Any, t.Any, None]]
 
 _OK_ERRORS = (ConnectionClosedOK,)
+#: Errors that mean "this connection is gone, get a new one" rather than "give up".
 _ERR_ERRORS = (
-    TimeoutError,
-    asyncio.TimeoutError,
-    ConnectionError,
+    # OSError covers TimeoutError, ConnectionError, ssl.SSLError, socket.gaierror and socket.herror
+    OSError,
+    asyncio.TimeoutError,  # a plain Exception before Python 3.11, an OSError from 3.11 on
     ConnectionClosedError,
     InvalidHandshake,
     PayloadTooBig,
     ProtocolError,
-    socket.gaierror,
 )
 
 
 if t.TYPE_CHECKING:
+    from websockets.asyncio.client import ClientConnection as AsyncWebSocketClient
     from websockets.asyncio.client import connect as AsyncConnect
     from websockets.sync.client import ClientConnection as SyncWebSocketClient
 
@@ -78,7 +80,7 @@ def _handle_websocket_error_or_stop(exception: Exception) -> bool:
     if isinstance(exception, FirehoseError):
         raise exception
 
-    raise FirehoseError from exception
+    raise FirehoseError(exception) from exception
 
 
 def _get_message_frame_from_bytes_or_raise(data: bytes) -> MessageFrame:
@@ -124,25 +126,34 @@ class _WebsocketClientBase:
         return _build_websocket_uri(self._method, self._base_uri, self._params)
 
     def _get_client(self) -> 'SyncWebSocketClient':
-        # Disable automatic pings for sync client (added in websockets v15+)
-        # to maintain behavior consistent with <v14 for now.
         return connect(
             self._websocket_uri,
             max_size=_MAX_MESSAGE_SIZE_BYTES,
             close_timeout=0.1,
-            # see https://websockets.readthedocs.io/en/stable/topics/keepalive.html
-            ping_interval=None,  # Disable automatic pings
         )
 
     def _get_async_client(self) -> 'AsyncConnect':
         # Async client connect function accepts ping_interval directly (default is 20s)
         return aconnect(self._websocket_uri, max_size=_MAX_MESSAGE_SIZE_BYTES, close_timeout=0.1)
 
-    def _get_reconnection_delay(self) -> int:
+    def _get_reconnection_delay(self) -> float:
         base_sec = 2**self._reconnect_no
         rand_sec = random.uniform(-0.5, 0.5)  # noqa: S311
 
         return min(base_sec, self._max_reconnect_delay_sec) + rand_sec
+
+    def _track_reconnection(self, connected_at: t.Optional[float]) -> None:
+        """Escalate the backoff, unless the connection that just died had been healthy.
+
+        Args:
+            connected_at: When the connection was established, or :obj:`None` if it never was.
+        """
+        if connected_at is not None and time.monotonic() - connected_at >= _HEALTHY_CONNECTION_SEC:
+            # Start over from the base delay rather than reconnecting instantly: when a server
+            # restarts it drops every client at once, and they must not all come back together.
+            self._reconnect_no = 1
+        else:
+            self._reconnect_no += 1
 
 
 class _WebsocketClient(_WebsocketClientBase):
@@ -156,6 +167,7 @@ class _WebsocketClient(_WebsocketClientBase):
         super().__init__(method, base_uri, params, recv_timeout)
 
         self._stopped = False
+        self._client: t.Optional[SyncWebSocketClient] = None
 
         self._on_message_callback: t.Optional[OnMessageCallback] = None
         self._on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None
@@ -191,12 +203,15 @@ class _WebsocketClient(_WebsocketClientBase):
         self._on_callback_error_callback = on_callback_error_callback
 
         while not self._stopped:
+            connected_at = None
             try:
                 if self._reconnect_no != 0:
                     time.sleep(self._get_reconnection_delay())
 
-                with self._get_client() as client:
-                    self._reconnect_no = 0
+                client = self._get_client()
+                with client:
+                    connected_at = time.monotonic()
+                    self._client = client
 
                     while not self._stopped:
                         raw_frame = client.recv(self._recv_timeout)
@@ -210,19 +225,29 @@ class _WebsocketClient(_WebsocketClientBase):
                         except Exception as e:  # noqa: BLE001
                             _handle_frame_decoding_error(e)
             except Exception as e:  # noqa: BLE001
-                self._reconnect_no += 1
+                self._track_reconnection(connected_at)
 
                 should_stop = _handle_websocket_error_or_stop(e)
                 if should_stop:
                     break
+            finally:
+                self._client = None
 
     def stop(self) -> None:
         """Unsubscribe and stop the Firehose client.
+
+        Safe to call from another thread. The client stops even if it is currently waiting for
+        the next frame on an idle connection.
 
         Returns:
             :obj:`None`
         """
         self._stopped = True
+
+        client = self._client
+        if client is not None:
+            with contextlib.suppress(Exception):
+                client.close()
 
 
 class _AsyncWebsocketClient(_WebsocketClientBase):
@@ -236,6 +261,7 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
         super().__init__(method, base_uri, params, recv_timeout)
 
         self._stop_event = asyncio.Event()
+        self._client: t.Optional[AsyncWebSocketClient] = None
 
         self._on_message_callback: t.Optional[AsyncOnMessageCallback] = None
         self._on_callback_error_callback: t.Optional[AsyncOnCallbackErrorCallback] = None
@@ -271,12 +297,14 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
         self._on_callback_error_callback = on_callback_error_callback
 
         while not self._stop_event.is_set():
+            connected_at = None
             try:
                 if self._reconnect_no != 0:
                     await asyncio.sleep(self._get_reconnection_delay())
 
                 async with self._get_async_client() as client:
-                    self._reconnect_no = 0
+                    connected_at = time.monotonic()
+                    self._client = client
 
                     while not self._stop_event.is_set():
                         # TODO(MarshalX): if the perf will be critical consider to use async-timeout lib
@@ -292,19 +320,29 @@ class _AsyncWebsocketClient(_WebsocketClientBase):
                             _handle_frame_decoding_error(e)
 
             except Exception as e:  # noqa: BLE001
-                self._reconnect_no += 1
+                self._track_reconnection(connected_at)
 
                 should_stop = _handle_websocket_error_or_stop(e)
                 if should_stop:
                     break
+            finally:
+                self._client = None
 
     async def stop(self) -> None:
         """Unsubscribe and stop the Firehose client.
+
+        Safe to call from another task. The client stops even if it is currently waiting for
+        the next frame on an idle connection.
 
         Returns:
             :obj:`None`
         """
         self._stop_event.set()
+
+        client = self._client
+        if client is not None:
+            with contextlib.suppress(Exception):
+                await client.close()
 
 
 FirehoseClient = _WebsocketClient
