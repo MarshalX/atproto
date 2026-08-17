@@ -19,18 +19,20 @@ jobs:
       - name: Checkout repository.
         uses: actions/checkout@v5
 
-      - name: Set up Python.
-        id: setup-python
+      # Poetry itself requires Python 3.10+, but codegen runs on the oldest supported Python.
+      # Poetry is installed with its own interpreter and creates the venv with the active one.
+      - name: Set up Python for Poetry.
+        id: poetry-python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.9'
+          python-version: '3.13'
 
       - name: Load cached Poetry installation.
         id: cached-poetry
         uses: actions/cache@v5
         with:
           path: ~/.local
-          key: poetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-2.2.1  # bump the suffix to reset the cache
+          key: poetry-${{ runner.os }}-${{ steps.poetry-python.outputs.python-version }}-2.4.1  # bump the suffix to reset the cache
 
       - name: Setup Poetry.
         if: steps.cached-poetry.outputs.cache-hit != 'true'
@@ -40,6 +42,12 @@ jobs:
 
       - name: Add Poetry to PATH.
         run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Set up Python.
+        id: setup-python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.9'
 
       - name: Load cached venv.
         id: cached-venv
