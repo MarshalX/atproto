@@ -28,11 +28,13 @@ jobs:
       - name: Checkout repository.
         uses: actions/checkout@v5
 
-      - name: Set up Python.
-        id: setup-python
+      # Poetry itself requires Python 3.10+, but the project is tested down to 3.9.
+      # Poetry is installed with its own interpreter and creates the venv with the active one.
+      - name: Set up Python for Poetry.
+        id: poetry-python
         uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.13'
 
       - name: Load cached Poetry installation.
         id: cached-poetry
@@ -40,17 +42,23 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.local
-          key: poetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-2.2.1  # bump the suffix to reset the cache
+          key: poetry-${{ runner.os }}-${{ steps.poetry-python.outputs.python-version }}-2.4.1  # bump the suffix to reset the cache
 
       - name: Setup Poetry.
         if: steps.cached-poetry.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
         with:
-          version: 2.2.1
+          version: 2.4.1
 
       - name: Add Poetry to PATH.
         if: runner.os != 'Windows'
         run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Set up Python.
+        id: setup-python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
 
       - name: Load cached venv.
         id: cached-venv
