@@ -12,6 +12,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   atproto_client.models.app.bsky.actor.content_visibility_declaration
    atproto_client.models.app.bsky.actor.defs
    atproto_client.models.app.bsky.actor.get_preferences
    atproto_client.models.app.bsky.actor.get_profile

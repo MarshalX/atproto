@@ -21,10 +21,8 @@ from atproto_client.models import base
 class Main(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.video`."""
 
-    video: 'BlobRef'  #: The mp4 video file. May be up to 100mb, formerly limited to 50mb.
-    alt: te.Annotated[t.Optional[str], Field(max_length=10000)] = (
-        None  #: Alt text description of the video, for accessibility.
-    )
+    video: 'BlobRef'  #: The mp4 video file. May be up to 300mb, formerly limited to 100mb.
+    alt: t.Optional[str] = None  #: Alt text description of the video, for accessibility.
     aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None  #: Aspect ratio.
     captions: te.Annotated[t.Optional[t.List['models.AppBskyEmbedVideo.Caption']], Field(max_length=20)] = (
         None  #: Captions.
@@ -52,7 +50,7 @@ class View(base.ModelBase):
 
     cid: string_formats.Cid  #: Cid.
     playlist: string_formats.Uri  #: Playlist.
-    alt: te.Annotated[t.Optional[str], Field(max_length=10000)] = None  #: Alt.
+    alt: t.Optional[str] = None  #: Alt.
     aspect_ratio: t.Optional['models.AppBskyEmbedDefs.AspectRatio'] = None  #: Aspect ratio.
     presentation: t.Optional[t.Union[t.Literal['default'], t.Literal['gif'], str]] = (
         None  #: A hint to the client about how to present the video.

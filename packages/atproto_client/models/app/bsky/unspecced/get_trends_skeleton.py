@@ -37,3 +37,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.unspecced.getTrendsSkeleton`."""
 
     trends: t.List['models.AppBskyUnspeccedDefs.SkeletonTrend']  #: Trends.
+    rec_id_str: t.Optional[str] = None  #: Snowflake for this recommendation, use when submitting recommendation events.

@@ -79,6 +79,9 @@ class ConfigRegion(base.ModelBase):
     additional_verification_methods: t.Optional[t.List[t.Union[t.Literal['device'], str]]] = (
         None  #: Verification methods permitted in this region in addition to the third-party (KWS) flow, which is always supported. `device` permits using the native on-device age APIs (e.g. Apple Declared Age Range, Google Play Age Signals).
     )
+    platforms: t.Optional[t.List[t.Union[t.Literal['web'], t.Literal['ios'], t.Literal['android'], str]]] = (
+        None  #: The platforms this configuration applies to. If omitted, the configuration applies to all platforms.
+    )
     region_code: t.Optional[str] = (
         None  #: The ISO 3166-2 region code this configuration applies to. If omitted, the configuration applies to the entire country.
     )

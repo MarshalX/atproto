@@ -7,6 +7,8 @@
 
 import typing as t
 
+from atproto_client.models import string_formats
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -25,4 +27,4 @@ class DataDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.draft.createDraft`."""
 
-    id: str  #: The ID of the created draft.
+    id: string_formats.Tid  #: The ID of the created draft.

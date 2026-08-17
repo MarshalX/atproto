@@ -23,10 +23,29 @@ class JobStatus(base.ModelBase):
     did: string_formats.Did  #: Did.
     job_id: str  #: Job id.
     state: t.Union[
-        t.Literal['JOB_STATE_COMPLETED'], t.Literal['JOB_STATE_FAILED'], str
+        t.Literal['JOB_STATE_CREATED'],
+        t.Literal['JOB_STATE_ENCODING'],
+        t.Literal['JOB_STATE_ENCODED'],
+        t.Literal['JOB_STATE_SCANNING'],
+        t.Literal['JOB_STATE_SCANNED'],
+        t.Literal['JOB_STATE_UPLOADING'],
+        t.Literal['JOB_STATE_UPLOADED'],
+        t.Literal['JOB_STATE_COMPLETED'],
+        t.Literal['JOB_STATE_FAILED'],
+        str,
     ]  #: The state of the video processing job. All values not listed as a known value indicate that the job is in process.
     blob: t.Optional['BlobRef'] = None  #: Blob.
     error: t.Optional[str] = None  #: Error.
+    failure_code: t.Optional[
+        t.Union[
+            t.Literal['validation_failure'],
+            t.Literal['encoding_failure'],
+            t.Literal['pds_upload_failure'],
+            t.Literal['pds_upload_unsupported_blob_size'],
+            t.Literal['generic_failure'],
+            str,
+        ]
+    ] = None  #: A machine-readable code for why the video processing job failed.
     message: t.Optional[str] = None  #: Message.
     progress: te.Annotated[t.Optional[int], Field(ge=0, le=100)] = (
         None  #: Progress within the current processing state.
