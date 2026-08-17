@@ -21,7 +21,7 @@ class Data(base.DataModelBase):
     cursor: t.Optional[str] = None  #: Cursor for pagination.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Maximum number of results to return.
     pattern_type: t.Optional[str] = None  #: Filter by pattern type.
-    sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc'], str]] = 'desc'  #: Sort direction.
+    sort_direction: t.Optional[t.Union[t.Literal['asc', 'desc'], str]] = 'desc'  #: Sort direction.
     urls: t.Optional[t.List[str]] = None  #: Filter by specific URLs or domains.
 
 
@@ -29,7 +29,7 @@ class DataDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor for pagination.
     limit: te.NotRequired[t.Optional[int]]  #: Maximum number of results to return.
     pattern_type: te.NotRequired[t.Optional[str]]  #: Filter by pattern type.
-    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc'], t.Literal['desc'], str]]]  #: Sort direction.
+    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc', 'desc'], str]]]  #: Sort direction.
     urls: te.NotRequired[t.Optional[t.List[str]]]  #: Filter by specific URLs or domains.
 
 

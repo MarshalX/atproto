@@ -145,7 +145,8 @@ def _set_commit_message_output(commit_message: str) -> None:
 
 
 def _run_subprocess(command: t.List[str]) -> None:
-    result = subprocess.run(command, stderr=subprocess.PIPE, text=True)  # noqa: S603
+    # check=False: the return code is reported to GitHub below instead of raising
+    result = subprocess.run(command, stderr=subprocess.PIPE, text=True, check=False)  # noqa: S603
     if result.stderr:
         sys.stderr.write(result.stderr)
     if result.returncode != 0:

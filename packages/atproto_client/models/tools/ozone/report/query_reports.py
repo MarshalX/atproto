@@ -20,9 +20,7 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`tools.ozone.report.queryReports`."""
 
-    status: t.Union[
-        t.Literal['open'], t.Literal['closed'], t.Literal['escalated'], t.Literal['queued'], t.Literal['assigned'], str
-    ]  #: Filter by report status.
+    status: t.Union[t.Literal['open', 'closed', 'escalated', 'queued', 'assigned'], str]  #: Filter by report status.
     assigned_to: t.Optional[string_formats.Did] = (
         None  #: Filter by the DID of the moderator permanently assigned to the report.
     )
@@ -43,18 +41,16 @@ class Params(base.ParamsModelBase):
     )
     reported_after: t.Optional[string_formats.DateTime] = None  #: Retrieve reports created after a given timestamp.
     reported_before: t.Optional[string_formats.DateTime] = None  #: Retrieve reports created before a given timestamp.
-    sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = 'desc'  #: Sort direction.
-    sort_field: t.Optional[t.Union[t.Literal['createdAt'], t.Literal['updatedAt']]] = 'createdAt'  #: Sort field.
+    sort_direction: t.Optional[t.Union[t.Literal['asc', 'desc']]] = 'desc'  #: Sort direction.
+    sort_field: t.Optional[t.Union[t.Literal['createdAt', 'updatedAt']]] = 'createdAt'  #: Sort field.
     subject: t.Optional[string_formats.Uri] = None  #: Filter by subject DID or AT-URI.
-    subject_type: t.Optional[
-        t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]
-    ] = None  #: If specified, reports of the given subject type will be returned.
+    subject_type: t.Optional[t.Union[t.Literal['account', 'record', 'message', 'conversation'], str]] = (
+        None  #: If specified, reports of the given subject type will be returned.
+    )
 
 
 class ParamsDict(t.TypedDict):
-    status: t.Union[
-        t.Literal['open'], t.Literal['closed'], t.Literal['escalated'], t.Literal['queued'], t.Literal['assigned'], str
-    ]  #: Filter by report status.
+    status: t.Union[t.Literal['open', 'closed', 'escalated', 'queued', 'assigned'], str]  #: Filter by report status.
     assigned_to: te.NotRequired[
         t.Optional[string_formats.Did]
     ]  #: Filter by the DID of the moderator permanently assigned to the report.
@@ -79,13 +75,11 @@ class ParamsDict(t.TypedDict):
     reported_before: te.NotRequired[
         t.Optional[string_formats.DateTime]
     ]  #: Retrieve reports created before a given timestamp.
-    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]]  #: Sort direction.
-    sort_field: te.NotRequired[t.Optional[t.Union[t.Literal['createdAt'], t.Literal['updatedAt']]]]  #: Sort field.
+    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc', 'desc']]]]  #: Sort direction.
+    sort_field: te.NotRequired[t.Optional[t.Union[t.Literal['createdAt', 'updatedAt']]]]  #: Sort field.
     subject: te.NotRequired[t.Optional[string_formats.Uri]]  #: Filter by subject DID or AT-URI.
     subject_type: te.NotRequired[
-        t.Optional[
-            t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]
-        ]
+        t.Optional[t.Union[t.Literal['account', 'record', 'message', 'conversation'], str]]
     ]  #: If specified, reports of the given subject type will be returned.
 
 

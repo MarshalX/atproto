@@ -25,12 +25,7 @@ class Params(base.ParamsModelBase):
     events: t.Optional[
         t.List[
             t.Union[
-                t.Literal['accountCreated'],
-                t.Literal['emailUpdated'],
-                t.Literal['emailConfirmed'],
-                t.Literal['passwordUpdated'],
-                t.Literal['handleUpdated'],
-                str,
+                t.Literal['accountCreated', 'emailUpdated', 'emailConfirmed', 'passwordUpdated', 'handleUpdated'], str
             ]
         ]
     ] = None  #: Events.
@@ -44,11 +39,7 @@ class ParamsDict(t.TypedDict):
         t.Optional[
             t.List[
                 t.Union[
-                    t.Literal['accountCreated'],
-                    t.Literal['emailUpdated'],
-                    t.Literal['emailConfirmed'],
-                    t.Literal['passwordUpdated'],
-                    t.Literal['handleUpdated'],
+                    t.Literal['accountCreated', 'emailUpdated', 'emailConfirmed', 'passwordUpdated', 'handleUpdated'],
                     str,
                 ]
             ]

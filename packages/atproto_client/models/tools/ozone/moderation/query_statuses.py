@@ -20,16 +20,9 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`tools.ozone.moderation.queryStatuses`."""
 
-    age_assurance_state: t.Optional[
-        t.Union[
-            t.Literal['pending'],
-            t.Literal['assured'],
-            t.Literal['unknown'],
-            t.Literal['reset'],
-            t.Literal['blocked'],
-            str,
-        ]
-    ] = None  #: If specified, only subjects with the given age assurance state will be returned.
+    age_assurance_state: t.Optional[t.Union[t.Literal['pending', 'assured', 'unknown', 'reset', 'blocked'], str]] = (
+        None  #: If specified, only subjects with the given age assurance state will be returned.
+    )
     appealed: t.Optional[bool] = None  #: Get subjects in unresolved appealed status.
     collections: te.Annotated[t.Optional[t.List[string_formats.Nsid]], Field(max_length=20)] = (
         None  #: If specified, subjects belonging to the given collections will be returned. When subjectType is set to 'account', this will be ignored.
@@ -97,18 +90,16 @@ class Params(base.ParamsModelBase):
     ] = None  #: Specify when fetching subjects in a certain state.
     reviewed_after: t.Optional[string_formats.DateTime] = None  #: Search subjects reviewed after a given timestamp.
     reviewed_before: t.Optional[string_formats.DateTime] = None  #: Search subjects reviewed before a given timestamp.
-    sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = 'desc'  #: Sort direction.
+    sort_direction: t.Optional[t.Union[t.Literal['asc', 'desc']]] = 'desc'  #: Sort direction.
     sort_field: t.Optional[
         t.Union[
-            t.Literal['lastReviewedAt'],
-            t.Literal['lastReportedAt'],
-            t.Literal['reportedRecordsCount'],
-            t.Literal['takendownRecordsCount'],
-            t.Literal['priorityScore'],
+            t.Literal[
+                'lastReviewedAt', 'lastReportedAt', 'reportedRecordsCount', 'takendownRecordsCount', 'priorityScore'
+            ]
         ]
     ] = 'lastReportedAt'  #: Sort field.
     subject: t.Optional[string_formats.Uri] = None  #: The subject to get the status for.
-    subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['conversation'], str]] = (
+    subject_type: t.Optional[t.Union[t.Literal['account', 'record', 'conversation'], str]] = (
         None  #: If specified, subjects of the given type (account, record, or conversation) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     )
     tags: te.Annotated[t.Optional[t.List[str]], Field(max_length=25)] = (
@@ -119,16 +110,7 @@ class Params(base.ParamsModelBase):
 
 class ParamsDict(t.TypedDict):
     age_assurance_state: te.NotRequired[
-        t.Optional[
-            t.Union[
-                t.Literal['pending'],
-                t.Literal['assured'],
-                t.Literal['unknown'],
-                t.Literal['reset'],
-                t.Literal['blocked'],
-                str,
-            ]
-        ]
+        t.Optional[t.Union[t.Literal['pending', 'assured', 'unknown', 'reset', 'blocked'], str]]
     ]  #: If specified, only subjects with the given age assurance state will be returned.
     appealed: te.NotRequired[t.Optional[bool]]  #: Get subjects in unresolved appealed status.
     collections: te.NotRequired[
@@ -211,21 +193,19 @@ class ParamsDict(t.TypedDict):
     reviewed_before: te.NotRequired[
         t.Optional[string_formats.DateTime]
     ]  #: Search subjects reviewed before a given timestamp.
-    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]]  #: Sort direction.
+    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc', 'desc']]]]  #: Sort direction.
     sort_field: te.NotRequired[
         t.Optional[
             t.Union[
-                t.Literal['lastReviewedAt'],
-                t.Literal['lastReportedAt'],
-                t.Literal['reportedRecordsCount'],
-                t.Literal['takendownRecordsCount'],
-                t.Literal['priorityScore'],
+                t.Literal[
+                    'lastReviewedAt', 'lastReportedAt', 'reportedRecordsCount', 'takendownRecordsCount', 'priorityScore'
+                ]
             ]
         ]
     ]  #: Sort field.
     subject: te.NotRequired[t.Optional[string_formats.Uri]]  #: The subject to get the status for.
     subject_type: te.NotRequired[
-        t.Optional[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['conversation'], str]]
+        t.Optional[t.Union[t.Literal['account', 'record', 'conversation'], str]]
     ]  #: If specified, subjects of the given type (account, record, or conversation) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     tags: te.NotRequired[
         t.Optional[t.List[str]]

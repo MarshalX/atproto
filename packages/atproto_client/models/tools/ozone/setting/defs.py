@@ -25,7 +25,7 @@ class Option(base.ModelBase):
     did: string_formats.Did  #: Did.
     key: string_formats.Nsid  #: Key.
     last_updated_by: string_formats.Did  #: Last updated by.
-    scope: t.Union[t.Literal['instance'], t.Literal['personal'], str]  #: Scope.
+    scope: t.Union[t.Literal['instance', 'personal'], str]  #: Scope.
     value: 'UnknownType'  #: Value.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     description: te.Annotated[t.Optional[str], Field(max_length=10240)] = None  #: Description.

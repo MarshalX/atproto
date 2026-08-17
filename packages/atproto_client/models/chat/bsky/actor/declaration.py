@@ -17,8 +17,8 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`chat.bsky.actor.declaration`."""
 
-    allow_incoming: t.Union[t.Literal['all'], t.Literal['none'], t.Literal['following'], str]  #: Allow incoming.
-    allow_group_invites: t.Optional[t.Union[t.Literal['all'], t.Literal['none'], t.Literal['following'], str]] = (
+    allow_incoming: t.Union[t.Literal['all', 'none', 'following'], str]  #: Allow incoming.
+    allow_group_invites: t.Optional[t.Union[t.Literal['all', 'none', 'following'], str]] = (
         None  #: Declaration about group chat invitation preferences for the record owner.
     )
 

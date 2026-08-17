@@ -26,16 +26,9 @@ class Params(base.ParamsModelBase):
     added_tags: t.Optional[t.List[str]] = (
         None  #: If specified, only events where all of these tags were added are returned.
     )
-    age_assurance_state: t.Optional[
-        t.Union[
-            t.Literal['pending'],
-            t.Literal['assured'],
-            t.Literal['unknown'],
-            t.Literal['reset'],
-            t.Literal['blocked'],
-            str,
-        ]
-    ] = None  #: If specified, only events where the age assurance state matches the given value are returned.
+    age_assurance_state: t.Optional[t.Union[t.Literal['pending', 'assured', 'unknown', 'reset', 'blocked'], str]] = (
+        None  #: If specified, only events where the age assurance state matches the given value are returned.
+    )
     batch_id: t.Optional[str] = (
         None  #: If specified, only events where the batchId matches the given value are returned.
     )
@@ -67,11 +60,11 @@ class Params(base.ParamsModelBase):
         None  #: If specified, only events where all of these tags were removed are returned.
     )
     report_types: t.Optional[t.List[str]] = None  #: Report types.
-    sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = (
+    sort_direction: t.Optional[t.Union[t.Literal['asc', 'desc']]] = (
         'desc'  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     )
     subject: t.Optional[string_formats.Uri] = None  #: Subject.
-    subject_type: t.Optional[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['conversation'], str]] = (
+    subject_type: t.Optional[t.Union[t.Literal['account', 'record', 'conversation'], str]] = (
         None  #: If specified, only events where the subject is of the given type (account, record, or conversation) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     )
     types: t.Optional[t.List[str]] = (
@@ -88,16 +81,7 @@ class ParamsDict(t.TypedDict):
         t.Optional[t.List[str]]
     ]  #: If specified, only events where all of these tags were added are returned.
     age_assurance_state: te.NotRequired[
-        t.Optional[
-            t.Union[
-                t.Literal['pending'],
-                t.Literal['assured'],
-                t.Literal['unknown'],
-                t.Literal['reset'],
-                t.Literal['blocked'],
-                str,
-            ]
-        ]
+        t.Optional[t.Union[t.Literal['pending', 'assured', 'unknown', 'reset', 'blocked'], str]]
     ]  #: If specified, only events where the age assurance state matches the given value are returned.
     batch_id: te.NotRequired[
         t.Optional[str]
@@ -135,11 +119,11 @@ class ParamsDict(t.TypedDict):
     ]  #: If specified, only events where all of these tags were removed are returned.
     report_types: te.NotRequired[t.Optional[t.List[str]]]  #: Report types.
     sort_direction: te.NotRequired[
-        t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]
+        t.Optional[t.Union[t.Literal['asc', 'desc']]]
     ]  #: Sort direction for the events. Defaults to descending order of created at timestamp.
     subject: te.NotRequired[t.Optional[string_formats.Uri]]  #: Subject.
     subject_type: te.NotRequired[
-        t.Optional[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['conversation'], str]]
+        t.Optional[t.Union[t.Literal['account', 'record', 'conversation'], str]]
     ]  #: If specified, only events where the subject is of the given type (account, record, or conversation) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
     types: te.NotRequired[
         t.Optional[t.List[str]]

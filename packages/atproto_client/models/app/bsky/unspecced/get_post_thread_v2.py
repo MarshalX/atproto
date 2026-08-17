@@ -28,9 +28,7 @@ class Params(base.ParamsModelBase):
     branching_factor: te.Annotated[t.Optional[int], Field(ge=0, le=100)] = (
         None  #: Maximum of replies to include at each level of the thread, except for the direct replies to the anchor, which are (NOTE: currently, during unspecced phase) all returned (NOTE: later they might be paginated).
     )
-    sort: t.Optional[t.Union[t.Literal['newest'], t.Literal['oldest'], t.Literal['top'], str]] = (
-        'oldest'  #: Sorting for the thread replies.
-    )
+    sort: t.Optional[t.Union[t.Literal['newest', 'oldest', 'top'], str]] = 'oldest'  #: Sorting for the thread replies.
 
 
 class ParamsDict(t.TypedDict):
@@ -41,7 +39,7 @@ class ParamsDict(t.TypedDict):
         t.Optional[int]
     ]  #: Maximum of replies to include at each level of the thread, except for the direct replies to the anchor, which are (NOTE: currently, during unspecced phase) all returned (NOTE: later they might be paginated).
     sort: te.NotRequired[
-        t.Optional[t.Union[t.Literal['newest'], t.Literal['oldest'], t.Literal['top'], str]]
+        t.Optional[t.Union[t.Literal['newest', 'oldest', 'top'], str]]
     ]  #: Sorting for the thread replies.
 
 

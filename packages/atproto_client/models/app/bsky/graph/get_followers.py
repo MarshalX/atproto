@@ -23,14 +23,14 @@ class Params(base.ParamsModelBase):
     actor: string_formats.AtIdentifier  #: Actor.
     cursor: t.Optional[str] = None  #: Cursor.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
-    sort: t.Optional[t.Union[t.Literal['latest'], t.Literal['top'], str]] = None  #: Sort.
+    sort: t.Optional[t.Union[t.Literal['latest', 'top'], str]] = None  #: Sort.
 
 
 class ParamsDict(t.TypedDict):
     actor: string_formats.AtIdentifier  #: Actor.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
-    sort: te.NotRequired[t.Optional[t.Union[t.Literal['latest'], t.Literal['top'], str]]]  #: Sort.
+    sort: te.NotRequired[t.Optional[t.Union[t.Literal['latest', 'top'], str]]]  #: Sort.
 
 
 class Response(base.ResponseModelBase):

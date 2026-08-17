@@ -26,7 +26,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
 
         self._refresh_lock = Lock()
 
-        self.me: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed'] = None
+        self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
     def _invoke(self, invoke_type: 'InvokeType', **kwargs: t.Any) -> 'Response':
         ignore_session_check = kwargs.pop('ignore_session_check', False)

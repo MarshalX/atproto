@@ -62,19 +62,19 @@ class LabelValueDefinition(base.ModelBase):
     """Definition model for :obj:`com.atproto.label.defs`. Declares a label value and its expected interpretations and behaviors."""
 
     blurs: t.Union[
-        t.Literal['content'], t.Literal['media'], t.Literal['none'], str
+        t.Literal['content', 'media', 'none'], str
     ]  #: What should this label hide in the UI, if applied? 'content' hides all of the target; 'media' hides the images/video/audio; 'none' hides nothing.
     identifier: str = Field(
         max_length=100
     )  #: The value of the label being defined. Must only include lowercase ascii and the '-' character ([a-z-]+).
     locales: t.List['models.ComAtprotoLabelDefs.LabelValueDefinitionStrings']  #: Locales.
     severity: t.Union[
-        t.Literal['inform'], t.Literal['alert'], t.Literal['none'], str
+        t.Literal['inform', 'alert', 'none'], str
     ]  #: How should a client visually convey this label? 'inform' means neutral and informational; 'alert' means negative and warning; 'none' means show nothing.
     adult_only: t.Optional[bool] = (
         None  #: Does the user need to have adult content enabled in order to configure this label?
     )
-    default_setting: t.Optional[t.Union[t.Literal['ignore'], t.Literal['warn'], t.Literal['hide'], str]] = (
+    default_setting: t.Optional[t.Union[t.Literal['ignore', 'warn', 'hide'], str]] = (
         'warn'  #: The default setting for this label.
     )
 
@@ -98,13 +98,5 @@ class LabelValueDefinitionStrings(base.ModelBase):
 
 
 LabelValue = t.Union[
-    t.Literal['!hide'],
-    t.Literal['!warn'],
-    t.Literal['!no-unauthenticated'],
-    t.Literal['porn'],
-    t.Literal['sexual'],
-    t.Literal['nudity'],
-    t.Literal['graphic-media'],
-    t.Literal['bot'],
-    str,
+    t.Literal['!hide', '!warn', '!no-unauthenticated', 'porn', 'sexual', 'nudity', 'graphic-media', 'bot'], str
 ]  #: Label value

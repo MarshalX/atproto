@@ -69,9 +69,9 @@ def get_or_create(
             raise ModelError(f"Can't properly parse model of type {model}")
 
         return model_instance
-    except Exception as e:
+    except Exception:
         if strict or not isinstance(model_data, dict):
-            raise e
+            raise
 
         return DotDict(model_data)
 
@@ -152,9 +152,9 @@ def is_json(json_data: t.Union[str, bytes]) -> bool:
 def load_json(json_data: t.Union[str, bytes], strict: bool = True) -> t.Optional[t.Dict[str, t.Any]]:
     try:
         return from_json(json_data)
-    except ValueError as e:
+    except ValueError:
         if strict:
-            raise e
+            raise
 
         return None
 

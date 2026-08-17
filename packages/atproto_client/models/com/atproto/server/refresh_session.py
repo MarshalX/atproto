@@ -26,6 +26,6 @@ class Response(base.ResponseModelBase):
     email: t.Optional[str] = None  #: Email.
     email_auth_factor: t.Optional[bool] = None  #: Email auth factor.
     email_confirmed: t.Optional[bool] = None  #: Email confirmed.
-    status: t.Optional[t.Union[t.Literal['takendown'], t.Literal['suspended'], t.Literal['deactivated'], str]] = (
+    status: t.Optional[t.Union[t.Literal['takendown', 'suspended', 'deactivated'], str]] = (
         None  #: Hosting status of the account. If not specified, then assume 'active'.
     )

@@ -20,9 +20,9 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.moderation.listScheduledActions`."""
 
-    statuses: t.List[
-        t.Union[t.Literal['pending'], t.Literal['executed'], t.Literal['cancelled'], t.Literal['failed'], str]
-    ] = Field(min_length=1)  #: Filter actions by status.
+    statuses: t.List[t.Union[t.Literal['pending', 'executed', 'cancelled', 'failed'], str]] = Field(
+        min_length=1
+    )  #: Filter actions by status.
     cursor: t.Optional[str] = None  #: Cursor for pagination.
     ends_before: t.Optional[string_formats.DateTime] = None  #: Filter actions scheduled to execute before this time.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Maximum number of results to return.
@@ -34,7 +34,7 @@ class Data(base.DataModelBase):
 
 class DataDict(t.TypedDict):
     statuses: t.List[
-        t.Union[t.Literal['pending'], t.Literal['executed'], t.Literal['cancelled'], t.Literal['failed'], str]
+        t.Union[t.Literal['pending', 'executed', 'cancelled', 'failed'], str]
     ]  #: Filter actions by status.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor for pagination.
     ends_before: te.NotRequired[

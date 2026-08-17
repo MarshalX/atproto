@@ -25,7 +25,7 @@ class DataDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`chat.bsky.group.requestJoin`."""
 
-    status: t.Union[t.Literal['joined'], t.Literal['pending'], str]  #: Status.
+    status: t.Union[t.Literal['joined', 'pending'], str]  #: Status.
     convo: t.Optional['models.ChatBskyConvoDefs.ConvoView'] = (
         None  #: The group convo joined. This is only present in the case of status=joined.
     )

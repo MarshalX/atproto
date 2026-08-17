@@ -19,29 +19,27 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`chat.bsky.convo.listConvos`."""
 
     cursor: t.Optional[str] = None  #: Cursor.
-    kind: t.Optional[t.Union[t.Literal['direct'], t.Literal['group'], str]] = None  #: Filter by conversation kind.
+    kind: t.Optional[t.Union[t.Literal['direct', 'group'], str]] = None  #: Filter by conversation kind.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
-    lock_status: t.Optional[
-        t.Union[t.Literal['unlocked'], t.Literal['locked'], t.Literal['locked-permanently'], str]
-    ] = None  #: Filter by conversation lock status. Values follow chat.bsky.convo.defs#convoLockStatus.
+    lock_status: t.Optional[t.Union[t.Literal['unlocked', 'locked', 'locked-permanently'], str]] = (
+        None  #: Filter by conversation lock status. Values follow chat.bsky.convo.defs#convoLockStatus.
+    )
     read_state: t.Optional[t.Union[t.Literal['unread'], str]] = None  #: Read state.
-    status: t.Optional[t.Union[t.Literal['request'], t.Literal['accepted'], str]] = (
+    status: t.Optional[t.Union[t.Literal['request', 'accepted'], str]] = (
         None  #: Filter convos by their status. It is discouraged to call with "request" and preferred to call chat.bsky.convo.listConvoRequests, which also includes group join requests made by the user.
     )
 
 
 class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
-    kind: te.NotRequired[
-        t.Optional[t.Union[t.Literal['direct'], t.Literal['group'], str]]
-    ]  #: Filter by conversation kind.
+    kind: te.NotRequired[t.Optional[t.Union[t.Literal['direct', 'group'], str]]]  #: Filter by conversation kind.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
     lock_status: te.NotRequired[
-        t.Optional[t.Union[t.Literal['unlocked'], t.Literal['locked'], t.Literal['locked-permanently'], str]]
+        t.Optional[t.Union[t.Literal['unlocked', 'locked', 'locked-permanently'], str]]
     ]  #: Filter by conversation lock status. Values follow chat.bsky.convo.defs#convoLockStatus.
     read_state: te.NotRequired[t.Optional[t.Union[t.Literal['unread'], str]]]  #: Read state.
     status: te.NotRequired[
-        t.Optional[t.Union[t.Literal['request'], t.Literal['accepted'], str]]
+        t.Optional[t.Union[t.Literal['request', 'accepted'], str]]
     ]  #: Filter convos by their status. It is discouraged to call with "request" and preferred to call chat.bsky.convo.listConvoRequests, which also includes group join requests made by the user.
 
 

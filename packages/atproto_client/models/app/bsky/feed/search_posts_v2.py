@@ -59,15 +59,15 @@ class Params(base.ParamsModelBase):
         None  #: Include posts that mention any of these accounts. Handles are resolved to DIDs before searching.
     )
     query: t.Optional[str] = None  #: Search query string. A query or at least one filter is required.
-    query_language: t.Optional[
-        t.Union[t.Literal['ja'], t.Literal['zh'], t.Literal['ko'], t.Literal['th'], t.Literal['ar'], str]
-    ] = None  #: Language analyzer hint for the query text. If unset, the server auto-detects when possible.
+    query_language: t.Optional[t.Union[t.Literal['ja', 'zh', 'ko', 'th', 'ar'], str]] = (
+        None  #: Language analyzer hint for the query text. If unset, the server auto-detects when possible.
+    )
     replies_only: t.Optional[bool] = None  #: Include only replies. Mutually exclusive with excludeReplies.
     reply_parent_uri: t.Optional[string_formats.AtUri] = None  #: Include only direct replies to this parent post URI.
     since: t.Optional[str] = (
         None  #: Include posts indexed at or after this timestamp. Can be a datetime, or just an ISO date (YYYY-MM-DD).
     )
-    sort: t.Optional[t.Union[t.Literal['recent'], t.Literal['top'], str]] = (
+    sort: t.Optional[t.Union[t.Literal['recent', 'top'], str]] = (
         None  #: Ranking order for results. 'recent' sorts by recency; 'top' uses search ranking.
     )
     thread_root_uri: t.Optional[string_formats.AtUri] = (
@@ -126,7 +126,7 @@ class ParamsDict(t.TypedDict):
     ]  #: Include posts that mention any of these accounts. Handles are resolved to DIDs before searching.
     query: te.NotRequired[t.Optional[str]]  #: Search query string. A query or at least one filter is required.
     query_language: te.NotRequired[
-        t.Optional[t.Union[t.Literal['ja'], t.Literal['zh'], t.Literal['ko'], t.Literal['th'], t.Literal['ar'], str]]
+        t.Optional[t.Union[t.Literal['ja', 'zh', 'ko', 'th', 'ar'], str]]
     ]  #: Language analyzer hint for the query text. If unset, the server auto-detects when possible.
     replies_only: te.NotRequired[t.Optional[bool]]  #: Include only replies. Mutually exclusive with excludeReplies.
     reply_parent_uri: te.NotRequired[
@@ -136,7 +136,7 @@ class ParamsDict(t.TypedDict):
         t.Optional[str]
     ]  #: Include posts indexed at or after this timestamp. Can be a datetime, or just an ISO date (YYYY-MM-DD).
     sort: te.NotRequired[
-        t.Optional[t.Union[t.Literal['recent'], t.Literal['top'], str]]
+        t.Optional[t.Union[t.Literal['recent', 'top'], str]]
     ]  #: Ranking order for results. 'recent' sorts by recency; 'top' uses search ranking.
     thread_root_uri: te.NotRequired[
         t.Optional[string_formats.AtUri]
@@ -152,7 +152,7 @@ class Response(base.ResponseModelBase):
 
     posts: t.List['models.AppBskyFeedDefs.PostView']  #: Hydrated views of matching posts.
     cursor: t.Optional[str] = None  #: Cursor for the next page of results.
-    detected_query_languages: t.Optional[
-        t.List[t.Union[t.Literal['ja'], t.Literal['zh'], t.Literal['ko'], t.Literal['th'], t.Literal['ar'], str]]
-    ] = None  #: Query languages detected for CJK, Thai, or Arabic text. Empty or omitted for other scripts.
+    detected_query_languages: t.Optional[t.List[t.Union[t.Literal['ja', 'zh', 'ko', 'th', 'ar'], str]]] = (
+        None  #: Query languages detected for CJK, Thai, or Arabic text. Empty or omitted for other scripts.
+    )
     hits_total: t.Optional[int] = None  #: Estimated total number of matching hits. May be rounded or truncated.

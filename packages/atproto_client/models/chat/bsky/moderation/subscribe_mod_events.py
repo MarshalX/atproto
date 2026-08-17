@@ -163,7 +163,7 @@ class EventChatAccepted(base.ModelBase):
     convo_created_at: string_formats.DateTime  #: When the convo was originally created.
     convo_id: str  #: Convo id.
     created_at: string_formats.DateTime  #: Created at.
-    method: t.Union[t.Literal['explicit'], t.Literal['message'], str]  #: How the convo was accepted.
+    method: t.Union[t.Literal['explicit', 'message'], str]  #: How the convo was accepted.
     rev: str  #: Rev.
     group_member_count: t.Optional[int] = (
         None  #: Current member count at the time of the event. Only present for group convos.
@@ -185,7 +185,7 @@ class EventGroupChatMemberLeft(base.ModelBase):
     created_at: string_formats.DateTime  #: Created at.
     group_member_count: int  #: Current member count at the time of the event.
     group_name: str  #: Group name.
-    leave_method: t.Union[t.Literal['voluntary'], t.Literal['kicked'], str]  #: How the member left.
+    leave_method: t.Union[t.Literal['voluntary', 'kicked'], str]  #: How the member left.
     owner_did: string_formats.Did  #: The DID of the group chat owner.
     rev: str  #: Rev.
     subject_did: string_formats.Did  #: The DID of the member who left or was removed.
@@ -207,13 +207,15 @@ class EventGroupChatUpdated(base.ModelBase):
     owner_did: string_formats.Did  #: The DID of the group chat owner.
     rev: str  #: Rev.
     update_type: t.Union[
-        t.Literal['name_changed'],
-        t.Literal['locked'],
-        t.Literal['locked_permanently'],
-        t.Literal['unlocked'],
-        t.Literal['join_link_created'],
-        t.Literal['join_link_disabled'],
-        t.Literal['join_link_settings_changed'],
+        t.Literal[
+            'name_changed',
+            'locked',
+            'locked_permanently',
+            'unlocked',
+            'join_link_created',
+            'join_link_disabled',
+            'join_link_settings_changed',
+        ],
         str,
     ]  #: What changed.
     join_link_code: t.Optional[str] = (
@@ -227,14 +229,16 @@ class EventGroupChatUpdated(base.ModelBase):
     )
     lock_reason: t.Optional[
         t.Union[
-            t.Literal['owner_action'],
-            t.Literal['owner_left'],
-            t.Literal['owner_deactivated'],
-            t.Literal['owner_deleted'],
-            t.Literal['owner_suspended'],
-            t.Literal['owner_taken_down'],
-            t.Literal['label_applied'],
-            t.Literal['convo_taken_down'],
+            t.Literal[
+                'owner_action',
+                'owner_left',
+                'owner_deactivated',
+                'owner_deleted',
+                'owner_suspended',
+                'owner_taken_down',
+                'label_applied',
+                'convo_taken_down',
+            ],
             str,
         ]
     ] = None  #: Why the group was locked. Only present when updateType is 'locked'.

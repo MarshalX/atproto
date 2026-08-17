@@ -14,7 +14,7 @@ if t.TYPE_CHECKING:
     from atproto_client import models
 
 
-_SESSION_STRING_SEPARATOR: t.Final[te.Literal[':::']] = ':::'
+_SESSION_STRING_SEPARATOR: t.Final = ':::'
 
 
 class SessionEvent(Enum):
@@ -42,7 +42,7 @@ def _session_exists(session: t.Optional['Session']) -> te.TypeGuard['Session']:
 
 class SessionDispatcher:
     def __init__(self, session: t.Optional['Session'] = None) -> None:
-        self._session: t.Optional['Session'] = session
+        self._session: t.Optional[Session] = session
 
         self._on_session_change_callbacks: t.List[SessionChangeCallback] = []
         self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []

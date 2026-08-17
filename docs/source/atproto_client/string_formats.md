@@ -107,10 +107,12 @@ from atproto_client.models.utils import get_or_create
 from atproto_client.models.string_formats import Handle
 from pydantic import BaseModel
 
+
 class MyModel(BaseModel):
     handle: Handle
 
-data = {"handle": "alice.bsky.social"}
+
+data = {'handle': 'alice.bsky.social'}
 model_instance = get_or_create(data, MyModel, strict_string_format=True)
 ```
 
@@ -120,13 +122,12 @@ model_instance = get_or_create(data, MyModel, strict_string_format=True)
 from pydantic import BaseModel
 from atproto_client.models.string_formats import Handle
 
+
 class MyModel(BaseModel):
     handle: Handle
 
-model_instance = MyModel.model_validate(
-    {"handle": "alice.bsky.social"},
-    context={"strict_string_format": True}
-)
+
+model_instance = MyModel.model_validate({'handle': 'alice.bsky.social'}, context={'strict_string_format': True})
 ```
 
 When validation is disabled (the default), any string value will be accepted for any format. When enabled, the values must conform to the above validation rules, or else a `ValidationError` will be raised.

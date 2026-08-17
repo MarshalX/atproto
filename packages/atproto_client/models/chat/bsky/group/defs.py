@@ -15,9 +15,9 @@ if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
 
-LinkEnabledStatus = t.Union[t.Literal['enabled'], t.Literal['disabled'], str]  #: Link enabled status
+LinkEnabledStatus = t.Union[t.Literal['enabled', 'disabled'], str]  #: Link enabled status
 
-JoinRule = t.Union[t.Literal['anyone'], t.Literal['followedByOwner'], str]  #: Join rule
+JoinRule = t.Union[t.Literal['anyone', 'followedByOwner'], str]  #: Join rule
 
 
 class JoinLinkView(base.ModelBase):

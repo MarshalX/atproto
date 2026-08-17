@@ -31,7 +31,7 @@ class Params(base.ParamsModelBase):
     )
     cursor: t.Optional[str] = None  #: Cursor of the form `<createdAtMs>::<activityId>`.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
-    sort_direction: t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]] = 'desc'  #: Sort direction.
+    sort_direction: t.Optional[t.Union[t.Literal['asc', 'desc']]] = 'desc'  #: Sort direction.
 
 
 class ParamsDict(t.TypedDict):
@@ -46,7 +46,7 @@ class ParamsDict(t.TypedDict):
     ]  #: Retrieve activities created at or before a given timestamp.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor of the form `<createdAtMs>::<activityId>`.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
-    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc'], t.Literal['desc']]]]  #: Sort direction.
+    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc', 'desc']]]]  #: Sort direction.
 
 
 class Response(base.ResponseModelBase):

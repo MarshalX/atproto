@@ -16,13 +16,11 @@ if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
 
-ConvoKind = t.Union[t.Literal['direct'], t.Literal['group'], str]  #: Convo kind
+ConvoKind = t.Union[t.Literal['direct', 'group'], str]  #: Convo kind
 
-ConvoLockStatus = t.Union[
-    t.Literal['unlocked'], t.Literal['locked'], t.Literal['locked-permanently'], str
-]  #: Convo lock status
+ConvoLockStatus = t.Union[t.Literal['unlocked', 'locked', 'locked-permanently'], str]  #: Convo lock status
 
-ConvoStatus = t.Union[t.Literal['request'], t.Literal['accepted'], str]  #: Convo status
+ConvoStatus = t.Union[t.Literal['request', 'accepted'], str]  #: Convo status
 
 
 class ConvoRef(base.ModelBase):

@@ -35,9 +35,9 @@ class QueueView(base.ModelBase):
         None  #: Policy keys recommended when actioning reports in this queue.
     )
     report_types: t.Optional[t.List[str]] = None  #: Report reason types this queue accepts (fully qualified NSIDs).
-    subject_types: t.Optional[
-        t.List[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]]
-    ] = None  #: Subject types this queue accepts.
+    subject_types: t.Optional[t.List[t.Union[t.Literal['account', 'record', 'message', 'conversation'], str]]] = (
+        None  #: Subject types this queue accepts.
+    )
 
     py_type: t.Literal['tools.ozone.queue.defs#queueView'] = Field(
         default='tools.ozone.queue.defs#queueView', alias='$type', frozen=True

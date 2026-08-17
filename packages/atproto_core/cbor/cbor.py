@@ -1,5 +1,3 @@
-from typing import List
-
 import libipld
 
 from atproto_core.exceptions import DAGCBORDecodingError
@@ -20,7 +18,7 @@ def decode_dag(data: bytes) -> dict:
         raise DAGCBORDecodingError from e
 
 
-def decode_dag_multi(data: bytes) -> List[dict]:
+def decode_dag_multi(data: bytes) -> list[dict]:
     """Decode and returns many data items from the given data, with the DAG-CBOR codec.
 
     Args:

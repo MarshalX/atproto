@@ -111,7 +111,7 @@ class DotDict(UnknownDict):
     def __contains__(self, item: t.Any) -> bool:
         return item in self._data
 
-    def __eq__(self, other: t.Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, DotDict):
             return self._data == other._data
         if isinstance(other, dict):

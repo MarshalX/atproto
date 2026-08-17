@@ -31,9 +31,9 @@ class Data(base.DataModelBase):
     report_types: te.Annotated[t.Optional[t.List[str]], Field(max_length=25)] = (
         None  #: Report reason types (fully qualified NSIDs).
     )
-    subject_types: t.Optional[
-        t.List[t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]]
-    ] = None  #: Subject types this queue accepts.
+    subject_types: t.Optional[t.List[t.Union[t.Literal['account', 'record', 'message', 'conversation'], str]]] = (
+        None  #: Subject types this queue accepts.
+    )
 
 
 class DataDict(t.TypedDict):
@@ -47,11 +47,7 @@ class DataDict(t.TypedDict):
     ]  #: Policy keys to recommend when actioning reports in this queue.
     report_types: te.NotRequired[t.Optional[t.List[str]]]  #: Report reason types (fully qualified NSIDs).
     subject_types: te.NotRequired[
-        t.Optional[
-            t.List[
-                t.Union[t.Literal['account'], t.Literal['record'], t.Literal['message'], t.Literal['conversation'], str]
-            ]
-        ]
+        t.Optional[t.List[t.Union[t.Literal['account', 'record', 'message', 'conversation'], str]]]
     ]  #: Subject types this queue accepts.
 
 
