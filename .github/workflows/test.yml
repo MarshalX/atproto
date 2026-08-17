@@ -133,11 +133,14 @@ jobs:
         run: poetry install --without docs
 
       # Overrides the version poetry.lock pins. Fails loudly if the pin is unsatisfiable.
+      # The venv interpreter is invoked directly because `poetry run python` fails on Windows;
+      # POETRY_VIRTUALENVS_IN_PROJECT guarantees the venv is at .venv.
       - name: Pin websockets to v${{matrix.websockets}}.
         run: |
-          poetry run python -m pip install \
-            "websockets>=${{matrix.websockets}},<$((${{matrix.websockets}} + 1))"
-          poetry run python -c "import websockets; print('websockets', websockets.__version__)"
+          PYTHON=.venv/bin/python
+          [ -x "$PYTHON" ] || PYTHON=.venv/Scripts/python.exe
+          "$PYTHON" -m pip install "websockets~=${{matrix.websockets}}.0"
+          "$PYTHON" -c "import websockets; print('websockets', websockets.__version__)"
 
       - name: Run Tests.
         run: poetry run pytest
