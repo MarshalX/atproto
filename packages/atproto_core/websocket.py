@@ -175,6 +175,9 @@ class WebsocketClient(WebsocketClientBase):
         self._on_message_callback: t.Optional[OnMessageCallback] = None
         self._on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None
 
+    def _before_connect(self) -> None:
+        """Prepare the next connection. Called before every dial, including reconnects."""
+
     def _process_frame(self, frame: Frame) -> None:
         try:
             if self._on_message_callback is not None:
@@ -211,6 +214,7 @@ class WebsocketClient(WebsocketClientBase):
                 if self._reconnect_no != 0:
                     time.sleep(self._get_reconnection_delay())
 
+                self._before_connect()
                 client = self._get_client()
                 with client:
                     connected_at = time.monotonic()
@@ -263,6 +267,9 @@ class AsyncWebsocketClient(WebsocketClientBase):
         self._on_message_callback: t.Optional[AsyncOnMessageCallback] = None
         self._on_callback_error_callback: t.Optional[AsyncOnCallbackErrorCallback] = None
 
+    async def _before_connect(self) -> None:
+        """Prepare the next connection. Called before every dial, including reconnects."""
+
     async def _process_frame(self, frame: Frame) -> None:
         try:
             if self._on_message_callback is not None:
@@ -299,6 +306,7 @@ class AsyncWebsocketClient(WebsocketClientBase):
                 if self._reconnect_no != 0:
                     await asyncio.sleep(self._get_reconnection_delay())
 
+                await self._before_connect()
                 async with self._get_async_client() as client:
                     connected_at = time.monotonic()
                     self._client = client

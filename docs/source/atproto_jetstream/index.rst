@@ -67,6 +67,27 @@ Persist :obj:`cursor` to resume across restarts:
 .. note::
     Cursors are instance-local and are not portable between servers or between Jetstream versions.
 
+Compression
+-----------
+
+Frames are compressed by default using Jetstream's dict-zstd scheme, which cuts bandwidth by roughly 60%. The client fetches the server's dictionary over HTTPS once at startup, negotiates it on the websocket, and decompresses each frame transparently — your callback sees the same models either way.
+
+..  code-block:: python
+
+    client = JetstreamClient()
+    print(client.compressed)  # False until the first connection negotiates it
+
+Compression is best-effort and never fatal. If the dictionary cannot be fetched, or the server rotates it and the new one cannot be obtained, the client falls back to an uncompressed stream and keeps running. Check :obj:`compressed` to see what the current connection negotiated.
+
+Pass ``compress=False`` to disable it:
+
+..  code-block:: python
+
+    client = JetstreamClient(compress=False)
+
+.. note::
+    Decompression costs roughly 2 microseconds per frame, about 12% of the time spent turning a frame into a model.
+
 Backfill
 --------
 

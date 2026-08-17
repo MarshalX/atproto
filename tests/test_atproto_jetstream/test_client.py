@@ -16,7 +16,7 @@ from atproto_jetstream.exceptions import JetstreamCursorTooOldError, JetstreamEr
 from atproto_jetstream.jetstream import AsyncJetstreamClient, JetstreamClient
 from atproto_jetstream.models import SubscribeEventsMessage
 
-from .conftest import SUBPROTOCOL, JetstreamTestServer
+from .conftest import DICTIONARIES, SUBPROTOCOL, JetstreamTestServer
 
 #: Generous upper bound; every scenario finishes in well under a second locally.
 _TEST_TIMEOUT_SEC = 60
@@ -32,6 +32,7 @@ class Outcome(t.NamedTuple):
     messages: t.List[SubscribeEventsMessage]
     exception: t.Optional[BaseException]
     cursor: t.Optional[int]
+    compressed: bool = False
 
 
 def seqs(outcome: 'Outcome') -> t.List[int]:
@@ -54,9 +55,10 @@ def run_sync(
     params: t.Optional[dict] = None,
     recv_timeout: t.Optional[float] = None,
     stop_after: int = 1,
+    compress: bool = False,
 ) -> Outcome:
     """Run the sync client until ``stop_after`` messages arrive or it stops on its own."""
-    client = _JetstreamClient(method, server.base_uri, params, recv_timeout=recv_timeout)
+    client = _JetstreamClient(method, server.base_uri_for(method), params, recv_timeout=recv_timeout, compress=compress)
     _shrink_backoff(client)
 
     messages: t.List[SubscribeEventsMessage] = []
@@ -80,7 +82,7 @@ def run_sync(
     if thread.is_alive():
         raised.append(TimeoutError(f'the client did not stop within {_TEST_TIMEOUT_SEC}s'))
 
-    return Outcome(messages, raised[0] if raised else None, client.cursor)
+    return Outcome(messages, raised[0] if raised else None, client.cursor, client.compressed)
 
 
 async def run_async(
@@ -89,9 +91,12 @@ async def run_async(
     params: t.Optional[dict] = None,
     recv_timeout: t.Optional[float] = None,
     stop_after: int = 1,
+    compress: bool = False,
 ) -> Outcome:
     """Run the async client until ``stop_after`` messages arrive or it stops on its own."""
-    client = _AsyncJetstreamClient(method, server.base_uri, params, recv_timeout=recv_timeout)
+    client = _AsyncJetstreamClient(
+        method, server.base_uri_for(method), params, recv_timeout=recv_timeout, compress=compress
+    )
     _shrink_backoff(client)
 
     messages: t.List[SubscribeEventsMessage] = []
@@ -117,7 +122,7 @@ async def run_async(
         with contextlib.suppress(BaseException):
             await task
 
-    return Outcome(messages, raised[0] if raised else None, client.cursor)
+    return Outcome(messages, raised[0] if raised else None, client.cursor, client.compressed)
 
 
 def test_delivers_parsed_commits(server: JetstreamTestServer) -> None:
@@ -326,3 +331,96 @@ async def test_async_cursor_too_old_is_fatal(server: JetstreamTestServer) -> Non
 
     assert isinstance(outcome.exception, JetstreamCursorTooOldError)
     assert server.state(method).rejections == 1
+
+
+def test_compression_is_negotiated_and_frames_decode(server: JetstreamTestServer) -> None:
+    method = server.new_method('compressed')
+
+    outcome = run_sync(server, method, stop_after=3, compress=True)
+
+    assert outcome.exception is None
+    assert outcome.compressed
+    assert seqs(outcome) == [1, 2, 3]
+    assert first_commit(outcome).collection == 'app.bsky.feed.post'
+
+    expected_id = str(DICTIONARIES['current'].dict_id())
+    assert server.state(method).queries[0]['zstdDictionary'] == [expected_id]
+    assert server.state(method).dictionary_fetches == 1
+
+
+def test_compression_off_sends_no_dictionary_param(server: JetstreamTestServer) -> None:
+    method = server.new_method('compressed')
+
+    outcome = run_sync(server, method, stop_after=3, compress=False)
+
+    assert not outcome.compressed
+    assert seqs(outcome) == [1, 2, 3]
+    assert 'zstdDictionary' not in server.state(method).queries[0]
+    assert server.state(method).dictionary_fetches == 0
+
+
+def test_undecompressable_frame_is_skipped(server: JetstreamTestServer) -> None:
+    method = server.new_method('compressed_garbage')
+
+    outcome = run_sync(server, method, stop_after=2, compress=True)
+
+    assert outcome.exception is None
+    assert seqs(outcome) == [1, 3]
+
+
+def test_rotated_dictionary_is_refetched(server: JetstreamTestServer) -> None:
+    method = server.new_method('dict_rotate')
+
+    outcome = run_sync(server, method, stop_after=3, compress=True)
+
+    assert outcome.exception is None
+    assert outcome.compressed
+    assert seqs(outcome) == [1, 2, 3]
+    # fetched once before the refused dial, once more after it
+    assert server.state(method).dictionary_fetches == 2
+    assert server.state(method).queries[0]['zstdDictionary'] == [str(DICTIONARIES['rotated'].dict_id())]
+
+
+def test_stale_dictionary_sheds_compression(server: JetstreamTestServer) -> None:
+    method = server.new_method('dict_stale')
+
+    outcome = run_sync(server, method, stop_after=3, compress=True)
+
+    # the server keeps refusing and keeps returning the same id, so the client gives up on
+    # compression and carries on with an uncompressed tail
+    assert outcome.exception is None
+    assert not outcome.compressed
+    assert seqs(outcome) == [1, 2, 3]
+    assert 'zstdDictionary' not in server.state(method).queries[0]
+
+
+def test_unavailable_dictionary_sheds_compression(server: JetstreamTestServer) -> None:
+    method = server.new_method('dict_unavailable')
+
+    outcome = run_sync(server, method, stop_after=3, compress=True)
+
+    assert outcome.exception is None
+    assert not outcome.compressed
+    assert seqs(outcome) == [1, 2, 3]
+
+
+@pytest.mark.asyncio
+async def test_async_compression_is_negotiated(server: JetstreamTestServer) -> None:
+    method = server.new_method('compressed')
+
+    outcome = await run_async(server, method, stop_after=3, compress=True)
+
+    assert outcome.exception is None
+    assert outcome.compressed
+    assert seqs(outcome) == [1, 2, 3]
+
+
+@pytest.mark.asyncio
+async def test_async_unavailable_dictionary_sheds_compression(server: JetstreamTestServer) -> None:
+    method = server.new_method('dict_unavailable')
+
+    outcome = await run_async(server, method, stop_after=3, compress=True)
+
+    assert outcome.exception is None
+    assert not outcome.compressed
+    assert seqs(outcome) == [1, 2, 3]

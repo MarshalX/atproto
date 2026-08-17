@@ -53,6 +53,8 @@ class JetstreamClient(_JetstreamClient):
         base_uri: Base websocket URI. Example: `wss://jetstream.us-east.bsky.network/xrpc`.
         recv_timeout: Reconnect to the server after this many seconds of inactivity.
             Default is 60 seconds.
+        compress: Receive compressed frames. Falls back to an uncompressed stream
+            if the server does not cooperate. Default is :obj:`True`.
     """
 
     def __init__(
@@ -60,8 +62,15 @@ class JetstreamClient(_JetstreamClient):
         params: t.Optional[t.Union[Params, ParamsDict]] = None,
         base_uri: str = _BASE_WEBSOCKET_URI,
         recv_timeout: t.Optional[float] = _DEFAULT_RECV_TIMEOUT,
+        compress: bool = True,
     ) -> None:
-        super().__init__(method=_METHOD, base_uri=base_uri, params=_build_params(params), recv_timeout=recv_timeout)
+        super().__init__(
+            method=_METHOD,
+            base_uri=base_uri,
+            params=_build_params(params),
+            recv_timeout=recv_timeout,
+            compress=compress,
+        )
 
 
 class AsyncJetstreamClient(_AsyncJetstreamClient):
@@ -79,6 +88,8 @@ class AsyncJetstreamClient(_AsyncJetstreamClient):
         base_uri: Base websocket URI. Example: `wss://jetstream.us-east.bsky.network/xrpc`.
         recv_timeout: Reconnect to the server after this many seconds of inactivity.
             Default is 60 seconds.
+        compress: Receive compressed frames. Falls back to an uncompressed stream
+            if the server does not cooperate. Default is :obj:`True`.
     """
 
     def __init__(
@@ -86,5 +97,12 @@ class AsyncJetstreamClient(_AsyncJetstreamClient):
         params: t.Optional[t.Union[Params, ParamsDict]] = None,
         base_uri: str = _BASE_WEBSOCKET_URI,
         recv_timeout: t.Optional[float] = _DEFAULT_RECV_TIMEOUT,
+        compress: bool = True,
     ) -> None:
-        super().__init__(method=_METHOD, base_uri=base_uri, params=_build_params(params), recv_timeout=recv_timeout)
+        super().__init__(
+            method=_METHOD,
+            base_uri=base_uri,
+            params=_build_params(params),
+            recv_timeout=recv_timeout,
+            compress=compress,
+        )

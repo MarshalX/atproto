@@ -35,6 +35,7 @@ dependencies = [
     "libipld>=3.0.1,<4",
     "dnspython>=2.4.0,<3",
     "cryptography>=41.0.7,<51",
+    "zstandard (>=0.24.0,<0.26.0)",
 ]
 
 [project.scripts]
