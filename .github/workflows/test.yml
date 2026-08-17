@@ -82,17 +82,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # One cell per (major, boundary): the oldest and newest Python each major supports.
+        # v15 is omitted because poetry.lock pins it, so unit_tests already covers it on every
+        # Python and OS. The OS is rotated so all three see a version the lockfile never installs.
         include:
-          # websockets v15 is the last version supporting Python 3.9
-          - { os: ubuntu-latest, python-version: "3.10", websockets: "15" }
-          # websockets v16 is the last version supporting Python 3.10
-          - { os: ubuntu-latest, python-version: "3.10", websockets: "16" }
-          - { os: ubuntu-latest, python-version: "3.11", websockets: "16" }
-          # websockets v17 requires Python 3.11+
-          - { os: ubuntu-latest, python-version: "3.11", websockets: "17" }
-          - { os: ubuntu-latest, python-version: "3.13", websockets: "17" }
-          - { os: macos-latest, python-version: "3.14", websockets: "17" }
-          - { os: windows-latest, python-version: "3.14", websockets: "17" }
+          - { websockets: "16", python-version: "3.10", os: ubuntu-latest }  # v16 needs 3.10+
+          - { websockets: "16", python-version: "3.14", os: macos-latest }
+          - { websockets: "17", python-version: "3.11", os: ubuntu-latest }  # v17 needs 3.11+
+          - { websockets: "17", python-version: "3.14", os: windows-latest }
 
     runs-on: ${{matrix.os}}
 
