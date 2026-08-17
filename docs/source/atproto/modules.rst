@@ -12,5 +12,6 @@ packages
    atproto_crypto
    atproto_firehose
    atproto_identity
+   atproto_jetstream
    atproto_lexicon
    atproto_server

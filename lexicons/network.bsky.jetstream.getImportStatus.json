@@ -1,0 +1,58 @@
+{
+  "lexicon": 1,
+  "id": "network.bsky.jetstream.getImportStatus",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Report the status of a timestamp-import job: lifecycle state, current phase, per-phase progress, and (on completion) the parse/mutation totals. With no job parameter, reports the current or most recent job. Bearer-token gated: without a configured token the endpoint always returns 401.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "job": {
+            "type": "string",
+            "description": "Job id returned by importTimestamps. When omitted, the current or most recent job is reported."
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": ["job", "state"],
+          "properties": {
+            "job": { "type": "string", "description": "Job id." },
+            "state": {
+              "type": "string",
+              "knownValues": ["running", "complete", "failed"],
+              "description": "Lifecycle state."
+            },
+            "phase": {
+              "type": "string",
+              "knownValues": ["parse_bucket", "apply"],
+              "description": "Current phase: parse_bucket (Phase A+B) or apply (Phase C)."
+            },
+            "error": { "type": "string", "description": "Failure detail; present only when state is failed." },
+            "submittedAt": { "type": "string", "format": "datetime" },
+            "finishedAt": { "type": "string", "format": "datetime", "description": "Present only for a terminal job." },
+            "bucketed": { "type": "boolean", "description": "Whether Phase A+B completed (the offset files are durable)." },
+            "segmentsToApply": { "type": "integer", "minimum": 0, "description": "Segments Phase C will process (after resume-skips)." },
+            "segmentsApplied": { "type": "integer", "minimum": 0, "description": "Segments processed so far in Phase C." },
+            "rowsTotal": { "type": "integer", "minimum": 0 },
+            "rowsValid": { "type": "integer", "minimum": 0 },
+            "rowsRejected": { "type": "integer", "minimum": 0 },
+            "segmentsExamined": { "type": "integer", "minimum": 0 },
+            "segmentsPatched": { "type": "integer", "minimum": 0 },
+            "rowsMutated": { "type": "integer", "minimum": 0 },
+            "rowsMatchedAllVersions": { "type": "integer", "minimum": 0 },
+            "rowsMatchedSpecific": { "type": "integer", "minimum": 0 },
+            "specificCidsUnmatched": { "type": "integer", "minimum": 0 },
+            "rowsCorruptOffset": { "type": "integer", "minimum": 0 }
+          }
+        }
+      },
+      "errors": [
+        { "name": "JobNotFound", "description": "No import job matches the supplied id, or no job has ever run when the id is omitted." }
+      ]
+    }
+  }
+}

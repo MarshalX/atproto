@@ -26,3 +26,4 @@ Submodules
    :maxdepth: 4
 
    atproto_core.exceptions
+   atproto_core.websocket

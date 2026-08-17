@@ -22,6 +22,7 @@ Documentation
    atproto_client/index
    atproto_core/index
    atproto_firehose/index
+   atproto_jetstream/index
    atproto_identity/index
    atproto_crypto/index
    atproto_server/index

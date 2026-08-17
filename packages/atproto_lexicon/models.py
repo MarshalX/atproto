@@ -218,6 +218,7 @@ class LexSubscription(LexDefinitionBase):
     message: t.Optional[LexXrpcSubscriptionMessage] = None
     infos: t.Optional[t.List[LexXrpcError]] = None
     errors: t.Optional[t.List[LexXrpcError]] = None
+    subprotocol: t.Optional[str] = None
 
 
 class LexXrpcQuery(LexDefinitionBase):

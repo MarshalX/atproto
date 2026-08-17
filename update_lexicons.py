@@ -17,10 +17,24 @@ _GITHUB_BASE_URL = 'https://github.com'
 _GITHUB_API_BASE_URL = 'https://api.github.com'
 
 _ORG_NAME = 'bluesky-social'
-_REPO_NAME = 'atproto'
 _DEFAULT_BRANCH_NAME = 'main'
 
 _LEXICONS_FOLDER_NAME = 'lexicons'
+
+
+class LexiconSource(t.NamedTuple):
+    """Upstream repository to fetch lexicons from."""
+
+    repo: str
+    branch: str = _DEFAULT_BRANCH_NAME
+    subpath: str = ''  #: Restricts the fetch to a subtree of the repo's lexicons dir.
+    org: str = _ORG_NAME
+
+
+_SOURCES = (
+    LexiconSource(repo='atproto'),
+    LexiconSource(repo='jetstream', subpath='network/'),
+)
 
 _MANDATORY_REQUEST_HEADERS = {'Content-Type-': 'application/json'}
 
@@ -31,18 +45,22 @@ _FOLDER_OF_GEN_DOCS = Path(__file__).parent.joinpath('docs', 'source', 'atproto'
 _FOLDER_OF_MODELS = Path(__file__).parent.joinpath('packages', 'atproto_client', 'models').absolute()
 
 
-def _build_last_commit_api_url() -> str:
-    return f'{_GITHUB_API_BASE_URL}/repos/{_ORG_NAME}/{_REPO_NAME}/commits'
+def _build_last_commit_api_url(source: LexiconSource) -> str:
+    return f'{_GITHUB_API_BASE_URL}/repos/{source.org}/{source.repo}/commits'
 
 
-def _build_src_download_url() -> str:
-    return f'{_GITHUB_BASE_URL}/{_ORG_NAME}/{_REPO_NAME}/archive/refs/heads/{_DEFAULT_BRANCH_NAME}.zip'
+def _build_src_download_url(source: LexiconSource) -> str:
+    return f'{_GITHUB_BASE_URL}/{source.org}/{source.repo}/archive/refs/heads/{source.branch}.zip'
 
 
-def _get_last_commit_info() -> t.Tuple[str, str, str]:
+def _get_last_commit_info(source: LexiconSource) -> t.Tuple[str, str, str]:
     response = httpx.get(
-        url=_build_last_commit_api_url(),
-        params={'path': _LEXICONS_FOLDER_NAME, 'sha': _DEFAULT_BRANCH_NAME, 'per_page': 1},
+        url=_build_last_commit_api_url(source),
+        params={
+            'path': f'{_LEXICONS_FOLDER_NAME}/{source.subpath}'.rstrip('/'),
+            'sha': source.branch,
+            'per_page': 1,
+        },
         headers=_MANDATORY_REQUEST_HEADERS,
         timeout=5,
     )
@@ -58,8 +76,8 @@ def _get_last_commit_info() -> t.Tuple[str, str, str]:
     return sha, commit_date, message
 
 
-def _download_zip_with_code() -> BytesIO:
-    response = httpx.get(_build_src_download_url(), follow_redirects=True)
+def _download_zip_with_code(source: LexiconSource) -> BytesIO:
+    response = httpx.get(_build_src_download_url(source), follow_redirects=True)
     response.raise_for_status()
 
     zip_file_bytes = BytesIO()
@@ -68,26 +86,51 @@ def _download_zip_with_code() -> BytesIO:
     return zip_file_bytes
 
 
-def _build_valid_path_to_lexicons() -> str:
-    return f'{_REPO_NAME}-{_DEFAULT_BRANCH_NAME}/{_LEXICONS_FOLDER_NAME}/'
+def _build_valid_path_to_lexicons(source: LexiconSource) -> str:
+    return f'{source.repo}-{source.branch}/{_LEXICONS_FOLDER_NAME}/'
 
 
-def _validate_lexicon_path_prefix(path: str) -> bool:
-    return path.startswith(_build_valid_path_to_lexicons())
+def _validate_lexicon_path_prefix(path: str, source: LexiconSource) -> bool:
+    return path.startswith(f'{_build_valid_path_to_lexicons(source)}{source.subpath}')
 
 
 ExtractedFiles = t.Dict[str, bytes]
 
 
-def _extract_zip(zip_file: BytesIO) -> ExtractedFiles:
+def _extract_zip(zip_file: BytesIO, source: LexiconSource) -> ExtractedFiles:
+    """Extract lexicons of the source keyed by their flattened output filename."""
     archive = zipfile.ZipFile(zip_file)
 
     extracted_files: ExtractedFiles = {}
     for name in archive.namelist():
-        if _validate_lexicon_path_prefix(name):
-            extracted_files[name] = archive.read(name)
+        if not _validate_lexicon_path_prefix(name, source):
+            continue
+
+        content = archive.read(name)
+        if not content:
+            # if dir name
+            continue
+
+        extracted_files[_format_lexicon_filename(name, source)] = content
 
     return extracted_files
+
+
+def _merge_extracted_lexicons(sources_files: t.List[t.Tuple[LexiconSource, ExtractedFiles]]) -> ExtractedFiles:
+    """Merge lexicons of all sources, rejecting any filename claimed by more than one."""
+    merged: ExtractedFiles = {}
+    owner_by_filename: t.Dict[str, str] = {}
+
+    for source, files in sources_files:
+        for filename, content in files.items():
+            owner = owner_by_filename.get(filename)
+            if owner is not None:
+                raise RuntimeError(f'Lexicon {filename} is provided by both {owner} and {source.repo}')
+
+            owner_by_filename[filename] = source.repo
+            merged[filename] = content
+
+    return merged
 
 
 def _get_path_to_write_lexicon(filename: str) -> Path:
@@ -100,18 +143,14 @@ def _write_to_file(filename: str, content: bytes) -> None:
         f.write(content.decode('UTF-8'))
 
 
-def _format_lexicon_filename(original_filename: str) -> str:
-    filename = original_filename.replace(_build_valid_path_to_lexicons(), '')
+def _format_lexicon_filename(original_filename: str, source: LexiconSource) -> str:
+    filename = original_filename.replace(_build_valid_path_to_lexicons(source), '')
     return filename.replace('/', '.')
 
 
 def _write_extracted_lexicons(extracted_files: ExtractedFiles) -> None:
     for filename, content in extracted_files.items():
-        if not content:
-            # if dir name
-            continue
-
-        _write_to_file(_format_lexicon_filename(filename), content)
+        _write_to_file(filename, content)
 
 
 def _remove_content_in_path(path: Path) -> None:
@@ -164,11 +203,16 @@ def _print(*args) -> None:
 
 def main() -> None:
     """Fetch new lexicons and regenerate code and docs. Used in CI/CD."""
-    _print('- Fetching lexicons from the latest commit...')
-    sha, commit_date, _ = _get_last_commit_info()
+    sources_files = []
+    revisions = []
+    for source in _SOURCES:
+        _print(f'- Fetching lexicons from the latest commit of {source.repo}...')
+        sha, commit_date, _ = _get_last_commit_info(source)
+        revisions.append(f'{source.repo}@{sha[:7]} ({commit_date})')
+        sources_files.append((source, _extract_zip(_download_zip_with_code(source), source)))
 
     _remove_content_in_path(_FOLDER_TO_WRITE_LEXICONS)
-    _write_extracted_lexicons(_extract_zip(_download_zip_with_code()))
+    _write_extracted_lexicons(_merge_extracted_lexicons(sources_files))
 
     # remove all generated models
     for item in os.listdir(_FOLDER_OF_MODELS):
@@ -189,7 +233,7 @@ def main() -> None:
     _remove_content_in_path(_FOLDER_OF_GEN_DOCS)
     _run_subprocess(['make', '-s', '-C', 'docs', 'gen'])
 
-    commit_message = f'Update lexicons fetched from {sha[:7]} committed {commit_date}'
+    commit_message = f'Update lexicons fetched from {", ".join(revisions)}'
     _print(f'Commit message: {commit_message}')
 
     _set_commit_message_output(commit_message)

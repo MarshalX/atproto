@@ -41,8 +41,8 @@ class Params(base.ParamsModelBase):
     )
     reported_after: t.Optional[string_formats.DateTime] = None  #: Retrieve reports created after a given timestamp.
     reported_before: t.Optional[string_formats.DateTime] = None  #: Retrieve reports created before a given timestamp.
-    sort_direction: t.Optional[t.Union[t.Literal['asc', 'desc']]] = 'desc'  #: Sort direction.
-    sort_field: t.Optional[t.Union[t.Literal['createdAt', 'updatedAt']]] = 'createdAt'  #: Sort field.
+    sort_direction: t.Optional[t.Literal['asc', 'desc']] = 'desc'  #: Sort direction.
+    sort_field: t.Optional[t.Literal['createdAt', 'updatedAt']] = 'createdAt'  #: Sort field.
     subject: t.Optional[string_formats.Uri] = None  #: Filter by subject DID or AT-URI.
     subject_type: t.Optional[t.Union[t.Literal['account', 'record', 'message', 'conversation'], str]] = (
         None  #: If specified, reports of the given subject type will be returned.
@@ -75,8 +75,8 @@ class ParamsDict(t.TypedDict):
     reported_before: te.NotRequired[
         t.Optional[string_formats.DateTime]
     ]  #: Retrieve reports created before a given timestamp.
-    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc', 'desc']]]]  #: Sort direction.
-    sort_field: te.NotRequired[t.Optional[t.Union[t.Literal['createdAt', 'updatedAt']]]]  #: Sort field.
+    sort_direction: te.NotRequired[t.Optional[t.Literal['asc', 'desc']]]  #: Sort direction.
+    sort_field: te.NotRequired[t.Optional[t.Literal['createdAt', 'updatedAt']]]  #: Sort field.
     subject: te.NotRequired[t.Optional[string_formats.Uri]]  #: Filter by subject DID or AT-URI.
     subject_type: te.NotRequired[
         t.Optional[t.Union[t.Literal['account', 'record', 'message', 'conversation'], str]]

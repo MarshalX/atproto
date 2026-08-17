@@ -10154,6 +10154,231 @@ class InternalBskyActorNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.InternalBskyActorGetProfiles.Response)
 
 
+class NetworkNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        super().__init__(client)
+        self.bsky = NetworkBskyNamespace(self._client)
+
+
+class NetworkBskyNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncClientRaw') -> None:
+        super().__init__(client)
+        self.jetstream = NetworkBskyJetstreamNamespace(self._client)
+
+
+class NetworkBskyJetstreamNamespace(AsyncNamespaceBase):
+    async def get_block(
+        self,
+        params: t.Union[models.NetworkBskyJetstreamGetBlock.Params, models.NetworkBskyJetstreamGetBlock.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.NetworkBskyJetstreamGetBlock.Response':
+        """Download a single block within a sealed segment file by index. Returns the raw zstd-compressed block frame exactly as stored on disk.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.NetworkBskyJetstreamGetBlock.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.NetworkBskyJetstreamGetBlock.Params',
+            get_or_create(params, models.NetworkBskyJetstreamGetBlock.Params),
+        )
+        response = await self._client.invoke_query(
+            'network.bsky.jetstream.getBlock', params=params_model, output_encoding='application/octet-stream', **kwargs
+        )
+        return get_response_model(response, models.NetworkBskyJetstreamGetBlock.Response)
+
+    async def get_import_status(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.NetworkBskyJetstreamGetImportStatus.Params, models.NetworkBskyJetstreamGetImportStatus.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.NetworkBskyJetstreamGetImportStatus.Response':
+        """Report the status of a timestamp-import job: lifecycle state, current phase, per-phase progress, and (on completion) the parse/mutation totals. With no job parameter, reports the current or most recent job. Bearer-token gated: without a configured token the endpoint always returns 401.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.NetworkBskyJetstreamGetImportStatus.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.NetworkBskyJetstreamGetImportStatus.Params',
+            get_or_create(params, models.NetworkBskyJetstreamGetImportStatus.Params),
+        )
+        response = await self._client.invoke_query(
+            'network.bsky.jetstream.getImportStatus', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.NetworkBskyJetstreamGetImportStatus.Response)
+
+    async def get_segment(
+        self,
+        params: t.Union[models.NetworkBskyJetstreamGetSegment.Params, models.NetworkBskyJetstreamGetSegment.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.NetworkBskyJetstreamGetSegment.Response':
+        """Download a sealed segment file by name.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.NetworkBskyJetstreamGetSegment.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.NetworkBskyJetstreamGetSegment.Params',
+            get_or_create(params, models.NetworkBskyJetstreamGetSegment.Params),
+        )
+        response = await self._client.invoke_query(
+            'network.bsky.jetstream.getSegment',
+            params=params_model,
+            output_encoding='application/octet-stream',
+            **kwargs,
+        )
+        return get_response_model(response, models.NetworkBskyJetstreamGetSegment.Response)
+
+    async def get_zstd_dictionary(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.NetworkBskyJetstreamGetZstdDictionary.Params,
+                models.NetworkBskyJetstreamGetZstdDictionary.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.NetworkBskyJetstreamGetZstdDictionary.Response':
+        """Download the zstd dictionary used by the network.bsky.jetstream.subscribeEvents stream's optional compression scheme. The dictionary is requested by its zstd dictionary ID (the same ID embedded in every compressed frame's header); a client that wants compressed frames first fetches the server's current dictionary, then opts in on the websocket with zstdDictionary=<id>. The response is a raw zstd structured dictionary (RFC 8878 section 5), immutable for a given ID and CDN-cacheable. Servers may retire old dictionaries after retraining; a client holding a retired ID re-fetches without an id parameter to obtain the current one.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.NetworkBskyJetstreamGetZstdDictionary.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.NetworkBskyJetstreamGetZstdDictionary.Params',
+            get_or_create(params, models.NetworkBskyJetstreamGetZstdDictionary.Params),
+        )
+        response = await self._client.invoke_query(
+            'network.bsky.jetstream.getZstdDictionary',
+            params=params_model,
+            output_encoding='application/octet-stream',
+            **kwargs,
+        )
+        return get_response_model(response, models.NetworkBskyJetstreamGetZstdDictionary.Response)
+
+    async def import_timestamps(
+        self,
+        data: t.Union[
+            models.NetworkBskyJetstreamImportTimestamps.Data, models.NetworkBskyJetstreamImportTimestamps.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.NetworkBskyJetstreamImportTimestamps.Response':
+        """Submit a timestamp-import job. The referenced CSV is staged server-local out-of-band and named by a path confined to the server's configured import directory (paths escaping it via .. or a symlink are rejected). The job runs asynchronously and shares the segment-rewrite lock with delete-compaction, so only one import runs at a time; a concurrent submit is rejected. Bearer-token gated: without a configured token the endpoint always returns 401.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.NetworkBskyJetstreamImportTimestamps.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.NetworkBskyJetstreamImportTimestamps.Data',
+            get_or_create(data, models.NetworkBskyJetstreamImportTimestamps.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'network.bsky.jetstream.importTimestamps',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.NetworkBskyJetstreamImportTimestamps.Response)
+
+    async def list_segments(
+        self,
+        params: t.Optional[
+            t.Union[models.NetworkBskyJetstreamListSegments.Params, models.NetworkBskyJetstreamListSegments.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.NetworkBskyJetstreamListSegments.Response':
+        """Enumerate sealed segment files available for download, in ascending index order.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.NetworkBskyJetstreamListSegments.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.NetworkBskyJetstreamListSegments.Params',
+            get_or_create(params, models.NetworkBskyJetstreamListSegments.Params),
+        )
+        response = await self._client.invoke_query(
+            'network.bsky.jetstream.listSegments', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.NetworkBskyJetstreamListSegments.Response)
+
+    async def plan_snapshot(
+        self,
+        data: t.Optional[
+            t.Union[models.NetworkBskyJetstreamPlanSnapshot.Data, models.NetworkBskyJetstreamPlanSnapshot.DataDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.NetworkBskyJetstreamPlanSnapshot.Response':
+        """Build a download plan for the desired data pattern. The plan lists whole segments or block ranges that might contain events for the requested kinds, DIDs, and collections.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.NetworkBskyJetstreamPlanSnapshot.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.NetworkBskyJetstreamPlanSnapshot.Data',
+            get_or_create(data, models.NetworkBskyJetstreamPlanSnapshot.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'network.bsky.jetstream.planSnapshot',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.NetworkBskyJetstreamPlanSnapshot.Response)
+
+
 class SiteNamespace(AsyncNamespaceBase):
     def __init__(self, client: 'AsyncClientRaw') -> None:
         super().__init__(client)

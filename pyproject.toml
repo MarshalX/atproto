@@ -83,6 +83,7 @@ packages = [
     { include = "atproto_crypto", from = "packages" },
     { include = "atproto_firehose", from = "packages" },
     { include = "atproto_identity", from = "packages" },
+    { include = "atproto_jetstream", from = "packages" },
     { include = "atproto_lexicon", from = "packages" },
     { include = "atproto_server", from = "packages" },
 ]

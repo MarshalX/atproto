@@ -15,17 +15,19 @@ import typing as t
 
 import libipld
 import pytest
-from atproto_firehose import client as client_module
-from atproto_firehose.client import (
-    _AsyncWebsocketClient,
-    _handle_websocket_error_or_stop,
-    _WebsocketClient,
-)
+from atproto_core import websocket as websocket_module
+from atproto_firehose.client import _AsyncWebsocketClient, _WebsocketClient
 from atproto_firehose.exceptions import FirehoseError
 from atproto_firehose.models import MessageFrame
 from websockets.asyncio.client import connect
 
 from .conftest import MAX_SIZE_BYTES, FirehoseTestServer
+
+
+def _handle_websocket_error_or_stop(exception: Exception) -> bool:
+    """Classify an error the same way a running client would."""
+    return _WebsocketClient('m', 'ws://127.0.0.1:1')._handle_websocket_error_or_stop(exception)
+
 
 #: Generous upper bound; every scenario finishes in well under a second locally.
 _TEST_TIMEOUT_SEC = 60
@@ -388,7 +390,7 @@ async def test_backoff_resets_after_a_healthy_connection(
     runner: t.Any, server: FirehoseTestServer, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """A long-lived connection dropping is a one-off, not evidence of a failing server."""
-    monkeypatch.setattr(client_module, '_HEALTHY_CONNECTION_SEC', 0.0)
+    monkeypatch.setattr(websocket_module, '_HEALTHY_CONNECTION_SEC', 0.0)
     method = server.new_method('always_drops')
     attempts: t.List[int] = []
 

@@ -16,6 +16,7 @@ Subpackages
    atproto_client.models.chat
    atproto_client.models.com
    atproto_client.models.internal
+   atproto_client.models.network
    atproto_client.models.site
    atproto_client.models.tools
 

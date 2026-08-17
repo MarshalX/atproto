@@ -90,13 +90,9 @@ class Params(base.ParamsModelBase):
     ] = None  #: Specify when fetching subjects in a certain state.
     reviewed_after: t.Optional[string_formats.DateTime] = None  #: Search subjects reviewed after a given timestamp.
     reviewed_before: t.Optional[string_formats.DateTime] = None  #: Search subjects reviewed before a given timestamp.
-    sort_direction: t.Optional[t.Union[t.Literal['asc', 'desc']]] = 'desc'  #: Sort direction.
+    sort_direction: t.Optional[t.Literal['asc', 'desc']] = 'desc'  #: Sort direction.
     sort_field: t.Optional[
-        t.Union[
-            t.Literal[
-                'lastReviewedAt', 'lastReportedAt', 'reportedRecordsCount', 'takendownRecordsCount', 'priorityScore'
-            ]
-        ]
+        t.Literal['lastReviewedAt', 'lastReportedAt', 'reportedRecordsCount', 'takendownRecordsCount', 'priorityScore']
     ] = 'lastReportedAt'  #: Sort field.
     subject: t.Optional[string_formats.Uri] = None  #: The subject to get the status for.
     subject_type: t.Optional[t.Union[t.Literal['account', 'record', 'conversation'], str]] = (
@@ -193,13 +189,11 @@ class ParamsDict(t.TypedDict):
     reviewed_before: te.NotRequired[
         t.Optional[string_formats.DateTime]
     ]  #: Search subjects reviewed before a given timestamp.
-    sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc', 'desc']]]]  #: Sort direction.
+    sort_direction: te.NotRequired[t.Optional[t.Literal['asc', 'desc']]]  #: Sort direction.
     sort_field: te.NotRequired[
         t.Optional[
-            t.Union[
-                t.Literal[
-                    'lastReviewedAt', 'lastReportedAt', 'reportedRecordsCount', 'takendownRecordsCount', 'priorityScore'
-                ]
+            t.Literal[
+                'lastReviewedAt', 'lastReportedAt', 'reportedRecordsCount', 'takendownRecordsCount', 'priorityScore'
             ]
         ]
     ]  #: Sort field.
