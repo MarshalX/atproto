@@ -101,6 +101,7 @@ class FirehoseTestServer:
         with contextlib.suppress(websockets.exceptions.ConnectionClosed):
             await SCENARIOS[scenario](websocket, connection_no)
 
+
 #: Long enough that the client always acts first; the connection is torn down with the test.
 _IDLE_SEC = 30
 

@@ -82,17 +82,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # One cell per (major, boundary): the oldest and newest Python each major supports.
+        # v15 is omitted because poetry.lock pins it, so unit_tests already covers it on every
+        # Python and OS. The OS is rotated so all three see a version the lockfile never installs.
         include:
-          # websockets v15 is the last version supporting Python 3.9
-          - { os: ubuntu-latest, python-version: "3.10", websockets: "15" }
-          # websockets v16 is the last version supporting Python 3.10
-          - { os: ubuntu-latest, python-version: "3.10", websockets: "16" }
-          - { os: ubuntu-latest, python-version: "3.11", websockets: "16" }
-          # websockets v17 requires Python 3.11+
-          - { os: ubuntu-latest, python-version: "3.11", websockets: "17" }
-          - { os: ubuntu-latest, python-version: "3.13", websockets: "17" }
-          - { os: macos-latest, python-version: "3.14", websockets: "17" }
-          - { os: windows-latest, python-version: "3.14", websockets: "17" }
+          - { websockets: "16", python-version: "3.10", os: ubuntu-latest }  # v16 needs 3.10+
+          - { websockets: "16", python-version: "3.14", os: macos-latest }
+          - { websockets: "17", python-version: "3.11", os: ubuntu-latest }  # v17 needs 3.11+
+          - { websockets: "17", python-version: "3.14", os: windows-latest }
 
     runs-on: ${{matrix.os}}
 
@@ -133,11 +130,14 @@ jobs:
         run: poetry install --without docs
 
       # Overrides the version poetry.lock pins. Fails loudly if the pin is unsatisfiable.
+      # The venv interpreter is invoked directly because `poetry run python` fails on Windows;
+      # POETRY_VIRTUALENVS_IN_PROJECT guarantees the venv is at .venv.
       - name: Pin websockets to v${{matrix.websockets}}.
         run: |
-          poetry run python -m pip install \
-            "websockets>=${{matrix.websockets}},<$((${{matrix.websockets}} + 1))"
-          poetry run python -c "import websockets; print('websockets', websockets.__version__)"
+          PYTHON=.venv/bin/python
+          [ -x "$PYTHON" ] || PYTHON=.venv/Scripts/python.exe
+          "$PYTHON" -m pip install "websockets~=${{matrix.websockets}}.0"
+          "$PYTHON" -c "import websockets; print('websockets', websockets.__version__)"
 
       - name: Run Tests.
         run: poetry run pytest
