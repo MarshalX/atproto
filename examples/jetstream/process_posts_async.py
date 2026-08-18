@@ -12,8 +12,8 @@ async def on_message_handler(event: jetstream_models.SubscribeEventsMessage) -> 
     if event.operation != 'create':
         return
 
-    post = models.get_or_create(event.record, models.AppBskyFeedPost.Record, strict=False)
-    print(f'[{event.seq}] {event.did}: {post.text}')
+    # already decoded into a model by the client; a non-conforming record falls back to DotDict
+    print(f'[{event.seq}] {event.did}: {event.record.text}')
 
 
 asyncio.run(client.start(on_message_handler))

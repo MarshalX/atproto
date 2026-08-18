@@ -23,8 +23,8 @@ Both clients are present in two variants: sync and async. Filters are applied by
             return
 
         if event.operation == 'create':
-            post = models.get_or_create(event.record, models.AppBskyFeedPost.Record)
-            print(event.seq, post.text)
+            # already decoded into a model; a non-conforming record falls back to DotDict
+            print(event.seq, event.record.text)
 
 
     client.start(on_message_handler)
@@ -36,9 +36,9 @@ Filtering
 
 The three filters are independent and combined with AND. Each matches everything when omitted:
 
-- ``kinds`` — ``commit``, ``identity``, ``account``, ``sync``.
-- ``dids`` — repositories to receive events for. Applies to every kind.
-- ``collections`` — NSIDs or ``<prefix>.*`` patterns.
+- ``kinds``: ``commit``, ``identity``, ``account``, ``sync``.
+- ``dids``: repositories to receive events for. Applies to every kind.
+- ``collections``: NSIDs or ``<prefix>.*`` patterns.
 
 .. warning::
     ``collections`` constrains **commit events only**. Identity, account, and sync events are delivered regardless of it, because they are the only signals telling you an account was deactivated or deleted. Pass ``kinds=['commit']`` to get a commits-only stream.
@@ -70,7 +70,7 @@ Persist :obj:`cursor` to resume across restarts:
 Compression
 -----------
 
-Frames are compressed by default using Jetstream's dict-zstd scheme, which cuts bandwidth by roughly 60%. The client fetches the server's dictionary over HTTPS once at startup, negotiates it on the websocket, and decompresses each frame transparently — your callback sees the same models either way.
+Frames are compressed by default using Jetstream's dict-zstd scheme, which cuts bandwidth by roughly 60%. The client fetches the server's dictionary over HTTPS once at startup, negotiates it on the websocket, and decompresses each frame transparently. Your callback sees the same models either way.
 
 ..  code-block:: python
 
@@ -88,31 +88,52 @@ Pass ``compress=False`` to disable it:
 .. note::
     Decompression costs roughly 2 microseconds per frame, about 12% of the time spent turning a frame into a model.
 
-Backfill
---------
+Archive replay
+--------------
 
-This package covers the live tail. Historical replay is not implemented: it needs a reader for Jetstream's binary segment format, and the archive endpoints require a bearer token on the hosted instance.
-
-The archive XRPC methods themselves are generated and reachable, so you can drive them yourself. Pass your own credential per call:
+Jetstream keeps the whole network's history and can replay it. Pass an ``api_key`` and use :obj:`snapshot` for the sealed archive, or :obj:`replay` to sweep the archive and continue into the live tail without a gap:
 
 ..  code-block:: python
 
-    from atproto import Client, models
+    from atproto import JetstreamClient
 
-    client = Client(base_url='https://jetstream.us-east.bsky.network')
-    auth = {'Authorization': 'Bearer <your-api-key>'}
+    client = JetstreamClient(params={'dids': ['did:plc:...']}, api_key='...')
 
-    plan = client.network.bsky.jetstream.plan_snapshot(
-        {'collections': [models.ids.AppBskyFeedPost], 'kinds': ['commit'], 'after_seq': 0},
-        headers=auth,
-    )
-    for segment in plan.segments:
-        print(segment.name, segment.min_seq, segment.max_seq)
+    # the archive, then stop
+    for event in client.snapshot(after_seq=0):
+        print(event.seq, event.did)
 
-Decoding the downloaded ``.jss`` segments is up to you. ``getZstdDictionary`` is public and needs no credential.
+    # the archive, then the live tail, seamlessly
+    for event in client.replay(after_seq=0):
+        print(event.seq, event.did)
+
+Both yield the same models the live tail delivers, so a consumer cannot tell whether an event came from a segment or the socket. The async client mirrors this with ``async for``.
+
+Record CIDs are not stored in the archive; the client derives each one from the record's CBOR, matching what the PDS reports.
+
+.. note::
+    Get a key at `bsky.network/account <https://bsky.network/account>`_. It is **not** an AT Protocol credential: a PDS session token and a ``com.atproto.server.getServiceAuth`` token are both rejected. The key is used only for the archive, never on the websocket, and a self-hosted Jetstream needs none.
+
+Metering
+--------
 
 .. warning::
-    The archive key is **not** an AT Protocol credential. It is an opaque bearer token issued by whoever operates the instance.
+    The archive is **metered in bytes downloaded**, not requests. The whole network is roughly 1.85 TB. Check :obj:`bytes_downloaded` to see what a sweep cost.
+
+What a filter costs depends on how *selective* it is, not on whether one is set. Every filter is sent to the planner, but segments carry per-DID bloom filters, so ``dids`` prunes hard while a popular collection appears in nearly every block and prunes almost nothing. Planning the whole archive:
+
+===============================================  ==========================  ===========
+filter                                           segments matched            blocks
+===============================================  ==========================  ===========
+``dids=['did:plc:...']``                         1 of 7,075                  1
+``collections=['app.bsky.feed.post']``           7,075 of 7,075              5,363,406
+===============================================  ==========================  ===========
+
+To follow a busy collection, resume from a stored cursor rather than sweeping from ``after_seq=0``.
+
+The client honours the plan's download mode, so a sparse filter fetches individual blocks rather than whole 261 MB segments, and whole segments are read in HTTP ``Range`` slices so they never land in memory at once. If the quota is exhausted the server replies ``429`` with ``Retry-After``, and the client waits it out rather than retrying blindly.
+
+More code examples: https://github.com/MarshalX/atproto/tree/main/examples/jetstream
 
 .. automodule:: atproto_jetstream
    :members:
@@ -126,3 +147,4 @@ Submodules
    :maxdepth: 4
 
    models
+   archive
