@@ -1,5 +1,23 @@
 # Change Log
 
+## Version 0.0.70
+
+**18.08.2026**
+
+**🛩️ [Jetstream v2 support](https://atproto.blue/en/latest/atproto_jetstream/index.html): live tail with dict-zstd compression (~65% less bandwidth) and full network replay via `snapshot()` and `replay()`**
+
+* Add `atproto_jetstream` package with Jetstream v2 live tail support by @MarshalX in https://github.com/MarshalX/atproto/pull/704
+* Add dict-zstd compression to the Jetstream client by @MarshalX in https://github.com/MarshalX/atproto/pull/705
+* Add Jetstream network replay: `snapshot()` and `replay()` over the archive by @MarshalX in https://github.com/MarshalX/atproto/pull/706
+* Allow SDK usage with cryptography up to v50 by @MarshalX in https://github.com/MarshalX/atproto/pull/699
+* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/691 and https://github.com/MarshalX/atproto/pull/698
+* Upgrade ruff, mypy, and pyright and adopt new ruff default rules by @MarshalX in https://github.com/MarshalX/atproto/pull/701
+* Migrate to PEP 735 dependency groups and static project.dependencies by @MarshalX in https://github.com/MarshalX/atproto/pull/700
+* Fix lexicon_parse_dir failing on lexicons in subdirectories by @jacoblapenna in https://github.com/MarshalX/atproto/pull/696
+* Fix TID validation rejecting valid TIDs starting with a-j by @jacoblapenna in https://github.com/MarshalX/atproto/pull/695
+* Fix websockets compat job on Windows by invoking the venv interpreter directly by @MarshalX in https://github.com/MarshalX/atproto/pull/702
+* Fix Firehose reliability: fatal network errors, stalled backoff, and hanging stop() by @MarshalX in https://github.com/MarshalX/atproto/pull/703
+
 ## Version 0.0.69
 
 **24.06.2026**
