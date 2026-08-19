@@ -3,6 +3,8 @@ import typing as t
 import urllib.parse as urlparse
 from urllib.parse import urlencode
 
+import typing_extensions as te
+
 from atproto_core.exceptions import InvalidAtUriError
 
 # ref: https://github.com/bluesky-social/atproto/blob/a4af3494bd8263187bb3450193bcd2467ae6b788/packages/syntax/src/aturi.ts#L5C5-L5C98
@@ -79,9 +81,19 @@ class AtUri:
         return ''
 
     @property
-    def http(self) -> str:
-        """Convert instance to HTTP URI."""
+    def href(self) -> str:
+        """Get string representation of the URI."""
         return str(self)
+
+    @property
+    @te.deprecated('`AtUri.http` is a misnomer of `AtUri.href`. It never returns an HTTP URI. Use `AtUri.href`.')
+    def http(self) -> str:
+        """Get string representation of the URI.
+
+        .. deprecated::
+            Use :obj:`AtUri.href` instead.
+        """
+        return self.href
 
     @property
     def search(self) -> str:
