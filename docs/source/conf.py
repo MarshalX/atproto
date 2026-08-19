@@ -159,8 +159,17 @@ autodoc_pydantic_settings_show_json = False
 autosectionlabel_prefix_document = True
 
 
+def prepare_model_modules(_app: 'Sphinx') -> None:
+    """Resolve every model module through the lazy accessor so its forward references are injected."""
+    from atproto_client import models
+
+    for alias in dir(models):
+        getattr(models, alias, None)
+
+
 def setup(app: 'Sphinx') -> None:
     from docs.source.alias_resolver import resolve_internal_aliases, resolve_intersphinx_aliases
 
+    app.connect('builder-inited', prepare_model_modules)
     app.connect('doctree-read', resolve_internal_aliases)
     app.connect('missing-reference', resolve_intersphinx_aliases)
