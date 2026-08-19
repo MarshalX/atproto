@@ -1,5 +1,21 @@
 # Change Log
 
+## Version 0.0.71
+
+**19.08.2026**
+
+⚡ Jetstream 56k -> 111k events/s, Firehose 22.7k -> 31.1k frames/s. Same bytes in, byte-identical models out (Apple M1)
+
+* Speed up Jetstream 2x and Firehose 1.4x by [@MarshalX](https://github.com/MarshalX) in [#709](https://github.com/MarshalX/atproto/pull/709)
+* Speed up the docs build 3.8x and fix the build warnings by [@MarshalX](https://github.com/MarshalX) in [#715](https://github.com/MarshalX/atproto/pull/715)
+* Narrow the type of `is_record_type` with `TypeGuard` by [@MarshalX](https://github.com/MarshalX) in [#713](https://github.com/MarshalX/atproto/pull/713)
+* Deprecate `AtUri.http` in favor of the correctly named `AtUri.href` by [@MarshalX](https://github.com/MarshalX) in [#714](https://github.com/MarshalX/atproto/pull/714)
+* Fix Firehose frame `op` by [@MarshalX](https://github.com/MarshalX) in [#709](https://github.com/MarshalX/atproto/pull/709)
+* Fix JSON serialization of blobs decoded from DAG-CBOR by [@MarshalX](https://github.com/MarshalX) in [#708](https://github.com/MarshalX/atproto/pull/708)
+* Fix ugly changelog on the docs site by [@MarshalX](https://github.com/MarshalX) in [#710](https://github.com/MarshalX/atproto/pull/710)
+* Fix ignored constraints of array items in codegen by [@MarshalX](https://github.com/MarshalX) in [#711](https://github.com/MarshalX/atproto/pull/711)
+* Fix unions failing the whole response on an unknown `$type` by [@MarshalX](https://github.com/MarshalX) in [#712](https://github.com/MarshalX/atproto/pull/712)
+
 ## Version 0.0.70
 
 **18.08.2026**
