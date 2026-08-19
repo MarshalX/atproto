@@ -6,17 +6,17 @@
 
 **🛩️ [Jetstream v2 support](https://atproto.blue/en/latest/atproto_jetstream/index.html): live tail with dict-zstd compression (~65% less bandwidth) and full network replay via `snapshot()` and `replay()`**
 
-* Add `atproto_jetstream` package with Jetstream v2 live tail support by @MarshalX in https://github.com/MarshalX/atproto/pull/704
-* Add dict-zstd compression to the Jetstream client by @MarshalX in https://github.com/MarshalX/atproto/pull/705
-* Add Jetstream network replay: `snapshot()` and `replay()` over the archive by @MarshalX in https://github.com/MarshalX/atproto/pull/706
-* Allow SDK usage with cryptography up to v50 by @MarshalX in https://github.com/MarshalX/atproto/pull/699
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/691 and https://github.com/MarshalX/atproto/pull/698
-* Upgrade ruff, mypy, and pyright and adopt new ruff default rules by @MarshalX in https://github.com/MarshalX/atproto/pull/701
-* Migrate to PEP 735 dependency groups and static project.dependencies by @MarshalX in https://github.com/MarshalX/atproto/pull/700
-* Fix lexicon_parse_dir failing on lexicons in subdirectories by @jacoblapenna in https://github.com/MarshalX/atproto/pull/696
-* Fix TID validation rejecting valid TIDs starting with a-j by @jacoblapenna in https://github.com/MarshalX/atproto/pull/695
-* Fix websockets compat job on Windows by invoking the venv interpreter directly by @MarshalX in https://github.com/MarshalX/atproto/pull/702
-* Fix Firehose reliability: fatal network errors, stalled backoff, and hanging stop() by @MarshalX in https://github.com/MarshalX/atproto/pull/703
+* Add `atproto_jetstream` package with Jetstream v2 live tail support by [@MarshalX](https://github.com/MarshalX) in [#704](https://github.com/MarshalX/atproto/pull/704)
+* Add dict-zstd compression to the Jetstream client by [@MarshalX](https://github.com/MarshalX) in [#705](https://github.com/MarshalX/atproto/pull/705)
+* Add Jetstream network replay: `snapshot()` and `replay()` over the archive by [@MarshalX](https://github.com/MarshalX) in [#706](https://github.com/MarshalX/atproto/pull/706)
+* Allow SDK usage with cryptography up to v50 by [@MarshalX](https://github.com/MarshalX) in [#699](https://github.com/MarshalX/atproto/pull/699)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#691](https://github.com/MarshalX/atproto/pull/691) and [#698](https://github.com/MarshalX/atproto/pull/698)
+* Upgrade ruff, mypy, and pyright and adopt new ruff default rules by [@MarshalX](https://github.com/MarshalX) in [#701](https://github.com/MarshalX/atproto/pull/701)
+* Migrate to PEP 735 dependency groups and static project.dependencies by [@MarshalX](https://github.com/MarshalX) in [#700](https://github.com/MarshalX/atproto/pull/700)
+* Fix lexicon_parse_dir failing on lexicons in subdirectories by [@jacoblapenna](https://github.com/jacoblapenna) in [#696](https://github.com/MarshalX/atproto/pull/696)
+* Fix TID validation rejecting valid TIDs starting with a-j by [@jacoblapenna](https://github.com/jacoblapenna) in [#695](https://github.com/MarshalX/atproto/pull/695)
+* Fix websockets compat job on Windows by invoking the venv interpreter directly by [@MarshalX](https://github.com/MarshalX) in [#702](https://github.com/MarshalX/atproto/pull/702)
+* Fix Firehose reliability: fatal network errors, stalled backoff, and hanging stop() by [@MarshalX](https://github.com/MarshalX) in [#703](https://github.com/MarshalX/atproto/pull/703)
 
 ## Version 0.0.69
 
@@ -24,56 +24,56 @@
 
 ⚡ Speed up imports by loading generated models lazily: **12x faster** load time (2.6s → 0.21s), **6x lower** memory usage (375MB → 57MB)
 
-* Add CHANGES.md update automation using GitHub Actions by @MarshalX in https://github.com/MarshalX/atproto/pull/686
-* Add network mocking for identity resolver tests by @MarshalX in https://github.com/MarshalX/atproto/pull/680
-* Add caching and bump actions for CI/CD pipelines by @MarshalX in https://github.com/MarshalX/atproto/pull/681
-* Speed up imports by loading generated models lazily by @MarshalX in https://github.com/MarshalX/atproto/pull/679
-* Improve errors visibility in update_lexicons GHA workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/682
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/685 and https://github.com/MarshalX/atproto/pull/689
-* Fix `update_lexicons` codegen failing due to lazy-loading regression by @MarshalX in https://github.com/MarshalX/atproto/pull/683
-* Fix GHA cache by @MarshalX in https://github.com/MarshalX/atproto/pull/684
+* Add CHANGES.md update automation using GitHub Actions by [@MarshalX](https://github.com/MarshalX) in [#686](https://github.com/MarshalX/atproto/pull/686)
+* Add network mocking for identity resolver tests by [@MarshalX](https://github.com/MarshalX) in [#680](https://github.com/MarshalX/atproto/pull/680)
+* Add caching and bump actions for CI/CD pipelines by [@MarshalX](https://github.com/MarshalX) in [#681](https://github.com/MarshalX/atproto/pull/681)
+* Speed up imports by loading generated models lazily by [@MarshalX](https://github.com/MarshalX) in [#679](https://github.com/MarshalX/atproto/pull/679)
+* Improve errors visibility in update_lexicons GHA workflow by [@MarshalX](https://github.com/MarshalX) in [#682](https://github.com/MarshalX/atproto/pull/682)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#685](https://github.com/MarshalX/atproto/pull/685) and [#689](https://github.com/MarshalX/atproto/pull/689)
+* Fix `update_lexicons` codegen failing due to lazy-loading regression by [@MarshalX](https://github.com/MarshalX) in [#683](https://github.com/MarshalX/atproto/pull/683)
+* Fix GHA cache by [@MarshalX](https://github.com/MarshalX) in [#684](https://github.com/MarshalX/atproto/pull/684)
 
 ## Version 0.0.68
 
 **10.06.2026**
 
-* Update lexicons fetched from 24c7311 committed 2026-06-09T20:20:05Z (adds `AppBskyEmbedGallery` support) by @MarshalX in https://github.com/MarshalX/atproto/pull/676
+* Update lexicons fetched from 24c7311 committed 2026-06-09T20:20:05Z (adds `AppBskyEmbedGallery` support) by [@MarshalX](https://github.com/MarshalX) in [#676](https://github.com/MarshalX/atproto/pull/676)
 
 ## Version 0.0.67
 
 **28.05.2026**
 
-* Add [Standard.site](https://standard.site/) lexicon entrypoints by @MarshalX in https://github.com/MarshalX/atproto/pull/673
+* Add [Standard.site](https://standard.site/) lexicon entrypoints by [@MarshalX](https://github.com/MarshalX) in [#673](https://github.com/MarshalX/atproto/pull/673)
 
 ## Version 0.0.66
 
 **28.05.2026**
 
 * Add support for [Standard.site](https://standard.site) long-form publishing lexicons!
-* Add `LexPermission` and `LexPermissionSet` support to the lexicon parser. Fix model generator with reserved Python keywords by @MarshalX in https://github.com/MarshalX/atproto/pull/648
-* Fix codegen to support namespaces with both records and child namespaces by @MarshalX in https://github.com/MarshalX/atproto/pull/668
-* Update copyright year by @MarshalX in https://github.com/MarshalX/atproto/pull/671
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/649, https://github.com/MarshalX/atproto/pull/650, https://github.com/MarshalX/atproto/pull/651, https://github.com/MarshalX/atproto/pull/653, https://github.com/MarshalX/atproto/pull/655, https://github.com/MarshalX/atproto/pull/661, https://github.com/MarshalX/atproto/pull/662, https://github.com/MarshalX/atproto/pull/665, https://github.com/MarshalX/atproto/pull/666, https://github.com/MarshalX/atproto/pull/667, https://github.com/MarshalX/atproto/pull/669, https://github.com/MarshalX/atproto/pull/670
+* Add `LexPermission` and `LexPermissionSet` support to the lexicon parser. Fix model generator with reserved Python keywords by [@MarshalX](https://github.com/MarshalX) in [#648](https://github.com/MarshalX/atproto/pull/648)
+* Fix codegen to support namespaces with both records and child namespaces by [@MarshalX](https://github.com/MarshalX) in [#668](https://github.com/MarshalX/atproto/pull/668)
+* Update copyright year by [@MarshalX](https://github.com/MarshalX) in [#671](https://github.com/MarshalX/atproto/pull/671)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#649](https://github.com/MarshalX/atproto/pull/649), [#650](https://github.com/MarshalX/atproto/pull/650), [#651](https://github.com/MarshalX/atproto/pull/651), [#653](https://github.com/MarshalX/atproto/pull/653), [#655](https://github.com/MarshalX/atproto/pull/655), [#661](https://github.com/MarshalX/atproto/pull/661), [#662](https://github.com/MarshalX/atproto/pull/662), [#665](https://github.com/MarshalX/atproto/pull/665), [#666](https://github.com/MarshalX/atproto/pull/666), [#667](https://github.com/MarshalX/atproto/pull/667), [#669](https://github.com/MarshalX/atproto/pull/669), [#670](https://github.com/MarshalX/atproto/pull/670)
 
 ## Version 0.0.65
 
 **08.12.2025**
 
-* Migrate to PEP 621 (use `project` section in `pyproject.toml`) by @MarshalX in https://github.com/MarshalX/atproto/pull/645
-* Update lexicons fetched from 380aa3b committed 2025-12-08T14:47:20Z by @MarshalX in https://github.com/MarshalX/atproto/pull/643
-* Bump `urllib3` and other deps by @MarshalX in https://github.com/MarshalX/atproto/pull/646
+* Migrate to PEP 621 (use `project` section in `pyproject.toml`) by [@MarshalX](https://github.com/MarshalX) in [#645](https://github.com/MarshalX/atproto/pull/645)
+* Update lexicons fetched from 380aa3b committed 2025-12-08T14:47:20Z by [@MarshalX](https://github.com/MarshalX) in [#643](https://github.com/MarshalX/atproto/pull/643)
+* Bump `urllib3` and other deps by [@MarshalX](https://github.com/MarshalX) in [#646](https://github.com/MarshalX/atproto/pull/646)
 
 ## Version 0.0.64
 
 **01.12.2025**
 
-⚡ The underlying lib for **CAR decoding got a x2 speed boost** for your custom feeds and firehose in general! Update it now with `pip install -U libipld`. More info and benchmarks: https://github.com/MarshalX/python-libipld/releases/tag/v3.3.0
+⚡ The underlying lib for **CAR decoding got a x2 speed boost** for your custom feeds and firehose in general! Update it now with `pip install -U libipld`. More info and benchmarks: [libipld v3.3.0 release notes](https://github.com/MarshalX/python-libipld/releases/tag/v3.3.0)
 
-* Add `leeway` argument to `verify_jwt` function by @MarshalX in https://github.com/MarshalX/atproto/pull/638
-* Add caching to model building functions and fix record model name resolution in refs by @MarshalX in https://github.com/MarshalX/atproto/pull/633
-* Update quickstart documentation to clarify base API URLs by @paulopperman in https://github.com/MarshalX/atproto/pull/635
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/631 and https://github.com/MarshalX/atproto/pull/639
-* Fix pydantic field warnings for optional fields with constraints  by @zzstoatzz in https://github.com/MarshalX/atproto/pull/630
+* Add `leeway` argument to `verify_jwt` function by [@MarshalX](https://github.com/MarshalX) in [#638](https://github.com/MarshalX/atproto/pull/638)
+* Add caching to model building functions and fix record model name resolution in refs by [@MarshalX](https://github.com/MarshalX) in [#633](https://github.com/MarshalX/atproto/pull/633)
+* Update quickstart documentation to clarify base API URLs by [@paulopperman](https://github.com/paulopperman) in [#635](https://github.com/MarshalX/atproto/pull/635)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#631](https://github.com/MarshalX/atproto/pull/631) and [#639](https://github.com/MarshalX/atproto/pull/639)
+* Fix pydantic field warnings for optional fields with constraints  by [@zzstoatzz](https://github.com/zzstoatzz) in [#630](https://github.com/MarshalX/atproto/pull/630)
 
 ## Version 0.0.63
 
@@ -81,18 +81,18 @@
 
 **Breaking changes**
 
-* Drop support for Python 3.8 by @zzstoatzz in https://github.com/MarshalX/atproto/pull/605
+* Drop support for Python 3.8 by [@zzstoatzz](https://github.com/zzstoatzz) in [#605](https://github.com/MarshalX/atproto/pull/605)
 
 Notes:
 * Since we updated `websockets` lib to v15, which uses the new async client, differences in stability are possible. Please report your findings!
 * Since we updated `pydantic` lib, new strange warnings coming from it are possible. Please report your findings!
 
 **What's Changed**
-* Add Python 3.14 support by @MarshalX in https://github.com/MarshalX/atproto/pull/629
-* Update lexicons fetched by @MarshalX in https://github.com/MarshalX/atproto/pull/621 and https://github.com/MarshalX/atproto/pull/626
-* Update `websockets` to v15 by @zzstoatzz in https://github.com/MarshalX/atproto/pull/605
-* Fix `httpx` deprecation warnings by @zzstoatzz in https://github.com/MarshalX/atproto/pull/614
-* Fix `pydantic` field warnings for optional fields with constraints by @zzstoatzz in https://github.com/MarshalX/atproto/pull/627
+* Add Python 3.14 support by [@MarshalX](https://github.com/MarshalX) in [#629](https://github.com/MarshalX/atproto/pull/629)
+* Update lexicons fetched by [@MarshalX](https://github.com/MarshalX) in [#621](https://github.com/MarshalX/atproto/pull/621) and [#626](https://github.com/MarshalX/atproto/pull/626)
+* Update `websockets` to v15 by [@zzstoatzz](https://github.com/zzstoatzz) in [#605](https://github.com/MarshalX/atproto/pull/605)
+* Fix `httpx` deprecation warnings by [@zzstoatzz](https://github.com/zzstoatzz) in [#614](https://github.com/MarshalX/atproto/pull/614)
+* Fix `pydantic` field warnings for optional fields with constraints by [@zzstoatzz](https://github.com/zzstoatzz) in [#627](https://github.com/MarshalX/atproto/pull/627)
 
 ## Version 0.0.62
 
@@ -100,10 +100,10 @@ Notes:
 
 **❗ Next release will drop Python 3.8 support**
 
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/603, https://github.com/MarshalX/atproto/pull/607, https://github.com/MarshalX/atproto/pull/615, https://github.com/MarshalX/atproto/pull/617, https://github.com/MarshalX/atproto/pull/618
-* Bump h11 from 0.14.0 to 0.16.0 by @dependabot[bot] in https://github.com/MarshalX/atproto/pull/606
-* Bump urllib3 and requests by @MarshalX in https://github.com/MarshalX/atproto/pull/619
-* Fix codegen for cases where NSID contains V2 by @MarshalX in https://github.com/MarshalX/atproto/pull/611
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#603](https://github.com/MarshalX/atproto/pull/603), [#607](https://github.com/MarshalX/atproto/pull/607), [#615](https://github.com/MarshalX/atproto/pull/615), [#617](https://github.com/MarshalX/atproto/pull/617), [#618](https://github.com/MarshalX/atproto/pull/618)
+* Bump h11 from 0.14.0 to 0.16.0 by [@dependabot[bot]](https://github.com/apps/dependabot) in [#606](https://github.com/MarshalX/atproto/pull/606)
+* Bump urllib3 and requests by [@MarshalX](https://github.com/MarshalX) in [#619](https://github.com/MarshalX/atproto/pull/619)
+* Fix codegen for cases where NSID contains V2 by [@MarshalX](https://github.com/MarshalX) in [#611](https://github.com/MarshalX/atproto/pull/611)
 
 ## Version 0.0.61
 
@@ -111,8 +111,8 @@ Notes:
 
 Note: this release fixes the session refreshing issue broken by 0.0.60.
 
-* Fix headers overriding in `RequestBase -> get_headers()` by @MarshalX in https://github.com/MarshalX/atproto/pull/601
-* Update lexicons fetched from 0087dc1 committed 2025-04-18T19:46:42Z by @MarshalX in https://github.com/MarshalX/atproto/pull/599
+* Fix headers overriding in `RequestBase -> get_headers()` by [@MarshalX](https://github.com/MarshalX) in [#601](https://github.com/MarshalX/atproto/pull/601)
+* Update lexicons fetched from 0087dc1 committed 2025-04-18T19:46:42Z by [@MarshalX](https://github.com/MarshalX) in [#599](https://github.com/MarshalX/atproto/pull/599)
 
 ## Version 0.0.60
 
@@ -120,88 +120,88 @@ Note: this release fixes the session refreshing issue broken by 0.0.60.
 
 Note: session refreshing was broken in this version. Please use 0.0.61 instead.
 
-* Add message reaction to the example of Direct Messages by @MarshalX in https://github.com/MarshalX/atproto/pull/595
-* Add `UnknownUnionModel` type by @MarshalX in https://github.com/MarshalX/atproto/pull/586
-* Add `include_pins` argument to `get_author_feed` method of `Client` by @maratsh in https://github.com/MarshalX/atproto/pull/583
-* Add `auth_factor_token` argument to the `login` method to support Email 2FA by @MarshalX in https://github.com/MarshalX/atproto/pull/593
-* Improve `AtUri` by adding relative URIs support and `make` method by @MarshalX in https://github.com/MarshalX/atproto/pull/592
-* Improve a way to configure `HTTPX` client (timeouts, SSL, retry policies, etc.) by @MarshalX in https://github.com/MarshalX/atproto/pull/594
-* Allow overriding of `Content-Type` header by @MarshalX in https://github.com/MarshalX/atproto/pull/579
-* Allow digits in the `NSID`; fix edge cases for string format validation by @zzstoatzz in https://github.com/MarshalX/atproto/pull/572
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/562, https://github.com/MarshalX/atproto/pull/570, https://github.com/MarshalX/atproto/pull/567, https://github.com/MarshalX/atproto/pull/587, https://github.com/MarshalX/atproto/pull/591
-* Fix lexicon parsing for nested objects; apply a limited scope of types for properties of params by @MarshalX in https://github.com/MarshalX/atproto/pull/574
-* Fix models code generator with an empty union type by @MarshalX in https://github.com/MarshalX/atproto/pull/584
-* Fix the issue of session refreshing on session creation in Client by @betaprior in https://github.com/MarshalX/atproto/pull/582
+* Add message reaction to the example of Direct Messages by [@MarshalX](https://github.com/MarshalX) in [#595](https://github.com/MarshalX/atproto/pull/595)
+* Add `UnknownUnionModel` type by [@MarshalX](https://github.com/MarshalX) in [#586](https://github.com/MarshalX/atproto/pull/586)
+* Add `include_pins` argument to `get_author_feed` method of `Client` by [@maratsh](https://github.com/maratsh) in [#583](https://github.com/MarshalX/atproto/pull/583)
+* Add `auth_factor_token` argument to the `login` method to support Email 2FA by [@MarshalX](https://github.com/MarshalX) in [#593](https://github.com/MarshalX/atproto/pull/593)
+* Improve `AtUri` by adding relative URIs support and `make` method by [@MarshalX](https://github.com/MarshalX) in [#592](https://github.com/MarshalX/atproto/pull/592)
+* Improve a way to configure `HTTPX` client (timeouts, SSL, retry policies, etc.) by [@MarshalX](https://github.com/MarshalX) in [#594](https://github.com/MarshalX/atproto/pull/594)
+* Allow overriding of `Content-Type` header by [@MarshalX](https://github.com/MarshalX) in [#579](https://github.com/MarshalX/atproto/pull/579)
+* Allow digits in the `NSID`; fix edge cases for string format validation by [@zzstoatzz](https://github.com/zzstoatzz) in [#572](https://github.com/MarshalX/atproto/pull/572)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#562](https://github.com/MarshalX/atproto/pull/562), [#570](https://github.com/MarshalX/atproto/pull/570), [#567](https://github.com/MarshalX/atproto/pull/567), [#587](https://github.com/MarshalX/atproto/pull/587), [#591](https://github.com/MarshalX/atproto/pull/591)
+* Fix lexicon parsing for nested objects; apply a limited scope of types for properties of params by [@MarshalX](https://github.com/MarshalX) in [#574](https://github.com/MarshalX/atproto/pull/574)
+* Fix models code generator with an empty union type by [@MarshalX](https://github.com/MarshalX) in [#584](https://github.com/MarshalX/atproto/pull/584)
+* Fix the issue of session refreshing on session creation in Client by [@betaprior](https://github.com/betaprior) in [#582](https://github.com/MarshalX/atproto/pull/582)
 
 ## Version 0.0.59
 
 **23.02.2025**
 
-* Add support for the repository `#sync` message in the subscribe repos firehose by @MarshalX in https://github.com/MarshalX/atproto/pull/556
-* Add `chat.*` and `tools.*` models to the main menu of documentation by @MarshalX in https://github.com/MarshalX/atproto/pull/551
-* Allow SDK usage with `httpx` 0.28.x by @MarshalX in https://github.com/MarshalX/atproto/pull/553
-* Allow SDK usage with `cryptography` v44 and v45 by @MarshalX in https://github.com/MarshalX/atproto/pull/554
-* Improve mapping protocol of `DotDict` by @MarshalX in https://github.com/MarshalX/atproto/pull/550
-* Fix segfault in CAR decoding (firehose subscription) by @MarshalX in https://github.com/MarshalX/atproto/pull/552
-* Fix descriptions of array items in generated models by @MarshalX in https://github.com/MarshalX/atproto/pull/534
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/555, https://github.com/MarshalX/atproto/pull/537, https://github.com/MarshalX/atproto/pull/539, https://github.com/MarshalX/atproto/pull/540, https://github.com/MarshalX/atproto/pull/546, https://github.com/MarshalX/atproto/pull/548
+* Add support for the repository `#sync` message in the subscribe repos firehose by [@MarshalX](https://github.com/MarshalX) in [#556](https://github.com/MarshalX/atproto/pull/556)
+* Add `chat.*` and `tools.*` models to the main menu of documentation by [@MarshalX](https://github.com/MarshalX) in [#551](https://github.com/MarshalX/atproto/pull/551)
+* Allow SDK usage with `httpx` 0.28.x by [@MarshalX](https://github.com/MarshalX) in [#553](https://github.com/MarshalX/atproto/pull/553)
+* Allow SDK usage with `cryptography` v44 and v45 by [@MarshalX](https://github.com/MarshalX) in [#554](https://github.com/MarshalX/atproto/pull/554)
+* Improve mapping protocol of `DotDict` by [@MarshalX](https://github.com/MarshalX) in [#550](https://github.com/MarshalX/atproto/pull/550)
+* Fix segfault in CAR decoding (firehose subscription) by [@MarshalX](https://github.com/MarshalX) in [#552](https://github.com/MarshalX/atproto/pull/552)
+* Fix descriptions of array items in generated models by [@MarshalX](https://github.com/MarshalX) in [#534](https://github.com/MarshalX/atproto/pull/534)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#555](https://github.com/MarshalX/atproto/pull/555), [#537](https://github.com/MarshalX/atproto/pull/537), [#539](https://github.com/MarshalX/atproto/pull/539), [#540](https://github.com/MarshalX/atproto/pull/540), [#546](https://github.com/MarshalX/atproto/pull/546), [#548](https://github.com/MarshalX/atproto/pull/548)
 
 ## Version 0.0.58
 
 **25.01.2025**
 
-* Add the ability to send an aspect ratio with `send_video` by @yamamotura in https://github.com/MarshalX/atproto/pull/521
-* Automatically reconnect firehose clients after a period of inactivity (timeout for recv) by @p1timmy in https://github.com/MarshalX/atproto/pull/520
-* Allow sync `on_session_change` callbacks in an async client by @MarshalX in https://github.com/MarshalX/atproto/pull/531
-* Update lexicons fetched from c0a75d3 committed 2025-01-21T18:49:02Z by @MarshalX in https://github.com/MarshalX/atproto/pull/529
-* Fix session sharing with all cloned client instances by @MarshalX in https://github.com/MarshalX/atproto/pull/531
-* Fix types for image aspect ratios in `send_image` and `send_images` by @MarshalX in https://github.com/MarshalX/atproto/pull/531
+* Add the ability to send an aspect ratio with `send_video` by [@yamamotura](https://github.com/yamamotura) in [#521](https://github.com/MarshalX/atproto/pull/521)
+* Automatically reconnect firehose clients after a period of inactivity (timeout for recv) by [@p1timmy](https://github.com/p1timmy) in [#520](https://github.com/MarshalX/atproto/pull/520)
+* Allow sync `on_session_change` callbacks in an async client by [@MarshalX](https://github.com/MarshalX) in [#531](https://github.com/MarshalX/atproto/pull/531)
+* Update lexicons fetched from c0a75d3 committed 2025-01-21T18:49:02Z by [@MarshalX](https://github.com/MarshalX) in [#529](https://github.com/MarshalX/atproto/pull/529)
+* Fix session sharing with all cloned client instances by [@MarshalX](https://github.com/MarshalX) in [#531](https://github.com/MarshalX/atproto/pull/531)
+* Fix types for image aspect ratios in `send_image` and `send_images` by [@MarshalX](https://github.com/MarshalX) in [#531](https://github.com/MarshalX/atproto/pull/531)
 
 ## Version 0.0.57
 
 **20.01.2025**
 
-* Add opt-in strict string format validation by @zzstoatzz in https://github.com/MarshalX/atproto/pull/451
-* Add documentation for string formats; fix `at-identifier` format by @zzstoatzz in https://github.com/MarshalX/atproto/pull/491
-* Add an example to quote a post with an image by @zzstoatzz in https://github.com/MarshalX/atproto/pull/484
-* Fix grammar in the README by @ErikPohl444 in https://github.com/MarshalX/atproto/pull/492
-* Fix typo in the word `REFRESH` by @tveastman in https://github.com/MarshalX/atproto/pull/500
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/490, https://github.com/MarshalX/atproto/pull/502, https://github.com/MarshalX/atproto/pull/503, https://github.com/MarshalX/atproto/pull/508, https://github.com/MarshalX/atproto/pull/516
+* Add opt-in strict string format validation by [@zzstoatzz](https://github.com/zzstoatzz) in [#451](https://github.com/MarshalX/atproto/pull/451)
+* Add documentation for string formats; fix `at-identifier` format by [@zzstoatzz](https://github.com/zzstoatzz) in [#491](https://github.com/MarshalX/atproto/pull/491)
+* Add an example to quote a post with an image by [@zzstoatzz](https://github.com/zzstoatzz) in [#484](https://github.com/MarshalX/atproto/pull/484)
+* Fix grammar in the README by [@ErikPohl444](https://github.com/ErikPohl444) in [#492](https://github.com/MarshalX/atproto/pull/492)
+* Fix typo in the word `REFRESH` by [@tveastman](https://github.com/tveastman) in [#500](https://github.com/MarshalX/atproto/pull/500)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#490](https://github.com/MarshalX/atproto/pull/490), [#502](https://github.com/MarshalX/atproto/pull/502), [#503](https://github.com/MarshalX/atproto/pull/503), [#508](https://github.com/MarshalX/atproto/pull/508), [#516](https://github.com/MarshalX/atproto/pull/516)
 
 ## Version 0.0.56
 
 **05.12.2024**
 
-* Add ability to send aspect ratio with `send_image` and `send_images` by @palmer-cl in https://github.com/MarshalX/atproto/pull/480
-* Add `get_bsky_post_by_url` example by @DGaffney in https://github.com/MarshalX/atproto/pull/424
-* Add new `add_user_to_list` advanced example by @MarshalX in https://github.com/MarshalX/atproto/pull/435
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/481, https://github.com/MarshalX/atproto/pull/485, https://github.com/MarshalX/atproto/pull/458, https://github.com/MarshalX/atproto/pull/452, https://github.com/MarshalX/atproto/pull/429, https://github.com/MarshalX/atproto/pull/442
-* Fix `update_lexicons` workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/428
-* Fix typo in item of `SessionEvent`: `'creat'` -> `'create'` by @zzstoatzz in https://github.com/MarshalX/atproto/pull/439
-* Fix `clone()` and `with_...()` methods for `AsyncClient` by @MarshalX in https://github.com/MarshalX/atproto/pull/457
-* Fix link to API docs for rate-limits in `atproto_client/auth.md` by @questionlp in https://github.com/MarshalX/atproto/pull/464
+* Add ability to send aspect ratio with `send_image` and `send_images` by [@palmer-cl](https://github.com/palmer-cl) in [#480](https://github.com/MarshalX/atproto/pull/480)
+* Add `get_bsky_post_by_url` example by [@DGaffney](https://github.com/DGaffney) in [#424](https://github.com/MarshalX/atproto/pull/424)
+* Add new `add_user_to_list` advanced example by [@MarshalX](https://github.com/MarshalX) in [#435](https://github.com/MarshalX/atproto/pull/435)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#481](https://github.com/MarshalX/atproto/pull/481), [#485](https://github.com/MarshalX/atproto/pull/485), [#458](https://github.com/MarshalX/atproto/pull/458), [#452](https://github.com/MarshalX/atproto/pull/452), [#429](https://github.com/MarshalX/atproto/pull/429), [#442](https://github.com/MarshalX/atproto/pull/442)
+* Fix `update_lexicons` workflow by [@MarshalX](https://github.com/MarshalX) in [#428](https://github.com/MarshalX/atproto/pull/428)
+* Fix typo in item of `SessionEvent`: `'creat'` -> `'create'` by [@zzstoatzz](https://github.com/zzstoatzz) in [#439](https://github.com/MarshalX/atproto/pull/439)
+* Fix `clone()` and `with_...()` methods for `AsyncClient` by [@MarshalX](https://github.com/MarshalX) in [#457](https://github.com/MarshalX/atproto/pull/457)
+* Fix link to API docs for rate-limits in `atproto_client/auth.md` by [@questionlp](https://github.com/questionlp) in [#464](https://github.com/MarshalX/atproto/pull/464)
 
 ## Version 0.0.55
 
 **24.10.2024**
 
-* Add Python 3.13 support by @MarshalX in https://github.com/MarshalX/atproto/pull/416
-* Add support for `LexRef` as a Schema type of inputs by @MarshalX in https://github.com/MarshalX/atproto/pull/412
-* Replace `threading.Lock` with a boolean flag in `_WebsocketClient` by @Darkkekus in https://github.com/MarshalX/atproto/pull/402
-* Update compatibility with Read The Docs by @MarshalX in https://github.com/MarshalX/atproto/pull/405
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/403, https://github.com/MarshalX/atproto/pull/404, https://github.com/MarshalX/atproto/pull/413
-* Fix different cases of response header names by @MarshalX in https://github.com/MarshalX/atproto/pull/415
+* Add Python 3.13 support by [@MarshalX](https://github.com/MarshalX) in [#416](https://github.com/MarshalX/atproto/pull/416)
+* Add support for `LexRef` as a Schema type of inputs by [@MarshalX](https://github.com/MarshalX) in [#412](https://github.com/MarshalX/atproto/pull/412)
+* Replace `threading.Lock` with a boolean flag in `_WebsocketClient` by [@Darkkekus](https://github.com/Darkkekus) in [#402](https://github.com/MarshalX/atproto/pull/402)
+* Update compatibility with Read The Docs by [@MarshalX](https://github.com/MarshalX) in [#405](https://github.com/MarshalX/atproto/pull/405)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#403](https://github.com/MarshalX/atproto/pull/403), [#404](https://github.com/MarshalX/atproto/pull/404), [#413](https://github.com/MarshalX/atproto/pull/413)
+* Fix different cases of response header names by [@MarshalX](https://github.com/MarshalX) in [#415](https://github.com/MarshalX/atproto/pull/415)
 
 ## Version 0.0.54
 
 **13.09.2024**
 
-* Add `Client.send_video` high-level method by @Meorge in https://github.com/MarshalX/atproto/pull/395
-* Add support for `known_values` and `enum` of string properties in objects by @MarshalX in https://github.com/MarshalX/atproto/pull/391
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/394 and https://github.com/MarshalX/atproto/pull/398
-* Fix string definitions which use `know_values` field as _closed_ enum by @MarshalX in https://github.com/MarshalX/atproto/pull/389
-* Fix model field default value generating in cases when this is the only one constraint by @MarshalX in https://github.com/MarshalX/atproto/pull/393
-* Fix response parsing for JSON content type by @MarshalX in https://github.com/MarshalX/atproto/pull/397
+* Add `Client.send_video` high-level method by [@Meorge](https://github.com/Meorge) in [#395](https://github.com/MarshalX/atproto/pull/395)
+* Add support for `known_values` and `enum` of string properties in objects by [@MarshalX](https://github.com/MarshalX) in [#391](https://github.com/MarshalX/atproto/pull/391)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#394](https://github.com/MarshalX/atproto/pull/394) and [#398](https://github.com/MarshalX/atproto/pull/398)
+* Fix string definitions which use `know_values` field as _closed_ enum by [@MarshalX](https://github.com/MarshalX) in [#389](https://github.com/MarshalX/atproto/pull/389)
+* Fix model field default value generating in cases when this is the only one constraint by [@MarshalX](https://github.com/MarshalX) in [#393](https://github.com/MarshalX/atproto/pull/393)
+* Fix response parsing for JSON content type by [@MarshalX](https://github.com/MarshalX) in [#397](https://github.com/MarshalX/atproto/pull/397)
 
 ## Version 0.0.53
 
@@ -209,35 +209,35 @@ Note: session refreshing was broken in this version. Please use 0.0.61 instead.
 
 **⚡ Thanks to libipld 2.0.0 firehose performance should increase approximately by 30%! No changes from you are required! Check more detailed benchmark results [here](https://github.com/MarshalX/python-libipld/releases/tag/v2.0.0)**
 
-* Add libipld v2.0.0 support by @MarshalX in https://github.com/MarshalX/atproto/pull/315
-* Update lexicons fetched from e4d41d6 committed 2024-09-04T10:42:39Z by @MarshalX in https://github.com/MarshalX/atproto/pull/380
-* Fix firehose client stop by @MarshalX in https://github.com/MarshalX/atproto/pull/384
+* Add libipld v2.0.0 support by [@MarshalX](https://github.com/MarshalX) in [#315](https://github.com/MarshalX/atproto/pull/315)
+* Update lexicons fetched from e4d41d6 committed 2024-09-04T10:42:39Z by [@MarshalX](https://github.com/MarshalX) in [#380](https://github.com/MarshalX/atproto/pull/380)
+* Fix firehose client stop by [@MarshalX](https://github.com/MarshalX) in [#384](https://github.com/MarshalX/atproto/pull/384)
 
 ## Version 0.0.52
 
 **01.09.2024**
 
-* Add new asyncio implementation support for websockets 13.0; handle `ConnectionError` exception; remove `close_timeout` by @MarshalX in https://github.com/MarshalX/atproto/pull/376
-* Add process_commits_async example by @MarshalX in https://github.com/MarshalX/atproto/pull/377
-* Update process_commits example by @MarshalX in https://github.com/MarshalX/atproto/pull/374
+* Add new asyncio implementation support for websockets 13.0; handle `ConnectionError` exception; remove `close_timeout` by [@MarshalX](https://github.com/MarshalX) in [#376](https://github.com/MarshalX/atproto/pull/376)
+* Add process_commits_async example by [@MarshalX](https://github.com/MarshalX) in [#377](https://github.com/MarshalX/atproto/pull/377)
+* Update process_commits example by [@MarshalX](https://github.com/MarshalX) in [#374](https://github.com/MarshalX/atproto/pull/374)
 
 ## Version 0.0.51
 
 **31.08.2024**
 
-* Fix PDS auto-switching for self-hosted instances by @MarshalX in https://github.com/MarshalX/atproto/pull/370
-* Update lexicons fetched from bfbac24 committed 2024-08-30T18:18:43Z by @MarshalX in https://github.com/MarshalX/atproto/pull/372
+* Fix PDS auto-switching for self-hosted instances by [@MarshalX](https://github.com/MarshalX) in [#370](https://github.com/MarshalX/atproto/pull/370)
+* Update lexicons fetched from bfbac24 committed 2024-08-30T18:18:43Z by [@MarshalX](https://github.com/MarshalX) in [#372](https://github.com/MarshalX/atproto/pull/372)
 
 ## Version 0.0.50
 
 **30.08.2024**
 
-* Use `jiter` instead of the built-in `json` module to improve performance by @MarshalX in https://github.com/MarshalX/atproto/pull/360
-* Update docs example to fix empty blocks of commit by @MarshalX in https://github.com/MarshalX/atproto/pull/363
-* Bump `certifi` from 2024.2.2 to 2024.7.4 by @dependabot in https://github.com/MarshalX/atproto/pull/355
-* Bump `zipp` from 3.18.1 to 3.19.1 by @dependabot in https://github.com/MarshalX/atproto/pull/356
-* Bump `setuptools` from 69.5.1 to 70.0.0 by @dependabot in https://github.com/MarshalX/atproto/pull/357
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/358, https://github.com/MarshalX/atproto/pull/359, https://github.com/MarshalX/atproto/pull/364, https://github.com/MarshalX/atproto/pull/366, https://github.com/MarshalX/atproto/pull/367
+* Use `jiter` instead of the built-in `json` module to improve performance by [@MarshalX](https://github.com/MarshalX) in [#360](https://github.com/MarshalX/atproto/pull/360)
+* Update docs example to fix empty blocks of commit by [@MarshalX](https://github.com/MarshalX) in [#363](https://github.com/MarshalX/atproto/pull/363)
+* Bump `certifi` from 2024.2.2 to 2024.7.4 by [@dependabot](https://github.com/dependabot) in [#355](https://github.com/MarshalX/atproto/pull/355)
+* Bump `zipp` from 3.18.1 to 3.19.1 by [@dependabot](https://github.com/dependabot) in [#356](https://github.com/MarshalX/atproto/pull/356)
+* Bump `setuptools` from 69.5.1 to 70.0.0 by [@dependabot](https://github.com/dependabot) in [#357](https://github.com/MarshalX/atproto/pull/357)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#358](https://github.com/MarshalX/atproto/pull/358), [#359](https://github.com/MarshalX/atproto/pull/359), [#364](https://github.com/MarshalX/atproto/pull/364), [#366](https://github.com/MarshalX/atproto/pull/366), [#367](https://github.com/MarshalX/atproto/pull/367)
 
 ## Version 0.0.49
 
@@ -245,52 +245,52 @@ Note: session refreshing was broken in this version. Please use 0.0.61 instead.
 
 **Breaking changes for Direct Messages. Now you must create a client with a chat proxy. See the updated [documentation](https://atproto.blue/en/latest/dm.html)**.
 
-* Add automatically switching to PDS endpoint after login and session resume by @MarshalX in https://github.com/MarshalX/atproto/pull/344
-* Add atproto proxy and atproto labelers support by @MarshalX in https://github.com/MarshalX/atproto/pull/345 and https://github.com/MarshalX/atproto/pull/351
-* Add `BlobRef` representation conversations by @MarshalX in https://github.com/MarshalX/atproto/pull/348
-* Fix `BlobRef` creation for JSON representation by @MarshalX in https://github.com/MarshalX/atproto/pull/340
-* Fix `delete_post` example by @MarshalX in https://github.com/MarshalX/atproto/pull/342
-* Fix `repost` method by @MarshalX in https://github.com/MarshalX/atproto/pull/343
-* Bump urllib3 from 2.2.1 to 2.2.2 by @dependabot in https://github.com/MarshalX/atproto/pull/346
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/352, https://github.com/MarshalX/atproto/pull/350, https://github.com/MarshalX/atproto/pull/349, https://github.com/MarshalX/atproto/pull/347, https://github.com/MarshalX/atproto/pull/339, https://github.com/MarshalX/atproto/pull/337
+* Add automatically switching to PDS endpoint after login and session resume by [@MarshalX](https://github.com/MarshalX) in [#344](https://github.com/MarshalX/atproto/pull/344)
+* Add atproto proxy and atproto labelers support by [@MarshalX](https://github.com/MarshalX) in [#345](https://github.com/MarshalX/atproto/pull/345) and [#351](https://github.com/MarshalX/atproto/pull/351)
+* Add `BlobRef` representation conversations by [@MarshalX](https://github.com/MarshalX) in [#348](https://github.com/MarshalX/atproto/pull/348)
+* Fix `BlobRef` creation for JSON representation by [@MarshalX](https://github.com/MarshalX) in [#340](https://github.com/MarshalX/atproto/pull/340)
+* Fix `delete_post` example by [@MarshalX](https://github.com/MarshalX) in [#342](https://github.com/MarshalX/atproto/pull/342)
+* Fix `repost` method by [@MarshalX](https://github.com/MarshalX) in [#343](https://github.com/MarshalX/atproto/pull/343)
+* Bump urllib3 from 2.2.1 to 2.2.2 by [@dependabot](https://github.com/dependabot) in [#346](https://github.com/MarshalX/atproto/pull/346)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#352](https://github.com/MarshalX/atproto/pull/352), [#350](https://github.com/MarshalX/atproto/pull/350), [#349](https://github.com/MarshalX/atproto/pull/349), [#347](https://github.com/MarshalX/atproto/pull/347), [#339](https://github.com/MarshalX/atproto/pull/339), [#337](https://github.com/MarshalX/atproto/pull/337)
 
 ## Version 0.0.48
 
 **01.06.2024**
 
-* Add Firehose Account message (use instead of Identity) by @MarshalX in https://github.com/MarshalX/atproto/pull/335
-* Update lexicons fetched from 255d5ea committed 2024-05-31T21:39:21Z by @MarshalX in https://github.com/MarshalX/atproto/pull/334
+* Add Firehose Account message (use instead of Identity) by [@MarshalX](https://github.com/MarshalX) in [#335](https://github.com/MarshalX/atproto/pull/335)
+* Update lexicons fetched from 255d5ea committed 2024-05-31T21:39:21Z by [@MarshalX](https://github.com/MarshalX) in [#334](https://github.com/MarshalX/atproto/pull/334)
 
 ## Version 0.0.47
 
 **22.05.2024**
 
-**💬 Just shipped: Bluesky Direct Messages! https://atproto.blue/en/latest/dm.html**
+**💬 Just shipped: [Bluesky Direct Messages](https://atproto.blue/en/latest/dm.html)!**
 
 **Breaking changes**
 
 Many of these changes were backward compatible for a few months with proper warnings.
 
-* Drop support for Python 3.7 by @MarshalX in https://github.com/MarshalX/atproto/pull/321
-* Delete deprecated record models called `Main` instead of `Record` by @MarshalX in https://github.com/MarshalX/atproto/pull/323
-* Delete deprecated `SessionString` class by @MarshalX in https://github.com/MarshalX/atproto/pull/324
-* Delete deprecated `subject` argument of `.like()` and `.repost()` methods by @MarshalX in https://github.com/MarshalX/atproto/pull/325
+* Drop support for Python 3.7 by [@MarshalX](https://github.com/MarshalX) in [#321](https://github.com/MarshalX/atproto/pull/321)
+* Delete deprecated record models called `Main` instead of `Record` by [@MarshalX](https://github.com/MarshalX) in [#323](https://github.com/MarshalX/atproto/pull/323)
+* Delete deprecated `SessionString` class by [@MarshalX](https://github.com/MarshalX) in [#324](https://github.com/MarshalX/atproto/pull/324)
+* Delete deprecated `subject` argument of `.like()` and `.repost()` methods by [@MarshalX](https://github.com/MarshalX) in [#325](https://github.com/MarshalX/atproto/pull/325)
 
 **What's Changed**
 
-* Add support for Direct Messages (Chats) by @MarshalX in https://github.com/MarshalX/atproto/pull/331
-* Add method to send post with multiple attached photos by @ryoryo25 in https://github.com/MarshalX/atproto/pull/313
-* Register chat (DM) namespace by @MarshalX in https://github.com/MarshalX/atproto/pull/330
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/312, https://github.com/MarshalX/atproto/pull/314, https://github.com/MarshalX/atproto/pull/317, https://github.com/MarshalX/atproto/pull/322, https://github.com/MarshalX/atproto/pull/327, https://github.com/MarshalX/atproto/pull/328
-* Fix HTTP error handling by @MarshalX in https://github.com/MarshalX/atproto/pull/329
-* Bump requests from 2.31.0 to 2.32.2 by @dependabot in https://github.com/MarshalX/atproto/pull/332
+* Add support for Direct Messages (Chats) by [@MarshalX](https://github.com/MarshalX) in [#331](https://github.com/MarshalX/atproto/pull/331)
+* Add method to send post with multiple attached photos by [@ryoryo25](https://github.com/ryoryo25) in [#313](https://github.com/MarshalX/atproto/pull/313)
+* Register chat (DM) namespace by [@MarshalX](https://github.com/MarshalX) in [#330](https://github.com/MarshalX/atproto/pull/330)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#312](https://github.com/MarshalX/atproto/pull/312), [#314](https://github.com/MarshalX/atproto/pull/314), [#317](https://github.com/MarshalX/atproto/pull/317), [#322](https://github.com/MarshalX/atproto/pull/322), [#327](https://github.com/MarshalX/atproto/pull/327), [#328](https://github.com/MarshalX/atproto/pull/328)
+* Fix HTTP error handling by [@MarshalX](https://github.com/MarshalX) in [#329](https://github.com/MarshalX/atproto/pull/329)
+* Bump requests from 2.31.0 to 2.32.2 by [@dependabot](https://github.com/dependabot) in [#332](https://github.com/MarshalX/atproto/pull/332)
 
 ## Version 0.0.46
 
 **20.03.2024**
 
-* Fix follow redirects by @MarshalX in https://github.com/MarshalX/atproto/pull/309
-* Update lexicons fetched from c28e374 committed 2024-03-19T16:26:14Z by @MarshalX in https://github.com/MarshalX/atproto/pull/310
+* Fix follow redirects by [@MarshalX](https://github.com/MarshalX) in [#309](https://github.com/MarshalX/atproto/pull/309)
+* Update lexicons fetched from c28e374 committed 2024-03-19T16:26:14Z by [@MarshalX](https://github.com/MarshalX) in [#310](https://github.com/MarshalX/atproto/pull/310)
 
 ## Version 0.0.45
 
@@ -301,42 +301,42 @@ Many of these changes were backward compatible for a few months with proper warn
 - [Example how to subscribe and process labeling update](https://github.com/MarshalX/atproto/blob/main/examples/firehose/sub_labels.py)
 - [Updated documentation about real-time updates](https://atproto.blue/en/latest/atproto_firehose/index.html)
 
-* Add labels firehose data stream by @MarshalX in https://github.com/MarshalX/atproto/pull/304
-* Register ozone.tools namespace as root namespace by @MarshalX in https://github.com/MarshalX/atproto/pull/303
-* Generate unique namespace classes to avoid collisions between lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/299
-* Update lexicons by @MarshalX in https://github.com/MarshalX/atproto/pull/297, https://github.com/MarshalX/atproto/pull/298, https://github.com/MarshalX/atproto/pull/302
-* Fix CIMON by @MarshalX in https://github.com/MarshalX/atproto/pull/300
-* Fix lexicon updater by @MarshalX in https://github.com/MarshalX/atproto/pull/301
+* Add labels firehose data stream by [@MarshalX](https://github.com/MarshalX) in [#304](https://github.com/MarshalX/atproto/pull/304)
+* Register ozone.tools namespace as root namespace by [@MarshalX](https://github.com/MarshalX) in [#303](https://github.com/MarshalX/atproto/pull/303)
+* Generate unique namespace classes to avoid collisions between lexicons by [@MarshalX](https://github.com/MarshalX) in [#299](https://github.com/MarshalX/atproto/pull/299)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#297](https://github.com/MarshalX/atproto/pull/297), [#298](https://github.com/MarshalX/atproto/pull/298), [#302](https://github.com/MarshalX/atproto/pull/302)
+* Fix CIMON by [@MarshalX](https://github.com/MarshalX) in [#300](https://github.com/MarshalX/atproto/pull/300)
+* Fix lexicon updater by [@MarshalX](https://github.com/MarshalX) in [#301](https://github.com/MarshalX/atproto/pull/301)
 
 ## Version 0.0.44
 
 **05.03.2024**
 
-* Add identity firehose message by @MarshalX in https://github.com/MarshalX/atproto/pull/294
-* Update lexicons fetched from d643b5b committed 2024-02-23T22:59:47Z by @MarshalX in https://github.com/MarshalX/atproto/pull/293
-* Update lexicons fetched from c7e6ef0 committed 2024-03-05T19:27:25Z by @MarshalX in https://github.com/MarshalX/atproto/pull/295
-* Fix typo in README by @yallxe in https://github.com/MarshalX/atproto/pull/291
+* Add identity firehose message by [@MarshalX](https://github.com/MarshalX) in [#294](https://github.com/MarshalX/atproto/pull/294)
+* Update lexicons fetched from d643b5b committed 2024-02-23T22:59:47Z by [@MarshalX](https://github.com/MarshalX) in [#293](https://github.com/MarshalX/atproto/pull/293)
+* Update lexicons fetched from c7e6ef0 committed 2024-03-05T19:27:25Z by [@MarshalX](https://github.com/MarshalX) in [#295](https://github.com/MarshalX/atproto/pull/295)
+* Fix typo in README by [@yallxe](https://github.com/yallxe) in [#291](https://github.com/MarshalX/atproto/pull/291)
 
 ## Version 0.0.43
 
 **22.02.2024**
 
-**🎉 New lexicon introduces Account Migration between PDS. More info: https://github.com/bluesky-social/pds/blob/main/ACCOUNT_MIGRATION.md**
+**🎉 New lexicon introduces Account Migration between PDS. More info: [ACCOUNT_MIGRATION.md](https://github.com/bluesky-social/pds/blob/main/ACCOUNT_MIGRATION.md)**
 
-* Fix bytes response by @MarshalX in https://github.com/MarshalX/atproto/pull/287
-* Update lexicons fetched from 514aab9 committed 2024-02-22T15:43:58Z by @MarshalX in https://github.com/MarshalX/atproto/pull/288
-* Bump cryptography from 42.0.2 to 42.0.4 by @dependabot in https://github.com/MarshalX/atproto/pull/289
+* Fix bytes response by [@MarshalX](https://github.com/MarshalX) in [#287](https://github.com/MarshalX/atproto/pull/287)
+* Update lexicons fetched from 514aab9 committed 2024-02-22T15:43:58Z by [@MarshalX](https://github.com/MarshalX) in [#288](https://github.com/MarshalX/atproto/pull/288)
+* Bump cryptography from 42.0.2 to 42.0.4 by [@dependabot](https://github.com/dependabot) in [#289](https://github.com/MarshalX/atproto/pull/289)
 
 ## Version 0.0.42
 
 **17.02.2024**
 
-* Add `send_ogp_link_card.py` (Open Graph protocol) example by @OhkuboSGMS in https://github.com/MarshalX/atproto/pull/273
-* Update lexicons fetched from 8c94979 committed 2024-02-16T02:12:39Z by @MarshalX in https://github.com/MarshalX/atproto/pull/279
-* Bump cryptography from 41.0.7 to 42.0.2 by @dependabot in https://github.com/MarshalX/atproto/pull/280
-* Fix pyright for pydantic aliases via `alias_generator` by @MarshalX in https://github.com/MarshalX/atproto/pull/277
-* Fix `filter` argument of `get_author_feed` method in https://github.com/MarshalX/atproto/pull/278
-* Fix pyright errors part 1 by @MarshalX in https://github.com/MarshalX/atproto/pull/278
+* Add `send_ogp_link_card.py` (Open Graph protocol) example by [@OhkuboSGMS](https://github.com/OhkuboSGMS) in [#273](https://github.com/MarshalX/atproto/pull/273)
+* Update lexicons fetched from 8c94979 committed 2024-02-16T02:12:39Z by [@MarshalX](https://github.com/MarshalX) in [#279](https://github.com/MarshalX/atproto/pull/279)
+* Bump cryptography from 41.0.7 to 42.0.2 by [@dependabot](https://github.com/dependabot) in [#280](https://github.com/MarshalX/atproto/pull/280)
+* Fix pyright for pydantic aliases via `alias_generator` by [@MarshalX](https://github.com/MarshalX) in [#277](https://github.com/MarshalX/atproto/pull/277)
+* Fix `filter` argument of `get_author_feed` method in [#278](https://github.com/MarshalX/atproto/pull/278)
+* Fix pyright errors part 1 by [@MarshalX](https://github.com/MarshalX) in [#278](https://github.com/MarshalX/atproto/pull/278)
 
 ## Version 0.0.41
 
@@ -344,8 +344,8 @@ Many of these changes were backward compatible for a few months with proper warn
 
 **[🔥 New documentation page about auth and session reusing!](https://atproto.blue/en/latest/atproto_client/auth.html)**
 
-* Add on session change callback by @MarshalX in https://github.com/MarshalX/atproto/pull/269
-* Update lexicons fetched from e4ec7af committed 2024-02-06T00:10:44Z by @MarshalX in https://github.com/MarshalX/atproto/pull/271
+* Add on session change callback by [@MarshalX](https://github.com/MarshalX) in [#269](https://github.com/MarshalX/atproto/pull/269)
+* Update lexicons fetched from e4ec7af committed 2024-02-06T00:10:44Z by [@MarshalX](https://github.com/MarshalX) in [#271](https://github.com/MarshalX/atproto/pull/271)
 
 ## Version 0.0.40
 
@@ -380,9 +380,9 @@ print(deleted_post)
 **⚠️ Record models have been renamed from "Main" to "Record". Backward compatibility is provided but will be removed soon!**
 **⚠️ Internals of High-Level Clients have been migrated to new syntax sugar. It could affect you because returned models are changed but the fields are the same.**
 
-* Add record syntax sugar with get, list, create, and delete methods by @MarshalX in https://github.com/MarshalX/atproto/pull/263
-* Rename record models from "Main" to "Record" by @MarshalX in https://github.com/MarshalX/atproto/pull/264
-* Integrate syntax sugar for repo operations upon records by @MarshalX in https://github.com/MarshalX/atproto/pull/266
+* Add record syntax sugar with get, list, create, and delete methods by [@MarshalX](https://github.com/MarshalX) in [#263](https://github.com/MarshalX/atproto/pull/263)
+* Rename record models from "Main" to "Record" by [@MarshalX](https://github.com/MarshalX) in [#264](https://github.com/MarshalX/atproto/pull/264)
+* Integrate syntax sugar for repo operations upon records by [@MarshalX](https://github.com/MarshalX) in [#266](https://github.com/MarshalX/atproto/pull/266)
 
 ## Version 0.0.39
 
@@ -390,46 +390,46 @@ print(deleted_post)
 
 **⚠️ Using strong references in `.like()` and `.repost()` methods are deprecated. Use URI and CID arguments instead.**
 
-* Use .like() and .repost() methods without strong reference by @MarshalX in https://github.com/MarshalX/atproto/pull/255
-* Allow Service URl as base URL by @MarshalX in https://github.com/MarshalX/atproto/pull/256
-* Improve URL detection in auto_hyperlinks example by @editor-syntax in https://github.com/MarshalX/atproto/pull/250
-* Simplify send_embed example by @MarshalX in https://github.com/MarshalX/atproto/pull/258
-* Update lexicons fetched from f023494 committed 2024-01-30T22:19:36Z by @MarshalX in https://github.com/MarshalX/atproto/pull/259
-* Delete release workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/252
-* Add docs codegen check to GitHub Actions Workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/260
+* Use .like() and .repost() methods without strong reference by [@MarshalX](https://github.com/MarshalX) in [#255](https://github.com/MarshalX/atproto/pull/255)
+* Allow Service URl as base URL by [@MarshalX](https://github.com/MarshalX) in [#256](https://github.com/MarshalX/atproto/pull/256)
+* Improve URL detection in auto_hyperlinks example by [@editor-syntax](https://github.com/editor-syntax) in [#250](https://github.com/MarshalX/atproto/pull/250)
+* Simplify send_embed example by [@MarshalX](https://github.com/MarshalX) in [#258](https://github.com/MarshalX/atproto/pull/258)
+* Update lexicons fetched from f023494 committed 2024-01-30T22:19:36Z by [@MarshalX](https://github.com/MarshalX) in [#259](https://github.com/MarshalX/atproto/pull/259)
+* Delete release workflow by [@MarshalX](https://github.com/MarshalX) in [#252](https://github.com/MarshalX/atproto/pull/252)
+* Add docs codegen check to GitHub Actions Workflow by [@MarshalX](https://github.com/MarshalX) in [#260](https://github.com/MarshalX/atproto/pull/260)
 
 ## Version 0.0.38
 
 **26.01.2024**
 
-* Add lexicons updating automation using GitHub Actions by @MarshalX in https://github.com/MarshalX/atproto/pull/248
-* Update lexicons fetched from 8994d36 committed 2024-01-25T20:16:30Z by @MarshalX in https://github.com/MarshalX/atproto/pull/249
-* Update code snippet in README by @MarshalX in https://github.com/MarshalX/atproto/pull/245
-* Fix input data mutation in DotDict by @MarshalX in https://github.com/MarshalX/atproto/pull/246
-* Fix links to documentation by @MarshalX in https://github.com/MarshalX/atproto/pull/244
+* Add lexicons updating automation using GitHub Actions by [@MarshalX](https://github.com/MarshalX) in [#248](https://github.com/MarshalX/atproto/pull/248)
+* Update lexicons fetched from 8994d36 committed 2024-01-25T20:16:30Z by [@MarshalX](https://github.com/MarshalX) in [#249](https://github.com/MarshalX/atproto/pull/249)
+* Update code snippet in README by [@MarshalX](https://github.com/MarshalX) in [#245](https://github.com/MarshalX/atproto/pull/245)
+* Fix input data mutation in DotDict by [@MarshalX](https://github.com/MarshalX) in [#246](https://github.com/MarshalX/atproto/pull/246)
+* Fix links to documentation by [@MarshalX](https://github.com/MarshalX) in [#244](https://github.com/MarshalX/atproto/pull/244)
 
 ## Version 0.0.37
 
 **12.01.2024**
 
-🎉 Welcome in 2024! User-specific custom feeds are here! This is a massive update with a lot of new implementations including Service JWT, signature validation, DID Keys, AtProtoData, and more! Huge docs restructuring is here too: https://atproto.blue
+🎉 Welcome in 2024! User-specific custom feeds are here! This is a massive update with a lot of new implementations including Service JWT, signature validation, DID Keys, AtProtoData, and more! Huge docs restructuring is here too: [atproto.blue](https://atproto.blue)
 
 Code snippet: [Authorized Custom Feed (user-specific results) ](https://github.com/MarshalX/bluesky-feed-generator/pull/10)
 
 SDK:
-* Implement Service JWT by @MarshalX in https://github.com/MarshalX/atproto/pull/225
-* Implement AtprotoData and DID key formatting and parsing by @MarshalX in https://github.com/MarshalX/atproto/pull/227
-* Implement signature verification by @MarshalX in https://github.com/MarshalX/atproto/pull/232
-* Add tests for auth flow in custom feeds by @MarshalX in https://github.com/MarshalX/atproto/pull/236
-* Describe JWT payload according to RFC 7519 by @MarshalX in https://github.com/MarshalX/atproto/pull/235
-* Update lexicons fetched from 51fcba7 committed 2024-01-09T23:29:07Z by @MarshalX in https://github.com/MarshalX/atproto/pull/238
-* Fix AtUri hostname parsing with digits by @MarshalX in https://github.com/MarshalX/atproto/pull/229
+* Implement Service JWT by [@MarshalX](https://github.com/MarshalX) in [#225](https://github.com/MarshalX/atproto/pull/225)
+* Implement AtprotoData and DID key formatting and parsing by [@MarshalX](https://github.com/MarshalX) in [#227](https://github.com/MarshalX/atproto/pull/227)
+* Implement signature verification by [@MarshalX](https://github.com/MarshalX) in [#232](https://github.com/MarshalX/atproto/pull/232)
+* Add tests for auth flow in custom feeds by [@MarshalX](https://github.com/MarshalX) in [#236](https://github.com/MarshalX/atproto/pull/236)
+* Describe JWT payload according to RFC 7519 by [@MarshalX](https://github.com/MarshalX) in [#235](https://github.com/MarshalX/atproto/pull/235)
+* Update lexicons fetched from 51fcba7 committed 2024-01-09T23:29:07Z by [@MarshalX](https://github.com/MarshalX) in [#238](https://github.com/MarshalX/atproto/pull/238)
+* Fix AtUri hostname parsing with digits by [@MarshalX](https://github.com/MarshalX) in [#229](https://github.com/MarshalX/atproto/pull/229)
 
 Docs:
-* Enable pydocstyle rules by @MarshalX in https://github.com/MarshalX/atproto/pull/226
-* Cleanup docs of models by disabling aliases, schemes, validators, and list of fields by @MarshalX in https://github.com/MarshalX/atproto/pull/231
-* Improve documentation by @MarshalX in https://github.com/MarshalX/atproto/pull/234
-* Bump jinja2 from 3.1.2 to 3.1.3 by @dependabot in https://github.com/MarshalX/atproto/pull/230
+* Enable pydocstyle rules by [@MarshalX](https://github.com/MarshalX) in [#226](https://github.com/MarshalX/atproto/pull/226)
+* Cleanup docs of models by disabling aliases, schemes, validators, and list of fields by [@MarshalX](https://github.com/MarshalX) in [#231](https://github.com/MarshalX/atproto/pull/231)
+* Improve documentation by [@MarshalX](https://github.com/MarshalX) in [#234](https://github.com/MarshalX/atproto/pull/234)
+* Bump jinja2 from 3.1.2 to 3.1.3 by [@dependabot](https://github.com/dependabot) in [#230](https://github.com/MarshalX/atproto/pull/230)
 
 ## Version 0.0.36
 
@@ -449,17 +449,17 @@ Check the docs below!
 
 **❗Breaking changes:** SDK was split into many packages. This affects imports in your codebase. [Read more](https://atproto.blue/en/latest/readme.content.html#sdk-structure)
 
-* New SDK structure by @MarshalX in https://github.com/MarshalX/atproto/pull/214 and https://github.com/MarshalX/atproto/pull/216
-* Fix decoding of CAR root by @MarshalX in https://github.com/MarshalX/atproto/pull/213
-* Fix parsing of BlobRef in CBOR by @MarshalX in https://github.com/MarshalX/atproto/pull/215
-* Update lexicons fetched from 905743d committed 2023-12-20T14:49:21Z by @MarshalX in https://github.com/MarshalX/atproto/pull/217
+* New SDK structure by [@MarshalX](https://github.com/MarshalX) in [#214](https://github.com/MarshalX/atproto/pull/214) and [#216](https://github.com/MarshalX/atproto/pull/216)
+* Fix decoding of CAR root by [@MarshalX](https://github.com/MarshalX) in [#213](https://github.com/MarshalX/atproto/pull/213)
+* Fix parsing of BlobRef in CBOR by [@MarshalX](https://github.com/MarshalX) in [#215](https://github.com/MarshalX/atproto/pull/215)
+* Update lexicons fetched from 905743d committed 2023-12-20T14:49:21Z by [@MarshalX](https://github.com/MarshalX) in [#217](https://github.com/MarshalX/atproto/pull/217)
 
 ## Version 0.0.34
 
 **17.12.2023**
 
-* Make SDK more backward and forward-compatible with protocol by @MarshalX in https://github.com/MarshalX/atproto/pull/207
-* Add plenty of new high-level methods by @MarshalX in https://github.com/MarshalX/atproto/pull/208
+* Make SDK more backward and forward-compatible with protocol by [@MarshalX](https://github.com/MarshalX) in [#207](https://github.com/MarshalX/atproto/pull/207)
+* Add plenty of new high-level methods by [@MarshalX](https://github.com/MarshalX) in [#208](https://github.com/MarshalX/atproto/pull/208)
   * Breaking changes:
     * `unlike` now accepts AT URI instead of `record_key` and `profile_identify`
   * New methods:
@@ -482,7 +482,7 @@ Check the docs below!
     * `resolve_handle`
     * `update_handle`
     * `upload_blob`
-* Migrate lexicon parser from dacite to pydantic; enable ruff ANN by @MarshalX in https://github.com/MarshalX/atproto/pull/206
+* Migrate lexicon parser from dacite to pydantic; enable ruff ANN by [@MarshalX](https://github.com/MarshalX) in [#206](https://github.com/MarshalX/atproto/pull/206)
   * Removed exceptions:
     * `UnknownPrimitiveTypeError`
     * `UnknownDefinitionTypeError`
@@ -495,68 +495,68 @@ Check the docs below!
 
 **13.12.2023**
 
-* Update lexicons fetched from 0c54951 committed 2023-12-12T21:37:06Z by @MarshalX in https://github.com/MarshalX/atproto/pull/202
-* Update changelog for v0.0.32 by @MarshalX in https://github.com/MarshalX/atproto/pull/199
+* Update lexicons fetched from 0c54951 committed 2023-12-12T21:37:06Z by [@MarshalX](https://github.com/MarshalX) in [#202](https://github.com/MarshalX/atproto/pull/202)
+* Update changelog for v0.0.32 by [@MarshalX](https://github.com/MarshalX) in [#199](https://github.com/MarshalX/atproto/pull/199)
 
 ## Version 0.0.32
 
 **11.12.2023**
 
-* Add text builder as helper for constructing rich text by @MarshalX in https://github.com/MarshalX/atproto/pull/194
-* Lock dependencies by major version only by @MarshalX in https://github.com/MarshalX/atproto/pull/195
-* Fix parsing of lexicon procedure parameters by @MarshalX in https://github.com/MarshalX/atproto/pull/196
-* Update lexicons fetched from ffe39aa committed 2023-12-08T21:32:06Z by @MarshalX in https://github.com/MarshalX/atproto/pull/197
-* Update code snippets in README by @MarshalX in https://github.com/MarshalX/atproto/pull/198
-* Update changelog for v0.0.31 by @MarshalX in https://github.com/MarshalX/atproto/pull/191
+* Add text builder as helper for constructing rich text by [@MarshalX](https://github.com/MarshalX) in [#194](https://github.com/MarshalX/atproto/pull/194)
+* Lock dependencies by major version only by [@MarshalX](https://github.com/MarshalX) in [#195](https://github.com/MarshalX/atproto/pull/195)
+* Fix parsing of lexicon procedure parameters by [@MarshalX](https://github.com/MarshalX) in [#196](https://github.com/MarshalX/atproto/pull/196)
+* Update lexicons fetched from ffe39aa committed 2023-12-08T21:32:06Z by [@MarshalX](https://github.com/MarshalX) in [#197](https://github.com/MarshalX/atproto/pull/197)
+* Update code snippets in README by [@MarshalX](https://github.com/MarshalX) in [#198](https://github.com/MarshalX/atproto/pull/198)
+* Update changelog for v0.0.31 by [@MarshalX](https://github.com/MarshalX) in [#191](https://github.com/MarshalX/atproto/pull/191)
 
 ## Version 0.0.31
 
 **02.12.2023**
 
-* Migrate firehose to new relay URI by @MarshalX in https://github.com/MarshalX/atproto/pull/190
-* Update lexicons fetched from 8d9b1f7 committed 2023-12-01T20:28:54Z by @MarshalX in https://github.com/MarshalX/atproto/pull/189
-* Update changelog for v0.0.30 by @MarshalX in https://github.com/MarshalX/atproto/pull/184
+* Migrate firehose to new relay URI by [@MarshalX](https://github.com/MarshalX) in [#190](https://github.com/MarshalX/atproto/pull/190)
+* Update lexicons fetched from 8d9b1f7 committed 2023-12-01T20:28:54Z by [@MarshalX](https://github.com/MarshalX) in [#189](https://github.com/MarshalX/atproto/pull/189)
+* Update changelog for v0.0.30 by [@MarshalX](https://github.com/MarshalX) in [#184](https://github.com/MarshalX/atproto/pull/184)
 
 ## Version 0.0.30
 
 **06.11.2023**
 
-* Add Python 3.12; migrate from black to ruff format by @MarshalX in https://github.com/MarshalX/atproto/pull/177
-* Async Firehose Client: block on make message handler call, add on error callback by @DXsmiley in https://github.com/MarshalX/atproto/pull/157
-* Downgrade sphinxext-opengraph to clean up the tree of dependencies (including vulnerable) by @MarshalX in https://github.com/MarshalX/atproto/pull/179
-* Update lexicons fetched from 46b108c committed 2023-10-26T22:29:51Z by @MarshalX in https://github.com/MarshalX/atproto/pull/178
-* Update lexicons fetched from 772736a committed 2023-11-02T20:16:26Z by @MarshalX in https://github.com/MarshalX/atproto/pull/182
-* Update changelog for v0.0.29 by @MarshalX in https://github.com/MarshalX/atproto/pull/173
-* Fix type hint of OnMessageCallback (Firehose client) by @MarshalX in https://github.com/MarshalX/atproto/pull/183
-* Fix dependency groups by @MarshalX in https://github.com/MarshalX/atproto/pull/180
+* Add Python 3.12; migrate from black to ruff format by [@MarshalX](https://github.com/MarshalX) in [#177](https://github.com/MarshalX/atproto/pull/177)
+* Async Firehose Client: block on make message handler call, add on error callback by [@DXsmiley](https://github.com/DXsmiley) in [#157](https://github.com/MarshalX/atproto/pull/157)
+* Downgrade sphinxext-opengraph to clean up the tree of dependencies (including vulnerable) by [@MarshalX](https://github.com/MarshalX) in [#179](https://github.com/MarshalX/atproto/pull/179)
+* Update lexicons fetched from 46b108c committed 2023-10-26T22:29:51Z by [@MarshalX](https://github.com/MarshalX) in [#178](https://github.com/MarshalX/atproto/pull/178)
+* Update lexicons fetched from 772736a committed 2023-11-02T20:16:26Z by [@MarshalX](https://github.com/MarshalX) in [#182](https://github.com/MarshalX/atproto/pull/182)
+* Update changelog for v0.0.29 by [@MarshalX](https://github.com/MarshalX) in [#173](https://github.com/MarshalX/atproto/pull/173)
+* Fix type hint of OnMessageCallback (Firehose client) by [@MarshalX](https://github.com/MarshalX) in [#183](https://github.com/MarshalX/atproto/pull/183)
+* Fix dependency groups by [@MarshalX](https://github.com/MarshalX) in [#180](https://github.com/MarshalX/atproto/pull/180)
 
 ## Version 0.0.29
 
 **28.09.2023**
 
-* Make codegen deterministic by @DXsmiley in https://github.com/MarshalX/atproto/pull/162
-* Add TypedDict for params and data arguments; add type hint for kwargs by @DXsmiley in https://github.com/MarshalX/atproto/pull/166
-* Update lexicons fetched from 41ee177 committed 2023-09-27T21:08:58Z by @MarshalX in https://github.com/MarshalX/atproto/pull/172
-* Update changelog for v0.0.28 by @MarshalX in https://github.com/MarshalX/atproto/pull/156
+* Make codegen deterministic by [@DXsmiley](https://github.com/DXsmiley) in [#162](https://github.com/MarshalX/atproto/pull/162)
+* Add TypedDict for params and data arguments; add type hint for kwargs by [@DXsmiley](https://github.com/DXsmiley) in [#166](https://github.com/MarshalX/atproto/pull/166)
+* Update lexicons fetched from 41ee177 committed 2023-09-27T21:08:58Z by [@MarshalX](https://github.com/MarshalX) in [#172](https://github.com/MarshalX/atproto/pull/172)
+* Update changelog for v0.0.28 by [@MarshalX](https://github.com/MarshalX) in [#156](https://github.com/MarshalX/atproto/pull/156)
 
 ## Version 0.0.28
 
 **16.09.2023**
 
-* Add `update_params` method to firehose clients to fix utilizing the old state on reconnecting by @MarshalX in https://github.com/MarshalX/atproto/pull/149
-* Add the ability to export and import session string by @MarshalX in https://github.com/MarshalX/atproto/pull/154
-* Add the ability to pass `base_uri` to Firehose clients by @MarshalX in https://github.com/MarshalX/atproto/pull/155
-* Update lexicons fetched from 9879ca9 committed 2023-09-14T20:24:48Z by @MarshalX in https://github.com/MarshalX/atproto/pull/150
-* Update changelog for v0.0.27 by @MarshalX in https://github.com/MarshalX/atproto/pull/146
+* Add `update_params` method to firehose clients to fix utilizing the old state on reconnecting by [@MarshalX](https://github.com/MarshalX) in [#149](https://github.com/MarshalX/atproto/pull/149)
+* Add the ability to export and import session string by [@MarshalX](https://github.com/MarshalX) in [#154](https://github.com/MarshalX/atproto/pull/154)
+* Add the ability to pass `base_uri` to Firehose clients by [@MarshalX](https://github.com/MarshalX) in [#155](https://github.com/MarshalX/atproto/pull/155)
+* Update lexicons fetched from 9879ca9 committed 2023-09-14T20:24:48Z by [@MarshalX](https://github.com/MarshalX) in [#150](https://github.com/MarshalX/atproto/pull/150)
+* Update changelog for v0.0.27 by [@MarshalX](https://github.com/MarshalX) in [#146](https://github.com/MarshalX/atproto/pull/146)
 
 ## Version 0.0.27
 
 **13.09.2023**
 
-* Add reposts support to the firehose process commits example by @MarshalX in https://github.com/MarshalX/atproto/pull/140
-* Add snake to camel and camel to snake case conversion support for DotDict wrapper by @MarshalX in https://github.com/MarshalX/atproto/pull/143
-* Update lexicons fetched from 07bb0da committed 2023-09-12T17:37:57Z by @MarshalX in https://github.com/MarshalX/atproto/pull/144
-* Update dependencies by @MarshalX in https://github.com/MarshalX/atproto/pull/145
+* Add reposts support to the firehose process commits example by [@MarshalX](https://github.com/MarshalX) in [#140](https://github.com/MarshalX/atproto/pull/140)
+* Add snake to camel and camel to snake case conversion support for DotDict wrapper by [@MarshalX](https://github.com/MarshalX) in [#143](https://github.com/MarshalX/atproto/pull/143)
+* Update lexicons fetched from 07bb0da committed 2023-09-12T17:37:57Z by [@MarshalX](https://github.com/MarshalX) in [#144](https://github.com/MarshalX/atproto/pull/144)
+* Update dependencies by [@MarshalX](https://github.com/MarshalX) in [#145](https://github.com/MarshalX/atproto/pull/145)
 
 ## Version 0.0.26
 
@@ -638,36 +638,36 @@ _Test stand for benchmarks: MacBook Pro 2021, Apple M1 Pro, 32 GB RAM, 450mbps c
 **30.08.2023**
 
 🔥 Bsky made breaking changes in models of firehose. This release fixes it
-* Update changelog for v0.0.24 by @MarshalX in https://github.com/MarshalX/atproto/pull/126
-* Update lexicons fetched from ad1fcf1 committed 2023-08-30T00:07:21Z by @MarshalX in https://github.com/MarshalX/atproto/pull/131
+* Update changelog for v0.0.24 by [@MarshalX](https://github.com/MarshalX) in [#126](https://github.com/MarshalX/atproto/pull/126)
+* Update lexicons fetched from ad1fcf1 committed 2023-08-30T00:07:21Z by [@MarshalX](https://github.com/MarshalX) in [#131](https://github.com/MarshalX/atproto/pull/131)
 
 ## Version 0.0.24
 
 **15.08.2023**
 
-* Add update profile example by @MarshalX in https://github.com/MarshalX/atproto/pull/120
-* Add automatic link (facet) detection example by @Jxck-S in https://github.com/MarshalX/atproto/pull/122
-* Update changelog for v0.0.23 by @MarshalX in https://github.com/MarshalX/atproto/pull/117
-* Update changelog by @MarshalX in https://github.com/MarshalX/atproto/pull/118
-* Update lexicons fetched from 244bf46 committed 2023-08-10T20:54:24Z by @MarshalX in https://github.com/MarshalX/atproto/pull/124
-* Update packages; fix CVE-2023-37920 (certifi) by @MarshalX in https://github.com/MarshalX/atproto/pull/125
-* Fix update profile example by @IamC8 in https://github.com/MarshalX/atproto/pull/121
+* Add update profile example by [@MarshalX](https://github.com/MarshalX) in [#120](https://github.com/MarshalX/atproto/pull/120)
+* Add automatic link (facet) detection example by [@Jxck-S](https://github.com/Jxck-S) in [#122](https://github.com/MarshalX/atproto/pull/122)
+* Update changelog for v0.0.23 by [@MarshalX](https://github.com/MarshalX) in [#117](https://github.com/MarshalX/atproto/pull/117)
+* Update changelog by [@MarshalX](https://github.com/MarshalX) in [#118](https://github.com/MarshalX/atproto/pull/118)
+* Update lexicons fetched from 244bf46 committed 2023-08-10T20:54:24Z by [@MarshalX](https://github.com/MarshalX) in [#124](https://github.com/MarshalX/atproto/pull/124)
+* Update packages; fix CVE-2023-37920 (certifi) by [@MarshalX](https://github.com/MarshalX) in [#125](https://github.com/MarshalX/atproto/pull/125)
+* Fix update profile example by [@IamC8](https://github.com/IamC8) in [#121](https://github.com/MarshalX/atproto/pull/121)
 
 ## Version 0.0.23
 
 **23.07.2023**
 
-* ❗ Delete get_or_create_model method (backward incompatible) by @MarshalX in https://github.com/MarshalX/atproto/pull/111
-* Add documentation for base models by @MarshalX in https://github.com/MarshalX/atproto/pull/109
-* Add import aliases for "models.utils" by @MarshalX in https://github.com/MarshalX/atproto/pull/111
-* Add str and repr for BlobRef by @MarshalX in https://github.com/MarshalX/atproto/pull/113
-* Add Firehose process commits example by @MarshalX in https://github.com/MarshalX/atproto/pull/114
-* Implement additional magic methods for DotDict by @MarshalX in https://github.com/MarshalX/atproto/pull/109
-* Make languages constants immutable by @MarshalX in https://github.com/MarshalX/atproto/pull/110
-* Fix get_model_as_dict for DotDict by @MarshalX in https://github.com/MarshalX/atproto/pull/111
-* Fix is_record_type for DotDict models by @MarshalX in https://github.com/MarshalX/atproto/pull/112
-* Fix access to unknown fields in DotDict by @MarshalX in https://github.com/MarshalX/atproto/pull/116
-* Update changelog for v0.0.21 by @MarshalX in https://github.com/MarshalX/atproto/pull/108
+* ❗ Delete get_or_create_model method (backward incompatible) by [@MarshalX](https://github.com/MarshalX) in [#111](https://github.com/MarshalX/atproto/pull/111)
+* Add documentation for base models by [@MarshalX](https://github.com/MarshalX) in [#109](https://github.com/MarshalX/atproto/pull/109)
+* Add import aliases for "models.utils" by [@MarshalX](https://github.com/MarshalX) in [#111](https://github.com/MarshalX/atproto/pull/111)
+* Add str and repr for BlobRef by [@MarshalX](https://github.com/MarshalX) in [#113](https://github.com/MarshalX/atproto/pull/113)
+* Add Firehose process commits example by [@MarshalX](https://github.com/MarshalX) in [#114](https://github.com/MarshalX/atproto/pull/114)
+* Implement additional magic methods for DotDict by [@MarshalX](https://github.com/MarshalX) in [#109](https://github.com/MarshalX/atproto/pull/109)
+* Make languages constants immutable by [@MarshalX](https://github.com/MarshalX) in [#110](https://github.com/MarshalX/atproto/pull/110)
+* Fix get_model_as_dict for DotDict by [@MarshalX](https://github.com/MarshalX) in [#111](https://github.com/MarshalX/atproto/pull/111)
+* Fix is_record_type for DotDict models by [@MarshalX](https://github.com/MarshalX) in [#112](https://github.com/MarshalX/atproto/pull/112)
+* Fix access to unknown fields in DotDict by [@MarshalX](https://github.com/MarshalX) in [#116](https://github.com/MarshalX/atproto/pull/116)
+* Update changelog for v0.0.21 by [@MarshalX](https://github.com/MarshalX) in [#108](https://github.com/MarshalX/atproto/pull/108)
 
 ## Version 0.0.22
 
@@ -679,188 +679,188 @@ release has been yanked
 
 **21.07.2023**
 
-* Add dot notation for dictionaries by @MarshalX in https://github.com/MarshalX/atproto/pull/106
-* Fix unknown type that could be plain dictionary by @MarshalX in https://github.com/MarshalX/atproto/pull/105
-* Fix parsing of custom (extended) records by @MarshalX in https://github.com/MarshalX/atproto/pull/106
-* Fix a small typo in `README.md` by @ndrezn in https://github.com/MarshalX/atproto/pull/104
-* Update lexicons fetched from b2ef386 committed 2023-07-20T16:00:51Z by @MarshalX in https://github.com/MarshalX/atproto/pull/107
-* Update changelog for v0.0.20 by @MarshalX in https://github.com/MarshalX/atproto/pull/103
+* Add dot notation for dictionaries by [@MarshalX](https://github.com/MarshalX) in [#106](https://github.com/MarshalX/atproto/pull/106)
+* Fix unknown type that could be plain dictionary by [@MarshalX](https://github.com/MarshalX) in [#105](https://github.com/MarshalX/atproto/pull/105)
+* Fix parsing of custom (extended) records by [@MarshalX](https://github.com/MarshalX) in [#106](https://github.com/MarshalX/atproto/pull/106)
+* Fix a small typo in `README.md` by [@ndrezn](https://github.com/ndrezn) in [#104](https://github.com/MarshalX/atproto/pull/104)
+* Update lexicons fetched from b2ef386 committed 2023-07-20T16:00:51Z by [@MarshalX](https://github.com/MarshalX) in [#107](https://github.com/MarshalX/atproto/pull/107)
+* Update changelog for v0.0.20 by [@MarshalX](https://github.com/MarshalX) in [#103](https://github.com/MarshalX/atproto/pull/103)
 
 ## Version 0.0.20
 
 **19.07.2023**
 
-* Update changelog for v0.0.19 by @MarshalX in https://github.com/MarshalX/atproto/pull/99
-* Add pagination example using cursors by @ymdpharm in https://github.com/MarshalX/atproto/pull/93
-* Migrate to websockets lib (fixed all known issues with lost firehouse frames, reconnections and crashes) by @MarshalX in https://github.com/MarshalX/atproto/pull/101
+* Update changelog for v0.0.19 by [@MarshalX](https://github.com/MarshalX) in [#99](https://github.com/MarshalX/atproto/pull/99)
+* Add pagination example using cursors by [@ymdpharm](https://github.com/ymdpharm) in [#93](https://github.com/MarshalX/atproto/pull/93)
+* Migrate to websockets lib (fixed all known issues with lost firehouse frames, reconnections and crashes) by [@MarshalX](https://github.com/MarshalX) in [#101](https://github.com/MarshalX/atproto/pull/101)
 
 ## Version 0.0.19
 
 **18.07.2023**
 
-* Update changelog for v0.0.18 by @MarshalX in https://github.com/MarshalX/atproto/pull/92
-* Add posts langs support by @MarshalX in https://github.com/MarshalX/atproto/pull/96
-* Fix infinite loop of reconnections to Firehose by @MarshalX in https://github.com/MarshalX/atproto/pull/97
-* Update lexicons fetched from 775944e committed 2023-07-17T23:06:44Z by @MarshalX in https://github.com/MarshalX/atproto/pull/98
+* Update changelog for v0.0.18 by [@MarshalX](https://github.com/MarshalX) in [#92](https://github.com/MarshalX/atproto/pull/92)
+* Add posts langs support by [@MarshalX](https://github.com/MarshalX) in [#96](https://github.com/MarshalX/atproto/pull/96)
+* Fix infinite loop of reconnections to Firehose by [@MarshalX](https://github.com/MarshalX) in [#97](https://github.com/MarshalX/atproto/pull/97)
+* Update lexicons fetched from 775944e committed 2023-07-17T23:06:44Z by [@MarshalX](https://github.com/MarshalX) in [#98](https://github.com/MarshalX/atproto/pull/98)
 
 ## Version 0.0.18
 
 **16.07.2023**
 
-* Update changelog for v0.0.17 by @MarshalX in https://github.com/MarshalX/atproto/pull/86
-* Fix is_record_type for dict record types by @joelghill in https://github.com/MarshalX/atproto/pull/88
-* Lower version of typing-extensions as possible; update ruff by @MarshalX in https://github.com/MarshalX/atproto/pull/90
-* Update lexicons fetched from b9ca76f committed 2023-07-14T23:05:56Z by @MarshalX in https://github.com/MarshalX/atproto/pull/91
+* Update changelog for v0.0.17 by [@MarshalX](https://github.com/MarshalX) in [#86](https://github.com/MarshalX/atproto/pull/86)
+* Fix is_record_type for dict record types by [@joelghill](https://github.com/joelghill) in [#88](https://github.com/MarshalX/atproto/pull/88)
+* Lower version of typing-extensions as possible; update ruff by [@MarshalX](https://github.com/MarshalX) in [#90](https://github.com/MarshalX/atproto/pull/90)
+* Update lexicons fetched from b9ca76f committed 2023-07-14T23:05:56Z by [@MarshalX](https://github.com/MarshalX) in [#91](https://github.com/MarshalX/atproto/pull/91)
 
 ## Version 0.0.17
 
 **06.07.2023**
 
-* Update changelog for v0.0.16 by @MarshalX in https://github.com/MarshalX/atproto/pull/82
-* Move the websocket client into part of the atproto package by @MarshalX in https://github.com/MarshalX/atproto/pull/84
-* Update lexicons fetched from e7a0d27 committed 2023-07-03T16:28:39Z by @MarshalX in https://github.com/MarshalX/atproto/pull/85
+* Update changelog for v0.0.16 by [@MarshalX](https://github.com/MarshalX) in [#82](https://github.com/MarshalX/atproto/pull/82)
+* Move the websocket client into part of the atproto package by [@MarshalX](https://github.com/MarshalX) in [#84](https://github.com/MarshalX/atproto/pull/84)
+* Update lexicons fetched from e7a0d27 committed 2023-07-03T16:28:39Z by [@MarshalX](https://github.com/MarshalX) in [#85](https://github.com/MarshalX/atproto/pull/85)
 
 ## Version 0.0.16
 
 **01.07.2023**
 
-* Update changelog for v0.0.15 by @MarshalX in https://github.com/MarshalX/atproto/pull/77
-* Update lexicons fetched from 0306f81 committed 2023-06-23T20:30:52Z by @MarshalX in https://github.com/MarshalX/atproto/pull/79
-* Lock ruff version in GHA workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/81
+* Update changelog for v0.0.15 by [@MarshalX](https://github.com/MarshalX) in [#77](https://github.com/MarshalX/atproto/pull/77)
+* Update lexicons fetched from 0306f81 committed 2023-06-23T20:30:52Z by [@MarshalX](https://github.com/MarshalX) in [#79](https://github.com/MarshalX/atproto/pull/79)
+* Lock ruff version in GHA workflow by [@MarshalX](https://github.com/MarshalX) in [#81](https://github.com/MarshalX/atproto/pull/81)
 
 ## Version 0.0.15
 
 **23.06.2023**
 
-* Update changelog for v0.0.14 by @MarshalX in https://github.com/MarshalX/atproto/pull/70
-* Update Cimon by @MarshalX in https://github.com/MarshalX/atproto/pull/71
-* Update lexicons fetched from 84032a6 committed 2023-06-12T21:51:38Z by @MarshalX in https://github.com/MarshalX/atproto/pull/72
-* Update Ruff; make _MANDATORY_HEADERS private; fix issues by @MarshalX in https://github.com/MarshalX/atproto/pull/73
-* Disable Cimon fail-on-error flag by @MarshalX in https://github.com/MarshalX/atproto/pull/74
-* Update lexicons fetched from 2768fb9 committed 2023-06-20T14:36:09Z by @MarshalX in https://github.com/MarshalX/atproto/pull/75
-* Fix dynamic versioning build backend by @MarshalX in https://github.com/MarshalX/atproto/pull/76
+* Update changelog for v0.0.14 by [@MarshalX](https://github.com/MarshalX) in [#70](https://github.com/MarshalX/atproto/pull/70)
+* Update Cimon by [@MarshalX](https://github.com/MarshalX) in [#71](https://github.com/MarshalX/atproto/pull/71)
+* Update lexicons fetched from 84032a6 committed 2023-06-12T21:51:38Z by [@MarshalX](https://github.com/MarshalX) in [#72](https://github.com/MarshalX/atproto/pull/72)
+* Update Ruff; make _MANDATORY_HEADERS private; fix issues by [@MarshalX](https://github.com/MarshalX) in [#73](https://github.com/MarshalX/atproto/pull/73)
+* Disable Cimon fail-on-error flag by [@MarshalX](https://github.com/MarshalX) in [#74](https://github.com/MarshalX/atproto/pull/74)
+* Update lexicons fetched from 2768fb9 committed 2023-06-20T14:36:09Z by [@MarshalX](https://github.com/MarshalX) in [#75](https://github.com/MarshalX/atproto/pull/75)
+* Fix dynamic versioning build backend by [@MarshalX](https://github.com/MarshalX) in [#76](https://github.com/MarshalX/atproto/pull/76)
 
 ## Version 0.0.14
 
 **10.06.2023**
 
-* Update changelog for v0.0.13 by @MarshalX in https://github.com/MarshalX/atproto/pull/60
-* Add Cimon in Detect Mode by @MarshalX in https://github.com/MarshalX/atproto/pull/63
-* Enable Cimon Prevent Mode by @MarshalX in https://github.com/MarshalX/atproto/pull/64
-* Add send_embed example by @MarshalX in https://github.com/MarshalX/atproto/pull/66
-* Update README by @MarshalX in https://github.com/MarshalX/atproto/pull/67
-* Update lexicons fetched from 8857fb0 committed 2023-06-09T13:21:09Z by @MarshalX in https://github.com/MarshalX/atproto/pull/68
-* Bump requests from 2.30.0 to 2.31.0 by @dependabot in https://github.com/MarshalX/atproto/pull/69
+* Update changelog for v0.0.13 by [@MarshalX](https://github.com/MarshalX) in [#60](https://github.com/MarshalX/atproto/pull/60)
+* Add Cimon in Detect Mode by [@MarshalX](https://github.com/MarshalX) in [#63](https://github.com/MarshalX/atproto/pull/63)
+* Enable Cimon Prevent Mode by [@MarshalX](https://github.com/MarshalX) in [#64](https://github.com/MarshalX/atproto/pull/64)
+* Add send_embed example by [@MarshalX](https://github.com/MarshalX) in [#66](https://github.com/MarshalX/atproto/pull/66)
+* Update README by [@MarshalX](https://github.com/MarshalX) in [#67](https://github.com/MarshalX/atproto/pull/67)
+* Update lexicons fetched from 8857fb0 committed 2023-06-09T13:21:09Z by [@MarshalX](https://github.com/MarshalX) in [#68](https://github.com/MarshalX/atproto/pull/68)
+* Bump requests from 2.30.0 to 2.31.0 by [@dependabot](https://github.com/dependabot) in [#69](https://github.com/MarshalX/atproto/pull/69)
 
 ## Version 0.0.13
 
 **03.06.2023**
 
-* Update changelog for v0.0.12 by @MarshalX in https://github.com/MarshalX/atproto/pull/58
-* Update lexicons (add admin.rebaseRepo) fetched from 4a6c976 committed 2023-05-30T15:50:46Z by @MarshalX in https://github.com/MarshalX/atproto/pull/59
+* Update changelog for v0.0.12 by [@MarshalX](https://github.com/MarshalX) in [#58](https://github.com/MarshalX/atproto/pull/58)
+* Update lexicons (add admin.rebaseRepo) fetched from 4a6c976 committed 2023-05-30T15:50:46Z by [@MarshalX](https://github.com/MarshalX) in [#59](https://github.com/MarshalX/atproto/pull/59)
 
 ## Version 0.0.12
 
 **01.06.2023**
 
-* Update changelog for v0.0.11 by @MarshalX in https://github.com/MarshalX/atproto/pull/55
-* Add mypy; fix types; fix error handling of requests by @MarshalX in https://github.com/MarshalX/atproto/pull/56
-* Increase max message size in Firehose by @MarshalX in https://github.com/MarshalX/atproto/pull/57
+* Update changelog for v0.0.11 by [@MarshalX](https://github.com/MarshalX) in [#55](https://github.com/MarshalX/atproto/pull/55)
+* Add mypy; fix types; fix error handling of requests by [@MarshalX](https://github.com/MarshalX) in [#56](https://github.com/MarshalX/atproto/pull/56)
+* Increase max message size in Firehose by [@MarshalX](https://github.com/MarshalX) in [#57](https://github.com/MarshalX/atproto/pull/57)
 
 ## Version 0.0.11
 
 **30.05.2023**
 
-* Update changelog for v0.0.10 by @MarshalX in https://github.com/MarshalX/atproto/pull/52
-* Keep Firehose open on invalid CBOR or DAG-CBOR by @MarshalX in https://github.com/MarshalX/atproto/pull/54
+* Update changelog for v0.0.10 by [@MarshalX](https://github.com/MarshalX) in [#52](https://github.com/MarshalX/atproto/pull/52)
+* Keep Firehose open on invalid CBOR or DAG-CBOR by [@MarshalX](https://github.com/MarshalX) in [#54](https://github.com/MarshalX/atproto/pull/54)
 
 ## Version 0.0.10
 
 **27.05.2023**
 
-* Update changelog for v0.0.9 by @MarshalX in https://github.com/MarshalX/atproto/pull/42
-* Add CLI for codegen by @MarshalX in https://github.com/MarshalX/atproto/pull/43
-* Update lexicons fetched from 743eaf1 committed 2023-05-26T00:04:10Z by @MarshalX in https://github.com/MarshalX/atproto/pull/44
-* Add Ruff; init tests; fix code style and type hints by @MarshalX in https://github.com/MarshalX/atproto/pull/45
-* Move docs dependencies to separated group by @MarshalX in https://github.com/MarshalX/atproto/pull/46
-* Fix Ruff for root dir by @MarshalX in https://github.com/MarshalX/atproto/pull/48
-* Update lexicons fetched from c62964b committed 2023-05-26T00:22:05Z by @MarshalX in https://github.com/MarshalX/atproto/pull/49
-* Fix .gitignore by @MarshalX in https://github.com/MarshalX/atproto/pull/50
-* Custom feed generators by @MarshalX in https://github.com/MarshalX/atproto/pull/47
-* Fix firehose params by @MarshalX in https://github.com/MarshalX/atproto/pull/51
+* Update changelog for v0.0.9 by [@MarshalX](https://github.com/MarshalX) in [#42](https://github.com/MarshalX/atproto/pull/42)
+* Add CLI for codegen by [@MarshalX](https://github.com/MarshalX) in [#43](https://github.com/MarshalX/atproto/pull/43)
+* Update lexicons fetched from 743eaf1 committed 2023-05-26T00:04:10Z by [@MarshalX](https://github.com/MarshalX) in [#44](https://github.com/MarshalX/atproto/pull/44)
+* Add Ruff; init tests; fix code style and type hints by [@MarshalX](https://github.com/MarshalX) in [#45](https://github.com/MarshalX/atproto/pull/45)
+* Move docs dependencies to separated group by [@MarshalX](https://github.com/MarshalX) in [#46](https://github.com/MarshalX/atproto/pull/46)
+* Fix Ruff for root dir by [@MarshalX](https://github.com/MarshalX) in [#48](https://github.com/MarshalX/atproto/pull/48)
+* Update lexicons fetched from c62964b committed 2023-05-26T00:22:05Z by [@MarshalX](https://github.com/MarshalX) in [#49](https://github.com/MarshalX/atproto/pull/49)
+* Fix .gitignore by [@MarshalX](https://github.com/MarshalX) in [#50](https://github.com/MarshalX/atproto/pull/50)
+* Custom feed generators by [@MarshalX](https://github.com/MarshalX) in [#47](https://github.com/MarshalX/atproto/pull/47)
+* Fix firehose params by [@MarshalX](https://github.com/MarshalX) in [#51](https://github.com/MarshalX/atproto/pull/51)
 
 ## Version 0.0.9
 
 **25.05.2023**
 
-* Update changelog for v0.0.8 by @MarshalX in https://github.com/MarshalX/atproto/pull/39
-* Add "delete_post" and "repost" methods by @codybraun in https://github.com/MarshalX/atproto/pull/40
-* Fix request error handling by @MarshalX in https://github.com/MarshalX/atproto/pull/41
+* Update changelog for v0.0.8 by [@MarshalX](https://github.com/MarshalX) in [#39](https://github.com/MarshalX/atproto/pull/39)
+* Add "delete_post" and "repost" methods by [@codybraun](https://github.com/codybraun) in [#40](https://github.com/MarshalX/atproto/pull/40)
+* Fix request error handling by [@MarshalX](https://github.com/MarshalX) in [#41](https://github.com/MarshalX/atproto/pull/41)
 
 ## Version 0.0.8
 
 **23.05.2023**
 
-* update changelog for v0.0.7 by @MarshalX in https://github.com/MarshalX/atproto/pull/34
-* Fix duplication of field descriptions in docs by @MarshalX in https://github.com/MarshalX/atproto/pull/35
-* Add support for custom feeds. Update lexicons fetched from d661a60 committed 2023-05-23T05:02:36Z by @MarshalX in https://github.com/MarshalX/atproto/pull/36
-* Add Firehose (data streaming) by @MarshalX in https://github.com/MarshalX/atproto/pull/31
-* Add forgotten models by @MarshalX in https://github.com/MarshalX/atproto/pull/37
-* Fix link format in docs by @MarshalX in https://github.com/MarshalX/atproto/pull/38
+* update changelog for v0.0.7 by [@MarshalX](https://github.com/MarshalX) in [#34](https://github.com/MarshalX/atproto/pull/34)
+* Fix duplication of field descriptions in docs by [@MarshalX](https://github.com/MarshalX) in [#35](https://github.com/MarshalX/atproto/pull/35)
+* Add support for custom feeds. Update lexicons fetched from d661a60 committed 2023-05-23T05:02:36Z by [@MarshalX](https://github.com/MarshalX) in [#36](https://github.com/MarshalX/atproto/pull/36)
+* Add Firehose (data streaming) by [@MarshalX](https://github.com/MarshalX) in [#31](https://github.com/MarshalX/atproto/pull/31)
+* Add forgotten models by [@MarshalX](https://github.com/MarshalX) in [#37](https://github.com/MarshalX/atproto/pull/37)
+* Fix link format in docs by [@MarshalX](https://github.com/MarshalX) in [#38](https://github.com/MarshalX/atproto/pull/38)
 
 ## Version 0.0.7
 
 **20.05.2023**
 
-* update changelog for v0.0.6 by @MarshalX in https://github.com/MarshalX/atproto/pull/29
-* Update docs by @MarshalX in https://github.com/MarshalX/atproto/pull/30
-* Short typing import by @MarshalX in https://github.com/MarshalX/atproto/pull/32
-* Fix session refreshing by @MarshalX in https://github.com/MarshalX/atproto/pull/33
+* update changelog for v0.0.6 by [@MarshalX](https://github.com/MarshalX) in [#29](https://github.com/MarshalX/atproto/pull/29)
+* Update docs by [@MarshalX](https://github.com/MarshalX) in [#30](https://github.com/MarshalX/atproto/pull/30)
+* Short typing import by [@MarshalX](https://github.com/MarshalX) in [#32](https://github.com/MarshalX/atproto/pull/32)
+* Fix session refreshing by [@MarshalX](https://github.com/MarshalX) in [#33](https://github.com/MarshalX/atproto/pull/33)
 
 ## Version 0.0.6
 
 **19.05.2023**
 
-* update changelog for v0.0.5 by @MarshalX in https://github.com/MarshalX/atproto/pull/24
-* Update docs domain; improve open graph by @MarshalX in https://github.com/MarshalX/atproto/pull/25
-* Don't lock dependencies so strictly; add pyjwt by @MarshalX in https://github.com/MarshalX/atproto/pull/26
-* Add session refreshing by @MarshalX in https://github.com/MarshalX/atproto/pull/27
-* Update lexicons fetched from cf36b36 committed 2023-05-18T22:57:59Z by @MarshalX in https://github.com/MarshalX/atproto/pull/28
+* update changelog for v0.0.5 by [@MarshalX](https://github.com/MarshalX) in [#24](https://github.com/MarshalX/atproto/pull/24)
+* Update docs domain; improve open graph by [@MarshalX](https://github.com/MarshalX) in [#25](https://github.com/MarshalX/atproto/pull/25)
+* Don't lock dependencies so strictly; add pyjwt by [@MarshalX](https://github.com/MarshalX) in [#26](https://github.com/MarshalX/atproto/pull/26)
+* Add session refreshing by [@MarshalX](https://github.com/MarshalX) in [#27](https://github.com/MarshalX/atproto/pull/27)
+* Update lexicons fetched from cf36b36 committed 2023-05-18T22:57:59Z by [@MarshalX](https://github.com/MarshalX) in [#28](https://github.com/MarshalX/atproto/pull/28)
 
 ## Version 0.0.5
 
 **17.05.2023**
 
-* update changelog for v0.0.4 by @MarshalX in https://github.com/MarshalX/atproto/pull/14
-* Add CAR files support by @MarshalX in https://github.com/MarshalX/atproto/pull/17
-* Update lexicons fetched from 1cbffd6 committed 2023-05-12T21:45:15Z (lists, mute lists preferences, repo rebase, and more), by @MarshalX in https://github.com/MarshalX/atproto/pull/18
-* Fix spacing in examples by @prtolem in https://github.com/MarshalX/atproto/pull/16
-* bump version by @MarshalX in https://github.com/MarshalX/atproto/pull/19
-* Add PyPI publishing to release workflow by @MarshalX in https://github.com/MarshalX/atproto/pull/21
-* Dynamic versioning from Git Tags by @MarshalX in https://github.com/MarshalX/atproto/pull/22
-* fix creating of GitHub Release by @MarshalX in https://github.com/MarshalX/atproto/pull/23
+* update changelog for v0.0.4 by [@MarshalX](https://github.com/MarshalX) in [#14](https://github.com/MarshalX/atproto/pull/14)
+* Add CAR files support by [@MarshalX](https://github.com/MarshalX) in [#17](https://github.com/MarshalX/atproto/pull/17)
+* Update lexicons fetched from 1cbffd6 committed 2023-05-12T21:45:15Z (lists, mute lists preferences, repo rebase, and more), by [@MarshalX](https://github.com/MarshalX) in [#18](https://github.com/MarshalX/atproto/pull/18)
+* Fix spacing in examples by [@prtolem](https://github.com/prtolem) in [#16](https://github.com/MarshalX/atproto/pull/16)
+* bump version by [@MarshalX](https://github.com/MarshalX) in [#19](https://github.com/MarshalX/atproto/pull/19)
+* Add PyPI publishing to release workflow by [@MarshalX](https://github.com/MarshalX) in [#21](https://github.com/MarshalX/atproto/pull/21)
+* Dynamic versioning from Git Tags by [@MarshalX](https://github.com/MarshalX) in [#22](https://github.com/MarshalX/atproto/pull/22)
+* fix creating of GitHub Release by [@MarshalX](https://github.com/MarshalX) in [#23](https://github.com/MarshalX/atproto/pull/23)
 
 ## Version 0.0.4
 
 **12.05.2023**
 
-* update changes for 0.0.3 by @MarshalX in https://github.com/MarshalX/atproto/pull/10
-* Update logo by @MarshalX in https://github.com/MarshalX/atproto/pull/11
-* add example with rich text; fix generation of system type field by @MarshalX in https://github.com/MarshalX/atproto/pull/13
+* update changes for 0.0.3 by [@MarshalX](https://github.com/MarshalX) in [#10](https://github.com/MarshalX/atproto/pull/10)
+* Update logo by [@MarshalX](https://github.com/MarshalX) in [#11](https://github.com/MarshalX/atproto/pull/11)
+* add example with rich text; fix generation of system type field by [@MarshalX](https://github.com/MarshalX) in [#13](https://github.com/MarshalX/atproto/pull/13)
 * fix sending of facets
 
 ## Version 0.0.3
 
 **08.05.2023**
 
-* add GHA workflow to create release on tag creation by @roj1512 in https://github.com/MarshalX/atproto/pull/1
-* Add notifications example by @MarshalX in https://github.com/MarshalX/atproto/pull/2
-* simplify and fix process_notifications example by @MarshalX in https://github.com/MarshalX/atproto/pull/4
-* add ability to access to model's fields by [] by @MarshalX in https://github.com/MarshalX/atproto/pull/5
-* add deserialization of records by @MarshalX in https://github.com/MarshalX/atproto/pull/6
-* add home_timeline and profile_posts examples by @MarshalX in https://github.com/MarshalX/atproto/pull/7
-* publish package with OpenID Connect by @MarshalX in https://github.com/MarshalX/atproto/pull/8
-* bump version to 0.0.3 by @MarshalX in https://github.com/MarshalX/atproto/pull/9
+* add GHA workflow to create release on tag creation by [@roj1512](https://github.com/roj1512) in [#1](https://github.com/MarshalX/atproto/pull/1)
+* Add notifications example by [@MarshalX](https://github.com/MarshalX) in [#2](https://github.com/MarshalX/atproto/pull/2)
+* simplify and fix process_notifications example by [@MarshalX](https://github.com/MarshalX) in [#4](https://github.com/MarshalX/atproto/pull/4)
+* add ability to access to model's fields by [] by [@MarshalX](https://github.com/MarshalX) in [#5](https://github.com/MarshalX/atproto/pull/5)
+* add deserialization of records by [@MarshalX](https://github.com/MarshalX) in [#6](https://github.com/MarshalX/atproto/pull/6)
+* add home_timeline and profile_posts examples by [@MarshalX](https://github.com/MarshalX) in [#7](https://github.com/MarshalX/atproto/pull/7)
+* publish package with OpenID Connect by [@MarshalX](https://github.com/MarshalX) in [#8](https://github.com/MarshalX/atproto/pull/8)
+* bump version to 0.0.3 by [@MarshalX](https://github.com/MarshalX) in [#9](https://github.com/MarshalX/atproto/pull/9)
 
 ## Version 0.0.2
 

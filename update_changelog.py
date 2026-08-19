@@ -3,6 +3,7 @@
 
 import datetime as dt
 import os
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -18,6 +19,9 @@ _TOP_HEADING = '# Change Log'
 
 _DROP_HEADING = "## What's Changed"
 _FOOTER_MARKERS = ('**Full Changelog**', '## New Contributors')
+
+_PR_URL_RE = re.compile(r'(?<!\]\()https://github\.com/([\w.-]+)/([\w.-]+)/(pull|issues)/(\d+)\b')
+_MENTION_RE = re.compile(r'(?<![\w/\[])@([A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?)\b(\[bot\])?')
 
 
 def _emit_github_error(message: str, title: str = 'update_changelog.py failed') -> None:
@@ -87,6 +91,23 @@ def _fetch_release(tag: str) -> dict:
     return response.json()
 
 
+def _link_pr_url(match: re.Match) -> str:
+    owner, repo, kind, number = match.groups()
+    label = f'#{number}' if f'{owner}/{repo}' == _DEFAULT_REPO else f'{owner}/{repo}#{number}'
+    return f'[{label}](https://github.com/{owner}/{repo}/{kind}/{number})'
+
+
+def _link_mention(match: re.Match) -> str:
+    name, bot_suffix = match.groups()
+    profile = f'https://github.com/apps/{name}' if bot_suffix else f'https://github.com/{name}'
+    return f'[@{name}{bot_suffix or ""}]({profile})'
+
+
+def _linkify(body: str) -> str:
+    """Turn bare PR/issue URLs and @mentions into explicit Markdown links."""
+    return _MENTION_RE.sub(_link_mention, _PR_URL_RE.sub(_link_pr_url, body))
+
+
 def _clean_body(body: str) -> str:
     """Strip GitHub's auto-notes scaffolding (``## What's Changed`` header and footer)."""
     lines = body.replace('\r\n', '\n').split('\n')
@@ -100,7 +121,7 @@ def _clean_body(body: str) -> str:
     # Drop the leading heading
     lines = [line for line in lines if line.strip() != _DROP_HEADING]
 
-    return '\n'.join(lines).strip()
+    return _linkify('\n'.join(lines).strip())
 
 
 def _build_section(version: str, date: str, body: str) -> str:
