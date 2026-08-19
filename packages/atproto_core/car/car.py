@@ -55,9 +55,9 @@ class CAR:
             # The first element of the CAR roots metadata array must be the CID of the most relevant Commit object.
             # For a generic export, this is the current (most recent) commit.
             # Additional CIDs may also be present in the roots array, with (for now) undefined meaning or order.
-            root: CID = CID.decode(roots[0])
+            root: CID = CID.from_decoded_bytes(roots[0])
         else:
             raise InvalidCARFile('Invalid CAR file. Expected at least one root.')
 
-        blocks = {CID.decode(cid): block for cid, block in blocks.items()}
+        blocks = {CID.from_decoded_bytes(cid): block for cid, block in blocks.items()}
         return cls(root=root, blocks=blocks)

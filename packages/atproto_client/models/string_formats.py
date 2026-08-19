@@ -64,14 +64,31 @@ AT_URI_RE = re.compile(
 )
 
 
+def _is_strict(info: ValidationInfo) -> bool:
+    """Whether the caller opted into string format validation through the validation context.
+
+    Runs for every string format field of every model, so the common `dict` context is checked
+    without the (comparatively expensive) `Mapping` ABC lookup.
+    """
+    context = info.context if info else None
+    if isinstance(context, dict):
+        return bool(context.get(_OPT_IN_KEY, False))
+
+    return isinstance(context, Mapping) and bool(context.get(_OPT_IN_KEY, False))
+
+
 class _NamedValidator:
     """Decorator to add a __str__ attribute to a validation function."""
 
     def __init__(self, validate_fn: Callable[..., str]) -> None:
         self.validate_fn = validate_fn
+        # the opt-in gate is applied here, so skip the `only_validate_if_strict` wrapper frame
+        self._strict_fn = getattr(validate_fn, '__wrapped__', validate_fn)
 
     def __call__(self, v: str, info: ValidationInfo) -> str:
-        return self.validate_fn(v, info)
+        if _is_strict(info):
+            return cast('core_schema.WithInfoValidatorFunction', self._strict_fn)(v, info)
+        return v
 
     def __str__(self) -> str:
         func_str = f':func:`string_formats.{self.validate_fn.__name__}`'
@@ -84,7 +101,7 @@ def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., st
     @wraps(validate_fn)
     def wrapper(v: str, info: ValidationInfo) -> str:
         """Could likely be generalized to support arbitrary signatures."""
-        if info and isinstance(info.context, Mapping) and info.context.get(_OPT_IN_KEY, False):
+        if _is_strict(info):
             return cast('core_schema.WithInfoValidatorFunction', validate_fn)(v, info)
         return v
 
