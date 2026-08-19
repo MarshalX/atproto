@@ -66,5 +66,7 @@ UnknownRecordTypePydantic = te.Annotated[
     ],
     Field(discriminator='py_type'),
 ]
-UnknownType: te.TypeAlias = t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType']
+UnknownType: te.TypeAlias = te.Annotated[
+    t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType'], Field(union_mode='left_to_right')
+]
 UnknownInputType: te.TypeAlias = t.Union[UnknownType, t.Dict[str, t.Any]]

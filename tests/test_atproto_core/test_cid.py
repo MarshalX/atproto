@@ -1,5 +1,9 @@
+import libipld
+from atproto_core.car import CAR
 from atproto_core.cid import CID, CIDType
 from pydantic import BaseModel
+
+from .car_builder import encode_car, make_cid
 
 
 def test_cid_decode_str() -> None:
@@ -75,3 +79,34 @@ def test_cid_type_bytes() -> None:
 
     model_json = model.model_dump_json()
     assert model_json == f'{{"cid":"{model.cid}"}}'
+
+
+def test_cid_from_decoded_bytes_lazy_fields() -> None:
+    test_cid_bytes = make_cid(libipld.encode_dag_cbor({'text': 'synthetic block'}))
+    test_cid_str = libipld.encode_cid(test_cid_bytes)
+
+    cid = CID.from_decoded_bytes(test_cid_bytes)
+
+    assert cid._version is None  # not decoded until asked for
+    assert cid.version == 1
+    assert cid.codec == 113
+    assert cid.hash == CID.decode(test_cid_bytes).hash
+
+    assert cid.encode() == test_cid_str
+    assert cid == test_cid_str
+    assert cid == CID.decode(test_cid_bytes)
+    assert hash(cid) == hash(CID.decode(test_cid_bytes))
+
+
+def test_car_blocks_lookup_by_cid_and_str() -> None:
+    root_block = {'text': 'synthetic root block'}
+    child_block = {'text': 'synthetic child block'}
+    car = CAR.from_bytes(encode_car([root_block, child_block]))
+
+    assert len(car.blocks) == 2
+    assert car.root == libipld.encode_cid(make_cid(libipld.encode_dag_cbor(root_block)))
+
+    # a CID key must resolve both as itself and by its stringified form
+    for block_cid in car.blocks:
+        assert car.blocks[block_cid] in (root_block, child_block)
+        assert car.blocks[str(block_cid)] == car.blocks[block_cid]
