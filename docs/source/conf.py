@@ -13,6 +13,7 @@
 import os
 import sys
 import typing as t
+from pathlib import Path
 
 if t.TYPE_CHECKING:
     from sphinx.application import Sphinx
@@ -56,7 +57,16 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
+# The generated `atproto/` tree is kept only for model pages; the rest duplicates the handwritten pages.
+_GENERATED_DIR = Path(__file__).parent / 'atproto'
+exclude_patterns = [
+    f'atproto/{path.name}'
+    for path in sorted(_GENERATED_DIR.glob('*.rst'))
+    if not path.stem.startswith('atproto_client.models.')
+]
+
+# Headings and labels of the included README.md, and names shared by many modules.
+suppress_warnings = ['myst.header', 'autosectionlabel.*', 'ref.python']
 
 # -- MyST-Parser ---------------------------------------------------
 

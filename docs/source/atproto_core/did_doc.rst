@@ -1,7 +1,7 @@
 DID Document
 ============
 
-Check out how to resolve a DID Document in :doc:`atproto_identity/identity`.
+Check out how to resolve a DID Document in :doc:`../atproto_identity/index`.
 
 After a DID document has been resolved, atproto-specific information needs to be extracted. This parsing process is agnostic to the DID method used to resolve the document.
 

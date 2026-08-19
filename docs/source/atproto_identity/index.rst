@@ -25,11 +25,6 @@ Typically, you don't need to care about the details of how the Identity module w
 
 Learn how to use cache to speed up the resolution process in the :doc:`cache` section.
 
-.. automodule:: atproto_identity.resolver
-   :members:
-   :undoc-members:
-   :inherited-members:
-
 Submodules
 ----------
 

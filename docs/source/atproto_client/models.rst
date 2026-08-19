@@ -18,8 +18,15 @@ Submodules
    ../atproto/atproto_client.models.chat
    ../atproto/atproto_client.models.site
    ../atproto/atproto_client.models.tools
+   ../atproto/atproto_client.models.internal
+   ../atproto/atproto_client.models.network
    ../atproto/atproto_client.models.languages
    ../atproto/atproto_client.models.blob_ref
    ../atproto/atproto_client.models.dot_dict
    ../atproto/atproto_client.models.utils
    ../atproto/atproto_client.models.string_formats
+   ../atproto/atproto_client.models.common
+   ../atproto/atproto_client.models.models_loader
+   ../atproto/atproto_client.models.type_conversion
+   ../atproto/atproto_client.models.unknown_type
+   ../atproto/atproto_client.models.unknown_union
