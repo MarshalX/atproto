@@ -2,7 +2,7 @@ import typing as t
 
 import typing_extensions as te
 from atproto_core.cid import CID
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 
 class IpldLink(BaseModel):
@@ -23,6 +23,17 @@ class BlobRef(BaseModel):
     ref: t.Union[str, bytes, IpldLink]  #: CID.
 
     py_type: te.Literal['blob'] = Field(default='blob', alias='$type')
+
+    @field_serializer('ref', when_used='json')
+    def _serialize_ref(self, ref: t.Union[str, bytes, IpldLink]) -> t.Union[str, t.Dict[str, str]]:
+        """Render a raw CID as the atproto JSON link. `model_dump` keeps the bytes as they are."""
+        if isinstance(ref, bytes):
+            return {'$link': str(CID.decode(ref))}
+
+        if isinstance(ref, IpldLink):
+            return {'$link': ref.link}
+
+        return ref
 
     @property
     def cid(self) -> 'CID':
@@ -65,7 +76,7 @@ class BlobRef(BaseModel):
         if self.is_json_representation:
             return BlobRef(mime_type=self.mime_type, size=self.size, ref=IpldLink(link=self.ref.link))
 
-        return BlobRef(mime_type=self.mime_type, size=self.size, ref=IpldLink(link=self.ref))
+        return BlobRef(mime_type=self.mime_type, size=self.size, ref=IpldLink(link=str(self.cid)))
 
     def to_bytes_representation(self) -> 'BlobRef':
         """Get bytes representation.
