@@ -86,3 +86,18 @@ def test_at_uri_from_str_roundtrip(valid_at_uri: str) -> None:
     """Test str -> AtUri.from_str -> str roundtrip with valid data."""
     round_tripped_at_uri = str(AtUri.from_str(valid_at_uri))
     assert round_tripped_at_uri.startswith(valid_at_uri)  # trailing slash is okay
+
+
+def test_at_uri_href() -> None:
+    test_uri = 'at://did:plc:poqvcn9iqfkgukdvqvb2qzba/app.bsky.feed.post/1jlmwihiomm9m'
+
+    at_uri = AtUri.from_str(test_uri)
+    assert at_uri.href == test_uri
+    assert at_uri.href == str(at_uri)
+
+
+def test_at_uri_http_is_deprecated() -> None:
+    at_uri = AtUri.from_str('at://did:plc:poqvcn9iqfkgukdvqvb2qzba/app.bsky.feed.post/1jlmwihiomm9m')
+
+    with pytest.deprecated_call():
+        assert at_uri.http == at_uri.href
