@@ -10,7 +10,7 @@ from atproto_client.exceptions import (
     ModelError,
     ModelFieldNotFoundError,
 )
-from atproto_client.models.base import ModelBase
+from atproto_client.models.base import ModelBase, RecordModelBase
 from atproto_client.models.blob_ref import BlobRef
 from atproto_client.models.dot_dict import DotDict
 from atproto_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
@@ -20,6 +20,7 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 M = t.TypeVar('M')
+R = t.TypeVar('R', bound=RecordModelBase)
 ModelData: te.TypeAlias = t.Union[
     M, t.Dict[str, t.Any], None
 ]  # we assume that dict is JSON object. not list or primitive
@@ -161,13 +162,41 @@ def load_json(json_data: t.Union[str, bytes], strict: bool = True) -> t.Optional
         return None
 
 
-def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[str, types.ModuleType]) -> bool:
+class _RecordModule(t.Protocol[R]):
+    """Protocol of a generated lexicon module that defines a Record."""
+
+    Record: t.Type[R]
+
+
+@t.overload
+def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: _RecordModule[R]) -> te.TypeGuard[R]: ...
+
+
+@t.overload
+def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Type[R]) -> te.TypeGuard[R]: ...
+
+
+@t.overload
+def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[str, types.ModuleType]) -> bool: ...
+
+
+def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Any) -> bool:
     """Verify that the model is the expected Record type.
+
+    Note:
+        Passing a Python module or a Record class narrows the type of `model` for static type checkers.
+        Narrowing is not performed for the NSID form because a string carries no type information.
+
+    Warning:
+        A custom or extended record that failed validation is decoded to
+        :obj:`atproto_client.models.dot_dict.DotDict`.
+        Such a model matches its own type by NSID, so the narrowed type is not guaranteed
+        to be an instance of the Record class in runtime.
 
     Args:
         model: Model to be verified.
         expected_type: Excepted type.
-            Could be NSID or Python Module.
+            Could be NSID, Python Module, or Record class.
 
     Example:
         >>> from atproto import Client, models
@@ -179,17 +208,22 @@ def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[st
         >>> is_record_type(record.value, ids.AppBskyFeedPost)
         >>> # using Python module:
         >>> is_record_type(record.value, models.AppBskyFeedPost)
+        >>> # using Record class:
+        >>> is_record_type(record.value, models.AppBskyFeedPost.Record)
 
     Returns:
         :obj:`bool`: Is record or not.
     """
     if isinstance(expected_type, types.ModuleType):
         # for now, all records are defined in the Record class
-        if not hasattr(expected_type, 'Record'):
-            return False
+        expected_type = getattr(expected_type, 'Record', None)
 
-        if hasattr(expected_type, 'Record'):
-            expected_type = expected_type.Record.model_fields['py_type'].default
+    if isinstance(expected_type, type) and issubclass(expected_type, BaseModel):
+        py_type_field = expected_type.model_fields.get('py_type')
+        expected_type = py_type_field.default if py_type_field else None
+
+    if not isinstance(expected_type, str):
+        return False
 
     if isinstance(model, DotDict):  # custom record
         try:
