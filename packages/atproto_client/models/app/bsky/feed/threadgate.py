@@ -56,21 +56,22 @@ class Record(base.RecordModelBase):
 
     created_at: string_formats.DateTime  #: Created at.
     post: string_formats.AtUri  #: Reference (AT-URI) to the post record.
-    allow: t.Optional[
-        t.List[
-            te.Annotated[
-                t.Union[
-                    'models.AppBskyFeedThreadgate.MentionRule',
-                    'models.AppBskyFeedThreadgate.FollowerRule',
-                    'models.AppBskyFeedThreadgate.FollowingRule',
-                    'models.AppBskyFeedThreadgate.ListRule',
-                ],
-                Field(discriminator='py_type'),
+    allow: te.Annotated[
+        t.Optional[
+            t.List[
+                te.Annotated[
+                    t.Union[
+                        'models.AppBskyFeedThreadgate.MentionRule',
+                        'models.AppBskyFeedThreadgate.FollowerRule',
+                        'models.AppBskyFeedThreadgate.FollowingRule',
+                        'models.AppBskyFeedThreadgate.ListRule',
+                    ],
+                    Field(discriminator='py_type'),
+                ]
             ]
-        ]
-    ] = Field(
-        max_length=5
-    )  #: List of rules defining who can reply to this post. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
+        ],
+        Field(max_length=5),
+    ] = None  #: List of rules defining who can reply to this post. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
     hidden_replies: te.Annotated[t.Optional[t.List[string_formats.AtUri]], Field(max_length=300)] = (
         None  #: List of hidden reply URIs.
     )

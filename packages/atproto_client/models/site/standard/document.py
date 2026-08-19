@@ -56,7 +56,7 @@ class Record(base.RecordModelBase):
     path: t.Optional[str] = (
         None  #: Combine with site or publication url to construct a canonical URL to the document. Prepend with a leading slash.
     )
-    tags: t.Optional[t.List[str]] = (
+    tags: t.Optional[t.List[te.Annotated[str, Field(max_length=1280)]]] = (
         None  #: Array of strings used to tag or categorize the document. Avoid prepending tags with hashtags.
     )
     text_content: t.Optional[str] = (

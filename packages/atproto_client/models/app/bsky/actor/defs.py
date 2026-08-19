@@ -354,7 +354,7 @@ class ThreadViewPref(base.ModelBase):
 class InterestsPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`."""
 
-    tags: t.List[str] = Field(
+    tags: t.List[te.Annotated[str, Field(max_length=640)]] = Field(
         max_length=100
     )  #: A list of tags which describe the account owner's interests gathered during onboarding.
 
@@ -432,9 +432,9 @@ class BskyAppStatePref(base.ModelBase):
     nuxs: te.Annotated[t.Optional[t.List['models.AppBskyActorDefs.Nux']], Field(max_length=100)] = (
         None  #: Storage for NUXs the user has encountered.
     )
-    queued_nudges: te.Annotated[t.Optional[t.List[str]], Field(max_length=1000)] = (
-        None  #: An array of tokens which identify nudges (modals, popups, tours, highlight dots) that should be shown to the user.
-    )
+    queued_nudges: te.Annotated[
+        t.Optional[t.List[te.Annotated[str, Field(max_length=100)]]], Field(max_length=1000)
+    ] = None  #: An array of tokens which identify nudges (modals, popups, tours, highlight dots) that should be shown to the user.
 
     py_type: t.Literal['app.bsky.actor.defs#bskyAppStatePref'] = Field(
         default='app.bsky.actor.defs#bskyAppStatePref', alias='$type', frozen=True
@@ -490,26 +490,28 @@ class LiveEventPreferences(base.ModelBase):
 class PostInteractionSettingsPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`. Default post interaction settings for the account. These values should be applied as default values when creating new posts. These refs should mirror the threadgate and postgate records exactly."""
 
-    postgate_embedding_rules: t.Optional[
-        t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
-    ] = Field(
-        max_length=5
-    )  #: Matches postgate record. List of rules defining who can embed this users posts. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
-    threadgate_allow_rules: t.Optional[
-        t.List[
-            te.Annotated[
-                t.Union[
-                    'models.AppBskyFeedThreadgate.MentionRule',
-                    'models.AppBskyFeedThreadgate.FollowerRule',
-                    'models.AppBskyFeedThreadgate.FollowingRule',
-                    'models.AppBskyFeedThreadgate.ListRule',
-                ],
-                Field(discriminator='py_type'),
+    postgate_embedding_rules: te.Annotated[
+        t.Optional[
+            t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
+        ],
+        Field(max_length=5),
+    ] = None  #: Matches postgate record. List of rules defining who can embed this users posts. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
+    threadgate_allow_rules: te.Annotated[
+        t.Optional[
+            t.List[
+                te.Annotated[
+                    t.Union[
+                        'models.AppBskyFeedThreadgate.MentionRule',
+                        'models.AppBskyFeedThreadgate.FollowerRule',
+                        'models.AppBskyFeedThreadgate.FollowingRule',
+                        'models.AppBskyFeedThreadgate.ListRule',
+                    ],
+                    Field(discriminator='py_type'),
+                ]
             ]
-        ]
-    ] = Field(
-        max_length=5
-    )  #: Matches threadgate record. List of rules defining who can reply to this users posts. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
+        ],
+        Field(max_length=5),
+    ] = None  #: Matches threadgate record. List of rules defining who can reply to this users posts. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
 
     py_type: t.Literal['app.bsky.actor.defs#postInteractionSettingsPref'] = Field(
         default='app.bsky.actor.defs#postInteractionSettingsPref', alias='$type', frozen=True

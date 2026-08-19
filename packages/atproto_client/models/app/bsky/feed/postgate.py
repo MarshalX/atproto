@@ -33,11 +33,12 @@ class Record(base.RecordModelBase):
     detached_embedding_uris: te.Annotated[t.Optional[t.List[string_formats.AtUri]], Field(max_length=50)] = (
         None  #: List of AT-URIs embedding this post that the author has detached from.
     )
-    embedding_rules: t.Optional[
-        t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
-    ] = Field(
-        max_length=5
-    )  #: List of rules defining who can embed this post. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
+    embedding_rules: te.Annotated[
+        t.Optional[
+            t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
+        ],
+        Field(max_length=5),
+    ] = None  #: List of rules defining who can embed this post. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
 
     py_type: t.Literal['app.bsky.feed.postgate'] = Field(default='app.bsky.feed.postgate', alias='$type', frozen=True)
 

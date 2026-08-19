@@ -43,22 +43,28 @@ class Draft(base.ModelBase):
     langs: te.Annotated[t.Optional[t.List[string_formats.Language]], Field(max_length=3)] = (
         None  #: Indicates human language of posts primary text content.
     )
-    postgate_embedding_rules: t.Optional[
-        t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
-    ] = Field(max_length=5)  #: Embedding rules for the postgates to be created when this draft is published.
-    threadgate_allow: t.Optional[
-        t.List[
-            te.Annotated[
-                t.Union[
-                    'models.AppBskyFeedThreadgate.MentionRule',
-                    'models.AppBskyFeedThreadgate.FollowerRule',
-                    'models.AppBskyFeedThreadgate.FollowingRule',
-                    'models.AppBskyFeedThreadgate.ListRule',
-                ],
-                Field(discriminator='py_type'),
+    postgate_embedding_rules: te.Annotated[
+        t.Optional[
+            t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
+        ],
+        Field(max_length=5),
+    ] = None  #: Embedding rules for the postgates to be created when this draft is published.
+    threadgate_allow: te.Annotated[
+        t.Optional[
+            t.List[
+                te.Annotated[
+                    t.Union[
+                        'models.AppBskyFeedThreadgate.MentionRule',
+                        'models.AppBskyFeedThreadgate.FollowerRule',
+                        'models.AppBskyFeedThreadgate.FollowingRule',
+                        'models.AppBskyFeedThreadgate.ListRule',
+                    ],
+                    Field(discriminator='py_type'),
+                ]
             ]
-        ]
-    ] = Field(max_length=5)  #: Allow-rules for the threadgate to be created when this draft is published.
+        ],
+        Field(max_length=5),
+    ] = None  #: Allow-rules for the threadgate to be created when this draft is published.
 
     py_type: t.Literal['app.bsky.draft.defs#draft'] = Field(
         default='app.bsky.draft.defs#draft', alias='$type', frozen=True
@@ -139,8 +145,9 @@ class DraftEmbedGallery(base.ModelBase):
     )
 
 
-DraftEmbedGalleryItems = t.List[
-    te.Annotated[t.Union['models.AppBskyDraftDefs.DraftEmbedImage'], Field(discriminator='py_type')]
+DraftEmbedGalleryItems = te.Annotated[
+    t.List[te.Annotated[t.Union['models.AppBskyDraftDefs.DraftEmbedImage'], Field(discriminator='py_type')]],
+    Field(max_length=20),
 ]
 
 

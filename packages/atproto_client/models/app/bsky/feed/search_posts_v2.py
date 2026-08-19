@@ -34,7 +34,7 @@ class Params(base.ParamsModelBase):
     exclude_embedded_at_uris: t.Optional[t.List[string_formats.AtUri]] = (
         None  #: Exclude posts that embed any of these AT URIs.
     )
-    exclude_hashtags: t.Optional[t.List[str]] = (
+    exclude_hashtags: t.Optional[t.List[te.Annotated[str, Field(max_length=640)]]] = (
         None  #: Exclude posts tagged with any of these hashtags. Do not include the hash (#) prefix.
     )
     exclude_languages: t.Optional[t.List[string_formats.Language]] = (
@@ -48,7 +48,7 @@ class Params(base.ParamsModelBase):
     following: t.Optional[bool] = None  #: Include only posts from accounts followed by the viewer.
     has_media: t.Optional[bool] = None  #: Include only posts with media.
     has_video: t.Optional[bool] = None  #: Include only posts with video.
-    hashtags: t.Optional[t.List[str]] = (
+    hashtags: t.Optional[t.List[te.Annotated[str, Field(max_length=640)]]] = (
         None  #: Include posts tagged with any of these hashtags. Do not include the hash (#) prefix.
     )
     languages: t.Optional[t.List[string_formats.Language]] = (
@@ -97,7 +97,7 @@ class ParamsDict(t.TypedDict):
         t.Optional[t.List[string_formats.AtUri]]
     ]  #: Exclude posts that embed any of these AT URIs.
     exclude_hashtags: te.NotRequired[
-        t.Optional[t.List[str]]
+        t.Optional[t.List[te.Annotated[str, Field(max_length=640)]]]
     ]  #: Exclude posts tagged with any of these hashtags. Do not include the hash (#) prefix.
     exclude_languages: te.NotRequired[
         t.Optional[t.List[string_formats.Language]]
@@ -115,7 +115,7 @@ class ParamsDict(t.TypedDict):
     has_media: te.NotRequired[t.Optional[bool]]  #: Include only posts with media.
     has_video: te.NotRequired[t.Optional[bool]]  #: Include only posts with video.
     hashtags: te.NotRequired[
-        t.Optional[t.List[str]]
+        t.Optional[t.List[te.Annotated[str, Field(max_length=640)]]]
     ]  #: Include posts tagged with any of these hashtags. Do not include the hash (#) prefix.
     languages: te.NotRequired[
         t.Optional[t.List[string_formats.Language]]
