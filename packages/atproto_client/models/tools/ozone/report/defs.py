@@ -7,7 +7,6 @@
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
@@ -15,7 +14,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 ReasonType = t.Union[
     'models.ToolsOzoneReportDefs.ReasonAppeal',
@@ -292,7 +291,7 @@ class NoteActivity(base.ModelBase):
 class ReportActivityView(base.ModelBase):
     """Definition model for :obj:`tools.ozone.report.defs`. A single activity entry on a report."""
 
-    activity: te.Annotated[
+    activity: unknown_union.OpenUnion[
         t.Union[
             'models.ToolsOzoneReportDefs.QueueActivity',
             'models.ToolsOzoneReportDefs.AssignmentActivity',
@@ -300,8 +299,7 @@ class ReportActivityView(base.ModelBase):
             'models.ToolsOzoneReportDefs.CloseActivity',
             'models.ToolsOzoneReportDefs.ReopenActivity',
             'models.ToolsOzoneReportDefs.NoteActivity',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: The typed activity object describing what occurred.
     created_at: string_formats.DateTime  #: When this activity was created.
     created_by: (

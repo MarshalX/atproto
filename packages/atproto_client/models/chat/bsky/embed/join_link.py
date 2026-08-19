@@ -7,12 +7,11 @@
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Main(base.ModelBase):
@@ -28,13 +27,12 @@ class Main(base.ModelBase):
 class View(base.ModelBase):
     """Definition model for :obj:`chat.bsky.embed.joinLink`."""
 
-    join_link_preview: te.Annotated[
+    join_link_preview: unknown_union.OpenUnion[
         t.Union[
             'models.ChatBskyGroupDefs.JoinLinkPreviewView',
             'models.ChatBskyGroupDefs.DisabledJoinLinkPreviewView',
             'models.ChatBskyGroupDefs.InvalidJoinLinkPreviewView',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Join link preview.
 
     py_type: t.Literal['chat.bsky.embed.joinLink#view'] = Field(

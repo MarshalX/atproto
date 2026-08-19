@@ -15,7 +15,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Data(base.DataModelBase):
@@ -24,9 +24,8 @@ class Data(base.DataModelBase):
     reason_type: (
         'models.ComAtprotoModerationDefs.ReasonType'  #: Indicates the broad category of violation the report is for.
     )
-    subject: te.Annotated[
-        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
-        Field(discriminator='py_type'),
+    subject: unknown_union.OpenUnion[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
     ]  #: Subject.
     mod_tool: t.Optional['models.ComAtprotoModerationCreateReport.ModTool'] = None  #: Mod tool.
     reason: te.Annotated[t.Optional[str], Field(max_length=20000)] = (
@@ -38,9 +37,8 @@ class DataDict(t.TypedDict):
     reason_type: (
         'models.ComAtprotoModerationDefs.ReasonType'  #: Indicates the broad category of violation the report is for.
     )
-    subject: te.Annotated[
-        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
-        Field(discriminator='py_type'),
+    subject: unknown_union.OpenUnion[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
     ]  #: Subject.
     mod_tool: te.NotRequired[t.Optional['models.ComAtprotoModerationCreateReport.ModTool']]  #: Mod tool.
     reason: te.NotRequired[t.Optional[str]]  #: Additional context about the content and violation.
@@ -53,9 +51,8 @@ class Response(base.ResponseModelBase):
     id: int  #: Id.
     reason_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Reason type.
     reported_by: string_formats.Did  #: Reported by.
-    subject: te.Annotated[
-        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
-        Field(discriminator='py_type'),
+    subject: unknown_union.OpenUnion[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
     ]  #: Subject.
     reason: te.Annotated[t.Optional[str], Field(max_length=20000)] = None  #: Reason.
 

@@ -15,7 +15,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class ProfileViewBasic(base.ModelBase):
@@ -217,7 +217,7 @@ class VerificationView(base.ModelBase):
 
 
 Preferences = t.List[
-    te.Annotated[
+    unknown_union.OpenUnion[
         t.Union[
             'models.AppBskyActorDefs.AdultContentPref',
             'models.AppBskyActorDefs.ContentLabelPref',
@@ -235,8 +235,7 @@ Preferences = t.List[
             'models.AppBskyActorDefs.PostInteractionSettingsPref',
             'models.AppBskyActorDefs.VerificationPrefs',
             'models.AppBskyActorDefs.LiveEventPreferences',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]
 ]
 
@@ -491,22 +490,18 @@ class PostInteractionSettingsPref(base.ModelBase):
     """Definition model for :obj:`app.bsky.actor.defs`. Default post interaction settings for the account. These values should be applied as default values when creating new posts. These refs should mirror the threadgate and postgate records exactly."""
 
     postgate_embedding_rules: te.Annotated[
-        t.Optional[
-            t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
-        ],
-        Field(max_length=5),
+        t.Optional[t.List[unknown_union.OpenUnion['models.AppBskyFeedPostgate.DisableRule']]], Field(max_length=5)
     ] = None  #: Matches postgate record. List of rules defining who can embed this users posts. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
     threadgate_allow_rules: te.Annotated[
         t.Optional[
             t.List[
-                te.Annotated[
+                unknown_union.OpenUnion[
                     t.Union[
                         'models.AppBskyFeedThreadgate.MentionRule',
                         'models.AppBskyFeedThreadgate.FollowerRule',
                         'models.AppBskyFeedThreadgate.FollowingRule',
                         'models.AppBskyFeedThreadgate.ListRule',
-                    ],
-                    Field(discriminator='py_type'),
+                    ]
                 ]
             ]
         ],
@@ -524,7 +519,7 @@ class StatusView(base.ModelBase):
     record: 'UnknownType'  #: Record.
     status: t.Union['models.AppBskyActorStatus.Live', str]  #: The status for the account.
     cid: t.Optional[string_formats.Cid] = None  #: Cid.
-    embed: t.Optional[te.Annotated[t.Union['models.AppBskyEmbedExternal.View'], Field(discriminator='py_type')]] = (
+    embed: t.Optional[unknown_union.OpenUnion['models.AppBskyEmbedExternal.View']] = (
         None  #: An optional embed associated with the status.
     )
     expires_at: t.Optional[string_formats.DateTime] = (

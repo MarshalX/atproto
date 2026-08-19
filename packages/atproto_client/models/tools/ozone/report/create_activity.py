@@ -8,17 +8,16 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.report.createActivity`."""
 
-    activity: te.Annotated[
+    activity: unknown_union.OpenUnion[
         t.Union[
             'models.ToolsOzoneReportDefs.QueueActivity',
             'models.ToolsOzoneReportDefs.AssignmentActivity',
@@ -26,8 +25,7 @@ class Data(base.DataModelBase):
             'models.ToolsOzoneReportDefs.CloseActivity',
             'models.ToolsOzoneReportDefs.ReopenActivity',
             'models.ToolsOzoneReportDefs.NoteActivity',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: The type of activity to record.
     event_id: t.Optional[int] = (
         None  #: ID of the report moderation event. Resolves to the report created from that event. Exactly one of reportId or eventId must be provided.
@@ -43,7 +41,7 @@ class Data(base.DataModelBase):
 
 
 class DataDict(t.TypedDict):
-    activity: te.Annotated[
+    activity: unknown_union.OpenUnion[
         t.Union[
             'models.ToolsOzoneReportDefs.QueueActivity',
             'models.ToolsOzoneReportDefs.AssignmentActivity',
@@ -51,8 +49,7 @@ class DataDict(t.TypedDict):
             'models.ToolsOzoneReportDefs.CloseActivity',
             'models.ToolsOzoneReportDefs.ReopenActivity',
             'models.ToolsOzoneReportDefs.NoteActivity',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: The type of activity to record.
     event_id: te.NotRequired[
         t.Optional[int]

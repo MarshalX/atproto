@@ -14,7 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class MentionRule(base.ModelBase):
@@ -59,14 +59,13 @@ class Record(base.RecordModelBase):
     allow: te.Annotated[
         t.Optional[
             t.List[
-                te.Annotated[
+                unknown_union.OpenUnion[
                     t.Union[
                         'models.AppBskyFeedThreadgate.MentionRule',
                         'models.AppBskyFeedThreadgate.FollowerRule',
                         'models.AppBskyFeedThreadgate.FollowingRule',
                         'models.AppBskyFeedThreadgate.ListRule',
-                    ],
-                    Field(discriminator='py_type'),
+                    ]
                 ]
             ]
         ],

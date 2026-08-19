@@ -7,14 +7,13 @@
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Record(base.RecordModelBase):
@@ -22,9 +21,7 @@ class Record(base.RecordModelBase):
 
     created_at: string_formats.DateTime  #: Created at.
     policies: 'models.AppBskyLabelerDefs.LabelerPolicies'  #: Policies.
-    labels: t.Optional[
-        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(discriminator='py_type')]
-    ] = None  #: Labels.
+    labels: t.Optional[unknown_union.OpenUnion['models.ComAtprotoLabelDefs.SelfLabels']] = None  #: Labels.
     reason_types: t.Optional[t.List['models.ComAtprotoModerationDefs.ReasonType']] = (
         None  #: The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed.
     )

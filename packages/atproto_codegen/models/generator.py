@@ -93,6 +93,7 @@ def _get_model_imports() -> str:
         f'{_(1)}from atproto_client.models.blob_ref import BlobRef',
         f'{_(1)}from atproto_core.cid import CIDType',
         'from atproto_client.models import base',
+        'from atproto_client.models import unknown_union',
         '',
         '',
     ]
@@ -234,13 +235,12 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, o
         # union of unknown types but it must have $type field.
         def_names.append('base.UnknownUnionModel')
 
-    # unbelievable but it's true. If schema doesn't describe the right type in Union
-    # we should fall back to the plain data
-    # maybe it's for the records that have custom fields... idk
-    # ref: https://github.com/bluesky-social/atproto/blob/b01e47b61730d05a780f7a42667b91ccaa192e8e/packages/lex-cli/src/codegen/lex-gen.ts#L325
-    # grep by "{$type: string; [k: string]: unknown}" string
-    # TODO(MarshalX): use 'base.UnknownDict' and convert to DotDict
-    # append 't.Dict[str, t.Any]' to def_names  # FIXME(MarshalX): support pydantic
+    # an open union may carry a $type this SDK release doesn't know yet; OpenUnion adds the DotDict
+    # fallback so such members don't fail the whole response. ref: https://github.com/MarshalX/atproto/issues/354
+    if not is_unknown_union and not field_type_def.closed:
+        quoted = [f"'{name}'" for name in def_names]
+        members = quoted[0] if len(quoted) == 1 else f't.Union[{", ".join(quoted)}]'
+        return _get_optional_typehint(f'unknown_union.OpenUnion[{members}]', optional=optional)
 
     def_names = ', '.join([f"'{name}'" for name in def_names])
 

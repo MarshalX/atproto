@@ -31,5 +31,9 @@ def test_thread_view_post_with_embed_media_serialization() -> None:
 
     restored_model = get_or_create(model_dict, models.AppBskyFeedGetPostThread.Response)
     assert model_dict == get_model_as_dict(restored_model)
+
+    assert isinstance(restored_model, models.AppBskyFeedGetPostThread.Response)
+    assert isinstance(restored_model.thread, models.AppBskyFeedDefs.ThreadViewPost)
     assert isinstance(restored_model.thread.post.embed, models.AppBskyEmbedRecordWithMedia.View)
+    assert isinstance(restored_model.thread.post.embed.media, models.AppBskyEmbedImages.View)
     assert len(restored_model.thread.post.embed.media.images) == 1

@@ -14,7 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Params(base.ParamsModelBase):
@@ -60,15 +60,14 @@ class Event(base.ModelBase):
 
     created_at: string_formats.DateTime  #: Created at.
     created_by: str  #: Created by.
-    details: te.Annotated[
+    details: unknown_union.OpenUnion[
         t.Union[
             'models.ToolsOzoneHostingGetAccountHistory.AccountCreated',
             'models.ToolsOzoneHostingGetAccountHistory.EmailUpdated',
             'models.ToolsOzoneHostingGetAccountHistory.EmailConfirmed',
             'models.ToolsOzoneHostingGetAccountHistory.PasswordUpdated',
             'models.ToolsOzoneHostingGetAccountHistory.HandleUpdated',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Details.
 
     py_type: t.Literal['tools.ozone.hosting.getAccountHistory#event'] = Field(

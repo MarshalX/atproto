@@ -7,14 +7,13 @@
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 Access = t.Union[
     t.Literal['unknown', 'none', 'safe', 'full'], str
@@ -63,7 +62,7 @@ class ConfigRegion(base.ModelBase):
     country_code: str  #: The ISO 3166-1 alpha-2 country code this configuration applies to.
     min_access_age: int  #: The minimum age (as a whole integer) required to use Bluesky in this region.
     rules: t.List[
-        te.Annotated[
+        unknown_union.OpenUnion[
             t.Union[
                 'models.AppBskyAgeassuranceDefs.ConfigRegionRuleDefault',
                 'models.AppBskyAgeassuranceDefs.ConfigRegionRuleIfDeclaredOverAge',
@@ -72,8 +71,7 @@ class ConfigRegion(base.ModelBase):
                 'models.AppBskyAgeassuranceDefs.ConfigRegionRuleIfAssuredUnderAge',
                 'models.AppBskyAgeassuranceDefs.ConfigRegionRuleIfAccountNewerThan',
                 'models.AppBskyAgeassuranceDefs.ConfigRegionRuleIfAccountOlderThan',
-            ],
-            Field(discriminator='py_type'),
+            ]
         ]
     ]  #: The ordered list of Age Assurance rules that apply to this region. Rules should be applied in order, and the first matching rule determines the access level granted. The rules array should always include a default rule as the last item.
     additional_verification_methods: t.Optional[t.List[t.Union[t.Literal['device'], str]]] = (

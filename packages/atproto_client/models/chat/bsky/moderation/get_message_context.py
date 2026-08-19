@@ -12,7 +12,7 @@ from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Params(base.ParamsModelBase):
@@ -53,8 +53,7 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`chat.bsky.moderation.getMessageContext`."""
 
     messages: t.List[
-        te.Annotated[
-            t.Union['models.ChatBskyConvoDefs.MessageView', 'models.ChatBskyConvoDefs.SystemMessageView'],
-            Field(discriminator='py_type'),
+        unknown_union.OpenUnion[
+            t.Union['models.ChatBskyConvoDefs.MessageView', 'models.ChatBskyConvoDefs.SystemMessageView']
         ]
     ]  #: Messages.

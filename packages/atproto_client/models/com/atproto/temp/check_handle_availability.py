@@ -14,7 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Params(base.ParamsModelBase):
@@ -43,12 +43,11 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.temp.checkHandleAvailability`."""
 
     handle: string_formats.Handle  #: Echo of the input handle.
-    result: te.Annotated[
+    result: unknown_union.OpenUnion[
         t.Union[
             'models.ComAtprotoTempCheckHandleAvailability.ResultAvailable',
             'models.ComAtprotoTempCheckHandleAvailability.ResultUnavailable',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Result.
 
 

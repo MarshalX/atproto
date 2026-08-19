@@ -8,36 +8,33 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`com.atproto.admin.updateSubjectStatus`."""
 
-    subject: te.Annotated[
+    subject: unknown_union.OpenUnion[
         t.Union[
             'models.ComAtprotoAdminDefs.RepoRef',
             'models.ComAtprotoRepoStrongRef.Main',
             'models.ComAtprotoAdminDefs.RepoBlobRef',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Subject.
     deactivated: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Deactivated.
     takedown: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Takedown.
 
 
 class DataDict(t.TypedDict):
-    subject: te.Annotated[
+    subject: unknown_union.OpenUnion[
         t.Union[
             'models.ComAtprotoAdminDefs.RepoRef',
             'models.ComAtprotoRepoStrongRef.Main',
             'models.ComAtprotoAdminDefs.RepoBlobRef',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Subject.
     deactivated: te.NotRequired[t.Optional['models.ComAtprotoAdminDefs.StatusAttr']]  #: Deactivated.
     takedown: te.NotRequired[t.Optional['models.ComAtprotoAdminDefs.StatusAttr']]  #: Takedown.
@@ -46,12 +43,11 @@ class DataDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.admin.updateSubjectStatus`."""
 
-    subject: te.Annotated[
+    subject: unknown_union.OpenUnion[
         t.Union[
             'models.ComAtprotoAdminDefs.RepoRef',
             'models.ComAtprotoRepoStrongRef.Main',
             'models.ComAtprotoAdminDefs.RepoBlobRef',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Subject.
     takedown: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Takedown.

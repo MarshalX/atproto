@@ -14,7 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Params(base.ParamsModelBase):
@@ -37,9 +37,8 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.graph.getRelationships`."""
 
     relationships: t.List[
-        te.Annotated[
-            t.Union['models.AppBskyGraphDefs.Relationship', 'models.AppBskyGraphDefs.NotFoundActor'],
-            Field(discriminator='py_type'),
+        unknown_union.OpenUnion[
+            t.Union['models.AppBskyGraphDefs.Relationship', 'models.AppBskyGraphDefs.NotFoundActor']
         ]
     ]  #: Relationships.
     actor: t.Optional[string_formats.Did] = None  #: Actor.

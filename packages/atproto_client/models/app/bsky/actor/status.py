@@ -14,7 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 Live = t.Literal['app.bsky.actor.status#live']  #: Advertises an account as currently offering live content.
 
@@ -27,7 +27,7 @@ class Record(base.RecordModelBase):
     duration_minutes: te.Annotated[t.Optional[int], Field(ge=1)] = (
         None  #: The duration of the status in minutes. Applications can choose to impose minimum and maximum limits.
     )
-    embed: t.Optional[te.Annotated[t.Union['models.AppBskyEmbedExternal.Main'], Field(discriminator='py_type')]] = (
+    embed: t.Optional[unknown_union.OpenUnion['models.AppBskyEmbedExternal.Main']] = (
         None  #: An optional embed associated with the status.
     )
 

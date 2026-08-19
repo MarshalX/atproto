@@ -8,13 +8,12 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Params(base.ParamsModelBase):
@@ -34,13 +33,12 @@ class ParamsDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`com.atproto.admin.getSubjectStatus`."""
 
-    subject: te.Annotated[
+    subject: unknown_union.OpenUnion[
         t.Union[
             'models.ComAtprotoAdminDefs.RepoRef',
             'models.ComAtprotoRepoStrongRef.Main',
             'models.ComAtprotoAdminDefs.RepoBlobRef',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Subject.
     deactivated: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Deactivated.
     takedown: t.Optional['models.ComAtprotoAdminDefs.StatusAttr'] = None  #: Takedown.

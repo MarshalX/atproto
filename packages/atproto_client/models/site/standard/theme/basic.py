@@ -7,29 +7,22 @@
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Record(base.RecordModelBase):
     """Record model for :obj:`site.standard.theme.basic`."""
 
-    accent: te.Annotated[
-        t.Union['models.SiteStandardThemeColor.Rgb'], Field(discriminator='py_type')
+    accent: unknown_union.OpenUnion[
+        'models.SiteStandardThemeColor.Rgb'
     ]  #: Color used for links and button backgrounds.
-    accent_foreground: te.Annotated[
-        t.Union['models.SiteStandardThemeColor.Rgb'], Field(discriminator='py_type')
-    ]  #: Color used for button text.
-    background: te.Annotated[
-        t.Union['models.SiteStandardThemeColor.Rgb'], Field(discriminator='py_type')
-    ]  #: Color used for content background.
-    foreground: te.Annotated[
-        t.Union['models.SiteStandardThemeColor.Rgb'], Field(discriminator='py_type')
-    ]  #: Color used for content text.
+    accent_foreground: unknown_union.OpenUnion['models.SiteStandardThemeColor.Rgb']  #: Color used for button text.
+    background: unknown_union.OpenUnion['models.SiteStandardThemeColor.Rgb']  #: Color used for content background.
+    foreground: unknown_union.OpenUnion['models.SiteStandardThemeColor.Rgb']  #: Color used for content text.
 
     py_type: t.Literal['site.standard.theme.basic'] = Field(
         default='site.standard.theme.basic', alias='$type', frozen=True

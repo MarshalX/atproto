@@ -14,15 +14,13 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.moderation.scheduleAction`."""
 
-    action: te.Annotated[
-        t.Union['models.ToolsOzoneModerationScheduleAction.Takedown'], Field(discriminator='py_type')
-    ]  #: Action.
+    action: unknown_union.OpenUnion['models.ToolsOzoneModerationScheduleAction.Takedown']  #: Action.
     created_by: string_formats.Did  #: Created by.
     scheduling: 'models.ToolsOzoneModerationScheduleAction.SchedulingConfig'  #: Scheduling.
     subjects: t.List[string_formats.Did] = Field(max_length=100)  #: Array of DID subjects to schedule the action for.
@@ -32,9 +30,7 @@ class Data(base.DataModelBase):
 
 
 class DataDict(t.TypedDict):
-    action: te.Annotated[
-        t.Union['models.ToolsOzoneModerationScheduleAction.Takedown'], Field(discriminator='py_type')
-    ]  #: Action.
+    action: unknown_union.OpenUnion['models.ToolsOzoneModerationScheduleAction.Takedown']  #: Action.
     created_by: string_formats.Did  #: Created by.
     scheduling: 'models.ToolsOzoneModerationScheduleAction.SchedulingConfig'  #: Scheduling.
     subjects: t.List[string_formats.Did]  #: Array of DID subjects to schedule the action for.

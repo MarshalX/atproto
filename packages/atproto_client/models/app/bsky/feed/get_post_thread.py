@@ -14,7 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Params(base.ParamsModelBase):
@@ -38,12 +38,11 @@ class ParamsDict(t.TypedDict):
 class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.feed.getPostThread`."""
 
-    thread: te.Annotated[
+    thread: unknown_union.OpenUnion[
         t.Union[
             'models.AppBskyFeedDefs.ThreadViewPost',
             'models.AppBskyFeedDefs.NotFoundPost',
             'models.AppBskyFeedDefs.BlockedPost',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Thread.
     threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.

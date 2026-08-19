@@ -14,7 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class DraftWithId(base.ModelBase):
@@ -44,22 +44,18 @@ class Draft(base.ModelBase):
         None  #: Indicates human language of posts primary text content.
     )
     postgate_embedding_rules: te.Annotated[
-        t.Optional[
-            t.List[te.Annotated[t.Union['models.AppBskyFeedPostgate.DisableRule'], Field(discriminator='py_type')]]
-        ],
-        Field(max_length=5),
+        t.Optional[t.List[unknown_union.OpenUnion['models.AppBskyFeedPostgate.DisableRule']]], Field(max_length=5)
     ] = None  #: Embedding rules for the postgates to be created when this draft is published.
     threadgate_allow: te.Annotated[
         t.Optional[
             t.List[
-                te.Annotated[
+                unknown_union.OpenUnion[
                     t.Union[
                         'models.AppBskyFeedThreadgate.MentionRule',
                         'models.AppBskyFeedThreadgate.FollowerRule',
                         'models.AppBskyFeedThreadgate.FollowingRule',
                         'models.AppBskyFeedThreadgate.ListRule',
-                    ],
-                    Field(discriminator='py_type'),
+                    ]
                 ]
             ]
         ],
@@ -90,9 +86,9 @@ class DraftPost(base.ModelBase):
     embed_videos: te.Annotated[t.Optional[t.List['models.AppBskyDraftDefs.DraftEmbedVideo']], Field(max_length=1)] = (
         None  #: Embed videos.
     )
-    labels: t.Optional[
-        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(discriminator='py_type')]
-    ] = None  #: Self-label values for this post. Effectively content warnings.
+    labels: t.Optional[unknown_union.OpenUnion['models.ComAtprotoLabelDefs.SelfLabels']] = (
+        None  #: Self-label values for this post. Effectively content warnings.
+    )
 
     py_type: t.Literal['app.bsky.draft.defs#draftPost'] = Field(
         default='app.bsky.draft.defs#draftPost', alias='$type', frozen=True
@@ -146,8 +142,7 @@ class DraftEmbedGallery(base.ModelBase):
 
 
 DraftEmbedGalleryItems = te.Annotated[
-    t.List[te.Annotated[t.Union['models.AppBskyDraftDefs.DraftEmbedImage'], Field(discriminator='py_type')]],
-    Field(max_length=20),
+    t.List[unknown_union.OpenUnion['models.AppBskyDraftDefs.DraftEmbedImage']], Field(max_length=20)
 ]
 
 
