@@ -7,14 +7,13 @@
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Params(base.ParamsModelBase):
@@ -40,9 +39,7 @@ class ThreadItem(base.ModelBase):
 
     depth: int  #: The nesting level of this item in the thread. Depth 0 means the anchor item. Items above have negative depths, items below have positive depths.
     uri: string_formats.AtUri  #: Uri.
-    value: te.Annotated[
-        t.Union['models.AppBskyUnspeccedDefs.ThreadItemPost'], Field(discriminator='py_type')
-    ]  #: Value.
+    value: unknown_union.OpenUnion['models.AppBskyUnspeccedDefs.ThreadItemPost']  #: Value.
 
     py_type: t.Literal['app.bsky.unspecced.getPostThreadOtherV2#threadItem'] = Field(
         default='app.bsky.unspecced.getPostThreadOtherV2#threadItem', alias='$type', frozen=True

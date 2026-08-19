@@ -14,14 +14,14 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.moderation.emitEvent`."""
 
     created_by: string_formats.Did  #: Created by.
-    event: te.Annotated[
+    event: unknown_union.OpenUnion[
         t.Union[
             'models.ToolsOzoneModerationDefs.ModEventTakedown',
             'models.ToolsOzoneModerationDefs.ModEventAcknowledge',
@@ -48,12 +48,10 @@ class Data(base.DataModelBase):
             'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
             'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
             'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Event.
-    subject: te.Annotated[
-        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
-        Field(discriminator='py_type'),
+    subject: unknown_union.OpenUnion[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
     ]  #: Subject.
     external_id: t.Optional[str] = (
         None  #: An optional external ID for the event, used to deduplicate events from external systems. Fails when an event of same type with the same external ID exists for the same subject.
@@ -67,7 +65,7 @@ class Data(base.DataModelBase):
 
 class DataDict(t.TypedDict):
     created_by: string_formats.Did  #: Created by.
-    event: te.Annotated[
+    event: unknown_union.OpenUnion[
         t.Union[
             'models.ToolsOzoneModerationDefs.ModEventTakedown',
             'models.ToolsOzoneModerationDefs.ModEventAcknowledge',
@@ -94,12 +92,10 @@ class DataDict(t.TypedDict):
             'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
             'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
             'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Event.
-    subject: te.Annotated[
-        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main'],
-        Field(discriminator='py_type'),
+    subject: unknown_union.OpenUnion[
+        t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
     ]  #: Subject.
     external_id: te.NotRequired[
         t.Optional[str]

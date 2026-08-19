@@ -15,7 +15,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.blob_ref import BlobRef
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Record(base.RecordModelBase):
@@ -27,9 +27,7 @@ class Record(base.RecordModelBase):
     avatar: t.Optional['BlobRef'] = None  #: Avatar.
     description: te.Annotated[t.Optional[str], Field(max_length=3000)] = None  #: Description.
     description_facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = None  #: Description facets.
-    labels: t.Optional[
-        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(discriminator='py_type')]
-    ] = None  #: Labels.
+    labels: t.Optional[unknown_union.OpenUnion['models.ComAtprotoLabelDefs.SelfLabels']] = None  #: Labels.
 
     py_type: t.Literal['app.bsky.graph.list'] = Field(default='app.bsky.graph.list', alias='$type', frozen=True)
 

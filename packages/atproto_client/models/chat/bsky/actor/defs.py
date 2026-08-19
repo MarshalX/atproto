@@ -14,7 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 MemberRole = t.Union[t.Literal['owner', 'standard'], str]  #: Member role
 
@@ -30,13 +30,12 @@ class ProfileViewBasic(base.ModelBase):
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
     display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     kind: t.Optional[
-        te.Annotated[
+        unknown_union.OpenUnion[
             t.Union[
                 'models.ChatBskyActorDefs.DirectConvoMember',
                 'models.ChatBskyActorDefs.GroupConvoMember',
                 'models.ChatBskyActorDefs.PastGroupConvoMember',
-            ],
-            Field(discriminator='py_type'),
+            ]
         ]
     ] = None  #: Union field that has data specific to different kinds of convos.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.

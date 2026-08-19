@@ -7,14 +7,13 @@
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Bookmark(base.ModelBase):
@@ -30,13 +29,12 @@ class Bookmark(base.ModelBase):
 class BookmarkView(base.ModelBase):
     """Definition model for :obj:`app.bsky.bookmark.defs`."""
 
-    item: te.Annotated[
+    item: unknown_union.OpenUnion[
         t.Union[
             'models.AppBskyFeedDefs.BlockedPost',
             'models.AppBskyFeedDefs.NotFoundPost',
             'models.AppBskyFeedDefs.PostView',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Item.
     subject: 'models.ComAtprotoRepoStrongRef.Main'  #: A strong ref to the bookmarked record.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.

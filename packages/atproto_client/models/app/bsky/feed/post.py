@@ -14,7 +14,7 @@ from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class ReplyRef(base.ModelBase):
@@ -57,7 +57,7 @@ class Record(base.RecordModelBase):
     created_at: string_formats.DateTime  #: Client-declared timestamp when this post was originally created.
     text: str = Field(max_length=3000)  #: The primary post content. May be an empty string, if there are embeds.
     embed: t.Optional[
-        te.Annotated[
+        unknown_union.OpenUnion[
             t.Union[
                 'models.AppBskyEmbedImages.Main',
                 'models.AppBskyEmbedVideo.Main',
@@ -65,8 +65,7 @@ class Record(base.RecordModelBase):
                 'models.AppBskyEmbedExternal.Main',
                 'models.AppBskyEmbedRecord.Main',
                 'models.AppBskyEmbedRecordWithMedia.Main',
-            ],
-            Field(discriminator='py_type'),
+            ]
         ]
     ] = None  #: Embed.
     entities: t.Optional[t.List['models.AppBskyFeedPost.Entity']] = (
@@ -75,9 +74,9 @@ class Record(base.RecordModelBase):
     facets: t.Optional[t.List['models.AppBskyRichtextFacet.Main']] = (
         None  #: Annotations of text (mentions, URLs, hashtags, etc).
     )
-    labels: t.Optional[
-        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(discriminator='py_type')]
-    ] = None  #: Self-label values for this post. Effectively content warnings.
+    labels: t.Optional[unknown_union.OpenUnion['models.ComAtprotoLabelDefs.SelfLabels']] = (
+        None  #: Self-label values for this post. Effectively content warnings.
+    )
     langs: te.Annotated[t.Optional[t.List[string_formats.Language]], Field(max_length=3)] = (
         None  #: Indicates human language of post primary text content.
     )

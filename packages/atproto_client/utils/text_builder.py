@@ -78,7 +78,7 @@ class TextBuilder:
 
     def _create_facet(self, text: str, features: _FEATURES_TYPE) -> models.AppBskyRichtextFacet.Main:
         return models.AppBskyRichtextFacet.Main(
-            features=features,
+            features=[*features],
             index=self._create_byte_slice(text),
         )
 

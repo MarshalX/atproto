@@ -7,27 +7,25 @@
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Main(base.ModelBase):
     """Definition model for :obj:`app.bsky.richtext.facet`. Annotation of a sub-string within rich text."""
 
     features: t.List[
-        te.Annotated[
+        unknown_union.OpenUnion[
             t.Union[
                 'models.AppBskyRichtextFacet.Mention',
                 'models.AppBskyRichtextFacet.Link',
                 'models.AppBskyRichtextFacet.Tag',
-            ],
-            Field(discriminator='py_type'),
+            ]
         ]
     ]  #: Features.
     index: 'models.AppBskyRichtextFacet.ByteSlice'  #: Index.

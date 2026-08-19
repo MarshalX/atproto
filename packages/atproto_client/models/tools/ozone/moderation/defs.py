@@ -15,7 +15,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class ModEventView(base.ModelBase):
@@ -23,7 +23,7 @@ class ModEventView(base.ModelBase):
 
     created_at: string_formats.DateTime  #: Created at.
     created_by: string_formats.Did  #: Created by.
-    event: te.Annotated[
+    event: unknown_union.OpenUnion[
         t.Union[
             'models.ToolsOzoneModerationDefs.ModEventTakedown',
             'models.ToolsOzoneModerationDefs.ModEventReverseTakedown',
@@ -50,18 +50,16 @@ class ModEventView(base.ModelBase):
             'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
             'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
             'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Event.
     id: int  #: Id.
-    subject: te.Annotated[
+    subject: unknown_union.OpenUnion[
         t.Union[
             'models.ComAtprotoAdminDefs.RepoRef',
             'models.ComAtprotoRepoStrongRef.Main',
             'models.ChatBskyConvoDefs.MessageRef',
             'models.ChatBskyConvoDefs.ConvoRef',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Subject.
     subject_blob_cids: t.List[str]  #: Subject blob cids.
     creator_handle: t.Optional[str] = None  #: Creator handle.
@@ -78,7 +76,7 @@ class ModEventViewDetail(base.ModelBase):
 
     created_at: string_formats.DateTime  #: Created at.
     created_by: string_formats.Did  #: Created by.
-    event: te.Annotated[
+    event: unknown_union.OpenUnion[
         t.Union[
             'models.ToolsOzoneModerationDefs.ModEventTakedown',
             'models.ToolsOzoneModerationDefs.ModEventReverseTakedown',
@@ -105,19 +103,17 @@ class ModEventViewDetail(base.ModelBase):
             'models.ToolsOzoneModerationDefs.RevokeAccountCredentialsEvent',
             'models.ToolsOzoneModerationDefs.ScheduleTakedownEvent',
             'models.ToolsOzoneModerationDefs.CancelScheduledTakedownEvent',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Event.
     id: int  #: Id.
-    subject: te.Annotated[
+    subject: unknown_union.OpenUnion[
         t.Union[
             'models.ToolsOzoneModerationDefs.RepoView',
             'models.ToolsOzoneModerationDefs.RepoViewNotFound',
             'models.ToolsOzoneModerationDefs.RecordView',
             'models.ToolsOzoneModerationDefs.RecordViewNotFound',
             'models.ToolsOzoneModerationDefs.ConvoView',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Subject.
     subject_blobs: t.List['models.ToolsOzoneModerationDefs.BlobView']  #: Subject blobs.
     mod_tool: t.Optional['models.ToolsOzoneModerationDefs.ModTool'] = None  #: Mod tool.
@@ -135,14 +131,13 @@ class SubjectStatusView(base.ModelBase):
     )  #: Timestamp referencing the first moderation status impacting event was emitted on the subject.
     id: int  #: Id.
     review_state: 'models.ToolsOzoneModerationDefs.SubjectReviewState'  #: Review state.
-    subject: te.Annotated[
+    subject: unknown_union.OpenUnion[
         t.Union[
             'models.ComAtprotoAdminDefs.RepoRef',
             'models.ComAtprotoRepoStrongRef.Main',
             'models.ChatBskyConvoDefs.MessageRef',
             'models.ChatBskyConvoDefs.ConvoRef',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Subject.
     updated_at: (
         string_formats.DateTime
@@ -164,9 +159,8 @@ class SubjectStatusView(base.ModelBase):
     )
     comment: t.Optional[str] = None  #: Sticky comment on the subject.
     hosting: t.Optional[
-        te.Annotated[
-            t.Union['models.ToolsOzoneModerationDefs.AccountHosting', 'models.ToolsOzoneModerationDefs.RecordHosting'],
-            Field(discriminator='py_type'),
+        unknown_union.OpenUnion[
+            t.Union['models.ToolsOzoneModerationDefs.AccountHosting', 'models.ToolsOzoneModerationDefs.RecordHosting']
         ]
     ] = None  #: Hosting.
     last_appealed_at: t.Optional[string_formats.DateTime] = (
@@ -761,9 +755,8 @@ class BlobView(base.ModelBase):
     mime_type: str  #: Mime type.
     size: int  #: Size.
     details: t.Optional[
-        te.Annotated[
-            t.Union['models.ToolsOzoneModerationDefs.ImageDetails', 'models.ToolsOzoneModerationDefs.VideoDetails'],
-            Field(discriminator='py_type'),
+        unknown_union.OpenUnion[
+            t.Union['models.ToolsOzoneModerationDefs.ImageDetails', 'models.ToolsOzoneModerationDefs.VideoDetails']
         ]
     ] = None  #: Details.
     moderation: t.Optional['models.ToolsOzoneModerationDefs.Moderation'] = None  #: Moderation.

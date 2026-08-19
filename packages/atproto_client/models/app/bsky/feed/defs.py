@@ -15,7 +15,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class PostView(base.ModelBase):
@@ -29,7 +29,7 @@ class PostView(base.ModelBase):
     bookmark_count: t.Optional[int] = None  #: Bookmark count.
     debug: t.Optional['UnknownType'] = None  #: Debug information for internal development.
     embed: t.Optional[
-        te.Annotated[
+        unknown_union.OpenUnion[
             t.Union[
                 'models.AppBskyEmbedImages.View',
                 'models.AppBskyEmbedVideo.View',
@@ -37,8 +37,7 @@ class PostView(base.ModelBase):
                 'models.AppBskyEmbedExternal.View',
                 'models.AppBskyEmbedRecord.View',
                 'models.AppBskyEmbedRecordWithMedia.View',
-            ],
-            Field(discriminator='py_type'),
+            ]
         ]
     ] = None  #: Embed.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
@@ -88,10 +87,7 @@ class FeedViewPost(base.ModelBase):
         None  #: Context provided by feed generator that may be passed back alongside interactions.
     )
     reason: t.Optional[
-        te.Annotated[
-            t.Union['models.AppBskyFeedDefs.ReasonRepost', 'models.AppBskyFeedDefs.ReasonPin'],
-            Field(discriminator='py_type'),
-        ]
+        unknown_union.OpenUnion[t.Union['models.AppBskyFeedDefs.ReasonRepost', 'models.AppBskyFeedDefs.ReasonPin']]
     ] = None  #: Reason.
     reply: t.Optional['models.AppBskyFeedDefs.ReplyRef'] = None  #: Reply.
     req_id: te.Annotated[t.Optional[str], Field(max_length=100)] = (
@@ -106,21 +102,19 @@ class FeedViewPost(base.ModelBase):
 class ReplyRef(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.defs`."""
 
-    parent: te.Annotated[
+    parent: unknown_union.OpenUnion[
         t.Union[
             'models.AppBskyFeedDefs.PostView',
             'models.AppBskyFeedDefs.NotFoundPost',
             'models.AppBskyFeedDefs.BlockedPost',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Parent.
-    root: te.Annotated[
+    root: unknown_union.OpenUnion[
         t.Union[
             'models.AppBskyFeedDefs.PostView',
             'models.AppBskyFeedDefs.NotFoundPost',
             'models.AppBskyFeedDefs.BlockedPost',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Root.
     grandparent_author: t.Optional['models.AppBskyActorDefs.ProfileViewBasic'] = (
         None  #: When parent is a reply to another post, this is the author of that post.
@@ -157,24 +151,22 @@ class ThreadViewPost(base.ModelBase):
 
     post: 'models.AppBskyFeedDefs.PostView'  #: Post.
     parent: t.Optional[
-        te.Annotated[
+        unknown_union.OpenUnion[
             t.Union[
                 'models.AppBskyFeedDefs.ThreadViewPost',
                 'models.AppBskyFeedDefs.NotFoundPost',
                 'models.AppBskyFeedDefs.BlockedPost',
-            ],
-            Field(discriminator='py_type'),
+            ]
         ]
     ] = None  #: Parent.
     replies: t.Optional[
         t.List[
-            te.Annotated[
+            unknown_union.OpenUnion[
                 t.Union[
                     'models.AppBskyFeedDefs.ThreadViewPost',
                     'models.AppBskyFeedDefs.NotFoundPost',
                     'models.AppBskyFeedDefs.BlockedPost',
-                ],
-                Field(discriminator='py_type'),
+                ]
             ]
         ]
     ] = None  #: Replies.
@@ -262,9 +254,8 @@ class SkeletonFeedPost(base.ModelBase):
         None  #: Context that will be passed through to client and may be passed to feed generator back alongside interactions.
     )
     reason: t.Optional[
-        te.Annotated[
-            t.Union['models.AppBskyFeedDefs.SkeletonReasonRepost', 'models.AppBskyFeedDefs.SkeletonReasonPin'],
-            Field(discriminator='py_type'),
+        unknown_union.OpenUnion[
+            t.Union['models.AppBskyFeedDefs.SkeletonReasonRepost', 'models.AppBskyFeedDefs.SkeletonReasonPin']
         ]
     ] = None  #: Reason.
 

@@ -8,11 +8,10 @@
 import typing as t
 
 import typing_extensions as te
-from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Params(base.ParamsModelBase):
@@ -29,7 +28,7 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`chat.bsky.convo.getLog`."""
 
     logs: t.List[
-        te.Annotated[
+        unknown_union.OpenUnion[
             t.Union[
                 'models.ChatBskyConvoDefs.LogBeginConvo',
                 'models.ChatBskyConvoDefs.LogAcceptConvo',
@@ -61,8 +60,7 @@ class Response(base.ResponseModelBase):
                 'models.ChatBskyConvoDefs.LogWithdrawIncomingJoinRequest',
                 'models.ChatBskyConvoDefs.LogWithdrawOutgoingJoinRequest',
                 'models.ChatBskyConvoDefs.LogReadJoinRequests',
-            ],
-            Field(discriminator='py_type'),
+            ]
         ]
     ]  #: Logs.
     cursor: t.Optional[str] = None  #: Cursor.

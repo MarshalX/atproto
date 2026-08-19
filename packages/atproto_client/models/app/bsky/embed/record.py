@@ -7,7 +7,6 @@
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
@@ -15,7 +14,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Main(base.ModelBase):
@@ -29,7 +28,7 @@ class Main(base.ModelBase):
 class View(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.record`."""
 
-    record: te.Annotated[
+    record: unknown_union.OpenUnion[
         t.Union[
             'models.AppBskyEmbedRecord.ViewRecord',
             'models.AppBskyEmbedRecord.ViewNotFound',
@@ -39,8 +38,7 @@ class View(base.ModelBase):
             'models.AppBskyGraphDefs.ListView',
             'models.AppBskyLabelerDefs.LabelerView',
             'models.AppBskyGraphDefs.StarterPackViewBasic',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Record.
 
     py_type: t.Literal['app.bsky.embed.record#view'] = Field(
@@ -58,7 +56,7 @@ class ViewRecord(base.ModelBase):
     value: 'UnknownType'  #: The record data itself.
     embeds: t.Optional[
         t.List[
-            te.Annotated[
+            unknown_union.OpenUnion[
                 t.Union[
                     'models.AppBskyEmbedImages.View',
                     'models.AppBskyEmbedVideo.View',
@@ -66,8 +64,7 @@ class ViewRecord(base.ModelBase):
                     'models.AppBskyEmbedExternal.View',
                     'models.AppBskyEmbedRecord.View',
                     'models.AppBskyEmbedRecordWithMedia.View',
-                ],
-                Field(discriminator='py_type'),
+                ]
             ]
         ]
     ] = None  #: Embeds.

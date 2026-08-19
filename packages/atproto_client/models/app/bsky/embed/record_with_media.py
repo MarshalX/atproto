@@ -7,25 +7,23 @@
 
 import typing as t
 
-import typing_extensions as te
 from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Main(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
-    media: te.Annotated[
+    media: unknown_union.OpenUnion[
         t.Union[
             'models.AppBskyEmbedImages.Main',
             'models.AppBskyEmbedVideo.Main',
             'models.AppBskyEmbedGallery.Main',
             'models.AppBskyEmbedExternal.Main',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Media.
     record: 'models.AppBskyEmbedRecord.Main'  #: Record.
 
@@ -37,14 +35,13 @@ class Main(base.ModelBase):
 class View(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.recordWithMedia`."""
 
-    media: te.Annotated[
+    media: unknown_union.OpenUnion[
         t.Union[
             'models.AppBskyEmbedImages.View',
             'models.AppBskyEmbedVideo.View',
             'models.AppBskyEmbedGallery.View',
             'models.AppBskyEmbedExternal.View',
-        ],
-        Field(discriminator='py_type'),
+        ]
     ]  #: Media.
     record: 'models.AppBskyEmbedRecord.View'  #: Record.
 

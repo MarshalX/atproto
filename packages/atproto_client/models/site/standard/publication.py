@@ -15,7 +15,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.blob_ref import BlobRef
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Preferences(base.ModelBase):
@@ -40,9 +40,9 @@ class Record(base.RecordModelBase):
     )
     description: te.Annotated[t.Optional[str], Field(max_length=30000)] = None  #: Brief description of the publication.
     icon: t.Optional['BlobRef'] = None  #: Square image to identify the publication. Should be at least 256x256.
-    labels: t.Optional[
-        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(discriminator='py_type')]
-    ] = None  #: Self-label values for this publication. Effectively content warnings.
+    labels: t.Optional[unknown_union.OpenUnion['models.ComAtprotoLabelDefs.SelfLabels']] = (
+        None  #: Self-label values for this publication. Effectively content warnings.
+    )
     preferences: t.Optional['models.SiteStandardPublication.Preferences'] = (
         None  #: Object containing platform specific preferences (with a few shared properties).
     )

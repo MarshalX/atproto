@@ -15,7 +15,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.blob_ref import BlobRef
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Record(base.RecordModelBase):
@@ -29,9 +29,9 @@ class Record(base.RecordModelBase):
     description: te.Annotated[t.Optional[str], Field(max_length=2560)] = None  #: Free-form profile description text.
     display_name: te.Annotated[t.Optional[str], Field(max_length=640)] = None  #: Display name.
     joined_via_starter_pack: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Joined via starter pack.
-    labels: t.Optional[
-        te.Annotated[t.Union['models.ComAtprotoLabelDefs.SelfLabels'], Field(discriminator='py_type')]
-    ] = None  #: Self-label values, specific to the Bluesky application, on the overall account.
+    labels: t.Optional[unknown_union.OpenUnion['models.ComAtprotoLabelDefs.SelfLabels']] = (
+        None  #: Self-label values, specific to the Bluesky application, on the overall account.
+    )
     pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Pinned post.
     pronouns: te.Annotated[t.Optional[str], Field(max_length=200)] = None  #: Free-form pronouns text.
     website: t.Optional[string_formats.Uri] = None  #: Website.

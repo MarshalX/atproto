@@ -12,7 +12,7 @@ from pydantic import Field
 
 if t.TYPE_CHECKING:
     from atproto_client import models
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Params(base.ParamsModelBase):
@@ -31,9 +31,8 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`chat.bsky.convo.listConvoRequests`."""
 
     requests: t.List[
-        te.Annotated[
-            t.Union['models.ChatBskyConvoDefs.ConvoView', 'models.ChatBskyGroupDefs.JoinRequestConvoView'],
-            Field(discriminator='py_type'),
+        unknown_union.OpenUnion[
+            t.Union['models.ChatBskyConvoDefs.ConvoView', 'models.ChatBskyGroupDefs.JoinRequestConvoView']
         ]
     ]  #: Requests.
     cursor: t.Optional[str] = None  #: Cursor.

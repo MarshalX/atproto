@@ -44,6 +44,8 @@ def get_or_create(
         This is called "extended record".
         Extended records will be decoded to proper models with extra, non-typehinted fields available only in runtime.
         Unknown record types will be decoded to :obj:`atproto.xrpc_client.models.base.DotDict`.
+        A union member with an unrecognized "$type" is decoded to a DotDict too, without failing
+        the rest of the model.
 
     Note:
         By default, the method raises an exception on custom models if you have passed the expected model.
