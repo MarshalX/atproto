@@ -24,6 +24,7 @@ Documentation
    atproto_firehose/index
    atproto_jetstream/index
    atproto_identity/index
+   atproto_oauth/index
    atproto_crypto/index
    atproto_server/index
    atproto_lexicon/index
