@@ -82,7 +82,7 @@ class Record(base.RecordModelBase):
         None  #: Indicates human language of post primary text content.
     )
     reply: t.Optional['models.AppBskyFeedPost.ReplyRef'] = None  #: Reply.
-    tags: te.Annotated[t.Optional[t.List[str]], Field(max_length=8)] = (
+    tags: te.Annotated[t.Optional[t.List[te.Annotated[str, Field(max_length=640)]]], Field(max_length=8)] = (
         None  #: Additional hashtags, in addition to any included in post text and facets.
     )
 

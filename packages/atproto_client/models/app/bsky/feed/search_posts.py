@@ -41,7 +41,7 @@ class Params(base.ParamsModelBase):
         None  #: Filter results for posts after the indicated datetime (inclusive). Expected to use 'sortAt' timestamp, which may not match 'createdAt'. Can be a datetime, or just an ISO date (YYYY-MM-DD).
     )
     sort: t.Optional[t.Union[t.Literal['top', 'latest'], str]] = 'latest'  #: Specifies the ranking order of results.
-    tag: t.Optional[t.List[str]] = (
+    tag: t.Optional[t.List[te.Annotated[str, Field(max_length=640)]]] = (
         None  #: Filter to posts with the given tag (hashtag), based on rich-text facet or tag field. Do not include the hash (#) prefix. Multiple tags can be specified, with 'AND' matching.
     )
     until: t.Optional[str] = (
@@ -77,7 +77,7 @@ class ParamsDict(t.TypedDict):
         t.Optional[t.Union[t.Literal['top', 'latest'], str]]
     ]  #: Specifies the ranking order of results.
     tag: te.NotRequired[
-        t.Optional[t.List[str]]
+        t.Optional[t.List[te.Annotated[str, Field(max_length=640)]]]
     ]  #: Filter to posts with the given tag (hashtag), based on rich-text facet or tag field. Do not include the hash (#) prefix. Multiple tags can be specified, with 'AND' matching.
     until: te.NotRequired[
         t.Optional[str]
