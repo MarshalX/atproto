@@ -21,6 +21,7 @@ def gen_client(input_filename: str, output_filename: str) -> None:
         '_get_and_set_session',
         '_refresh_and_set_session',
         '_import_session_string',
+        '_fetch_bsky_profile',
         '_call_on_session_change_callbacks',
         '_invoke',
     ]
