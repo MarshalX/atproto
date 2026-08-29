@@ -110,7 +110,9 @@ def get_record_model_name(_: t.Optional[str] = None) -> str:
 
 
 def get_model_path(nsid: NSID, method_name: str) -> str:
-    record_models_for_nsid = builder.build_record_models().get(nsid, {})
+    # ALL scope because a reference may point into a lexicon that is resolved against but not emitted,
+    # and only the record database tells us that "#main" is named "Record" rather than "Main"
+    record_models_for_nsid = builder.build_record_models(scope=builder.Scope.ALL).get(nsid, {})
     is_main_record_model = method_name == 'Main' and record_models_for_nsid.get('main')
 
     # edge case since we name classes "Record" for record types,

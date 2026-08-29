@@ -1,6 +1,5 @@
 import typing as t
 from dataclasses import dataclass
-from pathlib import Path
 
 from atproto_core.nsid import NSID
 from atproto_lexicon.models import (
@@ -11,7 +10,9 @@ from atproto_lexicon.models import (
     LexXrpcProcedure,
     LexXrpcQuery,
 )
-from atproto_lexicon.parser import lexicon_parse_dir
+
+from atproto_codegen.config import CodegenConfig, get_config
+from atproto_codegen.models.builder import Scope, parse_lexicons
 
 _VALID_LEX_DEF_TYPES = {LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, LexDefinitionType.RECORD}
 
@@ -100,10 +101,5 @@ def build_namespace_tree(lexicons: t.List[LexiconDoc]) -> dict:
     return namespace_tree
 
 
-def build_namespaces(lexicon_dir: t.Optional[Path] = None) -> dict:
-    lexicons = lexicon_parse_dir(lexicon_dir)
-    return build_namespace_tree(lexicons)
-
-
-if __name__ == '__main__':
-    build_namespaces()
+def build_namespaces(config: t.Optional[CodegenConfig] = None) -> dict:
+    return build_namespace_tree(list(parse_lexicons(config or get_config(), Scope.EMIT)))
