@@ -880,6 +880,8 @@ def _generate_import_aliases(root_package_path: Path) -> None:
 
             type_checking_imports.append(f'{_(1)}from {from_import} import {module_name} as {alias_name}')
 
+    lazy_accessor_fallback = '' if config.is_self_gen else f", fallback='{base}'"
+
     # The TYPE_CHECKING import block (so type checkers/IDEs resolve every `models.Alias` symbol)
     # The _Ids registry (alias -> NSID, from which the runtime derives module paths)
     lines = [
@@ -890,12 +892,22 @@ def _generate_import_aliases(root_package_path: Path) -> None:
         f'{_(1)}from {base}.utils import (',
         *[f'{_(2)}{name},' for name in sorted(_UTILS_EXPORTS)],
         f'{_(1)})',
-        '__getattr__, __dir__ = make_lazy_accessors(__name__)',
+        f'__getattr__, __dir__ = make_lazy_accessors(__name__{lazy_accessor_fallback})',
         *ids_db,
         'ids = _Ids()',
     ]
 
     write_code(config.models_output_dir.joinpath('__init__.py'), join_code(lines))
+
+
+def _generate_package_init(config: CodegenConfig) -> None:
+    """Make the generated package importable. The SDK's own root is hand-written, so it is skipped."""
+    if config.is_self_gen:
+        return
+
+    init_path = config.output_dir.joinpath('__init__.py')
+    if not init_path.exists():
+        write_code(init_path, DISCLAIMER)
 
 
 def generate_models(config: t.Optional[CodegenConfig] = None) -> None:
@@ -912,5 +924,6 @@ def generate_models(config: t.Optional[CodegenConfig] = None) -> None:
 
         _generate_empty_init_files(active.models_output_dir)
         _generate_import_aliases(active.models_output_dir)
+        _generate_package_init(active)
 
         format_code(active.models_output_dir)

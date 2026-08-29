@@ -31,23 +31,26 @@ _NOT_REBUILT_CLASSES = {
 }
 
 
-def _get_forward_ref_namespace() -> t.Dict[str, t.Any]:
+def _get_forward_ref_namespace(models_root: t.Optional['ModuleType'] = None) -> t.Dict[str, t.Any]:
     """Return the names required to resolve the string forward references used across models.
 
     Generated model modules import these only under ``typing.TYPE_CHECKING`` (to keep imports
     cheap and to avoid eagerly loading the whole package), so they are absent from the module
     namespace at runtime. They have to be injected back so that pydantic can resolve the string
     forward references when it builds a model's schema.
+
+    Args:
+        models_root: Package that ``models.<Alias>`` resolves against. Defaults to the SDK's own.
     """
     from atproto_core.cid import CIDType
 
-    from atproto_client import models
+    from atproto_client import models as sdk_models
     from atproto_client.models import dot_dict
     from atproto_client.models.blob_ref import BlobRef
     from atproto_client.models.unknown_type import UnknownInputType, UnknownType
 
     return {
-        'models': models,
+        'models': models_root if models_root is not None else sdk_models,
         'dot_dict': dot_dict,
         'BlobRef': BlobRef,
         'UnknownType': UnknownType,
@@ -79,10 +82,15 @@ def _model_aliases(package: 'ModuleType') -> t.List[str]:
 
 def make_lazy_accessors(
     package_name: str,
+    fallback: t.Optional[str] = None,
 ) -> 't.Tuple[t.Callable[[str], t.Any], t.Callable[[], t.List[str]]]':
     """Build ``__getattr__``/``__dir__`` for the lazily-loaded models package.
 
     Resolved attributes are cached on the package, so each accessor runs at most once per name.
+
+    Args:
+        package_name: The models package these accessors belong to.
+        fallback: Models package to defer to for names this one does not define.
     """
     import importlib
 
@@ -92,7 +100,7 @@ def make_lazy_accessors(
         nsid = getattr(package.__dict__.get('ids'), name, None)
         if nsid is not None:
             module = importlib.import_module(_module_path_from_nsid(package_name, nsid))
-            prepare_model_module(module)
+            prepare_model_module(module, package)
             package.__dict__[name] = module
             return module
 
@@ -102,23 +110,37 @@ def make_lazy_accessors(
             package.__dict__[name] = value
             return value
 
+        # dunders are import machinery probing the module, never an alias
+        if fallback is not None and not name.startswith('_'):
+            value = getattr(importlib.import_module(fallback), name)
+            package.__dict__[name] = value
+            return value
+
         raise AttributeError(f'module {package_name!r} has no attribute {name!r}')
 
     def __dir__() -> t.List[str]:
         package = importlib.import_module(package_name)
-        return sorted({*package.__dict__, *_model_aliases(package), *_UTILS_EXPORTS})
+        names = {*package.__dict__, *_model_aliases(package), *_UTILS_EXPORTS}
+        if fallback is not None:
+            names.update(dir(importlib.import_module(fallback)))
+
+        return sorted(names)
 
     return __getattr__, __dir__
 
 
-def prepare_model_module(module: 'ModuleType') -> None:
+def prepare_model_module(module: 'ModuleType', models_root: t.Optional['ModuleType'] = None) -> None:
     """Inject the forward-reference namespace into a freshly imported generated model module.
 
     Pydantic resolves the string forward references against the module's globals when it (lazily) builds
     each model's schema on first validation, so the names must be present there.
+
+    Args:
+        module: The freshly imported generated model module.
+        models_root: Package that ``models.<Alias>`` resolves against. Defaults to the SDK's own.
     """
     module_dict = vars(module)
-    for name, value in _get_forward_ref_namespace().items():
+    for name, value in _get_forward_ref_namespace(models_root).items():
         module_dict.setdefault(name, value)
 
 
@@ -131,17 +153,21 @@ def _iter_rebuildable_models(module: 'ModuleType') -> t.Iterator[t.Any]:
             yield value
 
 
-def load_models() -> None:
+def load_models(package_name: t.Optional[str] = None) -> None:
     """Eagerly import and rebuild every generated model.
 
     Models are imported and built lazily on first access, so calling this is optional. Use it to
     pay the (one-time) cost up-front instead of on first use, e.g. before forking worker processes
     or to avoid a latency spike on the first request.
+
+    Args:
+        package_name: Models package to load. Defaults to the SDK's own.
     """
     import importlib
 
-    from atproto_client import models
     from atproto_client.models.blob_ref import BlobRef
+
+    models = importlib.import_module(package_name) if package_name else importlib.import_module('atproto_client.models')
 
     package_name = models.__name__
     module_paths = {
@@ -151,7 +177,7 @@ def load_models() -> None:
     modules = []
     for module_path in sorted(module_paths):
         module = importlib.import_module(module_path)
-        prepare_model_module(module)
+        prepare_model_module(module, models)
         modules.append(module)
 
     BlobRef.model_rebuild()

@@ -12,17 +12,17 @@ from atproto_client.models.utils import get_or_create, get_response_model
 from atproto_client.namespaces.base import AsyncNamespaceBase, AsyncRecordBase
 
 if t.TYPE_CHECKING:
-    from atproto_client.client.async_raw import AsyncClientRaw
+    from atproto_client.namespaces.base import AsyncXrpcClient
 
 
 class AppNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.bsky = AppBskyNamespace(self._client)
 
 
 class AppBskyNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.actor = AppBskyActorNamespace(self._client)
         self.ageassurance = AppBskyAgeassuranceNamespace(self._client)
@@ -497,7 +497,7 @@ class AppBskyActorStatusRecord(AsyncRecordBase):
 
 
 class AppBskyActorNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.contentVisibilityDeclaration = AppBskyActorContentvisibilitydeclarationRecord(self._client)
         self.profile = AppBskyActorProfileRecord(self._client)
@@ -2129,7 +2129,7 @@ class AppBskyFeedThreadgateRecord(AsyncRecordBase):
 
 
 class AppBskyFeedNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.generator = AppBskyFeedGeneratorRecord(self._client)
         self.like = AppBskyFeedLikeRecord(self._client)
@@ -3676,7 +3676,7 @@ class AppBskyGraphVerificationRecord(AsyncRecordBase):
 
 
 class AppBskyGraphNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.block = AppBskyGraphBlockRecord(self._client)
         self.follow = AppBskyGraphFollowRecord(self._client)
@@ -4465,7 +4465,7 @@ class AppBskyLabelerServiceRecord(AsyncRecordBase):
 
 
 class AppBskyLabelerNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.service = AppBskyLabelerServiceRecord(self._client)
 
@@ -4650,7 +4650,7 @@ class AppBskyNotificationDeclarationRecord(AsyncRecordBase):
 
 
 class AppBskyNotificationNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.declaration = AppBskyNotificationDeclarationRecord(self._client)
 
@@ -6096,13 +6096,13 @@ class AppBskyVideoNamespace(AsyncNamespaceBase):
 
 
 class ChatNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.bsky = ChatBskyNamespace(self._client)
 
 
 class ChatBskyNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.actor = ChatBskyActorNamespace(self._client)
         self.convo = ChatBskyConvoNamespace(self._client)
@@ -6264,7 +6264,7 @@ class ChatBskyActorDeclarationRecord(AsyncRecordBase):
 
 
 class ChatBskyActorNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.declaration = ChatBskyActorDeclarationRecord(self._client)
 
@@ -7618,14 +7618,14 @@ class ChatBskyNotificationNamespace(AsyncNamespaceBase):
 
 
 class ComNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.atproto = ComAtprotoNamespace(self._client)
         self.germnetwork = ComGermnetworkNamespace(self._client)
 
 
 class ComAtprotoNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.admin = ComAtprotoAdminNamespace(self._client)
         self.identity = ComAtprotoIdentityNamespace(self._client)
@@ -8470,7 +8470,7 @@ class ComAtprotoLexiconSchemaRecord(AsyncRecordBase):
 
 
 class ComAtprotoLexiconNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.schema = ComAtprotoLexiconSchemaRecord(self._client)
 
@@ -10109,19 +10109,19 @@ class ComGermnetworkDeclarationRecord(AsyncRecordBase):
 
 
 class ComGermnetworkNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.declaration = ComGermnetworkDeclarationRecord(self._client)
 
 
 class InternalNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.bsky = InternalBskyNamespace(self._client)
 
 
 class InternalBskyNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.actor = InternalBskyActorNamespace(self._client)
 
@@ -10155,13 +10155,13 @@ class InternalBskyActorNamespace(AsyncNamespaceBase):
 
 
 class NetworkNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.bsky = NetworkBskyNamespace(self._client)
 
 
 class NetworkBskyNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.jetstream = NetworkBskyJetstreamNamespace(self._client)
 
@@ -10380,7 +10380,7 @@ class NetworkBskyJetstreamNamespace(AsyncNamespaceBase):
 
 
 class SiteNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.standard = SiteStandardNamespace(self._client)
 
@@ -10690,7 +10690,7 @@ class SiteStandardPublicationRecord(AsyncRecordBase):
 
 
 class SiteStandardNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.graph = SiteStandardGraphNamespace(self._client)
         self.theme = SiteStandardThemeNamespace(self._client)
@@ -11003,7 +11003,7 @@ class SiteStandardGraphSubscriptionRecord(AsyncRecordBase):
 
 
 class SiteStandardGraphNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.recommend = SiteStandardGraphRecommendRecord(self._client)
         self.subscription = SiteStandardGraphSubscriptionRecord(self._client)
@@ -11162,19 +11162,19 @@ class SiteStandardThemeBasicRecord(AsyncRecordBase):
 
 
 class SiteStandardThemeNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.basic = SiteStandardThemeBasicRecord(self._client)
 
 
 class ToolsNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.ozone = ToolsOzoneNamespace(self._client)
 
 
 class ToolsOzoneNamespace(AsyncNamespaceBase):
-    def __init__(self, client: 'AsyncClientRaw') -> None:
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
         super().__init__(client)
         self.communication = ToolsOzoneCommunicationNamespace(self._client)
         self.hosting = ToolsOzoneHostingNamespace(self._client)
