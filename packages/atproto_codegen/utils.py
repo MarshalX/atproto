@@ -76,9 +76,15 @@ def format_code(path: Path, quiet: bool = True, root: t.Optional[Path] = None) -
 
     cwd = root or (path if path.is_dir() else path.parent)
 
+    # per-file-ignores are matched against the path as given
+    try:
+        target = path.relative_to(cwd)
+    except ValueError:
+        target = path
+
     def run(*args: str) -> None:
         # check=False: `ruff check` exits non-zero on leftover unfixable lints, which is fine here
-        subprocess.run([ruff, *args, *options, str(path)], cwd=cwd, check=False)  # noqa: S603
+        subprocess.run([ruff, *args, *options, str(target)], cwd=cwd, check=False)  # noqa: S603
 
     run('format')
     run('check', '--fix')

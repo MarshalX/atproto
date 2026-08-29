@@ -84,3 +84,21 @@ def test_style_ignores_the_surrounding_project(generated_package: Path, tmp_path
 
     assert "'" in status
     assert any(len(line) > 50 for line in status.splitlines())
+
+
+def test_formatting_emits_no_diagnostics(tmp_path: Path, capfd: pytest.CaptureFixture) -> None:
+    """Codegen's own Ruff run is silent: its per-file-ignores apply to the paths it passes."""
+    root = tmp_path.joinpath('quiet_pkg')
+    config = CodegenConfig(
+        emit_lexicon_dirs=(CUSTOM_LEXICON_DIR,),
+        ref_lexicon_dirs=(DEFAULT_LEXICON_DIR,),
+        output_dir=root,
+        package='quiet_pkg',
+    )
+    generate_models(config)
+    generate_namespaces(config)
+
+    output = capfd.readouterr()
+
+    assert 'F401' not in output.out + output.err
+    assert 'E501' not in output.out + output.err

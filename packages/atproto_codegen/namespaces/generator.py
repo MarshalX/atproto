@@ -445,11 +445,60 @@ def _generate_raw_client(namespace_tree: dict, config: CodegenConfig, *, sync: b
     format_code(filepath, root=config.output_dir)
 
 
+def _generate_custom_client(namespace_tree: dict, config: CodegenConfig, *, sync: bool) -> None:
+    """Generate a client that adds the package's root namespaces to the SDK's own."""
+    base = config.base_package
+    ns_module = _NAMESPACES_SYNC_FILENAME[:-3] if sync else _NAMESPACES_ASYNC_FILENAME[:-3]
+    prefix = '' if sync else 'Async'
+    sdk_client = f'{prefix}Client'
+
+    roots = sorted(node for node in namespace_tree if node != METHODS_KEY)
+    package_class = ''.join(p.capitalize() for p in config.package.split('_'))
+    class_name = f'{prefix}{package_class}Client'
+
+    lines = [
+        DISCLAIMER,
+        'import typing as t',
+        '',
+        f'from {base} import {sdk_client}',
+        f'from {config.package}.namespaces import {ns_module}',
+        '',
+        '',
+        f'def attach_{"" if sync else "async_"}namespaces(client: t.Any) -> None:',
+        f'{_(1)}"""Add this package\'s root namespaces to an existing client."""',
+    ]
+    lines.extend(f'{_(1)}client.{root} = {ns_module}.{get_namespace_name([root])}(client)' for root in roots)
+    lines.extend(
+        [
+            '',
+            '',
+            f'class {class_name}({sdk_client}):',
+            f'{_(1)}"""{sdk_client} with the root namespaces of this package."""',
+            '',
+        ]
+    )
+    lines.extend(f"{_(1)}{root}: '{ns_module}.{get_namespace_name([root])}'" for root in roots)
+    lines.extend(
+        [
+            '',
+            f'{_(1)}def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:',
+            f'{_(2)}super().__init__(*args, **kwargs)',
+            f'{_(2)}attach_{"" if sync else "async_"}namespaces(self)',
+        ]
+    )
+
+    filename = 'client.py' if sync else 'async_client.py'
+    filepath = config.output_dir.joinpath(filename)
+    write_code(filepath, join_code(lines))
+    format_code(filepath, root=config.output_dir)
+
+
 def generate_namespaces(
     config: t.Optional[CodegenConfig] = None,
     output_dir: t.Optional[Path] = None,
     async_filename: t.Optional[str] = None,
     sync_filename: t.Optional[str] = None,
+    with_client: bool = True,
 ) -> None:
     with use_config(config or get_config()) as active:
         output_dir = output_dir or active.namespaces_output_dir
@@ -472,6 +521,8 @@ def generate_namespaces(
 
         format_code(output_dir, root=active.output_dir)
 
-        if active.is_self_gen:
-            for sync in (True, False):
+        for sync in (True, False):
+            if active.is_self_gen:
                 _generate_raw_client(namespace_tree, active, sync=sync)
+            elif with_client:
+                _generate_custom_client(namespace_tree, active, sync=sync)
