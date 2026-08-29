@@ -27,7 +27,6 @@ jobs:
       - name: Checkout repository.
         uses: actions/checkout@v5
 
-      # Poetry itself requires Python 3.10+, but codegen runs on the oldest supported Python.
       # Poetry is installed with its own interpreter and creates the venv with the active one.
       - name: Set up Python for Poetry.
         id: poetry-python
@@ -53,11 +52,12 @@ jobs:
         if: runner.os != 'Windows'
         run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
+      # Docs gen needs the docs deps, which require Python 3.12+.
       - name: Set up Python.
         id: setup-python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.9'
+          python-version: '3.13'
 
       - name: Load cached venv.
         id: cached-venv
