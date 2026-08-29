@@ -407,6 +407,44 @@ def _generate_namespace_in_output(
             _generate_namespace_in_output(sub_node, output, sync=sync, parent_nodes=nodes_path)
 
 
+def _generate_raw_client(namespace_tree: dict, config: CodegenConfig, *, sync: bool) -> None:
+    """Generate the client that exposes every root namespace."""
+    base = config.base_package
+    ns_module = _NAMESPACES_SYNC_FILENAME[:-3] if sync else _NAMESPACES_ASYNC_FILENAME[:-3]
+    class_name = 'ClientRaw' if sync else 'AsyncClientRaw'
+    base_class = 'ClientBase' if sync else 'AsyncClientBase'
+
+    roots = sorted(node for node in namespace_tree if node != METHODS_KEY)
+
+    lines = [
+        DISCLAIMER,
+        'import typing as t',
+        '',
+        f'from {base}.client.base import {base_class}',
+        f'from {base}.namespaces import {ns_module}',
+        '',
+        '',
+        f'class {class_name}({base_class}):',
+        f'{_(1)}"""Group all root namespaces."""',
+        '',
+    ]
+    lines.extend(f"{_(1)}{root}: '{ns_module}.{get_namespace_name([root])}'" for root in roots)
+    lines.extend(
+        [
+            '',
+            f'{_(1)}def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:',
+            f'{_(2)}super().__init__(*args, **kwargs)',
+            '',
+        ]
+    )
+    lines.extend(f'{_(2)}self.{root} = {ns_module}.{get_namespace_name([root])}(self)' for root in roots)
+
+    filename = 'raw.py' if sync else 'async_raw.py'
+    filepath = config.output_dir.joinpath('client', filename)
+    write_code(filepath, join_code(lines))
+    format_code(filepath)
+
+
 def generate_namespaces(
     config: t.Optional[CodegenConfig] = None,
     output_dir: t.Optional[Path] = None,
@@ -429,6 +467,8 @@ def generate_namespaces(
             filename = sync_filename if sync else async_filename
             write_code(output_dir.joinpath(filename), code)
 
-        # TODO(MarshalX): generate ClientRaw as root of namespaces
-
         format_code(output_dir)
+
+        if active.is_self_gen:
+            for sync in (True, False):
+                _generate_raw_client(namespace_tree, active, sync=sync)

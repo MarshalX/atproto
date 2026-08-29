@@ -10,7 +10,8 @@ def main(init_path: Path, output_path: Path) -> None:
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom) and node.names:
                 name = node.names[0]
-                if not name.asname:
+                # a model alias always renames; `x as x` is a re-export, not a model
+                if not name.asname or name.asname == name.name:
                     continue
 
                 aliases_db.append(f"    'models.{name.asname}': '{node.module}.{name.name}',")

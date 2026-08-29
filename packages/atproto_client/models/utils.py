@@ -13,7 +13,7 @@ from atproto_client.exceptions import (
 from atproto_client.models.base import ModelBase, RecordModelBase
 from atproto_client.models.blob_ref import BlobRef
 from atproto_client.models.dot_dict import DotDict
-from atproto_client.models.type_conversion import RECORD_TYPE_TO_MODEL_CLASS
+from atproto_client.models.record_registry import resolve_record_type
 from atproto_client.models.unknown_type import UnknownRecordType
 
 if t.TYPE_CHECKING:
@@ -94,15 +94,13 @@ def _get_or_create(
 
         # resolve a record model by type and try to deserialize
         record_type: t.Any = model_data.get(_TYPE_SERVICE_FIELD)
-        if record_type not in RECORD_TYPE_TO_MODEL_CLASS:
+        record_model = resolve_record_type(record_type) if isinstance(record_type, str) else None
+        if record_model is None:
             return None
-
-        # now we are sure that this is str because it's in RECORD_TYPE_TO_MODEL_CLASS
-        record_type = t.cast('str', record_type)
 
         return get_or_create(
             model_data,
-            RECORD_TYPE_TO_MODEL_CLASS[record_type],
+            record_model,
             strict=strict,
             strict_string_format=strict_string_format,
         )

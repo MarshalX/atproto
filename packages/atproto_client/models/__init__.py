@@ -1,5 +1,6 @@
 import typing as t
 
+from atproto_client.models import type_conversion as type_conversion
 from atproto_client.models.models_loader import make_lazy_accessors
 
 if t.TYPE_CHECKING:

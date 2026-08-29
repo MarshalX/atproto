@@ -781,7 +781,12 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     config = get_config()
     base = f'{config.base_package}.models'
 
-    type_conversion_lines = [f'from {config.package} import models', 'RECORD_TYPE_TO_MODEL_CLASS = {']
+    type_conversion_lines = [
+        f'from {base}.record_registry import RECORD_TYPE_TO_MODEL_CLASS',
+        f'from {base}.record_registry import register_record_types',
+        "__all__ = ['RECORD_TYPE_TO_MODEL_CLASS', 'RECORD_TYPES']",
+        'RECORD_TYPES = {',
+    ]
 
     import_lines = [
         'import typing as t',
@@ -808,12 +813,13 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
 
                 path_to_class = f'models.{get_import_path(nsid)}.{class_name}'
 
-                type_conversion_lines.append(f"'{record_type}': {path_to_class},")
+                type_conversion_lines.append(f"'{record_type}': '{get_import_path(nsid)}',")
 
                 unknown_record_type_hint_lines.append(f"{_(4)}'{path_to_class}',")
                 unknown_record_type_pydantic_lines.append(f"{_(4)}'{path_to_class}',")
 
     type_conversion_lines.append('}')
+    type_conversion_lines.append(f"register_record_types('{config.models_package}', RECORD_TYPES)")
 
     unknown_record_type_hint_lines.append(']')
     unknown_record_type_pydantic_lines.append('], Field(discriminator="py_type")]')
@@ -887,6 +893,8 @@ def _generate_import_aliases(root_package_path: Path) -> None:
     lines = [
         'import typing as t',
         f'from {base}.models_loader import make_lazy_accessors',
+        # imported for its registration side effect; the redundant alias is what keeps F401 off it
+        f'from {config.models_package} import type_conversion as type_conversion',
         'if t.TYPE_CHECKING:',
         *type_checking_imports,
         f'{_(1)}from {base}.utils import (',
