@@ -35,7 +35,7 @@ def _generate(root: Path, *extra: str) -> None:
     assert result.exit_code == 0, result.output
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def package(tmp_path_factory: pytest.TempPathFactory) -> t.Iterator[t.Any]:
     import importlib
 
@@ -43,12 +43,7 @@ def package(tmp_path_factory: pytest.TempPathFactory) -> t.Iterator[t.Any]:
     _generate(root)
 
     sys.path.insert(0, str(root))
-    try:
-        yield importlib.import_module(PACKAGE)
-    finally:
-        sys.path.remove(str(root))
-        for name in [n for n in sys.modules if n.startswith(PACKAGE)]:
-            del sys.modules[name]
+    yield importlib.import_module(PACKAGE)
 
 
 @pytest.fixture
