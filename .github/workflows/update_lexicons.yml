@@ -74,8 +74,8 @@ jobs:
           committer: Ilya (Marshal) <ilya@marshal.dev>
           author: Ilya (Marshal) <ilya@marshal.dev>
           commit-message: ${{ steps.regen.outputs.commit_message }}
-          body: This PR was automatically generated
+          body: ${{ steps.regen.outputs.body }}
           base: main
           branch: update-lexicons
-          title: ${{ steps.regen.outputs.commit_message }}
+          title: ${{ steps.regen.outputs.title }}
           assignees: MarshalX
