@@ -15,10 +15,10 @@ import typing as t
 
 import libipld
 import pytest
-from atproto_core import websocket as websocket_module
-from atproto_firehose.client import _AsyncWebsocketClient, _WebsocketClient
-from atproto_firehose.exceptions import FirehoseError
-from atproto_firehose.models import MessageFrame
+from atproto_subscription import websocket as websocket_module
+from atproto_subscription.client import _AsyncWebsocketClient, _WebsocketClient
+from atproto_subscription.exceptions import SubscriptionError
+from atproto_subscription.frames import MessageFrame
 from websockets.asyncio.client import connect
 
 from .conftest import MAX_SIZE_BYTES, FirehoseTestServer
@@ -153,7 +153,7 @@ async def test_error_frame_raises_firehose_error(runner: t.Any, server: Firehose
     method = server.new_method('error_frame')
     outcome = await _run(runner, server, method)
 
-    assert isinstance(outcome.exception, FirehoseError)
+    assert isinstance(outcome.exception, SubscriptionError)
     assert outcome.exception.args[0].error == 'ConsumerTooSlow'
 
 
@@ -351,10 +351,10 @@ async def test_reconnects_when_network_is_unreachable(runner: t.Any, server: Fir
 
 
 def test_unexpected_exception_keeps_its_message() -> None:
-    """An unrecognised error must not surface as a blank FirehoseError."""
+    """An unrecognised error must not surface as a blank SubscriptionError."""
     cause = ValueError('something specific went wrong')
 
-    with pytest.raises(FirehoseError) as exc_info:
+    with pytest.raises(SubscriptionError) as exc_info:
         _handle_websocket_error_or_stop(cause)
 
     assert 'something specific went wrong' in str(exc_info.value)

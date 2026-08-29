@@ -4,7 +4,7 @@ from copy import deepcopy
 from atproto_client.client.async_raw import AsyncClientRaw
 from atproto_client.client.raw import ClientRaw
 from atproto_client.models.common import XrpcError
-from atproto_core.websocket import AsyncWebsocketClient, WebsocketClient, WebsocketClientBase
+from atproto_subscription.websocket import AsyncWebsocketClient, WebsocketClient, WebsocketClientBase
 from pydantic_core import from_json
 from websockets.exceptions import InvalidStatus
 

@@ -25,3 +25,4 @@ Submodules
 
    atproto_client.exceptions
    atproto_client.request
+   atproto_client.subscriptions

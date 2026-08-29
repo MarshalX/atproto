@@ -6,6 +6,7 @@ from atproto_codegen.clients.generate_async_client import gen_client
 from atproto_codegen.config import DEFAULT_LEXICON_DIR, CodegenConfig
 from atproto_codegen.models.generator import generate_models
 from atproto_codegen.namespaces.generator import generate_namespaces
+from atproto_codegen.subscriptions.generator import generate_subscriptions
 
 
 class AliasedGroup(click.Group):
@@ -82,6 +83,8 @@ def gen_all(ctx: click.Context) -> None:
     generate_models(config)
     echo(ctx, '- namespaces...')
     generate_namespaces(config)
+    echo(ctx, '- subscriptions...')
+    generate_subscriptions(config)
     echo(ctx, '- async clients...')
     _gen_async_version()
 
@@ -160,6 +163,8 @@ def gen_custom(
     generate_models(config)
     echo(ctx, '- namespaces...')
     generate_namespaces(config, with_client=not no_client)
+    echo(ctx, '- subscriptions...')
+    generate_subscriptions(config)
 
     echo(ctx, f'Done! Package written to {config.output_dir}')
 

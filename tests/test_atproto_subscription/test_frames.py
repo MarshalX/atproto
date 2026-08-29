@@ -2,8 +2,8 @@
 
 import libipld
 import pytest
-from atproto_firehose.exceptions import FirehoseDecodingError
-from atproto_firehose.models import (
+from atproto_subscription.exceptions import FrameDecodingError
+from atproto_subscription.frames import (
     ErrorFrame,
     ErrorFrameHeader,
     Frame,
@@ -43,5 +43,5 @@ def test_error_frame_header() -> None:
 def test_unknown_operation_is_rejected() -> None:
     raw = libipld.encode_dag_cbor({'op': 42}) + libipld.encode_dag_cbor({})
 
-    with pytest.raises(FirehoseDecodingError):
+    with pytest.raises(FrameDecodingError):
         Frame.from_bytes(raw)

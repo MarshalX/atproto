@@ -1,0 +1,40 @@
+{
+  "lexicon": 1,
+  "id": "xyz.statusphere.subscribeStatuses",
+  "defs": {
+    "main": {
+      "type": "subscription",
+      "description": "Stream of status updates.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "cursor": { "type": "integer" }
+        }
+      },
+      "message": {
+        "schema": {
+          "type": "union",
+          "refs": ["#update", "#info"]
+        }
+      },
+      "errors": [{ "name": "FutureCursor" }]
+    },
+    "update": {
+      "type": "object",
+      "required": ["seq", "status"],
+      "properties": {
+        "seq": { "type": "integer" },
+        "status": { "type": "string" },
+        "did": { "type": "string", "format": "did" }
+      }
+    },
+    "info": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "message": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,88 +1,29 @@
+"""Moved to :mod:`atproto_subscription.client`.
+
+.. deprecated::
+    Use :obj:`atproto_subscription.SubscriptionClient` and
+    :obj:`atproto_subscription.AsyncSubscriptionClient` instead.
+"""
+
+import importlib
 import typing as t
+import warnings
 
-from atproto_client.models import get_model_as_dict
-from atproto_client.models.base import ParamsModelBase
-from atproto_client.models.common import XrpcError
-from atproto_core.exceptions import DAGCBORDecodingError
-from atproto_core.websocket import AsyncWebsocketClient, WebsocketClient, WebsocketClientBase
+if t.TYPE_CHECKING:
+    from atproto_subscription.client import AsyncSubscriptionClient as AsyncFirehoseClient
+    from atproto_subscription.client import SubscriptionClient as FirehoseClient
 
-from atproto_firehose.exceptions import FirehoseDecodingError, FirehoseError
-from atproto_firehose.models import ErrorFrame, Frame, MessageFrame
+_TARGET = 'atproto_subscription.client'
+_MOVED = {'FirehoseClient': 'SubscriptionClient', 'AsyncFirehoseClient': 'AsyncSubscriptionClient'}
 
-_MAX_MESSAGE_SIZE_BYTES = 1024 * 1024 * 5  # 5MB
-
-OnMessageCallback = t.Callable[['MessageFrame'], None]
-AsyncOnMessageCallback = t.Callable[['MessageFrame'], t.Coroutine[t.Any, t.Any, None]]
-
-OnCallbackErrorCallback = t.Callable[[BaseException], None]
-AsyncOnCallbackErrorCallback = t.Callable[[BaseException], t.Coroutine[t.Any, t.Any, None]]
+__all__ = ['AsyncFirehoseClient', 'FirehoseClient']
 
 
-def _get_message_frame_from_bytes_or_raise(data: bytes) -> MessageFrame:
-    frame = Frame.from_bytes(data)
-    if isinstance(frame, ErrorFrame):
-        raise FirehoseError(XrpcError(frame.body.error, frame.body.message))
-    if isinstance(frame, MessageFrame):
-        return frame
-    raise FirehoseDecodingError('Unknown frame type')
+def __getattr__(name: str) -> t.Any:
+    renamed = _MOVED.get(name)
+    if renamed is None:
+        raise AttributeError(f'module {__name__!r} has no attribute {name!r}')
 
+    warnings.warn(f'`{__name__}.{name}` moved to `{_TARGET}.{renamed}`.', DeprecationWarning, stacklevel=2)
 
-class _FirehoseClientMixin(WebsocketClientBase):
-    """Firehose framing on top of the shared websocket client."""
-
-    _error_class = FirehoseError
-
-    def __init__(
-        self,
-        method: str,
-        base_uri: str,
-        params: t.Optional[t.Dict[str, t.Any]] = None,
-        recv_timeout: t.Optional[float] = None,
-    ) -> None:
-        super().__init__(
-            method,
-            base_uri,
-            params,
-            recv_timeout,
-            max_message_size_bytes=_MAX_MESSAGE_SIZE_BYTES,
-        )
-
-    def update_params(self, params: t.Union[ParamsModelBase, t.Dict[str, t.Any]]) -> None:
-        """Update params.
-
-        Warning:
-            If you are using `params` arg at the client start, you must care about keeping params up to date.
-            Otherwise, your client will be rolled back to the previous state (cursor) on reconnecting.
-        """
-        if isinstance(params, ParamsModelBase):
-            params = get_model_as_dict(params)
-
-        super().update_params(params)
-
-    def _decode_frame(self, raw_frame: t.Union[str, bytes]) -> t.Optional[MessageFrame]:
-        if isinstance(raw_frame, str):
-            # skip text frames (should not be occurred)
-            return None
-
-        return _get_message_frame_from_bytes_or_raise(raw_frame)
-
-    def _handle_frame_decoding_error(self, exception: Exception) -> None:
-        if isinstance(exception, (DAGCBORDecodingError, FirehoseDecodingError)):
-            # Ignore an invalid atproto_firehose frame that could not be properly decoded.
-            # It's better to ignore one frame rather than stop the whole connection
-            # or trap into an infinite loop of reconnections.
-            return
-
-        raise exception
-
-
-class _WebsocketClient(_FirehoseClientMixin, WebsocketClient):
-    """Firehose subscription client."""
-
-
-class _AsyncWebsocketClient(_FirehoseClientMixin, AsyncWebsocketClient):
-    """Async firehose subscription client."""
-
-
-FirehoseClient = _WebsocketClient
-AsyncFirehoseClient = _AsyncWebsocketClient
+    return getattr(importlib.import_module(_TARGET), renamed)

@@ -1,8 +1,11 @@
 import typing as t
 from dataclasses import dataclass
 
-from atproto_client import models
 from atproto_client.models.utils import get_or_create
+from atproto_client.subscriptions import (
+    NETWORK_BSKY_JETSTREAM_SUBSCRIBE_EVENTS_MESSAGE_TYPE_TO_MODEL,
+    NetworkBskyJetstreamSubscribeEventsMessage,
+)
 from pydantic_core import from_json
 
 from atproto_jetstream.exceptions import JetstreamDecodingError
@@ -10,22 +13,16 @@ from atproto_jetstream.exceptions import JetstreamDecodingError
 _MESSAGE_FRAME_TYPE = 'message'
 _ERROR_FRAME_TYPE = 'error'
 
+_NSID = 'network.bsky.jetstream.subscribeEvents'
+
+# the generated map is keyed by fragment; Jetstream sends the fully qualified type
 _SUBSCRIBE_EVENTS_MESSAGE_TYPE_TO_MODEL = {
-    'network.bsky.jetstream.subscribeEvents#commit': models.NetworkBskyJetstreamSubscribeEvents.Commit,
-    'network.bsky.jetstream.subscribeEvents#identity': models.NetworkBskyJetstreamSubscribeEvents.Identity,
-    'network.bsky.jetstream.subscribeEvents#account': models.NetworkBskyJetstreamSubscribeEvents.Account,
-    'network.bsky.jetstream.subscribeEvents#sync': models.NetworkBskyJetstreamSubscribeEvents.Sync,
-    'network.bsky.jetstream.subscribeEvents#info': models.NetworkBskyJetstreamSubscribeEvents.Info,
+    f'{_NSID}{fragment}': model
+    for fragment, model in NETWORK_BSKY_JETSTREAM_SUBSCRIBE_EVENTS_MESSAGE_TYPE_TO_MODEL.items()
 }
 
 #: Subscribe Events Message
-SubscribeEventsMessage = t.Union[
-    models.NetworkBskyJetstreamSubscribeEvents.Commit,
-    models.NetworkBskyJetstreamSubscribeEvents.Identity,
-    models.NetworkBskyJetstreamSubscribeEvents.Account,
-    models.NetworkBskyJetstreamSubscribeEvents.Sync,
-    models.NetworkBskyJetstreamSubscribeEvents.Info,
-]
+SubscribeEventsMessage = NetworkBskyJetstreamSubscribeEventsMessage
 
 
 @dataclass
