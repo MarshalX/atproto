@@ -3,8 +3,8 @@ chat.bsky.notification
 
 .. automodule:: atproto_client.models.chat.bsky.notification
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

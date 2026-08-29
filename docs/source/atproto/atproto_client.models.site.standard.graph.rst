@@ -3,8 +3,8 @@ site.standard.graph
 
 .. automodule:: atproto_client.models.site.standard.graph
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

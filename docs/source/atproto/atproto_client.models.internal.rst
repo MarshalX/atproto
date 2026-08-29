@@ -3,8 +3,8 @@ internal
 
 .. automodule:: atproto_client.models.internal
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Subpackages
 -----------

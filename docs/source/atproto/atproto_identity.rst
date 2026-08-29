@@ -3,8 +3,8 @@ atproto\_identity
 
 .. automodule:: atproto_identity
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Subpackages
 -----------

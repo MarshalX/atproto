@@ -3,8 +3,8 @@ site.standard.theme
 
 .. automodule:: atproto_client.models.site.standard.theme
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

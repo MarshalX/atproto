@@ -3,8 +3,8 @@ atproto\_firehose
 
 .. automodule:: atproto_firehose
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

@@ -3,8 +3,8 @@ atproto\_crypto
 
 .. automodule:: atproto_crypto
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Subpackages
 -----------

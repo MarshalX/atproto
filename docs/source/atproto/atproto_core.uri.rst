@@ -3,8 +3,8 @@ atproto\_core.uri
 
 .. automodule:: atproto_core.uri
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

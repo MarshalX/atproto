@@ -3,8 +3,8 @@ site
 
 .. automodule:: atproto_client.models.site
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Subpackages
 -----------

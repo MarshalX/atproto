@@ -3,8 +3,8 @@ com.atproto.repo
 
 .. automodule:: atproto_client.models.com.atproto.repo
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

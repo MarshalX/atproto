@@ -3,8 +3,8 @@ com.germnetwork
 
 .. automodule:: atproto_client.models.com.germnetwork
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

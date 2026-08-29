@@ -3,8 +3,8 @@ atproto\_core.cbor
 
 .. automodule:: atproto_core.cbor
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

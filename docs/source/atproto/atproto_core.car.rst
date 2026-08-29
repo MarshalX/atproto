@@ -3,8 +3,8 @@ atproto\_core.car
 
 .. automodule:: atproto_core.car
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

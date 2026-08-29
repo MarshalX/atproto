@@ -3,8 +3,8 @@ tools
 
 .. automodule:: atproto_client.models.tools
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Subpackages
 -----------

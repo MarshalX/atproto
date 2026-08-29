@@ -3,8 +3,8 @@ chat
 
 .. automodule:: atproto_client.models.chat
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Subpackages
 -----------

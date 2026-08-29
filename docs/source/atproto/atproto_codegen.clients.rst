@@ -3,8 +3,8 @@ atproto\_codegen.clients
 
 .. automodule:: atproto_codegen.clients
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

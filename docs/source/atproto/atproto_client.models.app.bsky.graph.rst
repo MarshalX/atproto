@@ -3,8 +3,8 @@ app.bsky.graph
 
 .. automodule:: atproto_client.models.app.bsky.graph
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

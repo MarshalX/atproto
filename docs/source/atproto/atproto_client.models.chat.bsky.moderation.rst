@@ -3,8 +3,8 @@ chat.bsky.moderation
 
 .. automodule:: atproto_client.models.chat.bsky.moderation
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

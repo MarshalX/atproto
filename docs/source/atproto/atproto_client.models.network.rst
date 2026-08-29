@@ -3,8 +3,8 @@ network
 
 .. automodule:: atproto_client.models.network
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Subpackages
 -----------
