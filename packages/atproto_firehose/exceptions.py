@@ -1,7 +1,8 @@
-from atproto_core.exceptions import AtProtocolError
+"""Aliases of the subscription runtime's exceptions, kept for backward compatibility."""
 
+from atproto_subscription.exceptions import FrameDecodingError, SubscriptionError
 
-class FirehoseError(AtProtocolError): ...
+FirehoseError = SubscriptionError
+FirehoseDecodingError = FrameDecodingError
 
-
-class FirehoseDecodingError(FirehoseError): ...
+__all__ = ['FirehoseDecodingError', 'FirehoseError']

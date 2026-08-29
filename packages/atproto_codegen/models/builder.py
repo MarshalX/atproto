@@ -41,15 +41,11 @@ def parse_lexicons(config: CodegenConfig, scope: Scope) -> t.Tuple[models.Lexico
     return tuple(by_id.values())
 
 
-def _filter_defs_by_type(
-    defs: t.Dict[str, models.LexDefinition], def_types: t.Union[t.Set['models.LexDefinitionType'], t.Set['Enum']]
-) -> LexDefs:
+def _filter_defs_by_type(defs: t.Dict[str, models.LexDefinition], def_types: t.AbstractSet[str]) -> LexDefs:
     return {k: v for k, v in defs.items() if v.type in def_types}
 
 
-def _build_nsid_to_defs_map(
-    lexicons: t.Sequence[models.LexiconDoc], def_types: t.Union[t.Set['models.LexDefinitionType'], t.Set['Enum']]
-) -> LexDB:
+def _build_nsid_to_defs_map(lexicons: t.Sequence[models.LexiconDoc], def_types: t.AbstractSet[str]) -> LexDB:
     result = {}
 
     for lexicon in lexicons:
@@ -61,11 +57,7 @@ def _build_nsid_to_defs_map(
     return result
 
 
-def _build(
-    def_types: t.Union[t.Set['models.LexDefinitionType'], t.Set['Enum']],
-    config: t.Optional[CodegenConfig],
-    scope: Scope,
-) -> LexDB:
+def _build(def_types: t.AbstractSet[str], config: t.Optional[CodegenConfig], scope: Scope) -> LexDB:
     if config is None:
         config = get_config()
 
@@ -136,3 +128,12 @@ _LEX_DEF_TYPES_FOR_RECORDS = {models.LexDefinitionType.RECORD}
 
 def build_record_models(config: t.Optional[CodegenConfig] = None, scope: Scope = Scope.EMIT) -> BuiltRecordModels:
     return _build(_LEX_DEF_TYPES_FOR_RECORDS, config, scope)
+
+
+BuiltSubscriptions = t.Dict[NSID, t.Dict[str, models.LexSubscription]]
+
+_LEX_DEF_TYPES_FOR_SUBSCRIPTIONS = {models.LexDefinitionType.SUBSCRIPTION}
+
+
+def build_subscriptions(config: t.Optional[CodegenConfig] = None, scope: Scope = Scope.EMIT) -> BuiltSubscriptions:
+    return _build(_LEX_DEF_TYPES_FOR_SUBSCRIPTIONS, config, scope)

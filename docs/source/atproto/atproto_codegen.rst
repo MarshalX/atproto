@@ -15,6 +15,7 @@ Subpackages
    atproto_codegen.clients
    atproto_codegen.models
    atproto_codegen.namespaces
+   atproto_codegen.subscriptions
 
 Submodules
 ----------

@@ -15,3 +15,4 @@ packages
    atproto_jetstream
    atproto_lexicon
    atproto_server
+   atproto_subscription

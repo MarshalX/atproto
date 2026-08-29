@@ -87,6 +87,7 @@ packages = [
     { include = "atproto_jetstream", from = "packages" },
     { include = "atproto_lexicon", from = "packages" },
     { include = "atproto_server", from = "packages" },
+    { include = "atproto_subscription", from = "packages" },
 ]
 version = "0.0.0" # This is a placeholder. Dynamic version from Git Tag will be used.
 
