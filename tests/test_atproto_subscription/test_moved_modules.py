@@ -11,6 +11,9 @@ import pytest
         ('atproto_core.websocket', 'WebsocketClient', 'atproto_subscription.websocket.WebsocketClient'),
         ('atproto_core.websocket', 'AsyncWebsocketClient', 'atproto_subscription.websocket.AsyncWebsocketClient'),
         ('atproto_core.websocket', 'build_websocket_uri', 'atproto_subscription.websocket.build_websocket_uri'),
+        ('atproto_firehose.models', 'MessageFrame', 'atproto_subscription.frames.MessageFrame'),
+        ('atproto_firehose.models', 'Frame', 'atproto_subscription.frames.Frame'),
+        ('atproto_firehose.models', 'parse_frame_header', 'atproto_subscription.frames.parse_frame_header'),
         ('atproto_firehose.client', 'FirehoseClient', 'atproto_subscription.client.SubscriptionClient'),
         ('atproto_firehose.client', 'AsyncFirehoseClient', 'atproto_subscription.client.AsyncSubscriptionClient'),
     ],
@@ -27,7 +30,7 @@ def test_moved_name_warns_and_still_resolves(module: str, name: str, target: str
     assert value is getattr(importlib.import_module(module_path), attribute)
 
 
-@pytest.mark.parametrize('module', ['atproto_core.websocket', 'atproto_firehose.client'])
+@pytest.mark.parametrize('module', ['atproto_core.websocket', 'atproto_firehose.client', 'atproto_firehose.models'])
 def test_unknown_name_still_raises_attribute_error(module: str) -> None:
     import importlib
 
@@ -41,5 +44,6 @@ def test_importing_the_sdk_does_not_warn() -> None:
 
     with warnings.catch_warnings():
         warnings.simplefilter('error', DeprecationWarning)
+        importlib.reload(importlib.import_module('atproto'))
         importlib.reload(importlib.import_module('atproto_firehose.firehose'))
         importlib.reload(importlib.import_module('atproto_jetstream.client'))

@@ -17,7 +17,6 @@ from atproto_firehose import (
     parse_subscribe_labels_message,
     parse_subscribe_repos_message,
 )
-from atproto_firehose import models as firehose_models
 from atproto_identity.cache.in_memory_cache import AsyncDidInMemoryCache, DidInMemoryCache
 from atproto_identity.did.atproto_data import AtprotoData
 from atproto_identity.resolver import AsyncIdResolver, IdResolver
@@ -37,6 +36,7 @@ from atproto_server.auth.jwt import (
     verify_jwt,
     verify_jwt_async,
 )
+from atproto_subscription import frames as firehose_models
 
 __all__ = [  # noqa: RUF022
     # client

@@ -1,3 +1,5 @@
+"""Wire format of AT Protocol XRPC subscriptions: DAG-CBOR framed messages."""
+
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, Union
@@ -6,6 +8,19 @@ from atproto_core.cbor import decode_dag_multi
 from atproto_core.exceptions import AtProtocolError
 
 from atproto_subscription.exceptions import FrameDecodingError
+
+__all__ = [
+    'ErrorFrame',
+    'ErrorFrameBody',
+    'ErrorFrameHeader',
+    'Frame',
+    'FrameHeader',
+    'FrameType',
+    'MessageFrame',
+    'MessageFrameHeader',
+    'parse_frame',
+    'parse_frame_header',
+]
 
 
 class FrameType(Enum):
