@@ -1,37 +1,8 @@
-import sys
 import typing as t
-from pathlib import Path
 
 import pytest
-from atproto_codegen.config import DEFAULT_LEXICON_DIR, CodegenConfig
-from atproto_codegen.models.generator import generate_models
 
-CUSTOM_LEXICON_DIR = Path(__file__).parent.parent.joinpath('fixtures', 'custom_lexicons').absolute()
-PACKAGE = 'chained_pkg'
-
-
-@pytest.fixture(scope='module')
-def custom_package(tmp_path_factory: pytest.TempPathFactory) -> t.Iterator[t.Any]:
-    """Generate a package from the custom lexicons and import it."""
-    root = tmp_path_factory.mktemp('chained')
-    generate_models(
-        CodegenConfig(
-            emit_lexicon_dirs=(CUSTOM_LEXICON_DIR,),
-            ref_lexicon_dirs=(DEFAULT_LEXICON_DIR,),
-            output_dir=root.joinpath(PACKAGE),
-            package=PACKAGE,
-        )
-    )
-
-    sys.path.insert(0, str(root))
-    try:
-        import importlib
-
-        yield importlib.import_module(f'{PACKAGE}.models')
-    finally:
-        sys.path.remove(str(root))
-        for name in [n for n in sys.modules if n.startswith(PACKAGE)]:
-            del sys.modules[name]
+from .conftest import PACKAGE
 
 
 def test_generated_package_is_importable(custom_package: t.Any) -> None:

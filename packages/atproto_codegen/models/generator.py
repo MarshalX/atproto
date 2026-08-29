@@ -791,7 +791,7 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     import_lines = [
         'import typing as t',
         'import typing_extensions as te',
-        'from pydantic import Field',
+        f'from {base} import unknown_union',
         'if t.TYPE_CHECKING:',
         f'{_(4)}from {base} import base',
         f'{_(4)}from {config.package} import models',
@@ -799,7 +799,6 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
         '',
     ]
     unknown_record_type_hint_lines = ['UnknownRecordType: te.TypeAlias = t.Union[']
-    unknown_record_type_pydantic_lines = ['UnknownRecordTypePydantic = te.Annotated[t.Union[']
 
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
@@ -816,22 +815,28 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
                 type_conversion_lines.append(f"'{record_type}': '{get_import_path(nsid)}',")
 
                 unknown_record_type_hint_lines.append(f"{_(4)}'{path_to_class}',")
-                unknown_record_type_pydantic_lines.append(f"{_(4)}'{path_to_class}',")
 
     type_conversion_lines.append('}')
     type_conversion_lines.append(f"register_record_types('{config.models_package}', RECORD_TYPES)")
 
     unknown_record_type_hint_lines.append(']')
-    unknown_record_type_pydantic_lines.append('], Field(discriminator="py_type")]')
-    unknown_record_type_pydantic_lines.append('UnknownType: te.TypeAlias = te.Annotated[')
-    unknown_record_type_pydantic_lines.append(
-        f"{_(4)}t.Union[UnknownRecordTypePydantic, 'dot_dict.DotDictType'], Field(union_mode='left_to_right')"
-    )
-    unknown_record_type_pydantic_lines.append(']')
-    unknown_record_type_pydantic_lines.append(
-        'UnknownInputType: te.TypeAlias = t.Union[UnknownType, t.Dict[str, t.Any]]'
-    )
-    unknown_type_lines = [*import_lines, *unknown_record_type_hint_lines, *unknown_record_type_pydantic_lines]
+
+    # the runtime type is deliberately open: records are resolved through the registry, so a package
+    # generated from custom lexicons is decoded here too. UnknownRecordType stays for type checkers.
+    unknown_type_lines = [
+        *import_lines,
+        *unknown_record_type_hint_lines,
+        'if t.TYPE_CHECKING:',
+        f'{_(1)}UnknownType: te.TypeAlias = te.Annotated[',
+        f"{_(2)}t.Union[UnknownRecordType, 'dot_dict.DotDictType'], unknown_union.UnknownRecordFallback",
+        f'{_(1)}]',
+        f'{_(1)}UnknownInputType: te.TypeAlias = t.Union[UnknownType, t.Dict[str, t.Any]]',
+        'else:',
+        # the runtime annotation carries no member list: records are resolved through the registry,
+        # so a package generated from custom lexicons is decoded here too
+        f'{_(1)}UnknownType = te.Annotated[t.Any, unknown_union.UnknownRecordFallback]',
+        f'{_(1)}UnknownInputType = UnknownType',
+    ]
 
     write_code(config.models_output_dir.joinpath('type_conversion.py'), join_code(type_conversion_lines))
     write_code(config.models_output_dir.joinpath('unknown_type.py'), join_code(unknown_type_lines))
