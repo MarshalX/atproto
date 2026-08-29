@@ -10,6 +10,7 @@ from atproto_lexicon.models import (
     LexXrpcQuery,
 )
 
+from atproto_codegen.config import CodegenConfig, get_config, use_config
 from atproto_codegen.consts import (
     DISCLAIMER,
     INPUT_DICT,
@@ -45,8 +46,6 @@ from atproto_codegen.utils import (
 )
 from atproto_codegen.utils import get_code_intent as _
 
-_NAMESPACES_OUTPUT_DIR = Path(__file__).parent.parent.parent.joinpath('atproto_client', 'namespaces')
-
 _NAMESPACES_SYNC_FILENAME = 'sync_ns.py'
 _NAMESPACES_ASYNC_FILENAME = 'async_ns.py'
 
@@ -63,17 +62,20 @@ def get_record_name(path_parts: t.List[str]) -> str:
 
 
 def _get_namespace_imports() -> str:
+    config = get_config()
+    base = config.base_package
+
     lines = [
         DISCLAIMER,
         'import typing as t',
         '',
-        'from atproto_client import models',
-        'from atproto_client.models.utils import get_or_create, get_response_model',
-        'from atproto_client.namespaces.base import AsyncRecordBase, AsyncNamespaceBase, NamespaceBase, RecordBase',
+        f'from {config.package} import models',
+        f'from {base}.models.utils import get_or_create, get_response_model',
+        f'from {base}.namespaces.base import AsyncRecordBase, AsyncNamespaceBase, NamespaceBase, RecordBase',
         '',
         'if t.TYPE_CHECKING:',
-        f'{_(1)}from atproto_client.client.async_raw import AsyncClientRaw',
-        f'{_(1)}from atproto_client.client.raw import ClientRaw',
+        f'{_(1)}from {base}.client.async_raw import AsyncClientRaw',
+        f'{_(1)}from {base}.client.raw import ClientRaw',
     ]
 
     return join_code(lines)
@@ -407,31 +409,27 @@ def _generate_namespace_in_output(
 
 
 def generate_namespaces(
-    lexicon_dir: t.Optional[Path] = None,
+    config: t.Optional[CodegenConfig] = None,
     output_dir: t.Optional[Path] = None,
     async_filename: t.Optional[str] = None,
     sync_filename: t.Optional[str] = None,
 ) -> None:
-    if not output_dir:
-        output_dir = _NAMESPACES_OUTPUT_DIR
-    if not async_filename:
-        async_filename = _NAMESPACES_ASYNC_FILENAME
-    if not sync_filename:
-        sync_filename = _NAMESPACES_SYNC_FILENAME
+    with use_config(config or get_config()) as active:
+        output_dir = output_dir or active.namespaces_output_dir
+        async_filename = async_filename or _NAMESPACES_ASYNC_FILENAME
+        sync_filename = sync_filename or _NAMESPACES_SYNC_FILENAME
 
-    namespace_tree = build_namespaces(lexicon_dir)
+        namespace_tree = build_namespaces(active)
 
-    for sync in (True, False):
-        generated_code_lines_buffer: t.List[str] = []
-        _generate_namespace_in_output(namespace_tree, generated_code_lines_buffer, sync=sync, parent_nodes=[])
+        for sync in (True, False):
+            generated_code_lines_buffer: t.List[str] = []
+            _generate_namespace_in_output(namespace_tree, generated_code_lines_buffer, sync=sync, parent_nodes=[])
 
-        code = join_code([_get_namespace_imports(), *generated_code_lines_buffer])
+            code = join_code([_get_namespace_imports(), *generated_code_lines_buffer])
 
-        filename = sync_filename if sync else async_filename
-        filepath = output_dir.joinpath(filename)
+            filename = sync_filename if sync else async_filename
+            write_code(output_dir.joinpath(filename), code)
 
-        write_code(filepath, code)
+        # TODO(MarshalX): generate ClientRaw as root of namespaces
 
-    # TODO(MarshalX): generate ClientRaw as root of namespaces
-
-    format_code(output_dir)
+        format_code(output_dir)

@@ -3,6 +3,7 @@ from pathlib import Path
 
 import click
 from atproto_codegen.clients.generate_async_client import gen_client
+from atproto_codegen.config import CodegenConfig
 from atproto_codegen.models.generator import generate_models
 from atproto_codegen.namespaces.generator import generate_namespaces
 
@@ -55,8 +56,19 @@ def atproto_cli(ctx: click.Context, silent: bool) -> None:
 @click.option('--lexicon-dir', type=click.Path(exists=True), default=None, help='Path to dir with .JSON lexicon files.')
 @click.pass_context
 def gen(ctx: click.Context, lexicon_dir: t.Optional[str]) -> None:
-    lexicon_dir_path = Path(lexicon_dir) if lexicon_dir else None
-    ctx.obj['lexicon_dir'] = lexicon_dir_path
+    ctx.obj['lexicon_dir'] = Path(lexicon_dir) if lexicon_dir else None
+
+
+def _build_config(ctx: click.Context, output_dir: t.Optional[str] = None) -> CodegenConfig:
+    config = CodegenConfig()
+
+    lexicon_dir = ctx.obj.get('lexicon_dir')
+    if lexicon_dir:
+        config = config.with_overrides(emit_lexicon_dirs=(lexicon_dir,))
+    if output_dir:
+        config = config.with_overrides(output_dir=Path(output_dir))
+
+    return config
 
 
 @gen.command(name='all', help='Generated models, namespaces, and async clients with default configs.')
@@ -64,22 +76,16 @@ def gen(ctx: click.Context, lexicon_dir: t.Optional[str]) -> None:
 def gen_all(ctx: click.Context) -> None:
     echo(ctx, 'Generating all:')
 
+    config = _build_config(ctx)
+
     echo(ctx, '- models...')
-    _gen_models()
+    generate_models(config)
     echo(ctx, '- namespaces...')
-    _gen_namespaces()
+    generate_namespaces(config)
     echo(ctx, '- async clients...')
     _gen_async_version()
 
     echo(ctx, 'Done!')
-
-
-def _gen_models(*args: t.Any) -> None:
-    generate_models(*args)
-
-
-def _gen_namespaces(*args: t.Any) -> None:
-    generate_namespaces(*args)
 
 
 def _gen_async_version() -> None:
@@ -87,21 +93,16 @@ def _gen_async_version() -> None:
 
 
 @gen.command(name='models')
-@click.option('--output-dir', type=click.Path(exists=True), default=None)
+@click.option(
+    '--output-dir',
+    type=click.Path(exists=True),
+    default=None,
+    help='Root of the generated package. Models are written to its "models" subdir.',
+)
 @click.pass_context
 def gen_models(ctx: click.Context, output_dir: t.Optional[str]) -> None:
     echo(ctx, 'Generating models...')
-
-    if output_dir:
-        # FIXME(MarshalX): remove hardcoded imports
-        click.secho(
-            "It doesn't work with '--output-dir' option very well because of hardcoded imports! Replace by yourself",
-            fg='red',
-        )
-        _gen_models(ctx.obj.get('lexicon_dir'), Path(output_dir))
-    else:
-        _gen_models(ctx.obj.get('lexicon_dir'))
-
+    generate_models(_build_config(ctx, output_dir))
     echo(ctx, 'Done!')
 
 
@@ -115,8 +116,13 @@ def gen_namespaces(
 ) -> None:
     echo(ctx, 'Generating namespaces...')
 
-    output_dir_path = Path(output_dir) if output_dir else None
-    _gen_namespaces(ctx.obj.get('lexicon_dir'), output_dir_path, async_filename, sync_filename)
+    config = _build_config(ctx)
+    generate_namespaces(
+        config,
+        Path(output_dir) if output_dir else None,
+        async_filename,
+        sync_filename,
+    )
 
     echo(ctx, 'Done!')
 
