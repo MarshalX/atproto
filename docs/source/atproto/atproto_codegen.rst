@@ -22,6 +22,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   atproto_codegen.config
    atproto_codegen.consts
    atproto_codegen.record_templates
    atproto_codegen.utils
