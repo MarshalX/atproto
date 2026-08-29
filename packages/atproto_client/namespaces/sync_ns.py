@@ -12,17 +12,17 @@ from atproto_client.models.utils import get_or_create, get_response_model
 from atproto_client.namespaces.base import NamespaceBase, RecordBase
 
 if t.TYPE_CHECKING:
-    from atproto_client.client.raw import ClientRaw
+    from atproto_client.namespaces.base import XrpcClient
 
 
 class AppNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.bsky = AppBskyNamespace(self._client)
 
 
 class AppBskyNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.actor = AppBskyActorNamespace(self._client)
         self.ageassurance = AppBskyAgeassuranceNamespace(self._client)
@@ -497,7 +497,7 @@ class AppBskyActorStatusRecord(RecordBase):
 
 
 class AppBskyActorNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.contentVisibilityDeclaration = AppBskyActorContentvisibilitydeclarationRecord(self._client)
         self.profile = AppBskyActorProfileRecord(self._client)
@@ -2129,7 +2129,7 @@ class AppBskyFeedThreadgateRecord(RecordBase):
 
 
 class AppBskyFeedNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.generator = AppBskyFeedGeneratorRecord(self._client)
         self.like = AppBskyFeedLikeRecord(self._client)
@@ -3676,7 +3676,7 @@ class AppBskyGraphVerificationRecord(RecordBase):
 
 
 class AppBskyGraphNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.block = AppBskyGraphBlockRecord(self._client)
         self.follow = AppBskyGraphFollowRecord(self._client)
@@ -4465,7 +4465,7 @@ class AppBskyLabelerServiceRecord(RecordBase):
 
 
 class AppBskyLabelerNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.service = AppBskyLabelerServiceRecord(self._client)
 
@@ -4650,7 +4650,7 @@ class AppBskyNotificationDeclarationRecord(RecordBase):
 
 
 class AppBskyNotificationNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.declaration = AppBskyNotificationDeclarationRecord(self._client)
 
@@ -6096,13 +6096,13 @@ class AppBskyVideoNamespace(NamespaceBase):
 
 
 class ChatNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.bsky = ChatBskyNamespace(self._client)
 
 
 class ChatBskyNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.actor = ChatBskyActorNamespace(self._client)
         self.convo = ChatBskyConvoNamespace(self._client)
@@ -6264,7 +6264,7 @@ class ChatBskyActorDeclarationRecord(RecordBase):
 
 
 class ChatBskyActorNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.declaration = ChatBskyActorDeclarationRecord(self._client)
 
@@ -7616,14 +7616,14 @@ class ChatBskyNotificationNamespace(NamespaceBase):
 
 
 class ComNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.atproto = ComAtprotoNamespace(self._client)
         self.germnetwork = ComGermnetworkNamespace(self._client)
 
 
 class ComAtprotoNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.admin = ComAtprotoAdminNamespace(self._client)
         self.identity = ComAtprotoIdentityNamespace(self._client)
@@ -8468,7 +8468,7 @@ class ComAtprotoLexiconSchemaRecord(RecordBase):
 
 
 class ComAtprotoLexiconNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.schema = ComAtprotoLexiconSchemaRecord(self._client)
 
@@ -10107,19 +10107,19 @@ class ComGermnetworkDeclarationRecord(RecordBase):
 
 
 class ComGermnetworkNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.declaration = ComGermnetworkDeclarationRecord(self._client)
 
 
 class InternalNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.bsky = InternalBskyNamespace(self._client)
 
 
 class InternalBskyNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.actor = InternalBskyActorNamespace(self._client)
 
@@ -10153,13 +10153,13 @@ class InternalBskyActorNamespace(NamespaceBase):
 
 
 class NetworkNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.bsky = NetworkBskyNamespace(self._client)
 
 
 class NetworkBskyNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.jetstream = NetworkBskyJetstreamNamespace(self._client)
 
@@ -10378,7 +10378,7 @@ class NetworkBskyJetstreamNamespace(NamespaceBase):
 
 
 class SiteNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.standard = SiteStandardNamespace(self._client)
 
@@ -10688,7 +10688,7 @@ class SiteStandardPublicationRecord(RecordBase):
 
 
 class SiteStandardNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.graph = SiteStandardGraphNamespace(self._client)
         self.theme = SiteStandardThemeNamespace(self._client)
@@ -11001,7 +11001,7 @@ class SiteStandardGraphSubscriptionRecord(RecordBase):
 
 
 class SiteStandardGraphNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.recommend = SiteStandardGraphRecommendRecord(self._client)
         self.subscription = SiteStandardGraphSubscriptionRecord(self._client)
@@ -11160,19 +11160,19 @@ class SiteStandardThemeBasicRecord(RecordBase):
 
 
 class SiteStandardThemeNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.basic = SiteStandardThemeBasicRecord(self._client)
 
 
 class ToolsNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.ozone = ToolsOzoneNamespace(self._client)
 
 
 class ToolsOzoneNamespace(NamespaceBase):
-    def __init__(self, client: 'ClientRaw') -> None:
+    def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.communication = ToolsOzoneCommunicationNamespace(self._client)
         self.hosting = ToolsOzoneHostingNamespace(self._client)

@@ -74,8 +74,7 @@ def _get_namespace_imports() -> str:
         f'from {base}.namespaces.base import AsyncRecordBase, AsyncNamespaceBase, NamespaceBase, RecordBase',
         '',
         'if t.TYPE_CHECKING:',
-        f'{_(1)}from {base}.client.async_raw import AsyncClientRaw',
-        f'{_(1)}from {base}.client.raw import ClientRaw',
+        f'{_(1)}from {base}.namespaces.base import AsyncXrpcClient, XrpcClient',
     ]
 
     return join_code(lines)
@@ -106,7 +105,7 @@ def _get_init_method(
     if not sub_namespaces and not record_names:
         return ''
 
-    client_typehint = "'ClientRaw'" if sync else "'AsyncClientRaw'"
+    client_typehint = "'XrpcClient'" if sync else "'AsyncXrpcClient'"
     lines = [f'{_(1)}def __init__(self, client: {client_typehint}) -> None:', f'{_(2)}super().__init__(client)']
 
     for sub_namespace in sub_namespaces:
