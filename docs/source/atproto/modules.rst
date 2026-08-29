@@ -14,4 +14,5 @@ packages
    atproto_identity
    atproto_jetstream
    atproto_lexicon
+   atproto_oauth
    atproto_server
