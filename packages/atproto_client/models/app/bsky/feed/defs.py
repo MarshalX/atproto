@@ -58,6 +58,9 @@ class ViewerState(base.ModelBase):
 
     bookmarked: t.Optional[bool] = None  #: Bookmarked.
     embedding_disabled: t.Optional[bool] = None  #: Embedding disabled.
+    known_likers: t.Optional['models.AppBskyFeedDefs.KnownLikers'] = (
+        None  #: This property is present only in selected cases, as an optimization.
+    )
     like: t.Optional[string_formats.AtUri] = None  #: Like.
     pinned: t.Optional[bool] = None  #: Pinned.
     reply_disabled: t.Optional[bool] = None  #: Reply disabled.
@@ -66,6 +69,17 @@ class ViewerState(base.ModelBase):
 
     py_type: t.Literal['app.bsky.feed.defs#viewerState'] = Field(
         default='app.bsky.feed.defs#viewerState', alias='$type', frozen=True
+    )
+
+
+class KnownLikers(base.ModelBase):
+    """Definition model for :obj:`app.bsky.feed.defs`. The post's likers whom you also follow."""
+
+    actors: t.List['models.AppBskyActorDefs.ProfileViewBasic'] = Field(min_length=0, max_length=5)  #: Actors.
+    count: int  #: Count.
+
+    py_type: t.Literal['app.bsky.feed.defs#knownLikers'] = Field(
+        default='app.bsky.feed.defs#knownLikers', alias='$type', frozen=True
     )
 
 
