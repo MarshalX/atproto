@@ -1,0 +1,37 @@
+# Ruff settings for generated code.
+
+line-length = 120
+target-version = "py39"
+
+[format]
+quote-style = "single"
+
+[lint]
+extend-select = [
+    "E", "W", "F", "I", "D", "C90", "B", "Q", "S", "ASYNC", "ANN",
+    "C", "BLE", "ERA", "ICN", "INP", "ISC", "NPY", "PGH", "PIE",
+    "RET", "RSE", "RUF", "SIM", "T20", "TC", "TID", "YTT",
+]
+ignore = [
+    "PGH004",
+    "ANN401",
+    "ANN002",
+    "D203", "D413",
+    "D213",
+    "D406", "D407",
+    "S101",
+    "FA100", "FA102",
+    "UP006",
+    # generated modules carry no docstrings of their own
+    "D100", "D101", "D102", "D103", "D104", "D105", "D107", "D415",
+]
+
+[lint.per-file-ignores]
+"models/__init__.py" = ["E501", "F401", "F811"]
+"models/**/*.py" = ["E501", "D401"]
+"namespaces/*_ns.py" = ["E501", "D401"]
+
+[lint.flake8-quotes]
+docstring-quotes = "double"
+multiline-quotes = "double"
+inline-quotes = "single"

@@ -442,7 +442,7 @@ def _generate_raw_client(namespace_tree: dict, config: CodegenConfig, *, sync: b
     filename = 'raw.py' if sync else 'async_raw.py'
     filepath = config.output_dir.joinpath('client', filename)
     write_code(filepath, join_code(lines))
-    format_code(filepath)
+    format_code(filepath, root=config.output_dir)
 
 
 def generate_namespaces(
@@ -467,7 +467,10 @@ def generate_namespaces(
             filename = sync_filename if sync else async_filename
             write_code(output_dir.joinpath(filename), code)
 
-        format_code(output_dir)
+        if not active.is_self_gen:
+            write_code(output_dir.joinpath('__init__.py'), DISCLAIMER)
+
+        format_code(output_dir, root=active.output_dir)
 
         if active.is_self_gen:
             for sync in (True, False):

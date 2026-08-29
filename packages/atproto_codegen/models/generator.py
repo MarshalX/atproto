@@ -934,4 +934,4 @@ def generate_models(config: t.Optional[CodegenConfig] = None) -> None:
         _generate_import_aliases(active.models_output_dir)
         _generate_package_init(active)
 
-        format_code(active.models_output_dir)
+        format_code(active.models_output_dir, root=active.output_dir)

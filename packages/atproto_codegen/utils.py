@@ -1,6 +1,10 @@
 import re
+import shutil
 import subprocess
+import sys
+import sysconfig
 import typing as t
+from functools import cache
 from pathlib import Path
 
 from atproto_core.exceptions import InvalidNsidError
@@ -8,20 +12,77 @@ from atproto_core.nsid import NSID
 
 from atproto_codegen.models import builder
 
+RUFF_CONFIG_PATH = Path(__file__).parent.joinpath('ruff_generated.toml')
 
-def format_code(filepath: Path, quiet: bool = True) -> None:
-    if not isinstance(filepath, Path):
+
+class RuffNotFoundError(FileNotFoundError):
+    """Ruff is needed to format generated code but is not installed."""
+
+
+@cache
+def find_ruff() -> str:
+    """Return the path to the Ruff binary.
+
+    Looks in the running interpreter's script directories before falling back to ``PATH``, so a
+    Ruff installed into the active virtual environment wins over an unrelated global one.
+
+    Raises:
+        RuffNotFoundError: Ruff is not installed.
+    """
+    executable = f'ruff{sysconfig.get_config_var("EXE")}'
+    script_dirs = [
+        sysconfig.get_path('scripts'),
+        sysconfig.get_path('scripts', vars={'base': sys.base_prefix}),
+    ]
+
+    for script_dir in script_dirs:
+        if not script_dir:
+            continue
+
+        candidate = Path(script_dir, executable)
+        if candidate.is_file():
+            return str(candidate)
+
+    found = shutil.which(executable)
+    if found is None:
+        raise RuffNotFoundError(
+            'Ruff is required to format generated code but was not found. Install it with `pip install ruff`.'
+        )
+
+    return found
+
+
+def format_code(path: Path, quiet: bool = True, root: t.Optional[Path] = None) -> None:
+    """Format generated code under the generator's own Ruff settings.
+
+    Ruff resolves the per-file-ignores of :obj:`RUFF_CONFIG_PATH` against the working directory,
+    so it runs from the generated package root rather than from wherever codegen was invoked.
+
+    Args:
+        path: File or directory to format.
+        quiet: Suppress Ruff's own output.
+        root: Generated package root. Defaults to the directory being formatted.
+
+    Raises:
+        RuffNotFoundError: Ruff is not installed.
+    """
+    if not isinstance(path, Path):
         return
 
-    quiet_option = '--quiet'
-    if not quiet:
-        quiet_option = ''
+    ruff = find_ruff()
+    options = [f'--config={RUFF_CONFIG_PATH}']
+    if quiet:
+        options.append('--quiet')
 
-    # FIXME(MarshalX): doesn't work well with not-project dir
-    # check=False: `ruff check` exits non-zero on leftover unfixable lints, which is fine here
-    subprocess.run(['ruff', 'format', quiet_option, filepath], check=False)  # noqa: S603, S607
-    subprocess.run(['ruff', 'check', quiet_option, '--fix', filepath], check=False)  # noqa: S603, S607
-    subprocess.run(['ruff', 'format', quiet_option, filepath], check=False)  # noqa: S603, S607
+    cwd = root or (path if path.is_dir() else path.parent)
+
+    def run(*args: str) -> None:
+        # check=False: `ruff check` exits non-zero on leftover unfixable lints, which is fine here
+        subprocess.run([ruff, *args, *options, str(path)], cwd=cwd, check=False)  # noqa: S603
+
+    run('format')
+    run('check', '--fix')
+    run('format')
 
 
 def append_code(filepath: Path, code: str) -> None:
