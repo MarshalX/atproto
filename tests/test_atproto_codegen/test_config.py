@@ -101,7 +101,7 @@ def test_generated_imports_point_at_the_custom_package(generated: Path) -> None:
 def test_record_type_database_covers_only_emitted_records(generated: Path) -> None:
     type_conversion = generated.joinpath('type_conversion.py').read_text()
 
-    assert "'xyz.statusphere.status': models.XyzStatusphereStatus.Record" in type_conversion
+    assert "'xyz.statusphere.status': 'XyzStatusphereStatus'" in type_conversion
     assert 'app.bsky' not in type_conversion
 
 
