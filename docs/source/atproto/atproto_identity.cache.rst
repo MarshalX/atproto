@@ -3,8 +3,8 @@ atproto\_identity.cache
 
 .. automodule:: atproto_identity.cache
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

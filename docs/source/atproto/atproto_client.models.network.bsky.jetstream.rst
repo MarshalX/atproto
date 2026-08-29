@@ -3,8 +3,8 @@ network.bsky.jetstream
 
 .. automodule:: atproto_client.models.network.bsky.jetstream
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

@@ -3,8 +3,8 @@ app.bsky.actor
 
 .. automodule:: atproto_client.models.app.bsky.actor
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

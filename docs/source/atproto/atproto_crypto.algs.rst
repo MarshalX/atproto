@@ -3,8 +3,8 @@ atproto\_crypto.algs
 
 .. automodule:: atproto_crypto.algs
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

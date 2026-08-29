@@ -3,8 +3,8 @@ tools.ozone.team
 
 .. automodule:: atproto_client.models.tools.ozone.team
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

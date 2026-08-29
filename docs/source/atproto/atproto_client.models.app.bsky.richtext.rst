@@ -3,8 +3,8 @@ app.bsky.richtext
 
 .. automodule:: atproto_client.models.app.bsky.richtext
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

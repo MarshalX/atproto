@@ -3,8 +3,8 @@ atproto\_server.auth
 
 .. automodule:: atproto_server.auth
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

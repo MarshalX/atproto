@@ -3,8 +3,8 @@ atproto\_core.cid
 
 .. automodule:: atproto_core.cid
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

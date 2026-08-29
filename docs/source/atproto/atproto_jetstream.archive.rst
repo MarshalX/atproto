@@ -3,8 +3,8 @@ atproto\_jetstream.archive
 
 .. automodule:: atproto_jetstream.archive
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

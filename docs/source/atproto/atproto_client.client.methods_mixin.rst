@@ -3,8 +3,8 @@ atproto\_client.client.methods\_mixin
 
 .. automodule:: atproto_client.client.methods_mixin
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

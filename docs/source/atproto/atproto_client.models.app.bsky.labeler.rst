@@ -3,8 +3,8 @@ app.bsky.labeler
 
 .. automodule:: atproto_client.models.app.bsky.labeler
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

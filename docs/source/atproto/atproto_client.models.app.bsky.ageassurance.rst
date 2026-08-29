@@ -3,8 +3,8 @@ app.bsky.ageassurance
 
 .. automodule:: atproto_client.models.app.bsky.ageassurance
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

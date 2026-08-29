@@ -3,8 +3,8 @@ app.bsky.bookmark
 
 .. automodule:: atproto_client.models.app.bsky.bookmark
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

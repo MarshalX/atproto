@@ -3,8 +3,8 @@ chat.bsky.group
 
 .. automodule:: atproto_client.models.chat.bsky.group
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

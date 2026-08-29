@@ -3,8 +3,8 @@ app.bsky.unspecced
 
 .. automodule:: atproto_client.models.app.bsky.unspecced
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

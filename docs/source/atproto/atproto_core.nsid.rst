@@ -3,8 +3,8 @@ atproto\_core.nsid
 
 .. automodule:: atproto_core.nsid
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

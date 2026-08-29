@@ -3,8 +3,8 @@ atproto\_codegen.namespaces
 
 .. automodule:: atproto_codegen.namespaces
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------

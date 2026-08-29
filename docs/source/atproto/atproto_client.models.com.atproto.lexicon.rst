@@ -3,8 +3,8 @@ com.atproto.lexicon
 
 .. automodule:: atproto_client.models.com.atproto.lexicon
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Submodules
 ----------
