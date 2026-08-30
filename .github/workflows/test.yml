@@ -76,6 +76,9 @@ jobs:
       - name: Run Tests.
         run: poetry run pytest
 
+      - name: Byte-compile the examples.
+        run: poetry run python -m compileall -q examples
+
   websockets_compat:
     name: websockets ${{matrix.websockets}} (${{matrix.os}}, py${{matrix.python-version}})
 

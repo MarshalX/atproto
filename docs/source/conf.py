@@ -63,7 +63,8 @@ redirects = REDIRECTS
 # competing in search results. No noindex: these are the pages whose ranking we are keeping.
 redirect_html_template_file = '_templates/redirect_stub.html'
 
-# DocSearch is credentialed; without the credentials the built-in Sphinx search is used.
+# DocSearch is credentialed. Without the credentials the site has no search at all:
+# the built-in index is not built either. See disable_search_index below.
 DOCSEARCH_APP_ID = os.environ.get('DOCSEARCH_APP_ID')
 DOCSEARCH_API_KEY = os.environ.get('DOCSEARCH_API_KEY')
 DOCSEARCH_INDEX_NAME = os.environ.get('DOCSEARCH_INDEX_NAME')
@@ -124,10 +125,11 @@ html_theme_options = {
     'show_breadcrumbs': True,
     'show_scrolltop': True,
     'main_nav_links': {
-        'Getting started': 'readme',
-        'Client': 'atproto_client/client',
+        'Quickstart': 'getting-started/quickstart',
+        'Guides': 'guides/index',
+        'Examples': 'examples/index',
+        'Custom lexicons': 'cli/custom-lexicons',
         'Models': 'models/index',
-        'Firehose': 'atproto_firehose/index',
         'Changelog': 'change_log',
     },
     'logo_light': '_static/img/logo.png',
@@ -253,6 +255,15 @@ autodoc_pydantic_settings_show_json = False
 autosectionlabel_prefix_document = True
 
 
+def disable_search_index(app: 'Sphinx') -> None:
+    """Skip building the JS search index and the page that consumes it.
+
+    Search on the site is DocSearch, which crawls the published HTML.
+    """
+    if hasattr(app.builder, 'search'):
+        app.builder.search = False  # type: ignore[attr-defined]
+
+
 def prepare_model_modules(_app: 'Sphinx') -> None:
     """Resolve every model module through the lazy accessor so its forward references are injected."""
     from atproto_client import models
@@ -291,6 +302,7 @@ def scope_pygments_to_theme(app: 'Sphinx', exception: t.Optional[Exception]) -> 
 def setup(app: 'Sphinx') -> None:
     from docs.source.alias_resolver import resolve_internal_aliases, resolve_intersphinx_aliases
 
+    app.connect('builder-inited', disable_search_index)
     app.connect('builder-inited', prepare_model_modules)
     app.connect('build-finished', scope_pygments_to_theme)
     app.connect('doctree-read', resolve_internal_aliases)

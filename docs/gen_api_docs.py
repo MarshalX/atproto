@@ -282,9 +282,23 @@ def _new_url(docname: str) -> str:
     return '/' + f'{docname.removesuffix("/index").removesuffix("index")}'.strip('/') + '/'
 
 
+_MOVED_DOCNAMES: t.Dict[str, str] = {
+    'readme': 'getting-started/quickstart',
+    'readme.content': 'getting-started/quickstart',
+    'dm': 'guides/direct-messages',
+    'atproto_client/auth': 'guides/authentication',
+    'atproto_client/timeouts': 'guides/error-handling',
+    'atproto_client/string_formats': 'guides/string-formats',
+}
+
+
 def _moved_pages(pages: t.List[_Page]) -> t.Dict[str, str]:
     """Map every old page path to its new one, as site-absolute paths."""
     moves = {'atproto_client/models.html': _new_url('models/index')}
+
+    for old, new in _MOVED_DOCNAMES.items():
+        moves[old] = _new_url(new)
+        moves[f'{old}.html'] = _new_url(new)
     for page in _walk(pages):
         if page.docname != 'models/index':  # the flat atproto_client.models page was never published
             moves[f'atproto/{page.module}.html'] = _new_url(page.docname)
