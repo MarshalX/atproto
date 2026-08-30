@@ -67,8 +67,6 @@ _MANDATORY_REQUEST_HEADERS = {'Content-Type-': 'application/json'}
 
 _FOLDER_TO_WRITE_LEXICONS = Path(__file__).parent.joinpath('lexicons').absolute()
 
-_FOLDER_OF_GEN_DOCS = Path(__file__).parent.joinpath('docs', 'source', 'atproto').absolute()
-
 _FOLDER_OF_MODELS = Path(__file__).parent.joinpath('packages', 'atproto_client', 'models').absolute()
 
 
@@ -707,7 +705,6 @@ def main() -> None:
     _run_subprocess(['poetry', 'run', 'ruff', 'format', '--quiet', '.'])
 
     _print('- Generating docs (make -s -C docs gen)...')
-    _remove_content_in_path(_FOLDER_OF_GEN_DOCS)
     _run_subprocess(['make', '-s', '-C', 'docs', 'gen'])
 
     title = _build_title(diff)
