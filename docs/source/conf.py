@@ -238,7 +238,6 @@ googleanalytics_enabled = True
 
 autodoc_default_options = {'exclude-members': 'py_type'}
 autodoc_member_order = 'bysource'
-autodoc_typehints = 'none'
 
 # -- Pydantic models ---------------------------------------------------
 autodoc_pydantic_model_undoc_members = True
