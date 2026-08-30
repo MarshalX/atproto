@@ -1,7 +1,0 @@
-app.bsky.unspecced.get\_post\_thread\_other\_v2
-======================================================================
-
-.. automodule:: atproto_client.models.app.bsky.unspecced.get_post_thread_other_v2
-   :members:
-   :show-inheritance:
-   :undoc-members:

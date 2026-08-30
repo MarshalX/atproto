@@ -1,0 +1,9 @@
+chat.bsky.moderation.updateActorAccess
+======================================
+
+Update actor access.
+
+.. automodule:: atproto_client.models.chat.bsky.moderation.update_actor_access
+   :members:
+   :show-inheritance:
+   :undoc-members:

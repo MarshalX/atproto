@@ -1,4 +1,4 @@
-.sidebar-container {
-    box-sizing: border-box;
-    width: unset;
+/* NSID card titles are long single words; let them wrap instead of overflowing. */
+.sd-card-title {
+    overflow-wrap: anywhere;
 }

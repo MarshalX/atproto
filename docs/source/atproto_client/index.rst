@@ -14,7 +14,6 @@ Submodules
 
    clients
    namespace
-   models
    auth
    timeouts
    string_formats
