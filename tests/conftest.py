@@ -1,4 +1,4 @@
-"""Network mocking for identity resolver tests.
+"""Network mocking for the whole test suite.
 
 HTTP is intercepted with :class:`httpx.MockTransport`.
 DNS is intercepted by monkeypatching.
@@ -51,6 +51,9 @@ _DNS_TXT = {
 }
 
 
+_LOOPBACK_HOSTS = frozenset({'127.0.0.1', '::1', 'localhost'})
+
+
 def _http_handler(request: httpx.Request) -> httpx.Response:
     route = _HTTP_ROUTES.get(str(request.url))
     if route is None:
@@ -59,6 +62,30 @@ def _http_handler(request: httpx.Request) -> httpx.Response:
 
     status_code, body = route
     return httpx.Response(status_code, content=body.encode('UTF-8'))
+
+
+class _MockTransport(httpx.MockTransport):
+    def __init__(self) -> None:
+        super().__init__(_http_handler)
+        self._real = httpx.HTTPTransport()
+
+    def handle_request(self, request: httpx.Request) -> httpx.Response:
+        if request.url.host in _LOOPBACK_HOSTS:
+            return self._real.handle_request(request)
+
+        return super().handle_request(request)
+
+
+class _AsyncMockTransport(httpx.MockTransport):
+    def __init__(self) -> None:
+        super().__init__(_http_handler)
+        self._real = httpx.AsyncHTTPTransport()
+
+    async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
+        if request.url.host in _LOOPBACK_HOSTS:
+            return await self._real.handle_async_request(request)
+
+        return await super().handle_async_request(request)
 
 
 class _FakeRdata:
@@ -84,11 +111,11 @@ def _mock_network(monkeypatch: pytest.MonkeyPatch) -> None:
     real_async_client = httpx.AsyncClient
 
     def make_client(*args: t.Any, **kwargs: t.Any) -> httpx.Client:
-        kwargs.setdefault('transport', httpx.MockTransport(_http_handler))
+        kwargs.setdefault('transport', _MockTransport())
         return real_client(*args, **kwargs)
 
     def make_async_client(*args: t.Any, **kwargs: t.Any) -> httpx.AsyncClient:
-        kwargs.setdefault('transport', httpx.MockTransport(_http_handler))
+        kwargs.setdefault('transport', _AsyncMockTransport())
         return real_async_client(*args, **kwargs)
 
     monkeypatch.setattr(httpx, 'Client', make_client)
