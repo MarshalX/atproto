@@ -82,3 +82,9 @@ dl.py.class > dd {
     border-left: 2px solid var(--sig-rule);
     padding-left: 1.15rem;
 }
+
+main table.docutils {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+}

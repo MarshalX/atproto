@@ -1,0 +1,34 @@
+{
+  "lexicon": 1,
+  "id": "xyz.statusphere.status",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["status", "createdAt"],
+        "properties": {
+          "status": { "type": "string", "minLength": 1, "maxGraphemes": 1, "maxLength": 32 },
+          "createdAt": { "type": "string", "format": "datetime" },
+          "subject": { "type": "ref", "ref": "com.atproto.repo.strongRef" },
+          "aboutPost": { "type": "ref", "ref": "app.bsky.feed.post" },
+          "extra": { "type": "unknown" }
+        }
+      }
+    },
+    "statusView": {
+      "type": "object",
+      "required": ["uri", "status"],
+      "properties": {
+        "uri": { "type": "string", "format": "at-uri" },
+        "status": { "type": "string" },
+        "author": { "type": "ref", "ref": "app.bsky.actor.defs#profileViewBasic" },
+        "embed": {
+          "type": "union",
+          "refs": ["app.bsky.embed.images", "app.bsky.embed.external"]
+        }
+      }
+    }
+  }
+}
