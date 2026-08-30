@@ -33,7 +33,7 @@ source_suffix = {
 
 project = 'The AT Protocol SDK'
 copyright = '2023-2026 Ilya (Marshal) 🦁'
-author = 'Ilya (Marshal)'
+author = 'Ilya (Marshal) 🦁'
 
 language = 'en'
 
@@ -74,7 +74,9 @@ if DOCSEARCH_APP_ID and DOCSEARCH_API_KEY and DOCSEARCH_INDEX_NAME:
     docsearch_api_key = DOCSEARCH_API_KEY
     docsearch_index_name = DOCSEARCH_INDEX_NAME
     docsearch_placeholder = 'Search the docs'
-    docsearch_missing_results_url = 'https://github.com/MarshalX/atproto/discussions/new?category=q-a&title=${query}'
+    docsearch_missing_results_url = (
+        'https://github.com/MarshalX/atproto/discussions/new?category=questions&title=${query}'
+    )
 else:
     print(
         '[conf.py] DocSearch env vars missing - the built-in Sphinx search will be used',
@@ -93,12 +95,14 @@ pygments_style_dark = 'monokai'
 
 myst_heading_anchors = 4
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html?highlight=header-anchors#code-fences-using-colons
-myst_enable_extensions = ['colon_fence']
+myst_enable_extensions = ['colon_fence', 'alert', 'strikethrough', 'deflist', 'html_image', 'gfm_autolink']
 
 # -- Options for HTML output -------------------------------------------------
 
 # These folders are copied to the documentation's HTML output
 html_static_path = ['_static']
+# robots.txt is copied to the output root as-is
+html_extra_path = ['robots.txt']
 
 html_search_language = 'en'
 
@@ -233,6 +237,8 @@ googleanalytics_id = 'G-07PYQCJ0XP'
 googleanalytics_enabled = True
 
 autodoc_default_options = {'exclude-members': 'py_type'}
+autodoc_member_order = 'bysource'
+autodoc_typehints = 'none'
 
 # -- Pydantic models ---------------------------------------------------
 autodoc_pydantic_model_undoc_members = True
