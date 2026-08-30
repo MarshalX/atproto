@@ -1,3 +1,6 @@
+import functools
+import typing as t
+
 import pytest
 from atproto_client import Session
 from atproto_client.client.session import SessionDispatcher, SessionEvent, get_session_pds_endpoint
@@ -117,3 +120,68 @@ async def test_async_session_not_modified(dispatcher: SessionDispatcher) -> None
     await dispatcher.dispatch_session_change_async(SessionEvent.CREATE)
 
     assert dispatcher._session.handle == initial_handle  # The original session remains unchanged
+
+
+def test_register_bound_method_callback(dispatcher: SessionDispatcher) -> None:
+    class Storage:
+        def __init__(self) -> None:
+            self.saved: t.Optional[Session] = None
+
+        def on_session_change(self, _: SessionEvent, session: Session) -> None:
+            self.saved = session
+
+    storage = Storage()
+    dispatcher.on_session_change(storage.on_session_change)
+    dispatcher.dispatch_session_change(SessionEvent.CREATE)
+
+    assert storage.saved is not None
+    assert storage.saved.handle == _TEST_HANDLE
+
+
+def test_register_partial_callback(dispatcher: SessionDispatcher) -> None:
+    calls = []
+
+    def callback(tag: str, event: SessionEvent, session: Session) -> None:
+        calls.append((tag, event, session.handle))
+
+    dispatcher.on_session_change(functools.partial(callback, 'tagged'))
+    dispatcher.dispatch_session_change(SessionEvent.REFRESH)
+
+    assert calls == [('tagged', SessionEvent.REFRESH, _TEST_HANDLE)]
+
+
+def test_register_callable_object_callback(dispatcher: SessionDispatcher) -> None:
+    class Callback:
+        def __init__(self) -> None:
+            self.called = False
+
+        def __call__(self, _: SessionEvent, __: Session) -> None:
+            self.called = True
+
+    callback = Callback()
+    dispatcher.on_session_change(callback)
+    dispatcher.dispatch_session_change(SessionEvent.IMPORT)
+
+    assert callback.called
+
+
+@pytest.mark.asyncio
+async def test_register_bound_async_method_callback(dispatcher: SessionDispatcher) -> None:
+    class Storage:
+        def __init__(self) -> None:
+            self.saved: t.Optional[Session] = None
+
+        async def on_session_change(self, _: SessionEvent, session: Session) -> None:
+            self.saved = session
+
+    storage = Storage()
+    dispatcher.on_session_change(storage.on_session_change)
+    await dispatcher.dispatch_session_change_async(SessionEvent.REFRESH)
+
+    assert storage.saved is not None
+    assert storage.saved.handle == _TEST_HANDLE
+
+
+def test_register_non_callable_callback(dispatcher: SessionDispatcher) -> None:
+    with pytest.raises(TypeError):
+        dispatcher.on_session_change('not a callback')  # type: ignore[arg-type]

@@ -25,6 +25,7 @@ AtProtocolError
 │   ├── UnauthorizedError
 │   ├── BadRequestError
 │   └── RequestException
+│       └── RateLimitExceededError
 ├── LoginRequiredError
 ├── InvalidAtUriError
 ├── InvalidNsidError
@@ -37,6 +38,9 @@ AtProtocolError
 
 [RequestErrorBase](#atproto_client.exceptions.RequestErrorBase)
 : The base of everything that comes back from an HTTP request. Carries a `.response`.
+
+[RateLimitExceededError](#atproto_client.exceptions.RateLimitExceededError)
+: A 429. Subclasses `RequestException`, so an existing `except RequestException` still catches it.
 
 [LoginRequiredError](#atproto_client.exceptions.LoginRequiredError)
 : Raised locally, before any request, by a method that needs a session when there is none. See [Authentication](authentication.md).
@@ -72,16 +76,16 @@ except RequestErrorBase as e:
 
 A non-2xx response is turned into an exception by status code:
 
-| Status            | Exception                                                         |
-| ----------------- | ----------------------------------------------------------------- |
-| 400               | [BadRequestError](#atproto_client.exceptions.BadRequestError)     |
-| 401, 403          | [UnauthorizedError](#atproto_client.exceptions.UnauthorizedError) |
-| 409, 413, 502     | [NetworkError](#atproto_client.exceptions.NetworkError)           |
-| any other non-2xx | [RequestException](#atproto_client.exceptions.RequestException)   |
+| Status            | Exception                                                                   |
+| ----------------- | --------------------------------------------------------------------------- |
+| 400               | [BadRequestError](#atproto_client.exceptions.BadRequestError)               |
+| 401, 403          | [UnauthorizedError](#atproto_client.exceptions.UnauthorizedError)           |
+| 409, 413, 502     | [NetworkError](#atproto_client.exceptions.NetworkError)                     |
+| 429               | [RateLimitExceededError](#atproto_client.exceptions.RateLimitExceededError) |
+| any other non-2xx | [RequestException](#atproto_client.exceptions.RequestException)             |
 
 Note what this means in practice:
 
-- **429 is a `RequestException`**, not its own class. Rate limiting is detected by the status code and the headers, not the exception type.
 - **409, 413, and 502 are `NetworkError`**, which is otherwise the transport-failure class. A swap-commit conflict (409) and a payload that is too large (413) land there because they are worth retrying the same way a 502 is.
 - `UnauthorizedError` covers both "your token is wrong" (401) and "your token is fine but does not grant this" (403). The `error` name in the body separates them. A `Bad token scope` from a chat call means the app password lacks the direct-message grant.
 
@@ -126,17 +130,22 @@ Fine-tuning is documented in the [HTTPX timeout guide](https://www.python-httpx.
 
 ## Rate limits
 
-Rate-limited responses come back as 429, which means a [RequestException](#atproto_client.exceptions.RequestException). The budget is in the response headers, lowercased:
+Rate-limited responses come back as 429, which is a [RateLimitExceededError](#atproto_client.exceptions.RateLimitExceededError). It reads the budget out of the response headers for you:
 
 ```python
-from atproto.exceptions import RequestException
+from atproto.exceptions import RateLimitExceededError
 
 try:
     ...
-except RequestException as e:
-    if e.response and e.response.status_code == 429:
-        print('Reset at:', e.response.headers.get('ratelimit-reset'))
+except RateLimitExceededError as e:
+    print('Reset at:', e.reset_at)  # datetime in UTC, or None
 ```
+
+`limit`, `remaining` and `reset_at` come from `ratelimit-limit`, `ratelimit-remaining` and `ratelimit-reset`; `policy` from `ratelimit-policy`; `retry_after` from `retry-after`. Each is `None` when the server did not send that header, and services differ in which ones they send: the PDS sends the `ratelimit-*` family, while the [Jetstream archive](jetstream.md) answers a spent byte quota with `retry-after`. The raw headers are still on `e.response.headers`.
+
+`retry_after` is seconds to wait, as a float. HTTP allows the header to carry either a number of seconds or a date; both come back as seconds from now, never negative.
+
+`RateLimitExceededError` subclasses [RequestException](#atproto_client.exceptions.RequestException), which is what a 429 was raised as before, so code that already catches `RequestException` keeps working.
 
 The limits that bite hardest are per-handle rather than per-request: `createSession` allows 30 requests per 5 minutes and 300 per day, so a script that constructs a fresh client and logs in on every tick will exhaust it. Keep one client alive, or reuse the session string. See [Authentication](authentication.md).
 
@@ -144,7 +153,7 @@ Current limits are published at [bsky.network/docs/rate-limits](https://bsky.net
 
 ## Where each package's exceptions live
 
-Every package defines its own module. `atproto.exceptions` re-exports all of them **except `atproto_jetstream.exceptions`**, which you have to import from its own package.
+Every package defines its own module, and `atproto.exceptions` re-exports all of them. Importing from `atproto.exceptions` always works; the per-package modules are listed here so you know where each name comes from.
 
 `atproto_core.exceptions`
 : `AtProtocolError` and the parsing failures of the core primitives: `InvalidNsidError`, `InvalidAtUriError`, `InvalidCARFile`, `DAGCBORDecodingError`.
@@ -170,5 +179,5 @@ Every package defines its own module. `atproto.exceptions` re-exports all of the
 `atproto_firehose.exceptions`
 : `FirehoseError` and `FirehoseDecodingError`, aliases of the two above, kept for backward compatibility.
 
-`atproto_jetstream.exceptions` (not re-exported; import it directly)
+`atproto_jetstream.exceptions`
 : `JetstreamError`, `JetstreamDecodingError`, plus two conditions worth handling separately: `JetstreamConsumerTooSlowError` (the server dropped you for falling behind) and `JetstreamCursorTooOldError` (your cursor is below the server's retention floor).

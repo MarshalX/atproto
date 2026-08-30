@@ -2,6 +2,7 @@ from atproto import Client
 from atproto.exceptions import (
     BadRequestError,
     InvokeTimeoutError,
+    RateLimitExceededError,
     RequestErrorBase,
     UnauthorizedError,
 )
@@ -28,6 +29,10 @@ def main() -> None:
         client.login(USERNAME, PASSWORD)
     except UnauthorizedError as e:
         print('Login rejected:', describe(e))
+        return
+    except RateLimitExceededError as e:
+        # createSession is rate limited by handle: 30/5 min, 300/day
+        print('Too many logins. Retry at:', e.reset_at)
         return
     except InvokeTimeoutError:
         print('The PDS did not answer in time.')

@@ -126,8 +126,23 @@ async def on_session_change(event: SessionEvent, session: Session) -> None:
 
 The async client accepts both synchronous and asynchronous callbacks.
 
-:::{warning}
-Register a plain function or a coroutine function. A **bound method** or a callable object is accepted without complaint and then never invoked, because the dispatcher only recognises the two function forms. If your callback needs state, close over it rather than hanging it off `self`.
+Anything callable works: a plain function, a coroutine function, a bound method, a `functools.partial`, or an object with a `__call__`. So a callback that needs state can live on the class that holds it:
+
+```python
+class Bot:
+    def __init__(self) -> None:
+        self.client = Client()
+        self.client.on_session_change(self._save_session)
+
+    def _save_session(self, event: SessionEvent, session: Session) -> None:
+        if event in (SessionEvent.CREATE, SessionEvent.REFRESH):
+            save_session(session.export())
+```
+
+Registering something that is not callable raises `TypeError` right away.
+
+:::{note}
+A callable *object* whose `__call__` is `async` is registered as a synchronous callback, because `inspect.iscoroutinefunction` does not see through `__call__`. Use an `async def` method for an asynchronous callback with state.
 :::
 
 The three events:

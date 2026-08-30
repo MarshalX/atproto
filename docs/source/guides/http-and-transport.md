@@ -52,8 +52,8 @@ Three settings are worth knowing about:
 `proxy` / `mounts`
 : An HTTP proxy in the ordinary networking sense. Unrelated to `atproto-proxy`, which is service routing inside the protocol. See [Proxies and labelers](proxies-and-labelers.md).
 
-:::{warning}
-A [clone](proxies-and-labelers.md#cloning), which is what `with_proxy` and `with_labelers` return, builds a **fresh** `Request` with default arguments. Your timeout, transport and proxy do not carry over. Give a proxied client its own configured `Request` if it needs one.
+:::{note}
+A [clone](proxies-and-labelers.md#cloning), which is what `with_proxy` and `with_labelers` return, is constructed with the same keyword arguments as the original, so your timeout, transport and proxy carry over. It still opens its own `httpx` client, and with it its own connection pool.
 :::
 
 ```{literalinclude} ../../../examples/advanced_usage/custom_request.py

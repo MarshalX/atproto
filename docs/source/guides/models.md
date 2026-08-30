@@ -224,7 +224,7 @@ The first `models.AppBskyFeedPost` resolves the alias through `models.ids`, impo
 You rarely need to know this, except in two cases:
 
 - The import cost is paid on first *use*, not at import time. To pay it up front instead, before forking worker processes or to keep it out of your first request's latency, call [load_models](#atproto_client.models.models_loader.load_models).
-- `from atproto import models` is the way in. `from atproto.models import AppBskyFeedPost` does **not** work, because `atproto.models` is a re-exported attribute, not a submodule, so there is nothing for the import system to find. `from atproto_client.models import AppBskyFeedPost` does work, through the same `__getattr__`.
+- `from atproto import models`, `from atproto.models import AppBskyFeedPost` and `from atproto_client.models import AppBskyFeedPost` all resolve to the same lazily-loaded package, through the same `__getattr__`.
 
 ```python
 from atproto_client.models.models_loader import load_models
