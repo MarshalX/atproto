@@ -232,6 +232,8 @@ ogp_enable_meta_description = True
 googleanalytics_id = 'G-07PYQCJ0XP'
 googleanalytics_enabled = True
 
+autodoc_default_options = {'exclude-members': 'py_type'}
+
 # -- Pydantic models ---------------------------------------------------
 autodoc_pydantic_model_undoc_members = True
 autodoc_pydantic_model_show_json = False
