@@ -11,8 +11,8 @@ That `uri` is the like, not the post. It is the only handle on the record you ju
 ```python
 post = client.get_posts([post_uri]).posts[0]
 
-like = client.like(uri=post.uri, cid=post.cid)   # like.uri is the *like* record
-client.unlike(like.uri)                          # not post.uri
+like = client.like(uri=post.uri, cid=post.cid)  # like.uri is the *like* record
+client.unlike(like.uri)  # not post.uri
 ```
 
 The un- methods return a boolean.

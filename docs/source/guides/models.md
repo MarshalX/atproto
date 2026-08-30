@@ -150,8 +150,8 @@ A method that returns records returns them typed as a union, so you have to narr
 from atproto import models
 from atproto_client.models import ids, is_record_type
 
-is_record_type(record.value, ids.AppBskyFeedPost)        # NSID string
-is_record_type(record.value, models.AppBskyFeedPost)     # the generated module
+is_record_type(record.value, ids.AppBskyFeedPost)  # NSID string
+is_record_type(record.value, models.AppBskyFeedPost)  # the generated module
 is_record_type(record.value, models.AppBskyFeedPost.Record)  # the Record class
 ```
 

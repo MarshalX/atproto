@@ -58,7 +58,7 @@ For a group conversation, `members` is only a handful of important members, not 
 ```python
 chat_to = IdResolver().handle.resolve('test.marshal.dev')
 convo = dm.get_convo_for_members(
-    models.ChatBskyConvoGetConvoForMembers.Params(members=[chat_to])
+    models.ChatBskyConvoGetConvoForMembers.Params(members=[chat_to]),
 ).convo
 ```
 

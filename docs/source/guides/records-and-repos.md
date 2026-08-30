@@ -180,7 +180,9 @@ client.com.atproto.repo.create_record(
 
 # 2. record sugar: the collection is implied by the namespace path
 post = models.AppBskyFeedPost.Record(
-    text='Text of the post', embed=embed, created_at=client.get_current_time_iso()
+    text='Text of the post',
+    embed=embed,
+    created_at=client.get_current_time_iso(),
 )
 client.app.bsky.feed.post.create(client.me.did, post)
 
@@ -199,9 +201,9 @@ from atproto import AtUri
 
 uri = AtUri.from_str('at://did:plc:bv6ggog3tya2z3vxsub7hnal/app.bsky.feed.post/3k2a...')
 
-uri.hostname    # 'did:plc:bv6ggog3tya2z3vxsub7hnal'  # the repo
+uri.hostname  # 'did:plc:bv6ggog3tya2z3vxsub7hnal', the repo
 uri.collection  # 'app.bsky.feed.post'
-uri.rkey        # '3k2a...'
+uri.rkey  # '3k2a...'
 ```
 
 `hostname` is the repo the record lives in: a DID or a handle, whichever the URI carries. It is what you pass as `repo` to any of the record or `com.atproto.repo` methods. `collection` and `rkey` are empty strings, not `None`, when the URI does not reach that deep, so `at://alice.example.com` parses fine and yields `''` for both.
