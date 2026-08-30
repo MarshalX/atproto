@@ -10,20 +10,38 @@ Documentation
    :parser: myst_parser.sphinx_
 
 .. toctree::
-   :maxdepth: 4
+   :caption: 🚀 Getting started
+   :maxdepth: 2
 
-   readme
+   Overview <readme>
    Examples <https://github.com/MarshalX/atproto/tree/main/examples>
 
 .. toctree::
-   :caption: SDK
+   :caption: 🎛 Clients
+   :maxdepth: 3
+
+   atproto_client/index
+   dm
+
+.. toctree::
+   :caption: 📖 Models
    :maxdepth: 4
 
-   dm
-   atproto_client/index
-   atproto_core/index
+   Lexicons <models/lexicons>
+   Core <models/core>
+
+.. toctree::
+   :caption: 📡 Firehose & Jetstream
+   :maxdepth: 2
+
    atproto_firehose/index
    atproto_jetstream/index
+
+.. toctree::
+   :caption: 🧱 Advanced
+   :maxdepth: 2
+
+   atproto_core/index
    atproto_identity/index
    atproto_crypto/index
    atproto_server/index
@@ -32,7 +50,7 @@ Documentation
 
 .. toctree::
    :hidden:
-   :caption: Development
+   :caption: 🛠 Development
 
    change_log
    security
@@ -40,7 +58,7 @@ Documentation
 
 .. toctree::
    :hidden:
-   :caption: Project Links
+   :caption: 🔗 Project Links
 
    GitHub <https://github.com/MarshalX/atproto>
    PyPI <https://pypi.org/project/atproto/>

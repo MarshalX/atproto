@@ -2,12 +2,8 @@
 
 SPHINXOPTS ?= -j auto
 SPHINXBUILD ?= sphinx-build
-SPHINXGENERATE ?= sphinx-apidoc
-MODULEPATH = ../packages
 SOURCEDIR = source
-GENDIR = source/atproto
 BUILDDIR = build
-TEMPLATEDIR = source/templates
 
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
@@ -15,15 +11,18 @@ help:
 .PHONY: help Makefile
 
 gen:
-	@$(SPHINXGENERATE) -f -e -M -q -o "$(GENDIR)" -t "$(TEMPLATEDIR)" "$(MODULEPATH)" $(O) && make fix_gen && make gen_aliases_db
-
-fix_gen:
-	python fix_title_of_models.py
+	@python gen_api_docs.py && make gen_aliases_db
 
 gen_aliases_db:
-	python gen_aliases_db.py
+	@python gen_aliases_db.py
 
-.PHONY: gen Makefile
+.PHONY: gen gen_aliases_db Makefile
+
+# html -> dirhtml: the local build matches production (.readthedocs.yaml: builder: dirhtml).
+html:
+	@$(SPHINXBUILD) -M dirhtml "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+.PHONY: html
 
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
