@@ -21,4 +21,4 @@ Websites published on atproto.
    :hidden:
    :maxdepth: 1
 
-   /models/site/standard/index
+   standard </models/site/standard/index>

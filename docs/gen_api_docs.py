@@ -210,11 +210,20 @@ def _collect(directory: Path, prefix: str, lexicons: t.Dict[str, _Lexicon]) -> t
     return namespaces + modules
 
 
+def _short(page: _Page) -> str:
+    """The page's own NSID segment; the surrounding tree already carries the prefix."""
+    return page.title.rsplit('.', 1)[-1]
+
+
+def _toctree_entries(pages: t.List[_Page]) -> str:
+    return '\n'.join(f'   {_short(page)} </{page.docname}>' for page in pages)
+
+
 def _render_cards(pages: t.List[_Page]) -> str:
     cards = [_GRID]
     for page in pages:
         cards.append(
-            f'\n   .. grid-item-card:: :octicon:`{page.icon};1em;sd-mr-1` {page.title.rsplit(".", 1)[-1]}\n'
+            f'\n   .. grid-item-card:: :octicon:`{page.icon};1em;sd-mr-1` {_short(page)}\n'
             f'      :link: /{page.docname}\n'
             f'      :link-type: doc\n'
             f'\n'
@@ -223,14 +232,35 @@ def _render_cards(pages: t.List[_Page]) -> str:
     return ''.join(cards)
 
 
+_GROUPS = (
+    ('lexicons', 'Lexicons', 'One page per NSID, generated from the lexicons the network publishes.'),
+    ('core', 'Core', 'The hand-written machinery every generated model is built on.'),
+)
+
+
+def _render_section(heading: str, blurb: str, pages: t.List[_Page]) -> str:
+    return f'\n{heading}\n{"-" * len(heading)}\n\n{blurb}\n\n{_render_cards(pages)}'
+
+
 def _render_page(page: _Page) -> str:
-    parts = [f'{page.title}\n{"=" * len(page.title)}\n\n{_escape_rst(page.description)}\n']
+    orphan = ':orphan:\n\n' if page.docname == 'models/index' else ''
+    parts = [f'{orphan}{page.title}\n{"=" * len(page.title)}\n\n{_escape_rst(page.description)}\n']
     parts.append(f'\n.. automodule:: {page.module}\n   :members:\n   :show-inheritance:\n   :undoc-members:\n')
 
-    if page.children:
-        parts.append(f'\n{_render_cards(page.children)}')
-        toctree = '\n'.join(f'   /{child.docname}' for child in page.children)
-        parts.append(f'\n.. toctree::\n   :hidden:\n   :maxdepth: 1\n\n{toctree}\n')
+    if not page.children:
+        return ''.join(parts)
+
+    # The root mixes two unrelated things: authorities generated from lexicons/, and the
+    # hand-written machinery those models are built on. Split them so the list reads.
+    if page.docname == 'models/index':
+        namespaces = [child for child in page.children if child.children]
+        modules = [child for child in page.children if not child.children]
+        for (_, heading, blurb), group in zip(_GROUPS, (namespaces, modules)):
+            parts.append(_render_section(heading, blurb, group))
+        return ''.join(parts)
+
+    parts.append(f'\n{_render_cards(page.children)}')
+    parts.append(f'\n.. toctree::\n   :hidden:\n   :maxdepth: 1\n\n{_toctree_entries(page.children)}\n')
 
     return ''.join(parts)
 
@@ -272,6 +302,22 @@ def _moved_pages(pages: t.List[_Page]) -> t.Dict[str, str]:
     return dict(sorted(moves.items()))
 
 
+def _write_group_pages(children: t.List[_Page]) -> None:
+    """Write the two pages the sidebar hangs the models tree from.
+
+    A toctree entry only collapses when it points at a document, so the split between generated
+    and hand-written models needs a page on each side rather than a caption.
+    """
+    grouped = ([child for child in children if child.children], [child for child in children if not child.children])
+    for (name, title, blurb), pages in zip(_GROUPS, grouped):
+        _write(
+            f'models/{name}',
+            f'{title}\n{"=" * len(title)}\n\n{blurb}\n'
+            f'\n{_render_cards(pages)}'
+            f'\n.. toctree::\n   :hidden:\n   :maxdepth: 3\n\n{_toctree_entries(pages)}\n',
+        )
+
+
 def _write_stub_map(pages: t.List[_Page]) -> None:
     """Write the old-to-new map that sphinx-reredirects turns into stub pages at the old paths."""
     entries = ''.join(f'    {old!r}: {new!r},\n' for old, new in _moved_pages(pages).items())
@@ -302,6 +348,7 @@ def main() -> None:
     for page in _walk([root]):
         _write(page.docname, _render_page(page))
 
+    _write_group_pages(children)
     _write_stub_map([root])
 
 

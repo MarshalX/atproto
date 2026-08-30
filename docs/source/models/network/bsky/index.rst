@@ -21,4 +21,4 @@ Bluesky network infrastructure.
    :hidden:
    :maxdepth: 1
 
-   /models/network/bsky/jetstream/index
+   jetstream </models/network/bsky/jetstream/index>

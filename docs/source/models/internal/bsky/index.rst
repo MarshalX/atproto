@@ -21,4 +21,4 @@ Internal Bluesky lexicons.
    :hidden:
    :maxdepth: 1
 
-   /models/internal/bsky/actor/index
+   actor </models/internal/bsky/actor/index>

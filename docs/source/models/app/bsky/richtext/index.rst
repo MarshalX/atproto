@@ -21,4 +21,4 @@ Rich text facets: mentions, links, and tags.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/richtext/facet
+   facet </models/app/bsky/richtext/facet>

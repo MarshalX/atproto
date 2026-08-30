@@ -63,11 +63,11 @@ Post embeds: images, video, external links, and quoted records.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/embed/defs
-   /models/app/bsky/embed/external
-   /models/app/bsky/embed/gallery
-   /models/app/bsky/embed/getEmbedExternalView
-   /models/app/bsky/embed/images
-   /models/app/bsky/embed/record
-   /models/app/bsky/embed/recordWithMedia
-   /models/app/bsky/embed/video
+   defs </models/app/bsky/embed/defs>
+   external </models/app/bsky/embed/external>
+   gallery </models/app/bsky/embed/gallery>
+   getEmbedExternalView </models/app/bsky/embed/getEmbedExternalView>
+   images </models/app/bsky/embed/images>
+   record </models/app/bsky/embed/record>
+   recordWithMedia </models/app/bsky/embed/recordWithMedia>
+   video </models/app/bsky/embed/video>

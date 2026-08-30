@@ -153,26 +153,26 @@ Conversations, messages, and reactions.
    :hidden:
    :maxdepth: 1
 
-   /models/chat/bsky/convo/acceptConvo
-   /models/chat/bsky/convo/addReaction
-   /models/chat/bsky/convo/defs
-   /models/chat/bsky/convo/deleteMessageForSelf
-   /models/chat/bsky/convo/getConvo
-   /models/chat/bsky/convo/getConvoAvailability
-   /models/chat/bsky/convo/getConvoForMembers
-   /models/chat/bsky/convo/getConvoMembers
-   /models/chat/bsky/convo/getLog
-   /models/chat/bsky/convo/getMessages
-   /models/chat/bsky/convo/getUnreadCounts
-   /models/chat/bsky/convo/leaveConvo
-   /models/chat/bsky/convo/listConvoRequests
-   /models/chat/bsky/convo/listConvos
-   /models/chat/bsky/convo/lockConvo
-   /models/chat/bsky/convo/muteConvo
-   /models/chat/bsky/convo/removeReaction
-   /models/chat/bsky/convo/sendMessage
-   /models/chat/bsky/convo/sendMessageBatch
-   /models/chat/bsky/convo/unlockConvo
-   /models/chat/bsky/convo/unmuteConvo
-   /models/chat/bsky/convo/updateAllRead
-   /models/chat/bsky/convo/updateRead
+   acceptConvo </models/chat/bsky/convo/acceptConvo>
+   addReaction </models/chat/bsky/convo/addReaction>
+   defs </models/chat/bsky/convo/defs>
+   deleteMessageForSelf </models/chat/bsky/convo/deleteMessageForSelf>
+   getConvo </models/chat/bsky/convo/getConvo>
+   getConvoAvailability </models/chat/bsky/convo/getConvoAvailability>
+   getConvoForMembers </models/chat/bsky/convo/getConvoForMembers>
+   getConvoMembers </models/chat/bsky/convo/getConvoMembers>
+   getLog </models/chat/bsky/convo/getLog>
+   getMessages </models/chat/bsky/convo/getMessages>
+   getUnreadCounts </models/chat/bsky/convo/getUnreadCounts>
+   leaveConvo </models/chat/bsky/convo/leaveConvo>
+   listConvoRequests </models/chat/bsky/convo/listConvoRequests>
+   listConvos </models/chat/bsky/convo/listConvos>
+   lockConvo </models/chat/bsky/convo/lockConvo>
+   muteConvo </models/chat/bsky/convo/muteConvo>
+   removeReaction </models/chat/bsky/convo/removeReaction>
+   sendMessage </models/chat/bsky/convo/sendMessage>
+   sendMessageBatch </models/chat/bsky/convo/sendMessageBatch>
+   unlockConvo </models/chat/bsky/convo/unlockConvo>
+   unmuteConvo </models/chat/bsky/convo/unmuteConvo>
+   updateAllRead </models/chat/bsky/convo/updateAllRead>
+   updateRead </models/chat/bsky/convo/updateRead>

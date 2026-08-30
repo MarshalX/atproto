@@ -75,13 +75,13 @@ Handles, DIDs, and identity resolution.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/identity/defs
-   /models/com/atproto/identity/getRecommendedDidCredentials
-   /models/com/atproto/identity/refreshIdentity
-   /models/com/atproto/identity/requestPlcOperationSignature
-   /models/com/atproto/identity/resolveDid
-   /models/com/atproto/identity/resolveHandle
-   /models/com/atproto/identity/resolveIdentity
-   /models/com/atproto/identity/signPlcOperation
-   /models/com/atproto/identity/submitPlcOperation
-   /models/com/atproto/identity/updateHandle
+   defs </models/com/atproto/identity/defs>
+   getRecommendedDidCredentials </models/com/atproto/identity/getRecommendedDidCredentials>
+   refreshIdentity </models/com/atproto/identity/refreshIdentity>
+   requestPlcOperationSignature </models/com/atproto/identity/requestPlcOperationSignature>
+   resolveDid </models/com/atproto/identity/resolveDid>
+   resolveHandle </models/com/atproto/identity/resolveHandle>
+   resolveIdentity </models/com/atproto/identity/resolveIdentity>
+   signPlcOperation </models/com/atproto/identity/signPlcOperation>
+   submitPlcOperation </models/com/atproto/identity/submitPlcOperation>
+   updateHandle </models/com/atproto/identity/updateHandle>

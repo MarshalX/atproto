@@ -27,5 +27,5 @@ Lexicon schemas published as records.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/lexicon/resolveLexicon
-   /models/com/atproto/lexicon/schema
+   resolveLexicon </models/com/atproto/lexicon/resolveLexicon>
+   schema </models/com/atproto/lexicon/schema>

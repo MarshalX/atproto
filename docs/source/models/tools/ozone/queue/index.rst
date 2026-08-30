@@ -69,12 +69,12 @@ The moderation queue and its assignments.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/queue/assignModerator
-   /models/tools/ozone/queue/createQueue
-   /models/tools/ozone/queue/defs
-   /models/tools/ozone/queue/deleteQueue
-   /models/tools/ozone/queue/getAssignments
-   /models/tools/ozone/queue/listQueues
-   /models/tools/ozone/queue/routeReports
-   /models/tools/ozone/queue/unassignModerator
-   /models/tools/ozone/queue/updateQueue
+   assignModerator </models/tools/ozone/queue/assignModerator>
+   createQueue </models/tools/ozone/queue/createQueue>
+   defs </models/tools/ozone/queue/defs>
+   deleteQueue </models/tools/ozone/queue/deleteQueue>
+   getAssignments </models/tools/ozone/queue/getAssignments>
+   listQueues </models/tools/ozone/queue/listQueues>
+   routeReports </models/tools/ozone/queue/routeReports>
+   unassignModerator </models/tools/ozone/queue/unassignModerator>
+   updateQueue </models/tools/ozone/queue/updateQueue>

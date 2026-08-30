@@ -33,6 +33,6 @@ Labeling services and the labels they declare.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/labeler/defs
-   /models/app/bsky/labeler/getServices
-   /models/app/bsky/labeler/service
+   defs </models/app/bsky/labeler/defs>
+   getServices </models/app/bsky/labeler/getServices>
+   service </models/app/bsky/labeler/service>

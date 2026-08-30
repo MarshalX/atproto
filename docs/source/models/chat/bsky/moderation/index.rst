@@ -63,11 +63,11 @@ Moderation of chat actors and messages.
    :hidden:
    :maxdepth: 1
 
-   /models/chat/bsky/moderation/defs
-   /models/chat/bsky/moderation/getActorMetadata
-   /models/chat/bsky/moderation/getConvo
-   /models/chat/bsky/moderation/getConvoMembers
-   /models/chat/bsky/moderation/getConvos
-   /models/chat/bsky/moderation/getMessageContext
-   /models/chat/bsky/moderation/subscribeModEvents
-   /models/chat/bsky/moderation/updateActorAccess
+   defs </models/chat/bsky/moderation/defs>
+   getActorMetadata </models/chat/bsky/moderation/getActorMetadata>
+   getConvo </models/chat/bsky/moderation/getConvo>
+   getConvoMembers </models/chat/bsky/moderation/getConvoMembers>
+   getConvos </models/chat/bsky/moderation/getConvos>
+   getMessageContext </models/chat/bsky/moderation/getMessageContext>
+   subscribeModEvents </models/chat/bsky/moderation/subscribeModEvents>
+   updateActorAccess </models/chat/bsky/moderation/updateActorAccess>

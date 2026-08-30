@@ -21,4 +21,4 @@ Application lexicons: everything an app exposes to the people using it.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/index
+   bsky </models/app/bsky/index>

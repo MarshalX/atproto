@@ -57,10 +57,10 @@ Temporary endpoints that exist until a permanent one lands.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/temp/addReservedHandle
-   /models/com/atproto/temp/checkHandleAvailability
-   /models/com/atproto/temp/checkSignupQueue
-   /models/com/atproto/temp/dereferenceScope
-   /models/com/atproto/temp/fetchLabels
-   /models/com/atproto/temp/requestPhoneVerification
-   /models/com/atproto/temp/revokeAccountCredentials
+   addReservedHandle </models/com/atproto/temp/addReservedHandle>
+   checkHandleAvailability </models/com/atproto/temp/checkHandleAvailability>
+   checkSignupQueue </models/com/atproto/temp/checkSignupQueue>
+   dereferenceScope </models/com/atproto/temp/dereferenceScope>
+   fetchLabels </models/com/atproto/temp/fetchLabels>
+   requestPhoneVerification </models/com/atproto/temp/requestPhoneVerification>
+   revokeAccountCredentials </models/com/atproto/temp/revokeAccountCredentials>

@@ -33,6 +33,6 @@ Labels and the streams that publish them.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/label/defs
-   /models/com/atproto/label/queryLabels
-   /models/com/atproto/label/subscribeLabels
+   defs </models/com/atproto/label/defs>
+   queryLabels </models/com/atproto/label/queryLabels>
+   subscribeLabels </models/com/atproto/label/subscribeLabels>

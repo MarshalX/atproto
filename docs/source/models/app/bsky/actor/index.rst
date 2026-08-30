@@ -81,14 +81,14 @@ Profiles, preferences, statuses, and actor search.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/actor/contentVisibilityDeclaration
-   /models/app/bsky/actor/defs
-   /models/app/bsky/actor/getPreferences
-   /models/app/bsky/actor/getProfile
-   /models/app/bsky/actor/getProfiles
-   /models/app/bsky/actor/getSuggestions
-   /models/app/bsky/actor/profile
-   /models/app/bsky/actor/putPreferences
-   /models/app/bsky/actor/searchActors
-   /models/app/bsky/actor/searchActorsTypeahead
-   /models/app/bsky/actor/status
+   contentVisibilityDeclaration </models/app/bsky/actor/contentVisibilityDeclaration>
+   defs </models/app/bsky/actor/defs>
+   getPreferences </models/app/bsky/actor/getPreferences>
+   getProfile </models/app/bsky/actor/getProfile>
+   getProfiles </models/app/bsky/actor/getProfiles>
+   getSuggestions </models/app/bsky/actor/getSuggestions>
+   profile </models/app/bsky/actor/profile>
+   putPreferences </models/app/bsky/actor/putPreferences>
+   searchActors </models/app/bsky/actor/searchActors>
+   searchActorsTypeahead </models/app/bsky/actor/searchActorsTypeahead>
+   status </models/app/bsky/actor/status>

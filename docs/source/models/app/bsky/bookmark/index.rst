@@ -39,7 +39,7 @@ Private bookmarks on records.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/bookmark/createBookmark
-   /models/app/bsky/bookmark/defs
-   /models/app/bsky/bookmark/deleteBookmark
-   /models/app/bsky/bookmark/getBookmarks
+   createBookmark </models/app/bsky/bookmark/createBookmark>
+   defs </models/app/bsky/bookmark/defs>
+   deleteBookmark </models/app/bsky/bookmark/deleteBookmark>
+   getBookmarks </models/app/bsky/bookmark/getBookmarks>

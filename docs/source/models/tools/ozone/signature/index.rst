@@ -39,7 +39,7 @@ Account signatures used to find related accounts.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/signature/defs
-   /models/tools/ozone/signature/findCorrelation
-   /models/tools/ozone/signature/findRelatedAccounts
-   /models/tools/ozone/signature/searchAccounts
+   defs </models/tools/ozone/signature/defs>
+   findCorrelation </models/tools/ozone/signature/findCorrelation>
+   findRelatedAccounts </models/tools/ozone/signature/findRelatedAccounts>
+   searchAccounts </models/tools/ozone/signature/searchAccounts>

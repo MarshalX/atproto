@@ -39,7 +39,7 @@ Age assurance flow and its resulting state.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/ageassurance/begin
-   /models/app/bsky/ageassurance/defs
-   /models/app/bsky/ageassurance/getConfig
-   /models/app/bsky/ageassurance/getState
+   begin </models/app/bsky/ageassurance/begin>
+   defs </models/app/bsky/ageassurance/defs>
+   getConfig </models/app/bsky/ageassurance/getConfig>
+   getState </models/app/bsky/ageassurance/getState>

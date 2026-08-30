@@ -69,12 +69,12 @@ Core AT Protocol: identities, repositories, servers, and sync.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/admin/index
-   /models/com/atproto/identity/index
-   /models/com/atproto/label/index
-   /models/com/atproto/lexicon/index
-   /models/com/atproto/moderation/index
-   /models/com/atproto/repo/index
-   /models/com/atproto/server/index
-   /models/com/atproto/sync/index
-   /models/com/atproto/temp/index
+   admin </models/com/atproto/admin/index>
+   identity </models/com/atproto/identity/index>
+   label </models/com/atproto/label/index>
+   lexicon </models/com/atproto/lexicon/index>
+   moderation </models/com/atproto/moderation/index>
+   repo </models/com/atproto/repo/index>
+   server </models/com/atproto/server/index>
+   sync </models/com/atproto/sync/index>
+   temp </models/com/atproto/temp/index>

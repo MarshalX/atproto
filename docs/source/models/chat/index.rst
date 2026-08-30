@@ -21,4 +21,4 @@ Private messaging lexicons.
    :hidden:
    :maxdepth: 1
 
-   /models/chat/bsky/index
+   bsky </models/chat/bsky/index>

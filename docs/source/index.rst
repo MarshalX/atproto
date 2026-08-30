@@ -18,16 +18,17 @@ Documentation
 
 .. toctree::
    :caption: 🎛 Clients
-   :maxdepth: 2
+   :maxdepth: 3
 
    atproto_client/index
    dm
 
 .. toctree::
    :caption: 📖 Models
-   :maxdepth: 2
+   :maxdepth: 4
 
-   models/index
+   Lexicons <models/lexicons>
+   Core <models/core>
 
 .. toctree::
    :caption: 📡 Firehose & Jetstream

@@ -51,9 +51,9 @@ Bluesky direct messages.
    :hidden:
    :maxdepth: 1
 
-   /models/chat/bsky/actor/index
-   /models/chat/bsky/convo/index
-   /models/chat/bsky/embed/index
-   /models/chat/bsky/group/index
-   /models/chat/bsky/moderation/index
-   /models/chat/bsky/notification/index
+   actor </models/chat/bsky/actor/index>
+   convo </models/chat/bsky/convo/index>
+   embed </models/chat/bsky/embed/index>
+   group </models/chat/bsky/group/index>
+   moderation </models/chat/bsky/moderation/index>
+   notification </models/chat/bsky/notification/index>

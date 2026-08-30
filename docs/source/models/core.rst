@@ -1,67 +1,5 @@
-:orphan:
-
-Models
-======
-
-Every lexicon of the network, generated as a Pydantic model. Browse by NSID: the authority, then the namespace, then the record or method.
-
-.. automodule:: atproto_client.models
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-Lexicons
---------
-
-One page per NSID, generated from the lexicons the network publishes.
-
-.. grid:: 1 2 2 3
-   :gutter: 3
-
-   .. grid-item-card:: :octicon:`apps;1em;sd-mr-1` app
-      :link: /models/app/index
-      :link-type: doc
-
-      Application lexicons: everything an app exposes to the people using it.
-
-   .. grid-item-card:: :octicon:`comment-discussion;1em;sd-mr-1` chat
-      :link: /models/chat/index
-      :link-type: doc
-
-      Private messaging lexicons.
-
-   .. grid-item-card:: :octicon:`stack;1em;sd-mr-1` com
-      :link: /models/com/index
-      :link-type: doc
-
-      The protocol itself, plus the lexicons of third-party services.
-
-   .. grid-item-card:: :octicon:`lock;1em;sd-mr-1` internal
-      :link: /models/internal/index
-      :link-type: doc
-
-      Internal lexicons that are not part of the public API.
-
-   .. grid-item-card:: :octicon:`globe;1em;sd-mr-1` network
-      :link: /models/network/index
-      :link-type: doc
-
-      Infrastructure services behind the network.
-
-   .. grid-item-card:: :octicon:`browser;1em;sd-mr-1` site
-      :link: /models/site/index
-      :link-type: doc
-
-      Websites published on atproto.
-
-   .. grid-item-card:: :octicon:`tools;1em;sd-mr-1` tools
-      :link: /models/tools/index
-      :link-type: doc
-
-      Tooling for the people who operate the network.
-
 Core
-----
+====
 
 The hand-written machinery every generated model is built on.
 
@@ -139,3 +77,20 @@ The hand-written machinery every generated model is built on.
       :link-type: doc
 
       Helpers for working with model instances.
+
+.. toctree::
+   :hidden:
+   :maxdepth: 3
+
+   base </models/base>
+   blob_ref </models/blob_ref>
+   common </models/common>
+   dot_dict </models/dot_dict>
+   languages </models/languages>
+   models_loader </models/models_loader>
+   record_registry </models/record_registry>
+   string_formats </models/string_formats>
+   type_conversion </models/type_conversion>
+   unknown_type </models/unknown_type>
+   unknown_union </models/unknown_union>
+   utils </models/utils>

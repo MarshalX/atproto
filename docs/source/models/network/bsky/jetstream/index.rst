@@ -63,11 +63,11 @@ Jetstream: event stream, archive segments, and imports.
    :hidden:
    :maxdepth: 1
 
-   /models/network/bsky/jetstream/getBlock
-   /models/network/bsky/jetstream/getImportStatus
-   /models/network/bsky/jetstream/getSegment
-   /models/network/bsky/jetstream/getZstdDictionary
-   /models/network/bsky/jetstream/importTimestamps
-   /models/network/bsky/jetstream/listSegments
-   /models/network/bsky/jetstream/planSnapshot
-   /models/network/bsky/jetstream/subscribeEvents
+   getBlock </models/network/bsky/jetstream/getBlock>
+   getImportStatus </models/network/bsky/jetstream/getImportStatus>
+   getSegment </models/network/bsky/jetstream/getSegment>
+   getZstdDictionary </models/network/bsky/jetstream/getZstdDictionary>
+   importTimestamps </models/network/bsky/jetstream/importTimestamps>
+   listSegments </models/network/bsky/jetstream/listSegments>
+   planSnapshot </models/network/bsky/jetstream/planSnapshot>
+   subscribeEvents </models/network/bsky/jetstream/subscribeEvents>

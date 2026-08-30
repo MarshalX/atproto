@@ -93,16 +93,16 @@ The Bluesky microblogging app: profiles, posts, feeds, and the social graph.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/actor/index
-   /models/app/bsky/ageassurance/index
-   /models/app/bsky/bookmark/index
-   /models/app/bsky/contact/index
-   /models/app/bsky/draft/index
-   /models/app/bsky/embed/index
-   /models/app/bsky/feed/index
-   /models/app/bsky/graph/index
-   /models/app/bsky/labeler/index
-   /models/app/bsky/notification/index
-   /models/app/bsky/richtext/index
-   /models/app/bsky/unspecced/index
-   /models/app/bsky/video/index
+   actor </models/app/bsky/actor/index>
+   ageassurance </models/app/bsky/ageassurance/index>
+   bookmark </models/app/bsky/bookmark/index>
+   contact </models/app/bsky/contact/index>
+   draft </models/app/bsky/draft/index>
+   embed </models/app/bsky/embed/index>
+   feed </models/app/bsky/feed/index>
+   graph </models/app/bsky/graph/index>
+   labeler </models/app/bsky/labeler/index>
+   notification </models/app/bsky/notification/index>
+   richtext </models/app/bsky/richtext/index>
+   unspecced </models/app/bsky/unspecced/index>
+   video </models/app/bsky/video/index>

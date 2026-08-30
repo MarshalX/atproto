@@ -27,5 +27,5 @@ The protocol itself, plus the lexicons of third-party services.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/index
-   /models/com/germnetwork/index
+   atproto </models/com/atproto/index>
+   germnetwork </models/com/germnetwork/index>

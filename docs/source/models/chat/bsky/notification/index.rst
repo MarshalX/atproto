@@ -33,6 +33,6 @@ Chat notification preferences.
    :hidden:
    :maxdepth: 1
 
-   /models/chat/bsky/notification/defs
-   /models/chat/bsky/notification/getPreferences
-   /models/chat/bsky/notification/putPreferences
+   defs </models/chat/bsky/notification/defs>
+   getPreferences </models/chat/bsky/notification/getPreferences>
+   putPreferences </models/chat/bsky/notification/putPreferences>

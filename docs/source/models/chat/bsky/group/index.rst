@@ -117,20 +117,20 @@ Group conversations and their membership.
    :hidden:
    :maxdepth: 1
 
-   /models/chat/bsky/group/addMembers
-   /models/chat/bsky/group/approveJoinRequest
-   /models/chat/bsky/group/createGroup
-   /models/chat/bsky/group/createJoinLink
-   /models/chat/bsky/group/defs
-   /models/chat/bsky/group/disableJoinLink
-   /models/chat/bsky/group/editGroup
-   /models/chat/bsky/group/editJoinLink
-   /models/chat/bsky/group/enableJoinLink
-   /models/chat/bsky/group/getJoinLinkPreviews
-   /models/chat/bsky/group/listJoinRequests
-   /models/chat/bsky/group/listMutualGroups
-   /models/chat/bsky/group/rejectJoinRequest
-   /models/chat/bsky/group/removeMembers
-   /models/chat/bsky/group/requestJoin
-   /models/chat/bsky/group/updateJoinRequestsRead
-   /models/chat/bsky/group/withdrawJoinRequest
+   addMembers </models/chat/bsky/group/addMembers>
+   approveJoinRequest </models/chat/bsky/group/approveJoinRequest>
+   createGroup </models/chat/bsky/group/createGroup>
+   createJoinLink </models/chat/bsky/group/createJoinLink>
+   defs </models/chat/bsky/group/defs>
+   disableJoinLink </models/chat/bsky/group/disableJoinLink>
+   editGroup </models/chat/bsky/group/editGroup>
+   editJoinLink </models/chat/bsky/group/editJoinLink>
+   enableJoinLink </models/chat/bsky/group/enableJoinLink>
+   getJoinLinkPreviews </models/chat/bsky/group/getJoinLinkPreviews>
+   listJoinRequests </models/chat/bsky/group/listJoinRequests>
+   listMutualGroups </models/chat/bsky/group/listMutualGroups>
+   rejectJoinRequest </models/chat/bsky/group/rejectJoinRequest>
+   removeMembers </models/chat/bsky/group/removeMembers>
+   requestJoin </models/chat/bsky/group/requestJoin>
+   updateJoinRequestsRead </models/chat/bsky/group/updateJoinRequestsRead>
+   withdrawJoinRequest </models/chat/bsky/group/withdrawJoinRequest>

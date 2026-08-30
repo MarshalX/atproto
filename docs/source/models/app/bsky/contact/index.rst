@@ -69,12 +69,12 @@ Contact discovery between actors.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/contact/defs
-   /models/app/bsky/contact/dismissMatch
-   /models/app/bsky/contact/getMatches
-   /models/app/bsky/contact/getSyncStatus
-   /models/app/bsky/contact/importContacts
-   /models/app/bsky/contact/removeData
-   /models/app/bsky/contact/sendNotification
-   /models/app/bsky/contact/startPhoneVerification
-   /models/app/bsky/contact/verifyPhone
+   defs </models/app/bsky/contact/defs>
+   dismissMatch </models/app/bsky/contact/dismissMatch>
+   getMatches </models/app/bsky/contact/getMatches>
+   getSyncStatus </models/app/bsky/contact/getSyncStatus>
+   importContacts </models/app/bsky/contact/importContacts>
+   removeData </models/app/bsky/contact/removeData>
+   sendNotification </models/app/bsky/contact/sendNotification>
+   startPhoneVerification </models/app/bsky/contact/startPhoneVerification>
+   verifyPhone </models/app/bsky/contact/verifyPhone>

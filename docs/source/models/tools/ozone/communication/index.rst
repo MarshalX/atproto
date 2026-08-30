@@ -45,8 +45,8 @@ Templates for moderator communication.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/communication/createTemplate
-   /models/tools/ozone/communication/defs
-   /models/tools/ozone/communication/deleteTemplate
-   /models/tools/ozone/communication/listTemplates
-   /models/tools/ozone/communication/updateTemplate
+   createTemplate </models/tools/ozone/communication/createTemplate>
+   defs </models/tools/ozone/communication/defs>
+   deleteTemplate </models/tools/ozone/communication/deleteTemplate>
+   listTemplates </models/tools/ozone/communication/listTemplates>
+   updateTemplate </models/tools/ozone/communication/updateTemplate>

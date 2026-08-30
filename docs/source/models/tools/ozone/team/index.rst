@@ -45,8 +45,8 @@ Ozone team members and their roles.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/team/addMember
-   /models/tools/ozone/team/defs
-   /models/tools/ozone/team/deleteMember
-   /models/tools/ozone/team/listMembers
-   /models/tools/ozone/team/updateMember
+   addMember </models/tools/ozone/team/addMember>
+   defs </models/tools/ozone/team/defs>
+   deleteMember </models/tools/ozone/team/deleteMember>
+   listMembers </models/tools/ozone/team/listMembers>
+   updateMember </models/tools/ozone/team/updateMember>

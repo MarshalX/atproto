@@ -21,4 +21,4 @@ Ozone server configuration.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/server/getConfig
+   getConfig </models/tools/ozone/server/getConfig>

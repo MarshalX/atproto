@@ -39,7 +39,7 @@ The standard website vocabulary.
    :hidden:
    :maxdepth: 1
 
-   /models/site/standard/graph/index
-   /models/site/standard/theme/index
-   /models/site/standard/document
-   /models/site/standard/publication
+   graph </models/site/standard/graph/index>
+   theme </models/site/standard/theme/index>
+   document </models/site/standard/document>
+   publication </models/site/standard/publication>

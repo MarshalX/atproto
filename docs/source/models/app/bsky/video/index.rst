@@ -69,12 +69,12 @@ Video uploads and the status of their processing jobs.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/video/abortUpload
-   /models/app/bsky/video/defs
-   /models/app/bsky/video/finishUpload
-   /models/app/bsky/video/getJobStatus
-   /models/app/bsky/video/getUploadLimits
-   /models/app/bsky/video/getUploadStatus
-   /models/app/bsky/video/startUpload
-   /models/app/bsky/video/uploadPart
-   /models/app/bsky/video/uploadVideo
+   abortUpload </models/app/bsky/video/abortUpload>
+   defs </models/app/bsky/video/defs>
+   finishUpload </models/app/bsky/video/finishUpload>
+   getJobStatus </models/app/bsky/video/getJobStatus>
+   getUploadLimits </models/app/bsky/video/getUploadLimits>
+   getUploadStatus </models/app/bsky/video/getUploadStatus>
+   startUpload </models/app/bsky/video/startUpload>
+   uploadPart </models/app/bsky/video/uploadPart>
+   uploadVideo </models/app/bsky/video/uploadVideo>

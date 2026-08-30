@@ -111,19 +111,19 @@ Account administration for PDS operators.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/admin/defs
-   /models/com/atproto/admin/deleteAccount
-   /models/com/atproto/admin/disableAccountInvites
-   /models/com/atproto/admin/disableInviteCodes
-   /models/com/atproto/admin/enableAccountInvites
-   /models/com/atproto/admin/getAccountInfo
-   /models/com/atproto/admin/getAccountInfos
-   /models/com/atproto/admin/getInviteCodes
-   /models/com/atproto/admin/getSubjectStatus
-   /models/com/atproto/admin/searchAccounts
-   /models/com/atproto/admin/sendEmail
-   /models/com/atproto/admin/updateAccountEmail
-   /models/com/atproto/admin/updateAccountHandle
-   /models/com/atproto/admin/updateAccountPassword
-   /models/com/atproto/admin/updateAccountSigningKey
-   /models/com/atproto/admin/updateSubjectStatus
+   defs </models/com/atproto/admin/defs>
+   deleteAccount </models/com/atproto/admin/deleteAccount>
+   disableAccountInvites </models/com/atproto/admin/disableAccountInvites>
+   disableInviteCodes </models/com/atproto/admin/disableInviteCodes>
+   enableAccountInvites </models/com/atproto/admin/enableAccountInvites>
+   getAccountInfo </models/com/atproto/admin/getAccountInfo>
+   getAccountInfos </models/com/atproto/admin/getAccountInfos>
+   getInviteCodes </models/com/atproto/admin/getInviteCodes>
+   getSubjectStatus </models/com/atproto/admin/getSubjectStatus>
+   searchAccounts </models/com/atproto/admin/searchAccounts>
+   sendEmail </models/com/atproto/admin/sendEmail>
+   updateAccountEmail </models/com/atproto/admin/updateAccountEmail>
+   updateAccountHandle </models/com/atproto/admin/updateAccountHandle>
+   updateAccountPassword </models/com/atproto/admin/updateAccountPassword>
+   updateAccountSigningKey </models/com/atproto/admin/updateAccountSigningKey>
+   updateSubjectStatus </models/com/atproto/admin/updateSubjectStatus>

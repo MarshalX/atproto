@@ -111,19 +111,19 @@ Moderation events, reports, and subject state.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/moderation/cancelScheduledActions
-   /models/tools/ozone/moderation/defs
-   /models/tools/ozone/moderation/emitEvent
-   /models/tools/ozone/moderation/getAccountTimeline
-   /models/tools/ozone/moderation/getEvent
-   /models/tools/ozone/moderation/getRecord
-   /models/tools/ozone/moderation/getRecords
-   /models/tools/ozone/moderation/getRepo
-   /models/tools/ozone/moderation/getReporterStats
-   /models/tools/ozone/moderation/getRepos
-   /models/tools/ozone/moderation/getSubjects
-   /models/tools/ozone/moderation/listScheduledActions
-   /models/tools/ozone/moderation/queryEvents
-   /models/tools/ozone/moderation/queryStatuses
-   /models/tools/ozone/moderation/scheduleAction
-   /models/tools/ozone/moderation/searchRepos
+   cancelScheduledActions </models/tools/ozone/moderation/cancelScheduledActions>
+   defs </models/tools/ozone/moderation/defs>
+   emitEvent </models/tools/ozone/moderation/emitEvent>
+   getAccountTimeline </models/tools/ozone/moderation/getAccountTimeline>
+   getEvent </models/tools/ozone/moderation/getEvent>
+   getRecord </models/tools/ozone/moderation/getRecord>
+   getRecords </models/tools/ozone/moderation/getRecords>
+   getRepo </models/tools/ozone/moderation/getRepo>
+   getReporterStats </models/tools/ozone/moderation/getReporterStats>
+   getRepos </models/tools/ozone/moderation/getRepos>
+   getSubjects </models/tools/ozone/moderation/getSubjects>
+   listScheduledActions </models/tools/ozone/moderation/listScheduledActions>
+   queryEvents </models/tools/ozone/moderation/queryEvents>
+   queryStatuses </models/tools/ozone/moderation/queryStatuses>
+   scheduleAction </models/tools/ozone/moderation/scheduleAction>
+   searchRepos </models/tools/ozone/moderation/searchRepos>

@@ -2,3 +2,17 @@
 .sd-card-title {
     overflow-wrap: anywhere;
 }
+
+/* Fully qualified model paths are long enough to run under the right sidebar. */
+dl.py > dt,
+dl.py > dt .sig-name,
+dl.py > dt .sig-prename {
+    overflow-wrap: anywhere;
+    white-space: normal;
+}
+
+/* Same for the "On this page" entries, which repeat the qualified name. */
+#right-sidebar a code,
+#right-sidebar a {
+    overflow-wrap: anywhere;
+}

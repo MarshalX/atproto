@@ -207,35 +207,35 @@ Follows, blocks, mutes, lists, and starter packs.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/graph/block
-   /models/app/bsky/graph/defs
-   /models/app/bsky/graph/follow
-   /models/app/bsky/graph/getActorStarterPacks
-   /models/app/bsky/graph/getBlocks
-   /models/app/bsky/graph/getFollowers
-   /models/app/bsky/graph/getFollows
-   /models/app/bsky/graph/getKnownFollowers
-   /models/app/bsky/graph/getList
-   /models/app/bsky/graph/getListBlocks
-   /models/app/bsky/graph/getListMutes
-   /models/app/bsky/graph/getLists
-   /models/app/bsky/graph/getListsWithMembership
-   /models/app/bsky/graph/getMutes
-   /models/app/bsky/graph/getRelationships
-   /models/app/bsky/graph/getStarterPack
-   /models/app/bsky/graph/getStarterPacks
-   /models/app/bsky/graph/getStarterPacksWithMembership
-   /models/app/bsky/graph/getSuggestedFollowsByActor
-   /models/app/bsky/graph/list
-   /models/app/bsky/graph/listblock
-   /models/app/bsky/graph/listitem
-   /models/app/bsky/graph/muteActor
-   /models/app/bsky/graph/muteActorList
-   /models/app/bsky/graph/muteThread
-   /models/app/bsky/graph/searchStarterPacks
-   /models/app/bsky/graph/searchStarterPacksV2
-   /models/app/bsky/graph/starterpack
-   /models/app/bsky/graph/unmuteActor
-   /models/app/bsky/graph/unmuteActorList
-   /models/app/bsky/graph/unmuteThread
-   /models/app/bsky/graph/verification
+   block </models/app/bsky/graph/block>
+   defs </models/app/bsky/graph/defs>
+   follow </models/app/bsky/graph/follow>
+   getActorStarterPacks </models/app/bsky/graph/getActorStarterPacks>
+   getBlocks </models/app/bsky/graph/getBlocks>
+   getFollowers </models/app/bsky/graph/getFollowers>
+   getFollows </models/app/bsky/graph/getFollows>
+   getKnownFollowers </models/app/bsky/graph/getKnownFollowers>
+   getList </models/app/bsky/graph/getList>
+   getListBlocks </models/app/bsky/graph/getListBlocks>
+   getListMutes </models/app/bsky/graph/getListMutes>
+   getLists </models/app/bsky/graph/getLists>
+   getListsWithMembership </models/app/bsky/graph/getListsWithMembership>
+   getMutes </models/app/bsky/graph/getMutes>
+   getRelationships </models/app/bsky/graph/getRelationships>
+   getStarterPack </models/app/bsky/graph/getStarterPack>
+   getStarterPacks </models/app/bsky/graph/getStarterPacks>
+   getStarterPacksWithMembership </models/app/bsky/graph/getStarterPacksWithMembership>
+   getSuggestedFollowsByActor </models/app/bsky/graph/getSuggestedFollowsByActor>
+   list </models/app/bsky/graph/list>
+   listblock </models/app/bsky/graph/listblock>
+   listitem </models/app/bsky/graph/listitem>
+   muteActor </models/app/bsky/graph/muteActor>
+   muteActorList </models/app/bsky/graph/muteActorList>
+   muteThread </models/app/bsky/graph/muteThread>
+   searchStarterPacks </models/app/bsky/graph/searchStarterPacks>
+   searchStarterPacksV2 </models/app/bsky/graph/searchStarterPacksV2>
+   starterpack </models/app/bsky/graph/starterpack>
+   unmuteActor </models/app/bsky/graph/unmuteActor>
+   unmuteActorList </models/app/bsky/graph/unmuteActorList>
+   unmuteThread </models/app/bsky/graph/unmuteThread>
+   verification </models/app/bsky/graph/verification>

@@ -105,18 +105,18 @@ Report intake and handling.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/report/assignModerator
-   /models/tools/ozone/report/closeReports
-   /models/tools/ozone/report/createActivity
-   /models/tools/ozone/report/defs
-   /models/tools/ozone/report/getAssignments
-   /models/tools/ozone/report/getHistoricalStats
-   /models/tools/ozone/report/getLatestReport
-   /models/tools/ozone/report/getLiveStats
-   /models/tools/ozone/report/getReport
-   /models/tools/ozone/report/listActivities
-   /models/tools/ozone/report/queryActivities
-   /models/tools/ozone/report/queryReports
-   /models/tools/ozone/report/reassignQueue
-   /models/tools/ozone/report/refreshStats
-   /models/tools/ozone/report/unassignModerator
+   assignModerator </models/tools/ozone/report/assignModerator>
+   closeReports </models/tools/ozone/report/closeReports>
+   createActivity </models/tools/ozone/report/createActivity>
+   defs </models/tools/ozone/report/defs>
+   getAssignments </models/tools/ozone/report/getAssignments>
+   getHistoricalStats </models/tools/ozone/report/getHistoricalStats>
+   getLatestReport </models/tools/ozone/report/getLatestReport>
+   getLiveStats </models/tools/ozone/report/getLiveStats>
+   getReport </models/tools/ozone/report/getReport>
+   listActivities </models/tools/ozone/report/listActivities>
+   queryActivities </models/tools/ozone/report/queryActivities>
+   queryReports </models/tools/ozone/report/queryReports>
+   reassignQueue </models/tools/ozone/report/reassignQueue>
+   refreshStats </models/tools/ozone/report/refreshStats>
+   unassignModerator </models/tools/ozone/report/unassignModerator>

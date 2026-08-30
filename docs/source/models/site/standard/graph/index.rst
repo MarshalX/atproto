@@ -27,5 +27,5 @@ Links between websites and the accounts behind them.
    :hidden:
    :maxdepth: 1
 
-   /models/site/standard/graph/recommend
-   /models/site/standard/graph/subscription
+   recommend </models/site/standard/graph/recommend>
+   subscription </models/site/standard/graph/subscription>

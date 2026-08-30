@@ -21,4 +21,4 @@ Tooling for the people who operate the network.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/index
+   ozone </models/tools/ozone/index>

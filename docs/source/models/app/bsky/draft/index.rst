@@ -45,8 +45,8 @@ Unpublished post drafts.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/draft/createDraft
-   /models/app/bsky/draft/defs
-   /models/app/bsky/draft/deleteDraft
-   /models/app/bsky/draft/getDrafts
-   /models/app/bsky/draft/updateDraft
+   createDraft </models/app/bsky/draft/createDraft>
+   defs </models/app/bsky/draft/defs>
+   deleteDraft </models/app/bsky/draft/deleteDraft>
+   getDrafts </models/app/bsky/draft/getDrafts>
+   updateDraft </models/app/bsky/draft/updateDraft>

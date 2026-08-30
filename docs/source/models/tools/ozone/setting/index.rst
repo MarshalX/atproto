@@ -39,7 +39,7 @@ Ozone instance settings.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/setting/defs
-   /models/tools/ozone/setting/listOptions
-   /models/tools/ozone/setting/removeOptions
-   /models/tools/ozone/setting/upsertOption
+   defs </models/tools/ozone/setting/defs>
+   listOptions </models/tools/ozone/setting/listOptions>
+   removeOptions </models/tools/ozone/setting/removeOptions>
+   upsertOption </models/tools/ozone/setting/upsertOption>

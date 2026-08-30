@@ -21,4 +21,4 @@ Embeds carried inside chat messages.
    :hidden:
    :maxdepth: 1
 
-   /models/chat/bsky/embed/joinLink
+   joinLink </models/chat/bsky/embed/joinLink>

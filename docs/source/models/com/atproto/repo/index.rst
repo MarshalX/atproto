@@ -87,15 +87,15 @@ Records and blobs: create, read, update, delete, and list.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/repo/applyWrites
-   /models/com/atproto/repo/createRecord
-   /models/com/atproto/repo/defs
-   /models/com/atproto/repo/deleteRecord
-   /models/com/atproto/repo/describeRepo
-   /models/com/atproto/repo/getRecord
-   /models/com/atproto/repo/importRepo
-   /models/com/atproto/repo/listMissingBlobs
-   /models/com/atproto/repo/listRecords
-   /models/com/atproto/repo/putRecord
-   /models/com/atproto/repo/strongRef
-   /models/com/atproto/repo/uploadBlob
+   applyWrites </models/com/atproto/repo/applyWrites>
+   createRecord </models/com/atproto/repo/createRecord>
+   defs </models/com/atproto/repo/defs>
+   deleteRecord </models/com/atproto/repo/deleteRecord>
+   describeRepo </models/com/atproto/repo/describeRepo>
+   getRecord </models/com/atproto/repo/getRecord>
+   importRepo </models/com/atproto/repo/importRepo>
+   listMissingBlobs </models/com/atproto/repo/listMissingBlobs>
+   listRecords </models/com/atproto/repo/listRecords>
+   putRecord </models/com/atproto/repo/putRecord>
+   strongRef </models/com/atproto/repo/strongRef>
+   uploadBlob </models/com/atproto/repo/uploadBlob>

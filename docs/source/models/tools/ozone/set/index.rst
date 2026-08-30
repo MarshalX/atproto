@@ -57,10 +57,10 @@ Named value sets that moderation rules match against.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/set/addValues
-   /models/tools/ozone/set/defs
-   /models/tools/ozone/set/deleteSet
-   /models/tools/ozone/set/deleteValues
-   /models/tools/ozone/set/getValues
-   /models/tools/ozone/set/querySets
-   /models/tools/ozone/set/upsertSet
+   addValues </models/tools/ozone/set/addValues>
+   defs </models/tools/ozone/set/defs>
+   deleteSet </models/tools/ozone/set/deleteSet>
+   deleteValues </models/tools/ozone/set/deleteValues>
+   getValues </models/tools/ozone/set/getValues>
+   querySets </models/tools/ozone/set/querySets>
+   upsertSet </models/tools/ozone/set/upsertSet>

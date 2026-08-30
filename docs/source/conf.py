@@ -121,7 +121,7 @@ html_theme_options = {
     'show_scrolltop': True,
     'main_nav_links': {
         'Getting started': 'readme',
-        'Client': 'atproto_client/index',
+        'Client': 'atproto_client/client',
         'Models': 'models/index',
         'Firehose': 'atproto_firehose/index',
         'Changelog': 'change_log',
@@ -255,26 +255,30 @@ def prepare_model_modules(_app: 'Sphinx') -> None:
 
 
 def scope_pygments_to_theme(app: 'Sphinx', exception: t.Optional[Exception]) -> None:
-    """Bind both Pygments palettes to the theme toggle instead of the operating system.
+    """Rewrite the Pygments stylesheet so both palettes follow the theme toggle.
 
-    The theme emits its dark palette inside ``@media (prefers-color-scheme: dark)`` but switches
-    the page on an ``html.dark`` class, so a reader whose system preference disagrees with the
-    toggle reads one palette on the other palette's background.
+    The theme emits its dark palette inside ``@media (prefers-color-scheme: dark)`` while
+    switching the page on an ``html.dark`` class. A reader whose system preference disagrees
+    with the toggle then gets tokens from one palette over the other palette's background, and
+    tokens only one palette defines leak across. Scoping both to the class removes the coupling.
+
+    The palettes' own container background is dropped: the theme renders code on the page
+    background, not in a box.
     """
     if exception is not None or app.builder.name not in ('html', 'dirhtml'):
         return
 
     from pygments.formatters import HtmlFormatter
 
-    scoped = '\n'.join(
-        HtmlFormatter(style=style).get_style_defs(selector)
-        for style, selector in (
-            (pygments_style, 'html:not(.dark) .highlight'),
-            (pygments_style_dark, 'html.dark .highlight'),
-        )
-    )
-    with (Path(app.outdir) / '_static' / 'pygments.css').open('a', encoding='UTF-8') as f:
-        f.write(f'\n{scoped}')
+    blocks = []
+    for style, selector in (
+        (app.config.pygments_style, 'html:not(.dark) .highlight'),
+        (app.config.pygments_style_dark, 'html.dark .highlight'),
+    ):
+        defs = HtmlFormatter(style=style).get_style_defs(selector)
+        blocks.append('\n'.join(line for line in defs.splitlines() if not line.startswith(f'{selector} {{')))
+
+    (Path(app.outdir) / '_static' / 'pygments.css').write_text('\n'.join(blocks), encoding='UTF-8')
 
 
 def setup(app: 'Sphinx') -> None:

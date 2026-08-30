@@ -171,29 +171,29 @@ Posts, likes, reposts, threads, and feed generators.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/feed/defs
-   /models/app/bsky/feed/describeFeedGenerator
-   /models/app/bsky/feed/generator
-   /models/app/bsky/feed/getActorFeeds
-   /models/app/bsky/feed/getActorLikes
-   /models/app/bsky/feed/getAuthorFeed
-   /models/app/bsky/feed/getFeed
-   /models/app/bsky/feed/getFeedGenerator
-   /models/app/bsky/feed/getFeedGenerators
-   /models/app/bsky/feed/getFeedSkeleton
-   /models/app/bsky/feed/getLikes
-   /models/app/bsky/feed/getListFeed
-   /models/app/bsky/feed/getPostThread
-   /models/app/bsky/feed/getPosts
-   /models/app/bsky/feed/getQuotes
-   /models/app/bsky/feed/getRepostedBy
-   /models/app/bsky/feed/getSuggestedFeeds
-   /models/app/bsky/feed/getTimeline
-   /models/app/bsky/feed/like
-   /models/app/bsky/feed/post
-   /models/app/bsky/feed/postgate
-   /models/app/bsky/feed/repost
-   /models/app/bsky/feed/searchPosts
-   /models/app/bsky/feed/searchPostsV2
-   /models/app/bsky/feed/sendInteractions
-   /models/app/bsky/feed/threadgate
+   defs </models/app/bsky/feed/defs>
+   describeFeedGenerator </models/app/bsky/feed/describeFeedGenerator>
+   generator </models/app/bsky/feed/generator>
+   getActorFeeds </models/app/bsky/feed/getActorFeeds>
+   getActorLikes </models/app/bsky/feed/getActorLikes>
+   getAuthorFeed </models/app/bsky/feed/getAuthorFeed>
+   getFeed </models/app/bsky/feed/getFeed>
+   getFeedGenerator </models/app/bsky/feed/getFeedGenerator>
+   getFeedGenerators </models/app/bsky/feed/getFeedGenerators>
+   getFeedSkeleton </models/app/bsky/feed/getFeedSkeleton>
+   getLikes </models/app/bsky/feed/getLikes>
+   getListFeed </models/app/bsky/feed/getListFeed>
+   getPostThread </models/app/bsky/feed/getPostThread>
+   getPosts </models/app/bsky/feed/getPosts>
+   getQuotes </models/app/bsky/feed/getQuotes>
+   getRepostedBy </models/app/bsky/feed/getRepostedBy>
+   getSuggestedFeeds </models/app/bsky/feed/getSuggestedFeeds>
+   getTimeline </models/app/bsky/feed/getTimeline>
+   like </models/app/bsky/feed/like>
+   post </models/app/bsky/feed/post>
+   postgate </models/app/bsky/feed/postgate>
+   repost </models/app/bsky/feed/repost>
+   searchPosts </models/app/bsky/feed/searchPosts>
+   searchPostsV2 </models/app/bsky/feed/searchPostsV2>
+   sendInteractions </models/app/bsky/feed/sendInteractions>
+   threadgate </models/app/bsky/feed/threadgate>

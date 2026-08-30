@@ -171,29 +171,29 @@ Accounts, sessions, invites, and app passwords.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/server/activateAccount
-   /models/com/atproto/server/checkAccountStatus
-   /models/com/atproto/server/confirmEmail
-   /models/com/atproto/server/createAccount
-   /models/com/atproto/server/createAppPassword
-   /models/com/atproto/server/createInviteCode
-   /models/com/atproto/server/createInviteCodes
-   /models/com/atproto/server/createSession
-   /models/com/atproto/server/deactivateAccount
-   /models/com/atproto/server/defs
-   /models/com/atproto/server/deleteAccount
-   /models/com/atproto/server/deleteSession
-   /models/com/atproto/server/describeServer
-   /models/com/atproto/server/getAccountInviteCodes
-   /models/com/atproto/server/getServiceAuth
-   /models/com/atproto/server/getSession
-   /models/com/atproto/server/listAppPasswords
-   /models/com/atproto/server/refreshSession
-   /models/com/atproto/server/requestAccountDelete
-   /models/com/atproto/server/requestEmailConfirmation
-   /models/com/atproto/server/requestEmailUpdate
-   /models/com/atproto/server/requestPasswordReset
-   /models/com/atproto/server/reserveSigningKey
-   /models/com/atproto/server/resetPassword
-   /models/com/atproto/server/revokeAppPassword
-   /models/com/atproto/server/updateEmail
+   activateAccount </models/com/atproto/server/activateAccount>
+   checkAccountStatus </models/com/atproto/server/checkAccountStatus>
+   confirmEmail </models/com/atproto/server/confirmEmail>
+   createAccount </models/com/atproto/server/createAccount>
+   createAppPassword </models/com/atproto/server/createAppPassword>
+   createInviteCode </models/com/atproto/server/createInviteCode>
+   createInviteCodes </models/com/atproto/server/createInviteCodes>
+   createSession </models/com/atproto/server/createSession>
+   deactivateAccount </models/com/atproto/server/deactivateAccount>
+   defs </models/com/atproto/server/defs>
+   deleteAccount </models/com/atproto/server/deleteAccount>
+   deleteSession </models/com/atproto/server/deleteSession>
+   describeServer </models/com/atproto/server/describeServer>
+   getAccountInviteCodes </models/com/atproto/server/getAccountInviteCodes>
+   getServiceAuth </models/com/atproto/server/getServiceAuth>
+   getSession </models/com/atproto/server/getSession>
+   listAppPasswords </models/com/atproto/server/listAppPasswords>
+   refreshSession </models/com/atproto/server/refreshSession>
+   requestAccountDelete </models/com/atproto/server/requestAccountDelete>
+   requestEmailConfirmation </models/com/atproto/server/requestEmailConfirmation>
+   requestEmailUpdate </models/com/atproto/server/requestEmailUpdate>
+   requestPasswordReset </models/com/atproto/server/requestPasswordReset>
+   reserveSigningKey </models/com/atproto/server/reserveSigningKey>
+   resetPassword </models/com/atproto/server/resetPassword>
+   revokeAppPassword </models/com/atproto/server/revokeAppPassword>
+   updateEmail </models/com/atproto/server/updateEmail>

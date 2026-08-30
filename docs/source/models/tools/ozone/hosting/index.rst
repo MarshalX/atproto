@@ -21,4 +21,4 @@ Account hosting history.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/hosting/getAccountHistory
+   getAccountHistory </models/tools/ozone/hosting/getAccountHistory>

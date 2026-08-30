@@ -201,34 +201,34 @@ Unstable endpoints that may change or disappear without notice.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/unspecced/defs
-   /models/app/bsky/unspecced/getAgeAssuranceState
-   /models/app/bsky/unspecced/getConfig
-   /models/app/bsky/unspecced/getOnboardingSuggestedStarterPacks
-   /models/app/bsky/unspecced/getOnboardingSuggestedStarterPacksSkeleton
-   /models/app/bsky/unspecced/getOnboardingSuggestedUsersSkeleton
-   /models/app/bsky/unspecced/getPopularFeedGenerators
-   /models/app/bsky/unspecced/getPostThreadOtherV2
-   /models/app/bsky/unspecced/getPostThreadV2
-   /models/app/bsky/unspecced/getSuggestedFeeds
-   /models/app/bsky/unspecced/getSuggestedFeedsSkeleton
-   /models/app/bsky/unspecced/getSuggestedOnboardingUsers
-   /models/app/bsky/unspecced/getSuggestedStarterPacks
-   /models/app/bsky/unspecced/getSuggestedStarterPacksSkeleton
-   /models/app/bsky/unspecced/getSuggestedUsers
-   /models/app/bsky/unspecced/getSuggestedUsersForDiscover
-   /models/app/bsky/unspecced/getSuggestedUsersForDiscoverSkeleton
-   /models/app/bsky/unspecced/getSuggestedUsersForExplore
-   /models/app/bsky/unspecced/getSuggestedUsersForExploreSkeleton
-   /models/app/bsky/unspecced/getSuggestedUsersForSeeMore
-   /models/app/bsky/unspecced/getSuggestedUsersForSeeMoreSkeleton
-   /models/app/bsky/unspecced/getSuggestedUsersSkeleton
-   /models/app/bsky/unspecced/getSuggestionsSkeleton
-   /models/app/bsky/unspecced/getTaggedSuggestions
-   /models/app/bsky/unspecced/getTrendingTopics
-   /models/app/bsky/unspecced/getTrends
-   /models/app/bsky/unspecced/getTrendsSkeleton
-   /models/app/bsky/unspecced/initAgeAssurance
-   /models/app/bsky/unspecced/searchActorsSkeleton
-   /models/app/bsky/unspecced/searchPostsSkeleton
-   /models/app/bsky/unspecced/searchStarterPacksSkeleton
+   defs </models/app/bsky/unspecced/defs>
+   getAgeAssuranceState </models/app/bsky/unspecced/getAgeAssuranceState>
+   getConfig </models/app/bsky/unspecced/getConfig>
+   getOnboardingSuggestedStarterPacks </models/app/bsky/unspecced/getOnboardingSuggestedStarterPacks>
+   getOnboardingSuggestedStarterPacksSkeleton </models/app/bsky/unspecced/getOnboardingSuggestedStarterPacksSkeleton>
+   getOnboardingSuggestedUsersSkeleton </models/app/bsky/unspecced/getOnboardingSuggestedUsersSkeleton>
+   getPopularFeedGenerators </models/app/bsky/unspecced/getPopularFeedGenerators>
+   getPostThreadOtherV2 </models/app/bsky/unspecced/getPostThreadOtherV2>
+   getPostThreadV2 </models/app/bsky/unspecced/getPostThreadV2>
+   getSuggestedFeeds </models/app/bsky/unspecced/getSuggestedFeeds>
+   getSuggestedFeedsSkeleton </models/app/bsky/unspecced/getSuggestedFeedsSkeleton>
+   getSuggestedOnboardingUsers </models/app/bsky/unspecced/getSuggestedOnboardingUsers>
+   getSuggestedStarterPacks </models/app/bsky/unspecced/getSuggestedStarterPacks>
+   getSuggestedStarterPacksSkeleton </models/app/bsky/unspecced/getSuggestedStarterPacksSkeleton>
+   getSuggestedUsers </models/app/bsky/unspecced/getSuggestedUsers>
+   getSuggestedUsersForDiscover </models/app/bsky/unspecced/getSuggestedUsersForDiscover>
+   getSuggestedUsersForDiscoverSkeleton </models/app/bsky/unspecced/getSuggestedUsersForDiscoverSkeleton>
+   getSuggestedUsersForExplore </models/app/bsky/unspecced/getSuggestedUsersForExplore>
+   getSuggestedUsersForExploreSkeleton </models/app/bsky/unspecced/getSuggestedUsersForExploreSkeleton>
+   getSuggestedUsersForSeeMore </models/app/bsky/unspecced/getSuggestedUsersForSeeMore>
+   getSuggestedUsersForSeeMoreSkeleton </models/app/bsky/unspecced/getSuggestedUsersForSeeMoreSkeleton>
+   getSuggestedUsersSkeleton </models/app/bsky/unspecced/getSuggestedUsersSkeleton>
+   getSuggestionsSkeleton </models/app/bsky/unspecced/getSuggestionsSkeleton>
+   getTaggedSuggestions </models/app/bsky/unspecced/getTaggedSuggestions>
+   getTrendingTopics </models/app/bsky/unspecced/getTrendingTopics>
+   getTrends </models/app/bsky/unspecced/getTrends>
+   getTrendsSkeleton </models/app/bsky/unspecced/getTrendsSkeleton>
+   initAgeAssurance </models/app/bsky/unspecced/initAgeAssurance>
+   searchActorsSkeleton </models/app/bsky/unspecced/searchActorsSkeleton>
+   searchPostsSkeleton </models/app/bsky/unspecced/searchPostsSkeleton>
+   searchStarterPacksSkeleton </models/app/bsky/unspecced/searchStarterPacksSkeleton>

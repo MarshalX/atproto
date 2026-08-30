@@ -39,7 +39,7 @@ Verification records issued by trusted verifiers.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/verification/defs
-   /models/tools/ozone/verification/grantVerifications
-   /models/tools/ozone/verification/listVerifications
-   /models/tools/ozone/verification/revokeVerifications
+   defs </models/tools/ozone/verification/defs>
+   grantVerifications </models/tools/ozone/verification/grantVerifications>
+   listVerifications </models/tools/ozone/verification/listVerifications>
+   revokeVerifications </models/tools/ozone/verification/revokeVerifications>

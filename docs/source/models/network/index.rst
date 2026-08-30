@@ -21,4 +21,4 @@ Infrastructure services behind the network.
    :hidden:
    :maxdepth: 1
 
-   /models/network/bsky/index
+   bsky </models/network/bsky/index>

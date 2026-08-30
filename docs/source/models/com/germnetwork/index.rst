@@ -21,4 +21,4 @@ Germ Network lexicons.
    :hidden:
    :maxdepth: 1
 
-   /models/com/germnetwork/declaration
+   declaration </models/com/germnetwork/declaration>

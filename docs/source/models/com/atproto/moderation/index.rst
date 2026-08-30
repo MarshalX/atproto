@@ -27,5 +27,5 @@ Moderation reports submitted by users.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/moderation/createReport
-   /models/com/atproto/moderation/defs
+   createReport </models/com/atproto/moderation/createReport>
+   defs </models/com/atproto/moderation/defs>

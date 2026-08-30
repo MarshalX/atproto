@@ -27,5 +27,5 @@ Website theming.
    :hidden:
    :maxdepth: 1
 
-   /models/site/standard/theme/basic
-   /models/site/standard/theme/color
+   basic </models/site/standard/theme/basic>
+   color </models/site/standard/theme/color>

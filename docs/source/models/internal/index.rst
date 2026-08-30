@@ -21,4 +21,4 @@ Internal lexicons that are not part of the public API.
    :hidden:
    :maxdepth: 1
 
-   /models/internal/bsky/index
+   bsky </models/internal/bsky/index>

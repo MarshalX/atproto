@@ -87,15 +87,15 @@ Ozone, the moderation tooling of the network.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/communication/index
-   /models/tools/ozone/hosting/index
-   /models/tools/ozone/moderation/index
-   /models/tools/ozone/queue/index
-   /models/tools/ozone/report/index
-   /models/tools/ozone/safelink/index
-   /models/tools/ozone/server/index
-   /models/tools/ozone/set/index
-   /models/tools/ozone/setting/index
-   /models/tools/ozone/signature/index
-   /models/tools/ozone/team/index
-   /models/tools/ozone/verification/index
+   communication </models/tools/ozone/communication/index>
+   hosting </models/tools/ozone/hosting/index>
+   moderation </models/tools/ozone/moderation/index>
+   queue </models/tools/ozone/queue/index>
+   report </models/tools/ozone/report/index>
+   safelink </models/tools/ozone/safelink/index>
+   server </models/tools/ozone/server/index>
+   set </models/tools/ozone/set/index>
+   setting </models/tools/ozone/setting/index>
+   signature </models/tools/ozone/signature/index>
+   team </models/tools/ozone/team/index>
+   verification </models/tools/ozone/verification/index>

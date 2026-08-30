@@ -45,8 +45,8 @@ Chat profiles and account-level actions.
    :hidden:
    :maxdepth: 1
 
-   /models/chat/bsky/actor/declaration
-   /models/chat/bsky/actor/defs
-   /models/chat/bsky/actor/deleteAccount
-   /models/chat/bsky/actor/exportAccountData
-   /models/chat/bsky/actor/getStatus
+   declaration </models/chat/bsky/actor/declaration>
+   defs </models/chat/bsky/actor/defs>
+   deleteAccount </models/chat/bsky/actor/deleteAccount>
+   exportAccountData </models/chat/bsky/actor/exportAccountData>
+   getStatus </models/chat/bsky/actor/getStatus>

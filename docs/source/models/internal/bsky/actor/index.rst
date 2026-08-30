@@ -21,4 +21,4 @@ Internal actor endpoints.
    :hidden:
    :maxdepth: 1
 
-   /models/internal/bsky/actor/getProfiles
+   getProfiles </models/internal/bsky/actor/getProfiles>

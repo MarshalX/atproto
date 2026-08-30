@@ -51,9 +51,9 @@ Rules that mark URLs as unsafe.
    :hidden:
    :maxdepth: 1
 
-   /models/tools/ozone/safelink/addRule
-   /models/tools/ozone/safelink/defs
-   /models/tools/ozone/safelink/queryEvents
-   /models/tools/ozone/safelink/queryRules
-   /models/tools/ozone/safelink/removeRule
-   /models/tools/ozone/safelink/updateRule
+   addRule </models/tools/ozone/safelink/addRule>
+   defs </models/tools/ozone/safelink/defs>
+   queryEvents </models/tools/ozone/safelink/queryEvents>
+   queryRules </models/tools/ozone/safelink/queryRules>
+   removeRule </models/tools/ozone/safelink/removeRule>
+   updateRule </models/tools/ozone/safelink/updateRule>

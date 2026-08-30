@@ -87,15 +87,15 @@ Notifications, preferences, and push registration.
    :hidden:
    :maxdepth: 1
 
-   /models/app/bsky/notification/declaration
-   /models/app/bsky/notification/defs
-   /models/app/bsky/notification/getPreferences
-   /models/app/bsky/notification/getUnreadCount
-   /models/app/bsky/notification/listActivitySubscriptions
-   /models/app/bsky/notification/listNotifications
-   /models/app/bsky/notification/putActivitySubscription
-   /models/app/bsky/notification/putPreferences
-   /models/app/bsky/notification/putPreferencesV2
-   /models/app/bsky/notification/registerPush
-   /models/app/bsky/notification/unregisterPush
-   /models/app/bsky/notification/updateSeen
+   declaration </models/app/bsky/notification/declaration>
+   defs </models/app/bsky/notification/defs>
+   getPreferences </models/app/bsky/notification/getPreferences>
+   getUnreadCount </models/app/bsky/notification/getUnreadCount>
+   listActivitySubscriptions </models/app/bsky/notification/listActivitySubscriptions>
+   listNotifications </models/app/bsky/notification/listNotifications>
+   putActivitySubscription </models/app/bsky/notification/putActivitySubscription>
+   putPreferences </models/app/bsky/notification/putPreferences>
+   putPreferencesV2 </models/app/bsky/notification/putPreferencesV2>
+   registerPush </models/app/bsky/notification/registerPush>
+   unregisterPush </models/app/bsky/notification/unregisterPush>
+   updateSeen </models/app/bsky/notification/updateSeen>

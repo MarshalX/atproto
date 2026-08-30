@@ -117,20 +117,20 @@ Repository sync: firehose, blocks, blobs, and checkouts.
    :hidden:
    :maxdepth: 1
 
-   /models/com/atproto/sync/defs
-   /models/com/atproto/sync/getBlob
-   /models/com/atproto/sync/getBlocks
-   /models/com/atproto/sync/getCheckout
-   /models/com/atproto/sync/getHead
-   /models/com/atproto/sync/getHostStatus
-   /models/com/atproto/sync/getLatestCommit
-   /models/com/atproto/sync/getRecord
-   /models/com/atproto/sync/getRepo
-   /models/com/atproto/sync/getRepoStatus
-   /models/com/atproto/sync/listBlobs
-   /models/com/atproto/sync/listHosts
-   /models/com/atproto/sync/listRepos
-   /models/com/atproto/sync/listReposByCollection
-   /models/com/atproto/sync/notifyOfUpdate
-   /models/com/atproto/sync/requestCrawl
-   /models/com/atproto/sync/subscribeRepos
+   defs </models/com/atproto/sync/defs>
+   getBlob </models/com/atproto/sync/getBlob>
+   getBlocks </models/com/atproto/sync/getBlocks>
+   getCheckout </models/com/atproto/sync/getCheckout>
+   getHead </models/com/atproto/sync/getHead>
+   getHostStatus </models/com/atproto/sync/getHostStatus>
+   getLatestCommit </models/com/atproto/sync/getLatestCommit>
+   getRecord </models/com/atproto/sync/getRecord>
+   getRepo </models/com/atproto/sync/getRepo>
+   getRepoStatus </models/com/atproto/sync/getRepoStatus>
+   listBlobs </models/com/atproto/sync/listBlobs>
+   listHosts </models/com/atproto/sync/listHosts>
+   listRepos </models/com/atproto/sync/listRepos>
+   listReposByCollection </models/com/atproto/sync/listReposByCollection>
+   notifyOfUpdate </models/com/atproto/sync/notifyOfUpdate>
+   requestCrawl </models/com/atproto/sync/requestCrawl>
+   subscribeRepos </models/com/atproto/sync/subscribeRepos>
