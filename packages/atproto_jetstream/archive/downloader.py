@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from atproto_client.client.async_raw import AsyncClientRaw
 from atproto_client.client.raw import ClientRaw
-from atproto_client.exceptions import RequestErrorBase
+from atproto_client.exceptions import RateLimitExceededError
 
 from atproto_jetstream.archive.planner import WorkUnit
 from atproto_jetstream.archive.segment import SegmentEvent, decode_block, read_sealed_header
@@ -20,8 +20,6 @@ _HEADER_LEN = 256
 _BLOCK_LENGTH_PREFIX = 8
 
 DEFAULT_BLOCK_CONCURRENCY = 4
-
-_TOO_MANY_REQUESTS = 429
 
 #: Retry-After can be absent or unparseable; back off anyway rather than hammering the quota.
 _DEFAULT_RETRY_AFTER_SEC = 5.0
@@ -40,20 +38,14 @@ def quota_retry_after(exception: BaseException) -> t.Optional[float]:
     Returns:
         :obj:`float`: Delay to honour, or :obj:`None` if this was not a quota rejection.
     """
-    if not isinstance(exception, RequestErrorBase) or not exception.args:
+    if not isinstance(exception, RateLimitExceededError):
         return None
 
-    response = exception.args[0]
-    if getattr(response, 'status_code', None) != _TOO_MANY_REQUESTS:
-        return None
-
-    headers = getattr(response, 'headers', None) or {}
-    try:
-        delay = float(headers.get('retry-after', _DEFAULT_RETRY_AFTER_SEC))
-    except (TypeError, ValueError):
+    delay = exception.retry_after
+    if delay is None:
         delay = _DEFAULT_RETRY_AFTER_SEC
 
-    return min(max(delay, 0.0), _MAX_RETRY_AFTER_SEC)
+    return min(delay, _MAX_RETRY_AFTER_SEC)
 
 
 class ByteMeter:

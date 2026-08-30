@@ -47,14 +47,35 @@ class SessionDispatcher:
         self._on_session_change_callbacks: t.List[SessionChangeCallback] = []
         self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
 
+    @property
+    def session(self) -> t.Optional['Session']:
+        """Session the dispatcher holds. Shared by every client cloned from the same original."""
+        return self._session
+
     def set_session(self, session: 'Session') -> None:
         self._session = session
+
+    def get_auth_headers(self) -> t.Dict[str, str]:
+        """Build the ``Authorization`` header from the access token. Empty when there is no session."""
+        if not self._session:
+            return {}
+
+        return {'Authorization': f'Bearer {self._session.access_jwt}'}
+
+    def get_refresh_auth_headers(self) -> t.Dict[str, str]:
+        """Build the ``Authorization`` header from the refresh token. Empty when there is no session."""
+        if not self._session:
+            return {}
+
+        return {'Authorization': f'Bearer {self._session.refresh_jwt}'}
 
     def on_session_change(self, callback: t.Union['AsyncSessionChangeCallback', 'SessionChangeCallback']) -> None:
         if inspect.iscoroutinefunction(callback):
             self._on_session_change_async_callbacks.append(callback)
-        elif inspect.isfunction(callback):
-            self._on_session_change_callbacks.append(callback)
+        elif callable(callback):
+            self._on_session_change_callbacks.append(t.cast('SessionChangeCallback', callback))
+        else:
+            raise TypeError(f'Session change callback must be callable, got {type(callback).__name__}')
 
     def dispatch_session_change(self, event: SessionEvent) -> None:
         self._call_on_session_change_callbacks(event)

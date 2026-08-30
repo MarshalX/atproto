@@ -104,6 +104,8 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
         raise exceptions.UnauthorizedError(error_response)
     if response.status_code == 400:
         raise exceptions.BadRequestError(error_response)
+    if response.status_code == 429:
+        raise exceptions.RateLimitExceededError(error_response)
     if response.status_code in {409, 413, 502}:
         raise exceptions.NetworkError(error_response)
 
@@ -169,15 +171,24 @@ class RequestBase:
         """
         self._additional_headers[header_name] = header_value
 
+    def _new_instance(self) -> te.Self:
+        """Build an empty instance of this class configured the same way as this one."""
+        return type(self)()
+
     def clone(self) -> te.Self:
         """Clone the client instance.
 
         Used to customize atproto proxy and set of labeler services.
 
+        Note:
+            The clone keeps the configuration of the underlying HTTP client (timeouts, transport,
+            proxies, and anything else passed at construction), but opens its own connection pool.
+            Close it separately.
+
         Returns:
             Cloned client instance.
         """
-        cloned_request = type(self)()
+        cloned_request = self._new_instance()
 
         cloned_request._additional_headers = self._additional_headers.copy()
         cloned_request._additional_header_sources = self._additional_header_sources.copy()
@@ -194,7 +205,11 @@ class Request(RequestBase):
 
     def __init__(self, **kwargs: t.Any) -> None:
         super().__init__()
+        self._client_kwargs = kwargs
         self._client = httpx.Client(follow_redirects=True, **kwargs)
+
+    def _new_instance(self) -> te.Self:
+        return type(self)(**self._client_kwargs)
 
     def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers', None))
@@ -225,7 +240,11 @@ class AsyncRequest(RequestBase):
 
     def __init__(self, **kwargs: t.Any) -> None:
         super().__init__()
+        self._client_kwargs = kwargs
         self._client = httpx.AsyncClient(follow_redirects=True, **kwargs)
+
+    def _new_instance(self) -> te.Self:
+        return type(self)(**self._client_kwargs)
 
     async def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers', None))

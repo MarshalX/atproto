@@ -2,11 +2,17 @@
 
 import typing as t
 
+import httpx
 import pytest
 from atproto_client import models
-from atproto_client.exceptions import RequestException, UnauthorizedError
+from atproto_client.exceptions import (
+    RateLimitExceededError,
+    RequestErrorBase,
+    RequestException,
+    UnauthorizedError,
+)
 from atproto_client.models.common import XrpcError
-from atproto_client.request import Response
+from atproto_client.request import Response, _handle_response
 from atproto_jetstream.archive.downloader import quota_retry_after
 from atproto_jetstream.archive.planner import PlanFilters, SnapshotPlan
 
@@ -143,25 +149,25 @@ def _error(status_code: int, headers: t.Optional[dict] = None) -> t.Any:
 
 
 def test_quota_retry_after_honours_the_header() -> None:
-    assert quota_retry_after(RequestException(_error(429, {'retry-after': '12'}))) == 12.0
+    assert quota_retry_after(RateLimitExceededError(_error(429, {'retry-after': '12'}))) == 12.0
 
 
 def test_quota_retry_after_defaults_when_the_header_is_missing() -> None:
-    delay = quota_retry_after(RequestException(_error(429)))
+    delay = quota_retry_after(RateLimitExceededError(_error(429)))
 
     assert delay is not None
     assert delay > 0
 
 
 def test_quota_retry_after_defaults_when_the_header_is_junk() -> None:
-    delay = quota_retry_after(RequestException(_error(429, {'retry-after': 'soon'})))
+    delay = quota_retry_after(RateLimitExceededError(_error(429, {'retry-after': 'soon'})))
 
     assert delay is not None
     assert delay > 0
 
 
 def test_quota_retry_after_is_capped() -> None:
-    delay = quota_retry_after(RequestException(_error(429, {'retry-after': '999999'})))
+    delay = quota_retry_after(RateLimitExceededError(_error(429, {'retry-after': '999999'})))
 
     assert delay is not None
     assert delay <= 300.0
@@ -174,6 +180,20 @@ def test_quota_retry_after_ignores_other_failures() -> None:
     assert quota_retry_after(ValueError('unrelated')) is None
 
 
-@pytest.mark.parametrize('status_code', [200, 400, 401, 403, 404, 500, 503])
+def _raised_by_the_client(status_code: int, headers: t.Optional[dict] = None) -> BaseException:
+    """The exception the client actually raises for a status code."""
+    response = httpx.Response(status_code, headers=headers, request=httpx.Request('GET', 'https://example.com'))
+    with pytest.raises(RequestErrorBase) as exc_info:
+        _handle_response(response)
+
+    return exc_info.value
+
+
+@pytest.mark.parametrize('status_code', [400, 401, 403, 404, 500, 503])
 def test_only_429_is_a_quota_rejection(status_code: int) -> None:
-    assert quota_retry_after(RequestException(_error(status_code))) is None
+    assert quota_retry_after(_raised_by_the_client(status_code)) is None
+
+
+def test_a_429_from_the_client_is_a_quota_rejection() -> None:
+    # pins the wiring: the status the client maps to RateLimitExceededError is the one we back off on
+    assert quota_retry_after(_raised_by_the_client(429, {'retry-after': '12'})) == 12.0

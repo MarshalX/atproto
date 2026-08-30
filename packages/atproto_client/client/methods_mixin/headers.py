@@ -25,15 +25,15 @@ class HeadersConfigurationMethodsMixin:
 
         Used to customize atproto proxy and set of labeler services.
 
+        Note:
+            The clone shares the session and its dispatcher with the original, so it stays
+            authenticated even when it is created before the first login.
+
         Returns:
             Cloned client instance.
         """
         cloned_client = super().clone()
-
-        # share the same objects to avoid conflicts with session changes
         cloned_client.me = self.me
-        cloned_client._session = self._session
-        cloned_client._session_dispatcher = self._session_dispatcher
 
         return cloned_client
 

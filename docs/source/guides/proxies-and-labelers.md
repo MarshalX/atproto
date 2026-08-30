@@ -76,13 +76,16 @@ What a clone copies:
 
 - **The request's additional headers.** A fresh dict, so configuring the clone does not touch the original's headers.
 - **The additional-header sources.** The list of callbacks is copied; the callbacks themselves are shared.
+- **The configuration of the underlying `httpx` client.** Every keyword argument the original [Request](#atproto_client.request.Request) was constructed with, so a timeout, transport or proxy you set carries over.
 
-What a clone does **not** share is the underlying `httpx` client: `clone()` constructs a new [Request](#atproto_client.request.Request) of the same class with default arguments. A timeout or transport you configured on the original does **not** carry over, and each clone holds its own connection pool that you should `close()` separately. If you need custom transport settings on a proxied client, build it with its own `Request` rather than cloning.
+What a clone does **not** share is the `httpx` client itself. Each one opens its own connection pool, so `close()` it separately. See [HTTP and transport](http-and-transport.md).
 
 Sharing the session is the important half. A token refresh triggered by any one of the clones updates the session all of them are using, and fires the callbacks registered on any of them. Logging in once and fanning out into several proxied clients is the intended pattern.
 
-:::{warning}
-Clone *after* logging in. A clone taken before login gets `_session = None` and no `Authorization` header source, and the login that happens later on the original never reaches it, so every call from that clone goes out unauthenticated. It also inherits the base URL as it stands, so cloning after login is what gets it the PDS endpoint discovered during login rather than the URL you constructed the client with. See [Authentication](authentication.md).
+Because the session lives in the shared dispatcher rather than on the client, the order does not matter: a clone taken *before* `login()` picks up the session the original creates later, and authenticates from that point on.
+
+:::{attention}
+A clone inherits the base URL as it stands at the moment you clone. Login repoints the client at the PDS discovered in the DID document, so a clone taken before login keeps the URL you constructed the client with. Cloning after login is still the simpler thing to do. See [Authentication](authentication.md).
 :::
 
 ## Headers, and who wins
