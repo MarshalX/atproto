@@ -36,3 +36,8 @@ Here is an example of how to use ``DidInMemoryCache`` with ``IdResolver``:
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. automodule:: atproto_identity.cache.models
+   :members:
+   :undoc-members:
+   :show-inheritance:

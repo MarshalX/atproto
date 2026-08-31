@@ -15,4 +15,5 @@ Submodules
    client
    raw
    base
+   methods_mixin
    http

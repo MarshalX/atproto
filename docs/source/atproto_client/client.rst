@@ -95,3 +95,7 @@ change event and write the new one out each time:
 .. autoclass:: atproto_client.client.session.SessionEvent
    :members:
    :undoc-members:
+
+.. autoclass:: atproto_client.client.session.SessionDispatcher
+   :members:
+   :undoc-members:

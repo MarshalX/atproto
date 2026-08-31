@@ -53,6 +53,7 @@ class RequestErrorBase(AtProtocolError):
     """
 
     def __init__(self, response: t.Optional['Response'] = None) -> None:
+        #: Response that carried the error, when one arrived.
         self.response: t.Optional[Response] = response
 
     def __str__(self) -> str:

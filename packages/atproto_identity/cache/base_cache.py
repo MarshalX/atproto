@@ -1,6 +1,8 @@
 import typing as t
 from abc import ABC, abstractmethod
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     from atproto_core.did_doc import DidDocument
 
@@ -11,8 +13,12 @@ _DEFAULT_STALE_TTL = 60 * 60  # 1 hour
 _DEFAULT_MAX_TTL = 60 * 60 * 24  # 1 day
 
 
-GetDocCallback = t.Callable[[], t.Optional['DidDocument']]
-AsyncGetDocCallback = t.Callable[[], t.Coroutine[t.Any, t.Any, t.Optional['DidDocument']]]
+#: Called to fetch a DID document when the cache misses or has gone stale.
+GetDocCallback = te.TypeAliasType('GetDocCallback', t.Callable[[], t.Optional['DidDocument']])
+#: The awaitable twin of :obj:`GetDocCallback`.
+AsyncGetDocCallback = te.TypeAliasType(
+    'AsyncGetDocCallback', t.Callable[[], t.Coroutine[t.Any, t.Any, t.Optional['DidDocument']]]
+)
 
 
 class _DidBaseCache:

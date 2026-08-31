@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import validate_nsid as atproto_core_validate_nsid
 from pydantic import BeforeValidator, Field, ValidationInfo
-from typing_extensions import Literal
+from typing_extensions import Literal, TypeAliasType
 
 if TYPE_CHECKING:
     from pydantic_core import core_schema
@@ -92,7 +92,7 @@ class _NamedValidator:
 
     def __str__(self) -> str:
         func_str = f':func:`string_formats.{self.validate_fn.__name__}`'
-        return f'Validated by: {func_str} (only when `strict_string_format=True`)'
+        return f'Validated by {func_str} when `strict_string_format=True`'
 
 
 def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., str]:
@@ -498,23 +498,49 @@ def validate_uri(v: str, _: ValidationInfo) -> str:
     return v
 
 
-Handle = Annotated[str, BeforeValidator(_NamedValidator(validate_handle))]
-Did = Annotated[str, BeforeValidator(_NamedValidator(validate_did))]
-Nsid = Annotated[str, BeforeValidator(_NamedValidator(validate_nsid))]
-Language = Annotated[str, BeforeValidator(_NamedValidator(validate_language))]
-RecordKey = Annotated[str, BeforeValidator(_NamedValidator(validate_record_key))]
-Cid = Annotated[str, BeforeValidator(_NamedValidator(validate_cid))]
-AtUri = Annotated[str, BeforeValidator(_NamedValidator(validate_at_uri))]
-DateTime = Annotated[
-    str, BeforeValidator(_NamedValidator(validate_datetime))
-]  # see https://github.com/python-pendulum/pendulum/issues/844
-Tid = Annotated[str, BeforeValidator(_NamedValidator(validate_tid))]
-Uri = Annotated[str, BeforeValidator(_NamedValidator(validate_uri))]
+# Named aliases, so that a field documents and type-checks as its format rather than as the
+# validator wrapped around it.
+#: A handle identifier, such as ``alice.bsky.social``.
+#: Validated by :func:`validate_handle` when ``strict_string_format=True``.
+Handle = TypeAliasType('Handle', Annotated[str, BeforeValidator(_NamedValidator(validate_handle))])
+#: A decentralised identifier, such as ``did:plc:z72i7hdynmk6r22z27h6tvur``.
+#: Validated by :func:`validate_did` when ``strict_string_format=True``.
+Did = TypeAliasType('Did', Annotated[str, BeforeValidator(_NamedValidator(validate_did))])
+#: A namespaced identifier naming a lexicon, such as ``app.bsky.feed.post``.
+#: Validated by :func:`validate_nsid` when ``strict_string_format=True``.
+Nsid = TypeAliasType('Nsid', Annotated[str, BeforeValidator(_NamedValidator(validate_nsid))])
+#: An IETF language tag, such as ``en`` or ``pt-BR``.
+#: Validated by :func:`validate_language` when ``strict_string_format=True``.
+Language = TypeAliasType('Language', Annotated[str, BeforeValidator(_NamedValidator(validate_language))])
+#: The key identifying a record within its collection.
+#: Validated by :func:`validate_record_key` when ``strict_string_format=True``.
+RecordKey = TypeAliasType('RecordKey', Annotated[str, BeforeValidator(_NamedValidator(validate_record_key))])
+#: A content identifier.
+#: Validated by :func:`validate_cid` when ``strict_string_format=True``.
+Cid = TypeAliasType('Cid', Annotated[str, BeforeValidator(_NamedValidator(validate_cid))])
+#: An ``at://`` URI addressing a repository, collection, or record.
+#: Validated by :func:`validate_at_uri` when ``strict_string_format=True``.
+AtUri = TypeAliasType('AtUri', Annotated[str, BeforeValidator(_NamedValidator(validate_at_uri))])
+# see https://github.com/python-pendulum/pendulum/issues/844
+#: An ISO 8601 timestamp.
+#: Validated by :func:`validate_datetime` when ``strict_string_format=True``.
+DateTime = TypeAliasType('DateTime', Annotated[str, BeforeValidator(_NamedValidator(validate_datetime))])
+#: A timestamp identifier, the usual shape of a record key.
+#: Validated by :func:`validate_tid` when ``strict_string_format=True``.
+Tid = TypeAliasType('Tid', Annotated[str, BeforeValidator(_NamedValidator(validate_tid))])
+#: A URI with a scheme and an authority or path.
+#: Validated by :func:`validate_uri` when ``strict_string_format=True``.
+Uri = TypeAliasType('Uri', Annotated[str, BeforeValidator(_NamedValidator(validate_uri))])
 
-AtIdentifier = Union[Handle, Did]
+#: Either a :obj:`Handle` or a :obj:`Did`.
+AtIdentifier = TypeAliasType('AtIdentifier', Union[Handle, Did])
 
 # Any valid ATProto string format
-AtProtoString = Annotated[
-    Union[Handle, Did, Nsid, AtUri, Cid, DateTime, Tid, RecordKey, Uri, Language],
-    Field(description='ATProto string format'),
-]
+#: Any of the AT Protocol string formats.
+AtProtoString = TypeAliasType(
+    'AtProtoString',
+    Annotated[
+        Union[Handle, Did, Nsid, AtUri, Cid, DateTime, Tid, RecordKey, Uri, Language],
+        Field(description='ATProto string format'),
+    ],
+)

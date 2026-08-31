@@ -37,6 +37,7 @@ class AsyncClient(
 
         self._refresh_lock = Lock()
 
+        #: Profile of the logged-in account, when it was fetched at login.
         self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
     async def _invoke(self, invoke_type: 'InvokeType', **kwargs: t.Any) -> 'Response':
@@ -96,7 +97,9 @@ class AsyncClient(
         Args:
             login: Handle/username of the account.
             password: Main or app-specific password of the account.
-            session_string: Session string (use :py:attr:`~export_session_string` to get it).
+            session_string: Session string (use
+                :py:meth:`~atproto_client.client.methods_mixin.session.SessionMethodsMixin.export_session_string`
+                to get it).
             auth_factor_token: Auth factor token (for Email 2FA).
             fetch_bsky_profile: Look up the Bluesky profile of the account after authorizing.
 
@@ -106,8 +109,9 @@ class AsyncClient(
         Note:
             Authorization itself uses only ``com.atproto.server``. The profile lookup is
             ``app.bsky.actor.getProfile``, which not every PDS serves. It never fails the login:
-            when it is turned off or does not succeed, :py:attr:`~me` is :obj:`None` and a warning
-            is emitted. Pass ``fetch_bsky_profile=False`` on a PDS without ``app.bsky`` to skip the
+            when it is turned off or does not succeed,
+            :py:attr:`~atproto_client.client.client.Client.me` is :obj:`None` and a warning is
+            emitted. Pass ``fetch_bsky_profile=False`` on a PDS without ``app.bsky`` to skip the
             request and the warning.
 
         Returns:

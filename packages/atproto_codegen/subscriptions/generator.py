@@ -82,7 +82,7 @@ def _generate_parse_function(nsid: NSID) -> t.List[str]:
         f'{_(2)}message: Message frame.',
         '',
         f'{_(1)}Returns:',
-        f'{_(2)}:obj:`{alias}`: Corresponding message model.',
+        f'{_(2)}:obj:`.{alias}`: Corresponding message model.',
         f'{_(1)}"""',
         # TODO(MarshalX): fix return type in get_or_create instead of casting
         f"{_(1)}return t.cast('{alias}', get_or_create(message.body, {_type_map_name(nsid)}[message.type]))",

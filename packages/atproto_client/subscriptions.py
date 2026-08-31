@@ -53,7 +53,7 @@ def parse_chat_bsky_moderation_subscribe_mod_events_message(
         message: Message frame.
 
     Returns:
-        :obj:`ChatBskyModerationSubscribeModEventsMessage`: Corresponding message model.
+        :obj:`.ChatBskyModerationSubscribeModEventsMessage`: Corresponding message model.
     """
     return t.cast(
         'ChatBskyModerationSubscribeModEventsMessage',
@@ -129,7 +129,7 @@ def parse_com_atproto_label_subscribe_labels_message(
         message: Message frame.
 
     Returns:
-        :obj:`ComAtprotoLabelSubscribeLabelsMessage`: Corresponding message model.
+        :obj:`.ComAtprotoLabelSubscribeLabelsMessage`: Corresponding message model.
     """
     return t.cast(
         'ComAtprotoLabelSubscribeLabelsMessage',
@@ -209,7 +209,7 @@ def parse_com_atproto_sync_subscribe_repos_message(message: 'MessageFrame') -> '
         message: Message frame.
 
     Returns:
-        :obj:`ComAtprotoSyncSubscribeReposMessage`: Corresponding message model.
+        :obj:`.ComAtprotoSyncSubscribeReposMessage`: Corresponding message model.
     """
     return t.cast(
         'ComAtprotoSyncSubscribeReposMessage',
@@ -291,7 +291,7 @@ def parse_network_bsky_jetstream_subscribe_events_message(
         message: Message frame.
 
     Returns:
-        :obj:`NetworkBskyJetstreamSubscribeEventsMessage`: Corresponding message model.
+        :obj:`.NetworkBskyJetstreamSubscribeEventsMessage`: Corresponding message model.
     """
     return t.cast(
         'NetworkBskyJetstreamSubscribeEventsMessage',

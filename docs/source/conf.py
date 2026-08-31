@@ -43,6 +43,7 @@ language = 'en'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'sphinx.ext.autosectionlabel',
     'sphinxext.opengraph',
@@ -96,6 +97,28 @@ pygments_style_dark = 'monokai'
 
 myst_heading_anchors = 4
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html?highlight=header-anchors#code-fences-using-colons
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'pydantic': ('https://docs.pydantic.dev/latest', None),
+}
+# the build must not fail or hang when an inventory is unreachable
+intersphinx_timeout = 10
+intersphinx_disabled_reftypes = ['*.std:doc']
+
+# Targets that cannot resolve, rather than ones that merely do not yet.
+nitpick_ignore_regex = [
+    # a link to a private name would point at something callers cannot use
+    (r'py:.*', r'.*\._[A-Za-z][A-Za-z0-9_]*'),
+    # type variables carry no documentation of their own
+    (r'py:class', r'atproto_client\.models\.utils\.[MR]'),
+    (r'py:class', r'atproto_lexicon\.parser\.L'),
+    # `t` is this codebase's alias for `typing`, whose members are documented as py:data upstream,
+    # which a py:class reference cannot match
+    (r'py:class', r't\.[A-Za-z]+'),
+    # annotated_types publishes no object inventory to link into
+    (r'py:class', r'MaxLen'),
+]
+
 myst_enable_extensions = ['colon_fence', 'alert', 'strikethrough', 'deflist', 'html_image', 'gfm_autolink']
 
 # -- Options for HTML output -------------------------------------------------
@@ -272,6 +295,30 @@ def prepare_model_modules(_app: 'Sphinx') -> None:
         getattr(models, alias, None)
 
 
+# Napoleon reads a ``#:`` comment as ``type: description`` and splits it on the first colon, so a
+# lexicon description like "Moderator review status of a subject: Open." documents "Open." with a type
+# of "Moderator review status of a subject". The descriptions come from the lexicons, colons and all.
+_INLINE_DOC_TYPES = frozenset({'attribute', 'data', 'property'})
+
+_inline_docs: t.Dict[str, t.List[str]] = {}
+
+
+def stash_inline_docs(_app: 'Sphinx', what: str, name: str, _obj: t.Any, _options: t.Any, lines: t.List[str]) -> None:
+    """Keep the docstring of an inline attribute as it was written."""
+    if what in _INLINE_DOC_TYPES:
+        _inline_docs[name] = list(lines)
+
+
+def restore_inline_docs(_app: 'Sphinx', what: str, name: str, _obj: t.Any, _options: t.Any, lines: t.List[str]) -> None:
+    """Undo the split. Napoleon has nothing else to contribute to these object types."""
+    if what not in _INLINE_DOC_TYPES:
+        return
+
+    original = _inline_docs.pop(name, None)
+    if original is not None and lines != original:
+        lines[:] = original
+
+
 def scope_pygments_to_theme(app: 'Sphinx', exception: t.Optional[Exception]) -> None:
     """Rewrite the Pygments stylesheet so both palettes follow the theme toggle.
 
@@ -304,6 +351,9 @@ def setup(app: 'Sphinx') -> None:
 
     app.connect('builder-inited', disable_search_index)
     app.connect('builder-inited', prepare_model_modules)
+    # around Napoleon, which connects at the default priority
+    app.connect('autodoc-process-docstring', stash_inline_docs, priority=400)
+    app.connect('autodoc-process-docstring', restore_inline_docs, priority=600)
     app.connect('build-finished', scope_pygments_to_theme)
     app.connect('doctree-read', resolve_internal_aliases)
     app.connect('missing-reference', resolve_intersphinx_aliases)

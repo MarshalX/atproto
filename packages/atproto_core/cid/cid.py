@@ -66,7 +66,7 @@ class CID:
     def from_decoded_bytes(cls, value: bytes) -> 'CID':
         """Wrap the binary form of a CID that the decoder it came from has already validated.
 
-        Skips the redundant :obj:`libipld.decode_cid` call that :obj:`CID.decode` performs.
+        Skips the redundant ``libipld.decode_cid`` call that :obj:`CID.decode` performs.
         """
         return cls(_raw_byte_form=value)
 
