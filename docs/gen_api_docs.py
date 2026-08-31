@@ -94,6 +94,16 @@ _CORE_MODULES: t.Dict[str, t.Tuple[str, str]] = {
     'utils': ('tools', 'Helpers for working with model instances.'),
 }
 
+# Type aliases that autodoc cannot document
+_MODULE_EXTRA_DIRECTIVES: t.Dict[str, str] = {
+    'unknown_type': (
+        '\n.. py:type:: UnknownType\n\n'
+        '   A record of a lexicon the SDK generated a model for, or a :obj:`DotDict` when it did not.\n'
+        '\n.. py:type:: UnknownInputType\n\n'
+        '   An :obj:`UnknownType`, or a plain :obj:`dict` sent as it is.\n'
+    ),
+}
+
 _TYPE_ICONS: t.Dict[t.Optional[str], str] = {
     'record': 'note',
     'query': 'search',
@@ -246,6 +256,10 @@ def _render_page(page: _Page) -> str:
     orphan = ':orphan:\n\n' if page.docname == 'models/index' else ''
     parts = [f'{orphan}{page.title}\n{"=" * len(page.title)}\n\n{_escape_rst(page.description)}\n']
     parts.append(f'\n.. automodule:: {page.module}\n   :members:\n   :show-inheritance:\n   :undoc-members:\n')
+
+    extra_directives = _MODULE_EXTRA_DIRECTIVES.get(page.module[len(_MODELS_MODULE) + 1 :])
+    if extra_directives:
+        parts.append(extra_directives)
 
     if not page.children:
         return ''.join(parts)

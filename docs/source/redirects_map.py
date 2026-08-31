@@ -478,6 +478,7 @@ REDIRECTS = {
     'atproto_client/client.html': '/atproto_client/client/',
     'atproto_client/clients.html': '/atproto_client/clients/',
     'atproto_client/http.html': '/atproto_client/http/',
+    'atproto_client/methods_mixin.html': '/atproto_client/methods_mixin/',
     'atproto_client/models.html': '/models/',
     'atproto_client/namespace.html': '/atproto_client/namespace/',
     'atproto_client/raw.html': '/atproto_client/raw/',
