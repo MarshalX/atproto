@@ -171,7 +171,8 @@ class SessionMethodsMixin(TimeMethodsMixin):
         Attention:
             You must export session at the end of the Client`s life cycle!
             Alternatively, you can subscribe to the session change event.
-            Use :py:attr:`~on_session_change` to register handler.
+            Use :py:meth:`~atproto_client.client.methods_mixin.session.SessionDispatchMixin.on_session_change`
+            to register handler.
 
         Example:
             >>> from atproto import Client

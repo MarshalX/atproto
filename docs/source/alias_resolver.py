@@ -1,3 +1,4 @@
+import types
 import typing as t
 
 from sphinx.addnodes import pending_xref
@@ -24,6 +25,7 @@ _GLOBAL_ALIASES_DB = {
     'NoneType': 'types.NoneType',
     'DotDict': 'atproto_client.models.dot_dict.DotDict',
     'SubscribeEventsMessage': 'atproto_jetstream.models.SubscribeEventsMessage',
+    'atproto.CAR': 'atproto_core.car.CAR',
     'atproto.xrpc_client.models.base.DotDict': 'atproto_client.models.dot_dict.DotDict',
     'string_formats.validate_at_uri': 'atproto_client.models.string_formats.validate_at_uri',
     'string_formats.validate_cid': 'atproto_client.models.string_formats.validate_cid',
@@ -104,9 +106,30 @@ def _get_model_alias(alias: str) -> t.Optional[str]:
     return f'{ALIASES_DB[alias_prefix]}.{alias_suffix}'
 
 
-_RENAMED_MODULE_PREFIXES = {
-    'atproto.xrpc_client.': 'atproto_client.',
-}
+def _build_module_prefixes() -> t.Dict[str, str]:
+    """Map the module paths docstrings use onto the ones the modules are documented under.
+
+    ``atproto`` re-exports whole modules under shorter names, and the client package was once called
+    ``atproto.xrpc_client``.
+
+    Returns:
+        Prefix as written to prefix as documented.
+    """
+    import atproto
+
+    prefixes = {'atproto.xrpc_client.': 'atproto_client.'}
+    for name, obj in vars(atproto).items():
+        if not isinstance(obj, types.ModuleType) or name.startswith('_'):
+            continue
+
+        prefix, target = f'atproto.{name}.', f'{obj.__name__}.'
+        if prefix != target:
+            prefixes[prefix] = target
+
+    return prefixes
+
+
+_RENAMED_MODULE_PREFIXES = _build_module_prefixes()
 
 
 def _get_renamed_module_alias(alias: str) -> t.Optional[str]:

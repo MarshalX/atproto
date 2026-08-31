@@ -5,3 +5,7 @@ Archive replay
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. py:type:: ArchivedEventsMessage
+
+   Any message an archive segment can yield.

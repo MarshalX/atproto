@@ -55,7 +55,7 @@ def find_ruff() -> str:
 def format_code(path: Path, quiet: bool = True, root: t.Optional[Path] = None) -> None:
     """Format generated code under the generator's own Ruff settings.
 
-    Ruff resolves the per-file-ignores of :obj:`RUFF_CONFIG_PATH` against the working directory,
+    Ruff resolves the per-file-ignores of ``RUFF_CONFIG_PATH`` against the working directory,
     so it runs from the generated package root rather than from wherever codegen was invoked.
 
     Args:

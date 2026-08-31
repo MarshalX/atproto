@@ -7,3 +7,7 @@ Shared type definitions.
    :members:
    :show-inheritance:
    :undoc-members:
+
+.. py:type:: Preferences
+
+   The preferences of an account, in the order the service returned them.

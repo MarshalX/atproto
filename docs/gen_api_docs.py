@@ -101,7 +101,13 @@ _MODULE_EXTRA_DIRECTIVES: t.Dict[str, str] = {
         '   A record of a lexicon the SDK generated a model for, or a :obj:`DotDict` when it did not.\n'
         '\n.. py:type:: UnknownInputType\n\n'
         '   An :obj:`UnknownType`, or a plain :obj:`dict` sent as it is.\n'
+        '\n.. py:type:: UnknownRecordType\n\n'
+        '   Any record type the SDK generated a model for.\n'
     ),
+    'app.bsky.actor.defs': (
+        '\n.. py:type:: Preferences\n\n   The preferences of an account, in the order the service returned them.\n'
+    ),
+    'app.bsky.draft.defs': ('\n.. py:type:: DraftEmbedGalleryItems\n\n   The items a draft gallery embed can hold.\n'),
 }
 
 _TYPE_ICONS: t.Dict[t.Optional[str], str] = {

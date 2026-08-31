@@ -15,3 +15,7 @@ Fallback for records of an unrecognised type.
 .. py:type:: UnknownInputType
 
    An :obj:`UnknownType`, or a plain :obj:`dict` sent as it is.
+
+.. py:type:: UnknownRecordType
+
+   Any record type the SDK generated a model for.

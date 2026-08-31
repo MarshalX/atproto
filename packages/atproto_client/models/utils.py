@@ -63,7 +63,7 @@ def get_or_create(
         strict_string_format: Enable strict string format validation.
 
     Returns:
-        Instance of :obj:`model` or :obj:`None` or
+        Instance of ``model`` or :obj:`None` or
         :obj:`atproto.xrpc_client.models.dot_dict.DotDict` if `strict` is disabled.
     """
     try:

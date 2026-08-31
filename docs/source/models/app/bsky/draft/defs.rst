@@ -7,3 +7,7 @@ Shared type definitions.
    :members:
    :show-inheritance:
    :undoc-members:
+
+.. py:type:: DraftEmbedGalleryItems
+
+   The items a draft gallery embed can hold.
