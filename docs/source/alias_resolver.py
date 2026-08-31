@@ -15,6 +15,16 @@ if t.TYPE_CHECKING:
 #  I hope this is temporary and resolving will be on the Sphinx side.
 
 _GLOBAL_ALIASES_DB = {
+    'AtprotoData': 'atproto_identity.did.atproto_data.AtprotoData',
+    'CachedDidResult': 'atproto_identity.cache.models.CachedDidResult',
+    'DidDocument': 'atproto_core.did_doc.DidDocument',
+    # external types named bare in docstrings, resolved through intersphinx
+    'FieldInfo': 'pydantic.fields.FieldInfo',
+    'ModuleType': 'types.ModuleType',
+    'NoneType': 'types.NoneType',
+    'DotDict': 'atproto_client.models.dot_dict.DotDict',
+    'SubscribeEventsMessage': 'atproto_jetstream.models.SubscribeEventsMessage',
+    'atproto.xrpc_client.models.base.DotDict': 'atproto_client.models.dot_dict.DotDict',
     'string_formats.validate_at_uri': 'atproto_client.models.string_formats.validate_at_uri',
     'string_formats.validate_cid': 'atproto_client.models.string_formats.validate_cid',
     'string_formats.validate_datetime': 'atproto_client.models.string_formats.validate_datetime',
@@ -26,6 +36,59 @@ _GLOBAL_ALIASES_DB = {
     'string_formats.validate_tid': 'atproto_client.models.string_formats.validate_tid',
     'string_formats.validate_uri': 'atproto_client.models.string_formats.validate_uri',
 }
+
+
+_MODELS_MODULE_PREFIX = 'atproto_client.models.'
+
+
+def _to_camel_case(name: str) -> str:
+    head, *tail = name.split('_')
+    return head + ''.join(part.title() for part in tail)
+
+
+def _build_nsid_aliases_db() -> t.Dict[str, str]:
+    """Index the generated model modules by the lexicon NSID each one was generated from.
+
+    Lexicon descriptions name other lexicons by NSID, and every such mention is a reference target that
+    resolves to nothing on its own. Codegen snake-cases the last segment, so ``app.bsky.actor.getProfile``
+    is documented as ``atproto_client.models.app.bsky.actor.get_profile``.
+
+    Returns:
+        NSID to module path.
+    """
+    nsid_aliases_db = {}
+    for module in ALIASES_DB.values():
+        if not module.startswith(_MODELS_MODULE_PREFIX):
+            continue
+
+        *namespace, name = module[len(_MODELS_MODULE_PREFIX) :].split('.')
+        nsid_aliases_db['.'.join([*namespace, _to_camel_case(name)])] = module
+
+    return nsid_aliases_db
+
+
+_NSID_ALIASES_DB = _build_nsid_aliases_db()
+
+
+def _build_exception_aliases_db() -> t.Dict[str, str]:
+    """Index every exception re-exported by ``atproto.exceptions`` under the path it is documented at.
+
+    Docstrings name exceptions by the import path users write, while each one is documented under the
+    package that defines it.
+
+    Returns:
+        Re-exported path to documented path.
+    """
+    import atproto.exceptions
+
+    return {
+        f'atproto.exceptions.{name}': f'{obj.__module__}.{name}'
+        for name, obj in vars(atproto.exceptions).items()
+        if isinstance(obj, type) and issubclass(obj, BaseException)
+    }
+
+
+_EXCEPTION_ALIASES_DB = _build_exception_aliases_db()
 
 
 def _get_model_alias(alias: str) -> t.Optional[str]:
@@ -41,12 +104,38 @@ def _get_model_alias(alias: str) -> t.Optional[str]:
     return f'{ALIASES_DB[alias_prefix]}.{alias_suffix}'
 
 
+_RENAMED_MODULE_PREFIXES = {
+    'atproto.xrpc_client.': 'atproto_client.',
+}
+
+
+def _get_renamed_module_alias(alias: str) -> t.Optional[str]:
+    """Rewrite a path that a docstring still spells with a package's former name."""
+    for old_prefix, new_prefix in _RENAMED_MODULE_PREFIXES.items():
+        if alias.startswith(old_prefix):
+            return f'{new_prefix}{alias[len(old_prefix) :]}'
+
+    return None
+
+
 def get_alias_from_db(alias: str) -> t.Optional[str]:
     model_alias = _get_model_alias(alias)
     if model_alias:
         return model_alias
 
-    return _GLOBAL_ALIASES_DB.get(alias)
+    nsid_alias = _NSID_ALIASES_DB.get(alias)
+    if nsid_alias:
+        return nsid_alias
+
+    exception_alias = _EXCEPTION_ALIASES_DB.get(alias)
+    if exception_alias:
+        return exception_alias
+
+    global_alias = _GLOBAL_ALIASES_DB.get(alias)
+    if global_alias:
+        return global_alias
+
+    return _get_renamed_module_alias(alias)
 
 
 # annotate

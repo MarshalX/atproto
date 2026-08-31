@@ -43,6 +43,7 @@ language = 'en'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'sphinx.ext.autosectionlabel',
     'sphinxext.opengraph',
@@ -96,6 +97,14 @@ pygments_style_dark = 'monokai'
 
 myst_heading_anchors = 4
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html?highlight=header-anchors#code-fences-using-colons
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'pydantic': ('https://docs.pydantic.dev/latest', None),
+}
+# the build must not fail or hang when an inventory is unreachable
+intersphinx_timeout = 10
+intersphinx_disabled_reftypes = ['*.std:doc']
+
 myst_enable_extensions = ['colon_fence', 'alert', 'strikethrough', 'deflist', 'html_image', 'gfm_autolink']
 
 # -- Options for HTML output -------------------------------------------------
