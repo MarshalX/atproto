@@ -76,6 +76,8 @@ if DOCSEARCH_APP_ID and DOCSEARCH_API_KEY and DOCSEARCH_INDEX_NAME:
     docsearch_api_key = DOCSEARCH_API_KEY
     docsearch_index_name = DOCSEARCH_INDEX_NAME
     docsearch_placeholder = 'Search the docs'
+    docsearch_max_results_per_group = 20
+    docsearch_search_parameters = {'hitsPerPage': 50}
     docsearch_missing_results_url = (
         'https://github.com/MarshalX/atproto/discussions/new?category=questions&title=${query}'
     )
