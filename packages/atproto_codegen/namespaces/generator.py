@@ -501,6 +501,7 @@ def generate_namespaces(
     with_client: bool = True,
 ) -> None:
     with use_config(config or get_config()) as active:
+        writes_sdk_namespaces = output_dir is None or output_dir.resolve() == active.namespaces_output_dir.resolve()
         output_dir = output_dir or active.namespaces_output_dir
         async_filename = async_filename or _NAMESPACES_ASYNC_FILENAME
         sync_filename = sync_filename or _NAMESPACES_SYNC_FILENAME
@@ -522,7 +523,9 @@ def generate_namespaces(
         format_code(output_dir, root=active.output_dir)
 
         for sync in (True, False):
-            if active.is_self_gen:
+            if not active.is_self_gen:
+                if with_client:
+                    _generate_custom_client(namespace_tree, active, sync=sync)
+            elif writes_sdk_namespaces:
+                # the raw client imports the namespaces from their SDK location, so it follows only those
                 _generate_raw_client(namespace_tree, active, sync=sync)
-            elif with_client:
-                _generate_custom_client(namespace_tree, active, sync=sync)

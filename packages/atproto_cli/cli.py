@@ -3,7 +3,7 @@ from pathlib import Path
 
 import click
 from atproto_codegen.clients.generate_async_client import gen_client
-from atproto_codegen.config import DEFAULT_LEXICON_DIR, CodegenConfig
+from atproto_codegen.config import CodegenConfig
 from atproto_codegen.models.generator import generate_models
 from atproto_codegen.namespaces.generator import generate_namespaces
 from atproto_codegen.subscriptions.generator import generate_subscriptions
@@ -135,28 +135,14 @@ def gen_namespaces(
     '--output-dir', type=click.Path(), required=True, help='Root of the package to generate. Created if missing.'
 )
 @click.option('--package', type=click.STRING, required=True, help='Import name of the generated package.')
-@click.option(
-    '--sdk-lexicons',
-    type=click.Path(exists=True),
-    default=None,
-    help="Lexicons resolved against but not emitted. Defaults to the SDK's own.",
-)
 @click.option('--no-client', is_flag=True, default=False, help='Generate models and namespaces only.')
 @click.pass_context
-def gen_custom(
-    ctx: click.Context, output_dir: str, package: str, sdk_lexicons: t.Optional[str], no_client: bool
-) -> None:
+def gen_custom(ctx: click.Context, output_dir: str, package: str, no_client: bool) -> None:
     lexicon_dir = ctx.obj.get('lexicon_dir')
     if not lexicon_dir:
         raise click.UsageError("'--lexicon-dir' is required. Pass it before the subcommand: atp gen --lexicon-dir ...")
 
-    reference_dir = Path(sdk_lexicons) if sdk_lexicons else DEFAULT_LEXICON_DIR
-    config = CodegenConfig(
-        emit_lexicon_dirs=(lexicon_dir,),
-        ref_lexicon_dirs=(reference_dir,),
-        output_dir=Path(output_dir),
-        package=package,
-    )
+    config = CodegenConfig(emit_lexicon_dirs=(lexicon_dir,), output_dir=Path(output_dir), package=package)
 
     echo(ctx, f'Generating {package}:')
     echo(ctx, '- models...')

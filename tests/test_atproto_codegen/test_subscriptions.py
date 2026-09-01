@@ -3,7 +3,7 @@ from pathlib import Path
 
 import libipld
 import pytest
-from atproto_codegen.config import DEFAULT_LEXICON_DIR, CodegenConfig
+from atproto_codegen.config import CodegenConfig
 from atproto_codegen.models.generator import generate_models
 from atproto_codegen.subscriptions.generator import generate_subscriptions
 from atproto_subscription.frames import Frame
@@ -25,7 +25,6 @@ def subscriptions(tmp_path_factory: pytest.TempPathFactory) -> t.Iterator[t.Any]
     root = tmp_path_factory.mktemp('subs')
     config = CodegenConfig(
         emit_lexicon_dirs=(CUSTOM_LEXICON_DIR,),
-        ref_lexicon_dirs=(DEFAULT_LEXICON_DIR,),
         output_dir=root.joinpath(PACKAGE),
         package=PACKAGE,
     )

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 from atproto_codegen import utils
-from atproto_codegen.config import DEFAULT_LEXICON_DIR, CodegenConfig
+from atproto_codegen.config import CodegenConfig
 from atproto_codegen.models.generator import generate_models
 from atproto_codegen.namespaces.generator import generate_namespaces
 from atproto_codegen.utils import RUFF_CONFIG_PATH, RuffNotFoundError, find_ruff
@@ -17,7 +17,6 @@ def generated_package(tmp_path: Path) -> Path:
     root = tmp_path.joinpath('mypkg')
     config = CodegenConfig(
         emit_lexicon_dirs=(CUSTOM_LEXICON_DIR,),
-        ref_lexicon_dirs=(DEFAULT_LEXICON_DIR,),
         output_dir=root,
         package='mypkg',
     )
@@ -91,7 +90,6 @@ def test_formatting_emits_no_diagnostics(tmp_path: Path, capfd: pytest.CaptureFi
     root = tmp_path.joinpath('quiet_pkg')
     config = CodegenConfig(
         emit_lexicon_dirs=(CUSTOM_LEXICON_DIR,),
-        ref_lexicon_dirs=(DEFAULT_LEXICON_DIR,),
         output_dir=root,
         package='quiet_pkg',
     )

@@ -12,7 +12,7 @@ from atproto_lexicon.models import (
 )
 
 from atproto_codegen.config import CodegenConfig, get_config
-from atproto_codegen.models.builder import Scope, parse_lexicons
+from atproto_codegen.models.builder import parse_lexicons
 
 _VALID_LEX_DEF_TYPES = {LexDefinitionType.QUERY, LexDefinitionType.PROCEDURE, LexDefinitionType.RECORD}
 
@@ -102,4 +102,4 @@ def build_namespace_tree(lexicons: t.List[LexiconDoc]) -> dict:
 
 
 def build_namespaces(config: t.Optional[CodegenConfig] = None) -> dict:
-    return build_namespace_tree(list(parse_lexicons(config or get_config(), Scope.EMIT)))
+    return build_namespace_tree(list(parse_lexicons(config or get_config())))

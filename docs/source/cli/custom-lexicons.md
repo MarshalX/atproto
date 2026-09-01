@@ -124,19 +124,11 @@ These are ordinary `com.atproto.repo.*` calls underneath, so they work against a
 
 Three mechanisms make a generated package compose with the SDK rather than duplicate it. You do not have to configure any of them, but knowing they exist explains the behaviour.
 
-### Two tiers of lexicons
+### References resolve into the installed SDK
 
-The generator reads two sets of lexicons:
+Code is generated only for the lexicons in `--lexicon-dir`. A `$ref` that points outside them, such as `"ref": "com.atproto.repo.strongRef"`, becomes a reference to the SDK's existing model instead of a second copy of it.
 
-`emit_lexicon_dirs`
-: from `--lexicon-dir`. Code is generated for these.
-
-`ref_lexicon_dirs`
-: from `--sdk-lexicons`, defaulting to the SDK's own `lexicons/`. Parsed so that `$ref`s can be resolved, never emitted.
-
-That split is why `"ref": "com.atproto.repo.strongRef"` in your lexicon becomes a reference to the SDK's existing model instead of generating a second copy of it, or worse a reference to a class that does not exist.
-
-Pass `--sdk-lexicons` when you are generating against a network whose base lexicons differ from the ones the SDK ships.
+The generator does not need the SDK's lexicons for that. The one thing it has to know about a foreign lexicon is whether its `main` definition is a record, because records are named `Record` rather than `Main`, and the SDK's generated record table already answers it. That table is built from the same lexicons as the installed models, so a reference can only ever name a model that exists in the SDK you have installed.
 
 ### Models chain to the SDK's
 

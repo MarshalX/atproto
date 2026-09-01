@@ -75,3 +75,28 @@ def test_known_record_does_not_build_a_throwaway_dot_dict(monkeypatch: pytest.Mo
 
     assert isinstance(_parse_record(_LIKE), models.AppBskyFeedLike.Record)
     assert created == []
+
+
+def test_deprecated_pydantic_alias_still_resolves() -> None:
+    from atproto_client.models import unknown_type
+
+    assert unknown_type.UnknownRecordTypePydantic is unknown_type.UnknownType
+
+
+@pytest.mark.parametrize(
+    ('created_at', 'expected'),
+    [
+        pytest.param('2026-01-01T00:00:00Z', models.AppBskyFeedPost.Record, id='valid'),
+        pytest.param('not a date', DotDict, id='invalid'),
+    ],
+)
+def test_strict_string_format_reaches_records_in_unknown_fields(created_at: str, expected: type) -> None:
+    """The caller's validation context is forwarded to the record resolved through the registry."""
+    from atproto_client.models.utils import get_or_create
+
+    post = {'$type': 'app.bsky.feed.post', 'text': 'hi', 'createdAt': created_at}
+    response = get_or_create(
+        {'uri': _SUBJECT['uri'], 'value': post}, models.ComAtprotoRepoGetRecord.Response, strict_string_format=True
+    )
+
+    assert isinstance(response.value, expected)

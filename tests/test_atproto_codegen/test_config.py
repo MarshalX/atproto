@@ -1,28 +1,23 @@
 from pathlib import Path
 
 import pytest
-from atproto_codegen.config import DEFAULT_LEXICON_DIR, CodegenConfig, get_config, use_config
+from atproto_codegen.config import CodegenConfig, get_config, use_config
 from atproto_codegen.models import builder
-from atproto_codegen.models.builder import Scope
 from atproto_codegen.models.generator import generate_models
+from atproto_core.nsid import NSID
 
 CUSTOM_LEXICON_DIR = Path(__file__).parent.parent.joinpath('fixtures', 'custom_lexicons').absolute()
 
 UNUSED_OUTPUT_DIR = Path(__file__).parent.joinpath('__never_written__')
 
 
-def _custom_config(output_dir: Path, *, with_refs: bool, package: str = 'custom_pkg') -> CodegenConfig:
-    return CodegenConfig(
-        emit_lexicon_dirs=(CUSTOM_LEXICON_DIR,),
-        ref_lexicon_dirs=(DEFAULT_LEXICON_DIR,) if with_refs else (),
-        output_dir=output_dir,
-        package=package,
-    )
+def _custom_config(output_dir: Path, package: str = 'custom_pkg') -> CodegenConfig:
+    return CodegenConfig(emit_lexicon_dirs=(CUSTOM_LEXICON_DIR,), output_dir=output_dir, package=package)
 
 
 @pytest.fixture
 def generated(tmp_path: Path) -> Path:
-    generate_models(_custom_config(tmp_path, with_refs=True))
+    generate_models(_custom_config(tmp_path))
     return tmp_path.joinpath('models')
 
 
@@ -35,7 +30,7 @@ def test_default_config_targets_the_sdk() -> None:
 
 
 def test_use_config_restores_the_previous_config() -> None:
-    custom = _custom_config(UNUSED_OUTPUT_DIR, with_refs=False)
+    custom = _custom_config(UNUSED_OUTPUT_DIR)
 
     with use_config(custom):
         assert get_config() is custom
@@ -43,22 +38,33 @@ def test_use_config_restores_the_previous_config() -> None:
     assert get_config().is_self_gen
 
 
-def test_emit_scope_excludes_reference_lexicons() -> None:
-    config = _custom_config(UNUSED_OUTPUT_DIR, with_refs=True)
+def test_reference_records_come_from_the_base_package() -> None:
+    """A record is resolvable when it is emitted or when the package the models fall back to defines it."""
+    config = _custom_config(UNUSED_OUTPUT_DIR)
 
-    emitted = builder.build_record_models(config, Scope.EMIT)
-    resolvable = builder.build_record_models(config, Scope.ALL)
+    assert builder.is_record(NSID.from_str('xyz.statusphere.status'), config)
+    assert builder.is_record(NSID.from_str('app.bsky.feed.post'), config)
+    assert not builder.is_record(NSID.from_str('app.bsky.actor.defs'), config)
+    assert not builder.is_record(NSID.from_str('xyz.statusphere.getStatuses'), config)
 
-    assert {str(nsid) for nsid in emitted} == {'xyz.statusphere.status'}
-    assert 'app.bsky.feed.post' in {str(nsid) for nsid in resolvable}
+
+def test_reference_records_are_never_read_from_the_lexicons() -> None:
+    config = _custom_config(UNUSED_OUTPUT_DIR)
+
+    assert {str(nsid) for nsid in builder.build_record_models(config)} == {'xyz.statusphere.status'}
+    assert 'app.bsky.feed.post' in builder.reference_record_types(config)
+
+
+def test_self_generation_has_no_reference_records() -> None:
+    """The SDK emits every lexicon it knows, so there is nothing to fall back to."""
+    assert builder.reference_record_types(CodegenConfig()) == frozenset()
 
 
 def test_lexicon_databases_are_isolated_per_config() -> None:
-    with_refs = _custom_config(UNUSED_OUTPUT_DIR, with_refs=True)
-    without_refs = _custom_config(UNUSED_OUTPUT_DIR, with_refs=False)
+    custom = _custom_config(UNUSED_OUTPUT_DIR)
 
-    assert len(builder.build_record_models(with_refs, Scope.ALL)) > 1
-    assert len(builder.build_record_models(without_refs, Scope.ALL)) == 1
+    assert len(builder.build_record_models(custom)) == 1
+    assert len(builder.build_record_models(CodegenConfig())) > 1
 
 
 def test_only_emitted_lexicons_produce_modules(generated: Path) -> None:

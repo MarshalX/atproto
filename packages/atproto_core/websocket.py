@@ -10,16 +10,41 @@ import warnings
 
 if t.TYPE_CHECKING:
     from atproto_subscription.websocket import (
+        AsyncOnCallbackErrorCallback,
+        AsyncOnMessageCallback,
         AsyncWebsocketClient,
+        Frame,
+        OnCallbackErrorCallback,
+        OnMessageCallback,
         WebsocketClient,
         WebsocketClientBase,
         build_websocket_uri,
     )
 
 _TARGET = 'atproto_subscription.websocket'
-_MOVED = ('AsyncWebsocketClient', 'WebsocketClient', 'WebsocketClientBase', 'build_websocket_uri')
+_MOVED = (
+    'AsyncOnCallbackErrorCallback',
+    'AsyncOnMessageCallback',
+    'AsyncWebsocketClient',
+    'Frame',
+    'OnCallbackErrorCallback',
+    'OnMessageCallback',
+    'WebsocketClient',
+    'WebsocketClientBase',
+    'build_websocket_uri',
+)
 
-__all__ = ['AsyncWebsocketClient', 'WebsocketClient', 'WebsocketClientBase', 'build_websocket_uri']
+__all__ = [
+    'AsyncOnCallbackErrorCallback',
+    'AsyncOnMessageCallback',
+    'AsyncWebsocketClient',
+    'Frame',
+    'OnCallbackErrorCallback',
+    'OnMessageCallback',
+    'WebsocketClient',
+    'WebsocketClientBase',
+    'build_websocket_uri',
+]
 
 
 def __getattr__(name: str) -> t.Any:

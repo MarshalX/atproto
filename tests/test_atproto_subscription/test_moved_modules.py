@@ -11,11 +11,28 @@ import pytest
         ('atproto_core.websocket', 'WebsocketClient', 'atproto_subscription.websocket.WebsocketClient'),
         ('atproto_core.websocket', 'AsyncWebsocketClient', 'atproto_subscription.websocket.AsyncWebsocketClient'),
         ('atproto_core.websocket', 'build_websocket_uri', 'atproto_subscription.websocket.build_websocket_uri'),
+        ('atproto_core.websocket', 'Frame', 'atproto_subscription.websocket.Frame'),
+        ('atproto_core.websocket', 'OnMessageCallback', 'atproto_subscription.websocket.OnMessageCallback'),
+        ('atproto_core.websocket', 'AsyncOnMessageCallback', 'atproto_subscription.websocket.AsyncOnMessageCallback'),
+        ('atproto_core.websocket', 'OnCallbackErrorCallback', 'atproto_subscription.websocket.OnCallbackErrorCallback'),
+        (
+            'atproto_core.websocket',
+            'AsyncOnCallbackErrorCallback',
+            'atproto_subscription.websocket.AsyncOnCallbackErrorCallback',
+        ),
         ('atproto_firehose.models', 'MessageFrame', 'atproto_subscription.frames.MessageFrame'),
         ('atproto_firehose.models', 'Frame', 'atproto_subscription.frames.Frame'),
         ('atproto_firehose.models', 'parse_frame_header', 'atproto_subscription.frames.parse_frame_header'),
         ('atproto_firehose.client', 'FirehoseClient', 'atproto_subscription.client.SubscriptionClient'),
         ('atproto_firehose.client', 'AsyncFirehoseClient', 'atproto_subscription.client.AsyncSubscriptionClient'),
+        ('atproto_firehose.client', 'OnMessageCallback', 'atproto_subscription.client.OnMessageCallback'),
+        ('atproto_firehose.client', 'AsyncOnMessageCallback', 'atproto_subscription.client.AsyncOnMessageCallback'),
+        ('atproto_firehose.client', 'OnCallbackErrorCallback', 'atproto_subscription.client.OnCallbackErrorCallback'),
+        (
+            'atproto_firehose.client',
+            'AsyncOnCallbackErrorCallback',
+            'atproto_subscription.client.AsyncOnCallbackErrorCallback',
+        ),
     ],
 )
 def test_moved_name_warns_and_still_resolves(module: str, name: str, target: str) -> None:

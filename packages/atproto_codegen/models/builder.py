@@ -1,5 +1,5 @@
+import importlib
 import typing as t
-from enum import Enum
 from functools import lru_cache
 from pathlib import Path
 
@@ -16,29 +16,38 @@ LexDefs = t.Dict[
 LexDB = t.Dict[NSID, LexDefs]
 
 
-class Scope(Enum):
-    """Which lexicons a database is built from."""
-
-    EMIT = 'emit'
-    """Only the lexicons code is generated for."""
-
-    ALL = 'all'
-    """The emitted lexicons plus the ones parsed to resolve references into."""
-
-
 def _parse_dirs(dirs: t.Tuple[Path, ...]) -> t.List[models.LexiconDoc]:
     return [lexicon for lexicon_dir in dirs for lexicon in lexicon_parse_dir(lexicon_dir)]
 
 
 @lru_cache(maxsize=16)
-def parse_lexicons(config: CodegenConfig, scope: Scope) -> t.Tuple[models.LexiconDoc, ...]:
-    emitted = _parse_dirs(config.emit_lexicon_dirs)
-    if scope is Scope.EMIT:
-        return tuple(emitted)
+def parse_lexicons(config: CodegenConfig) -> t.Tuple[models.LexiconDoc, ...]:
+    return tuple(_parse_dirs(config.emit_lexicon_dirs))
 
-    # references first so that an emitted lexicon wins over a reference one with the same ID
-    by_id = {lexicon.id: lexicon for lexicon in (*_parse_dirs(config.ref_lexicon_dirs), *emitted)}
-    return tuple(by_id.values())
+
+@lru_cache(maxsize=16)
+def reference_record_types(config: CodegenConfig) -> t.FrozenSet[str]:
+    """Return the NSIDs of the records a reference out of the emitted code may name without emitting them.
+
+    They are read from the record table of the package the generated models fall back to at runtime,
+    so a reference can only name a record the installed package resolves.
+    """
+    if config.is_self_gen:
+        return frozenset()
+
+    type_conversion = importlib.import_module(f'{config.base_package}.models.type_conversion')
+    return frozenset(type_conversion.RECORD_TYPES)
+
+
+def is_record(nsid: NSID, config: t.Optional[CodegenConfig] = None) -> bool:
+    """Return whether ``#main`` of a lexicon is a record, in the emitted lexicons or the referenced package."""
+    if config is None:
+        config = get_config()
+
+    if 'main' in build_record_models(config).get(nsid, {}):
+        return True
+
+    return str(nsid) in reference_record_types(config)
 
 
 def _filter_defs_by_type(defs: t.Dict[str, models.LexDefinition], def_types: t.AbstractSet[str]) -> LexDefs:
@@ -57,11 +66,11 @@ def _build_nsid_to_defs_map(lexicons: t.Sequence[models.LexiconDoc], def_types: 
     return result
 
 
-def _build(def_types: t.AbstractSet[str], config: t.Optional[CodegenConfig], scope: Scope) -> LexDB:
+def _build(def_types: t.AbstractSet[str], config: t.Optional[CodegenConfig]) -> LexDB:
     if config is None:
         config = get_config()
 
-    return _build_nsid_to_defs_map(parse_lexicons(config, scope), def_types)
+    return _build_nsid_to_defs_map(parse_lexicons(config), def_types)
 
 
 BuiltParamsModels = t.Dict[
@@ -83,8 +92,8 @@ _LEX_DEF_TYPES_FOR_PARAMS = {
 }
 
 
-def build_params_models(config: t.Optional[CodegenConfig] = None, scope: Scope = Scope.EMIT) -> BuiltParamsModels:
-    return _build(_LEX_DEF_TYPES_FOR_PARAMS, config, scope)
+def build_params_models(config: t.Optional[CodegenConfig] = None) -> BuiltParamsModels:
+    return _build(_LEX_DEF_TYPES_FOR_PARAMS, config)
 
 
 BuiltDataModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexXrpcProcedure]]]
@@ -92,8 +101,8 @@ BuiltDataModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexXrpcProcedure]]]
 _LEX_DEF_TYPES_FOR_DATA = {models.LexDefinitionType.PROCEDURE}
 
 
-def build_data_models(config: t.Optional[CodegenConfig] = None, scope: Scope = Scope.EMIT) -> BuiltDataModels:
-    return _build(_LEX_DEF_TYPES_FOR_DATA, config, scope)
+def build_data_models(config: t.Optional[CodegenConfig] = None) -> BuiltDataModels:
+    return _build(_LEX_DEF_TYPES_FOR_DATA, config)
 
 
 BuiltResponseModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexXrpcQuery, models.LexXrpcProcedure]]]
@@ -101,8 +110,8 @@ BuiltResponseModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexXrpcQuery, mode
 _LEX_DEF_TYPES_FOR_RESPONSES = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
 
 
-def build_response_models(config: t.Optional[CodegenConfig] = None, scope: Scope = Scope.EMIT) -> BuiltResponseModels:
-    return _build(_LEX_DEF_TYPES_FOR_RESPONSES, config, scope)
+def build_response_models(config: t.Optional[CodegenConfig] = None) -> BuiltResponseModels:
+    return _build(_LEX_DEF_TYPES_FOR_RESPONSES, config)
 
 
 BuiltDefModels = t.Dict[
@@ -117,8 +126,8 @@ _LEX_DEF_TYPES_FOR_DEF = {
 }
 
 
-def build_def_models(config: t.Optional[CodegenConfig] = None, scope: Scope = Scope.EMIT) -> BuiltDefModels:
-    return _build(_LEX_DEF_TYPES_FOR_DEF, config, scope)
+def build_def_models(config: t.Optional[CodegenConfig] = None) -> BuiltDefModels:
+    return _build(_LEX_DEF_TYPES_FOR_DEF, config)
 
 
 BuiltRecordModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexRecord]]]
@@ -126,8 +135,8 @@ BuiltRecordModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexRecord]]]
 _LEX_DEF_TYPES_FOR_RECORDS = {models.LexDefinitionType.RECORD}
 
 
-def build_record_models(config: t.Optional[CodegenConfig] = None, scope: Scope = Scope.EMIT) -> BuiltRecordModels:
-    return _build(_LEX_DEF_TYPES_FOR_RECORDS, config, scope)
+def build_record_models(config: t.Optional[CodegenConfig] = None) -> BuiltRecordModels:
+    return _build(_LEX_DEF_TYPES_FOR_RECORDS, config)
 
 
 BuiltSubscriptions = t.Dict[NSID, t.Dict[str, models.LexSubscription]]
@@ -135,5 +144,5 @@ BuiltSubscriptions = t.Dict[NSID, t.Dict[str, models.LexSubscription]]
 _LEX_DEF_TYPES_FOR_SUBSCRIPTIONS = {models.LexDefinitionType.SUBSCRIPTION}
 
 
-def build_subscriptions(config: t.Optional[CodegenConfig] = None, scope: Scope = Scope.EMIT) -> BuiltSubscriptions:
-    return _build(_LEX_DEF_TYPES_FOR_SUBSCRIPTIONS, config, scope)
+def build_subscriptions(config: t.Optional[CodegenConfig] = None) -> BuiltSubscriptions:
+    return _build(_LEX_DEF_TYPES_FOR_SUBSCRIPTIONS, config)

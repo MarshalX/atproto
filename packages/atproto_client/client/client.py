@@ -6,6 +6,7 @@ from atproto_core.exceptions import AtProtocolError
 from atproto_core.uri import AtUri
 
 from atproto_client import models
+from atproto_client.client.base import is_method_not_served
 from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethodsMixin
 from atproto_client.client.methods_mixin.headers import HeadersConfigurationMethodsMixin
 from atproto_client.client.methods_mixin.session import SessionDispatchMixin
@@ -99,11 +100,11 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
 
         Note:
             Authorization itself uses only ``com.atproto.server``. The profile lookup is
-            ``app.bsky.actor.getProfile``, which not every PDS serves. It never fails the login:
-            when it is turned off or does not succeed,
-            :py:attr:`~atproto_client.client.client.Client.me` is :obj:`None` and a warning is
-            emitted. Pass ``fetch_bsky_profile=False`` on a PDS without ``app.bsky`` to skip the
-            request and the warning.
+            ``app.bsky.actor.getProfile``, which not every PDS serves. A PDS that does not serve it
+            does not fail the login: :py:attr:`~atproto_client.client.client.Client.me` is
+            :obj:`None` and a warning is emitted. Any other failure of the lookup, such as an
+            expired session, propagates. Pass ``fetch_bsky_profile=False`` on a PDS without
+            ``app.bsky`` to skip the request and the warning.
 
         Returns:
             :obj:`models.AppBskyActorDefs.ProfileViewDetailed`: Profile information,
@@ -129,6 +130,9 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         try:
             return self.app.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=handle))
         except AtProtocolError as e:
+            if not is_method_not_served(e):
+                raise
+
             warnings.warn(
                 f"Authorized, but could not fetch the Bluesky profile of '{handle}': {e}. "
                 '`me` is None. Pass `fetch_bsky_profile=False` to skip this lookup.',

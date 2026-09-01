@@ -80,7 +80,9 @@ class UnknownRecordFallback:
     def __get_pydantic_core_schema__(cls, source_type: t.Any, handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         from atproto_client.models.record_registry import resolve_record_type
 
-        def validate(value: t.Any, validator: core_schema.ValidatorFunctionWrapHandler) -> t.Any:
+        def validate(
+            value: t.Any, validator: core_schema.ValidatorFunctionWrapHandler, info: core_schema.ValidationInfo
+        ) -> t.Any:
             if isinstance(value, BaseModel):
                 return value
 
@@ -90,14 +92,14 @@ class UnknownRecordFallback:
                 model = resolve_record_type(record_type) if isinstance(record_type, str) else None
                 if model is not None:
                     try:
-                        return model.model_validate(data)
+                        return model.model_validate(data, context=info.context)
                     except ValidationError:
                         # a record the models know of but cannot describe still degrades to DotDict
                         pass
 
             return validator(value)
 
-        return core_schema.no_info_wrap_validator_function(
+        return core_schema.with_info_wrap_validator_function(
             validate,
             handler.generate_schema(DotDictType),
             serialization=core_schema.wrap_serializer_function_ser_schema(_serialize_unknown, info_arg=True),

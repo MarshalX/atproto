@@ -10,13 +10,33 @@ import typing as t
 import warnings
 
 if t.TYPE_CHECKING:
+    from atproto_subscription.client import (
+        AsyncOnCallbackErrorCallback,
+        AsyncOnMessageCallback,
+        OnCallbackErrorCallback,
+        OnMessageCallback,
+    )
     from atproto_subscription.client import AsyncSubscriptionClient as AsyncFirehoseClient
     from atproto_subscription.client import SubscriptionClient as FirehoseClient
 
 _TARGET = 'atproto_subscription.client'
-_MOVED = {'FirehoseClient': 'SubscriptionClient', 'AsyncFirehoseClient': 'AsyncSubscriptionClient'}
+_MOVED = {
+    'FirehoseClient': 'SubscriptionClient',
+    'AsyncFirehoseClient': 'AsyncSubscriptionClient',
+    'OnMessageCallback': 'OnMessageCallback',
+    'AsyncOnMessageCallback': 'AsyncOnMessageCallback',
+    'OnCallbackErrorCallback': 'OnCallbackErrorCallback',
+    'AsyncOnCallbackErrorCallback': 'AsyncOnCallbackErrorCallback',
+}
 
-__all__ = ['AsyncFirehoseClient', 'FirehoseClient']
+__all__ = [
+    'AsyncFirehoseClient',
+    'AsyncOnCallbackErrorCallback',
+    'AsyncOnMessageCallback',
+    'FirehoseClient',
+    'OnCallbackErrorCallback',
+    'OnMessageCallback',
+]
 
 
 def __getattr__(name: str) -> t.Any:
