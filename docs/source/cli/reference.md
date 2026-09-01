@@ -11,7 +11,6 @@ from atproto_codegen.config import CodegenConfig
 
 config = CodegenConfig(
     emit_lexicon_dirs=(Path('./lexicons'),),
-    ref_lexicon_dirs=(Path('./sdk-lexicons'),),
     output_dir=Path('./my_pkg'),
     package='my_pkg',
 )

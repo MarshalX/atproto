@@ -22,7 +22,7 @@ _ATPROTO_SDK_USER_AGENT = f'atproto/{_ATPROTO_SDK_VERSION} Python SDK (atproto.b
 class Response:
     success: bool
     status_code: int
-    content: t.Optional[t.Union[t.Dict[str, t.Any], bytes, 'XrpcError']]
+    content: t.Optional[t.Union[t.Dict[str, t.Any], bytes, XrpcError]]
     headers: t.Dict[str, t.Any]
 
 

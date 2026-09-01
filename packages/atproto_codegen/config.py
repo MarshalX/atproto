@@ -22,9 +22,6 @@ class CodegenConfig:
     emit_lexicon_dirs: t.Tuple[Path, ...] = (DEFAULT_LEXICON_DIR,)
     """Lexicons to generate code for."""
 
-    ref_lexicon_dirs: t.Tuple[Path, ...] = ()
-    """Lexicons parsed only to resolve references out of the emitted code."""
-
     package: str = DEFAULT_PACKAGE
     """Import name of the generated package."""
 
@@ -32,7 +29,10 @@ class CodegenConfig:
     """Filesystem root of the generated package."""
 
     base_package: str = DEFAULT_PACKAGE
-    """Package providing the hand-written base classes the generated code builds on."""
+    """Package providing the hand-written base classes the generated code builds on.
+
+    References out of the emitted lexicons resolve into its models, so they must name something it defines.
+    """
 
     @property
     def models_output_dir(self) -> Path:

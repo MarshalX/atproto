@@ -837,6 +837,10 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
         f'{_(1)}UnknownType = te.Annotated[t.Any, unknown_union.UnknownRecordFallback]',
         f'{_(1)}UnknownInputType = UnknownType',
     ]
+    if config.is_self_gen:
+        unknown_type_lines.append(
+            'UnknownRecordTypePydantic = UnknownType  #: Deprecated alias of :obj:`UnknownType`. Use it instead.'
+        )
 
     write_code(config.models_output_dir.joinpath('type_conversion.py'), join_code(type_conversion_lines))
     write_code(config.models_output_dir.joinpath('unknown_type.py'), join_code(unknown_type_lines))

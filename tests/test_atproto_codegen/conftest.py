@@ -4,7 +4,7 @@ import typing as t
 from pathlib import Path
 
 import pytest
-from atproto_codegen.config import DEFAULT_LEXICON_DIR, CodegenConfig
+from atproto_codegen.config import CodegenConfig
 from atproto_codegen.models.generator import generate_models
 
 CUSTOM_LEXICON_DIR = Path(__file__).parent.parent.joinpath('fixtures', 'custom_lexicons').absolute()
@@ -22,7 +22,6 @@ def custom_package(tmp_path_factory: pytest.TempPathFactory) -> t.Iterator[t.Any
     generate_models(
         CodegenConfig(
             emit_lexicon_dirs=(CUSTOM_LEXICON_DIR,),
-            ref_lexicon_dirs=(DEFAULT_LEXICON_DIR,),
             output_dir=root.joinpath(PACKAGE),
             package=PACKAGE,
         )

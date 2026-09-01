@@ -44,3 +44,4 @@ if t.TYPE_CHECKING:
 else:
     UnknownType = te.Annotated[t.Any, unknown_union.UnknownRecordFallback]
     UnknownInputType = UnknownType
+UnknownRecordTypePydantic = UnknownType  #: Deprecated alias of :obj:`UnknownType`. Use it instead.

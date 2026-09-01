@@ -74,7 +74,6 @@ atp gen --lexicon-dir ./lexicons custom --output-dir ./my_pkg --package my_pkg
 | --------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `--output-dir PATH`   | yes      | Root of the package to generate. Created if it does not exist.                                                             |
 | `--package NAME`      | yes      | Import name of the generated package. Must match the last path segment of `--output-dir` for the package to be importable. |
-| `--sdk-lexicons PATH` | no       | Lexicons resolved against but never emitted. Defaults to the SDK's own.                                                    |
 | `--no-client`         | no       | Emit models and namespaces only, no `client.py` / `async_client.py`.                                                       |
 
 ### atp gen all
@@ -127,7 +126,6 @@ from atproto_codegen.subscriptions.generator import generate_subscriptions
 
 config = CodegenConfig(
     emit_lexicon_dirs=(Path('./lexicons'),),
-    ref_lexicon_dirs=(Path('./sdk-lexicons'),),
     output_dir=Path('./my_pkg'),
     package='my_pkg',
 )
