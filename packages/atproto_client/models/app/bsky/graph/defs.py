@@ -62,6 +62,9 @@ class ListItemView(base.ModelBase):
 
     subject: 'models.AppBskyActorDefs.ProfileView'  #: Subject.
     uri: string_formats.AtUri  #: Uri.
+    subject_opted_out: te.Annotated[t.Optional[bool], Field(frozen=True)] = (
+        None  #: Set to true when the subject has opted out of appearing in the reference list. Only set when the viewer owns the list.
+    )
 
     py_type: t.Literal['app.bsky.graph.defs#listItemView'] = Field(
         default='app.bsky.graph.defs#listItemView', alias='$type', frozen=True
@@ -135,6 +138,9 @@ class ListViewerState(base.ModelBase):
 
     blocked: t.Optional[string_formats.AtUri] = None  #: Blocked.
     muted: t.Optional[bool] = None  #: Muted.
+    reference_list_opt_out: t.Optional[string_formats.AtUri] = (
+        None  #: The authenticated viewer's app.bsky.graph.referencelistoptout record URI for this reference list. Only set for reference lists. A client can delete this record to undo the opt-out.
+    )
 
     py_type: t.Literal['app.bsky.graph.defs#listViewerState'] = Field(
         default='app.bsky.graph.defs#listViewerState', alias='$type', frozen=True
