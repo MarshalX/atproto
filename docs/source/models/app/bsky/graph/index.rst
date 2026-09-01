@@ -161,6 +161,12 @@ Follows, blocks, mutes, lists, and starter packs.
 
       Mutes a thread preventing notifications from the thread and any of its children.
 
+   .. grid-item-card:: :octicon:`note;1em;sd-mr-1` referencelistoptout
+      :link: /models/app/bsky/graph/referencelistoptout
+      :link-type: doc
+
+      Record requesting that its author be omitted from the public presentation of a reference list.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` searchStarterPacks
       :link: /models/app/bsky/graph/searchStarterPacks
       :link-type: doc
@@ -232,6 +238,7 @@ Follows, blocks, mutes, lists, and starter packs.
    muteActor </models/app/bsky/graph/muteActor>
    muteActorList </models/app/bsky/graph/muteActorList>
    muteThread </models/app/bsky/graph/muteThread>
+   referencelistoptout </models/app/bsky/graph/referencelistoptout>
    searchStarterPacks </models/app/bsky/graph/searchStarterPacks>
    searchStarterPacksV2 </models/app/bsky/graph/searchStarterPacksV2>
    starterpack </models/app/bsky/graph/starterpack>

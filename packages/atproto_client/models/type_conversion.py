@@ -16,6 +16,7 @@ RECORD_TYPES = {
     'app.bsky.graph.list': 'AppBskyGraphList',
     'app.bsky.graph.listblock': 'AppBskyGraphListblock',
     'app.bsky.graph.listitem': 'AppBskyGraphListitem',
+    'app.bsky.graph.referencelistoptout': 'AppBskyGraphReferencelistoptout',
     'app.bsky.graph.starterpack': 'AppBskyGraphStarterpack',
     'app.bsky.graph.verification': 'AppBskyGraphVerification',
     'app.bsky.labeler.service': 'AppBskyLabelerService',

@@ -101,6 +101,7 @@ REDIRECTS = {
     'atproto/atproto_client.models.app.bsky.graph.mute_actor.html': '/models/app/bsky/graph/muteActor/',
     'atproto/atproto_client.models.app.bsky.graph.mute_actor_list.html': '/models/app/bsky/graph/muteActorList/',
     'atproto/atproto_client.models.app.bsky.graph.mute_thread.html': '/models/app/bsky/graph/muteThread/',
+    'atproto/atproto_client.models.app.bsky.graph.referencelistoptout.html': '/models/app/bsky/graph/referencelistoptout/',
     'atproto/atproto_client.models.app.bsky.graph.search_starter_packs.html': '/models/app/bsky/graph/searchStarterPacks/',
     'atproto/atproto_client.models.app.bsky.graph.search_starter_packs_v2.html': '/models/app/bsky/graph/searchStarterPacksV2/',
     'atproto/atproto_client.models.app.bsky.graph.starterpack.html': '/models/app/bsky/graph/starterpack/',

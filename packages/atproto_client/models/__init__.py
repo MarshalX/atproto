@@ -102,6 +102,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.graph import mute_actor as AppBskyGraphMuteActor
     from atproto_client.models.app.bsky.graph import mute_actor_list as AppBskyGraphMuteActorList
     from atproto_client.models.app.bsky.graph import mute_thread as AppBskyGraphMuteThread
+    from atproto_client.models.app.bsky.graph import referencelistoptout as AppBskyGraphReferencelistoptout
     from atproto_client.models.app.bsky.graph import search_starter_packs as AppBskyGraphSearchStarterPacks
     from atproto_client.models.app.bsky.graph import search_starter_packs_v2 as AppBskyGraphSearchStarterPacksV2
     from atproto_client.models.app.bsky.graph import starterpack as AppBskyGraphStarterpack
@@ -585,6 +586,7 @@ class _Ids:
     AppBskyGraphMuteActor: str = 'app.bsky.graph.muteActor'
     AppBskyGraphMuteActorList: str = 'app.bsky.graph.muteActorList'
     AppBskyGraphMuteThread: str = 'app.bsky.graph.muteThread'
+    AppBskyGraphReferencelistoptout: str = 'app.bsky.graph.referencelistoptout'
     AppBskyGraphSearchStarterPacks: str = 'app.bsky.graph.searchStarterPacks'
     AppBskyGraphSearchStarterPacksV2: str = 'app.bsky.graph.searchStarterPacksV2'
     AppBskyGraphStarterpack: str = 'app.bsky.graph.starterpack'

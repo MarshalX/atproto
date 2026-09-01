@@ -23,6 +23,7 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyGraphList.Record',
     'models.AppBskyGraphListblock.Record',
     'models.AppBskyGraphListitem.Record',
+    'models.AppBskyGraphReferencelistoptout.Record',
     'models.AppBskyGraphStarterpack.Record',
     'models.AppBskyGraphVerification.Record',
     'models.AppBskyLabelerService.Record',

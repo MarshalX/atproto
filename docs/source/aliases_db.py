@@ -91,6 +91,7 @@ ALIASES_DB = {
     'models.AppBskyGraphMuteActor': 'atproto_client.models.app.bsky.graph.mute_actor',
     'models.AppBskyGraphMuteActorList': 'atproto_client.models.app.bsky.graph.mute_actor_list',
     'models.AppBskyGraphMuteThread': 'atproto_client.models.app.bsky.graph.mute_thread',
+    'models.AppBskyGraphReferencelistoptout': 'atproto_client.models.app.bsky.graph.referencelistoptout',
     'models.AppBskyGraphSearchStarterPacks': 'atproto_client.models.app.bsky.graph.search_starter_packs',
     'models.AppBskyGraphSearchStarterPacksV2': 'atproto_client.models.app.bsky.graph.search_starter_packs_v2',
     'models.AppBskyGraphStarterpack': 'atproto_client.models.app.bsky.graph.starterpack',
