@@ -332,6 +332,7 @@ ALIASES_DB = {
     'models.ToolsOzoneModerationCancelScheduledActions': 'atproto_client.models.tools.ozone.moderation.cancel_scheduled_actions',
     'models.ToolsOzoneModerationDefs': 'atproto_client.models.tools.ozone.moderation.defs',
     'models.ToolsOzoneModerationEmitEvent': 'atproto_client.models.tools.ozone.moderation.emit_event',
+    'models.ToolsOzoneModerationGetAccountPreferences': 'atproto_client.models.tools.ozone.moderation.get_account_preferences',
     'models.ToolsOzoneModerationGetAccountTimeline': 'atproto_client.models.tools.ozone.moderation.get_account_timeline',
     'models.ToolsOzoneModerationGetEvent': 'atproto_client.models.tools.ozone.moderation.get_event',
     'models.ToolsOzoneModerationGetRecord': 'atproto_client.models.tools.ozone.moderation.get_record',

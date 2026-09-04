@@ -11549,6 +11549,38 @@ class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.ToolsOzoneModerationDefs.ModEventView)
 
+    async def get_account_preferences(
+        self,
+        params: t.Union[
+            models.ToolsOzoneModerationGetAccountPreferences.Params,
+            models.ToolsOzoneModerationGetAccountPreferences.ParamsDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationGetAccountPreferences.Response':
+        """Get private preferences for an account. Requires moderator or admin auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationGetAccountPreferences.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.ToolsOzoneModerationGetAccountPreferences.Params',
+            get_or_create(params, models.ToolsOzoneModerationGetAccountPreferences.Params),
+        )
+        response = await self._client.invoke_query(
+            'tools.ozone.moderation.getAccountPreferences',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationGetAccountPreferences.Response)
+
     async def get_account_timeline(
         self,
         params: t.Union[

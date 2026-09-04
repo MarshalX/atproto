@@ -391,6 +391,7 @@ REDIRECTS = {
     'atproto/atproto_client.models.tools.ozone.moderation.cancel_scheduled_actions.html': '/models/tools/ozone/moderation/cancelScheduledActions/',
     'atproto/atproto_client.models.tools.ozone.moderation.defs.html': '/models/tools/ozone/moderation/defs/',
     'atproto/atproto_client.models.tools.ozone.moderation.emit_event.html': '/models/tools/ozone/moderation/emitEvent/',
+    'atproto/atproto_client.models.tools.ozone.moderation.get_account_preferences.html': '/models/tools/ozone/moderation/getAccountPreferences/',
     'atproto/atproto_client.models.tools.ozone.moderation.get_account_timeline.html': '/models/tools/ozone/moderation/getAccountTimeline/',
     'atproto/atproto_client.models.tools.ozone.moderation.get_event.html': '/models/tools/ozone/moderation/getEvent/',
     'atproto/atproto_client.models.tools.ozone.moderation.get_record.html': '/models/tools/ozone/moderation/getRecord/',

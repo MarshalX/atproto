@@ -356,6 +356,9 @@ class InterestsPref(base.ModelBase):
     tags: t.List[te.Annotated[str, Field(max_length=640)]] = Field(
         max_length=100
     )  #: A list of tags which describe the account owner's interests gathered during onboarding.
+    updated_at: t.Optional[string_formats.DateTime] = (
+        None  #: The timestamp when the account owner last updated their interests.
+    )
 
     py_type: t.Literal['app.bsky.actor.defs#interestsPref'] = Field(
         default='app.bsky.actor.defs#interestsPref', alias='$type', frozen=True

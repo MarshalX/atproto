@@ -404,6 +404,9 @@ if t.TYPE_CHECKING:
     from atproto_client.models.tools.ozone.moderation import defs as ToolsOzoneModerationDefs
     from atproto_client.models.tools.ozone.moderation import emit_event as ToolsOzoneModerationEmitEvent
     from atproto_client.models.tools.ozone.moderation import (
+        get_account_preferences as ToolsOzoneModerationGetAccountPreferences,
+    )
+    from atproto_client.models.tools.ozone.moderation import (
         get_account_timeline as ToolsOzoneModerationGetAccountTimeline,
     )
     from atproto_client.models.tools.ozone.moderation import get_event as ToolsOzoneModerationGetEvent
@@ -831,6 +834,7 @@ class _Ids:
     ToolsOzoneModerationCancelScheduledActions: str = 'tools.ozone.moderation.cancelScheduledActions'
     ToolsOzoneModerationDefs: str = 'tools.ozone.moderation.defs'
     ToolsOzoneModerationEmitEvent: str = 'tools.ozone.moderation.emitEvent'
+    ToolsOzoneModerationGetAccountPreferences: str = 'tools.ozone.moderation.getAccountPreferences'
     ToolsOzoneModerationGetAccountTimeline: str = 'tools.ozone.moderation.getAccountTimeline'
     ToolsOzoneModerationGetEvent: str = 'tools.ozone.moderation.getEvent'
     ToolsOzoneModerationGetRecord: str = 'tools.ozone.moderation.getRecord'
