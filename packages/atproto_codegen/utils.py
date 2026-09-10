@@ -10,13 +10,11 @@ from pathlib import Path
 from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import NSID
 
+from atproto_codegen.config import get_config
+from atproto_codegen.exceptions import RuffNotFoundError, UnresolvedReferenceError
 from atproto_codegen.models import builder
 
 RUFF_CONFIG_PATH = Path(__file__).parent.joinpath('ruff_generated.toml')
-
-
-class RuffNotFoundError(FileNotFoundError):
-    """Ruff is needed to format generated code but is not installed."""
 
 
 @cache
@@ -70,7 +68,7 @@ def format_code(path: Path, quiet: bool = True, root: t.Optional[Path] = None) -
         return
 
     ruff = find_ruff()
-    options = [f'--config={RUFF_CONFIG_PATH}']
+    options = [f'--config={RUFF_CONFIG_PATH}', '--no-cache']
     if quiet:
         options.append('--quiet')
 
@@ -183,8 +181,19 @@ def get_model_path(nsid: NSID, method_name: str) -> str:
     # but references in schemes are still pointer to #main ("Main"),
     # so we need to rename Main to Record here
     model_name = get_record_model_name() if is_main_record_model else get_def_model_name(method_name)
+    alias = get_import_path(nsid)
 
-    return f'models.{get_import_path(nsid)}.{model_name}'
+    if not builder.reference_model_exists(nsid, alias, model_name):
+        config = get_config()
+        where = 'the lexicons being generated'
+        if not config.is_self_gen:
+            where += f" or the installed '{config.base_package}' package"
+        raise UnresolvedReferenceError(
+            f"'{nsid}' (model '{model_name}') is referenced but not found in {where}. "
+            'Add its lexicon to the lexicon directory.'
+        )
+
+    return f'models.{alias}.{model_name}'
 
 
 def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> t.Tuple[str, str]:

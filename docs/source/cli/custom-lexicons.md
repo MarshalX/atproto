@@ -130,6 +130,8 @@ Code is generated only for the lexicons in `--lexicon-dir`. A `$ref` that points
 
 The generator does not need the SDK's lexicons for that. The one thing it has to know about a foreign lexicon is whether its `main` definition is a record, because records are named `Record` rather than `Main`, and the SDK's generated record table already answers it. That table is built from the same lexicons as the installed models, so a reference can only ever name a model that exists in the SDK you have installed.
 
+A reference to something that is in neither place fails the run with an `UnresolvedReferenceError` naming the NSID, rather than producing a package that breaks on first use. Add the missing lexicon to `--lexicon-dir` to have it generated alongside yours.
+
 ### Models chain to the SDK's
 
 `statusphere/models/__init__.py` ends with:
@@ -197,7 +199,7 @@ Neither blocks generating a working package; they mean those particular defs pro
 
 ## Keeping generated code out of your diffs
 
-The output is deterministic, so both options work:
+The output is deterministic, and every run replaces what the previous one generated in the output directory (only the package `__init__.py` is left alone), so removing a lexicon removes its modules. Both options work:
 
 - **Commit it.** Your package is importable without a build step, and reviewers see what changed when a lexicon changes.
 - **Generate it in CI.** Add the `atp gen custom` invocation to your build and gitignore the output directory. Pin the `atproto` version: generated code is only guaranteed to work with the SDK version that produced it.

@@ -777,6 +777,15 @@ def _generate_record_models(lex_db: builder.BuiltRecordModels) -> None:
                 save_code_part(nsid, _generate_record_sugar_models(nsid))
 
 
+def _union_typehint(members: t.List[str]) -> str:
+    # t.Union of a single member is invalid for type checkers
+    if not members:
+        return 't.Any'
+    if len(members) == 1:
+        return members[0]
+    return f't.Union[{", ".join(members)}]'
+
+
 def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
     config = get_config()
     base = f'{config.base_package}.models'
@@ -796,9 +805,13 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
         f'{_(4)}from {base} import base',
         f'{_(4)}from {config.package} import models',
         f'{_(4)}from {base} import dot_dict',
-        '',
     ]
-    unknown_record_type_hint_lines = ['UnknownRecordType: te.TypeAlias = t.Union[']
+    unknown_record_type_members: t.List[str] = []
+    if not config.is_self_gen:
+        # records of the base package are resolved at runtime too, so its union is a member of ours
+        import_lines.append(f'{_(4)}from {base} import unknown_type as base_unknown_type')
+        unknown_record_type_members.append("'base_unknown_type.UnknownRecordType'")
+    import_lines.append('')
 
     for nsid, defs in lex_db.items():
         _save_code_import_if_not_exist(nsid)
@@ -814,12 +827,14 @@ def _generate_record_type_database(lex_db: builder.BuiltRecordModels) -> None:
 
                 type_conversion_lines.append(f"'{record_type}': '{get_import_path(nsid)}',")
 
-                unknown_record_type_hint_lines.append(f"{_(4)}'{path_to_class}',")
+                unknown_record_type_members.append(f"'{path_to_class}'")
 
     type_conversion_lines.append('}')
     type_conversion_lines.append(f"register_record_types('{config.models_package}', RECORD_TYPES)")
 
-    unknown_record_type_hint_lines.append(']')
+    unknown_record_type_hint_lines = [
+        f'UnknownRecordType: te.TypeAlias = {_union_typehint(unknown_record_type_members)}'
+    ]
 
     # the runtime type is deliberately open: records are resolved through the registry, so a package
     # generated from custom lexicons is decoded here too. UnknownRecordType stays for type checkers.

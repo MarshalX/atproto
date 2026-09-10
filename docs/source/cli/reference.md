@@ -37,6 +37,17 @@ Each of these takes a config and writes part of the package. `atp gen custom` ca
 .. autofunction:: atproto_codegen.subscriptions.generator.generate_subscriptions
 ```
 
+## Errors
+
+Every error the generator raises on purpose derives from `CodegenError`. The CLI prints them as a one-line message; programmatic callers can catch them.
+
+```{eval-rst}
+.. automodule:: atproto_codegen.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```
+
 ## Formatting
 
 Generated code is formatted by shelling out to Ruff with a config the generator owns, so the output does not inherit the style of whatever project the output directory sits in. Ruff is deliberately not a declared dependency of the SDK.

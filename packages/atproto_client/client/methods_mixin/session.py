@@ -1,6 +1,8 @@
 import typing as t
 from datetime import timedelta
 
+import typing_extensions as te
+
 from atproto_client.client.methods_mixin.time import TimeMethodsMixin
 from atproto_client.client.session import (
     AsyncSessionChangeCallback,
@@ -90,23 +92,35 @@ class AsyncSessionDispatchMixin:
 
 
 class SessionMethodsMixin(TimeMethodsMixin):
-    def __init__(self, *args: t.Any, session_dispatcher: t.Optional[SessionDispatcher] = None, **kwargs: t.Any) -> None:
+    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
-        self._session_dispatcher = session_dispatcher or SessionDispatcher()
+        self._session_dispatcher = SessionDispatcher()
         self._register_auth_headers_source()
 
     @property
     def _session(self) -> t.Optional[Session]:
         return self._session_dispatcher.session
 
-    def _get_clone_kwargs(self) -> t.Dict[str, t.Any]:
-        return {**super()._get_clone_kwargs(), 'session_dispatcher': self._session_dispatcher}
+    def _inherit_clone_state(self, original: te.Self) -> None:
+        super()._inherit_clone_state(original)
+
+        # the request was cloned with the original's auth headers source already in place,
+        # so the throwaway dispatcher the constructor registered is swapped for the shared one
+        self._unregister_auth_headers_source()
+        self._session_dispatcher = original._session_dispatcher
+        self._register_auth_headers_source()
 
     def _register_auth_headers_source(self) -> None:
         request = self.request
         source = self._session_dispatcher.get_auth_headers
-        if source not in request._additional_header_sources:  # a clone inherits it from its original
+        if source not in request._additional_header_sources:
             request.add_additional_headers_source(source)
+
+    def _unregister_auth_headers_source(self) -> None:
+        sources = self.request._additional_header_sources
+        source = self._session_dispatcher.get_auth_headers
+        if source in sources:
+            sources.remove(source)
 
     def _should_refresh_session(self) -> bool:
         if not self._session or not self._session.access_jwt_payload or not self._session.access_jwt_payload.exp:

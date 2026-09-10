@@ -8,6 +8,7 @@ from atproto_lexicon import models
 from atproto_lexicon.parser import lexicon_parse_dir
 
 from atproto_codegen.config import CodegenConfig, get_config
+from atproto_codegen.exceptions import LexiconsNotFoundError
 
 LexDefs = t.Dict[
     str,
@@ -22,7 +23,49 @@ def _parse_dirs(dirs: t.Tuple[Path, ...]) -> t.List[models.LexiconDoc]:
 
 @lru_cache(maxsize=16)
 def parse_lexicons(config: CodegenConfig) -> t.Tuple[models.LexiconDoc, ...]:
-    return tuple(_parse_dirs(config.emit_lexicon_dirs))
+    """Parse the lexicons to generate code for.
+
+    Raises:
+        LexiconsNotFoundError: A lexicon directory does not exist or holds no lexicons.
+    """
+    for lexicon_dir in config.emit_lexicon_dirs:
+        if not lexicon_dir.is_dir():
+            raise LexiconsNotFoundError(f'Lexicon directory does not exist: {lexicon_dir}')
+
+    lexicons = tuple(_parse_dirs(config.emit_lexicon_dirs))
+    if not lexicons:
+        dirs = ', '.join(str(d) for d in config.emit_lexicon_dirs)
+        raise LexiconsNotFoundError(f'No .json lexicons found in: {dirs}')
+
+    return lexicons
+
+
+@lru_cache(maxsize=16)
+def emitted_nsids(config: CodegenConfig) -> t.FrozenSet[NSID]:
+    return frozenset(NSID.from_str(lexicon.id) for lexicon in parse_lexicons(config))
+
+
+def reference_model_exists(nsid: NSID, alias: str, model_name: str, config: t.Optional[CodegenConfig] = None) -> bool:
+    """Return whether a referenced model is being generated or exists in the package the run falls back to.
+
+    Definitions of the emitted lexicons are taken as present; a wrong ``#name`` inside them fails on import
+    of the generated code. Foreign references are looked up in the installed base package.
+    """
+    if config is None:
+        config = get_config()
+
+    if nsid in emitted_nsids(config):
+        return True
+    if config.is_self_gen:
+        return False
+
+    models_module = importlib.import_module(f'{config.base_package}.models')
+    try:
+        module = getattr(models_module, alias)
+    except AttributeError:
+        return False
+
+    return hasattr(module, model_name)
 
 
 @lru_cache(maxsize=16)
@@ -37,6 +80,13 @@ def reference_record_types(config: CodegenConfig) -> t.FrozenSet[str]:
 
     type_conversion = importlib.import_module(f'{config.base_package}.models.type_conversion')
     return frozenset(type_conversion.RECORD_TYPES)
+
+
+def clear_caches() -> None:
+    """Forget parsed lexicons so that a new run sees lexicons edited since the previous one in this process."""
+    parse_lexicons.cache_clear()
+    emitted_nsids.cache_clear()
+    reference_record_types.cache_clear()
 
 
 def is_record(nsid: NSID, config: t.Optional[CodegenConfig] = None) -> bool:

@@ -76,9 +76,8 @@ def _handle_base_url(base_url: t.Optional[str] = None) -> str:
 
 
 class _ClientCommonMethodsMixin:
-    def _get_clone_kwargs(self) -> t.Dict[str, t.Any]:
-        """Return the constructor arguments a clone must be built with, on top of the base URL and request."""
-        return {}
+    def _inherit_clone_state(self, original: te.Self) -> None:
+        """Take over the state a freshly constructed clone must share with the client it was cloned from."""
 
     def clone(self) -> te.Self:
         """Clone the client instance.
@@ -88,7 +87,9 @@ class _ClientCommonMethodsMixin:
         Returns:
             Cloned client instance.
         """
-        return type(self)(base_url=self._base_url, request=self.request.clone(), **self._get_clone_kwargs())
+        cloned = type(self)(base_url=self._base_url, request=self.request.clone())
+        cloned._inherit_clone_state(self)
+        return cloned
 
     def update_base_url(self, base_url: t.Optional[str] = None) -> None:
         """Update XRPC base URL.

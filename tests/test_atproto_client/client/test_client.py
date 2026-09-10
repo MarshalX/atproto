@@ -1,3 +1,5 @@
+import typing as t
+
 import httpx
 import pytest
 from atproto_client import Session, SessionEvent
@@ -138,3 +140,20 @@ async def test_async_client_clone_before_login_is_authenticated() -> None:
 
     assert cloned_client.request.get_headers()['Authorization'] == 'Bearer access'
     assert cloned_client._session is session
+
+
+def test_client_clone_of_subclass_with_fixed_init_signature() -> None:
+    class MyClient(Client):
+        def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None) -> None:
+            super().__init__(base_url, request)
+
+    client = MyClient()
+    session = _log_in(client)
+
+    cloned_client = client.with_bsky_chat_proxy()
+
+    assert isinstance(cloned_client, MyClient)
+    assert cloned_client._session_dispatcher is client._session_dispatcher
+    assert cloned_client._session is session
+    assert len(cloned_client.request._additional_header_sources) == 1
+    assert cloned_client.request.get_headers()['Authorization'] == 'Bearer access'
