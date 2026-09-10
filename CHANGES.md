@@ -1,5 +1,40 @@
 # Change Log
 
+## Version 0.0.72
+
+**10.09.2026**
+
+**🧩 [Custom lexicon codegen](https://atproto.blue/cli/custom-lexicons/): `atp gen custom` turns any lexicon directory into a package of models, namespaces, subscription clients, and a `Client` subclass that composes with the SDK instead of forking it**
+
+**📚 Fully reworked [docs website](https://atproto.blue): a new theme, the API reference as a nested NSID tree, guides for every workflow with runnable examples, and a much better search**
+
+* Add `atp gen custom` to build a package from any lexicon directory by [@MarshalX](https://github.com/MarshalX) in [#727](https://github.com/MarshalX/atproto/pull/727)
+* Make codegen config-driven and fix references into non-emitted lexicons by [@MarshalX](https://github.com/MarshalX) in [#723](https://github.com/MarshalX/atproto/pull/723)
+* Resolve model references through the SDK so generated packages can live outside it by [@MarshalX](https://github.com/MarshalX) in [#724](https://github.com/MarshalX/atproto/pull/724)
+* Resolve records from generated packages at runtime and autogenerate `ClientRaw` by [@MarshalX](https://github.com/MarshalX) in [#725](https://github.com/MarshalX/atproto/pull/725)
+* Resolve records in unknown fields through the runtime registry by [@MarshalX](https://github.com/MarshalX) in [#728](https://github.com/MarshalX/atproto/pull/728)
+* Generate subscription clients and extract the subscription runtime by [@MarshalX](https://github.com/MarshalX) in [#729](https://github.com/MarshalX/atproto/pull/729)
+* Format generated code under the generator's own Ruff settings by [@MarshalX](https://github.com/MarshalX) in [#726](https://github.com/MarshalX/atproto/pull/726)
+* Add `RateLimitExceededError` with the `limit`, `remaining`, `reset_at`, and `retry_after` of the response by [@MarshalX](https://github.com/MarshalX) in [#738](https://github.com/MarshalX/atproto/pull/738)
+* Surface the server error message in request exceptions instead of the raw response by [@MarshalX](https://github.com/MarshalX) in [#722](https://github.com/MarshalX/atproto/pull/722)
+* Allow running the CLI with `python -m atproto_cli` by [@MarshalX](https://github.com/MarshalX) in [#730](https://github.com/MarshalX/atproto/pull/730)
+* Add guides, inline every example, and document custom lexicon codegen by [@MarshalX](https://github.com/MarshalX) in [#737](https://github.com/MarshalX/atproto/pull/737)
+* Restructure the docs into a nested NSID tree on the `sphinxawesome` theme by [@MarshalX](https://github.com/MarshalX) in [#735](https://github.com/MarshalX/atproto/pull/735)
+* Bump the docs stack to Sphinx 9 and pin a patched `autodoc-pydantic` by [@MarshalX](https://github.com/MarshalX) in [#734](https://github.com/MarshalX/atproto/pull/734)
+* Add robots.txt, trim autodoc typehints, and enable more MyST extensions by [@MarshalX](https://github.com/MarshalX) in [#736](https://github.com/MarshalX/atproto/pull/736)
+* Raise the DocSearch caps that limited every search to 10 results by [@MarshalX](https://github.com/MarshalX) in [#744](https://github.com/MarshalX/atproto/pull/744)
+* Summarize lexicon changes in the update PR title and body by [@MarshalX](https://github.com/MarshalX) in [#732](https://github.com/MarshalX/atproto/pull/732)
+* Mock the network suite-wide so no test reaches the real internet by [@MarshalX](https://github.com/MarshalX) in [#739](https://github.com/MarshalX/atproto/pull/739)
+* Update lexicons by [@MarshalX](https://github.com/MarshalX) in [#733](https://github.com/MarshalX/atproto/pull/733), [#745](https://github.com/MarshalX/atproto/pull/745) and [#747](https://github.com/MarshalX/atproto/pull/747)
+* Fix clones losing transport config and authentication by [@MarshalX](https://github.com/MarshalX) in [#738](https://github.com/MarshalX/atproto/pull/738)
+* Fix `clone()` breaking `Client` subclasses and make `atp gen` refuse to run from missing lexicons or unresolved refs by [@MarshalX](https://github.com/MarshalX) in [#749](https://github.com/MarshalX/atproto/pull/749)
+* Fix `login()` failing on a PDS that does not serve `app.bsky` by [@MarshalX](https://github.com/MarshalX) in [#731](https://github.com/MarshalX/atproto/pull/731)
+* Fix codegen references through the installed SDK and the login, shim, and strict-format regressions by [@MarshalX](https://github.com/MarshalX) in [#746](https://github.com/MarshalX/atproto/pull/746)
+* Fix model field types rendering as `ForwardRef` in the docs by [@MarshalX](https://github.com/MarshalX) in [#717](https://github.com/MarshalX/atproto/pull/717)
+* Fix the API reference's dead links, mangled field types, and truncated descriptions by [@MarshalX](https://github.com/MarshalX) in [#743](https://github.com/MarshalX/atproto/pull/743)
+* Fix `gen_api_docs.py` crashing on Python 3.9 by [@MarshalX](https://github.com/MarshalX) in [#741](https://github.com/MarshalX/atproto/pull/741)
+* Fix `update_lexicons.py` breaking on the stale docs pre-clean by [@MarshalX](https://github.com/MarshalX) in [#740](https://github.com/MarshalX/atproto/pull/740)
+
 ## Version 0.0.71
 
 **19.08.2026**
