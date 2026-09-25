@@ -23,21 +23,25 @@ class Params(base.ParamsModelBase):
 
     cursor: t.Optional[str] = None  #: Cursor.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
-    priority: t.Optional[bool] = None  #: Priority.
+    priority: t.Optional[bool] = None  #: Deprecated: this parameter is ignored.
     reasons: t.Optional[t.List[str]] = (
         None  #: Notification reasons to include in response. A reason that matches the reason property of #notification.
     )
-    seen_at: t.Optional[string_formats.DateTime] = None  #: Seen at.
+    seen_at: t.Optional[string_formats.DateTime] = (
+        None  #: Deprecated: this parameter is unsupported and will cause an error.
+    )
 
 
 class ParamsDict(t.TypedDict):
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
-    priority: te.NotRequired[t.Optional[bool]]  #: Priority.
+    priority: te.NotRequired[t.Optional[bool]]  #: Deprecated: this parameter is ignored.
     reasons: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: Notification reasons to include in response. A reason that matches the reason property of #notification.
-    seen_at: te.NotRequired[t.Optional[string_formats.DateTime]]  #: Seen at.
+    seen_at: te.NotRequired[
+        t.Optional[string_formats.DateTime]
+    ]  #: Deprecated: this parameter is unsupported and will cause an error.
 
 
 class Response(base.ResponseModelBase):
@@ -45,7 +49,7 @@ class Response(base.ResponseModelBase):
 
     notifications: t.List['models.AppBskyNotificationListNotifications.Notification']  #: Notifications.
     cursor: t.Optional[str] = None  #: Cursor.
-    priority: t.Optional[bool] = None  #: Priority.
+    priority: t.Optional[bool] = None  #: Deprecated: this field is no longer populated.
     seen_at: t.Optional[string_formats.DateTime] = None  #: Seen at.
 
 

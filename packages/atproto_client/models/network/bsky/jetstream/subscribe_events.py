@@ -74,6 +74,9 @@ class Commit(base.ModelBase):
     time: string_formats.DateTime  #: The event's display timestamp, microsecond precision: when Jetstream witnessed the event, unless an operator timestamp import overrode it. Timestamp cursors translate against the witnessed time, so after an import this value may not be a faithful resume position.
     cid: t.Optional[string_formats.Cid] = None  #: CID of the record. Absent for deletes.
     record: t.Optional['UnknownType'] = None  #: The record decoded to JSON. Absent for deletes.
+    witnessed_at: t.Optional[string_formats.DateTime] = (
+        None  #: When this Jetstream instance witnessed the event, microsecond precision. Never altered by timestamp imports and monotonic with seq on a single instance, so it is the value a ?cursor=<unix-microseconds> resume translates against. Unlike seq it is meaningful across instances (approximately: each instance witnesses independently), which makes it the portable resume position. Optional for compatibility with servers predating it.
+    )
 
     py_type: t.Literal['network.bsky.jetstream.subscribeEvents#commit'] = Field(
         default='network.bsky.jetstream.subscribeEvents#commit', alias='$type', frozen=True
@@ -87,6 +90,9 @@ class Identity(base.ModelBase):
     identity: 'models.ComAtprotoSyncSubscribeRepos.Identity'  #: The upstream event; its seq and time are the upstream relay's, not Jetstream's.
     seq: int  #: Seq.
     time: string_formats.DateTime  #: The time Jetstream witnessed this event, microsecond precision. Timestamp imports apply only to record (commit) events, so this is always the witnessed time.
+    witnessed_at: t.Optional[string_formats.DateTime] = (
+        None  #: When this Jetstream instance witnessed the event, microsecond precision. Never altered by timestamp imports and monotonic with seq on a single instance, so it is the value a ?cursor=<unix-microseconds> resume translates against. Unlike seq it is meaningful across instances (approximately: each instance witnesses independently), which makes it the portable resume position. Optional for compatibility with servers predating it.
+    )
 
     py_type: t.Literal['network.bsky.jetstream.subscribeEvents#identity'] = Field(
         default='network.bsky.jetstream.subscribeEvents#identity', alias='$type', frozen=True
@@ -100,6 +106,9 @@ class Account(base.ModelBase):
     did: string_formats.Did  #: Did.
     seq: int  #: Seq.
     time: string_formats.DateTime  #: The time Jetstream witnessed this event, microsecond precision. Timestamp imports apply only to record (commit) events, so this is always the witnessed time.
+    witnessed_at: t.Optional[string_formats.DateTime] = (
+        None  #: When this Jetstream instance witnessed the event, microsecond precision. Never altered by timestamp imports and monotonic with seq on a single instance, so it is the value a ?cursor=<unix-microseconds> resume translates against. Unlike seq it is meaningful across instances (approximately: each instance witnesses independently), which makes it the portable resume position. Optional for compatibility with servers predating it.
+    )
 
     py_type: t.Literal['network.bsky.jetstream.subscribeEvents#account'] = Field(
         default='network.bsky.jetstream.subscribeEvents#account', alias='$type', frozen=True
@@ -113,6 +122,9 @@ class Sync(base.ModelBase):
     seq: int  #: Seq.
     sync: 'models.ComAtprotoSyncSubscribeRepos.Sync'  #: The upstream event; its seq and time are the upstream relay's, not Jetstream's.
     time: string_formats.DateTime  #: The time Jetstream witnessed this event, microsecond precision. Timestamp imports apply only to record (commit) events, so this is always the witnessed time.
+    witnessed_at: t.Optional[string_formats.DateTime] = (
+        None  #: When this Jetstream instance witnessed the event, microsecond precision. Never altered by timestamp imports and monotonic with seq on a single instance, so it is the value a ?cursor=<unix-microseconds> resume translates against. Unlike seq it is meaningful across instances (approximately: each instance witnesses independently), which makes it the portable resume position. Optional for compatibility with servers predating it.
+    )
 
     py_type: t.Literal['network.bsky.jetstream.subscribeEvents#sync'] = Field(
         default='network.bsky.jetstream.subscribeEvents#sync', alias='$type', frozen=True

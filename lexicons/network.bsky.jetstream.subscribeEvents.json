@@ -81,6 +81,11 @@
           "format": "datetime",
           "description": "The event's display timestamp, microsecond precision: when Jetstream witnessed the event, unless an operator timestamp import overrode it. Timestamp cursors translate against the witnessed time, so after an import this value may not be a faithful resume position."
         },
+        "witnessedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When this Jetstream instance witnessed the event, microsecond precision. Never altered by timestamp imports and monotonic with seq on a single instance, so it is the value a ?cursor=<unix-microseconds> resume translates against. Unlike seq it is meaningful across instances (approximately: each instance witnesses independently), which makes it the portable resume position. Optional for compatibility with servers predating it."
+        },
         "rev": {
           "type": "string",
           "format": "tid",
@@ -116,6 +121,11 @@
           "format": "datetime",
           "description": "The time Jetstream witnessed this event, microsecond precision. Timestamp imports apply only to record (commit) events, so this is always the witnessed time."
         },
+        "witnessedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When this Jetstream instance witnessed the event, microsecond precision. Never altered by timestamp imports and monotonic with seq on a single instance, so it is the value a ?cursor=<unix-microseconds> resume translates against. Unlike seq it is meaningful across instances (approximately: each instance witnesses independently), which makes it the portable resume position. Optional for compatibility with servers predating it."
+        },
         "identity": {
           "type": "ref",
           "ref": "com.atproto.sync.subscribeRepos#identity",
@@ -135,6 +145,11 @@
           "format": "datetime",
           "description": "The time Jetstream witnessed this event, microsecond precision. Timestamp imports apply only to record (commit) events, so this is always the witnessed time."
         },
+        "witnessedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When this Jetstream instance witnessed the event, microsecond precision. Never altered by timestamp imports and monotonic with seq on a single instance, so it is the value a ?cursor=<unix-microseconds> resume translates against. Unlike seq it is meaningful across instances (approximately: each instance witnesses independently), which makes it the portable resume position. Optional for compatibility with servers predating it."
+        },
         "account": {
           "type": "ref",
           "ref": "com.atproto.sync.subscribeRepos#account",
@@ -153,6 +168,11 @@
           "type": "string",
           "format": "datetime",
           "description": "The time Jetstream witnessed this event, microsecond precision. Timestamp imports apply only to record (commit) events, so this is always the witnessed time."
+        },
+        "witnessedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When this Jetstream instance witnessed the event, microsecond precision. Never altered by timestamp imports and monotonic with seq on a single instance, so it is the value a ?cursor=<unix-microseconds> resume translates against. Unlike seq it is meaningful across instances (approximately: each instance witnesses independently), which makes it the portable resume position. Optional for compatibility with servers predating it."
         },
         "sync": {
           "type": "ref",
