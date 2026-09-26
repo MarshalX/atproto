@@ -116,6 +116,7 @@ implement `StateStore` and `SessionStore` interfaces:
 ```python
 from atproto_oauth.stores.base import StateStore, SessionStore
 
+
 class MyDatabaseStateStore(StateStore):
     async def save_state(self, state: OAuthState) -> None:
         # save to database

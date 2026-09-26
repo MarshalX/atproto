@@ -115,7 +115,7 @@ def _encode_component(value: str) -> str:
         if ch.isalnum() or ch in _UNRESERVED_CHARS or ch in _ALLOWED_SCOPE_CHARS:
             result.append(ch)
         else:
-            result.append('%{:02X}'.format(ord(ch)))
+            result.append(f'%{ord(ch):02X}')
     return ''.join(result)
 
 

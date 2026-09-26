@@ -68,7 +68,7 @@ _repo_parser = Parser(
             multiple=True,
             required=True,
             validate=_is_nsid_or_wildcard,
-            normalize=lambda value: (['*'] if any(v == '*' for v in value) else sorted(set(value))),
+            normalize=lambda value: ['*'] if any(v == '*' for v in value) else sorted(set(value)),
         ),
         'action': ParamSchema(
             multiple=True,
@@ -204,7 +204,7 @@ _rpc_parser = Parser(
             multiple=True,
             required=True,
             validate=_is_nsid_or_wildcard,
-            normalize=lambda value: (['*'] if len(value) > 1 and '*' in value else sorted(set(value))),
+            normalize=lambda value: ['*'] if len(value) > 1 and '*' in value else sorted(set(value)),
         ),
         'aud': ParamSchema(
             multiple=False,
