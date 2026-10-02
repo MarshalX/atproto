@@ -23,6 +23,12 @@ Ozone, the moderation tooling of the network.
 
       Account hosting history.
 
+   .. grid-item-card:: :octicon:`file-directory;1em;sd-mr-1` inbox
+      :link: /models/tools/ozone/inbox/index
+      :link-type: doc
+
+      Inbox.
+
    .. grid-item-card:: :octicon:`shield;1em;sd-mr-1` moderation
       :link: /models/tools/ozone/moderation/index
       :link-type: doc
@@ -89,6 +95,7 @@ Ozone, the moderation tooling of the network.
 
    communication </models/tools/ozone/communication/index>
    hosting </models/tools/ozone/hosting/index>
+   inbox </models/tools/ozone/inbox/index>
    moderation </models/tools/ozone/moderation/index>
    queue </models/tools/ozone/queue/index>
    report </models/tools/ozone/report/index>

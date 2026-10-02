@@ -21,6 +21,9 @@ class Data(base.DataModelBase):
     description: t.Optional[str] = None  #: Optional description of the queue.
     enabled: t.Optional[bool] = None  #: Enable or disable the queue.
     name: t.Optional[str] = None  #: New display name for the queue.
+    recommended_labels: t.Optional[t.List[str]] = (
+        None  #: Labels to recommend for this queue and use as fallback appeal routing mappings.
+    )
     recommended_policies: t.Optional[t.List[str]] = (
         None  #: Policy keys to recommend when actioning reports in this queue.
     )
@@ -31,6 +34,9 @@ class DataDict(t.TypedDict):
     description: te.NotRequired[t.Optional[str]]  #: Optional description of the queue.
     enabled: te.NotRequired[t.Optional[bool]]  #: Enable or disable the queue.
     name: te.NotRequired[t.Optional[str]]  #: New display name for the queue.
+    recommended_labels: te.NotRequired[
+        t.Optional[t.List[str]]
+    ]  #: Labels to recommend for this queue and use as fallback appeal routing mappings.
     recommended_policies: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: Policy keys to recommend when actioning reports in this queue.

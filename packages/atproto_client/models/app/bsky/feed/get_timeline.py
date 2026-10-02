@@ -23,6 +23,9 @@ class Params(base.ParamsModelBase):
     )
     cursor: t.Optional[str] = None  #: Cursor.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
+    since: t.Optional[str] = (
+        None  #: Return only items newer than the position identified by this cursor value, newest first. Use the startCursor from a previous response. The item at that position is not returned because the caller already holds it. When the bounded range is exhausted, the returned cursor equals this value so that pagination continues below the boundary.
+    )
 
 
 class ParamsDict(t.TypedDict):
@@ -31,6 +34,9 @@ class ParamsDict(t.TypedDict):
     ]  #: Variant 'algorithm' for timeline. Implementation-specific. NOTE: most feed flexibility has been moved to feed generator mechanism.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    since: te.NotRequired[
+        t.Optional[str]
+    ]  #: Return only items newer than the position identified by this cursor value, newest first. Use the startCursor from a previous response. The item at that position is not returned because the caller already holds it. When the bounded range is exhausted, the returned cursor equals this value so that pagination continues below the boundary.
 
 
 class Response(base.ResponseModelBase):
@@ -38,3 +44,6 @@ class Response(base.ResponseModelBase):
 
     feed: t.List['models.AppBskyFeedDefs.FeedViewPost']  #: Feed.
     cursor: t.Optional[str] = None  #: Cursor.
+    start_cursor: t.Optional[str] = (
+        None  #: Cursor identifying the newest item in this page. Pass it as since on a later request to fetch only newer content.
+    )

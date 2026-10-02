@@ -4809,6 +4809,40 @@ class AppBskyNotificationNamespace(AsyncNamespaceBase):
         super().__init__(client)
         self.declaration = AppBskyNotificationDeclarationRecord(self._client)
 
+    async def get_grouped_notifications(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyNotificationGetGroupedNotifications.Params,
+                models.AppBskyNotificationGetGroupedNotifications.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyNotificationGetGroupedNotifications.Response':
+        """[UNSTABLE - DO NOT USE THIS ENDPOINT WHILE THIS NOTE IS HERE] Enumerate notifications for the requesting account, pre-grouped for rendering. Supersedes listNotifications. Requires auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyNotificationGetGroupedNotifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyNotificationGetGroupedNotifications.Params',
+            get_or_create(params, models.AppBskyNotificationGetGroupedNotifications.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.notification.getGroupedNotifications',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyNotificationGetGroupedNotifications.Response)
+
     async def get_preferences(
         self,
         params: t.Optional[
@@ -11333,6 +11367,7 @@ class ToolsOzoneNamespace(AsyncNamespaceBase):
         super().__init__(client)
         self.communication = ToolsOzoneCommunicationNamespace(self._client)
         self.hosting = ToolsOzoneHostingNamespace(self._client)
+        self.inbox = ToolsOzoneInboxNamespace(self._client)
         self.moderation = ToolsOzoneModerationNamespace(self._client)
         self.queue = ToolsOzoneQueueNamespace(self._client)
         self.report = ToolsOzoneReportNamespace(self._client)
@@ -11484,6 +11519,40 @@ class ToolsOzoneHostingNamespace(AsyncNamespaceBase):
             'tools.ozone.hosting.getAccountHistory', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneHostingGetAccountHistory.Response)
+
+
+class ToolsOzoneInboxNamespace(AsyncNamespaceBase):
+    async def appeal_actioned_subject(
+        self,
+        data: t.Union[
+            models.ToolsOzoneInboxAppealActionedSubject.Data, models.ToolsOzoneInboxAppealActionedSubject.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneInboxDefs.SubjectView':
+        """Appeal a moderation action affecting the user's account or content.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneInboxDefs.SubjectView`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = t.cast(
+            'models.ToolsOzoneInboxAppealActionedSubject.Data',
+            get_or_create(data, models.ToolsOzoneInboxAppealActionedSubject.Data),
+        )
+        response = await self._client.invoke_procedure(
+            'tools.ozone.inbox.appealActionedSubject',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneInboxDefs.SubjectView)
 
 
 class ToolsOzoneModerationNamespace(AsyncNamespaceBase):
@@ -12363,7 +12432,7 @@ class ToolsOzoneReportNamespace(AsyncNamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ToolsOzoneReportGetLiveStats.Response':
-        """Get live report statistics from the past 24 hours. Filter by queue, moderator, or report type. Omit all parameters for aggregate stats.
+        """Get live report statistics for the current UTC calendar day. Filter by queue, moderator, or report type. Omit all parameters for aggregate stats.
 
         Args:
             params: Parameters.
@@ -12523,7 +12592,7 @@ class ToolsOzoneReportNamespace(AsyncNamespaceBase):
         data: t.Union[models.ToolsOzoneReportRefreshStats.Data, models.ToolsOzoneReportRefreshStats.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ToolsOzoneReportRefreshStats.Response':
-        """Recompute report statistics for a date range. Useful for backfilling after failures or data corrections.
+        """Recompute report statistics for a date range.
 
         Args:
             data: Input data.

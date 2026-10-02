@@ -100,6 +100,12 @@ class FeedViewPost(base.ModelBase):
     feed_context: te.Annotated[t.Optional[str], Field(max_length=2000)] = (
         None  #: Context provided by feed generator that may be passed back alongside interactions.
     )
+    op_thread_post_count: t.Optional[int] = (
+        None  #: The total number of posts in the contiguous OP thread that this post belongs to. Only present when this post is part of the OP thread.
+    )
+    op_thread_post_index: t.Optional[int] = (
+        None  #: The 1-indexed position of this post within the contiguous OP thread. Only present when this post is part of the OP thread.
+    )
     reason: t.Optional[
         unknown_union.OpenUnion[t.Union['models.AppBskyFeedDefs.ReasonRepost', 'models.AppBskyFeedDefs.ReasonPin']]
     ] = None  #: Reason.

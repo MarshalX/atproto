@@ -115,6 +115,9 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.labeler import service as AppBskyLabelerService
     from atproto_client.models.app.bsky.notification import declaration as AppBskyNotificationDeclaration
     from atproto_client.models.app.bsky.notification import defs as AppBskyNotificationDefs
+    from atproto_client.models.app.bsky.notification import (
+        get_grouped_notifications as AppBskyNotificationGetGroupedNotifications,
+    )
     from atproto_client.models.app.bsky.notification import get_preferences as AppBskyNotificationGetPreferences
     from atproto_client.models.app.bsky.notification import get_unread_count as AppBskyNotificationGetUnreadCount
     from atproto_client.models.app.bsky.notification import (
@@ -398,6 +401,8 @@ if t.TYPE_CHECKING:
     from atproto_client.models.tools.ozone.communication import list_templates as ToolsOzoneCommunicationListTemplates
     from atproto_client.models.tools.ozone.communication import update_template as ToolsOzoneCommunicationUpdateTemplate
     from atproto_client.models.tools.ozone.hosting import get_account_history as ToolsOzoneHostingGetAccountHistory
+    from atproto_client.models.tools.ozone.inbox import appeal_actioned_subject as ToolsOzoneInboxAppealActionedSubject
+    from atproto_client.models.tools.ozone.inbox import defs as ToolsOzoneInboxDefs
     from atproto_client.models.tools.ozone.moderation import (
         cancel_scheduled_actions as ToolsOzoneModerationCancelScheduledActions,
     )
@@ -602,6 +607,7 @@ class _Ids:
     AppBskyLabelerService: str = 'app.bsky.labeler.service'
     AppBskyNotificationDeclaration: str = 'app.bsky.notification.declaration'
     AppBskyNotificationDefs: str = 'app.bsky.notification.defs'
+    AppBskyNotificationGetGroupedNotifications: str = 'app.bsky.notification.getGroupedNotifications'
     AppBskyNotificationGetPreferences: str = 'app.bsky.notification.getPreferences'
     AppBskyNotificationGetUnreadCount: str = 'app.bsky.notification.getUnreadCount'
     AppBskyNotificationListActivitySubscriptions: str = 'app.bsky.notification.listActivitySubscriptions'
@@ -831,6 +837,8 @@ class _Ids:
     ToolsOzoneCommunicationListTemplates: str = 'tools.ozone.communication.listTemplates'
     ToolsOzoneCommunicationUpdateTemplate: str = 'tools.ozone.communication.updateTemplate'
     ToolsOzoneHostingGetAccountHistory: str = 'tools.ozone.hosting.getAccountHistory'
+    ToolsOzoneInboxAppealActionedSubject: str = 'tools.ozone.inbox.appealActionedSubject'
+    ToolsOzoneInboxDefs: str = 'tools.ozone.inbox.defs'
     ToolsOzoneModerationCancelScheduledActions: str = 'tools.ozone.moderation.cancelScheduledActions'
     ToolsOzoneModerationDefs: str = 'tools.ozone.moderation.defs'
     ToolsOzoneModerationEmitEvent: str = 'tools.ozone.moderation.emitEvent'

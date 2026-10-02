@@ -23,6 +23,12 @@ Notifications, preferences, and push registration.
 
       Shared type definitions.
 
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getGroupedNotifications
+      :link: /models/app/bsky/notification/getGroupedNotifications
+      :link-type: doc
+
+      [UNSTABLE - DO NOT USE THIS ENDPOINT WHILE THIS NOTE IS HERE] Enumerate notifications for the requesting account, pre-grouped for rendering.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getPreferences
       :link: /models/app/bsky/notification/getPreferences
       :link-type: doc
@@ -89,6 +95,7 @@ Notifications, preferences, and push registration.
 
    declaration </models/app/bsky/notification/declaration>
    defs </models/app/bsky/notification/defs>
+   getGroupedNotifications </models/app/bsky/notification/getGroupedNotifications>
    getPreferences </models/app/bsky/notification/getPreferences>
    getUnreadCount </models/app/bsky/notification/getUnreadCount>
    listActivitySubscriptions </models/app/bsky/notification/listActivitySubscriptions>

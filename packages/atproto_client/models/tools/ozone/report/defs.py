@@ -193,7 +193,7 @@ class ReportView(base.ModelBase):
     ]  #: Current status of the report.
     subject: 'models.ToolsOzoneModerationDefs.SubjectView'  #: The subject that was reported with full details.
     action_event_ids: t.Optional[t.List[int]] = (
-        None  #: Array of moderation event IDs representing actions taken on this report (sorted DESC, most recent first).
+        None  #: Array of moderation event IDs representing actions taken on this report, in append order (most recently linked event last).
     )
     action_note: t.Optional[str] = None  #: Note sent to reporter when report was actioned.
     actions: t.Optional[t.List['models.ToolsOzoneModerationDefs.ModEventView']] = (
@@ -328,17 +328,29 @@ class ReportActivityView(base.ModelBase):
 class LiveStats(base.ModelBase):
     """Definition model for :obj:`tools.ozone.report.defs`. Live statistics for reports for the current calendar day, filterable by queue, moderator, or report type."""
 
+    acknowledged_count: t.Optional[int] = (
+        None  #: Number of closures whose last report action is not label, tag, or takedown.
+    )
     action_rate: t.Optional[int] = (
-        None  #: Percentage of reports actioned (actionedCount / inboundCount * 100), rounded to nearest integer.
+        None  #: Percentage of closures actioned (actionedCount / closedCount * 100), rounded to nearest integer.
     )
-    actioned_count: t.Optional[int] = None  #: Number of reports closed today.
-    avg_handling_time_sec: t.Optional[int] = (
-        None  #: Average time in seconds from report creation (or moderator assignment) to close.
+    actioned_count: t.Optional[int] = None  #: Number of closures whose last report action is label, tag, or takedown.
+    aht_duration_sec: t.Optional[int] = None  #: Sum of report assignment-to-close seconds.
+    aht_sample_count: t.Optional[int] = None  #: Number of assigned closed-report samples in ahtDurationSec.
+    avg_handling_time_sec: t.Optional[int] = None  #: Average handling time in seconds from report assignment to close.
+    avg_resolution_time_sec: t.Optional[int] = (
+        None  #: Average resolution time in seconds from report creation to close.
     )
-    escalated_count: t.Optional[int] = None  #: Number of reports escalated today.
-    inbound_count: t.Optional[int] = None  #: Reports received today.
+    closed_count: t.Optional[int] = None  #: Number of close transitions.
+    escalated_count: t.Optional[int] = None  #: Number of reports escalated.
+    inbound_count: t.Optional[int] = None  #: Reports received.
+    label_action_count: t.Optional[int] = None  #: Closures whose last report action is a label event.
     last_updated: t.Optional[string_formats.DateTime] = None  #: When these statistics were last computed.
     pending_count: t.Optional[int] = None  #: Number of reports currently not closed.
+    resolution_duration_sec: t.Optional[int] = None  #: Sum of report creation-to-close seconds.
+    resolution_sample_count: t.Optional[int] = None  #: Number of closed-report samples in resolutionDurationSec.
+    tag_action_count: t.Optional[int] = None  #: Closures whose last report action is a tag event.
+    takedown_action_count: t.Optional[int] = None  #: Closures whose last report action is a takedown event.
 
     py_type: t.Literal['tools.ozone.report.defs#liveStats'] = Field(
         default='tools.ozone.report.defs#liveStats', alias='$type', frozen=True
@@ -349,17 +361,33 @@ class HistoricalStats(base.ModelBase):
     """Definition model for :obj:`tools.ozone.report.defs`. A single daily snapshot of report statistics for a calendar date."""
 
     date: str  #: The calendar date this snapshot covers (YYYY-MM-DD).
+    acknowledged_count: t.Optional[int] = (
+        None  #: Number of closures whose last report action is not label, tag, or takedown during this day.
+    )
     action_rate: t.Optional[int] = (
-        None  #: Percentage of reports actioned (actionedCount / inboundCount * 100), rounded to nearest integer.
+        None  #: Percentage of closures actioned (actionedCount / closedCount * 100), rounded to nearest integer.
     )
-    actioned_count: t.Optional[int] = None  #: Number of reports closed during this day.
-    avg_handling_time_sec: t.Optional[int] = (
-        None  #: Average time in seconds from report creation (or moderator assignment) to close.
+    actioned_count: t.Optional[int] = (
+        None  #: Number of closures whose last report action is label, tag, or takedown during this day.
     )
+    aht_duration_sec: t.Optional[int] = None  #: Sum of report assignment-to-close seconds for this day's samples.
+    aht_sample_count: t.Optional[int] = None  #: Number of assigned closed-report samples in ahtDurationSec.
+    avg_handling_time_sec: t.Optional[int] = None  #: Average handling time in seconds from report assignment to close.
+    avg_resolution_time_sec: t.Optional[int] = (
+        None  #: Average resolution time in seconds from report creation to close.
+    )
+    closed_count: t.Optional[int] = None  #: Number of close transitions during this day.
     computed_at: t.Optional[string_formats.DateTime] = None  #: When this snapshot was last computed.
     escalated_count: t.Optional[int] = None  #: Number of reports escalated during this day.
     inbound_count: t.Optional[int] = None  #: Reports received during this day.
+    label_action_count: t.Optional[int] = None  #: Closures whose last report action is a label event during this day.
     pending_count: t.Optional[int] = None  #: Number of reports not closed at time of computation.
+    resolution_duration_sec: t.Optional[int] = None  #: Sum of report creation-to-close seconds for this day's samples.
+    resolution_sample_count: t.Optional[int] = None  #: Number of closed-report samples in resolutionDurationSec.
+    tag_action_count: t.Optional[int] = None  #: Closures whose last report action is a tag event during this day.
+    takedown_action_count: t.Optional[int] = (
+        None  #: Closures whose last report action is a takedown event during this day.
+    )
 
     py_type: t.Literal['tools.ozone.report.defs#historicalStats'] = Field(
         default='tools.ozone.report.defs#historicalStats', alias='$type', frozen=True
