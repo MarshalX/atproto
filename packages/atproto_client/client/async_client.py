@@ -19,9 +19,9 @@ from atproto_client.client.methods_mixin import SessionMethodsMixin, TimeMethods
 from atproto_client.client.methods_mixin.headers import HeadersConfigurationMethodsMixin
 from atproto_client.client.methods_mixin.session import AsyncSessionDispatchMixin
 from atproto_client.client.session import Session, SessionEvent, SessionResponse
-from atproto_client.exceptions import LoginRequiredError
+from atproto_client.exceptions import BadRequestError, LoginRequiredError
 from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
-from atproto_client.utils import TextBuilder
+from atproto_client.utils import TextBuilder, facet_detection
 
 if t.TYPE_CHECKING:
     from atproto_client.client.base import InvokeType
@@ -148,6 +148,56 @@ class AsyncClient(
                 stacklevel=3,
             )
             return None
+
+    async def detect_facets(self, text: str) -> t.List[models.AppBskyRichtextFacet.Main]:
+        """Detect facets in the text: mentions, links, hashtags and cashtags.
+
+        The handles of the mentions are resolved to DIDs, which makes network requests.
+        Mentions of handles that don't resolve are dropped.
+        Use :func:`atproto_client.utils.facet_detection.detect_facets` to detect them without network requests.
+
+        Example:
+            >>> from atproto import Client
+            >>> client = Client()
+            >>> client.login('my-handle', 'my-password')
+            >>> text = 'Hello @bsky.app! #pythontime https://atproto.blue'
+            >>> client.send_post(text, facets=client.detect_facets(text))
+
+        Args:
+            text: Text to detect facets in.
+
+        Returns:
+            :obj:`list` of :obj:`models.AppBskyRichtextFacet.Main`: Detected facets sorted by position.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        facets = facet_detection.detect_facets(text)
+
+        dids: t.Dict[str, t.Optional[str]] = {}
+        for mention in facet_detection.detect_mentions(text):
+            if mention.handle not in dids:
+                try:
+                    response = await self.resolve_handle(mention.handle)
+                    dids[mention.handle] = response.did
+                except BadRequestError:
+                    dids[mention.handle] = None  # the handle doesn't resolve
+
+            did = dids[mention.handle]
+            if did is None:
+                continue
+
+            facets.append(
+                models.AppBskyRichtextFacet.Main(
+                    features=[models.AppBskyRichtextFacet.Mention(did=did)],
+                    index=models.AppBskyRichtextFacet.ByteSlice(
+                        byte_start=mention.byte_start,
+                        byte_end=mention.byte_end,
+                    ),
+                )
+            )
+
+        return sorted(facets, key=lambda facet: facet.index.byte_start)
 
     async def send_post(
         self,

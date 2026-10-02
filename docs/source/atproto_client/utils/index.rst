@@ -5,3 +5,4 @@ Utils
    :maxdepth: 4
 
    text_builder
+   facet_detection
