@@ -25,6 +25,9 @@ class Data(base.DataModelBase):
         None  #: Collection name for record subjects. Required if subjectTypes includes 'record'.
     )
     description: t.Optional[str] = None  #: Optional description of the queue.
+    recommended_labels: t.Optional[t.List[str]] = (
+        None  #: Labels to recommend for this queue and use as fallback appeal routing mappings.
+    )
     recommended_policies: t.Optional[t.List[str]] = (
         None  #: Policy keys to recommend when actioning reports in this queue.
     )
@@ -42,6 +45,9 @@ class DataDict(t.TypedDict):
         t.Optional[string_formats.Nsid]
     ]  #: Collection name for record subjects. Required if subjectTypes includes 'record'.
     description: te.NotRequired[t.Optional[str]]  #: Optional description of the queue.
+    recommended_labels: te.NotRequired[
+        t.Optional[t.List[str]]
+    ]  #: Labels to recommend for this queue and use as fallback appeal routing mappings.
     recommended_policies: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: Policy keys to recommend when actioning reports in this queue.

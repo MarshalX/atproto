@@ -57,7 +57,7 @@ Report intake and handling.
       :link: /models/tools/ozone/report/getLiveStats
       :link-type: doc
 
-      Get live report statistics from the past 24 hours.
+      Get live report statistics for the current UTC calendar day.
 
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getReport
       :link: /models/tools/ozone/report/getReport

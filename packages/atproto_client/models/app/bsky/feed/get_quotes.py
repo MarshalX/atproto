@@ -26,6 +26,9 @@ class Params(base.ParamsModelBase):
     )
     cursor: t.Optional[str] = None  #: Cursor.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
+    sort: t.Optional[t.Union[t.Literal['latest', 'top'], str]] = (
+        None  #: Ordering of results. 'latest' (default when unset) is newest first; 'top' orders quotes by their like count.
+    )
 
 
 class ParamsDict(t.TypedDict):
@@ -35,6 +38,9 @@ class ParamsDict(t.TypedDict):
     ]  #: If supplied, filters to quotes of specific version (by CID) of the post record.
     cursor: te.NotRequired[t.Optional[str]]  #: Cursor.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
+    sort: te.NotRequired[
+        t.Optional[t.Union[t.Literal['latest', 'top'], str]]
+    ]  #: Ordering of results. 'latest' (default when unset) is newest first; 'top' orders quotes by their like count.
 
 
 class Response(base.ResponseModelBase):

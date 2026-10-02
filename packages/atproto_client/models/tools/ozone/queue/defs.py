@@ -31,6 +31,9 @@ class QueueView(base.ModelBase):
     )
     deleted_at: t.Optional[string_formats.DateTime] = None  #: When the queue was deleted, if applicable.
     description: t.Optional[str] = None  #: Optional description of the queue.
+    recommended_labels: t.Optional[t.List[str]] = (
+        None  #: Labels recommended for this queue and used as a fallback when routing label appeals.
+    )
     recommended_policies: t.Optional[t.List[str]] = (
         None  #: Policy keys recommended when actioning reports in this queue.
     )
