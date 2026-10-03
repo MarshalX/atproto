@@ -1,9 +1,7 @@
 """Tests for facet detection.
 
 Ported from the TypeScript SDK: https://github.com/bluesky-social/atproto/blob/main/packages/api/tests/rich-text-detection.test.ts
-
-The TypeScript tests check the segments of a ``RichText``. There is no such class here, so the tests check the byte
-slices (and the features) of the detected facets instead.
+with some additional tests added to verify ported behaviour.
 """
 
 import typing as t
@@ -108,6 +106,11 @@ def _tags(text: str, *, cashtags: bool = False) -> t.Tuple[t.List[str], t.List[t
         ('see example.COM now', []),
         # the scheme is case-sensitive too
         ('see HTTPS://example.com now', []),
+        # Improvement on TypeScript SDK - domains w/o schemes starting with "http" are not mistaken for full URLs
+        ('try httpbin.org now', [('httpbin.org', 'https://httpbin.org')]),
+        ('try httpbin.org/get?a=b now', [('httpbin.org/get?a=b', 'https://httpbin.org/get?a=b')]),
+        ('try https://httpbin.org now', [('https://httpbin.org', 'https://httpbin.org')]),
+        ('try httpfoo.xyzzy now', []),
         # not links
         ('not.. a..url ..here', []),
         ('e.g.', []),

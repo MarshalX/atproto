@@ -93,7 +93,7 @@ def _detect_links(text: str) -> t.List[models.AppBskyRichtextFacet.Main]:
         uri = match.group(2)
         start, end = match.span(2)
 
-        if not uri.startswith('http'):
+        if not uri.startswith(('http://', 'https://')):
             domain = match.group('domain')
             if not domain or not _is_valid_domain(domain):
                 continue
@@ -140,16 +140,10 @@ def _detect_cashtags(text: str) -> t.List[models.AppBskyRichtextFacet.Main]:
 
     for match in CASHTAG_REGEX.finditer(text):
         ticker = match.group(2).upper()  # normalize to uppercase
+        tag = '$' + ticker  # stored with the dollar sign
 
         start = match.end(1)  # Dollar sign ($) position
-        facets.append(
-            _create_facet(
-                text,
-                start,
-                start + 1 + len(ticker),
-                models.AppBskyRichtextFacet.Tag(tag='$' + ticker),  # stored with the dollar sign
-            )
-        )
+        facets.append(_create_facet(text, start, start + 1 + len(ticker), models.AppBskyRichtextFacet.Tag(tag=tag)))
 
     return facets
 

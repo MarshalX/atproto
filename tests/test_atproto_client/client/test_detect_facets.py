@@ -1,11 +1,16 @@
-"""`detect_facets()` resolves the handles of the mentions. The requests are mocked, like the TypeScript tests do."""
-
 import typing as t
+import warnings
 
 import pytest
 from atproto_client import AsyncClient, Client, models
 from atproto_client.client.base import AsyncClientBase, ClientBase
-from atproto_client.exceptions import BadRequestError, NetworkError
+from atproto_client.exceptions import (
+    BadRequestError,
+    NetworkError,
+    RateLimitExceededError,
+    RequestException,
+    UnauthorizedError,
+)
 from atproto_client.models.common import XrpcError
 from atproto_client.request import Response
 
@@ -107,13 +112,67 @@ def test_detect_facets_does_not_resolve_anything_without_mentions(resolved_handl
     assert resolved_handles == []
 
 
-def test_detect_facets_does_not_hide_other_errors(monkeypatch: pytest.MonkeyPatch) -> None:
-    def fake_invoke(self: t.Any, invoke_type: t.Any, **kwargs: t.Any) -> Response:
-        raise NetworkError(Response(success=False, status_code=502, content=None, headers={}))
+def _failure(status_code: int) -> Response:
+    return Response(success=False, status_code=status_code, content=None, headers={})
 
-    monkeypatch.setattr(ClientBase, '_invoke', fake_invoke)
 
-    with pytest.raises(NetworkError):
+_LOOKUP_ERRORS = [
+    NetworkError(_failure(502)),
+    RateLimitExceededError(_failure(429)),
+    UnauthorizedError(_failure(401)),
+    RequestException(_failure(500)),
+]
+
+
+@pytest.fixture
+def fail_requests(monkeypatch: pytest.MonkeyPatch) -> t.Callable[[Exception], None]:
+    """Return a function that makes every request of both clients raise the given exception."""
+
+    def install(error: Exception) -> None:
+        def fake_invoke(self: t.Any, invoke_type: t.Any, **kwargs: t.Any) -> Response:
+            raise error
+
+        async def fake_async_invoke(self: t.Any, invoke_type: t.Any, **kwargs: t.Any) -> Response:
+            raise error
+
+        monkeypatch.setattr(ClientBase, '_invoke', fake_invoke)
+        monkeypatch.setattr(AsyncClientBase, '_invoke', fake_async_invoke)
+
+    return install
+
+
+@pytest.mark.parametrize('error', _LOOKUP_ERRORS, ids=lambda error: type(error).__name__)
+def test_detect_facets_warns_and_drops_mentions_when_the_lookup_fails(
+    fail_requests: t.Callable[[Exception], None], error: Exception
+) -> None:
+    fail_requests(error)
+    text = '@handle.com #tag'
+
+    with pytest.warns(UserWarning, match="Could not resolve the handle 'handle.com'"):
+        facets = Client().detect_facets(text)
+
+    assert _summary(text, facets) == [('#tag', 'tag')]
+
+
+def test_detect_facets_warns_once_per_handle(fail_requests: t.Callable[[Exception], None]) -> None:
+    fail_requests(NetworkError(_failure(502)))
+
+    with pytest.warns(UserWarning) as warnings_record:
+        Client().detect_facets('@a.com @a.com @b.com @a.com')
+
+    assert [str(warning.message).split("'")[1] for warning in warnings_record] == ['a.com', 'b.com']
+
+
+def test_detect_facets_does_not_warn_when_the_handle_does_not_resolve(resolved_handles: t.List[str]) -> None:
+    with warnings.catch_warnings():
+        warnings.simplefilter('error')
+        assert Client().detect_facets(f'@{_UNRESOLVABLE}') == []
+
+
+def test_detect_facets_does_not_hide_other_exceptions(fail_requests: t.Callable[[Exception], None]) -> None:
+    fail_requests(ValueError('a bug, not a failed lookup'))
+
+    with pytest.raises(ValueError, match='a bug'):
         Client().detect_facets('@handle.com')
 
 
@@ -125,3 +184,16 @@ async def test_async_detect_facets_resolves_mentions(resolved_handles: t.List[st
 
     assert _summary(text, facets) == [('@handle.com', 'did:fake:handle.com'), ('#tag', 'tag')]
     assert resolved_handles == [_UNRESOLVABLE, 'handle.com']
+
+
+@pytest.mark.asyncio
+async def test_async_detect_facets_warns_and_drops_mentions_when_the_lookup_fails(
+    fail_requests: t.Callable[[Exception], None],
+) -> None:
+    fail_requests(NetworkError(_failure(502)))
+    text = '@handle.com #tag'
+
+    with pytest.warns(UserWarning, match="Could not resolve the handle 'handle.com'"):
+        facets = await AsyncClient().detect_facets(text)
+
+    assert _summary(text, facets) == [('#tag', 'tag')]

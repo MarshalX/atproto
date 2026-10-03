@@ -3,28 +3,29 @@ r"""Regular expressions for detecting facets in text.
 Ported from the ``@atproto/api`` TypeScript SDK:
 https://github.com/bluesky-social/atproto/blob/main/packages/api/src/rich-text/util.ts
 
-The goal is to behave identically to the TypeScript regexes, but ``re`` differs from JavaScript in a few places:
+The goal is to match the behaviour of the TypeScript regexes as closely as possible.
+``re`` differs from TypeScript in a few places:
 
 * ``\s`` and ``\p{P}`` are written as explicit character classes (see ``_S`` and ``_P``)
 * ``\d`` is written ``0-9``, because in Python it matches every Unicode digit
 * ``$`` is written ``\Z``, because in Python it also matches before a trailing newline
-* ``re.IGNORECASE`` matches the ``i`` flag, with ``re.ASCII`` added so case folding stays ASCII only (as in JavaScript)
-* ``\b`` is ASCII only in JavaScript, so the mention regex uses ``re.ASCII`` too
+* ``re.IGNORECASE`` matches the ``i`` flag, with ``re.ASCII`` added so case folding stays ASCII only (as in TypeScript)
+* ``\b`` is ASCII only in TypeScript, so the mention regex uses ``re.ASCII`` too
 """
 
 import re
 
-# Whitespace - JavaScript's `\s`
+# Whitespace - TypeScript's `\s`
 #
-# Python's `\s` matches a slight different set to JavaScript's:
-# * Python matches `\x1c-\x1f` and `\x85` (control characters), JavaScript doesn't
-# * Python doesn't match `\ufeff` (byte order mark), JavaScript does
+# Using an explicit match, because Python's native `\s` has two issues:
+# * Minor: `\s` also matches `\x1c-\x1f` and `\x85`, and not `\ufeff` (rare control/format chars)
+# * Major: with `re.ASCII` (URL/mention regexes) `\s` is ASCII-only, so Unicode spaces (e.g. `\u3000`) aren't matched
 _S = r'\t\n\v\f\r \u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff'
 
-# Punctuation - JavaScript's `\p{P}`
+# Punctuation - TypeScript's `\p{P}`
 #
-# `re` doesn't have an equivilant to JavaScript's Unicode punctuation selector `\p{P}`.
-# So here an explicit list of all Unicode punctunation code points is created -
+# `re` doesn't have an equivalent to TypeScript's Unicode punctuation selector `\p{P}`.
+# So here an explicit list of all Unicode punctuation code points is created
 # (every code point whose category starts with ``P`` as of Unicode 16.0.0).
 _P = (
     r'\u0021-\u0023\u0025-\u002a\u002c-\u002f\u003a-\u003b\u003f-\u0040\u005b-\u005d\u005f\u007b\u007d'
@@ -69,7 +70,7 @@ URL_REGEX = re.compile(
 
 TRAILING_PUNCTUATION_REGEX = re.compile(rf'[{_P}]+\Z')
 
-# Hardcode emoji modifier & zero-width spaces (likely incomplete)
+# Hardcoded emoji modifier & zero-width spaces (likely incomplete)
 _EMOJI = r'\ufe0f'
 _ZERO_WIDTH = r'\u00ad\u2060\u200a\u200b\u200c\u200d\u20e2'
 TAG_REGEX = re.compile(
