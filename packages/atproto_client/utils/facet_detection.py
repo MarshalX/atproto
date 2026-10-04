@@ -149,7 +149,7 @@ def _detect_cashtags(text: str) -> t.List[models.AppBskyRichtextFacet.Main]:
 
 
 def detect_facets(text: str) -> t.List[models.AppBskyRichtextFacet.Main]:
-    """Detect non-@mention facets in the text: links, #tags and $cashtags.
+    """Detect non-``@mention`` facets in the text: links, ``#tags`` and ``$cashtags``.
 
     Args:
         text: Text to detect facets in.
