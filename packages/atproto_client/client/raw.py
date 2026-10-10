@@ -19,7 +19,9 @@ class ClientRaw(ClientBase):
     com: 'sync_ns.ComNamespace'
     internal: 'sync_ns.InternalNamespace'
     network: 'sync_ns.NetworkNamespace'
+    place: 'sync_ns.PlaceNamespace'
     site: 'sync_ns.SiteNamespace'
+    social: 'sync_ns.SocialNamespace'
     tools: 'sync_ns.ToolsNamespace'
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
@@ -30,5 +32,7 @@ class ClientRaw(ClientBase):
         self.com = sync_ns.ComNamespace(self)
         self.internal = sync_ns.InternalNamespace(self)
         self.network = sync_ns.NetworkNamespace(self)
+        self.place = sync_ns.PlaceNamespace(self)
         self.site = sync_ns.SiteNamespace(self)
+        self.social = sync_ns.SocialNamespace(self)
         self.tools = sync_ns.ToolsNamespace(self)

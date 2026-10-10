@@ -10,6 +10,7 @@ if t.TYPE_CHECKING:
 
 UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyActorContentVisibilityDeclaration.Record',
+    'models.AppBskyActorLink.Record',
     'models.AppBskyActorProfile.Record',
     'models.AppBskyActorStatus.Record',
     'models.AppBskyFeedGenerator.Record',
@@ -31,11 +32,18 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.ChatBskyActorDeclaration.Record',
     'models.ComAtprotoLexiconSchema.Record',
     'models.ComGermnetworkDeclaration.Record',
+    'models.PlaceStreamChatPinnedRecord.Record',
+    'models.PlaceStreamChatProfile.Record',
+    'models.PlaceStreamLivestream.Record',
     'models.SiteStandardDocument.Record',
     'models.SiteStandardGraphRecommend.Record',
     'models.SiteStandardGraphSubscription.Record',
     'models.SiteStandardPublication.Record',
     'models.SiteStandardThemeBasic.Record',
+    'models.SocialGrainFavorite.Record',
+    'models.SocialGrainGalleryItem.Record',
+    'models.SocialGrainGallery.Record',
+    'models.SocialGrainPhoto.Record',
 ]
 if t.TYPE_CHECKING:
     UnknownType: te.TypeAlias = te.Annotated[

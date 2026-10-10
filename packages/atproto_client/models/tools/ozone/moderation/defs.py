@@ -343,6 +343,12 @@ class ModEventReport(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.defs`. Report a subject."""
 
     report_type: 'models.ComAtprotoModerationDefs.ReasonType'  #: Report type.
+    appeal_action_id: t.Optional[int] = None  #: Appeal action id.
+    appeal_action_type: t.Optional[str] = None  #: Action reference type recorded when this appeal was submitted.
+    appeal_label: t.Optional[str] = None  #: Appeal label.
+    appeal_submitted_by: t.Optional[string_formats.Did] = (
+        None  #: Moderator who submitted this appeal on behalf of the affected account. Returned by moderator event APIs.
+    )
     comment: t.Optional[str] = None  #: Comment.
     is_reporter_muted: t.Optional[bool] = (
         None  #: Set to true if the reporter was muted from reporting at the time of the event. These reports won't impact the reviewState of the subject.

@@ -12,6 +12,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.actor import get_profile as AppBskyActorGetProfile
     from atproto_client.models.app.bsky.actor import get_profiles as AppBskyActorGetProfiles
     from atproto_client.models.app.bsky.actor import get_suggestions as AppBskyActorGetSuggestions
+    from atproto_client.models.app.bsky.actor import link as AppBskyActorLink
     from atproto_client.models.app.bsky.actor import profile as AppBskyActorProfile
     from atproto_client.models.app.bsky.actor import put_preferences as AppBskyActorPutPreferences
     from atproto_client.models.app.bsky.actor import search_actors as AppBskyActorSearchActors
@@ -135,6 +136,9 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
     from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
     from atproto_client.models.app.bsky.unspecced import get_age_assurance_state as AppBskyUnspeccedGetAgeAssuranceState
+    from atproto_client.models.app.bsky.unspecced import (
+        get_atmosphere_explore_tab as AppBskyUnspeccedGetAtmosphereExploreTab,
+    )
     from atproto_client.models.app.bsky.unspecced import get_config as AppBskyUnspeccedGetConfig
     from atproto_client.models.app.bsky.unspecced import (
         get_onboarding_suggested_starter_packs as AppBskyUnspeccedGetOnboardingSuggestedStarterPacks,
@@ -380,21 +384,30 @@ if t.TYPE_CHECKING:
     from atproto_client.models.com.germnetwork import declaration as ComGermnetworkDeclaration
     from atproto_client.models.internal.bsky.actor import get_profiles as InternalBskyActorGetProfiles
     from atproto_client.models.network.bsky.jetstream import get_block as NetworkBskyJetstreamGetBlock
-    from atproto_client.models.network.bsky.jetstream import get_import_status as NetworkBskyJetstreamGetImportStatus
     from atproto_client.models.network.bsky.jetstream import get_segment as NetworkBskyJetstreamGetSegment
     from atproto_client.models.network.bsky.jetstream import (
         get_zstd_dictionary as NetworkBskyJetstreamGetZstdDictionary,
     )
-    from atproto_client.models.network.bsky.jetstream import import_timestamps as NetworkBskyJetstreamImportTimestamps
     from atproto_client.models.network.bsky.jetstream import list_segments as NetworkBskyJetstreamListSegments
     from atproto_client.models.network.bsky.jetstream import plan_snapshot as NetworkBskyJetstreamPlanSnapshot
     from atproto_client.models.network.bsky.jetstream import subscribe_events as NetworkBskyJetstreamSubscribeEvents
+    from atproto_client.models.place.stream import defs as PlaceStreamDefs
+    from atproto_client.models.place.stream import livestream as PlaceStreamLivestream
+    from atproto_client.models.place.stream.badge import defs as PlaceStreamBadgeDefs
+    from atproto_client.models.place.stream.chat import defs as PlaceStreamChatDefs
+    from atproto_client.models.place.stream.chat import pinned_record as PlaceStreamChatPinnedRecord
+    from atproto_client.models.place.stream.chat import profile as PlaceStreamChatProfile
     from atproto_client.models.site.standard import document as SiteStandardDocument
     from atproto_client.models.site.standard import publication as SiteStandardPublication
     from atproto_client.models.site.standard.graph import recommend as SiteStandardGraphRecommend
     from atproto_client.models.site.standard.graph import subscription as SiteStandardGraphSubscription
     from atproto_client.models.site.standard.theme import basic as SiteStandardThemeBasic
     from atproto_client.models.site.standard.theme import color as SiteStandardThemeColor
+    from atproto_client.models.social.grain import defs as SocialGrainDefs
+    from atproto_client.models.social.grain import favorite as SocialGrainFavorite
+    from atproto_client.models.social.grain import gallery as SocialGrainGallery
+    from atproto_client.models.social.grain import photo as SocialGrainPhoto
+    from atproto_client.models.social.grain.gallery import item as SocialGrainGalleryItem
     from atproto_client.models.tools.ozone.communication import create_template as ToolsOzoneCommunicationCreateTemplate
     from atproto_client.models.tools.ozone.communication import defs as ToolsOzoneCommunicationDefs
     from atproto_client.models.tools.ozone.communication import delete_template as ToolsOzoneCommunicationDeleteTemplate
@@ -403,6 +416,20 @@ if t.TYPE_CHECKING:
     from atproto_client.models.tools.ozone.hosting import get_account_history as ToolsOzoneHostingGetAccountHistory
     from atproto_client.models.tools.ozone.inbox import appeal_actioned_subject as ToolsOzoneInboxAppealActionedSubject
     from atproto_client.models.tools.ozone.inbox import defs as ToolsOzoneInboxDefs
+    from atproto_client.models.tools.ozone.inbox import get_account_status as ToolsOzoneInboxGetAccountStatus
+    from atproto_client.models.tools.ozone.inbox import get_actioned_subject as ToolsOzoneInboxGetActionedSubject
+    from atproto_client.models.tools.ozone.inbox import (
+        get_notification_preferences as ToolsOzoneInboxGetNotificationPreferences,
+    )
+    from atproto_client.models.tools.ozone.inbox import get_report as ToolsOzoneInboxGetReport
+    from atproto_client.models.tools.ozone.inbox import get_unread_count as ToolsOzoneInboxGetUnreadCount
+    from atproto_client.models.tools.ozone.inbox import list_actioned_subjects as ToolsOzoneInboxListActionedSubjects
+    from atproto_client.models.tools.ozone.inbox import list_notifications as ToolsOzoneInboxListNotifications
+    from atproto_client.models.tools.ozone.inbox import list_reports as ToolsOzoneInboxListReports
+    from atproto_client.models.tools.ozone.inbox import (
+        put_notification_preferences as ToolsOzoneInboxPutNotificationPreferences,
+    )
+    from atproto_client.models.tools.ozone.inbox import update_seen as ToolsOzoneInboxUpdateSeen
     from atproto_client.models.tools.ozone.moderation import (
         cancel_scheduled_actions as ToolsOzoneModerationCancelScheduledActions,
     )
@@ -458,6 +485,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models.tools.ozone.safelink import query_rules as ToolsOzoneSafelinkQueryRules
     from atproto_client.models.tools.ozone.safelink import remove_rule as ToolsOzoneSafelinkRemoveRule
     from atproto_client.models.tools.ozone.safelink import update_rule as ToolsOzoneSafelinkUpdateRule
+    from atproto_client.models.tools.ozone.server import get_capabilities as ToolsOzoneServerGetCapabilities
     from atproto_client.models.tools.ozone.server import get_config as ToolsOzoneServerGetConfig
     from atproto_client.models.tools.ozone.set import add_values as ToolsOzoneSetAddValues
     from atproto_client.models.tools.ozone.set import defs as ToolsOzoneSetDefs
@@ -508,6 +536,7 @@ class _Ids:
     AppBskyActorGetProfile: str = 'app.bsky.actor.getProfile'
     AppBskyActorGetProfiles: str = 'app.bsky.actor.getProfiles'
     AppBskyActorGetSuggestions: str = 'app.bsky.actor.getSuggestions'
+    AppBskyActorLink: str = 'app.bsky.actor.link'
     AppBskyActorProfile: str = 'app.bsky.actor.profile'
     AppBskyActorPutPreferences: str = 'app.bsky.actor.putPreferences'
     AppBskyActorSearchActors: str = 'app.bsky.actor.searchActors'
@@ -621,6 +650,7 @@ class _Ids:
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetAgeAssuranceState: str = 'app.bsky.unspecced.getAgeAssuranceState'
+    AppBskyUnspeccedGetAtmosphereExploreTab: str = 'app.bsky.unspecced.getAtmosphereExploreTab'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
     AppBskyUnspeccedGetOnboardingSuggestedStarterPacks: str = 'app.bsky.unspecced.getOnboardingSuggestedStarterPacks'
     AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton: str = (
@@ -818,19 +848,28 @@ class _Ids:
     ComGermnetworkDeclaration: str = 'com.germnetwork.declaration'
     InternalBskyActorGetProfiles: str = 'internal.bsky.actor.getProfiles'
     NetworkBskyJetstreamGetBlock: str = 'network.bsky.jetstream.getBlock'
-    NetworkBskyJetstreamGetImportStatus: str = 'network.bsky.jetstream.getImportStatus'
     NetworkBskyJetstreamGetSegment: str = 'network.bsky.jetstream.getSegment'
     NetworkBskyJetstreamGetZstdDictionary: str = 'network.bsky.jetstream.getZstdDictionary'
-    NetworkBskyJetstreamImportTimestamps: str = 'network.bsky.jetstream.importTimestamps'
     NetworkBskyJetstreamListSegments: str = 'network.bsky.jetstream.listSegments'
     NetworkBskyJetstreamPlanSnapshot: str = 'network.bsky.jetstream.planSnapshot'
     NetworkBskyJetstreamSubscribeEvents: str = 'network.bsky.jetstream.subscribeEvents'
+    PlaceStreamDefs: str = 'place.stream.defs'
+    PlaceStreamLivestream: str = 'place.stream.livestream'
+    PlaceStreamBadgeDefs: str = 'place.stream.badge.defs'
+    PlaceStreamChatDefs: str = 'place.stream.chat.defs'
+    PlaceStreamChatPinnedRecord: str = 'place.stream.chat.pinnedRecord'
+    PlaceStreamChatProfile: str = 'place.stream.chat.profile'
     SiteStandardDocument: str = 'site.standard.document'
     SiteStandardPublication: str = 'site.standard.publication'
     SiteStandardGraphRecommend: str = 'site.standard.graph.recommend'
     SiteStandardGraphSubscription: str = 'site.standard.graph.subscription'
     SiteStandardThemeBasic: str = 'site.standard.theme.basic'
     SiteStandardThemeColor: str = 'site.standard.theme.color'
+    SocialGrainDefs: str = 'social.grain.defs'
+    SocialGrainFavorite: str = 'social.grain.favorite'
+    SocialGrainGallery: str = 'social.grain.gallery'
+    SocialGrainPhoto: str = 'social.grain.photo'
+    SocialGrainGalleryItem: str = 'social.grain.gallery.item'
     ToolsOzoneCommunicationCreateTemplate: str = 'tools.ozone.communication.createTemplate'
     ToolsOzoneCommunicationDefs: str = 'tools.ozone.communication.defs'
     ToolsOzoneCommunicationDeleteTemplate: str = 'tools.ozone.communication.deleteTemplate'
@@ -839,6 +878,16 @@ class _Ids:
     ToolsOzoneHostingGetAccountHistory: str = 'tools.ozone.hosting.getAccountHistory'
     ToolsOzoneInboxAppealActionedSubject: str = 'tools.ozone.inbox.appealActionedSubject'
     ToolsOzoneInboxDefs: str = 'tools.ozone.inbox.defs'
+    ToolsOzoneInboxGetAccountStatus: str = 'tools.ozone.inbox.getAccountStatus'
+    ToolsOzoneInboxGetActionedSubject: str = 'tools.ozone.inbox.getActionedSubject'
+    ToolsOzoneInboxGetNotificationPreferences: str = 'tools.ozone.inbox.getNotificationPreferences'
+    ToolsOzoneInboxGetReport: str = 'tools.ozone.inbox.getReport'
+    ToolsOzoneInboxGetUnreadCount: str = 'tools.ozone.inbox.getUnreadCount'
+    ToolsOzoneInboxListActionedSubjects: str = 'tools.ozone.inbox.listActionedSubjects'
+    ToolsOzoneInboxListNotifications: str = 'tools.ozone.inbox.listNotifications'
+    ToolsOzoneInboxListReports: str = 'tools.ozone.inbox.listReports'
+    ToolsOzoneInboxPutNotificationPreferences: str = 'tools.ozone.inbox.putNotificationPreferences'
+    ToolsOzoneInboxUpdateSeen: str = 'tools.ozone.inbox.updateSeen'
     ToolsOzoneModerationCancelScheduledActions: str = 'tools.ozone.moderation.cancelScheduledActions'
     ToolsOzoneModerationDefs: str = 'tools.ozone.moderation.defs'
     ToolsOzoneModerationEmitEvent: str = 'tools.ozone.moderation.emitEvent'
@@ -886,6 +935,7 @@ class _Ids:
     ToolsOzoneSafelinkQueryRules: str = 'tools.ozone.safelink.queryRules'
     ToolsOzoneSafelinkRemoveRule: str = 'tools.ozone.safelink.removeRule'
     ToolsOzoneSafelinkUpdateRule: str = 'tools.ozone.safelink.updateRule'
+    ToolsOzoneServerGetCapabilities: str = 'tools.ozone.server.getCapabilities'
     ToolsOzoneServerGetConfig: str = 'tools.ozone.server.getConfig'
     ToolsOzoneSetAddValues: str = 'tools.ozone.set.addValues'
     ToolsOzoneSetDefs: str = 'tools.ozone.set.defs'

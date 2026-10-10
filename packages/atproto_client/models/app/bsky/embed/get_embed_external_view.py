@@ -14,7 +14,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.unknown_type import UnknownType
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Params(base.ParamsModelBase):
@@ -42,6 +42,16 @@ class Response(base.ResponseModelBase):
     associated_refs: t.Optional[t.List['models.ComAtprotoRepoStrongRef.Main']] = (
         None  #: StrongRefs (URI+CID) of the Atmosphere records that backed this view, suitable for embedding into a post's external.associatedRefs.
     )
+    data: t.Optional[
+        unknown_union.OpenUnion[
+            t.Union[
+                'models.AppBskyEmbedExternal.ViewArticle',
+                'models.AppBskyEmbedExternal.ViewArticlePublication',
+                'models.AppBskyEmbedExternal.ViewGallery',
+                'models.AppBskyEmbedExternal.ViewLivestream',
+            ]
+        ]
+    ] = None  #: Preferred to #view. Hydrated data of the embed. Present only when the resolved records back the requested URL and supply enough information to populate the required fields. Omitted alongside the rest of the response when no records resolved or validation failed.
     view: t.Optional['models.AppBskyEmbedExternal.View'] = (
         None  #: Hydrated view of the embed. Present only when the resolved records back the requested URL and supply enough information to populate the required `viewExternal` fields. Omitted alongside the rest of the response when no records resolved or validation failed.
     )

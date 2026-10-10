@@ -36,11 +36,23 @@ One page per NSID, generated from the lexicons the network publishes.
 
       Infrastructure services behind the network.
 
+   .. grid-item-card:: :octicon:`file-directory;1em;sd-mr-1` place
+      :link: /models/place/index
+      :link-type: doc
+
+      Place.
+
    .. grid-item-card:: :octicon:`browser;1em;sd-mr-1` site
       :link: /models/site/index
       :link-type: doc
 
       Websites published on atproto.
+
+   .. grid-item-card:: :octicon:`file-directory;1em;sd-mr-1` social
+      :link: /models/social/index
+      :link-type: doc
+
+      Social.
 
    .. grid-item-card:: :octicon:`tools;1em;sd-mr-1` tools
       :link: /models/tools/index
@@ -57,5 +69,7 @@ One page per NSID, generated from the lexicons the network publishes.
    com </models/com/index>
    internal </models/internal/index>
    network </models/network/index>
+   place </models/place/index>
    site </models/site/index>
+   social </models/social/index>
    tools </models/tools/index>

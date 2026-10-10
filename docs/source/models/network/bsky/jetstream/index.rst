@@ -17,12 +17,6 @@ Jetstream: event stream, archive segments, and imports.
 
       Download a single block within a sealed segment file by index.
 
-   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getImportStatus
-      :link: /models/network/bsky/jetstream/getImportStatus
-      :link-type: doc
-
-      Report the status of a timestamp-import job: lifecycle state, current phase, per-phase progress, and (on completion) the parse/mutation totals.
-
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getSegment
       :link: /models/network/bsky/jetstream/getSegment
       :link-type: doc
@@ -34,12 +28,6 @@ Jetstream: event stream, archive segments, and imports.
       :link-type: doc
 
       Download the zstd dictionary used by the network.bsky.jetstream.subscribeEvents stream's optional compression scheme.
-
-   .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` importTimestamps
-      :link: /models/network/bsky/jetstream/importTimestamps
-      :link-type: doc
-
-      Submit a timestamp-import job.
 
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` listSegments
       :link: /models/network/bsky/jetstream/listSegments
@@ -64,10 +52,8 @@ Jetstream: event stream, archive segments, and imports.
    :maxdepth: 1
 
    getBlock </models/network/bsky/jetstream/getBlock>
-   getImportStatus </models/network/bsky/jetstream/getImportStatus>
    getSegment </models/network/bsky/jetstream/getSegment>
    getZstdDictionary </models/network/bsky/jetstream/getZstdDictionary>
-   importTimestamps </models/network/bsky/jetstream/importTimestamps>
    listSegments </models/network/bsky/jetstream/listSegments>
    planSnapshot </models/network/bsky/jetstream/planSnapshot>
    subscribeEvents </models/network/bsky/jetstream/subscribeEvents>

@@ -70,6 +70,12 @@ class ViewRecord(base.ModelBase):
     ] = None  #: Embeds.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: t.Optional[int] = None  #: Like count.
+    op_thread_post_count: t.Optional[int] = (
+        None  #: The total number of posts in the contiguous OP thread that this post belongs to. Only present when this post is part of the OP thread.
+    )
+    op_thread_post_index: t.Optional[int] = (
+        None  #: The 1-indexed position of this post within the contiguous OP thread. Only present when this post is part of the OP thread.
+    )
     quote_count: t.Optional[int] = None  #: Quote count.
     reply_count: t.Optional[int] = None  #: Reply count.
     repost_count: t.Optional[int] = None  #: Repost count.

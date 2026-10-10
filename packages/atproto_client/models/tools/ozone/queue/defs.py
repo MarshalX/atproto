@@ -7,6 +7,7 @@
 
 import typing as t
 
+import typing_extensions as te
 from pydantic import Field
 
 from atproto_client.models import string_formats
@@ -57,10 +58,22 @@ class QueueStats(base.ModelBase):
     avg_handling_time_sec: t.Optional[int] = (
         None  #: Average time in seconds from report creation to close, for reports closed in this period.
     )
+    closure_target_met_count: te.Annotated[t.Optional[int], Field(ge=0)] = (
+        None  #: Reports whose closure meets their closure target.
+    )
+    closure_target_met_rate: te.Annotated[t.Optional[int], Field(ge=0, le=100)] = (
+        None  #: Percent of reports meeting their closure target.
+    )
+    closure_target_missed_count: te.Annotated[t.Optional[int], Field(ge=0)] = (
+        None  #: Reports whose closure exceeds their closure target.
+    )
+    closure_target_overdue_count: te.Annotated[t.Optional[int], Field(ge=0)] = (
+        None  #: Unmuted pending reports past their closure target.
+    )
     escalated_count: t.Optional[int] = None  #: Number of reports in 'escalated' status.
     inbound_count: t.Optional[int] = None  #: Reports received in this queue in the last 24 hours.
     last_updated: t.Optional[string_formats.DateTime] = None  #: When these statistics were last computed.
-    pending_count: t.Optional[int] = None  #: Number of reports in 'open' status.
+    pending_count: t.Optional[int] = None  #: Number of unmuted reports currently not closed.
 
     py_type: t.Literal['tools.ozone.queue.defs#queueStats'] = Field(
         default='tools.ozone.queue.defs#queueStats', alias='$type', frozen=True

@@ -11,6 +11,12 @@ Ozone server configuration.
 .. grid:: 1 2 2 3
    :gutter: 3
 
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getCapabilities
+      :link: /models/tools/ozone/server/getCapabilities
+      :link-type: doc
+
+      Get capabilities.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getConfig
       :link: /models/tools/ozone/server/getConfig
       :link-type: doc
@@ -21,4 +27,5 @@ Ozone server configuration.
    :hidden:
    :maxdepth: 1
 
+   getCapabilities </models/tools/ozone/server/getCapabilities>
    getConfig </models/tools/ozone/server/getConfig>

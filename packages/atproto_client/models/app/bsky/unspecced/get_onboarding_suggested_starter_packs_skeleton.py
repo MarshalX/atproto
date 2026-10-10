@@ -33,3 +33,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.unspecced.getOnboardingSuggestedStarterPacksSkeleton`."""
 
     starter_packs: t.List[string_formats.AtUri]  #: Starter packs.
+    rec_id_str: t.Optional[str] = None  #: Snowflake for this recommendation, use when submitting recommendation events.
