@@ -284,3 +284,4 @@ class LexiconDoc(LexBase):
     defs: t.Dict[str, LexDefinition]
     description: t.Optional[str] = None
     revision: t.Optional[int] = None
+    type: t.Optional[te.Literal['com.atproto.lexicon.schema']] = Field(default=None, alias='$type')
