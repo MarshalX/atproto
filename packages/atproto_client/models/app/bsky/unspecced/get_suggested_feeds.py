@@ -29,3 +29,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.unspecced.getSuggestedFeeds`."""
 
     feeds: t.List['models.AppBskyFeedDefs.GeneratorView']  #: Feeds.
+    rec_id_str: t.Optional[str] = None  #: Snowflake for this recommendation, use when submitting recommendation events.

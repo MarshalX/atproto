@@ -19,7 +19,9 @@ class AsyncClientRaw(AsyncClientBase):
     com: 'async_ns.ComNamespace'
     internal: 'async_ns.InternalNamespace'
     network: 'async_ns.NetworkNamespace'
+    place: 'async_ns.PlaceNamespace'
     site: 'async_ns.SiteNamespace'
+    social: 'async_ns.SocialNamespace'
     tools: 'async_ns.ToolsNamespace'
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
@@ -30,5 +32,7 @@ class AsyncClientRaw(AsyncClientBase):
         self.com = async_ns.ComNamespace(self)
         self.internal = async_ns.InternalNamespace(self)
         self.network = async_ns.NetworkNamespace(self)
+        self.place = async_ns.PlaceNamespace(self)
         self.site = async_ns.SiteNamespace(self)
+        self.social = async_ns.SocialNamespace(self)
         self.tools = async_ns.ToolsNamespace(self)

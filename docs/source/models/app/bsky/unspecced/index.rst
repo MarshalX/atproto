@@ -23,6 +23,12 @@ Unstable endpoints that may change or disappear without notice.
 
       Returns the current state of the age assurance process for an account.
 
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereExploreTab
+      :link: /models/app/bsky/unspecced/getAtmosphereExploreTab
+      :link-type: doc
+
+      Get curated Atmosphere Explore content.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getConfig
       :link: /models/app/bsky/unspecced/getConfig
       :link-type: doc
@@ -203,6 +209,7 @@ Unstable endpoints that may change or disappear without notice.
 
    defs </models/app/bsky/unspecced/defs>
    getAgeAssuranceState </models/app/bsky/unspecced/getAgeAssuranceState>
+   getAtmosphereExploreTab </models/app/bsky/unspecced/getAtmosphereExploreTab>
    getConfig </models/app/bsky/unspecced/getConfig>
    getOnboardingSuggestedStarterPacks </models/app/bsky/unspecced/getOnboardingSuggestedStarterPacks>
    getOnboardingSuggestedStarterPacksSkeleton </models/app/bsky/unspecced/getOnboardingSuggestedStarterPacksSkeleton>

@@ -3,6 +3,7 @@ from atproto_client.models.record_registry import RECORD_TYPE_TO_MODEL_CLASS, re
 __all__ = ['RECORD_TYPES', 'RECORD_TYPE_TO_MODEL_CLASS']
 RECORD_TYPES = {
     'app.bsky.actor.contentVisibilityDeclaration': 'AppBskyActorContentVisibilityDeclaration',
+    'app.bsky.actor.link': 'AppBskyActorLink',
     'app.bsky.actor.profile': 'AppBskyActorProfile',
     'app.bsky.actor.status': 'AppBskyActorStatus',
     'app.bsky.feed.generator': 'AppBskyFeedGenerator',
@@ -24,10 +25,17 @@ RECORD_TYPES = {
     'chat.bsky.actor.declaration': 'ChatBskyActorDeclaration',
     'com.atproto.lexicon.schema': 'ComAtprotoLexiconSchema',
     'com.germnetwork.declaration': 'ComGermnetworkDeclaration',
+    'place.stream.chat.pinnedRecord': 'PlaceStreamChatPinnedRecord',
+    'place.stream.chat.profile': 'PlaceStreamChatProfile',
+    'place.stream.livestream': 'PlaceStreamLivestream',
     'site.standard.document': 'SiteStandardDocument',
     'site.standard.graph.recommend': 'SiteStandardGraphRecommend',
     'site.standard.graph.subscription': 'SiteStandardGraphSubscription',
     'site.standard.publication': 'SiteStandardPublication',
     'site.standard.theme.basic': 'SiteStandardThemeBasic',
+    'social.grain.favorite': 'SocialGrainFavorite',
+    'social.grain.gallery.item': 'SocialGrainGalleryItem',
+    'social.grain.gallery': 'SocialGrainGallery',
+    'social.grain.photo': 'SocialGrainPhoto',
 }
 register_record_types('atproto_client.models', RECORD_TYPES)

@@ -47,12 +47,12 @@ class Response(base.ResponseModelBase):
         t.List[
             unknown_union.OpenUnion[
                 t.Union[
-                    'models.AppBskyActorDefs.ProfileViewDetailed',
+                    'models.AppBskyActorDefs.ProfileViewBasic',
                     'models.AppBskyFeedDefs.BlockedPost',
                     'models.AppBskyFeedDefs.GeneratorView',
                     'models.AppBskyFeedDefs.NotFoundPost',
                     'models.AppBskyFeedDefs.PostView',
-                    'models.AppBskyGraphDefs.StarterPackView',
+                    'models.AppBskyGraphDefs.StarterPackViewBasic',
                 ]
             ]
         ]
@@ -71,6 +71,9 @@ class Group(base.ModelBase):
         t.Union[
             'models.AppBskyNotificationGetGroupedNotifications.LikeGroup',
             'models.AppBskyNotificationGetGroupedNotifications.MultiPostLikeGroup',
+            'models.AppBskyNotificationGetGroupedNotifications.MultiPostRepostGroup',
+            'models.AppBskyNotificationGetGroupedNotifications.MultiPostLikeViaRepostGroup',
+            'models.AppBskyNotificationGetGroupedNotifications.MultiPostRepostViaRepostGroup',
             'models.AppBskyNotificationGetGroupedNotifications.RepostGroup',
             'models.AppBskyNotificationGetGroupedNotifications.LikeViaRepostGroup',
             'models.AppBskyNotificationGetGroupedNotifications.RepostViaRepostGroup',
@@ -134,6 +137,79 @@ class MultiPostLikeItem(base.ModelBase):
 
     py_type: t.Literal['app.bsky.notification.getGroupedNotifications#multiPostLikeItem'] = Field(
         default='app.bsky.notification.getGroupedNotifications#multiPostLikeItem', alias='$type', frozen=True
+    )
+
+
+class MultiPostRepostGroup(base.ModelBase):
+    """Definition model for :obj:`app.bsky.notification.getGroupedNotifications`. Group of reposts by the same actor of different posts."""
+
+    actor: string_formats.Did  #: Actor.
+    items: t.List['models.AppBskyNotificationGetGroupedNotifications.MultiPostRepostItem'] = Field(
+        min_length=2
+    )  #: Items.
+
+    py_type: t.Literal['app.bsky.notification.getGroupedNotifications#multiPostRepostGroup'] = Field(
+        default='app.bsky.notification.getGroupedNotifications#multiPostRepostGroup', alias='$type', frozen=True
+    )
+
+
+class MultiPostRepostItem(base.ModelBase):
+    """Definition model for :obj:`app.bsky.notification.getGroupedNotifications`. One post which was reposted by the group's actor."""
+
+    post: string_formats.AtUri  #: Post.
+
+    py_type: t.Literal['app.bsky.notification.getGroupedNotifications#multiPostRepostItem'] = Field(
+        default='app.bsky.notification.getGroupedNotifications#multiPostRepostItem', alias='$type', frozen=True
+    )
+
+
+class MultiPostLikeViaRepostGroup(base.ModelBase):
+    """Definition model for :obj:`app.bsky.notification.getGroupedNotifications`. Group of likes by the same actor on different posts via the requesting account's reposts."""
+
+    actor: string_formats.Did  #: Actor.
+    items: t.List['models.AppBskyNotificationGetGroupedNotifications.MultiPostLikeViaRepostItem'] = Field(
+        min_length=2
+    )  #: Items.
+
+    py_type: t.Literal['app.bsky.notification.getGroupedNotifications#multiPostLikeViaRepostGroup'] = Field(
+        default='app.bsky.notification.getGroupedNotifications#multiPostLikeViaRepostGroup', alias='$type', frozen=True
+    )
+
+
+class MultiPostLikeViaRepostItem(base.ModelBase):
+    """Definition model for :obj:`app.bsky.notification.getGroupedNotifications`. One post which was liked by the group's actor via the requesting account's repost."""
+
+    post: string_formats.AtUri  #: Post.
+    via_repost: string_formats.AtUri  #: Via repost.
+
+    py_type: t.Literal['app.bsky.notification.getGroupedNotifications#multiPostLikeViaRepostItem'] = Field(
+        default='app.bsky.notification.getGroupedNotifications#multiPostLikeViaRepostItem', alias='$type', frozen=True
+    )
+
+
+class MultiPostRepostViaRepostGroup(base.ModelBase):
+    """Definition model for :obj:`app.bsky.notification.getGroupedNotifications`. Group of reposts by the same actor of different posts via the requesting account's reposts."""
+
+    actor: string_formats.Did  #: Actor.
+    items: t.List['models.AppBskyNotificationGetGroupedNotifications.MultiPostRepostViaRepostItem'] = Field(
+        min_length=2
+    )  #: Items.
+
+    py_type: t.Literal['app.bsky.notification.getGroupedNotifications#multiPostRepostViaRepostGroup'] = Field(
+        default='app.bsky.notification.getGroupedNotifications#multiPostRepostViaRepostGroup',
+        alias='$type',
+        frozen=True,
+    )
+
+
+class MultiPostRepostViaRepostItem(base.ModelBase):
+    """Definition model for :obj:`app.bsky.notification.getGroupedNotifications`. One post which was reposted by the group's actor via the requesting account's repost."""
+
+    post: string_formats.AtUri  #: Post.
+    via_repost: string_formats.AtUri  #: Via repost.
+
+    py_type: t.Literal['app.bsky.notification.getGroupedNotifications#multiPostRepostViaRepostItem'] = Field(
+        default='app.bsky.notification.getGroupedNotifications#multiPostRepostViaRepostItem', alias='$type', frozen=True
     )
 
 
