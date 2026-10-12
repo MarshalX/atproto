@@ -367,6 +367,7 @@ def _punctuation_class() -> str:
 
     Used to (re)generate `facet_regexes._P`: `print(_punctuation_class())`.
     """
+
     def escape(code_point: int) -> str:
         return f'{BS}u{code_point:04x}' if code_point <= 0xFFFF else f'{BS}U{code_point:08x}'
 
