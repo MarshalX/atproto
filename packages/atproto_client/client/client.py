@@ -164,20 +164,16 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
 
         dids: t.Dict[str, t.Optional[str]] = {}
         for mention in facet_detection.detect_mentions(text):
-            if mention.handle not in dids:
+            handle = mention.handle.lower()
+            if handle not in dids:
                 try:
-                    response = self.resolve_handle(mention.handle)
-                    dids[mention.handle] = response.did
+                    response = self.resolve_handle(handle)
+                    dids[handle] = response.did
                 except BadRequestError:
                     # 400 error (handle doesn't resolve) - skip mention
-                    dids[mention.handle] = None
-                except AtProtocolError as e:
-                    # Any other error (network, rate limit, etc) - warn + skip mention
-                    message = f"Could not resolve the handle '{mention.handle}': {e}. The mention is dropped."
-                    warnings.warn(message, stacklevel=2)
-                    dids[mention.handle] = None
+                    dids[handle] = None
 
-            did = dids[mention.handle]
+            did = dids[handle]
             if did is None:
                 continue
 

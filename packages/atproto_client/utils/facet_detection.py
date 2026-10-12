@@ -4,6 +4,7 @@ import unicodedata
 from tlds import tld_set
 
 from atproto_client import models
+from atproto_client.models.string_formats import is_valid_handle
 from atproto_client.utils.facet_regexes import (
     CASHTAG_REGEX,
     MENTION_REGEX,
@@ -24,18 +25,7 @@ _FacetFeature = t.Union[
 
 
 def _grapheme_len(text: str) -> int:
-    """Approximate the number of user-perceived characters (graphemes) in the text.
-
-    Python's standard library can't segment grapheme clusters, so this counts code points
-    and skips the ones that don't start a new cluster: combining marks, variation selectors,
-    emoji skin tone modifiers, tag characters, and whatever follows a zero width joiner.
-    A pair of regional indicators (a flag) counts as one.
-
-    This isn't a perfect implementation of UAX #29 (https://www.unicode.org/reports/tr29/),
-    but it is an improvement on using a simple len(str).
-
-    Fallback package used by `@atproto/api`: https://github.com/cometkim/unicode-segmenter
-    """
+    """Approximate grapheme count (not a full UAX #29 implementation)."""
     count = 0
     after_joiner = False
     pending_regional_indicator = False
@@ -186,7 +176,7 @@ def detect_mentions(text: str) -> t.List[MentionMatch]:
 
     for match in MENTION_REGEX.finditer(text):
         handle = match.group(3)
-        if not _is_valid_domain(handle) and not handle.endswith('.test'):
+        if not is_valid_handle(handle) or (not _is_valid_domain(handle) and not handle.endswith('.test')):
             continue  # probably not a handle
 
         start = match.end(1)  # At sign (@) position

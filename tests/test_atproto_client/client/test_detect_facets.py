@@ -142,25 +142,23 @@ def fail_requests(monkeypatch: pytest.MonkeyPatch) -> t.Callable[[Exception], No
 
 
 @pytest.mark.parametrize('error', _LOOKUP_ERRORS, ids=lambda error: type(error).__name__)
-def test_detect_facets_warns_and_drops_mentions_when_the_lookup_fails(
+def test_detect_facets_raises_when_the_lookup_fails(
     fail_requests: t.Callable[[Exception], None], error: Exception
 ) -> None:
     fail_requests(error)
     text = '@handle.com #tag'
 
-    with pytest.warns(UserWarning, match="Could not resolve the handle 'handle.com'"):
-        facets = Client().detect_facets(text)
-
-    assert _summary(text, facets) == [('#tag', 'tag')]
+    with pytest.raises(type(error)):
+        Client().detect_facets(text)
 
 
-def test_detect_facets_warns_once_per_handle(fail_requests: t.Callable[[Exception], None]) -> None:
-    fail_requests(NetworkError(_failure(502)))
+def test_detect_facets_resolves_handles_case_insensitively(resolved_handles: t.List[str]) -> None:
+    text = '@Bsky.app @bsky.app @BSKY.app'
 
-    with pytest.warns(UserWarning) as warnings_record:
-        Client().detect_facets('@a.com @a.com @b.com @a.com')
+    facets = Client().detect_facets(text)
 
-    assert [str(warning.message).split("'")[1] for warning in warnings_record] == ['a.com', 'b.com']
+    assert len(facets) == 3
+    assert resolved_handles == ['bsky.app']
 
 
 def test_detect_facets_does_not_warn_when_the_handle_does_not_resolve(resolved_handles: t.List[str]) -> None:
@@ -187,13 +185,11 @@ async def test_async_detect_facets_resolves_mentions(resolved_handles: t.List[st
 
 
 @pytest.mark.asyncio
-async def test_async_detect_facets_warns_and_drops_mentions_when_the_lookup_fails(
+async def test_async_detect_facets_raises_when_the_lookup_fails(
     fail_requests: t.Callable[[Exception], None],
 ) -> None:
     fail_requests(NetworkError(_failure(502)))
     text = '@handle.com #tag'
 
-    with pytest.warns(UserWarning, match="Could not resolve the handle 'handle.com'"):
-        facets = await AsyncClient().detect_facets(text)
-
-    assert _summary(text, facets) == [('#tag', 'tag')]
+    with pytest.raises(NetworkError):
+        await AsyncClient().detect_facets(text)

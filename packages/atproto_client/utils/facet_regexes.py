@@ -1,25 +1,12 @@
-r"""Regular expressions for detecting facets in text.
+"""Regular expressions for detecting facets in text.
 
 Ported from the ``@atproto/api`` TypeScript SDK:
 https://github.com/bluesky-social/atproto/blob/main/packages/api/src/rich-text/util.ts
-
-The goal is to match the behaviour of the TypeScript regexes as closely as possible.
-``re`` differs from TypeScript in a few places:
-
-* ``\s`` and ``\p{P}`` are written as explicit character classes (see ``_S`` and ``_P``)
-* ``\d`` is written ``0-9``, because in Python it matches every Unicode digit
-* ``$`` is written ``\Z``, because in Python it also matches before a trailing newline
-* ``re.IGNORECASE`` matches the ``i`` flag, with ``re.ASCII`` added so case folding stays ASCII only (as in TypeScript)
-* ``\b`` is ASCII only in TypeScript, so the mention regex uses ``re.ASCII`` too
 """
 
 import re
 
-# Whitespace - TypeScript's `\s`
-#
-# Using an explicit match, because Python's native `\s` has two issues:
-# * Minor: `\s` also matches `\x1c-\x1f` and `\x85`, and not `\ufeff` (rare control/format chars)
-# * Major: with `re.ASCII` (URL/mention regexes) `\s` is ASCII-only, so Unicode spaces (e.g. `\u3000`) aren't matched
+# Whitespace - explicit list, as Python's `\s` differs and is ASCII-only with `re.ASCII`
 _S = r'\t\n\v\f\r \u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff'
 
 # Punctuation - TypeScript's `\p{P}`
@@ -27,6 +14,9 @@ _S = r'\t\n\v\f\r \u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff'
 # `re` doesn't have an equivalent to TypeScript's Unicode punctuation selector `\p{P}`.
 # So here an explicit list of all Unicode punctuation code points is created
 # (every code point whose category starts with ``P`` as of Unicode 16.0.0).
+#
+# To regenerate, print `_punctuation_class()` from tests/test_atproto_client/test_facet_detection.py
+# (with a Python built against the target Unicode version).
 _P = (
     r'\u0021-\u0023\u0025-\u002a\u002c-\u002f\u003a-\u003b\u003f-\u0040\u005b-\u005d\u005f\u007b\u007d'
     r'\u00a1\u00a7\u00ab\u00b6-\u00b7\u00bb\u00bf\u037e\u0387\u055a-\u055f\u0589-\u058a\u05be\u05c0\u05c3'

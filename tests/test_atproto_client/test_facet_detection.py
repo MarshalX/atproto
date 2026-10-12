@@ -4,11 +4,14 @@ Ported from the TypeScript SDK: https://github.com/bluesky-social/atproto/blob/m
 with some additional tests added to verify ported behaviour.
 """
 
+import sys
 import typing as t
+import unicodedata
+from itertools import groupby
 
 import pytest
 from atproto_client import models
-from atproto_client.utils import facet_detection
+from atproto_client.utils import facet_detection, facet_regexes
 
 BS = chr(92)
 ZWSP = chr(0x200B)
@@ -321,8 +324,12 @@ def _mentions(text: str) -> t.List[str]:
         (f'@handle.com{E_ACUTE}', ['handle.com']),  # a word boundary is ASCII only
         (f'@handle.co{E_ACUTE}', ['handle.co']),
         ('@a.b.c.dev', ['a.b.c.dev']),
-        ('@handle-.com', ['handle-.com']),
-        ('@.com', ['.com']),
+        # malformed handles are skipped
+        ('@handle-.com', []),
+        ('@-handle.com', []),
+        ('@.com', []),
+        ('@-.com', []),
+        ('@a..com', []),
         ('foo@handle.com', []),
         ('https://example.com/@handle.com', []),
         ('@@handle.com', []),
@@ -348,3 +355,25 @@ def test_detect_mentions_uses_utf8_byte_indices() -> None:
     assert mention.handle == 'handle.com'
     assert mention.byte_start == len(f'{FAMILY} '.encode())
     assert mention.byte_end == mention.byte_start + len('@handle.com')
+
+
+def _punctuation_class() -> str:
+    """Build regex to match Unicode punctunation (every code point with a `P*` Unicode category).
+
+    Used to (re)generate `facet_regexes._P`: `print(_punctuation_class())`.
+    """
+
+    def escape(code_point: int) -> str:
+        return f'{BS}u{code_point:04x}' if code_point <= 0xFFFF else f'{BS}U{code_point:08x}'
+
+    code_points = [i for i in range(sys.maxunicode + 1) if unicodedata.category(chr(i)).startswith('P')]
+    runs = [list(run) for _, run in groupby(enumerate(code_points), lambda pair: pair[1] - pair[0])]
+    return ''.join(escape(run[0][1]) if len(run) == 1 else f'{escape(run[0][1])}-{escape(run[-1][1])}' for run in runs)
+
+
+def test_punctuation_class_matches_unicodedata() -> None:
+    """Check the hardcoded `_P` must cover exactly the code points `unicodedata` calls punctuation.
+
+    Fails when the running Python's Unicode version differs from the one `_P` was generated from.
+    """
+    assert _punctuation_class() == facet_regexes._P
