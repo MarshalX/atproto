@@ -32,6 +32,9 @@ class Record(base.RecordModelBase):
     labels: t.Optional[unknown_union.OpenUnion['models.ComAtprotoLabelDefs.SelfLabels']] = (
         None  #: Self-label values, specific to the Bluesky application, on the overall account.
     )
+    links: te.Annotated[t.Optional[t.List['models.ComAtprotoRepoStrongRef.Main']], Field(max_length=10)] = (
+        None  #: Links shown on the profile, in display order. Each ref points to an app.bsky.actor.link record in this repo.
+    )
     pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Pinned post.
     pronouns: te.Annotated[t.Optional[str], Field(max_length=200)] = None  #: Free-form pronouns text.
     website: t.Optional[string_formats.Uri] = None  #: Website.

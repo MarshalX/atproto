@@ -47,6 +47,12 @@ Profiles, preferences, statuses, and actor search.
 
       Get a list of suggested actors.
 
+   .. grid-item-card:: :octicon:`note;1em;sd-mr-1` link
+      :link: /models/app/bsky/actor/link
+      :link-type: doc
+
+      A link shown on the account's profile.
+
    .. grid-item-card:: :octicon:`note;1em;sd-mr-1` profile
       :link: /models/app/bsky/actor/profile
       :link-type: doc
@@ -87,6 +93,7 @@ Profiles, preferences, statuses, and actor search.
    getProfile </models/app/bsky/actor/getProfile>
    getProfiles </models/app/bsky/actor/getProfiles>
    getSuggestions </models/app/bsky/actor/getSuggestions>
+   link </models/app/bsky/actor/link>
    profile </models/app/bsky/actor/profile>
    putPreferences </models/app/bsky/actor/putPreferences>
    searchActors </models/app/bsky/actor/searchActors>

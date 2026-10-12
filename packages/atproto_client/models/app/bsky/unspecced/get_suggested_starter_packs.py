@@ -29,3 +29,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.unspecced.getSuggestedStarterPacks`."""
 
     starter_packs: t.List['models.AppBskyGraphDefs.StarterPackView']  #: Starter packs.
+    rec_id_str: t.Optional[str] = None  #: Snowflake for this recommendation, use when submitting recommendation events.

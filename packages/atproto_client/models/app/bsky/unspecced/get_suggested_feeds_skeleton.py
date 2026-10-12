@@ -33,3 +33,4 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.unspecced.getSuggestedFeedsSkeleton`."""
 
     feeds: t.List[string_formats.AtUri]  #: Feeds.
+    rec_id_str: t.Optional[str] = None  #: Snowflake for this recommendation, use when submitting recommendation events.
