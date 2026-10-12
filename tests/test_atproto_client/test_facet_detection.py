@@ -4,6 +4,7 @@ Ported from the TypeScript SDK: https://github.com/bluesky-social/atproto/blob/m
 with some additional tests added to verify ported behaviour.
 """
 
+import re
 import sys
 import typing as t
 import unicodedata
@@ -357,23 +358,30 @@ def test_detect_mentions_uses_utf8_byte_indices() -> None:
     assert mention.byte_end == mention.byte_start + len('@handle.com')
 
 
+def _punctuation_code_points() -> t.List[int]:
+    return [i for i in range(sys.maxunicode + 1) if unicodedata.category(chr(i)).startswith('P')]
+
+
 def _punctuation_class() -> str:
-    """Build regex to match Unicode punctunation (every code point with a `P*` Unicode category).
+    """Build regex to match Unicode punctuation (every code point with a `P*` Unicode category).
 
     Used to (re)generate `facet_regexes._P`: `print(_punctuation_class())`.
     """
-
     def escape(code_point: int) -> str:
         return f'{BS}u{code_point:04x}' if code_point <= 0xFFFF else f'{BS}U{code_point:08x}'
 
-    code_points = [i for i in range(sys.maxunicode + 1) if unicodedata.category(chr(i)).startswith('P')]
-    runs = [list(run) for _, run in groupby(enumerate(code_points), lambda pair: pair[1] - pair[0])]
+    runs = [list(run) for _, run in groupby(enumerate(_punctuation_code_points()), lambda pair: pair[1] - pair[0])]
     return ''.join(escape(run[0][1]) if len(run) == 1 else f'{escape(run[0][1])}-{escape(run[-1][1])}' for run in runs)
 
 
 def test_punctuation_class_matches_unicodedata() -> None:
-    """Check the hardcoded `_P` must cover exactly the code points `unicodedata` calls punctuation.
+    """The hardcoded regex `_P` should match each punctuation code point for the current Python version."""
+    punctuation = re.compile(f'[{facet_regexes._P}]')
+    expected = _punctuation_code_points()
 
-    Fails when the running Python's Unicode version differs from the one `_P` was generated from.
-    """
-    assert _punctuation_class() == facet_regexes._P
+    missing = [f'U+{i:04X}' for i in expected if not punctuation.fullmatch(chr(i))]
+
+    assert not missing, (
+        f'`_P` is missing code points from Unicode {unicodedata.unidata_version}: {missing}\n\n'
+        f'Replace `_P` in facet_regexes.py with:\n\n{_punctuation_class()}\n'
+    )
