@@ -29,9 +29,9 @@ There is no pagination helper. Responses carry a `cursor` you feed back in until
 :caption: examples/advanced_usage/send_rich_text.py
 ```
 
-## Turn bare URLs into links
+## Detect mentions, links and hashtags
 
-Detecting URLs in arbitrary text and computing their byte offsets. Note that facet indices are byte offsets into the UTF-8 encoding, not character offsets.
+Finding the mentions, links, hashtags and cashtags in finished text, and sending them as facets. See [Detecting facets](../guides/posting.md#detecting-facets) for the details.
 
 ```{literalinclude} ../../../examples/advanced_usage/auto_hyperlinks.py
 :language: python

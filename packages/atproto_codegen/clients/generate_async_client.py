@@ -17,6 +17,7 @@ def gen_client(input_filename: str, output_filename: str) -> None:
         'send_image',
         'send_images',
         'upload_blob',
+        'resolve_handle',
         '_set_session',
         '_get_and_set_session',
         '_refresh_and_set_session',

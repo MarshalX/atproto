@@ -108,6 +108,18 @@ def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., st
     return wrapper
 
 
+def is_valid_handle(v: str) -> bool:
+    """Check if the string is a syntactically valid AT Protocol Handle Identifier.
+
+    Args:
+        v: The handle to check (e.g. alice.bsky.social)
+
+    Returns:
+        :obj:`True` if the handle is valid, :obj:`False` otherwise.
+    """
+    return len(v) <= MAX_HANDLE_LENGTH and DOMAIN_RE.match(v) is not None
+
+
 @only_validate_if_strict
 def validate_handle(v: str, _: ValidationInfo) -> str:
     """Validate an AT Protocol Handle Identifier.
@@ -138,7 +150,7 @@ def validate_handle(v: str, _: ValidationInfo) -> str:
         raise ValueError('Invalid handle: must contain only ASCII characters')
 
     # Use the spec's reference regex
-    if not DOMAIN_RE.match(v.lower()) or len(v) > MAX_HANDLE_LENGTH:
+    if not is_valid_handle(v):
         raise ValueError(
             f'Invalid handle: must be a domain name (e.g. user.bsky.social) with max length {MAX_HANDLE_LENGTH}'
         )
