@@ -55,6 +55,15 @@ Identity
    :show-inheritance:
 
 
+OAuth
+#####
+
+.. automodule:: atproto_oauth.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 Crypto
 ######
 
