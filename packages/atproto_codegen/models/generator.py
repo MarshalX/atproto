@@ -7,6 +7,7 @@ from pathlib import Path
 
 from atproto_core.nsid import NSID
 from atproto_lexicon import models
+from atproto_lexicon.refs import find_unresolved_refs
 
 from atproto_codegen.config import CodegenConfig, get_config, use_config
 from atproto_codegen.consts import (
@@ -17,6 +18,7 @@ from atproto_codegen.consts import (
     PARAMS_DICT,
     PARAMS_MODEL,
 )
+from atproto_codegen.exceptions import UnresolvedReferenceError
 from atproto_codegen.models import builder
 from atproto_codegen.record_templates import (
     RECORD_CREATE_RESPONSE_MODEL_TEMPLATE,
@@ -942,8 +944,21 @@ def _generate_package_init(config: CodegenConfig) -> None:
         write_code(init_path, DISCLAIMER)
 
 
+def _check_references(config: CodegenConfig) -> None:
+    lexicons = builder.parse_lexicons(config)
+    unresolved = find_unresolved_refs(lexicons)
+    if not config.is_self_gen:
+        emitted = {lexicon.id for lexicon in lexicons}
+        unresolved = {target: refs for target, refs in unresolved.items() if target.split('#')[0] in emitted}
+
+    if unresolved:
+        lines = [f"- '{target}' referenced by {', '.join(referrers)}" for target, referrers in unresolved.items()]
+        raise UnresolvedReferenceError('\n'.join(['Lexicons reference missing definitions:', *lines]))
+
+
 def generate_models(config: t.Optional[CodegenConfig] = None) -> None:
     with use_config(config or get_config()) as active:
+        _check_references(active)
         _nsid_with_imports.clear()
 
         _generate_params_models(builder.build_params_models(active))

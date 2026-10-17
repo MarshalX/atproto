@@ -1,4 +1,7 @@
+import stat
 import sys
+import zipfile
+from io import BytesIO
 from pathlib import Path
 
 import pytest
@@ -13,6 +16,7 @@ from update_lexicons import (
     _build_commit_message,
     _build_title,
     _diff_lexicons,
+    _extract_zip,
     _format_lexicon_filename,
     _merge_extracted_lexicons,
     _set_output,
@@ -20,6 +24,7 @@ from update_lexicons import (
 )
 
 _ATPROTO = LexiconSource(repo='atproto')
+_ATPROTO_BSKY = LexiconSource(repo='atproto', lexicons_dir='packages/bsky/lexicons')
 _JETSTREAM = LexiconSource(repo='jetstream', subpath='network/')
 
 
@@ -35,6 +40,37 @@ def test_nsid_path_is_flattened_into_the_filename() -> None:
     filename = _format_lexicon_filename(path, _JETSTREAM)
 
     assert filename == 'network.bsky.jetstream.subscribeEvents.json'
+
+
+def _zip(files: dict, symlinks: dict) -> BytesIO:
+    buffer = BytesIO()
+    with zipfile.ZipFile(buffer, 'w') as archive:
+        for name, content in files.items():
+            archive.writestr(name, content)
+        for name, target in symlinks.items():
+            info = zipfile.ZipInfo(name)
+            info.external_attr = (stat.S_IFLNK | 0o777) << 16
+            archive.writestr(info, target)
+
+    return buffer
+
+
+def test_package_snapshot_lexicons_are_extracted_with_symlinks_resolved() -> None:
+    override = 'lexicons-overrides/app/bsky/embed/external.json'
+    archive = _zip(
+        {
+            'atproto-main/lexicons/com/atproto/repo/strongRef.json': b'{"id": "com.atproto.repo.strongRef"}',
+            'atproto-main/lexicons-overrides/app/bsky/embed/external.json': b'{"id": "app.bsky.embed.external"}',
+            'atproto-main/packages/bsky/lexicons/app/bsky/actor/defs.json': b'{"id": "app.bsky.actor.defs"}',
+            'atproto-main/packages/bsky/lexicons/README.md': b'# readme',
+        },
+        {'atproto-main/packages/bsky/lexicons/app/bsky/embed/external.json': f'{"../" * 6}{override}'},
+    )
+
+    assert _extract_zip(archive, _ATPROTO_BSKY) == {
+        'app.bsky.actor.defs.json': b'{"id": "app.bsky.actor.defs"}',
+        'app.bsky.embed.external.json': b'{"id": "app.bsky.embed.external"}',
+    }
 
 
 def test_merge_keeps_lexicons_of_every_source() -> None:

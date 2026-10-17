@@ -3,6 +3,8 @@
 
 import json
 import os
+import posixpath
+import stat
 import subprocess
 import sys
 import traceback
@@ -47,10 +49,12 @@ class LexiconSource(t.NamedTuple):
     branch: str = _DEFAULT_BRANCH_NAME
     subpath: str = ''  #: Restricts the fetch to a subtree of the repo's lexicons dir.
     org: str = _ORG_NAME
+    lexicons_dir: str = _LEXICONS_FOLDER_NAME
 
 
 _SOURCES = (
     LexiconSource(repo='atproto'),
+    LexiconSource(repo='atproto', lexicons_dir='packages/bsky/lexicons'),
     LexiconSource(repo='jetstream', subpath='network/'),
 )
 
@@ -82,7 +86,7 @@ def _get_last_commit_info(source: LexiconSource) -> t.Tuple[str, str, str]:
     response = httpx.get(
         url=_build_last_commit_api_url(source),
         params={
-            'path': f'{_LEXICONS_FOLDER_NAME}/{source.subpath}'.rstrip('/'),
+            'path': f'{source.lexicons_dir}/{source.subpath}'.rstrip('/'),
             'sha': source.branch,
             'per_page': 1,
         },
@@ -112,7 +116,7 @@ def _download_zip_with_code(source: LexiconSource) -> BytesIO:
 
 
 def _build_valid_path_to_lexicons(source: LexiconSource) -> str:
-    return f'{source.repo}-{source.branch}/{_LEXICONS_FOLDER_NAME}/'
+    return f'{source.repo}-{source.branch}/{source.lexicons_dir}/'
 
 
 def _validate_lexicon_path_prefix(path: str, source: LexiconSource) -> bool:
@@ -122,21 +126,25 @@ def _validate_lexicon_path_prefix(path: str, source: LexiconSource) -> bool:
 ExtractedFiles = t.Dict[str, bytes]
 
 
+def _read_entry(archive: zipfile.ZipFile, info: zipfile.ZipInfo) -> bytes:
+    """Read an entry, following a git symlink to its target."""
+    content = archive.read(info)
+    if stat.S_ISLNK(info.external_attr >> 16):
+        content = archive.read(posixpath.normpath(posixpath.join(posixpath.dirname(info.filename), content.decode())))
+
+    return content
+
+
 def _extract_zip(zip_file: BytesIO, source: LexiconSource) -> ExtractedFiles:
     """Extract lexicons of the source keyed by their flattened output filename."""
     archive = zipfile.ZipFile(zip_file)
 
     extracted_files: ExtractedFiles = {}
-    for name in archive.namelist():
-        if not _validate_lexicon_path_prefix(name, source):
+    for info in archive.infolist():
+        if not info.filename.endswith(_LEXICON_FILE_SUFFIX) or not _validate_lexicon_path_prefix(info.filename, source):
             continue
 
-        content = archive.read(name)
-        if not content:
-            # if dir name
-            continue
-
-        extracted_files[_format_lexicon_filename(name, source)] = content
+        extracted_files[_format_lexicon_filename(info.filename, source)] = _read_entry(archive, info)
 
     return extracted_files
 
