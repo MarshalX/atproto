@@ -19,11 +19,7 @@
       },
       "output": {
         "encoding": "application/json",
-        "schema": {
-          "type": "object",
-          "required": [],
-          "properties": {}
-        }
+        "schema": { "type": "object", "required": [], "properties": {} }
       }
     }
   }

@@ -32,10 +32,7 @@
       },
       "output": {
         "encoding": "application/json",
-        "schema": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#state"
-        }
+        "schema": { "type": "ref", "ref": "app.bsky.ageassurance.defs#state" }
       },
       "errors": [
         { "name": "InvalidEmail" },

@@ -7,10 +7,7 @@
       "type": "object",
       "required": ["code"],
       "properties": {
-        "code": {
-          "type": "string",
-          "description": "The join link code."
-        }
+        "code": { "type": "string", "description": "The join link code." }
       }
     },
     "view": {

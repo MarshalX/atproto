@@ -37,15 +37,8 @@
       "type": "object",
       "required": ["lang", "file"],
       "properties": {
-        "lang": {
-          "type": "string",
-          "format": "language"
-        },
-        "file": {
-          "type": "blob",
-          "accept": ["text/vtt"],
-          "maxSize": 20000
-        }
+        "lang": { "type": "string", "format": "language" },
+        "file": { "type": "blob", "accept": ["text/vtt"], "maxSize": 20000 }
       }
     },
     "view": {
@@ -55,9 +48,7 @@
         "cid": { "type": "string", "format": "cid" },
         "playlist": { "type": "string", "format": "uri" },
         "thumbnail": { "type": "string", "format": "uri" },
-        "alt": {
-          "type": "string"
-        },
+        "alt": { "type": "string" },
         "aspectRatio": {
           "type": "ref",
           "ref": "app.bsky.embed.defs#aspectRatio"

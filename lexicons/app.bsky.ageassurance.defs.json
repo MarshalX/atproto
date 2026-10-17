@@ -22,14 +22,8 @@
           "format": "datetime",
           "description": "The timestamp when this state was last updated."
         },
-        "status": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#status"
-        },
-        "access": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#access"
-        }
+        "status": { "type": "ref", "ref": "app.bsky.ageassurance.defs#status" },
+        "access": { "type": "ref", "ref": "app.bsky.ageassurance.defs#access" }
       }
     },
     "stateMetadata": {
@@ -87,10 +81,7 @@
         "additionalVerificationMethods": {
           "type": "array",
           "description": "Verification methods permitted in this region in addition to the third-party (KWS) flow, which is always supported. `device` permits using the native on-device age APIs (e.g. Apple Declared Age Range, Google Play Age Signals).",
-          "items": {
-            "type": "string",
-            "knownValues": ["device"]
-          }
+          "items": { "type": "string", "knownValues": ["device"] }
         },
         "rules": {
           "type": "array",
@@ -115,10 +106,7 @@
       "description": "Age Assurance rule that applies by default.",
       "required": ["access"],
       "properties": {
-        "access": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#access"
-        }
+        "access": { "type": "ref", "ref": "app.bsky.ageassurance.defs#access" }
       }
     },
     "configRegionRuleIfDeclaredOverAge": {
@@ -130,10 +118,7 @@
           "type": "integer",
           "description": "The age threshold as a whole integer."
         },
-        "access": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#access"
-        }
+        "access": { "type": "ref", "ref": "app.bsky.ageassurance.defs#access" }
       }
     },
     "configRegionRuleIfDeclaredUnderAge": {
@@ -145,10 +130,7 @@
           "type": "integer",
           "description": "The age threshold as a whole integer."
         },
-        "access": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#access"
-        }
+        "access": { "type": "ref", "ref": "app.bsky.ageassurance.defs#access" }
       }
     },
     "configRegionRuleIfAssuredOverAge": {
@@ -160,10 +142,7 @@
           "type": "integer",
           "description": "The age threshold as a whole integer."
         },
-        "access": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#access"
-        }
+        "access": { "type": "ref", "ref": "app.bsky.ageassurance.defs#access" }
       }
     },
     "configRegionRuleIfAssuredUnderAge": {
@@ -175,10 +154,7 @@
           "type": "integer",
           "description": "The age threshold as a whole integer."
         },
-        "access": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#access"
-        }
+        "access": { "type": "ref", "ref": "app.bsky.ageassurance.defs#access" }
       }
     },
     "configRegionRuleIfAccountNewerThan": {
@@ -191,10 +167,7 @@
           "format": "datetime",
           "description": "The date threshold as a datetime string."
         },
-        "access": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#access"
-        }
+        "access": { "type": "ref", "ref": "app.bsky.ageassurance.defs#access" }
       }
     },
     "configRegionRuleIfAccountOlderThan": {
@@ -207,10 +180,7 @@
           "format": "datetime",
           "description": "The date threshold as a datetime string."
         },
-        "access": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#access"
-        }
+        "access": { "type": "ref", "ref": "app.bsky.ageassurance.defs#access" }
       }
     },
     "event": {

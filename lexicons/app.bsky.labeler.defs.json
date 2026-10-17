@@ -61,9 +61,7 @@
     },
     "labelerViewerState": {
       "type": "object",
-      "properties": {
-        "like": { "type": "string", "format": "at-uri" }
-      }
+      "properties": { "like": { "type": "string", "format": "at-uri" } }
     },
     "labelerPolicies": {
       "type": "object",
@@ -72,10 +70,7 @@
         "labelValues": {
           "type": "array",
           "description": "The label values which this labeler publishes. May include global or custom labels.",
-          "items": {
-            "type": "ref",
-            "ref": "com.atproto.label.defs#labelValue"
-          }
+          "items": { "type": "ref", "ref": "com.atproto.label.defs#labelValue" }
         },
         "labelValueDefinitions": {
           "type": "array",

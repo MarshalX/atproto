@@ -36,21 +36,11 @@
         }
       },
       "errors": [
-        {
-          "name": "RateLimitExceeded"
-        },
-        {
-          "name": "InvalidDid"
-        },
-        {
-          "name": "InvalidPhone"
-        },
-        {
-          "name": "InvalidCode"
-        },
-        {
-          "name": "InternalError"
-        }
+        { "name": "RateLimitExceeded" },
+        { "name": "InvalidDid" },
+        { "name": "InvalidPhone" },
+        { "name": "InvalidCode" },
+        { "name": "InternalError" }
       ]
     }
   }

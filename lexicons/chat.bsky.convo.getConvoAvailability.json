@@ -13,10 +13,7 @@
             "type": "array",
             "minLength": 1,
             "maxLength": 10,
-            "items": {
-              "type": "string",
-              "format": "did"
-            }
+            "items": { "type": "string", "format": "did" }
           }
         }
       },
@@ -26,13 +23,8 @@
           "type": "object",
           "required": ["canChat"],
           "properties": {
-            "canChat": {
-              "type": "boolean"
-            },
-            "convo": {
-              "type": "ref",
-              "ref": "chat.bsky.convo.defs#convoView"
-            }
+            "canChat": { "type": "boolean" },
+            "convo": { "type": "ref", "ref": "chat.bsky.convo.defs#convoView" }
           }
         }
       }

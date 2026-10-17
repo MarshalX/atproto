@@ -133,6 +133,7 @@ REDIRECTS = {
     'atproto/atproto_client.models.app.bsky.richtext.html': '/models/app/bsky/richtext/',
     'atproto/atproto_client.models.app.bsky.unspecced.defs.html': '/models/app/bsky/unspecced/defs/',
     'atproto/atproto_client.models.app.bsky.unspecced.get_age_assurance_state.html': '/models/app/bsky/unspecced/getAgeAssuranceState/',
+    'atproto/atproto_client.models.app.bsky.unspecced.get_atmosphere_explore_article_recommendations.html': '/models/app/bsky/unspecced/getAtmosphereExploreArticleRecommendations/',
     'atproto/atproto_client.models.app.bsky.unspecced.get_atmosphere_explore_tab.html': '/models/app/bsky/unspecced/getAtmosphereExploreTab/',
     'atproto/atproto_client.models.app.bsky.unspecced.get_config.html': '/models/app/bsky/unspecced/getConfig/',
     'atproto/atproto_client.models.app.bsky.unspecced.get_onboarding_suggested_starter_packs.html': '/models/app/bsky/unspecced/getOnboardingSuggestedStarterPacks/',

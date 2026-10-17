@@ -137,6 +137,9 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
     from atproto_client.models.app.bsky.unspecced import get_age_assurance_state as AppBskyUnspeccedGetAgeAssuranceState
     from atproto_client.models.app.bsky.unspecced import (
+        get_atmosphere_explore_article_recommendations as AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations,
+    )
+    from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_explore_tab as AppBskyUnspeccedGetAtmosphereExploreTab,
     )
     from atproto_client.models.app.bsky.unspecced import get_config as AppBskyUnspeccedGetConfig
@@ -650,6 +653,9 @@ class _Ids:
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetAgeAssuranceState: str = 'app.bsky.unspecced.getAgeAssuranceState'
+    AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations: str = (
+        'app.bsky.unspecced.getAtmosphereExploreArticleRecommendations'
+    )
     AppBskyUnspeccedGetAtmosphereExploreTab: str = 'app.bsky.unspecced.getAtmosphereExploreTab'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
     AppBskyUnspeccedGetOnboardingSuggestedStarterPacks: str = 'app.bsky.unspecced.getOnboardingSuggestedStarterPacks'

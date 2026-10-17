@@ -33,10 +33,7 @@
           "hiddenReplies": {
             "type": "array",
             "maxLength": 300,
-            "items": {
-              "type": "string",
-              "format": "at-uri"
-            },
+            "items": { "type": "string", "format": "at-uri" },
             "description": "List of hidden reply URIs."
           }
         }
@@ -61,9 +58,7 @@
       "type": "object",
       "description": "Allow replies from actors on a list.",
       "required": ["list"],
-      "properties": {
-        "list": { "type": "string", "format": "at-uri" }
-      }
+      "properties": { "list": { "type": "string", "format": "at-uri" } }
     }
   }
 }

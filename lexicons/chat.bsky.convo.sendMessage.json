@@ -26,10 +26,7 @@
       },
       "output": {
         "encoding": "application/json",
-        "schema": {
-          "type": "ref",
-          "ref": "chat.bsky.convo.defs#messageView"
-        }
+        "schema": { "type": "ref", "ref": "chat.bsky.convo.defs#messageView" }
       }
     }
   }

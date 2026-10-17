@@ -20,24 +20,13 @@
       },
       "output": {
         "encoding": "application/json",
-        "schema": {
-          "type": "object",
-          "properties": {}
-        }
+        "schema": { "type": "object", "properties": {} }
       },
       "errors": [
-        {
-          "name": "RateLimitExceeded"
-        },
-        {
-          "name": "InvalidDid"
-        },
-        {
-          "name": "InvalidPhone"
-        },
-        {
-          "name": "InternalError"
-        }
+        { "name": "RateLimitExceeded" },
+        { "name": "InvalidDid" },
+        { "name": "InvalidPhone" },
+        { "name": "InternalError" }
       ]
     }
   }

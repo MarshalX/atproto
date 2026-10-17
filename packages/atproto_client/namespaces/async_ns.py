@@ -1349,7 +1349,7 @@ class AppBskyEmbedNamespace(AsyncNamespaceBase):
         ],
         **kwargs: t.Any,
     ) -> 'models.AppBskyEmbedGetEmbedExternalView.Response':
-        """Resolve one or more AT-URIs into the data needed to render an enhanced external embed. Returns `associatedRefs` (strongRefs to embed into a post's external.associatedRefs), the raw `associatedRecords`, and a hydrated `view`. The response is empty (`{}`) when no records were resolvable, or when validation determined the resolved records don't actually back the requested URL; clients should fall back to their own link-card rendering in that case and skip writing strongRefs to the post.
+        """Resolve one AT-URI record into the data needed to render an enhanced external embed. The records are validated against the requested `url` before any view is built. When validation passes, returns `data`, `associatedRefs` (strongRefs to embed into a post's external.associatedRefs) and the raw `associatedRecords`, plus a legacy `view` for Standard.site records only. When validation fails, only `unverifiedAssociatedRefs` and `unverifiedAssociatedRecords` are returned and no view or data is built. The response is empty (`{}`) when no record URI was usable or the record could not be resolved; clients should fall back to their own link-card rendering in that case and skip writing strongRefs to the post.
 
         Args:
             params: Parameters.
@@ -5309,6 +5309,40 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedDefs.AgeAssuranceState)
 
+    async def get_atmosphere_explore_article_recommendations(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations.Params,
+                models.AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations.Response':
+        """Get a skeleton of recommended Atmosphere Explore articles. Intended to be called and hydrated by app.bsky.unspecced.getAtmosphereExploreTab.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = t.cast(
+            'models.AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations.Params',
+            get_or_create(params, models.AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations.Params),
+        )
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getAtmosphereExploreArticleRecommendations',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations.Response)
+
     async def get_atmosphere_explore_tab(
         self,
         params: t.Optional[
@@ -5319,7 +5353,7 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyUnspeccedGetAtmosphereExploreTab.Response':
-        """Get curated Atmosphere Explore content. Authentication is optional; authenticated requests include viewer-specific profile state.
+        """Get Atmosphere Explore content. Articles are recommended when algorithmic recommendations are enabled for the request, and curated otherwise; other sections are curated. Authentication is optional; authenticated requests include viewer-specific profile state.
 
         Args:
             params: Parameters.
@@ -12848,7 +12882,7 @@ class ToolsOzoneInboxNamespace(AsyncNamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.ToolsOzoneInboxGetNotificationPreferences.Response':
-        """Get notification preferences.
+        """Get moderation push notification preferences for report outcomes, account actions, and labeling. Returns all three categories, defaulting to enabled for an account without saved preferences.
 
         Args:
             params: Parameters.
@@ -13012,13 +13046,15 @@ class ToolsOzoneInboxNamespace(AsyncNamespaceBase):
 
     async def put_notification_preferences(
         self,
-        data: t.Union[
-            models.ToolsOzoneInboxPutNotificationPreferences.Data,
-            models.ToolsOzoneInboxPutNotificationPreferences.DataDict,
-        ],
+        data: t.Optional[
+            t.Union[
+                models.ToolsOzoneInboxPutNotificationPreferences.Data,
+                models.ToolsOzoneInboxPutNotificationPreferences.DataDict,
+            ]
+        ] = None,
         **kwargs: t.Any,
     ) -> 'models.ToolsOzoneInboxPutNotificationPreferences.Response':
-        """Put notification preferences.
+        """Update the authenticated account's moderation push notification preferences. Only provided categories are updated; omitted categories retain their values. At least one category must be provided. Returns all three preferences. These preferences do not hide in-app inbox activity.
 
         Args:
             data: Input data.

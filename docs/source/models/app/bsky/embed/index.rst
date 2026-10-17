@@ -33,7 +33,7 @@ Post embeds: images, video, external links, and quoted records.
       :link: /models/app/bsky/embed/getEmbedExternalView
       :link-type: doc
 
-      Resolve one or more AT-URIs into the data needed to render an enhanced external embed.
+      Resolve one AT-URI record into the data needed to render an enhanced external embed.
 
    .. grid-item-card:: :octicon:`package;1em;sd-mr-1` images
       :link: /models/app/bsky/embed/images

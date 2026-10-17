@@ -7,10 +7,7 @@
       "type": "object",
       "required": ["record", "media"],
       "properties": {
-        "record": {
-          "type": "ref",
-          "ref": "app.bsky.embed.record"
-        },
+        "record": { "type": "ref", "ref": "app.bsky.embed.record" },
         "media": {
           "type": "union",
           "refs": [
@@ -26,10 +23,7 @@
       "type": "object",
       "required": ["record", "media"],
       "properties": {
-        "record": {
-          "type": "ref",
-          "ref": "app.bsky.embed.record#view"
-        },
+        "record": { "type": "ref", "ref": "app.bsky.embed.record#view" },
         "media": {
           "type": "union",
           "refs": [

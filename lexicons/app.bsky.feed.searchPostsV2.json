@@ -31,18 +31,12 @@
           },
           "authors": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "at-identifier"
-            },
+            "items": { "type": "string", "format": "at-identifier" },
             "description": "Include posts by any of these authors. Handles are resolved to DIDs before searching."
           },
           "mentions": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "at-identifier"
-            },
+            "items": { "type": "string", "format": "at-identifier" },
             "description": "Include posts that mention any of these accounts. Handles are resolved to DIDs before searching."
           },
           "domains": {
@@ -52,43 +46,27 @@
           },
           "urls": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uri"
-            },
+            "items": { "type": "string", "format": "uri" },
             "description": "Include posts that link to any of these URLs."
           },
           "embeddedAtUris": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "at-uri"
-            },
+            "items": { "type": "string", "format": "at-uri" },
             "description": "Include posts that embed any of these AT URIs."
           },
           "hashtags": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "maxLength": 640,
-              "maxGraphemes": 64
-            },
+            "items": { "type": "string", "maxLength": 640, "maxGraphemes": 64 },
             "description": "Include posts tagged with any of these hashtags. Do not include the hash (#) prefix."
           },
           "excludeAuthors": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "at-identifier"
-            },
+            "items": { "type": "string", "format": "at-identifier" },
             "description": "Exclude posts by any of these authors. Handles are resolved to DIDs before searching."
           },
           "excludeMentions": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "at-identifier"
-            },
+            "items": { "type": "string", "format": "at-identifier" },
             "description": "Exclude posts that mention any of these accounts. Handles are resolved to DIDs before searching."
           },
           "excludeDomains": {
@@ -98,27 +76,17 @@
           },
           "excludeUrls": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uri"
-            },
+            "items": { "type": "string", "format": "uri" },
             "description": "Exclude posts that link to any of these URLs."
           },
           "excludeEmbeddedAtUris": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "at-uri"
-            },
+            "items": { "type": "string", "format": "at-uri" },
             "description": "Exclude posts that embed any of these AT URIs."
           },
           "excludeHashtags": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "maxLength": 640,
-              "maxGraphemes": 64
-            },
+            "items": { "type": "string", "maxLength": 640, "maxGraphemes": 64 },
             "description": "Exclude posts tagged with any of these hashtags. Do not include the hash (#) prefix."
           },
           "since": {
@@ -135,18 +103,12 @@
           },
           "languages": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "language"
-            },
+            "items": { "type": "string", "format": "language" },
             "description": "Include posts whose language matches any of these language codes."
           },
           "excludeLanguages": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "language"
-            },
+            "items": { "type": "string", "format": "language" },
             "description": "Exclude posts whose language matches any of these language codes."
           },
           "hasMedia": {
@@ -202,10 +164,7 @@
             },
             "posts": {
               "type": "array",
-              "items": {
-                "type": "ref",
-                "ref": "app.bsky.feed.defs#postView"
-              },
+              "items": { "type": "ref", "ref": "app.bsky.feed.defs#postView" },
               "description": "Hydrated views of matching posts."
             },
             "detectedQueryLanguages": {

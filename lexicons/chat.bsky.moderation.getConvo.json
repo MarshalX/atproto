@@ -9,9 +9,7 @@
       "parameters": {
         "type": "params",
         "required": ["convoId"],
-        "properties": {
-          "convoId": { "type": "string" }
-        }
+        "properties": { "convoId": { "type": "string" } }
       },
       "output": {
         "encoding": "application/json",

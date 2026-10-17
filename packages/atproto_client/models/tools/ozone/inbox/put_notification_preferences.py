@@ -7,6 +7,8 @@
 
 import typing as t
 
+import typing_extensions as te
+
 if t.TYPE_CHECKING:
     from atproto_client import models
 from atproto_client.models import base
@@ -15,11 +17,21 @@ from atproto_client.models import base
 class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.inbox.putNotificationPreferences`."""
 
-    push: bool  #: Push.
+    account: t.Optional[bool] = (
+        None  #: Notify about moderation actions against the account or its content, excluding labeling.
+    )
+    labels: t.Optional[bool] = None  #: Notify about labels applied to or removed from the account or its content.
+    reports: t.Optional[bool] = None  #: Notify about outcomes of reports filed by the account.
 
 
 class DataDict(t.TypedDict):
-    push: bool  #: Push.
+    account: te.NotRequired[
+        t.Optional[bool]
+    ]  #: Notify about moderation actions against the account or its content, excluding labeling.
+    labels: te.NotRequired[
+        t.Optional[bool]
+    ]  #: Notify about labels applied to or removed from the account or its content.
+    reports: te.NotRequired[t.Optional[bool]]  #: Notify about outcomes of reports filed by the account.
 
 
 class Response(base.ResponseModelBase):

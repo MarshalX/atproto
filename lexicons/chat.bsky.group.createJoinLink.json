@@ -17,10 +17,7 @@
           "required": ["convoId", "joinRule"],
           "properties": {
             "convoId": { "type": "string" },
-            "requireApproval": {
-              "type": "boolean",
-              "default": false
-            },
+            "requireApproval": { "type": "boolean", "default": false },
             "joinRule": {
               "type": "ref",
               "ref": "chat.bsky.group.defs#joinRule"

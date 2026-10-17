@@ -27,10 +27,7 @@
           "type": "object",
           "required": ["convo"],
           "properties": {
-            "convo": {
-              "type": "ref",
-              "ref": "chat.bsky.convo.defs#convoView"
-            }
+            "convo": { "type": "ref", "ref": "chat.bsky.convo.defs#convoView" }
           }
         }
       }

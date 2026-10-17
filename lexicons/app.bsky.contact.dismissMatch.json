@@ -21,19 +21,9 @@
       },
       "output": {
         "encoding": "application/json",
-        "schema": {
-          "type": "object",
-          "properties": {}
-        }
+        "schema": { "type": "object", "properties": {} }
       },
-      "errors": [
-        {
-          "name": "InvalidDid"
-        },
-        {
-          "name": "InternalError"
-        }
-      ]
+      "errors": [{ "name": "InvalidDid" }, { "name": "InternalError" }]
     }
   }
 }

@@ -119,6 +119,7 @@ ALIASES_DB = {
     'models.AppBskyRichtextFacet': 'atproto_client.models.app.bsky.richtext.facet',
     'models.AppBskyUnspeccedDefs': 'atproto_client.models.app.bsky.unspecced.defs',
     'models.AppBskyUnspeccedGetAgeAssuranceState': 'atproto_client.models.app.bsky.unspecced.get_age_assurance_state',
+    'models.AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations': 'atproto_client.models.app.bsky.unspecced.get_atmosphere_explore_article_recommendations',
     'models.AppBskyUnspeccedGetAtmosphereExploreTab': 'atproto_client.models.app.bsky.unspecced.get_atmosphere_explore_tab',
     'models.AppBskyUnspeccedGetConfig': 'atproto_client.models.app.bsky.unspecced.get_config',
     'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks': 'atproto_client.models.app.bsky.unspecced.get_onboarding_suggested_starter_packs',

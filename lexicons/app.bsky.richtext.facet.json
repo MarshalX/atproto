@@ -18,17 +18,13 @@
       "type": "object",
       "description": "Facet feature for mention of another account. The text is usually a handle, including a '@' prefix, but the facet reference is a DID.",
       "required": ["did"],
-      "properties": {
-        "did": { "type": "string", "format": "did" }
-      }
+      "properties": { "did": { "type": "string", "format": "did" } }
     },
     "link": {
       "type": "object",
       "description": "Facet feature for a URL. The text URL may have been simplified or truncated, but the facet reference should be a complete URL.",
       "required": ["uri"],
-      "properties": {
-        "uri": { "type": "string", "format": "uri" }
-      }
+      "properties": { "uri": { "type": "string", "format": "uri" } }
     },
     "tag": {
       "type": "object",

@@ -26,10 +26,7 @@
       },
       "output": {
         "encoding": "application/json",
-        "schema": {
-          "type": "object",
-          "properties": {}
-        }
+        "schema": { "type": "object", "properties": {} }
       }
     }
   }

@@ -15,7 +15,7 @@ from atproto_client.models import string_formats
 if t.TYPE_CHECKING:
     from atproto_client import models
     from atproto_client.models.blob_ref import BlobRef
-from atproto_client.models import base
+from atproto_client.models import base, unknown_union
 
 
 class Record(base.RecordModelBase):
@@ -24,6 +24,9 @@ class Record(base.RecordModelBase):
     created_at: string_formats.DateTime  #: Created at.
     url: string_formats.Uri  #: The link destination, an https URL.
     icon: t.Optional['BlobRef'] = None  #: The destination site's icon, uploaded when the link is saved.
+    labels: t.Optional[unknown_union.OpenUnion['models.ComAtprotoLabelDefs.SelfLabels']] = (
+        None  #: Self-label values for this link.
+    )
     title: te.Annotated[t.Optional[str], Field(max_length=320)] = (
         None  #: Optional label for the link. Clients can fall back to the destination's domain.
     )

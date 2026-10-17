@@ -11,18 +11,12 @@
         "schema": {
           "type": "object",
           "required": ["convoId"],
-          "properties": {
-            "convoId": { "type": "string" }
-          }
+          "properties": { "convoId": { "type": "string" } }
         }
       },
       "output": {
         "encoding": "application/json",
-        "schema": {
-          "type": "object",
-          "required": [],
-          "properties": {}
-        }
+        "schema": { "type": "object", "required": [], "properties": {} }
       }
     }
   }
