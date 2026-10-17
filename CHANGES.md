@@ -1,5 +1,17 @@
 # Change Log
 
+## Version 0.0.73
+
+**17.10.2026**
+
+**✨ [Automatic facet detection](https://atproto.blue/guides/posting/#detecting-facets): `client.detect_facets(text)` finds mentions, links, hashtags and cashtags in plain text, resolves the handles to DIDs, and returns facets ready for `send_post`**
+
+* Add `detect_facets` and `detect_mentions` to build rich text facets from plain text by [@pjpscriv](https://github.com/pjpscriv) in [#754](https://github.com/MarshalX/atproto/pull/754)
+* Accept `$type` in lexicon documents by [@MarshalX](https://github.com/MarshalX) in [#755](https://github.com/MarshalX/atproto/pull/755)
+* Make `atp gen` report every unresolved reference before it writes any file by [@MarshalX](https://github.com/MarshalX) in [#757](https://github.com/MarshalX/atproto/pull/757)
+* Fix lexicon updates after upstream moved `app.bsky` and `chat.bsky` out of `bluesky-social/atproto/lexicons` by [@MarshalX](https://github.com/MarshalX) in [#757](https://github.com/MarshalX/atproto/pull/757)
+* Update lexicons with `app.bsky.notification.getGroupedNotifications`, `app.bsky.actor.link`, `app.bsky.unspecced.getAtmosphereExploreArticleRecommendations` and more by [@MarshalX](https://github.com/MarshalX) in [#751](https://github.com/MarshalX/atproto/pull/751), [#753](https://github.com/MarshalX/atproto/pull/753), [#756](https://github.com/MarshalX/atproto/pull/756) and [#758](https://github.com/MarshalX/atproto/pull/758)
+
 ## Version 0.0.72
 
 **10.09.2026**
