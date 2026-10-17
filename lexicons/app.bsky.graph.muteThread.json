@@ -10,9 +10,7 @@
         "schema": {
           "type": "object",
           "required": ["root"],
-          "properties": {
-            "root": { "type": "string", "format": "at-uri" }
-          }
+          "properties": { "root": { "type": "string", "format": "at-uri" } }
         }
       }
     }

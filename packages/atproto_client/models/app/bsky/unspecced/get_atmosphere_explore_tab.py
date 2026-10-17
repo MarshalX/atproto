@@ -21,7 +21,9 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
     country_code: t.Optional[str] = None  #: The ISO 3166-1 alpha-2 country code used to select curated content.
-    langs: t.Optional[t.List[string_formats.Language]] = None  #: Preferred languages. Currently ignored.
+    langs: t.Optional[t.List[string_formats.Language]] = (
+        None  #: Preferred languages for article recommendations when algorithmic recommendations are enabled. Ignored otherwise.
+    )
     region_code: t.Optional[str] = None  #: The ISO 3166-2 region code used to select curated content.
 
 
@@ -29,7 +31,9 @@ class ParamsDict(t.TypedDict):
     country_code: te.NotRequired[
         t.Optional[str]
     ]  #: The ISO 3166-1 alpha-2 country code used to select curated content.
-    langs: te.NotRequired[t.Optional[t.List[string_formats.Language]]]  #: Preferred languages. Currently ignored.
+    langs: te.NotRequired[
+        t.Optional[t.List[string_formats.Language]]
+    ]  #: Preferred languages for article recommendations when algorithmic recommendations are enabled. Ignored otherwise.
     region_code: te.NotRequired[t.Optional[str]]  #: The ISO 3166-2 region code used to select curated content.
 
 
@@ -37,12 +41,64 @@ class Response(base.ResponseModelBase):
     """Output data model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
     apps: t.List['models.AppBskyUnspeccedGetAtmosphereExploreTab.AppCard'] = Field(max_length=100)  #: Apps.
-    articles: t.List['models.AppBskyUnspeccedGetAtmosphereExploreTab.ArticleItem']  #: Articles.
-    livestreams: t.List['models.AppBskyUnspeccedGetAtmosphereExploreTab.LivestreamItem']  #: Livestreams.
-    photos: t.List['models.AppBskyUnspeccedGetAtmosphereExploreTab.GalleryItem']  #: Photos.
-    publications: t.List['models.AppBskyUnspeccedGetAtmosphereExploreTab.PublicationItem']  #: Publications.
+    articles: 'models.AppBskyUnspeccedGetAtmosphereExploreTab.ArticleList'  #: Articles.
+    livestreams: 'models.AppBskyUnspeccedGetAtmosphereExploreTab.LivestreamList'  #: Livestreams.
+    photos: 'models.AppBskyUnspeccedGetAtmosphereExploreTab.GalleryList'  #: Photos.
+    publications: 'models.AppBskyUnspeccedGetAtmosphereExploreTab.PublicationList'  #: Publications.
     announcement_banner: t.Optional['models.AppBskyUnspeccedGetAtmosphereExploreTab.AnnouncementBanner'] = (
         None  #: Announcement banner.
+    )
+
+
+class ArticleList(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
+
+    items: t.List['models.AppBskyUnspeccedGetAtmosphereExploreTab.ArticleItem']  #: Items.
+    rec_id_str: t.Optional[str] = (
+        None  #: Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the list is not algorithmically recommended.
+    )
+
+    py_type: t.Literal['app.bsky.unspecced.getAtmosphereExploreTab#articleList'] = Field(
+        default='app.bsky.unspecced.getAtmosphereExploreTab#articleList', alias='$type', frozen=True
+    )
+
+
+class PublicationList(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
+
+    items: t.List['models.AppBskyUnspeccedGetAtmosphereExploreTab.PublicationItem']  #: Items.
+    rec_id_str: t.Optional[str] = (
+        None  #: Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the list is not algorithmically recommended.
+    )
+
+    py_type: t.Literal['app.bsky.unspecced.getAtmosphereExploreTab#publicationList'] = Field(
+        default='app.bsky.unspecced.getAtmosphereExploreTab#publicationList', alias='$type', frozen=True
+    )
+
+
+class GalleryList(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
+
+    items: t.List['models.AppBskyUnspeccedGetAtmosphereExploreTab.GalleryItem']  #: Items.
+    rec_id_str: t.Optional[str] = (
+        None  #: Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the list is not algorithmically recommended.
+    )
+
+    py_type: t.Literal['app.bsky.unspecced.getAtmosphereExploreTab#galleryList'] = Field(
+        default='app.bsky.unspecced.getAtmosphereExploreTab#galleryList', alias='$type', frozen=True
+    )
+
+
+class LivestreamList(base.ModelBase):
+    """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
+
+    items: t.List['models.AppBskyUnspeccedGetAtmosphereExploreTab.LivestreamItem']  #: Items.
+    rec_id_str: t.Optional[str] = (
+        None  #: Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the list is not algorithmically recommended.
+    )
+
+    py_type: t.Literal['app.bsky.unspecced.getAtmosphereExploreTab#livestreamList'] = Field(
+        default='app.bsky.unspecced.getAtmosphereExploreTab#livestreamList', alias='$type', frozen=True
     )
 
 

@@ -24,9 +24,7 @@
     "feed": {
       "type": "object",
       "required": ["uri"],
-      "properties": {
-        "uri": { "type": "string", "format": "at-uri" }
-      }
+      "properties": { "uri": { "type": "string", "format": "at-uri" } }
     },
     "links": {
       "type": "object",

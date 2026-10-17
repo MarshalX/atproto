@@ -479,10 +479,7 @@
           "description": "Current member count at the time of the event.",
           "type": "integer"
         },
-        "groupName": {
-          "description": "Current group name.",
-          "type": "string"
-        },
+        "groupName": { "description": "Current group name.", "type": "string" },
         "joinLinkCode": {
           "description": "The code of the join link. Only present when updateType is join-link-related.",
           "type": "string"

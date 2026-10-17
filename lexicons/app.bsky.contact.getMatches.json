@@ -35,18 +35,10 @@
         }
       },
       "errors": [
-        {
-          "name": "InvalidDid"
-        },
-        {
-          "name": "InvalidLimit"
-        },
-        {
-          "name": "InvalidCursor"
-        },
-        {
-          "name": "InternalError"
-        }
+        { "name": "InvalidDid" },
+        { "name": "InvalidLimit" },
+        { "name": "InvalidCursor" },
+        { "name": "InternalError" }
       ]
     }
   }

@@ -13,9 +13,7 @@
           "partNumber": { "type": "integer", "minimum": 1 }
         }
       },
-      "input": {
-        "encoding": "application/octet-stream"
-      },
+      "input": { "encoding": "application/octet-stream" },
       "output": {
         "encoding": "application/json",
         "schema": {

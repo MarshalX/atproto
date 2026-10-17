@@ -20,9 +20,7 @@
         "schema": {
           "type": "object",
           "required": ["count"],
-          "properties": {
-            "count": { "type": "integer" }
-          }
+          "properties": { "count": { "type": "integer" } }
         }
       }
     }

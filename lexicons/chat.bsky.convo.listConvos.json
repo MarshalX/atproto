@@ -15,10 +15,7 @@
             "default": 50
           },
           "cursor": { "type": "string" },
-          "readState": {
-            "type": "string",
-            "knownValues": ["unread"]
-          },
+          "readState": { "type": "string", "knownValues": ["unread"] },
           "status": {
             "description": "Filter convos by their status. It is discouraged to call with \"request\" and preferred to call chat.bsky.convo.listConvoRequests, which also includes group join requests made by the user.",
             "type": "string",

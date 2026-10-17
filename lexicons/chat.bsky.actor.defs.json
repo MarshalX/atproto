@@ -2,10 +2,7 @@
   "lexicon": 1,
   "id": "chat.bsky.actor.defs",
   "defs": {
-    "memberRole": {
-      "type": "string",
-      "knownValues": ["owner", "standard"]
-    },
+    "memberRole": { "type": "string", "knownValues": ["owner", "standard"] },
     "profileViewBasic": {
       "type": "object",
       "required": ["did", "handle"],
@@ -47,10 +44,7 @@
         }
       }
     },
-    "directConvoMember": {
-      "type": "object",
-      "properties": {}
-    },
+    "directConvoMember": { "type": "object", "properties": {} },
     "groupConvoMember": {
       "description": "A current group convo member.",
       "type": "object",

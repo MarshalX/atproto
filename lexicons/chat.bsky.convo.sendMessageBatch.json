@@ -19,10 +19,7 @@
             "items": {
               "type": "array",
               "maxLength": 100,
-              "items": {
-                "type": "ref",
-                "ref": "#batchItem"
-              }
+              "items": { "type": "ref", "ref": "#batchItem" }
             }
           }
         }
@@ -49,10 +46,7 @@
       "required": ["convoId", "message"],
       "properties": {
         "convoId": { "type": "string" },
-        "message": {
-          "type": "ref",
-          "ref": "chat.bsky.convo.defs#messageInput"
-        }
+        "message": { "type": "ref", "ref": "chat.bsky.convo.defs#messageInput" }
       }
     }
   }

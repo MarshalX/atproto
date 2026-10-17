@@ -10,9 +10,7 @@
         "schema": {
           "type": "object",
           "required": ["priority"],
-          "properties": {
-            "priority": { "type": "boolean" }
-          }
+          "properties": { "priority": { "type": "boolean" } }
         }
       }
     }

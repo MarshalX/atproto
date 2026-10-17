@@ -7,10 +7,7 @@
       "description": "Returns Age Assurance configuration for use on the client.",
       "output": {
         "encoding": "application/json",
-        "schema": {
-          "type": "ref",
-          "ref": "app.bsky.ageassurance.defs#config"
-        }
+        "schema": { "type": "ref", "ref": "app.bsky.ageassurance.defs#config" }
       }
     }
   }

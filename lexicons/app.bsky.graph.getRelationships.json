@@ -18,10 +18,7 @@
             "type": "array",
             "description": "List of 'other' accounts to be related back to the primary.",
             "maxLength": 30,
-            "items": {
-              "type": "string",
-              "format": "at-identifier"
-            }
+            "items": { "type": "string", "format": "at-identifier" }
           }
         }
       },

@@ -320,6 +320,7 @@ class SubscribedPostItem(base.ModelBase):
 
     actor: string_formats.Did  #: Actor.
     post: string_formats.AtUri  #: Post.
+    parent: t.Optional[string_formats.AtUri] = None  #: The post this one replies to, if it is a reply.
 
     py_type: t.Literal['app.bsky.notification.getGroupedNotifications#subscribedPostItem'] = Field(
         default='app.bsky.notification.getGroupedNotifications#subscribedPostItem', alias='$type', frozen=True

@@ -51,14 +51,8 @@
       "type": "object",
       "required": ["list"],
       "properties": {
-        "list": {
-          "type": "ref",
-          "ref": "app.bsky.graph.defs#listView"
-        },
-        "listItem": {
-          "type": "ref",
-          "ref": "app.bsky.graph.defs#listItemView"
-        }
+        "list": { "type": "ref", "ref": "app.bsky.graph.defs#listView" },
+        "listItem": { "type": "ref", "ref": "app.bsky.graph.defs#listItemView" }
       }
     }
   }

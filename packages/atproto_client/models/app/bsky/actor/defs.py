@@ -144,6 +144,7 @@ class ProfileLinkView(base.ModelBase):
     uri: string_formats.AtUri  #: The app.bsky.actor.link record, e.g. for reporting the link.
     url: string_formats.Uri  #: The link destination.
     icon: t.Optional[string_formats.Uri] = None  #: Image URL for the destination site's icon.
+    labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     title: te.Annotated[t.Optional[str], Field(max_length=320)] = None  #: Title.
 
     py_type: t.Literal['app.bsky.actor.defs#profileLinkView'] = Field(

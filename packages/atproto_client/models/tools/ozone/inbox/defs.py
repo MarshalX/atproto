@@ -57,6 +57,7 @@ class AppealView(base.ModelBase):
     state: t.Union[t.Literal['none', 'pending', 'resolved', 'superseded', 'expired'], str]  #: State.
     appealable_until: t.Optional[string_formats.DateTime] = None  #: Appealable until.
     appealed_at: t.Optional[string_formats.DateTime] = None  #: Appealed at.
+    outcome: t.Optional[t.Union[t.Literal['approved', 'denied'], str]] = None  #: Decision on a resolved appeal.
     resolved_at: t.Optional[string_formats.DateTime] = None  #: When the appeal's report was closed.
 
     py_type: t.Literal['tools.ozone.inbox.defs#appealView'] = Field(
@@ -164,9 +165,11 @@ class Notification(base.ModelBase):
 
 
 class NotificationPreferences(base.ModelBase):
-    """Definition model for :obj:`tools.ozone.inbox.defs`."""
+    """Definition model for :obj:`tools.ozone.inbox.defs`. Push notification preferences by moderation notification category. These preferences do not hide in-app inbox activity. Each category defaults to enabled."""
 
-    push: bool  #: Push.
+    account: bool  #: Notify about moderation actions against the account or its content, action reversals, appeal outcomes, and standing changes. Label application and removal are controlled by labels.
+    labels: bool  #: Notify when labels are applied to or removed from the account or its content (labelApplied and labelRemoved actions).
+    reports: bool  #: Notify about outcomes of reports filed by the account (reportResolved and reportReopened).
 
     py_type: t.Literal['tools.ozone.inbox.defs#notificationPreferences'] = Field(
         default='tools.ozone.inbox.defs#notificationPreferences', alias='$type', frozen=True
@@ -195,6 +198,9 @@ class SubjectRef(base.ModelBase):
     ]  #: Subject.
     action_id: t.Optional[int] = None  #: Action id.
     action_type: t.Optional[str] = None  #: Action type.
+    appeal_outcome: t.Optional[t.Union[t.Literal['approved', 'denied'], str]] = (
+        None  #: Decision captured when an appealResolved notification was created. Omitted when the outcome is unknown.
+    )
 
     py_type: t.Literal['tools.ozone.inbox.defs#subjectRef'] = Field(
         default='tools.ozone.inbox.defs#subjectRef', alias='$type', frozen=True

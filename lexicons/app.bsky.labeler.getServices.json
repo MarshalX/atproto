@@ -13,10 +13,7 @@
             "type": "array",
             "items": { "type": "string", "format": "did" }
           },
-          "detailed": {
-            "type": "boolean",
-            "default": false
-          }
+          "detailed": { "type": "boolean", "default": false }
         }
       },
       "output": {

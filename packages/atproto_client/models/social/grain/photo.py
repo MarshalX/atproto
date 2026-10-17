@@ -20,8 +20,8 @@ from atproto_client.models import base
 class Record(base.RecordModelBase):
     """Record model for :obj:`social.grain.photo`."""
 
-    alt: str  #: Alt text description of the image, for accessibility.
     photo: 'BlobRef'  #: Photo.
+    alt: t.Optional[str] = None  #: Alt text description of the image, for accessibility.
     aspect_ratio: t.Optional['models.SocialGrainDefs.AspectRatio'] = None  #: Aspect ratio.
     created_at: t.Optional[string_formats.DateTime] = None  #: Created at.
 

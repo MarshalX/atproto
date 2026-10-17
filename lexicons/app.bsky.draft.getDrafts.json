@@ -26,10 +26,7 @@
             "cursor": { "type": "string" },
             "drafts": {
               "type": "array",
-              "items": {
-                "type": "ref",
-                "ref": "app.bsky.draft.defs#draftView"
-              }
+              "items": { "type": "ref", "ref": "app.bsky.draft.defs#draftView" }
             }
           }
         }

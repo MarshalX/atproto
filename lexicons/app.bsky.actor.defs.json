@@ -15,24 +15,15 @@
         },
         "pronouns": { "type": "string" },
         "avatar": { "type": "string", "format": "uri" },
-        "associated": {
-          "type": "ref",
-          "ref": "#profileAssociated"
-        },
+        "associated": { "type": "ref", "ref": "#profileAssociated" },
         "viewer": { "type": "ref", "ref": "#viewerState" },
         "labels": {
           "type": "array",
           "items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
         },
         "createdAt": { "type": "string", "format": "datetime" },
-        "verification": {
-          "type": "ref",
-          "ref": "#verificationState"
-        },
-        "status": {
-          "type": "ref",
-          "ref": "#statusView"
-        },
+        "verification": { "type": "ref", "ref": "#verificationState" },
+        "status": { "type": "ref", "ref": "#statusView" },
         "debug": {
           "type": "unknown",
           "description": "Debug information for internal development"
@@ -57,10 +48,7 @@
           "maxLength": 2560
         },
         "avatar": { "type": "string", "format": "uri" },
-        "associated": {
-          "type": "ref",
-          "ref": "#profileAssociated"
-        },
+        "associated": { "type": "ref", "ref": "#profileAssociated" },
         "indexedAt": { "type": "string", "format": "datetime" },
         "createdAt": { "type": "string", "format": "datetime" },
         "viewer": { "type": "ref", "ref": "#viewerState" },
@@ -68,14 +56,8 @@
           "type": "array",
           "items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
         },
-        "verification": {
-          "type": "ref",
-          "ref": "#verificationState"
-        },
-        "status": {
-          "type": "ref",
-          "ref": "#statusView"
-        },
+        "verification": { "type": "ref", "ref": "#verificationState" },
+        "status": { "type": "ref", "ref": "#statusView" },
         "debug": {
           "type": "unknown",
           "description": "Debug information for internal development"
@@ -105,10 +87,7 @@
         "followersCount": { "type": "integer" },
         "followsCount": { "type": "integer" },
         "postsCount": { "type": "integer" },
-        "associated": {
-          "type": "ref",
-          "ref": "#profileAssociated"
-        },
+        "associated": { "type": "ref", "ref": "#profileAssociated" },
         "joinedViaStarterPack": {
           "type": "ref",
           "ref": "app.bsky.graph.defs#starterPackViewBasic"
@@ -120,23 +99,14 @@
           "type": "array",
           "items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
         },
-        "pinnedPost": {
-          "type": "ref",
-          "ref": "com.atproto.repo.strongRef"
-        },
+        "pinnedPost": { "type": "ref", "ref": "com.atproto.repo.strongRef" },
         "links": {
           "type": "array",
           "description": "The profile's links, in display order. Links that were taken down or don't resolve are left out.",
           "items": { "type": "ref", "ref": "#profileLinkView" }
         },
-        "verification": {
-          "type": "ref",
-          "ref": "#verificationState"
-        },
-        "status": {
-          "type": "ref",
-          "ref": "#statusView"
-        },
+        "verification": { "type": "ref", "ref": "#verificationState" },
+        "status": { "type": "ref", "ref": "#statusView" },
         "debug": {
           "type": "unknown",
           "description": "Debug information for internal development"
@@ -176,10 +146,7 @@
       "type": "object",
       "required": ["showButtonTo", "messageMeUrl"],
       "properties": {
-        "messageMeUrl": {
-          "type": "string",
-          "format": "uri"
-        },
+        "messageMeUrl": { "type": "string", "format": "uri" },
         "showButtonTo": {
           "type": "string",
           "knownValues": ["usersIFollow", "everyone"]
@@ -206,6 +173,10 @@
           "type": "string",
           "format": "uri",
           "description": "Image URL for the destination site's icon."
+        },
+        "labels": {
+          "type": "array",
+          "items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
         }
       }
     },
@@ -269,10 +240,7 @@
           "type": "array",
           "minLength": 0,
           "maxLength": 5,
-          "items": {
-            "type": "ref",
-            "ref": "#profileViewBasic"
-          }
+          "items": { "type": "ref", "ref": "#profileViewBasic" }
         }
       }
     },
@@ -360,9 +328,7 @@
     "adultContentPref": {
       "type": "object",
       "required": ["enabled"],
-      "properties": {
-        "enabled": { "type": "boolean", "default": false }
-      }
+      "properties": { "enabled": { "type": "boolean", "default": false } }
     },
     "contentLabelPref": {
       "type": "object",
@@ -384,19 +350,13 @@
       "type": "object",
       "required": ["id", "type", "value", "pinned"],
       "properties": {
-        "id": {
-          "type": "string"
-        },
+        "id": { "type": "string" },
         "type": {
           "type": "string",
           "knownValues": ["feed", "list", "timeline"]
         },
-        "value": {
-          "type": "string"
-        },
-        "pinned": {
-          "type": "boolean"
-        }
+        "value": { "type": "string" },
+        "pinned": { "type": "boolean" }
       }
     },
     "savedFeedsPrefV2": {
@@ -405,10 +365,7 @@
       "properties": {
         "items": {
           "type": "array",
-          "items": {
-            "type": "ref",
-            "ref": "app.bsky.actor.defs#savedFeed"
-          }
+          "items": { "type": "ref", "ref": "app.bsky.actor.defs#savedFeed" }
         }
       }
     },
@@ -418,21 +375,13 @@
       "properties": {
         "pinned": {
           "type": "array",
-          "items": {
-            "type": "string",
-            "format": "at-uri"
-          }
+          "items": { "type": "string", "format": "at-uri" }
         },
         "saved": {
           "type": "array",
-          "items": {
-            "type": "string",
-            "format": "at-uri"
-          }
+          "items": { "type": "string", "format": "at-uri" }
         },
-        "timelineIndex": {
-          "type": "integer"
-        }
+        "timelineIndex": { "type": "integer" }
       }
     },
     "personalDetailsPref": {
@@ -566,10 +515,7 @@
       "properties": {
         "items": {
           "type": "array",
-          "items": {
-            "type": "ref",
-            "ref": "app.bsky.actor.defs#mutedWord"
-          },
+          "items": { "type": "ref", "ref": "app.bsky.actor.defs#mutedWord" },
           "description": "A list of words the account owner has muted."
         }
       }
@@ -591,22 +537,14 @@
       "properties": {
         "labelers": {
           "type": "array",
-          "items": {
-            "type": "ref",
-            "ref": "#labelerPrefItem"
-          }
+          "items": { "type": "ref", "ref": "#labelerPrefItem" }
         }
       }
     },
     "labelerPrefItem": {
       "type": "object",
       "required": ["did"],
-      "properties": {
-        "did": {
-          "type": "string",
-          "format": "did"
-        }
-      }
+      "properties": { "did": { "type": "string", "format": "did" } }
     },
     "bskyAppStatePref": {
       "description": "A grab bag of state that's specific to the bsky.app program. Third-party apps shouldn't use this.",
@@ -630,10 +568,7 @@
           "description": "Storage for NUXs the user has encountered.",
           "type": "array",
           "maxLength": 100,
-          "items": {
-            "type": "ref",
-            "ref": "app.bsky.actor.defs#nux"
-          }
+          "items": { "type": "ref", "ref": "app.bsky.actor.defs#nux" }
         }
       }
     },
@@ -641,23 +576,15 @@
       "description": "If set, an active progress guide. Once completed, can be set to undefined. Should have unspecced fields tracking progress.",
       "type": "object",
       "required": ["guide"],
-      "properties": {
-        "guide": { "type": "string", "maxLength": 100 }
-      }
+      "properties": { "guide": { "type": "string", "maxLength": 100 } }
     },
     "nux": {
       "type": "object",
       "description": "A new user experiences (NUX) storage object",
       "required": ["id", "completed"],
       "properties": {
-        "id": {
-          "type": "string",
-          "maxLength": 100
-        },
-        "completed": {
-          "type": "boolean",
-          "default": false
-        },
+        "id": { "type": "string", "maxLength": 100 },
+        "completed": { "type": "boolean", "default": false },
         "data": {
           "description": "Arbitrary data for the NUX. The structure is defined by the NUX itself. Limited to 300 characters.",
           "type": "string",

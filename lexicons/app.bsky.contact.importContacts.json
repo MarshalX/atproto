@@ -18,9 +18,7 @@
             "contacts": {
               "description": "List of phone numbers in global E.164 format (e.g., '+12125550123'). Phone numbers that cannot be normalized into a valid phone number will be discarded. Should not repeat the 'phone' input used in `app.bsky.contact.verifyPhone`.",
               "type": "array",
-              "items": {
-                "type": "string"
-              },
+              "items": { "type": "string" },
               "minLength": 1,
               "maxLength": 1000
             }
@@ -45,21 +43,11 @@
         }
       },
       "errors": [
-        {
-          "name": "InvalidDid"
-        },
-        {
-          "name": "InvalidContacts"
-        },
-        {
-          "name": "TooManyContacts"
-        },
-        {
-          "name": "InvalidToken"
-        },
-        {
-          "name": "InternalError"
-        }
+        { "name": "InvalidDid" },
+        { "name": "InvalidContacts" },
+        { "name": "TooManyContacts" },
+        { "name": "InvalidToken" },
+        { "name": "InternalError" }
       ]
     }
   }

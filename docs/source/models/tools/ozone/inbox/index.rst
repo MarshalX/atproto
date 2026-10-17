@@ -39,7 +39,7 @@ Inbox.
       :link: /models/tools/ozone/inbox/getNotificationPreferences
       :link-type: doc
 
-      Get notification preferences.
+      Get moderation push notification preferences for report outcomes, account actions, and labeling.
 
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getReport
       :link: /models/tools/ozone/inbox/getReport
@@ -75,7 +75,7 @@ Inbox.
       :link: /models/tools/ozone/inbox/putNotificationPreferences
       :link-type: doc
 
-      Put notification preferences.
+      Update the authenticated account's moderation push notification preferences.
 
    .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` updateSeen
       :link: /models/tools/ozone/inbox/updateSeen

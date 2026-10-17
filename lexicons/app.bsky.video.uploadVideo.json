@@ -5,9 +5,7 @@
     "main": {
       "type": "procedure",
       "description": "Upload a video to be processed then stored on the PDS.",
-      "input": {
-        "encoding": "video/mp4"
-      },
+      "input": { "encoding": "video/mp4" },
       "output": {
         "encoding": "application/json",
         "schema": {

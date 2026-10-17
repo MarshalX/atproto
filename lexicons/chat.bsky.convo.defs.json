@@ -2,18 +2,12 @@
   "lexicon": 1,
   "id": "chat.bsky.convo.defs",
   "defs": {
-    "convoKind": {
-      "type": "string",
-      "knownValues": ["direct", "group"]
-    },
+    "convoKind": { "type": "string", "knownValues": ["direct", "group"] },
     "convoLockStatus": {
       "type": "string",
       "knownValues": ["unlocked", "locked", "locked-permanently"]
     },
-    "convoStatus": {
-      "type": "string",
-      "knownValues": ["request", "accepted"]
-    },
+    "convoStatus": { "type": "string", "knownValues": ["request", "accepted"] },
     "convoRef": {
       "type": "object",
       "required": ["did", "convoId"],
@@ -35,11 +29,7 @@
       "type": "object",
       "required": ["text"],
       "properties": {
-        "text": {
-          "type": "string",
-          "maxLength": 10000,
-          "maxGraphemes": 1000
-        },
+        "text": { "type": "string", "maxLength": 10000, "maxGraphemes": 1000 },
         "facets": {
           "type": "array",
           "description": "Annotations of text (mentions, URLs, hashtags, etc)",
@@ -60,9 +50,7 @@
       "description": "A reference to another message within the same convo, used to indicate that a message is a reply to it.",
       "type": "object",
       "required": ["messageId"],
-      "properties": {
-        "messageId": { "type": "string" }
-      }
+      "properties": { "messageId": { "type": "string" } }
     },
     "messageView": {
       "type": "object",
@@ -70,11 +58,7 @@
       "properties": {
         "id": { "type": "string" },
         "rev": { "type": "string" },
-        "text": {
-          "type": "string",
-          "maxLength": 10000,
-          "maxGraphemes": 1000
-        },
+        "text": { "type": "string", "maxLength": 10000, "maxGraphemes": 1000 },
         "facets": {
           "type": "array",
           "description": "Annotations of text (mentions, URLs, hashtags, etc)",
@@ -108,9 +92,7 @@
     "systemMessageReferredUser": {
       "type": "object",
       "required": ["did"],
-      "properties": {
-        "did": { "type": "string", "format": "did" }
-      }
+      "properties": { "did": { "type": "string", "format": "did" } }
     },
     "systemMessageView": {
       "type": "object",
@@ -153,10 +135,7 @@
           "type": "ref",
           "ref": "chat.bsky.actor.defs#memberRole"
         },
-        "addedBy": {
-          "type": "ref",
-          "ref": "#systemMessageReferredUser"
-        }
+        "addedBy": { "type": "ref", "ref": "#systemMessageReferredUser" }
       }
     },
     "systemMessageDataRemoveMember": {
@@ -169,10 +148,7 @@
           "type": "ref",
           "ref": "#systemMessageReferredUser"
         },
-        "removedBy": {
-          "type": "ref",
-          "ref": "#systemMessageReferredUser"
-        }
+        "removedBy": { "type": "ref", "ref": "#systemMessageReferredUser" }
       }
     },
     "systemMessageDataMemberJoin": {
@@ -297,9 +273,7 @@
     "messageViewSender": {
       "type": "object",
       "required": ["did"],
-      "properties": {
-        "did": { "type": "string", "format": "did" }
-      }
+      "properties": { "did": { "type": "string", "format": "did" } }
     },
     "reactionView": {
       "type": "object",
@@ -313,9 +287,7 @@
     "reactionViewSender": {
       "type": "object",
       "required": ["did"],
-      "properties": {
-        "did": { "type": "string", "format": "did" }
-      }
+      "properties": { "did": { "type": "string", "format": "did" } }
     },
     "messageAndReactionView": {
       "type": "object",
@@ -361,10 +333,7 @@
         }
       }
     },
-    "directConvo": {
-      "type": "object",
-      "properties": {}
-    },
+    "directConvo": { "type": "object", "properties": {} },
     "groupConvo": {
       "type": "object",
       "required": [
@@ -376,10 +345,7 @@
         "name"
       ],
       "properties": {
-        "createdAt": {
-          "type": "string",
-          "format": "datetime"
-        },
+        "createdAt": { "type": "string", "format": "datetime" },
         "joinLink": {
           "type": "ref",
           "ref": "chat.bsky.group.defs#joinLinkView"

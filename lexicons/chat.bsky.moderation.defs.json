@@ -33,10 +33,7 @@
         "name"
       ],
       "properties": {
-        "createdAt": {
-          "type": "string",
-          "format": "datetime"
-        },
+        "createdAt": { "type": "string", "format": "datetime" },
         "joinLink": {
           "type": "ref",
           "ref": "chat.bsky.group.defs#joinLinkView"

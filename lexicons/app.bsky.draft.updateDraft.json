@@ -11,10 +11,7 @@
           "type": "object",
           "required": ["draft"],
           "properties": {
-            "draft": {
-              "type": "ref",
-              "ref": "app.bsky.draft.defs#draftWithId"
-            }
+            "draft": { "type": "ref", "ref": "app.bsky.draft.defs#draftWithId" }
           }
         }
       }

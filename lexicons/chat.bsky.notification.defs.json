@@ -14,10 +14,7 @@
       "type": "object",
       "required": ["include", "push"],
       "properties": {
-        "include": {
-          "type": "string",
-          "knownValues": ["all", "follows"]
-        },
+        "include": { "type": "string", "knownValues": ["all", "follows"] },
         "push": { "type": "boolean" }
       }
     }

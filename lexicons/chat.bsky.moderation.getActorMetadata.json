@@ -7,9 +7,7 @@
       "parameters": {
         "type": "params",
         "required": ["actor"],
-        "properties": {
-          "actor": { "type": "string", "format": "did" }
-        }
+        "properties": { "actor": { "type": "string", "format": "did" } }
       },
       "output": {
         "encoding": "application/json",
