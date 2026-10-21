@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ macos-latest, ubuntu-latest, windows-latest ]
-        python-version: [ "3.9", "3.10", "3.11", "3.12", "3.13", "3.14" ]
+        python-version: [ "3.9", "3.10", "3.11", "3.12", "3.13", "3.14", "3.15", "3.14t", "3.15t" ]
 
     runs-on: ${{matrix.os}}
 
@@ -67,11 +67,18 @@ jobs:
         uses: actions/cache@v5
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies.
         if: steps.cached-venv.outputs.cache-hit != 'true'
         run: poetry install --without docs
+
+      - name: Check the GIL stays disabled.
+        if: endsWith(matrix.python-version, 't')
+        run: >
+          poetry run python -W error::RuntimeWarning -c
+          "import sys, atproto, atproto_firehose, atproto_jetstream, cryptography.hazmat.bindings._rust;
+          assert not sys._is_gil_enabled(), 'GIL is enabled'"
 
       - name: Run Tests.
         run: poetry run pytest
@@ -86,13 +93,12 @@ jobs:
       fail-fast: false
       matrix:
         # One cell per (major, boundary): the oldest and newest Python each major supports.
-        # v15 is omitted because poetry.lock pins it, so unit_tests already covers it on every
-        # Python and OS. The OS is rotated so all three see a version the lockfile never installs.
+        # poetry.lock installs v15 on 3.9, v16 on 3.10-3.14 and v17 on 3.15, so unit_tests covers
+        # the other boundaries. The OS is rotated so all three see a version the lockfile never installs.
         include:
-          - { websockets: "16", python-version: "3.10", os: ubuntu-latest }  # v16 needs 3.10+
-          - { websockets: "16", python-version: "3.14", os: macos-latest }
+          - { websockets: "15", python-version: "3.15", os: macos-latest }
+          - { websockets: "16", python-version: "3.15", os: windows-latest }
           - { websockets: "17", python-version: "3.11", os: ubuntu-latest }  # v17 needs 3.11+
-          - { websockets: "17", python-version: "3.14", os: windows-latest }
 
     runs-on: ${{matrix.os}}
 

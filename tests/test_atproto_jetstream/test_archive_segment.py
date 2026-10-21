@@ -8,6 +8,7 @@ import typing as t
 import libipld
 import pytest
 import zstandard
+from atproto_jetstream.archive import segment
 from atproto_jetstream.archive.matcher import RowMatcher
 from atproto_jetstream.archive.segment import (
     KIND_ACCOUNT,
@@ -73,6 +74,15 @@ def events() -> t.List[SegmentEvent]:
 
 def test_block_decompresses() -> None:
     assert decompress_block(encode_block(VARIED_ROWS)) == encode_columns(VARIED_ROWS)
+
+
+@pytest.mark.parametrize('write_content_size', [True, False])
+def test_oversized_block_is_rejected(monkeypatch: pytest.MonkeyPatch, write_content_size: bool) -> None:
+    monkeypatch.setattr(segment, '_MAX_BLOCK_BYTES', 1024)
+    frame = zstandard.ZstdCompressor(write_content_size=write_content_size).compress(b'\x00' * 4096)
+
+    with pytest.raises(JetstreamDecodingError):
+        decompress_block(frame)
 
 
 def test_every_row_survives_the_round_trip(events: t.List[SegmentEvent]) -> None:

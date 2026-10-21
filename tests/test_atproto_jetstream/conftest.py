@@ -8,6 +8,7 @@ handlers can branch on the connection number without leaking state between tests
 
 import asyncio
 import contextlib
+import sys
 import threading
 import typing as t
 import uuid
@@ -16,6 +17,7 @@ from urllib.parse import parse_qs, urlparse
 import pytest
 import websockets
 import zstandard
+from atproto_jetstream import compression
 from pydantic_core import to_json
 from websockets.asyncio.server import serve
 from websockets.datastructures import Headers
@@ -322,6 +324,18 @@ SCENARIOS: t.Dict[str, t.Callable[[t.Any, int], t.Coroutine[t.Any, t.Any, None]]
 
 #: The scenario handlers need the server to resolve which dictionary to compress with.
 SERVER = JetstreamTestServer()
+
+
+ZSTD_BACKENDS: t.Dict[str, t.Any] = {'zstandard': compression._ZstandardDecompressor}
+if sys.version_info >= (3, 14):
+    ZSTD_BACKENDS['stdlib'] = compression._StdlibDecompressor
+
+
+@pytest.fixture(autouse=True, params=list(ZSTD_BACKENDS))
+def zstd_backend(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> str:
+    """Run every test against each zstd backend this Python has."""
+    monkeypatch.setattr(compression, '_select_backend', lambda: ZSTD_BACKENDS[request.param])
+    return request.param
 
 
 @pytest.fixture(scope='session')

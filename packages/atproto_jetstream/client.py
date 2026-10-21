@@ -8,7 +8,7 @@ from atproto_subscription.websocket import AsyncWebsocketClient, WebsocketClient
 from pydantic_core import from_json
 from websockets.exceptions import InvalidStatus
 
-from atproto_jetstream.compression import ZstdDecompression
+from atproto_jetstream.compression import ZstdDecompression, is_available
 from atproto_jetstream.exceptions import (
     JetstreamConsumerTooSlowError,
     JetstreamCursorTooOldError,
@@ -103,6 +103,7 @@ class _JetstreamClientMixin(WebsocketClientBase):
 
         self._cursor: t.Optional[int] = None
 
+        compress = compress and is_available()
         self._compression = ZstdDecompression(_MAX_MESSAGE_SIZE_BYTES) if compress else None
         self._dictionary_needs_refresh = compress
         self._rejected_dictionary_id: t.Optional[int] = None

@@ -86,6 +86,12 @@ client = JetstreamClient(compress=False)
 Decompression costs roughly 2 microseconds per frame, about 12% of the time spent turning a frame into a model.
 :::
 
+On Python 3.14+, the SDK decompresses with the standard library `compression.zstd` module unless the `zstandard` package is installed. `zstandard` makes the whole frame-to-model path about 4% faster and archive replay about the same. It is installed by default on older Pythons. To use it on 3.14+, install the extra:
+
+```bash
+pip install "atproto[zstd]"
+```
+
 ## Archive replay
 
 Jetstream keeps the whole network's history and can replay it. Pass an `api_key` and use [snapshot](#atproto_jetstream.JetstreamClient.snapshot) for the sealed archive:

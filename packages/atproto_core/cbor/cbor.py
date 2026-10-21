@@ -27,4 +27,7 @@ def decode_dag_multi(data: bytes) -> list[dict]:
     Returns:
         :obj:`list` of :obj:`dict`: Decoded DAG-CBOR.
     """
-    return libipld.decode_dag_cbor_multi(data)
+    try:
+        return libipld.decode_dag_cbor_multi(data)
+    except Exception as e:
+        raise DAGCBORDecodingError from e

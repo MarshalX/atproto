@@ -13,7 +13,7 @@ _S = r'\t\n\v\f\r \u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff'
 #
 # `re` doesn't have an equivalent to TypeScript's Unicode punctuation selector `\p{P}`.
 # So here an explicit list of all Unicode punctuation code points is created
-# (every code point whose category starts with ``P`` as of Unicode 16.0.0).
+# (every code point whose category starts with ``P`` as of Unicode 17.0.0).
 #
 # To regenerate, print `_punctuation_class()` from tests/test_atproto_client/test_facet_detection.py
 # (with a Python built against the target Unicode version).
@@ -35,7 +35,7 @@ _P = (
     r'\uff05-\uff0a\uff0c-\uff0f\uff1a-\uff1b\uff1f-\uff20\uff3b-\uff3d\uff3f\uff5b\uff5d\uff5f-\uff65'
     r'\U00010100-\U00010102\U0001039f\U000103d0\U0001056f\U00010857\U0001091f\U0001093f'
     r'\U00010a50-\U00010a58\U00010a7f\U00010af0-\U00010af6\U00010b39-\U00010b3f\U00010b99-\U00010b9c'
-    r'\U00010d6e\U00010ead\U00010f55-\U00010f59\U00010f86-\U00010f89\U00011047-\U0001104d'
+    r'\U00010d6e\U00010ead\U00010ed0\U00010f55-\U00010f59\U00010f86-\U00010f89\U00011047-\U0001104d'
     r'\U000110bb-\U000110bc\U000110be-\U000110c1\U00011140-\U00011143\U00011174-\U00011175'
     r'\U000111c5-\U000111c8\U000111cd\U000111db\U000111dd-\U000111df\U00011238-\U0001123d\U000112a9'
     r'\U000113d4-\U000113d5\U000113d7-\U000113d8\U0001144b-\U0001144f\U0001145a-\U0001145b\U0001145d'
