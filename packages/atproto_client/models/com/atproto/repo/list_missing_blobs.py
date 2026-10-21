@@ -35,6 +35,10 @@ class Response(base.ResponseModelBase):
     blobs: t.List['models.ComAtprotoRepoListMissingBlobs.RecordBlob']  #: Blobs.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.ComAtprotoRepoListMissingBlobs.RecordBlob']:
+        """Get the items of this page."""
+        return self.blobs
+
 
 class RecordBlob(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.listMissingBlobs`."""

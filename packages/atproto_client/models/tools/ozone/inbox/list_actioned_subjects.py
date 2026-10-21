@@ -50,3 +50,7 @@ class Response(base.ResponseModelBase):
 
     subjects: t.List['models.ToolsOzoneInboxDefs.SubjectView']  #: Subjects.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneInboxDefs.SubjectView']:
+        """Get the items of this page."""
+        return self.subjects

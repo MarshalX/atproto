@@ -34,3 +34,7 @@ class Response(base.ResponseModelBase):
     cursor: t.Optional[str] = None  #: Cursor.
     rec_id: t.Optional[int] = None  #: DEPRECATED: use recIdStr instead.
     rec_id_str: t.Optional[str] = None  #: Snowflake for this recommendation, use when submitting recommendation events.
+
+    def get_page_items(self) -> t.List['models.AppBskyActorDefs.ProfileView']:
+        """Get the items of this page."""
+        return self.actors

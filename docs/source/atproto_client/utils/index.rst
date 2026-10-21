@@ -6,3 +6,4 @@ Utils
 
    text_builder
    facet_detection
+   pagination

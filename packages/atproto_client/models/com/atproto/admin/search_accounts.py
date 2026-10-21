@@ -34,3 +34,7 @@ class Response(base.ResponseModelBase):
 
     accounts: t.List['models.ComAtprotoAdminDefs.AccountView']  #: Accounts.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ComAtprotoAdminDefs.AccountView']:
+        """Get the items of this page."""
+        return self.accounts

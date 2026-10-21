@@ -45,3 +45,7 @@ class Response(base.ResponseModelBase):
     start_cursor: t.Optional[str] = (
         None  #: Cursor identifying the newest item in this page. Pass it as since on a later request to fetch only newer content.
     )
+
+    def get_page_items(self) -> t.List['models.AppBskyFeedDefs.FeedViewPost']:
+        """Get the items of this page."""
+        return self.feed

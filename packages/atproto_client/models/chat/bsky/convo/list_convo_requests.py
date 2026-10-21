@@ -36,3 +36,13 @@ class Response(base.ResponseModelBase):
         ]
     ]  #: Requests.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(
+        self,
+    ) -> t.List[
+        unknown_union.OpenUnion[
+            t.Union['models.ChatBskyConvoDefs.ConvoView', 'models.ChatBskyGroupDefs.JoinRequestConvoView']
+        ]
+    ]:
+        """Get the items of this page."""
+        return self.requests

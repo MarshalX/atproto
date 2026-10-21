@@ -51,6 +51,10 @@ class Response(base.ResponseModelBase):
     reports: t.List['models.ToolsOzoneInboxListReports.ReportView']  #: Reports.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.ToolsOzoneInboxListReports.ReportView']:
+        """Get the items of this page."""
+        return self.reports
+
 
 class ReportView(base.ModelBase):
     """Definition model for :obj:`tools.ozone.inbox.listReports`."""

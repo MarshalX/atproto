@@ -42,6 +42,10 @@ class Response(base.ResponseModelBase):
     records: t.List['models.ComAtprotoRepoListRecords.Record']  #: Records.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.ComAtprotoRepoListRecords.Record']:
+        """Get the items of this page."""
+        return self.records
+
 
 class Record(base.ModelBase):
     """Definition model for :obj:`com.atproto.repo.listRecords`."""

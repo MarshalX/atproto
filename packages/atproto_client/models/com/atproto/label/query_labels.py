@@ -44,3 +44,7 @@ class Response(base.ResponseModelBase):
 
     labels: t.List['models.ComAtprotoLabelDefs.Label']  #: Labels.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ComAtprotoLabelDefs.Label']:
+        """Get the items of this page."""
+        return self.labels

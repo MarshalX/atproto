@@ -32,3 +32,7 @@ class Response(base.ResponseModelBase):
 
     matches: t.List['models.AppBskyActorDefs.ProfileView']  #: Matches.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.AppBskyActorDefs.ProfileView']:
+        """Get the items of this page."""
+        return self.matches

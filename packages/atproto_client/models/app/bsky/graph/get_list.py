@@ -37,3 +37,7 @@ class Response(base.ResponseModelBase):
     items: t.List['models.AppBskyGraphDefs.ListItemView']  #: Items.
     list: 'models.AppBskyGraphDefs.ListView'  #: List.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.AppBskyGraphDefs.ListItemView']:
+        """Get the items of this page."""
+        return self.items

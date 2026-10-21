@@ -35,6 +35,10 @@ class Response(base.ResponseModelBase):
     segments: t.List['models.NetworkBskyJetstreamListSegments.Segment']  #: Segments.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.NetworkBskyJetstreamListSegments.Segment']:
+        """Get the items of this page."""
+        return self.segments
+
 
 class Segment(base.ModelBase):
     """Definition model for :obj:`network.bsky.jetstream.listSegments`."""

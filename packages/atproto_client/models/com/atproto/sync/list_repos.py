@@ -35,6 +35,10 @@ class Response(base.ResponseModelBase):
     repos: t.List['models.ComAtprotoSyncListRepos.Repo']  #: Repos.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.ComAtprotoSyncListRepos.Repo']:
+        """Get the items of this page."""
+        return self.repos
+
 
 class Repo(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.listRepos`."""

@@ -34,3 +34,7 @@ class Response(base.ResponseModelBase):
 
     cids: t.List[string_formats.Cid]  #: Cids.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List[string_formats.Cid]:
+        """Get the items of this page."""
+        return self.cids

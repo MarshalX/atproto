@@ -38,3 +38,7 @@ class Response(base.ResponseModelBase):
 
     members: t.List['models.ToolsOzoneTeamDefs.Member']  #: Members.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneTeamDefs.Member']:
+        """Get the items of this page."""
+        return self.members

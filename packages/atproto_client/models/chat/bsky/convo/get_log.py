@@ -64,3 +64,44 @@ class Response(base.ResponseModelBase):
         ]
     ]  #: Logs.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(
+        self,
+    ) -> t.List[
+        unknown_union.OpenUnion[
+            t.Union[
+                'models.ChatBskyConvoDefs.LogBeginConvo',
+                'models.ChatBskyConvoDefs.LogAcceptConvo',
+                'models.ChatBskyConvoDefs.LogLeaveConvo',
+                'models.ChatBskyConvoDefs.LogMuteConvo',
+                'models.ChatBskyConvoDefs.LogUnmuteConvo',
+                'models.ChatBskyConvoDefs.LogCreateMessage',
+                'models.ChatBskyConvoDefs.LogDeleteMessage',
+                'models.ChatBskyConvoDefs.LogReadMessage',
+                'models.ChatBskyConvoDefs.LogAddReaction',
+                'models.ChatBskyConvoDefs.LogRemoveReaction',
+                'models.ChatBskyConvoDefs.LogReadConvo',
+                'models.ChatBskyConvoDefs.LogAddMember',
+                'models.ChatBskyConvoDefs.LogRemoveMember',
+                'models.ChatBskyConvoDefs.LogMemberJoin',
+                'models.ChatBskyConvoDefs.LogMemberLeave',
+                'models.ChatBskyConvoDefs.LogLockConvo',
+                'models.ChatBskyConvoDefs.LogUnlockConvo',
+                'models.ChatBskyConvoDefs.LogLockConvoPermanently',
+                'models.ChatBskyConvoDefs.LogEditGroup',
+                'models.ChatBskyConvoDefs.LogCreateJoinLink',
+                'models.ChatBskyConvoDefs.LogEditJoinLink',
+                'models.ChatBskyConvoDefs.LogEnableJoinLink',
+                'models.ChatBskyConvoDefs.LogDisableJoinLink',
+                'models.ChatBskyConvoDefs.LogIncomingJoinRequest',
+                'models.ChatBskyConvoDefs.LogApproveJoinRequest',
+                'models.ChatBskyConvoDefs.LogRejectJoinRequest',
+                'models.ChatBskyConvoDefs.LogOutgoingJoinRequest',
+                'models.ChatBskyConvoDefs.LogWithdrawIncomingJoinRequest',
+                'models.ChatBskyConvoDefs.LogWithdrawOutgoingJoinRequest',
+                'models.ChatBskyConvoDefs.LogReadJoinRequests',
+            ]
+        ]
+    ]:
+        """Get the items of this page."""
+        return self.logs

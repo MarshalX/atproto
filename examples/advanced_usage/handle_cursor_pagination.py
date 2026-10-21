@@ -2,7 +2,7 @@ from atproto import Client
 
 
 def main() -> None:
-    # This is an example for get_follows method.
+    # This is an example for get_follows method. client_utils.paginate does the same: see paginate_follows.py
     client = Client()
     client.login('my-handle', 'my-password')
     handle = 'target-handle'

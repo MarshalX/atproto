@@ -642,6 +642,57 @@ def _generate_data_model(nsid: NSID, input_body: models.LexXrpcBody) -> str:
     )
 
 
+def _get_page_items_field(
+    definition: t.Union[models.LexXrpcQuery, models.LexXrpcProcedure],
+) -> t.Optional[t.Tuple[models.LexObject, str, models.LexArray]]:
+    """Return the output schema and the array field holding page items if the query is cursor-paginated."""
+    if not isinstance(definition, models.LexXrpcQuery) or not definition.parameters or not definition.output:
+        return None
+
+    schema = definition.output.schema_
+    if not isinstance(schema, models.LexObject):
+        return None
+    if 'cursor' not in definition.parameters.properties or 'cursor' not in schema.properties:
+        return None
+
+    arrays = [(name, field) for name, field in schema.properties.items() if isinstance(field, models.LexArray)]
+    if len(arrays) > 1:
+        # extra arrays are side data (e.g. relatedProfiles); the page items are the required one
+        arrays = [(name, field) for name, field in arrays if name in _get_req_fields_set(schema)]
+
+    if len(arrays) != 1:
+        return None
+
+    name, field = arrays[0]
+    return schema, name, field
+
+
+def _generate_page_items_method(nsid: NSID, definition: t.Union[models.LexXrpcQuery, models.LexXrpcProcedure]) -> str:
+    page_items_field = _get_page_items_field(definition)
+    if page_items_field is None:
+        return ''
+
+    schema, field_name, field = page_items_field
+    type_hint = _get_model_field_typehint(nsid, field, optional=False)
+
+    attr_name = convert_camel_case_to_snake_case(field_name)
+    if _is_reserved_variable_name(attr_name):
+        attr_name += '_'
+
+    value = f'self.{attr_name}'
+    if field_name not in _get_req_fields_set(schema):
+        value = f'{value} or []'
+
+    lines = [
+        f'{_(1)}def get_page_items(self) -> {type_hint}:',
+        f'{_(2)}"""Get the items of this page."""',
+        f'{_(2)}return {value}',
+        '',
+    ]
+
+    return join_code(lines)
+
+
 def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str:
     return _generate_xrpc_body_model(nsid, output_body, ModelType.RESPONSE)
 
@@ -734,7 +785,8 @@ def _generate_response_models(lex_db: builder.BuiltResponseModels) -> None:
 
         definition = defs['main']
         if definition.output:
-            save_code_part(nsid, _generate_response_model(nsid, definition.output))
+            response_model = _generate_response_model(nsid, definition.output)
+            save_code_part(nsid, join_code([response_model, _generate_page_items_method(nsid, definition)]))
 
 
 def _generate_def_models(lex_db: builder.BuiltDefModels) -> None:

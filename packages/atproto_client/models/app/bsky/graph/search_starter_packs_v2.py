@@ -35,3 +35,7 @@ class Response(base.ResponseModelBase):
     starter_packs: t.List['models.AppBskyGraphDefs.StarterPackView']  #: Starter packs.
     cursor: t.Optional[str] = None  #: Cursor.
     hits_total: t.Optional[int] = None  #: Estimated total number of matching hits. May be rounded or truncated.
+
+    def get_page_items(self) -> t.List['models.AppBskyGraphDefs.StarterPackView']:
+        """Get the items of this page."""
+        return self.starter_packs

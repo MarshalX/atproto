@@ -45,6 +45,10 @@ class Response(base.ResponseModelBase):
     ]  #: Lists with membership.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.AppBskyGraphGetListsWithMembership.ListWithMembership']:
+        """Get the items of this page."""
+        return self.lists_with_membership
+
 
 class ListWithMembership(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.getListsWithMembership`. A list and an optional list item indicating membership of a target user to that list."""

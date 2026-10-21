@@ -52,6 +52,10 @@ class Response(base.ResponseModelBase):
     priority: t.Optional[bool] = None  #: Deprecated: this field is no longer populated.
     seen_at: t.Optional[string_formats.DateTime] = None  #: Seen at.
 
+    def get_page_items(self) -> t.List['models.AppBskyNotificationListNotifications.Notification']:
+        """Get the items of this page."""
+        return self.notifications
+
 
 class Notification(base.ModelBase):
     """Definition model for :obj:`app.bsky.notification.listNotifications`."""

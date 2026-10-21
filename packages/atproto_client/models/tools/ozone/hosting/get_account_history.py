@@ -54,6 +54,10 @@ class Response(base.ResponseModelBase):
     events: t.List['models.ToolsOzoneHostingGetAccountHistory.Event']  #: Events.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.ToolsOzoneHostingGetAccountHistory.Event']:
+        """Get the items of this page."""
+        return self.events
+
 
 class Event(base.ModelBase):
     """Definition model for :obj:`tools.ozone.hosting.getAccountHistory`."""

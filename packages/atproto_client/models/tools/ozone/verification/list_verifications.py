@@ -58,3 +58,7 @@ class Response(base.ResponseModelBase):
 
     verifications: t.List['models.ToolsOzoneVerificationDefs.VerificationView']  #: Verifications.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneVerificationDefs.VerificationView']:
+        """Get the items of this page."""
+        return self.verifications

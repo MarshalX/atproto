@@ -50,3 +50,7 @@ class Response(base.ResponseModelBase):
     uri: string_formats.AtUri  #: Uri.
     cid: t.Optional[string_formats.Cid] = None  #: Cid.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.AppBskyFeedDefs.PostView']:
+        """Get the items of this page."""
+        return self.posts

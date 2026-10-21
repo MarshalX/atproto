@@ -35,6 +35,10 @@ class Response(base.ResponseModelBase):
     ]  #: Sort order is not formally specified. Recommended order is by time host was first seen by the server, with oldest first.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.ComAtprotoSyncListHosts.Host']:
+        """Get the items of this page."""
+        return self.hosts
+
 
 class Host(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.listHosts`."""

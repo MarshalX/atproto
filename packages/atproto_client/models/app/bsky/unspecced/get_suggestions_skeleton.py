@@ -51,3 +51,7 @@ class Response(base.ResponseModelBase):
     relative_to_did: t.Optional[string_formats.Did] = (
         None  #: DID of the account these suggestions are relative to. If this is returned undefined, suggestions are based on the viewer.
     )
+
+    def get_page_items(self) -> t.List['models.AppBskyUnspeccedDefs.SkeletonSearchActor']:
+        """Get the items of this page."""
+        return self.actors

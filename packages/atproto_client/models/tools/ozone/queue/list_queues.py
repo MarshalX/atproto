@@ -48,3 +48,7 @@ class Response(base.ResponseModelBase):
 
     queues: t.List['models.ToolsOzoneQueueDefs.QueueView']  #: Queues.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneQueueDefs.QueueView']:
+        """Get the items of this page."""
+        return self.queues

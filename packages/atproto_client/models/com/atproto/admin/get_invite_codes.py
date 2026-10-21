@@ -34,3 +34,7 @@ class Response(base.ResponseModelBase):
 
     codes: t.List['models.ComAtprotoServerDefs.InviteCode']  #: Codes.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ComAtprotoServerDefs.InviteCode']:
+        """Get the items of this page."""
+        return self.codes

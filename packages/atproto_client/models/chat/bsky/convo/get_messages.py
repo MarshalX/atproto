@@ -45,3 +45,17 @@ class Response(base.ResponseModelBase):
     related_profiles: t.Optional[t.List['models.ChatBskyActorDefs.ProfileViewBasic']] = (
         None  #: Set of all members who authored or reacted to the returned messages. Members referred to by system messages are also included.
     )
+
+    def get_page_items(
+        self,
+    ) -> t.List[
+        unknown_union.OpenUnion[
+            t.Union[
+                'models.ChatBskyConvoDefs.MessageView',
+                'models.ChatBskyConvoDefs.DeletedMessageView',
+                'models.ChatBskyConvoDefs.SystemMessageView',
+            ]
+        ]
+    ]:
+        """Get the items of this page."""
+        return self.messages
