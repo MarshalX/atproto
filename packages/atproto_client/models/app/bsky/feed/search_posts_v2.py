@@ -156,3 +156,7 @@ class Response(base.ResponseModelBase):
         None  #: Query languages detected for CJK, Thai, or Arabic text. Empty or omitted for other scripts.
     )
     hits_total: t.Optional[int] = None  #: Estimated total number of matching hits. May be rounded or truncated.
+
+    def get_page_items(self) -> t.List['models.AppBskyFeedDefs.PostView']:
+        """Get the items of this page."""
+        return self.posts

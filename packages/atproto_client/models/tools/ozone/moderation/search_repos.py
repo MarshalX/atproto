@@ -36,3 +36,7 @@ class Response(base.ResponseModelBase):
 
     repos: t.List['models.ToolsOzoneModerationDefs.RepoView']  #: Repos.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneModerationDefs.RepoView']:
+        """Get the items of this page."""
+        return self.repos

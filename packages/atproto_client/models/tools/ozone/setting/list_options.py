@@ -44,3 +44,7 @@ class Response(base.ResponseModelBase):
 
     options: t.List['models.ToolsOzoneSettingDefs.Option']  #: Options.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneSettingDefs.Option']:
+        """Get the items of this page."""
+        return self.options

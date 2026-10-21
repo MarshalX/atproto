@@ -522,6 +522,7 @@ REDIRECTS = {
     'atproto_client/timeouts': '/guides/error-handling/',
     'atproto_client/timeouts.html': '/guides/error-handling/',
     'atproto_client/utils/facet_detection.html': '/atproto_client/utils/facet_detection/',
+    'atproto_client/utils/pagination.html': '/atproto_client/utils/pagination/',
     'atproto_client/utils/text_builder.html': '/atproto_client/utils/text_builder/',
     'atproto_core/car.html': '/atproto_core/car/',
     'atproto_core/cbor.html': '/atproto_core/cbor/',

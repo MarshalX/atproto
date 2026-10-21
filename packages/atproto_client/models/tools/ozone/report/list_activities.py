@@ -34,3 +34,7 @@ class Response(base.ResponseModelBase):
 
     activities: t.List['models.ToolsOzoneReportDefs.ReportActivityView']  #: Activities.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneReportDefs.ReportActivityView']:
+        """Get the items of this page."""
+        return self.activities

@@ -39,6 +39,10 @@ class Response(base.ResponseModelBase):
     ]  #: Starter packs with membership.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.AppBskyGraphGetStarterPacksWithMembership.StarterPackWithMembership']:
+        """Get the items of this page."""
+        return self.starter_packs_with_membership
+
 
 class StarterPackWithMembership(base.ModelBase):
     """Definition model for :obj:`app.bsky.graph.getStarterPacksWithMembership`. A starter pack and an optional list item indicating membership of a target user to that starter pack."""

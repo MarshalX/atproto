@@ -138,3 +138,7 @@ class Response(base.ResponseModelBase):
 
     events: t.List['models.ToolsOzoneModerationDefs.ModEventView']  #: Events.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneModerationDefs.ModEventView']:
+        """Get the items of this page."""
+        return self.events

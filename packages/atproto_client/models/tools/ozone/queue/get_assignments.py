@@ -42,3 +42,7 @@ class Response(base.ResponseModelBase):
 
     assignments: t.List['models.ToolsOzoneQueueDefs.AssignmentView']  #: Assignments.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneQueueDefs.AssignmentView']:
+        """Get the items of this page."""
+        return self.assignments

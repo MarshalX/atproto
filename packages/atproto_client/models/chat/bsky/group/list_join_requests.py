@@ -34,3 +34,7 @@ class Response(base.ResponseModelBase):
 
     requests: t.List['models.ChatBskyGroupDefs.JoinRequestView']  #: Requests.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ChatBskyGroupDefs.JoinRequestView']:
+        """Get the items of this page."""
+        return self.requests

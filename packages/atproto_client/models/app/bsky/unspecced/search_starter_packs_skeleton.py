@@ -49,3 +49,7 @@ class Response(base.ResponseModelBase):
     hits_total: t.Optional[int] = (
         None  #: Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits.
     )
+
+    def get_page_items(self) -> t.List['models.AppBskyUnspeccedDefs.SkeletonSearchStarterPack']:
+        """Get the items of this page."""
+        return self.starter_packs

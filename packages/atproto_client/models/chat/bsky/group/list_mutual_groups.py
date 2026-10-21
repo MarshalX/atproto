@@ -36,3 +36,7 @@ class Response(base.ResponseModelBase):
 
     convos: t.List['models.ChatBskyConvoDefs.ConvoView']  #: Convos.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ChatBskyConvoDefs.ConvoView']:
+        """Get the items of this page."""
+        return self.convos

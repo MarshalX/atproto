@@ -37,6 +37,10 @@ class Response(base.ResponseModelBase):
     accounts: t.List['models.ToolsOzoneSignatureFindRelatedAccounts.RelatedAccount']  #: Accounts.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.ToolsOzoneSignatureFindRelatedAccounts.RelatedAccount']:
+        """Get the items of this page."""
+        return self.accounts
+
 
 class RelatedAccount(base.ModelBase):
     """Definition model for :obj:`tools.ozone.signature.findRelatedAccounts`."""

@@ -212,3 +212,7 @@ class Response(base.ResponseModelBase):
 
     subject_statuses: t.List['models.ToolsOzoneModerationDefs.SubjectStatusView']  #: Subject statuses.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneModerationDefs.SubjectStatusView']:
+        """Get the items of this page."""
+        return self.subject_statuses

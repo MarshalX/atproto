@@ -76,3 +76,7 @@ class Response(base.ResponseModelBase):
 
     notifications: t.List['models.ToolsOzoneInboxDefs.Notification']  #: Notifications.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneInboxDefs.Notification']:
+        """Get the items of this page."""
+        return self.notifications

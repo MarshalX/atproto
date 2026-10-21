@@ -32,3 +32,7 @@ class Response(base.ResponseModelBase):
 
     mutes: t.List['models.AppBskyActorDefs.ProfileView']  #: Mutes.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.AppBskyActorDefs.ProfileView']:
+        """Get the items of this page."""
+        return self.mutes

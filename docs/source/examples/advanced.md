@@ -13,7 +13,7 @@ Longer examples that go past the high-level client: session handling, pagination
 
 ## Page through a cursor
 
-There is no pagination helper. Responses carry a `cursor` you feed back in until the server stops returning one.
+The cursor loop by hand. Responses carry a `cursor` you feed back in until the server stops returning one. [paginate](#atproto_client.utils.pagination.paginate) runs this loop for you, see [Page through all results](basics.md#page-through-all-results).
 
 ```{literalinclude} ../../../examples/advanced_usage/handle_cursor_pagination.py
 :language: python

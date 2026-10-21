@@ -38,3 +38,7 @@ class Response(base.ResponseModelBase):
 
     sets: t.List['models.ToolsOzoneSetDefs.SetView']  #: Sets.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneSetDefs.SetView']:
+        """Get the items of this page."""
+        return self.sets

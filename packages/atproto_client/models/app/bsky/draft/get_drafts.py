@@ -32,3 +32,7 @@ class Response(base.ResponseModelBase):
 
     drafts: t.List['models.AppBskyDraftDefs.DraftView']  #: Drafts.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.AppBskyDraftDefs.DraftView']:
+        """Get the items of this page."""
+        return self.drafts

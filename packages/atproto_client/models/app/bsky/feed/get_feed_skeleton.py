@@ -39,3 +39,7 @@ class Response(base.ResponseModelBase):
     req_id: te.Annotated[t.Optional[str], Field(max_length=100)] = (
         None  #: Unique identifier per request that may be passed back alongside interactions.
     )
+
+    def get_page_items(self) -> t.List['models.AppBskyFeedDefs.SkeletonFeedPost']:
+        """Get the items of this page."""
+        return self.feed

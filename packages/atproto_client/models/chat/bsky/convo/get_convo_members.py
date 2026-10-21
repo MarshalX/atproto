@@ -34,3 +34,7 @@ class Response(base.ResponseModelBase):
 
     members: t.List['models.ChatBskyActorDefs.ProfileViewBasic']  #: Members.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ChatBskyActorDefs.ProfileViewBasic']:
+        """Get the items of this page."""
+        return self.members

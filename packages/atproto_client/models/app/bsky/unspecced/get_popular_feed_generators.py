@@ -34,3 +34,7 @@ class Response(base.ResponseModelBase):
 
     feeds: t.List['models.AppBskyFeedDefs.GeneratorView']  #: Feeds.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.AppBskyFeedDefs.GeneratorView']:
+        """Get the items of this page."""
+        return self.feeds

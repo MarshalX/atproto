@@ -45,6 +45,10 @@ class Response(base.ResponseModelBase):
     cid: t.Optional[string_formats.Cid] = None  #: Cid.
     cursor: t.Optional[str] = None  #: Cursor.
 
+    def get_page_items(self) -> t.List['models.AppBskyFeedGetLikes.Like']:
+        """Get the items of this page."""
+        return self.likes
+
 
 class Like(base.ModelBase):
     """Definition model for :obj:`app.bsky.feed.getLikes`."""

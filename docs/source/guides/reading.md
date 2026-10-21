@@ -83,22 +83,34 @@ Note the asymmetry: `get_likes` gives you like records (`actor` plus `created_at
 
 ## Pagination
 
-The SDK ships **no** pagination helper. There is no auto-paging iterator, no `paginate()`, no generator wrapper. You write the cursor loop yourself.
+Every paged method works the same way. The response carries a `cursor` alongside the data, and you pass that cursor back on the next call to get the next page. When the server has nothing more to give, `cursor` comes back `None` (or missing).
 
-The contract is the same across every paged method. You call it, the response carries a `cursor` alongside the data, and you pass that cursor back on the next call to get the next page. When the server has nothing more to give, `cursor` comes back `None` (or missing) and you stop.
+[paginate](#atproto_client.utils.pagination.paginate) runs that loop for you. Give it a namespace method and its params. It returns a lazy iterator over the response models, and `.items()` iterates over the items of every page instead:
+
+```{literalinclude} ../../../examples/paginate_follows.py
+:language: python
+:caption: examples/paginate_follows.py
+```
+
+```python
+for page in client_utils.paginate(client.app.bsky.feed.get_timeline, {'limit': 100}, max_pages=5):
+    print(len(page.feed), page.cursor)
+```
+
+It works with every query that takes and returns a `cursor`: `get_timeline`, `get_author_feed`, `get_likes`, `get_reposted_by`, `get_follows`, `get_followers`, `list_notifications`, `list_convos` and the rest. The types follow the method. Pages are the method's `Response` model, and items are whatever its list attribute holds (`ProfileView` for `get_follows`, `FeedViewPost` for `get_timeline`). A method that does not page is a type error. With an [AsyncClient](#atproto_client.client.async_client.AsyncClient) method you get an async iterator, used with `async for`.
+
+Pass `cursor` in the params to start from a saved position. Each request starts after the last page fetched, and the paginator's `cursor` attribute holds the next one. If a loop stops on an exception, such as a rate limit, iterating the same paginator again continues from there.
+
+:::{warning}
+Requests happen as you iterate, one per page, and nothing stops a `list(...)` over a huge feed. Cap it with `max_pages`. `limit` is capped server-side, usually at 100, and a tight loop over thousands of pages will hit [rate limits](https://bsky.network/docs/rate-limits).
+:::
+
+To write the loop yourself, break on a falsy cursor, not on an empty page. A page can come back with fewer items than `limit`, or with none at all, and still have a cursor pointing at more data. `paginate` also stops if the server repeats a cursor.
 
 ```{literalinclude} ../../../examples/advanced_usage/handle_cursor_pagination.py
 :language: python
 :caption: examples/advanced_usage/handle_cursor_pagination.py
 ```
-
-The same loop works for `get_timeline`, `get_author_feed`, `get_likes`, `get_reposted_by`, `get_follows`, `get_followers`, `list_notifications`, `list_convos` and every other method with a `cursor` parameter. Only the name of the list attribute changes.
-
-:::{warning}
-Break on a falsy cursor, not on an empty page. A page can come back with fewer items than `limit`, or with none at all, and still have a cursor pointing at more data. Looping until the items run out will stop early; looping without checking the cursor at all will never stop.
-:::
-
-`limit` is capped server-side, usually at 100. Asking for more does not get you more, and a tight loop over thousands of pages will hit [rate limits](https://bsky.network/docs/rate-limits).
 
 ## Resolving a bsky.app URL
 

@@ -44,3 +44,7 @@ class Response(base.ResponseModelBase):
 
     stats: t.List['models.ToolsOzoneReportDefs.HistoricalStats']  #: Stats.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.ToolsOzoneReportDefs.HistoricalStats']:
+        """Get the items of this page."""
+        return self.stats

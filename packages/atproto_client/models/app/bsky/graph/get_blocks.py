@@ -32,3 +32,7 @@ class Response(base.ResponseModelBase):
 
     blocks: t.List['models.AppBskyActorDefs.ProfileView']  #: Blocks.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.AppBskyActorDefs.ProfileView']:
+        """Get the items of this page."""
+        return self.blocks

@@ -73,6 +73,15 @@ Always set alt text.
 :caption: examples/profile_posts.py
 ```
 
+## Page through all results
+
+Paged methods return one page and a `cursor`. `paginate` keeps fetching pages until the cursor runs out. To write that loop yourself, see [Page through a cursor](advanced.md#page-through-a-cursor).
+
+```{literalinclude} ../../../examples/paginate_follows.py
+:language: python
+:caption: examples/paginate_follows.py
+```
+
 ## Like and unlike
 
 Liking creates a record. Keep the URI it returns, because undoing the like means deleting that record.

@@ -37,3 +37,7 @@ class Response(base.ResponseModelBase):
     followers: t.List['models.AppBskyActorDefs.ProfileView']  #: Followers.
     subject: 'models.AppBskyActorDefs.ProfileView'  #: Subject.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.AppBskyActorDefs.ProfileView']:
+        """Get the items of this page."""
+        return self.followers

@@ -120,7 +120,7 @@ The async version does the same thing, but hands each notification to a callback
 Three seconds is fine for one account. Polling is rate limited like any other request, so if you are running a bot across many accounts, back off. The current limits are at [bsky.network/docs/rate-limits](https://bsky.network/docs/rate-limits).
 :::
 
-Neither example pages. `list_notifications` returns one page, so a backlog longer than the page size needs the cursor loop from [Pagination](reading.md#pagination). Otherwise `update_seen` marks notifications read that you never looked at.
+Neither example pages. `list_notifications` returns one page, so a backlog longer than the page size needs [Pagination](reading.md#pagination). Otherwise `update_seen` marks notifications read that you never looked at.
 
 ## The firehose instead
 

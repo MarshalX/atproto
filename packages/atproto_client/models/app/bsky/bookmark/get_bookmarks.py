@@ -32,3 +32,7 @@ class Response(base.ResponseModelBase):
 
     bookmarks: t.List['models.AppBskyBookmarkDefs.BookmarkView']  #: Bookmarks.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.AppBskyBookmarkDefs.BookmarkView']:
+        """Get the items of this page."""
+        return self.bookmarks

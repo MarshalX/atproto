@@ -36,3 +36,7 @@ class Response(base.ResponseModelBase):
 
     feed: t.List['models.AppBskyFeedDefs.FeedViewPost']  #: Feed.
     cursor: t.Optional[str] = None  #: Cursor.
+
+    def get_page_items(self) -> t.List['models.AppBskyFeedDefs.FeedViewPost']:
+        """Get the items of this page."""
+        return self.feed

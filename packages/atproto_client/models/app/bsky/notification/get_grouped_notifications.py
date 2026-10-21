@@ -59,6 +59,10 @@ class Response(base.ResponseModelBase):
     ] = None  #: Reusable views referenced by notifications. Views shared across notifications appear once to avoid duplication. Each group contributes only its first 10 of each related view to this array. Ex: for a group containing likes in a post, we might have a large number of likeItem (e.g., 50) in a group, but only the profile views for the newest 10 items will be included here.
     seen_at: t.Optional[string_formats.DateTime] = None  #: Seen at.
 
+    def get_page_items(self) -> t.List['models.AppBskyNotificationGetGroupedNotifications.Group']:
+        """Get the items of this page."""
+        return self.groups
+
 
 class Group(base.ModelBase):
     """Definition model for :obj:`app.bsky.notification.getGroupedNotifications`. Contains common metadata and kind-specific data for a notification group or individual notification."""
