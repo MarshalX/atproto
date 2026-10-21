@@ -1,4 +1,4 @@
-from atproto import Client
+from atproto import Client, models
 
 
 def main(client: Client, handle: str) -> None:
@@ -7,7 +7,9 @@ def main(client: Client, handle: str) -> None:
     # Get profile's posts. Use pagination (cursor + limit) to fetch all
     profile_feed = client.get_author_feed(actor=handle)
     for feed_view in profile_feed.feed:
-        print('-', feed_view.post.record.text)
+        post = feed_view.post.record
+        if models.is_record_type(post, models.AppBskyFeedPost):
+            print('-', post.text)
 
 
 if __name__ == '__main__':

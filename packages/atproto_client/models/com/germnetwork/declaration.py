@@ -10,7 +10,7 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
-from atproto_client.models import string_formats
+from atproto_client.models import bytes_type, string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
@@ -35,14 +35,14 @@ class MessageMe(base.ModelBase):
 class Record(base.RecordModelBase):
     """Record model for :obj:`com.germnetwork.declaration`."""
 
-    current_key: t.Union[str, bytes]  #: Opaque value, an ed25519 public key prefixed with a byte enum.
+    current_key: bytes_type.BytesType  #: Opaque value, an ed25519 public key prefixed with a byte enum.
     version: str = Field(
         min_length=5, max_length=14
     )  #: Semver version number, without pre-release or build information, for the format of opaque content.
-    continuity_proofs: te.Annotated[t.Optional[t.List[t.Union[str, bytes]]], Field(max_length=1000)] = (
+    continuity_proofs: te.Annotated[t.Optional[t.List[bytes_type.BytesType]], Field(max_length=1000)] = (
         None  #: Array of opaque values to allow for key rolling.
     )
-    key_package: t.Optional[t.Union[str, bytes]] = (
+    key_package: t.Optional[bytes_type.BytesType] = (
         None  #: Opaque value, contains MLS KeyPackage(s), and other signature data, and is signed by the currentKey.
     )
     message_me: t.Optional['models.ComGermnetworkDeclaration.MessageMe'] = (

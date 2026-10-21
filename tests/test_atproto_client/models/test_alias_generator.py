@@ -13,7 +13,7 @@ class SampleModel(ModelBase):
 
 
 def test_model_base_aliases() -> None:
-    model = SampleModel(testField='test', validate=True)
+    model = SampleModel(testField='test', validate=True)  # pyrefly: ignore[missing-argument]
     assert model.test_field == 'test'
     assert model.validate_ is True
 

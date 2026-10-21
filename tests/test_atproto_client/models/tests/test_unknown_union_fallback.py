@@ -22,7 +22,7 @@ _UNKNOWN_RECORD = {'$type': 'app.bsky.future.defs#brandNewView', 'uri': _POST_UR
 _KNOWN_RECORD = {'$type': 'app.bsky.embed.record#viewNotFound', 'notFound': True, 'uri': _POST_URI}
 
 
-def _parse_embed(record: dict) -> t.Any:
+def _parse_embed(record: t.Dict[str, t.Any]) -> t.Any:
     view = models.AppBskyEmbedRecord.View.model_validate({'$type': 'app.bsky.embed.record#view', 'record': record})
     return view.record
 
@@ -39,7 +39,7 @@ def test_known_union_member_resolves_to_model() -> None:
         pytest.param({'$type': 'com.example.thing', 'items': [{'a': 1}, {'b': 2}]}, id='nested_list'),
     ],
 )
-def test_undescribable_union_member_falls_back_to_dot_dict(record: dict) -> None:
+def test_undescribable_union_member_falls_back_to_dot_dict(record: t.Dict[str, t.Any]) -> None:
     assert isinstance(_parse_embed(record), DotDict)
 
 
@@ -58,7 +58,7 @@ def test_dot_dict_fallback_keeps_dot_and_bracket_access() -> None:
         pytest.param({**_KNOWN_RECORD, 'uri': 123}, id='wrong_field_type'),
     ],
 )
-def test_known_union_member_still_raises(record: dict) -> None:
+def test_known_union_member_still_raises(record: t.Dict[str, t.Any]) -> None:
     with pytest.raises(ModelError):
         get_or_create(
             {'$type': 'app.bsky.embed.record#view', 'record': record}, models.AppBskyEmbedRecord.View, strict=True
@@ -135,7 +135,7 @@ def test_known_union_member_does_not_build_a_throwaway_dot_dict(monkeypatch: pyt
     created = []
     original_init = DotDict.__init__
 
-    def spy(self: DotDict, data: dict) -> None:
+    def spy(self: DotDict, data: t.Dict[str, t.Any]) -> None:
         created.append(data)
         original_init(self, data)
 

@@ -122,7 +122,8 @@ def test_lazy(server: FakeServer) -> None:
 
 
 def test_empty_page_with_cursor_does_not_stop(server: FakeServer) -> None:
-    server.pages['c1'] = ([], 'c2')
+    empty_page: t.List[str] = []
+    server.pages['c1'] = (empty_page, 'c2')
 
     items = paginate(Client().app.bsky.graph.get_follows, {'actor': 'subject.test'}).items()
 
@@ -142,7 +143,7 @@ def test_resume_after_error(server: FakeServer) -> None:
     server.fail_once_on.add('c2')
     paginator = paginate(Client().app.bsky.graph.get_follows, {'actor': 'subject.test'})
 
-    fetched = []
+    fetched: t.List[models.AppBskyActorDefs.ProfileView] = []
     with pytest.raises(RateLimitExceededError):
         fetched.extend(paginator.items())
     fetched.extend(paginator.items())
@@ -159,7 +160,7 @@ def test_request_kwargs_are_forwarded(server: FakeServer) -> None:
 
 def test_not_paginated_method(server: FakeServer) -> None:
     with pytest.raises(TypeError, match='not a paginated response'):
-        list(paginate(Client().app.bsky.actor.get_profile, {'actor': 'subject.test'}))  # type: ignore[arg-type]
+        list(paginate(Client().app.bsky.actor.get_profile, {'actor': 'subject.test'}))  # pyrefly: ignore[no-matching-overload]
 
 
 def test_async_method_returns_async_paginator() -> None:
@@ -170,8 +171,13 @@ def test_async_method_returns_async_paginator() -> None:
 def test_sync_paginator_rejects_coroutine(server: FakeServer) -> None:
     client = AsyncClient()
 
-    # typed as AsyncPaginator, but a lambda is not a coroutine function at runtime
-    paginator: t.Any = paginate(lambda params: client.app.bsky.graph.get_follows(params), {'actor': 'subject.test'})
+    def get_follows(
+        params: models.AppBskyGraphGetFollows.ParamsDict,
+    ) -> t.Awaitable[models.AppBskyGraphGetFollows.Response]:
+        return client.app.bsky.graph.get_follows(params)
+
+    # typed as AsyncPaginator, but a plain function is not a coroutine function at runtime
+    paginator: t.Any = paginate(get_follows, {'actor': 'subject.test'})
 
     with pytest.raises(TypeError, match='async def'):
         list(paginator)

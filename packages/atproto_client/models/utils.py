@@ -20,12 +20,83 @@ if t.TYPE_CHECKING:
     from atproto_client.request import Response
 
 M = t.TypeVar('M')
+B = t.TypeVar('B', bound=BaseModel)
 R = t.TypeVar('R', bound=RecordModelBase)
 ModelData: te.TypeAlias = t.Union[
-    M, t.Dict[str, t.Any], None
-]  # we assume that dict is JSON object. not list or primitive
+    M, t.Mapping[str, t.Any], None
+]  # we assume that mapping is JSON object. not list or primitive
 
 _TYPE_SERVICE_FIELD = '$type'
+
+
+@t.overload
+def get_or_create(
+    model_data: None,
+    model: t.Optional[t.Type[object]] = None,
+    *,
+    strict: bool = True,
+    strict_string_format: bool = False,
+) -> None: ...
+
+
+@t.overload
+def get_or_create(
+    model_data: t.Mapping[str, t.Any],
+    model: t.Type[M],
+    *,
+    strict: te.Literal[True] = True,
+    strict_string_format: bool = False,
+) -> M: ...
+
+
+@t.overload
+def get_or_create(
+    model_data: B,
+    model: t.Type[B],
+    *,
+    strict: te.Literal[True] = True,
+    strict_string_format: bool = False,
+) -> B: ...
+
+
+@t.overload
+def get_or_create(
+    model_data: t.Mapping[str, t.Any],
+    model: t.Type[M],
+    *,
+    strict: bool,
+    strict_string_format: bool = False,
+) -> t.Union[M, DotDict]: ...
+
+
+@t.overload
+def get_or_create(
+    model_data: B,
+    model: t.Type[B],
+    *,
+    strict: bool,
+    strict_string_format: bool = False,
+) -> t.Union[B, DotDict]: ...
+
+
+@t.overload
+def get_or_create(
+    model_data: object,
+    model: None = None,
+    *,
+    strict: te.Literal[True] = True,
+    strict_string_format: bool = False,
+) -> t.Optional[UnknownRecordType]: ...
+
+
+@t.overload
+def get_or_create(
+    model_data: object,
+    model: None = None,
+    *,
+    strict: bool,
+    strict_string_format: bool = False,
+) -> t.Optional[t.Union[UnknownRecordType, DotDict]]: ...
 
 
 def get_or_create(
@@ -68,7 +139,7 @@ def get_or_create(
     """
     try:
         model_instance = _get_or_create(model_data, model, strict=strict, strict_string_format=strict_string_format)
-        if strict and model_instance is not None and (not model or not isinstance(model_instance, model)):
+        if strict and model is not None and model_instance is not None and not isinstance(model_instance, model):
             raise ModelError(f"Can't properly parse model of type {model}")
 
         return model_instance
@@ -89,9 +160,6 @@ def _get_or_create(
         if not isinstance(model_data, dict):
             return None
 
-        # we are sure that this is dict because of check above
-        model_data = t.cast('t.Dict[str, t.Any]', model_data)
-
         # resolve a record model by type and try to deserialize
         record_type: t.Any = model_data.get(_TYPE_SERVICE_FIELD)
         record_model = resolve_record_type(record_type) if isinstance(record_type, str) else None
@@ -110,7 +178,7 @@ def _get_or_create(
 
     try:
         if issubclass(model, BaseModel):
-            return model.model_validate(model_data, context={'strict_string_format': strict_string_format})
+            return t.cast('M', model.model_validate(model_data, context={'strict_string_format': strict_string_format}))
         if not isinstance(model_data, t.Mapping):
             raise ModelError(f'Cannot parse model of type {model}')
         return model(**model_data)
@@ -128,8 +196,7 @@ def get_response_model(response: 'Response', model: t.Type[M]) -> M:
     if not isinstance(response.content, dict):
         raise ModelError("Can't properly parse response model because JSON is expected in response")
 
-    # casting to M because of enabled strict mode
-    return t.cast('M', get_or_create(response.content, model, strict=True))
+    return get_or_create(response.content, model, strict=True)
 
 
 def get_model_as_dict(model: t.Union[DotDict, BlobRef, ModelBase]) -> t.Dict[str, t.Any]:
@@ -150,7 +217,7 @@ def is_json(json_data: t.Union[str, bytes]) -> bool:
     return load_json(json_data, strict=False) is not None
 
 
-def load_json(json_data: t.Union[str, bytes], strict: bool = True) -> t.Optional[t.Dict[str, t.Any]]:
+def load_json(json_data: t.Union[str, bytes], strict: bool = True) -> object:
     try:
         return from_json(json_data)
     except ValueError:
@@ -167,18 +234,22 @@ class _RecordModule(t.Protocol[R]):
 
 
 @t.overload
-def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: _RecordModule[R]) -> te.TypeGuard[R]: ...
+def is_record_type(
+    model: t.Optional[t.Union[ModelBase, DotDict]], expected_type: _RecordModule[R]
+) -> te.TypeGuard[R]: ...
 
 
 @t.overload
-def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Type[R]) -> te.TypeGuard[R]: ...
+def is_record_type(model: t.Optional[t.Union[ModelBase, DotDict]], expected_type: t.Type[R]) -> te.TypeGuard[R]: ...
 
 
 @t.overload
-def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Union[str, types.ModuleType]) -> bool: ...
+def is_record_type(
+    model: t.Optional[t.Union[ModelBase, DotDict]], expected_type: t.Union[str, types.ModuleType]
+) -> bool: ...
 
 
-def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Any) -> bool:
+def is_record_type(model: t.Optional[t.Union[ModelBase, DotDict]], expected_type: t.Any) -> bool:
     """Verify that the model is the expected Record type.
 
     Note:
@@ -192,7 +263,7 @@ def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Any) -> 
         to be an instance of the Record class in runtime.
 
     Args:
-        model: Model to be verified.
+        model: Model to be verified. :obj:`None` is never a record.
         expected_type: Excepted type.
             Could be NSID, Python Module, or Record class.
 
@@ -212,6 +283,9 @@ def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Any) -> 
     Returns:
         :obj:`bool`: Is record or not.
     """
+    if model is None:
+        return False
+
     if isinstance(expected_type, types.ModuleType):
         # for now, all records are defined in the Record class
         expected_type = getattr(expected_type, 'Record', None)
@@ -225,14 +299,25 @@ def is_record_type(model: t.Union[ModelBase, DotDict], expected_type: t.Any) -> 
 
     if isinstance(model, DotDict):  # custom record
         try:
-            return expected_type == model[_TYPE_SERVICE_FIELD]
+            record_type: object = model[_TYPE_SERVICE_FIELD]
+            return expected_type == record_type
         except ModelFieldNotFoundError:
             return False
 
-    return expected_type == model.py_type
+    return expected_type == getattr(model, 'py_type', None)
 
 
-def create_strong_ref(model: ModelBase) -> models.ComAtprotoRepoStrongRef.Main:
+class _StrongRefSource(t.Protocol):
+    """Protocol of a model that references a record by its CID and URI."""
+
+    @property
+    def cid(self) -> str: ...
+
+    @property
+    def uri(self) -> str: ...
+
+
+def create_strong_ref(model: _StrongRefSource) -> models.ComAtprotoRepoStrongRef.Main:
     """Create a strong ref from the model.
 
     Args:

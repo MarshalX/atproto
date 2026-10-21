@@ -13,6 +13,10 @@ if t.TYPE_CHECKING:
     from _pytest.monkeypatch import MonkeyPatch
 
 
+def _always_valid(*_: object) -> bool:
+    return True
+
+
 def test_parse_jwt_empty() -> None:
     with pytest.raises(TokenDecodeError):
         parse_jwt('')
@@ -52,7 +56,7 @@ def test_verify_jwt_valid_signature(monkeypatch: 'MonkeyPatch') -> None:
         return 'did:key:zQ3shc6V2kvUxn7hNmPy9JMToKT7u2NH27SnKNxGL1GcBcS4j'
 
     # allow expired token
-    monkeypatch.setattr('atproto_server.auth.jwt._validate_exp', lambda *_: True)
+    monkeypatch.setattr('atproto_server.auth.jwt._validate_exp', _always_valid)
 
     verify_jwt(_TEST_JWT_EXPIRED, get_signing_key)
 
@@ -66,7 +70,7 @@ def test_verify_jwt_aud_validation(monkeypatch: 'MonkeyPatch') -> None:
         return 'blabla'
 
     # allow invalid signature
-    monkeypatch.setattr('atproto_server.auth.jwt._verify_signature', lambda *_: True)
+    monkeypatch.setattr('atproto_server.auth.jwt._verify_signature', _always_valid)
 
     verify_jwt(_TEST_JWT_INVALID_SIGN, get_signing_key)
     verify_jwt(_TEST_JWT_INVALID_SIGN, get_signing_key, expected_aud)
@@ -85,7 +89,7 @@ async def test_verify_jwt_aud_validation_async(monkeypatch: 'MonkeyPatch') -> No
         return 'blabla'
 
     # allow invalid signature
-    monkeypatch.setattr('atproto_server.auth.jwt._verify_signature', lambda *_: True)
+    monkeypatch.setattr('atproto_server.auth.jwt._verify_signature', _always_valid)
 
     await verify_jwt_async(_TEST_JWT_INVALID_SIGN, get_signing_key)
     await verify_jwt_async(_TEST_JWT_INVALID_SIGN, get_signing_key, expected_aud)

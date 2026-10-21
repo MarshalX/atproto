@@ -9,6 +9,7 @@ import typing as t
 import warnings
 from asyncio import Lock
 
+import typing_extensions as te
 from atproto_core.exceptions import AtProtocolError
 from atproto_core.uri import AtUri
 
@@ -41,6 +42,7 @@ class AsyncClient(
         #: Profile of the logged-in account, when it was fetched at login.
         self.me: t.Optional[models.AppBskyActorDefs.ProfileViewDetailed] = None
 
+    @te.override
     async def _invoke(self, invoke_type: 'InvokeType', **kwargs: t.Any) -> 'Response':
         ignore_session_check = kwargs.pop('ignore_session_check', False)
         if ignore_session_check:
@@ -241,7 +243,7 @@ class AsyncClient(
             facets = text.build_facets()
             text = text.build_text()
 
-        repo = self.me and self.me.did
+        repo = self.me.did if self.me else None
         if profile_identify:
             repo = profile_identify
 
@@ -448,7 +450,7 @@ class AsyncClient(
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        repo = self.me and self.me.did
+        repo = self.me.did if self.me else None
         if profile_identify:
             repo = profile_identify
 
@@ -613,7 +615,7 @@ class AsyncClient(
         """
         subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
-        repo = self.me and self.me.did
+        repo = self.me.did if self.me else None
         if not repo:
             raise LoginRequiredError
 
@@ -650,7 +652,7 @@ class AsyncClient(
         """
         subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
-        repo = self.me and self.me.did
+        repo = self.me.did if self.me else None
         if not repo:
             raise LoginRequiredError
 
@@ -684,7 +686,7 @@ class AsyncClient(
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        repo = self.me and self.me.did
+        repo = self.me.did if self.me else None
         if not repo:
             raise LoginRequiredError
 

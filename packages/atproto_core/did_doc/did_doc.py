@@ -2,6 +2,7 @@ import typing as t
 from dataclasses import dataclass
 from urllib.parse import urlparse
 
+import typing_extensions as te
 from atproto_crypto.did import get_did_key
 from atproto_identity.did.atproto_data import AtprotoData
 from pydantic import BaseModel, Field, ValidationError
@@ -9,6 +10,14 @@ from pydantic import BaseModel, Field, ValidationError
 _AT_URI_PREFIX = 'at://'
 _AT_URI_PREFIX_LEN = len(_AT_URI_PREFIX)
 _ATPROTO_KEY_ID = '#atproto'
+
+
+@te.runtime_checkable
+class _SupportsToDict(te.Protocol):
+    def to_dict(self) -> t.Dict[str, t.Any]: ...
+
+
+RawDidDocument = t.Union[t.Dict[str, t.Any], _SupportsToDict]
 
 
 @dataclass
@@ -33,7 +42,7 @@ def _validate_url(url: str) -> t.Optional[str]:
     return url
 
 
-def is_valid_did_doc(did_doc: t.Union[t.Dict[str, t.Any], t.Any]) -> bool:
+def is_valid_did_doc(did_doc: object) -> te.TypeGuard[RawDidDocument]:
     """Return whether the given DID document is valid.
 
     Args:
@@ -42,6 +51,9 @@ def is_valid_did_doc(did_doc: t.Union[t.Dict[str, t.Any], t.Any]) -> bool:
     Returns:
         :obj:`bool`: Whether the given DID document is valid.
     """
+    if not isinstance(did_doc, (dict, _SupportsToDict)):
+        return False
+
     try:
         DidDocument.from_dict(did_doc)
         return True
@@ -188,7 +200,7 @@ class DidDocument(BaseModel):
         )
 
     @classmethod
-    def from_dict(cls, did_doc: t.Union[t.Dict[str, t.Any], t.Any]) -> 'DidDocument':
+    def from_dict(cls, did_doc: RawDidDocument) -> 'DidDocument':
         """Parse a DID document.
 
         Args:
@@ -197,7 +209,7 @@ class DidDocument(BaseModel):
         Returns:
             :obj:`DidDocument`: The parsed DID document.
         """
-        if hasattr(did_doc, 'to_dict'):
+        if isinstance(did_doc, _SupportsToDict):
             return DidDocument(**did_doc.to_dict())
 
         return DidDocument(**did_doc)

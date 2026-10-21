@@ -1,7 +1,7 @@
 import typing as t
 
 if t.TYPE_CHECKING:
-    from atproto_client.models.base import DataModelBase, ParamsModelBase
+    from atproto_client.models.base import ModelBase, ParamsModelBase
     from atproto_client.request import Response
 
 
@@ -13,7 +13,7 @@ class XrpcClient(t.Protocol):
         self,
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
-        data: t.Optional[t.Union['DataModelBase', bytes]] = None,
+        data: t.Optional[t.Union['ModelBase', bytes]] = None,
         **kwargs: t.Any,
     ) -> 'Response': ...
 
@@ -21,7 +21,7 @@ class XrpcClient(t.Protocol):
         self,
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
-        data: t.Optional[t.Union['DataModelBase', bytes]] = None,
+        data: t.Optional[t.Union['ModelBase', bytes]] = None,
         **kwargs: t.Any,
     ) -> 'Response': ...
 
@@ -34,7 +34,7 @@ class AsyncXrpcClient(t.Protocol):
         self,
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
-        data: t.Optional[t.Union['DataModelBase', bytes]] = None,
+        data: t.Optional[t.Union['ModelBase', bytes]] = None,
         **kwargs: t.Any,
     ) -> 'Response': ...
 
@@ -42,7 +42,7 @@ class AsyncXrpcClient(t.Protocol):
         self,
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
-        data: t.Optional[t.Union['DataModelBase', bytes]] = None,
+        data: t.Optional[t.Union['ModelBase', bytes]] = None,
         **kwargs: t.Any,
     ) -> 'Response': ...
 

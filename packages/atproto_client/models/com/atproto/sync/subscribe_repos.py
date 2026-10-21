@@ -10,7 +10,7 @@ import typing as t
 import typing_extensions as te
 from pydantic import Field
 
-from atproto_client.models import string_formats
+from atproto_client.models import bytes_type, string_formats
 
 if t.TYPE_CHECKING:
     from atproto_core.cid import CIDType
@@ -35,9 +35,7 @@ class Commit(base.ModelBase):
     blobs: t.List[
         'CIDType'
     ]  #: Blobs. DEPRECATED -- will soon always be empty. List of new blobs (by CID) referenced by records in this commit.
-    blocks: t.Union[
-        str, bytes
-    ]  #: CAR file containing relevant blocks, as a diff since the previous repo state. The commit must be included as a block, and the commit block CID must be the first entry in the CAR header 'roots' list.
+    blocks: bytes_type.BytesType  #: CAR file containing relevant blocks, as a diff since the previous repo state. The commit must be included as a block, and the commit block CID must be the first entry in the CAR header 'roots' list.
     commit: 'CIDType'  #: Repo commit object CID.
     ops: t.List['models.ComAtprotoSyncSubscribeRepos.RepoOp'] = Field(
         max_length=200
@@ -63,9 +61,7 @@ class Commit(base.ModelBase):
 class Sync(base.ModelBase):
     """Definition model for :obj:`com.atproto.sync.subscribeRepos`. Updates the repo to a new state, without necessarily including that state on the firehose. Used to recover from broken commit streams, data loss incidents, or in situations where upstream host does not know recent state of the repository."""
 
-    blocks: t.Union[
-        str, bytes
-    ]  #: CAR file containing the commit, as a block. The CAR header must include the commit block CID as the first 'root'.
+    blocks: bytes_type.BytesType  #: CAR file containing the commit, as a block. The CAR header must include the commit block CID as the first 'root'.
     did: string_formats.Did  #: The account this repo event corresponds to. Must match that in the commit object.
     rev: str  #: The rev of the commit. This value must match that in the commit object.
     seq: int  #: The stream sequence number of this message.

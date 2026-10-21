@@ -3,20 +3,21 @@ import queue
 import threading
 import typing as t
 
+from atproto_subscription.websocket import AsyncWebsocketClient, WebsocketClient
+
 from atproto_jetstream.models import SubscribeEventsMessage
 
 #: Bounds memory if the consumer is slower than the tail.
 _QUEUE_SIZE = 1024
 
-_SENTINEL = object()
 
-
-def iter_live(client: t.Any) -> t.Iterator[SubscribeEventsMessage]:
+def iter_live(client: WebsocketClient[SubscribeEventsMessage]) -> t.Iterator[SubscribeEventsMessage]:
     """Drive a running live client from a background thread and yield its events.
 
     `start()` is a blocking callback loop, but `replay()` is an iterator.
     """
-    events: queue.Queue[t.Any] = queue.Queue(maxsize=_QUEUE_SIZE)
+    # None marks the end of the stream
+    events: queue.Queue[t.Optional[SubscribeEventsMessage]] = queue.Queue(maxsize=_QUEUE_SIZE)
     failure: t.List[BaseException] = []
 
     def on_message(message: SubscribeEventsMessage) -> None:
@@ -28,7 +29,7 @@ def iter_live(client: t.Any) -> t.Iterator[SubscribeEventsMessage]:
         except BaseException as e:  # noqa: BLE001
             failure.append(e)
         finally:
-            events.put(_SENTINEL)
+            events.put(None)
 
     thread = threading.Thread(target=run, daemon=True)
     thread.start()
@@ -36,7 +37,7 @@ def iter_live(client: t.Any) -> t.Iterator[SubscribeEventsMessage]:
     try:
         while True:
             item = events.get()
-            if item is _SENTINEL:
+            if item is None:
                 break
 
             yield item
@@ -47,9 +48,11 @@ def iter_live(client: t.Any) -> t.Iterator[SubscribeEventsMessage]:
         raise failure[0]
 
 
-async def iter_live_async(client: t.Any) -> t.AsyncIterator[SubscribeEventsMessage]:
+async def iter_live_async(
+    client: AsyncWebsocketClient[SubscribeEventsMessage],
+) -> t.AsyncIterator[SubscribeEventsMessage]:
     """Async twin of :obj:`iter_live`."""
-    events: asyncio.Queue[t.Any] = asyncio.Queue(maxsize=_QUEUE_SIZE)
+    events: asyncio.Queue[t.Optional[SubscribeEventsMessage]] = asyncio.Queue(maxsize=_QUEUE_SIZE)
     failure: t.List[BaseException] = []
 
     async def on_message(message: SubscribeEventsMessage) -> None:
@@ -61,14 +64,14 @@ async def iter_live_async(client: t.Any) -> t.AsyncIterator[SubscribeEventsMessa
         except BaseException as e:  # noqa: BLE001
             failure.append(e)
         finally:
-            await events.put(_SENTINEL)
+            await events.put(None)
 
     task = asyncio.ensure_future(run())
 
     try:
         while True:
             item = await events.get()
-            if item is _SENTINEL:
+            if item is None:
                 break
 
             yield item

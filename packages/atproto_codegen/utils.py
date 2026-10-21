@@ -16,6 +16,8 @@ from atproto_codegen.models import builder
 
 RUFF_CONFIG_PATH = Path(__file__).parent.joinpath('ruff_generated.toml')
 
+_VT = t.TypeVar('_VT')
+
 
 @cache
 def find_ruff() -> str:
@@ -137,7 +139,7 @@ def gen_description_by_camel_case_name(name: str) -> str:
     return ' '.join(words)
 
 
-def sort_dict_by_key(d: dict) -> dict:
+def sort_dict_by_key(d: t.Dict[str, _VT]) -> t.Dict[str, _VT]:
     return dict(sorted(d.items()))
 
 

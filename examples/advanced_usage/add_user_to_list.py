@@ -14,7 +14,7 @@ def main() -> None:
     user_handle_to_add = 'test.marshal.dev'
 
     mod_list_owner = AtUri.from_str(mod_list_uri).host
-    user_to_add = IdResolver().handle.resolve(user_handle_to_add)
+    user_to_add = IdResolver().handle.ensure_resolve(user_handle_to_add)
 
     print(f'Adding {user_to_add} to the list {mod_list_uri} (owned by {mod_list_owner})')
 

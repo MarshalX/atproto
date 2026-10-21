@@ -1,8 +1,10 @@
+import typing as t
+
 from atproto_client.models.dot_dict import DotDict
 
 
 def test_dot_dict_input_mutation() -> None:
-    test_data = {'a': 1, 'b': {'c': 2}, 'd': [{'e': 3}, 4, 5]}
+    test_data: t.Dict[str, t.Any] = {'a': 1, 'b': {'c': 2}, 'd': [{'e': 3}, 4, 5]}
     model = DotDict(test_data)
 
     model['a'] = 2

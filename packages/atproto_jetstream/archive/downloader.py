@@ -1,4 +1,5 @@
 import asyncio
+import functools
 import time
 import typing as t
 from concurrent.futures import ThreadPoolExecutor
@@ -10,6 +11,9 @@ from atproto_client.exceptions import RateLimitExceededError
 from atproto_jetstream.archive.planner import WorkUnit
 from atproto_jetstream.archive.segment import SegmentEvent, decode_block, read_sealed_header
 from atproto_jetstream.exceptions import JetstreamError
+
+if t.TYPE_CHECKING:
+    from atproto_client import models
 
 #: A whole segment is ~261 MB, far too much to hold in memory. Read it in Range slices.
 SEGMENT_CHUNK_BYTES = 8 * 1024 * 1024
@@ -27,6 +31,8 @@ _MAX_RETRY_AFTER_SEC = 300.0
 
 #: A quota refills continuously, so waiting works; a wall of retries does not.
 DEFAULT_MAX_QUOTA_WAITS = 10
+
+_T = t.TypeVar('_T')
 
 
 def quota_retry_after(exception: BaseException) -> t.Optional[float]:
@@ -115,7 +121,7 @@ class ArchiveDownloader:
         self._concurrency = max(1, concurrency)
         self._max_quota_waits = max_quota_waits
 
-    def _call(self, request: t.Callable[[], t.Any]) -> t.Any:
+    def _call(self, request: t.Callable[[], _T]) -> _T:
         """Run a request, waiting out byte-quota rejections rather than retrying blindly."""
         for _ in range(self._max_quota_waits + 1):
             try:
@@ -129,10 +135,9 @@ class ArchiveDownloader:
 
         raise JetstreamError('Byte quota still exhausted after waiting')
 
-    def plan_page(self, data: t.Dict[str, t.Any]) -> t.Any:
-        return self._call(
-            lambda: self._client.network.bsky.jetstream.plan_snapshot(t.cast('t.Any', data), headers=self._headers)
-        )
+    def plan_page(self, data: t.Dict[str, t.Any]) -> 'models.NetworkBskyJetstreamPlanSnapshot.Response':
+        plan_input = t.cast('models.NetworkBskyJetstreamPlanSnapshot.DataDict', data)
+        return self._call(lambda: self._client.network.bsky.jetstream.plan_snapshot(plan_input, headers=self._headers))
 
     def fetch_block(self, segment: str, block_index: int) -> bytes:
         frame = self._call(
@@ -184,7 +189,7 @@ class ArchiveDownloader:
             return
 
         with ThreadPoolExecutor(max_workers=self._concurrency) as pool:
-            for frame in pool.map(lambda index: self.fetch_block(unit.segment, index), blocks):
+            for frame in pool.map(functools.partial(self.fetch_block, unit.segment), blocks):
                 yield from decode_block(frame)
 
 
@@ -205,7 +210,7 @@ class AsyncArchiveDownloader:
         self._semaphore = asyncio.Semaphore(max(1, concurrency))
         self._max_quota_waits = max_quota_waits
 
-    async def _call(self, request: t.Callable[[], t.Any]) -> t.Any:
+    async def _call(self, request: t.Callable[[], t.Awaitable[_T]]) -> _T:
         for _ in range(self._max_quota_waits + 1):
             try:
                 return await request()
@@ -218,9 +223,10 @@ class AsyncArchiveDownloader:
 
         raise JetstreamError('Byte quota still exhausted after waiting')
 
-    async def plan_page(self, data: t.Dict[str, t.Any]) -> t.Any:
+    async def plan_page(self, data: t.Dict[str, t.Any]) -> 'models.NetworkBskyJetstreamPlanSnapshot.Response':
+        plan_input = t.cast('models.NetworkBskyJetstreamPlanSnapshot.DataDict', data)
         return await self._call(
-            lambda: self._client.network.bsky.jetstream.plan_snapshot(t.cast('t.Any', data), headers=self._headers)
+            lambda: self._client.network.bsky.jetstream.plan_snapshot(plan_input, headers=self._headers)
         )
 
     async def fetch_block(self, segment: str, block_index: int) -> bytes:
@@ -240,7 +246,7 @@ class AsyncArchiveDownloader:
         while True:
             headers = {**self._headers, **_range_header(start, start + SEGMENT_CHUNK_BYTES - 1)}
 
-            def fetch(headers: t.Dict[str, str] = headers) -> t.Any:
+            def fetch(headers: t.Dict[str, str] = headers) -> t.Awaitable[bytes]:
                 return self._client.network.bsky.jetstream.get_segment({'name': name}, headers=headers)
 
             chunk = await self._call(fetch)

@@ -5,9 +5,10 @@ from pathlib import Path
 import pytest
 from atproto_codegen import utils
 from atproto_codegen.config import CodegenConfig
+from atproto_codegen.exceptions import RuffNotFoundError
 from atproto_codegen.models.generator import generate_models
 from atproto_codegen.namespaces.generator import generate_namespaces
-from atproto_codegen.utils import RUFF_CONFIG_PATH, RuffNotFoundError, find_ruff
+from atproto_codegen.utils import RUFF_CONFIG_PATH, find_ruff
 
 CUSTOM_LEXICON_DIR = Path(__file__).parent.parent.joinpath('fixtures', 'custom_lexicons').absolute()
 
@@ -44,10 +45,14 @@ def test_find_ruff_locates_the_binary() -> None:
     assert Path(find_ruff()).is_file()
 
 
+def _not_found(*_: object, **__: object) -> None:
+    return None
+
+
 def test_missing_ruff_raises_with_install_hint(monkeypatch: pytest.MonkeyPatch) -> None:
     find_ruff.cache_clear()
-    monkeypatch.setattr(utils.sysconfig, 'get_path', lambda *a, **kw: None)
-    monkeypatch.setattr(utils.shutil, 'which', lambda _: None)
+    monkeypatch.setattr(utils.sysconfig, 'get_path', _not_found)
+    monkeypatch.setattr(utils.shutil, 'which', _not_found)
 
     with pytest.raises(RuffNotFoundError, match='pip install ruff'):
         find_ruff()
@@ -85,7 +90,7 @@ def test_style_ignores_the_surrounding_project(generated_package: Path, tmp_path
     assert any(len(line) > 50 for line in status.splitlines())
 
 
-def test_formatting_emits_no_diagnostics(tmp_path: Path, capfd: pytest.CaptureFixture) -> None:
+def test_formatting_emits_no_diagnostics(tmp_path: Path, capfd: pytest.CaptureFixture[str]) -> None:
     """Codegen's own Ruff run is silent: its per-file-ignores apply to the paths it passes."""
     root = tmp_path.joinpath('quiet_pkg')
     config = CodegenConfig(

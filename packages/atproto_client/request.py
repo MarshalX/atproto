@@ -8,6 +8,7 @@ from pydantic_core import from_json
 
 from atproto_client import exceptions
 from atproto_client.models.common import XrpcError
+from atproto_client.models.dot_dict import DotDict
 from atproto_client.models.utils import get_or_create, load_json
 
 try:
@@ -22,7 +23,7 @@ _ATPROTO_SDK_USER_AGENT = f'atproto/{_ATPROTO_SDK_VERSION} Python SDK (atproto.b
 class Response:
     success: bool
     status_code: int
-    content: t.Optional[t.Union[t.Dict[str, t.Any], bytes, XrpcError]]
+    content: t.Optional[t.Union[t.Dict[str, t.Any], bytes, XrpcError, DotDict]]
     headers: t.Dict[str, t.Any]
 
 
@@ -97,8 +98,8 @@ def _handle_response(response: httpx.Response) -> httpx.Response:
         headers=_convert_headers_to_dict(response.headers),
     )
     error_content = load_json(response.content, strict=False)
-    if error_content:
-        error_response.content = t.cast('XrpcError', get_or_create(error_content, XrpcError, strict=False))
+    if error_content and isinstance(error_content, dict):
+        error_response.content = get_or_create(error_content, XrpcError, strict=False)
 
     if response.status_code in {401, 403}:
         raise exceptions.UnauthorizedError(error_response)
@@ -208,6 +209,7 @@ class Request(RequestBase):
         self._client_kwargs = kwargs
         self._client = httpx.Client(follow_redirects=True, **kwargs)
 
+    @te.override
     def _new_instance(self) -> te.Self:
         return type(self)(**self._client_kwargs)
 
@@ -243,6 +245,7 @@ class AsyncRequest(RequestBase):
         self._client_kwargs = kwargs
         self._client = httpx.AsyncClient(follow_redirects=True, **kwargs)
 
+    @te.override
     def _new_instance(self) -> te.Self:
         return type(self)(**self._client_kwargs)
 

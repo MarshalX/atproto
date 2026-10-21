@@ -45,3 +45,18 @@ def test_unknown_operation_is_rejected() -> None:
 
     with pytest.raises(FrameDecodingError):
         Frame.from_bytes(raw)
+
+
+def test_bytearray_is_accepted() -> None:
+    frame = Frame.from_bytes(bytearray(message_frame(seq=1)))
+
+    assert isinstance(frame, MessageFrame)
+    assert frame.body['seq'] == 1
+
+
+def test_message_frame_without_type() -> None:
+    raw = libipld.encode_dag_cbor({'op': 1}) + libipld.encode_dag_cbor({})
+    frame = Frame.from_bytes(raw)
+
+    assert isinstance(frame, MessageFrame)
+    assert frame.type == ''

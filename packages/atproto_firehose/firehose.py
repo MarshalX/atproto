@@ -42,7 +42,9 @@ class FirehoseSubscribeReposClient(ComAtprotoSyncSubscribeReposClient):
 
     def __init__(
         self,
-        params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None,
+        params: t.Optional[
+            t.Union['models.ComAtprotoSyncSubscribeRepos.Params', 'models.ComAtprotoSyncSubscribeRepos.ParamsDict']
+        ] = None,
         base_uri: t.Optional[str] = _REPOS_BASE_WEBSOCKET_URI,
         recv_timeout: t.Optional[float] = _REPOS_DEFAULT_RECV_TIMEOUT,
     ) -> None:
@@ -61,7 +63,9 @@ class AsyncFirehoseSubscribeReposClient(AsyncComAtprotoSyncSubscribeReposClient)
 
     def __init__(
         self,
-        params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None,
+        params: t.Optional[
+            t.Union['models.ComAtprotoSyncSubscribeRepos.Params', 'models.ComAtprotoSyncSubscribeRepos.ParamsDict']
+        ] = None,
         base_uri: t.Optional[str] = _REPOS_BASE_WEBSOCKET_URI,
         recv_timeout: t.Optional[float] = _REPOS_DEFAULT_RECV_TIMEOUT,
     ) -> None:
@@ -80,7 +84,9 @@ class FirehoseSubscribeLabelsClient(ComAtprotoLabelSubscribeLabelsClient):
 
     def __init__(
         self,
-        params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None,
+        params: t.Optional[
+            t.Union['models.ComAtprotoLabelSubscribeLabels.Params', 'models.ComAtprotoLabelSubscribeLabels.ParamsDict']
+        ] = None,
         base_uri: t.Optional[str] = _LABELS_BASE_WEBSOCKET_URI,
         recv_timeout: t.Optional[float] = _LABELS_DEFAULT_RECV_TIMEOUT,
     ) -> None:
@@ -99,7 +105,9 @@ class AsyncFirehoseSubscribeLabelsClient(AsyncComAtprotoLabelSubscribeLabelsClie
 
     def __init__(
         self,
-        params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None,
+        params: t.Optional[
+            t.Union['models.ComAtprotoLabelSubscribeLabels.Params', 'models.ComAtprotoLabelSubscribeLabels.ParamsDict']
+        ] = None,
         base_uri: t.Optional[str] = _LABELS_BASE_WEBSOCKET_URI,
         recv_timeout: t.Optional[float] = _LABELS_DEFAULT_RECV_TIMEOUT,
     ) -> None:

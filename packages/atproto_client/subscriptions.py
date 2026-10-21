@@ -55,10 +55,7 @@ def parse_chat_bsky_moderation_subscribe_mod_events_message(
     Returns:
         :obj:`.ChatBskyModerationSubscribeModEventsMessage`: Corresponding message model.
     """
-    return t.cast(
-        'ChatBskyModerationSubscribeModEventsMessage',
-        get_or_create(message.body, CHAT_BSKY_MODERATION_SUBSCRIBE_MOD_EVENTS_MESSAGE_TYPE_TO_MODEL[message.type]),
-    )
+    return get_or_create(message.body, CHAT_BSKY_MODERATION_SUBSCRIBE_MOD_EVENTS_MESSAGE_TYPE_TO_MODEL[message.type])
 
 
 class ChatBskyModerationSubscribeModEventsClient(SubscriptionClient):
@@ -73,7 +70,12 @@ class ChatBskyModerationSubscribeModEventsClient(SubscriptionClient):
     def __init__(
         self,
         base_uri: str,
-        params: t.Optional[t.Union[dict, 'models.ChatBskyModerationSubscribeModEvents.Params']] = None,
+        params: t.Optional[
+            t.Union[
+                'models.ChatBskyModerationSubscribeModEvents.Params',
+                'models.ChatBskyModerationSubscribeModEvents.ParamsDict',
+            ]
+        ] = None,
         recv_timeout: t.Optional[float] = None,
     ) -> None:
         params_model = get_or_create(params, models.ChatBskyModerationSubscribeModEvents.Params)
@@ -97,7 +99,12 @@ class AsyncChatBskyModerationSubscribeModEventsClient(AsyncSubscriptionClient):
     def __init__(
         self,
         base_uri: str,
-        params: t.Optional[t.Union[dict, 'models.ChatBskyModerationSubscribeModEvents.Params']] = None,
+        params: t.Optional[
+            t.Union[
+                'models.ChatBskyModerationSubscribeModEvents.Params',
+                'models.ChatBskyModerationSubscribeModEvents.ParamsDict',
+            ]
+        ] = None,
         recv_timeout: t.Optional[float] = None,
     ) -> None:
         params_model = get_or_create(params, models.ChatBskyModerationSubscribeModEvents.Params)
@@ -131,10 +138,7 @@ def parse_com_atproto_label_subscribe_labels_message(
     Returns:
         :obj:`.ComAtprotoLabelSubscribeLabelsMessage`: Corresponding message model.
     """
-    return t.cast(
-        'ComAtprotoLabelSubscribeLabelsMessage',
-        get_or_create(message.body, COM_ATPROTO_LABEL_SUBSCRIBE_LABELS_MESSAGE_TYPE_TO_MODEL[message.type]),
-    )
+    return get_or_create(message.body, COM_ATPROTO_LABEL_SUBSCRIBE_LABELS_MESSAGE_TYPE_TO_MODEL[message.type])
 
 
 class ComAtprotoLabelSubscribeLabelsClient(SubscriptionClient):
@@ -149,7 +153,9 @@ class ComAtprotoLabelSubscribeLabelsClient(SubscriptionClient):
     def __init__(
         self,
         base_uri: str,
-        params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None,
+        params: t.Optional[
+            t.Union['models.ComAtprotoLabelSubscribeLabels.Params', 'models.ComAtprotoLabelSubscribeLabels.ParamsDict']
+        ] = None,
         recv_timeout: t.Optional[float] = None,
     ) -> None:
         params_model = get_or_create(params, models.ComAtprotoLabelSubscribeLabels.Params)
@@ -173,7 +179,9 @@ class AsyncComAtprotoLabelSubscribeLabelsClient(AsyncSubscriptionClient):
     def __init__(
         self,
         base_uri: str,
-        params: t.Optional[t.Union[dict, 'models.ComAtprotoLabelSubscribeLabels.Params']] = None,
+        params: t.Optional[
+            t.Union['models.ComAtprotoLabelSubscribeLabels.Params', 'models.ComAtprotoLabelSubscribeLabels.ParamsDict']
+        ] = None,
         recv_timeout: t.Optional[float] = None,
     ) -> None:
         params_model = get_or_create(params, models.ComAtprotoLabelSubscribeLabels.Params)
@@ -211,10 +219,7 @@ def parse_com_atproto_sync_subscribe_repos_message(message: 'MessageFrame') -> '
     Returns:
         :obj:`.ComAtprotoSyncSubscribeReposMessage`: Corresponding message model.
     """
-    return t.cast(
-        'ComAtprotoSyncSubscribeReposMessage',
-        get_or_create(message.body, COM_ATPROTO_SYNC_SUBSCRIBE_REPOS_MESSAGE_TYPE_TO_MODEL[message.type]),
-    )
+    return get_or_create(message.body, COM_ATPROTO_SYNC_SUBSCRIBE_REPOS_MESSAGE_TYPE_TO_MODEL[message.type])
 
 
 class ComAtprotoSyncSubscribeReposClient(SubscriptionClient):
@@ -229,7 +234,9 @@ class ComAtprotoSyncSubscribeReposClient(SubscriptionClient):
     def __init__(
         self,
         base_uri: str,
-        params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None,
+        params: t.Optional[
+            t.Union['models.ComAtprotoSyncSubscribeRepos.Params', 'models.ComAtprotoSyncSubscribeRepos.ParamsDict']
+        ] = None,
         recv_timeout: t.Optional[float] = None,
     ) -> None:
         params_model = get_or_create(params, models.ComAtprotoSyncSubscribeRepos.Params)
@@ -253,7 +260,9 @@ class AsyncComAtprotoSyncSubscribeReposClient(AsyncSubscriptionClient):
     def __init__(
         self,
         base_uri: str,
-        params: t.Optional[t.Union[dict, 'models.ComAtprotoSyncSubscribeRepos.Params']] = None,
+        params: t.Optional[
+            t.Union['models.ComAtprotoSyncSubscribeRepos.Params', 'models.ComAtprotoSyncSubscribeRepos.ParamsDict']
+        ] = None,
         recv_timeout: t.Optional[float] = None,
     ) -> None:
         params_model = get_or_create(params, models.ComAtprotoSyncSubscribeRepos.Params)
@@ -293,7 +302,4 @@ def parse_network_bsky_jetstream_subscribe_events_message(
     Returns:
         :obj:`.NetworkBskyJetstreamSubscribeEventsMessage`: Corresponding message model.
     """
-    return t.cast(
-        'NetworkBskyJetstreamSubscribeEventsMessage',
-        get_or_create(message.body, NETWORK_BSKY_JETSTREAM_SUBSCRIBE_EVENTS_MESSAGE_TYPE_TO_MODEL[message.type]),
-    )
+    return get_or_create(message.body, NETWORK_BSKY_JETSTREAM_SUBSCRIBE_EVENTS_MESSAGE_TYPE_TO_MODEL[message.type])

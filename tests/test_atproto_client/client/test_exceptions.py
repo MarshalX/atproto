@@ -1,9 +1,11 @@
+import typing as t
+
 from atproto_client import exceptions
 from atproto_client.models.common import XrpcError
 from atproto_client.request import Response
 
 
-def _response(content: object, status_code: int = 400) -> Response:
+def _response(content: t.Optional[t.Union[XrpcError, bytes]], status_code: int = 400) -> Response:
     return Response(success=False, status_code=status_code, content=content, headers={'content-type': 'text/plain'})
 
 

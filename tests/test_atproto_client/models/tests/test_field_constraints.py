@@ -1,3 +1,5 @@
+import typing as t
+
 import pytest
 from atproto_client import models
 from pydantic import ValidationError
@@ -20,7 +22,7 @@ def test_array_constraint_is_applied() -> None:
 
 
 def test_array_item_constraint_is_applied_to_integers() -> None:
-    def build_response(received_parts: list) -> models.AppBskyVideoGetUploadStatus.Response:
+    def build_response(received_parts: t.List[int]) -> models.AppBskyVideoGetUploadStatus.Response:
         return models.AppBskyVideoGetUploadStatus.Response(
             job_id='job',
             part_count=2,

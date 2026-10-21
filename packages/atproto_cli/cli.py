@@ -4,6 +4,7 @@ import typing as t
 from pathlib import Path
 
 import click
+import typing_extensions as te
 from atproto_codegen.clients.generate_async_client import gen_client
 from atproto_codegen.config import CodegenConfig
 from atproto_codegen.exceptions import CodegenError
@@ -19,6 +20,7 @@ _F = t.TypeVar('_F', bound=t.Callable[..., t.Any])
 class AliasedGroup(click.Group):
     """Ref: https://click.palletsprojects.com/en/8.1.x/advanced/."""
 
+    @te.override
     def get_command(self, ctx: click.Context, cmd_name: str) -> t.Optional[click.Command]:
         rv = click.Group.get_command(self, ctx, cmd_name)
         if rv is not None:
@@ -27,12 +29,12 @@ class AliasedGroup(click.Group):
         matches = [x for x in self.list_commands(ctx) if x.startswith(cmd_name)]
         if not matches:
             return None
-        if len(matches) == 1:
-            return click.Group.get_command(self, ctx, matches[0])
+        if len(matches) > 1:
+            ctx.fail(f'Too many matches: {", ".join(sorted(matches))}')
 
-        ctx.fail(f'Too many matches: {", ".join(sorted(matches))}')
-        return None
+        return click.Group.get_command(self, ctx, matches[0])
 
+    @te.override
     def resolve_command(
         self, ctx: click.Context, args: t.List[str]
     ) -> t.Tuple[t.Optional[str], t.Optional[click.Command], t.List[str]]:

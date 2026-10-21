@@ -248,9 +248,7 @@ html_baseurl = os.environ.get('READTHEDOCS_CANONICAL_URL', 'https://atproto.blue
 
 # Tell Jinja2 templates the build is running on Read the Docs
 if os.environ.get('READTHEDOCS', '') == 'True':
-    if 'html_context' not in globals():
-        html_context = {}
-    html_context['READTHEDOCS'] = True
+    html_context = {'READTHEDOCS': True}
 
 # -- OpenGraph ---------------------------------------------------
 ogp_site_url = 'https://atproto.blue/'
@@ -285,8 +283,10 @@ def disable_search_index(app: 'Sphinx') -> None:
 
     Search on the site is DocSearch, which crawls the published HTML.
     """
-    if hasattr(app.builder, 'search'):
-        app.builder.search = False  # type: ignore[attr-defined]
+    from sphinx.builders.html import StandaloneHTMLBuilder
+
+    if isinstance(app.builder, StandaloneHTMLBuilder):
+        app.builder.search = False
 
 
 def prepare_model_modules(_app: 'Sphinx') -> None:
@@ -342,7 +342,7 @@ def scope_pygments_to_theme(app: 'Sphinx', exception: t.Optional[Exception]) -> 
         (app.config.pygments_style, 'html:not(.dark) .highlight'),
         (app.config.pygments_style_dark, 'html.dark .highlight'),
     ):
-        defs = HtmlFormatter(style=style).get_style_defs(selector)
+        defs: str = HtmlFormatter(style=style).get_style_defs(selector)
         blocks.append('\n'.join(line for line in defs.splitlines() if not line.startswith(f'{selector} {{')))
 
     (Path(app.outdir) / '_static' / 'pygments.css').write_text('\n'.join(blocks), encoding='UTF-8')

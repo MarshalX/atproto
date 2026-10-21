@@ -37,7 +37,9 @@ async def test_did_resolver_with_did_plc() -> None:
 
     assert did_doc.id == expected_did_plc
     assert did_doc.get_handle() == expected_handle
-    assert did_doc.get_signing_key().type == expected_key_type
+    signing_key = did_doc.get_signing_key()
+    assert signing_key is not None
+    assert signing_key.type == expected_key_type
 
 
 @pytest.mark.asyncio

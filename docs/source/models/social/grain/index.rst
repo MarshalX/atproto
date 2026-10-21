@@ -29,12 +29,6 @@ Grain.
 
       Favorite.
 
-   .. grid-item-card:: :octicon:`note;1em;sd-mr-1` gallery
-      :link: /models/social/grain/gallery
-      :link-type: doc
-
-      Gallery.
-
    .. grid-item-card:: :octicon:`note;1em;sd-mr-1` photo
       :link: /models/social/grain/photo
       :link-type: doc
@@ -48,5 +42,4 @@ Grain.
    gallery </models/social/grain/gallery/index>
    defs </models/social/grain/defs>
    favorite </models/social/grain/favorite>
-   gallery </models/social/grain/gallery>
    photo </models/social/grain/photo>

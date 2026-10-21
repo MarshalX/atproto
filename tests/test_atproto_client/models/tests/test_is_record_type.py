@@ -9,15 +9,15 @@ from atproto_client.models.dot_dict import DotDict
 from tests.test_atproto_client.models.tests.utils import load_data_from_file
 
 
-def load_test_correct_data() -> dict:
+def load_test_correct_data() -> t.Dict[str, t.Any]:
     return load_data_from_file('post_record')
 
 
-def load_test_custom_data() -> dict:
+def load_test_custom_data() -> t.Dict[str, t.Any]:
     return load_data_from_file('custom_record')
 
 
-def load_record(loader: t.Callable[[], dict]) -> t.Union[ModelBase, DotDict]:
+def load_record(loader: t.Callable[[], t.Dict[str, t.Any]]) -> t.Union[ModelBase, DotDict]:
     response = get_or_create(loader(), models.ComAtprotoRepoGetRecord.Response)
     assert isinstance(response, models.ComAtprotoRepoGetRecord.Response)
 
@@ -69,3 +69,9 @@ def test_is_record_type_narrows_type() -> None:
         assert post_record.text
 
     te.assert_type(is_record_type(post_record, models.ids.AppBskyFeedPost), bool)
+
+
+def test_is_record_type_none() -> None:
+    assert is_record_type(None, models.ids.AppBskyFeedPost) is False
+    assert is_record_type(None, models.AppBskyFeedPost) is False
+    assert is_record_type(None, models.AppBskyFeedPost.Record) is False

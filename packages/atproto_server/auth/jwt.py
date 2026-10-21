@@ -12,7 +12,6 @@ from atproto_server.exceptions import (
     TokenExpiredSignatureError,
     TokenImmatureSignatureError,
     TokenInvalidAudienceError,
-    TokenInvalidIssuedAtError,
     TokenInvalidSignatureError,
 )
 
@@ -103,7 +102,7 @@ def decode_jwt_payload(payload: t.Union[str, bytes]) -> JwtPayload:
         raise TokenDecodeError('Invalid payload string: must be a json object')
 
     try:
-        return JwtPayload(**plain_payload)  # type: ignore  # noqa: PGH003
+        return JwtPayload(**plain_payload)
     except Exception as e:
         raise TokenDecodeError(f'Invalid payload string: {e}') from e
 
@@ -126,11 +125,6 @@ def _validate_exp(
     now: float,
     leeway: float,
 ) -> None:
-    try:
-        exp = int(exp)
-    except ValueError as e:
-        raise TokenDecodeError('Expiration Time claim (exp) must be an integer.') from e
-
     if exp <= (now - leeway):
         raise TokenExpiredSignatureError('Signature has expired')
 
@@ -140,10 +134,6 @@ def _validate_iat(
     now: float,
     leeway: float,
 ) -> None:
-    try:
-        iat = int(iat)
-    except ValueError as e:
-        raise TokenInvalidIssuedAtError('Issued At claim (iat) must be an integer.') from e
     if iat > (now + leeway):
         raise TokenImmatureSignatureError('The token is not yet valid (iat)')
 
@@ -159,10 +149,8 @@ def validate_jwt_payload(payload: JwtPayload, leeway: int = 0) -> None:
         :obj:`None`: The payload is valid.
 
     Raises:
-        TokenDecodeError: If the given JWT is invalid.
         TokenExpiredSignatureError: If the given JWT is expired.
         TokenImmatureSignatureError: If the given JWT is immature.
-        TokenInvalidIssuedAtError: If the given JWT has invalid issued at.
     """
     now = datetime.now(tz=timezone.utc).timestamp()
 
@@ -198,7 +186,6 @@ def verify_jwt(
         TokenExpiredSignatureError: If the given JWT is expired.
         TokenImmatureSignatureError: If the given JWT is immature.
         TokenInvalidAudienceError: If the given JWT has invalid audience.
-        TokenInvalidIssuedAtError: If the given JWT has invalid issued at.
         TokenInvalidSignatureError: If the given JWT has invalid signature.
     """
     plain_payload, signing_input, _, signature = parse_jwt(jwt)
@@ -247,7 +234,6 @@ async def verify_jwt_async(
         TokenExpiredSignatureError: If the given JWT is expired.
         TokenImmatureSignatureError: If the given JWT is immature.
         TokenInvalidAudienceError: If the given JWT has invalid audience.
-        TokenInvalidIssuedAtError: If the given JWT has invalid issued at.
         TokenInvalidSignatureError: If the given JWT has invalid signature.
     """
     plain_payload, signing_input, _, signature = parse_jwt(jwt)

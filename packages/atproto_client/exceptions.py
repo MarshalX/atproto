@@ -3,11 +3,13 @@ import typing as t
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 
+import typing_extensions as te
 from atproto_core.exceptions import AtProtocolError
 
 from atproto_client.models.common import XrpcError
 
 if t.TYPE_CHECKING:
+    from atproto_client.models.dot_dict import DotDict
     from atproto_client.request import Response
 
 
@@ -15,7 +17,7 @@ _DEFAULT_LOGING_REQUIRED_ERROR_MESSAGE = 'To perform this action, you must be lo
 _MAX_ERROR_CONTENT_LENGTH = 200
 
 
-def _get_error_details(content: t.Optional[t.Union[t.Dict[str, t.Any], bytes, XrpcError]]) -> str:
+def _get_error_details(content: t.Optional[t.Union[t.Dict[str, t.Any], bytes, XrpcError, 'DotDict']]) -> str:
     """Build a human-readable summary of the error content of a response.
 
     Args:
@@ -53,9 +55,12 @@ class RequestErrorBase(AtProtocolError):
     """
 
     def __init__(self, response: t.Optional['Response'] = None) -> None:
+        super().__init__(*self.args)  # args are already set by BaseException.__new__
+
         #: Response that carried the error, when one arrived.
         self.response: t.Optional[Response] = response
 
+    @te.override
     def __str__(self) -> str:
         """Summarize the error response. The full response is available in the :attr:`response` attribute."""
         if self.response is None:

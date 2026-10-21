@@ -53,7 +53,7 @@ def _shrink_backoff(client: t.Any) -> None:
 def run_sync(
     server: JetstreamTestServer,
     method: str,
-    params: t.Optional[dict] = None,
+    params: t.Optional[t.Dict[str, t.Any]] = None,
     recv_timeout: t.Optional[float] = None,
     stop_after: int = 1,
     compress: bool = False,
@@ -89,7 +89,7 @@ def run_sync(
 async def run_async(
     server: JetstreamTestServer,
     method: str,
-    params: t.Optional[dict] = None,
+    params: t.Optional[t.Dict[str, t.Any]] = None,
     recv_timeout: t.Optional[float] = None,
     stop_after: int = 1,
     compress: bool = False,
@@ -142,7 +142,7 @@ def test_record_is_typed(server: JetstreamTestServer) -> None:
 
     outcome = run_sync(server, method, stop_after=1)
 
-    post = models.get_or_create(first_commit(outcome).record, models.AppBskyFeedPost.Record)
+    post = first_commit(outcome).record
 
     assert isinstance(post, models.AppBskyFeedPost.Record)
     assert post.text == 'hello'

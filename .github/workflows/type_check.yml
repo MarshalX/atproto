@@ -1,0 +1,33 @@
+name: Type check
+
+on: [ pull_request ]
+
+permissions:
+  contents: read
+
+jobs:
+  pyrefly:
+    runs-on: ubuntu-latest
+
+    env:
+      POETRY_VIRTUALENVS_IN_PROJECT: "true"
+
+    steps:
+      - name: Checkout repository.
+        uses: actions/checkout@v5
+
+      - name: Set up Python.
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Setup Poetry.
+        uses: snok/install-poetry@v1
+        with:
+          version: 2.4.1
+
+      - name: Install dependencies.
+        run: poetry install --with docs
+
+      - name: Run type check.
+        run: poetry run pyrefly check --output-format=full-text-with-github

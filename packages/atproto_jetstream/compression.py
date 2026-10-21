@@ -1,5 +1,4 @@
 import functools
-import struct
 import sys
 import typing as t
 
@@ -130,7 +129,8 @@ def parse_dictionary_id(blob: bytes) -> int:
     if len(blob) < _DICTIONARY_HEADER_LEN:
         raise JetstreamDecodingError('Zstd dictionary is too short')
 
-    magic, dictionary_id = struct.unpack('<II', blob[:_DICTIONARY_HEADER_LEN])
+    magic = int.from_bytes(blob[:4], 'little')
+    dictionary_id = int.from_bytes(blob[4:_DICTIONARY_HEADER_LEN], 'little')
     if magic != _DICTIONARY_MAGIC:
         raise JetstreamDecodingError('Not a zstd dictionary')
 

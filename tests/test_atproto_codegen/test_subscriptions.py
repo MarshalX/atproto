@@ -13,7 +13,7 @@ from .conftest import CUSTOM_LEXICON_DIR
 PACKAGE = 'subs_pkg'
 
 
-def _frame(fragment: str, body: dict) -> t.Any:
+def _frame(fragment: str, body: t.Dict[str, object]) -> t.Any:
     return Frame.from_bytes(libipld.encode_dag_cbor({'op': 1, 't': fragment}) + libipld.encode_dag_cbor(body))
 
 

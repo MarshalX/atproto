@@ -1,9 +1,11 @@
+import typing as t
+
 import libipld
 
 from atproto_core.exceptions import DAGCBORDecodingError
 
 
-def decode_dag(data: bytes) -> dict:
+def decode_dag(data: bytes) -> t.Dict[str, t.Any]:
     """Decode and returns a single data item from the given data, with the DAG-CBOR codec.
 
     Args:
@@ -13,12 +15,17 @@ def decode_dag(data: bytes) -> dict:
         :obj:`dict`: Decoded DAG-CBOR.
     """
     try:
-        return libipld.decode_dag_cbor(data)
+        decoded = libipld.decode_dag_cbor(data)
     except Exception as e:
         raise DAGCBORDecodingError from e
 
+    if not isinstance(decoded, dict):
+        raise DAGCBORDecodingError('Expected a DAG-CBOR map at the top level.')
 
-def decode_dag_multi(data: bytes) -> list[dict]:
+    return decoded
+
+
+def decode_dag_multi(data: bytes) -> t.List[t.Dict[str, t.Any]]:
     """Decode and returns many data items from the given data, with the DAG-CBOR codec.
 
     Args:

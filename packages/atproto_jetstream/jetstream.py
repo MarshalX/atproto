@@ -54,7 +54,7 @@ def _row_matcher(params: t.Optional[t.Dict[str, t.Any]], after_seq: int, before_
 
 
 def _build_params(params: t.Optional[t.Union[Params, ParamsDict]]) -> t.Optional[t.Dict[str, t.Any]]:
-    params_model = t.cast('t.Optional[Params]', get_or_create(params, Params))
+    params_model = get_or_create(params, Params)
     if params_model is None:
         return None
 

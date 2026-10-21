@@ -1,7 +1,6 @@
 import typing as t
 
 import httpx
-from pydantic_core import from_json
 
 from atproto_identity.did.resolvers.base_resolver import AsyncBaseResolver, BaseResolver
 from atproto_identity.exceptions import DidWebResolverError, PoorlyFormattedDidError, UnsupportedDidWebPathError
@@ -46,7 +45,7 @@ class DidWebResolver(_DidWebResolverBase, BaseResolver):
         try:
             response = self._client.get(url, timeout=self._timeout)
             response.raise_for_status()
-            return from_json(response.content)
+            return self._decode_did_doc_json(did, response.content)
         except httpx.HTTPError as e:
             raise DidWebResolverError(f'Error resolving DID {did}') from e
 
@@ -69,6 +68,6 @@ class AsyncDidWebResolver(_DidWebResolverBase, AsyncBaseResolver):
         try:
             response = await self._client.get(url, timeout=self._timeout)
             response.raise_for_status()
-            return from_json(response.content)
+            return self._decode_did_doc_json(did, response.content)
         except httpx.HTTPError as e:
             raise DidWebResolverError(f'Error resolving DID {did}') from e

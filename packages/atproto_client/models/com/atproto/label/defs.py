@@ -9,7 +9,7 @@ import typing as t
 
 from pydantic import Field
 
-from atproto_client.models import string_formats
+from atproto_client.models import bytes_type, string_formats
 
 if t.TYPE_CHECKING:
     from atproto_client import models
@@ -30,7 +30,7 @@ class Label(base.ModelBase):
     )
     exp: t.Optional[string_formats.DateTime] = None  #: Timestamp at which this label expires (no longer applies).
     neg: t.Optional[bool] = None  #: If true, this is a negation label, overwriting a previous label.
-    sig: t.Optional[t.Union[str, bytes]] = None  #: Signature of dag-cbor encoded label.
+    sig: t.Optional[bytes_type.BytesType] = None  #: Signature of dag-cbor encoded label.
     ver: t.Optional[int] = None  #: The AT Protocol version of the label object.
 
     py_type: t.Literal['com.atproto.label.defs#label'] = Field(

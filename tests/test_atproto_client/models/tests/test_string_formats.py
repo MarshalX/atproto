@@ -1,3 +1,4 @@
+import typing as t
 from functools import lru_cache
 
 import pytest
@@ -11,7 +12,7 @@ from tests.interop_test_files import get_test_cases
 
 
 @lru_cache
-def read_test_data() -> dict:
+def read_test_data() -> t.Dict[str, t.Dict[str, t.List[str]]]:
     """Load all test data once at session start"""
     return {
         'valid': {
@@ -35,21 +36,21 @@ def read_test_data() -> dict:
     }
 
 
-def _get_validator_type(field_name: str) -> type:
-    field_name_to_type = {
-        'at_uri': string_formats.AtUri,
-        'datetime': string_formats.DateTime,
-        'handle': string_formats.Handle,
-        'did': string_formats.Did,
-        'nsid': string_formats.Nsid,
-        'tid': string_formats.Tid,
-        'record_key': string_formats.RecordKey,
+def _get_type_adapter(field_name: str) -> TypeAdapter[str]:
+    field_name_to_adapter: t.Dict[str, TypeAdapter[str]] = {
+        'at_uri': TypeAdapter(string_formats.AtUri),
+        'datetime': TypeAdapter(string_formats.DateTime),
+        'handle': TypeAdapter(string_formats.Handle),
+        'did': TypeAdapter(string_formats.Did),
+        'nsid': TypeAdapter(string_formats.Nsid),
+        'tid': TypeAdapter(string_formats.Tid),
+        'record_key': TypeAdapter(string_formats.RecordKey),
     }
-    return field_name_to_type[field_name]
+    return field_name_to_adapter[field_name]
 
 
 @pytest.fixture
-def valid_data() -> dict:
+def valid_data() -> t.Dict[str, str]:
     """Get first valid example of each type plus constants"""
     test_data = read_test_data()
     return {
@@ -67,7 +68,7 @@ def valid_data() -> dict:
 
 
 @pytest.fixture
-def invalid_data() -> dict:
+def invalid_data() -> t.Dict[str, str]:
     """Get first invalid example of each type plus constants"""
     test_data = read_test_data()
     return {
@@ -94,7 +95,7 @@ def invalid_data() -> dict:
 )
 def test_string_format_validation_with_invalid(field_name: str, invalid_value: str) -> None:
     """Test validation with invalid data for each string format type."""
-    SomeTypeAdapter = TypeAdapter(_get_validator_type(field_name))
+    SomeTypeAdapter = _get_type_adapter(field_name)
 
     # Test that validation is skipped by default
     assert SomeTypeAdapter.validate_python(invalid_value) == invalid_value
@@ -114,7 +115,7 @@ def test_string_format_validation_with_invalid(field_name: str, invalid_value: s
 )
 def test_string_format_validation_with_valid(field_name: str, valid_value: str) -> None:
     """Test validation with valid data for each string format type."""
-    SomeTypeAdapter = TypeAdapter(_get_validator_type(field_name))
+    SomeTypeAdapter = _get_type_adapter(field_name)
 
     # Test that validation is skipped by default
     assert SomeTypeAdapter.validate_python(valid_value) == valid_value
@@ -164,7 +165,7 @@ def test_generic_string_format_validation(valid_value: str) -> None:
     assert validated == valid_value
 
 
-def test_get_or_create_with_strict_validation(valid_data: dict, invalid_data: dict) -> None:
+def test_get_or_create_with_strict_validation(valid_data: t.Dict[str, str], invalid_data: t.Dict[str, str]) -> None:
     """Test that get_or_create uses strict validation."""
 
     class FooModel(BaseModel):
@@ -199,7 +200,9 @@ def test_get_or_create_with_strict_validation(valid_data: dict, invalid_data: di
 
 
 @pytest.mark.parametrize('string_format_name', ['handle', 'did'])  # at-identifier: either a Handle or a DID
-def test_at_identifier_type(string_format_name: str, valid_data: dict, invalid_data: dict) -> None:
+def test_at_identifier_type(
+    string_format_name: str, valid_data: t.Dict[str, str], invalid_data: t.Dict[str, str]
+) -> None:
     """Test `string_formats.AtIdentifier` validation."""
 
     class FooModel(BaseModel):

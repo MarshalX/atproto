@@ -46,10 +46,12 @@ def test_custom_record_is_typed_inside_an_sdk_model() -> None:
     from atproto_client.models.record_registry import resolve_record_type
 
     debug = _with_unknown(CUSTOM_STATUS).debug
+    record_type = resolve_record_type('xyz.statusphere.status')
 
     assert not isinstance(debug, DotDict)
-    assert type(debug) is resolve_record_type('xyz.statusphere.status')
-    assert debug.status == '🚀'
+    assert record_type is not None
+    assert type(debug) is record_type
+    assert debug['status'] == '🚀'
 
 
 @pytest.mark.usefixtures('custom_package')

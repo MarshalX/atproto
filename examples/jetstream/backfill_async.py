@@ -15,7 +15,7 @@ TARGET_DID = 'did:plc:kvwvcn5iqfooopmyzvb4qzba'
 async def main() -> None:
     client = AsyncJetstreamClient(params={'dids': [TARGET_DID]}, api_key=os.environ['JETSTREAM_API_KEY'])
 
-    collections: dict = {}
+    collections: dict[str, int] = {}
     async for event in client.snapshot(after_seq=0):
         if isinstance(event, models.NetworkBskyJetstreamSubscribeEvents.Commit):
             collections[event.collection] = collections.get(event.collection, 0) + 1

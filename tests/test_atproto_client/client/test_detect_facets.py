@@ -45,14 +45,16 @@ def resolved_handles(monkeypatch: pytest.MonkeyPatch) -> t.List[str]:
 
 def _summary(text: str, facets: t.List[models.AppBskyRichtextFacet.Main]) -> t.List[t.Tuple[str, str]]:
     """Return the text each facet covers and the value of its feature (DID, URI or tag)."""
-    result = []
+    result: t.List[t.Tuple[str, str]] = []
     for facet in facets:
         (feature,) = facet.features
-        value = {
-            models.AppBskyRichtextFacet.Mention: lambda f: f.did,
-            models.AppBskyRichtextFacet.Link: lambda f: f.uri,
-            models.AppBskyRichtextFacet.Tag: lambda f: f.tag,
-        }[type(feature)](feature)
+        if isinstance(feature, models.AppBskyRichtextFacet.Mention):
+            value = feature.did
+        elif isinstance(feature, models.AppBskyRichtextFacet.Link):
+            value = feature.uri
+        else:
+            assert isinstance(feature, models.AppBskyRichtextFacet.Tag)
+            value = feature.tag
         covered = text.encode()[facet.index.byte_start : facet.index.byte_end].decode()
         result.append((covered, value))
     return result

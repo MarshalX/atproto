@@ -82,6 +82,7 @@ _NAMESPACES: t.Dict[str, t.Tuple[str, str]] = {
 _CORE_MODULES: t.Dict[str, t.Tuple[str, str]] = {
     'base': ('package', 'Base classes every generated model inherits from.'),
     'blob_ref': ('file-media', 'References to blobs stored on a PDS.'),
+    'bytes_type': ('file-binary', 'Lexicon bytes, carried as base64 in JSON.'),
     'common': ('package', 'Types shared across the generated models.'),
     'dot_dict': ('code', 'Dict wrapper that also allows attribute access.'),
     'languages': ('globe', 'ISO language codes used by posts.'),
@@ -183,7 +184,8 @@ def _read_lexicons() -> t.Dict[str, _Lexicon]:
 
 def _collect(directory: Path, prefix: str, lexicons: t.Dict[str, _Lexicon]) -> t.List[_Page]:
     """Build the page tree for one package directory, sorted namespaces first."""
-    namespaces, modules = [], []
+    namespaces: t.List[_Page] = []
+    modules: t.List[_Page] = []
 
     for path in sorted(directory.iterdir()):
         if path.is_dir() and (path / '__init__.py').exists():

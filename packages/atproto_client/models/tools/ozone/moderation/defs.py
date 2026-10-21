@@ -193,7 +193,7 @@ class SubjectView(base.ModelBase):
 
     subject: str  #: Subject.
     type: 'models.ComAtprotoModerationDefs.SubjectType'  #: Type.
-    profile: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field()]] = None  #: Profile.
+    profile: t.Optional[te.Annotated['base.UnknownUnionModel', Field()]] = None  #: Profile.
     record: t.Optional['models.ToolsOzoneModerationDefs.RecordViewDetail'] = None  #: Record.
     repo: t.Optional['models.ToolsOzoneModerationDefs.RepoViewDetail'] = None  #: Repo.
     status: t.Optional['models.ToolsOzoneModerationDefs.SubjectStatusView'] = None  #: Status.

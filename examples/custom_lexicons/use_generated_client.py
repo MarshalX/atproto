@@ -18,10 +18,11 @@ PASSWORD = 'hunter2'  # noqa: S105 never hardcode your password in a real applic
 def with_generated_client() -> None:
     # StatusphereClient is a subclass of the SDK Client, so it keeps app, com, chat and the rest
     client = StatusphereClient()
-    client.login(USERNAME, PASSWORD)
+    me = client.login(USERNAME, PASSWORD)
+    assert me is not None  # None only when the PDS does not serve Bluesky profiles
 
     # the SDK's own namespaces still work
-    print(client.app.bsky.actor.get_profile({'actor': client.me.did}).display_name)
+    print(client.app.bsky.actor.get_profile({'actor': me.did}).display_name)
 
     # and so do yours
     print(client.xyz.statusphere.get_statuses({'limit': 10}))
@@ -31,7 +32,7 @@ def with_generated_client() -> None:
         status='👍',
         created_at=client.get_current_time_iso(),
     )
-    created = client.xyz.statusphere.status.create(client.me.did, status)
+    created = client.xyz.statusphere.status.create(me.did, status)
     print(created.uri)
 
 
@@ -52,7 +53,8 @@ def resolve_a_custom_record() -> None:
         None,
         strict=False,
     )
-    print(type(record), record.status)
+    assert isinstance(record, statusphere_models.XyzStatusphereStatus.Record)
+    print(record.status)
 
 
 if __name__ == '__main__':

@@ -22,4 +22,4 @@ def test_unknown_union_model() -> None:
         UnknownUnionModel.model_validate_json('{"literallyNoTypeInfo": "lol"}')
 
     model_with_extra = UnknownUnionModel(py_type=expected_type, extra_field='extra_value')
-    assert model_with_extra.extra_field == 'extra_value'
+    assert model_with_extra.extra_field == 'extra_value'  # pyrefly: ignore[missing-attribute]

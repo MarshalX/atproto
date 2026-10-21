@@ -20,8 +20,8 @@ from atproto_codegen.consts import (
     PARAMS_MODEL,
 )
 from atproto_codegen.namespaces.builder import (
-    METHODS_KEY,
     MethodInfo,
+    NamespaceNode,
     ProcedureInfo,
     QueryInfo,
     RecordInfo,
@@ -80,8 +80,12 @@ def _get_namespace_imports() -> str:
     return join_code(lines)
 
 
-def _get_namespace_class_def(name_parts: t.List[str], *, sync: bool) -> str:
+def _get_namespace_class_def(name_parts: t.List[str], *, sync: bool, is_record: bool = False) -> str:
     base_class = 'NamespaceBase' if sync else 'AsyncNamespaceBase'
+    if is_record:
+        # the NSID is both a record and the namespace of other lexicons, so one attribute serves both
+        base_class = get_record_name(name_parts)
+
     lines = [f'class {get_namespace_name(name_parts)}({base_class}):']
 
     return join_code(lines)
@@ -176,8 +180,10 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
 
     def _override_arg_line(name: str, model_name: str) -> str:
         model_path = f'models.{get_import_path(method_info.nsid)}.{model_name}'
-        # TODO(MarshalX): fix return type in get_or_create instead of casting
-        return f"{_(2)}{name}_model = t.cast('{model_path}', get_or_create({name}, {model_path}))"
+        return f'{_(2)}{name}_model = get_or_create({name}, {model_path})'
+
+    definition = method_info.definition
+    input_body = definition.input if isinstance(definition, LexXrpcProcedure) else None
 
     invoke_args = [f"'{method_info.nsid}'"]
 
@@ -187,26 +193,22 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
     if 'data_schema' in presented_args:
         invoke_args.append('data=data_model')
         lines.append(_override_arg_line('data', INPUT_MODEL))
-    if 'data_schema_ref' in presented_args:  # special case
+    if input_body and isinstance(input_body.schema_, LexRef):  # special case
         invoke_args.append('data=data_model')
-        model_path, __ = _resolve_nsid_ref(method_info.nsid, method_info.definition.input.schema_.ref)
-        # FIXME(MarshalX): typically this refs will lead to base.ModelBase, not models.DataModelBase
-        #  which breaks type hinting in invoke methods (data argument)
-        lines.append(f"{_(2)}data_model = t.cast('{model_path}', get_or_create(data, {model_path}))")
+        model_path, __ = _resolve_nsid_ref(method_info.nsid, input_body.schema_.ref)
+        lines.append(f'{_(2)}data_model = get_or_create(data, {model_path})')
     if 'data_alias' in presented_args:
         invoke_args.append('data=data')
-    if 'input_encoding' in presented_args:
-        input_encoding = method_info.definition.input.encoding
-        invoke_args.append(f"input_encoding='{input_encoding}'")
-    if 'output_encoding' in presented_args:
-        output_encoding = method_info.definition.output.encoding
-        invoke_args.append(f"output_encoding='{output_encoding}'")
+    if input_body and input_body.encoding:
+        invoke_args.append(f"input_encoding='{input_body.encoding}'")
+    if definition.output and definition.output.encoding:
+        invoke_args.append(f"output_encoding='{definition.output.encoding}'")
 
     invoke_args.append('**kwargs')
     invoke_args_str = ', '.join(invoke_args)
 
     method_name = 'invoke_query'
-    if isinstance(method_info.definition, LexXrpcProcedure):
+    if isinstance(definition, LexXrpcProcedure):
         method_name = 'invoke_procedure'
 
     lines.append(f'{_(2)}response = {c}self._client.{method_name}({invoke_args_str})')
@@ -374,28 +376,23 @@ def _get_record_class(records_info: t.List[RecordInfo], sync: bool) -> str:
 
 
 def _generate_namespace_in_output(
-    namespace_tree: dict, output: t.List[str], *, sync: bool, parent_nodes: t.List[str]
+    namespace_tree: NamespaceNode, output: t.List[str], *, sync: bool, parent_nodes: t.List[str]
 ) -> None:
-    for node_name, sub_node in sort_dict_by_key(namespace_tree).items():
-        if node_name == METHODS_KEY:
-            # methods/records for parent namespace are emitted by the parent iteration
-            continue
+    sibling_record_names = {info.name for info in namespace_tree.objects if isinstance(info, RecordInfo)}
 
+    for node_name, sub_node in sort_dict_by_key(namespace_tree.children).items():
         nodes_path = [*parent_nodes, node_name]
 
-        own_methods = sub_node.get(METHODS_KEY, [])
-        child_namespaces = {k: v for k, v in sub_node.items() if k != METHODS_KEY}
-
-        records = [info for info in own_methods if isinstance(info, RecordInfo)]
-        methods = [info for info in own_methods if isinstance(info, (ProcedureInfo, QueryInfo))]
+        records = [info for info in sub_node.objects if isinstance(info, RecordInfo)]
+        methods = [info for info in sub_node.objects if isinstance(info, (ProcedureInfo, QueryInfo))]
 
         if records:
             output.append(_get_record_class(records, sync=sync))
 
-        output.append(_get_namespace_class_def(nodes_path, sync=sync))
+        output.append(_get_namespace_class_def(nodes_path, sync=sync, is_record=node_name in sibling_record_names))
 
-        sub_namespace_names = list(sort_dict_by_key(child_namespaces).keys())
-        record_names = sorted(record.name for record in records)
+        sub_namespace_names = list(sort_dict_by_key(sub_node.children).keys())
+        record_names = sorted(record.name for record in records if record.name not in sub_node.children)
         output.append(
             _get_init_method(sub_namespace_names, sync=sync, parent_nodes=nodes_path, record_names=record_names)
         )
@@ -403,18 +400,18 @@ def _generate_namespace_in_output(
         if methods:
             output.append(_get_namespace_methods_block(methods, sync=sync))
 
-        if child_namespaces:
+        if sub_node.children:
             _generate_namespace_in_output(sub_node, output, sync=sync, parent_nodes=nodes_path)
 
 
-def _generate_raw_client(namespace_tree: dict, config: CodegenConfig, *, sync: bool) -> None:
+def _generate_raw_client(namespace_tree: NamespaceNode, config: CodegenConfig, *, sync: bool) -> None:
     """Generate the client that exposes every root namespace."""
     base = config.base_package
     ns_module = _NAMESPACES_SYNC_FILENAME[:-3] if sync else _NAMESPACES_ASYNC_FILENAME[:-3]
     class_name = 'ClientRaw' if sync else 'AsyncClientRaw'
     base_class = 'ClientBase' if sync else 'AsyncClientBase'
 
-    roots = sorted(node for node in namespace_tree if node != METHODS_KEY)
+    roots = sorted(namespace_tree.children)
 
     lines = [
         DISCLAIMER,
@@ -445,14 +442,14 @@ def _generate_raw_client(namespace_tree: dict, config: CodegenConfig, *, sync: b
     format_code(filepath, root=config.output_dir)
 
 
-def _generate_custom_client(namespace_tree: dict, config: CodegenConfig, *, sync: bool) -> None:
+def _generate_custom_client(namespace_tree: NamespaceNode, config: CodegenConfig, *, sync: bool) -> None:
     """Generate a client that adds the package's root namespaces to the SDK's own."""
     base = config.base_package
     ns_module = _NAMESPACES_SYNC_FILENAME[:-3] if sync else _NAMESPACES_ASYNC_FILENAME[:-3]
     prefix = '' if sync else 'Async'
     sdk_client = f'{prefix}Client'
 
-    roots = sorted(node for node in namespace_tree if node != METHODS_KEY)
+    roots = sorted(namespace_tree.children)
     package_class = ''.join(p.capitalize() for p in config.package.split('_'))
     class_name = f'{prefix}{package_class}Client'
 

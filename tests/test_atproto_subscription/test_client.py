@@ -7,6 +7,7 @@ framing, reconnection, and which errors are fatal versus recoverable.
 import asyncio
 import contextlib
 import errno
+import functools
 import socket
 import ssl
 import threading
@@ -48,7 +49,7 @@ def _shrink_backoff(client: t.Any) -> None:
 def run_sync(
     server: FirehoseTestServer,
     method: str,
-    params: t.Optional[dict] = None,
+    params: t.Optional[t.Dict[str, t.Any]] = None,
     recv_timeout: t.Optional[float] = None,
     stop_after: int = 1,
     configure: t.Optional[t.Callable[[t.Any], None]] = None,
@@ -86,7 +87,7 @@ def run_sync(
 async def run_async(
     server: FirehoseTestServer,
     method: str,
-    params: t.Optional[dict] = None,
+    params: t.Optional[t.Dict[str, t.Any]] = None,
     recv_timeout: t.Optional[float] = None,
     stop_after: int = 1,
     configure: t.Optional[t.Callable[[t.Any], None]] = None,
@@ -127,11 +128,13 @@ async def run_async(
 RUNNERS = [run_sync, run_async]
 
 
-async def _run(runner: t.Any, *args: t.Any, **kwargs: t.Any) -> Outcome:
+async def _run(
+    runner: t.Callable[..., t.Union[Outcome, t.Awaitable[Outcome]]], *args: t.Any, **kwargs: t.Any
+) -> Outcome:
     result = runner(*args, **kwargs)
-    if asyncio.iscoroutine(result):
-        return await result
-    return result
+    if isinstance(result, Outcome):
+        return result
+    return await result
 
 
 @pytest.mark.asyncio
@@ -378,7 +381,9 @@ async def test_backoff_escalates_against_a_flapping_server(runner: t.Any, server
     method = server.new_method('always_drops')
     attempts: t.List[int] = []
 
-    outcome = await _run(runner, server, method, stop_after=4, configure=lambda c: _record_backoff(c, attempts))
+    outcome = await _run(
+        runner, server, method, stop_after=4, configure=functools.partial(_record_backoff, attempts=attempts)
+    )
 
     assert outcome.exception is None
     assert attempts[:3] == [1, 2, 3]
@@ -394,7 +399,9 @@ async def test_backoff_resets_after_a_healthy_connection(
     method = server.new_method('always_drops')
     attempts: t.List[int] = []
 
-    outcome = await _run(runner, server, method, stop_after=4, configure=lambda c: _record_backoff(c, attempts))
+    outcome = await _run(
+        runner, server, method, stop_after=4, configure=functools.partial(_record_backoff, attempts=attempts)
+    )
 
     assert outcome.exception is None
     assert attempts[:3] == [1, 1, 1]

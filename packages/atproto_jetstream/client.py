@@ -1,6 +1,7 @@
 import typing as t
 from copy import deepcopy
 
+import typing_extensions as te
 from atproto_client.client.async_raw import AsyncClientRaw
 from atproto_client.client.raw import ClientRaw
 from atproto_client.models.common import XrpcError
@@ -17,8 +18,8 @@ from atproto_jetstream.exceptions import (
 )
 from atproto_jetstream.models import (
     ErrorFrame,
-    MessageFrame,
     SubscribeEventsMessage,
+    _is_json_object,
     parse_frame,
     parse_subscribe_events_message,
 )
@@ -60,10 +61,15 @@ def _parse_xrpc_error(body: t.Optional[bytes]) -> t.Optional[XrpcError]:
     except ValueError:
         return None
 
-    if not isinstance(parsed, dict) or 'error' not in parsed:
+    if not _is_json_object(parsed):
         return None
 
-    return XrpcError(parsed['error'], parsed.get('message'))
+    error = parsed.get('error')
+    if not isinstance(error, str):
+        return None
+
+    message = parsed.get('message')
+    return XrpcError(error, message if isinstance(message, str) else None)
 
 
 def _rejected_handshake_to_exception(exception: InvalidStatus) -> t.Optional[JetstreamError]:
@@ -79,7 +85,7 @@ def _rejected_handshake_to_exception(exception: InvalidStatus) -> t.Optional[Jet
     return JetstreamError(xrpc_error if xrpc_error is not None else exception)
 
 
-class _JetstreamClientMixin(WebsocketClientBase):
+class _JetstreamClientMixin(WebsocketClientBase[SubscribeEventsMessage]):
     """Jetstream v2 framing, cursor tracking, and deduplication."""
 
     _error_class = JetstreamError
@@ -169,15 +175,16 @@ class _JetstreamClientMixin(WebsocketClientBase):
         if self._params is not None:
             self._params.pop(_ZSTD_DICTIONARY_PARAM, None)
 
+    @te.override
     def _decode_frame(self, raw_frame: t.Union[str, bytes]) -> t.Optional[SubscribeEventsMessage]:
-        if self._compression is not None and isinstance(raw_frame, (bytes, bytearray)):
-            raw_frame = self._compression.decompress(bytes(raw_frame))
+        if self._compression is not None and isinstance(raw_frame, bytes):
+            raw_frame = self._compression.decompress(raw_frame)
 
         frame = parse_frame(raw_frame)
         if isinstance(frame, ErrorFrame):
             raise _error_frame_to_exception(frame)
 
-        message = parse_subscribe_events_message(t.cast('MessageFrame', frame))
+        message = parse_subscribe_events_message(frame)
 
         seq = getattr(message, 'seq', None)
         if seq is None:
@@ -192,6 +199,7 @@ class _JetstreamClientMixin(WebsocketClientBase):
 
         return message
 
+    @te.override
     def _handle_frame_decoding_error(self, exception: Exception) -> None:
         if isinstance(exception, JetstreamDecodingError):
             # Ignore a frame that could not be decoded, including unknown types sent by
@@ -200,6 +208,7 @@ class _JetstreamClientMixin(WebsocketClientBase):
 
         raise exception
 
+    @te.override
     def _handle_websocket_error_or_stop(self, exception: Exception) -> bool:
         if isinstance(exception, JetstreamConsumerTooSlowError):
             return False
@@ -230,7 +239,7 @@ class _JetstreamClientMixin(WebsocketClientBase):
         return True
 
 
-class _JetstreamClient(_JetstreamClientMixin, WebsocketClient):
+class _JetstreamClient(_JetstreamClientMixin, WebsocketClient[SubscribeEventsMessage]):
     """Jetstream subscription client."""
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
@@ -238,6 +247,7 @@ class _JetstreamClient(_JetstreamClientMixin, WebsocketClient):
 
         self._xrpc_client: t.Optional[ClientRaw] = None
 
+    @te.override
     def _before_connect(self) -> None:
         if self._compression is None or not self._dictionary_needs_refresh:
             return
@@ -254,7 +264,7 @@ class _JetstreamClient(_JetstreamClientMixin, WebsocketClient):
         self._use_dictionary(blob)
 
 
-class _AsyncJetstreamClient(_JetstreamClientMixin, AsyncWebsocketClient):
+class _AsyncJetstreamClient(_JetstreamClientMixin, AsyncWebsocketClient[SubscribeEventsMessage]):
     """Async jetstream subscription client."""
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
@@ -262,6 +272,7 @@ class _AsyncJetstreamClient(_JetstreamClientMixin, AsyncWebsocketClient):
 
         self._xrpc_client: t.Optional[AsyncClientRaw] = None
 
+    @te.override
     async def _before_connect(self) -> None:
         if self._compression is None or not self._dictionary_needs_refresh:
             return

@@ -71,7 +71,7 @@ class DotDict(UnknownDict):
         """Unwrap DotDict to Python built-in dict."""
         return deepcopy(self._data)
 
-    def __getitem__(self, item: str) -> t.Optional[t.Any]:
+    def __getitem__(self, item: str) -> t.Any:
         value = self._data.get(item)
         if value is not None:
             return value
@@ -93,16 +93,16 @@ class DotDict(UnknownDict):
 
     __setattr__ = __setitem__
 
-    def __iter__(self) -> t.Iterator[t.Any]:
+    def __iter__(self) -> t.Iterator[str]:
         yield from iter(self._data)
 
-    def keys(self) -> abc.KeysView:
+    def keys(self) -> abc.KeysView[str]:
         return self._data.keys()
 
-    def values(self) -> abc.ValuesView:
+    def values(self) -> abc.ValuesView[t.Any]:
         return self._data.values()
 
-    def items(self) -> abc.ItemsView:
+    def items(self) -> abc.ItemsView[str, t.Any]:
         return self._data.items()
 
     def __len__(self) -> int:
@@ -125,10 +125,10 @@ class DotDict(UnknownDict):
     def __repr__(self) -> str:
         return repr(self._data)
 
-    def __reduce_ex__(self, protocol: te.SupportsIndex):  # noqa: ANN204
+    def __reduce_ex__(self, protocol: te.SupportsIndex) -> t.Union[str, t.Tuple[t.Any, ...]]:
         return self._data.__reduce_ex__(protocol)
 
-    def __reduce__(self):  # noqa: ANN204
+    def __reduce__(self) -> t.Union[str, t.Tuple[t.Any, ...]]:
         return self._data.__reduce__()
 
     @staticmethod

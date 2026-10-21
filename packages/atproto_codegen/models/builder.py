@@ -10,11 +10,7 @@ from atproto_lexicon.parser import lexicon_parse_dir
 from atproto_codegen.config import CodegenConfig, get_config
 from atproto_codegen.exceptions import LexiconsNotFoundError
 
-LexDefs = t.Dict[
-    str,
-    t.Any,
-]
-LexDB = t.Dict[NSID, LexDefs]
+_D = t.TypeVar('_D')
 
 
 def _parse_dirs(dirs: t.Tuple[Path, ...]) -> t.List[models.LexiconDoc]:
@@ -100,11 +96,15 @@ def is_record(nsid: NSID, config: t.Optional[CodegenConfig] = None) -> bool:
     return str(nsid) in reference_record_types(config)
 
 
-def _filter_defs_by_type(defs: t.Dict[str, models.LexDefinition], def_types: t.AbstractSet[str]) -> LexDefs:
-    return {k: v for k, v in defs.items() if v.type in def_types}
+def _filter_defs_by_type(
+    defs: t.Dict[str, models.LexDefinition], def_types: t.Tuple[t.Type[_D], ...]
+) -> t.Dict[str, _D]:
+    return {k: v for k, v in defs.items() if isinstance(v, def_types)}
 
 
-def _build_nsid_to_defs_map(lexicons: t.Sequence[models.LexiconDoc], def_types: t.AbstractSet[str]) -> LexDB:
+def _build_nsid_to_defs_map(
+    lexicons: t.Sequence[models.LexiconDoc], def_types: t.Tuple[t.Type[_D], ...]
+) -> t.Dict[NSID, t.Dict[str, _D]]:
     result = {}
 
     for lexicon in lexicons:
@@ -116,7 +116,7 @@ def _build_nsid_to_defs_map(lexicons: t.Sequence[models.LexiconDoc], def_types: 
     return result
 
 
-def _build(def_types: t.AbstractSet[str], config: t.Optional[CodegenConfig]) -> LexDB:
+def _build(def_types: t.Tuple[t.Type[_D], ...], config: t.Optional[CodegenConfig]) -> t.Dict[NSID, t.Dict[str, _D]]:
     if config is None:
         config = get_config()
 
@@ -135,20 +135,16 @@ BuiltParamsModels = t.Dict[
     ],
 ]
 
-_LEX_DEF_TYPES_FOR_PARAMS = {
-    models.LexDefinitionType.QUERY,
-    models.LexDefinitionType.PROCEDURE,
-    models.LexDefinitionType.SUBSCRIPTION,
-}
+_LEX_DEF_TYPES_FOR_PARAMS = (models.LexXrpcQuery, models.LexXrpcProcedure, models.LexSubscription)
 
 
 def build_params_models(config: t.Optional[CodegenConfig] = None) -> BuiltParamsModels:
     return _build(_LEX_DEF_TYPES_FOR_PARAMS, config)
 
 
-BuiltDataModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexXrpcProcedure]]]
+BuiltDataModels = t.Dict[NSID, t.Dict[str, models.LexXrpcProcedure]]
 
-_LEX_DEF_TYPES_FOR_DATA = {models.LexDefinitionType.PROCEDURE}
+_LEX_DEF_TYPES_FOR_DATA = (models.LexXrpcProcedure,)
 
 
 def build_data_models(config: t.Optional[CodegenConfig] = None) -> BuiltDataModels:
@@ -157,7 +153,7 @@ def build_data_models(config: t.Optional[CodegenConfig] = None) -> BuiltDataMode
 
 BuiltResponseModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexXrpcQuery, models.LexXrpcProcedure]]]
 
-_LEX_DEF_TYPES_FOR_RESPONSES = {models.LexDefinitionType.QUERY, models.LexDefinitionType.PROCEDURE}
+_LEX_DEF_TYPES_FOR_RESPONSES = (models.LexXrpcQuery, models.LexXrpcProcedure)
 
 
 def build_response_models(config: t.Optional[CodegenConfig] = None) -> BuiltResponseModels:
@@ -168,21 +164,16 @@ BuiltDefModels = t.Dict[
     NSID, t.Dict[str, t.Union[models.LexObject, models.LexString, models.LexToken, models.LexArray]]
 ]
 
-_LEX_DEF_TYPES_FOR_DEF = {
-    models.LexDefinitionType.OBJECT,
-    models.LexPrimitiveType.STRING,
-    models.LexDefinitionType.TOKEN,
-    models.LexDefinitionType.ARRAY,
-}
+_LEX_DEF_TYPES_FOR_DEF = (models.LexObject, models.LexString, models.LexToken, models.LexArray)
 
 
 def build_def_models(config: t.Optional[CodegenConfig] = None) -> BuiltDefModels:
     return _build(_LEX_DEF_TYPES_FOR_DEF, config)
 
 
-BuiltRecordModels = t.Dict[NSID, t.Dict[str, t.Union[models.LexRecord]]]
+BuiltRecordModels = t.Dict[NSID, t.Dict[str, models.LexRecord]]
 
-_LEX_DEF_TYPES_FOR_RECORDS = {models.LexDefinitionType.RECORD}
+_LEX_DEF_TYPES_FOR_RECORDS = (models.LexRecord,)
 
 
 def build_record_models(config: t.Optional[CodegenConfig] = None) -> BuiltRecordModels:
@@ -191,7 +182,7 @@ def build_record_models(config: t.Optional[CodegenConfig] = None) -> BuiltRecord
 
 BuiltSubscriptions = t.Dict[NSID, t.Dict[str, models.LexSubscription]]
 
-_LEX_DEF_TYPES_FOR_SUBSCRIPTIONS = {models.LexDefinitionType.SUBSCRIPTION}
+_LEX_DEF_TYPES_FOR_SUBSCRIPTIONS = (models.LexSubscription,)
 
 
 def build_subscriptions(config: t.Optional[CodegenConfig] = None) -> BuiltSubscriptions:

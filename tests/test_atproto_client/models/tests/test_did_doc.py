@@ -1,3 +1,5 @@
+import typing as t
+
 from atproto_client import models
 from atproto_client.models import get_or_create
 from atproto_client.models.dot_dict import DotDict
@@ -5,7 +7,7 @@ from atproto_client.models.dot_dict import DotDict
 from tests.test_atproto_client.models.tests.utils import load_data_from_file
 
 
-def load_test_data() -> dict:
+def load_test_data() -> t.Dict[str, t.Any]:
     return load_data_from_file('did_doc')
 
 

@@ -98,6 +98,7 @@ async def test_register_async_callback(dispatcher: SessionDispatcher) -> None:
 
 
 def test_session_not_modified(dispatcher: SessionDispatcher) -> None:
+    assert dispatcher._session is not None
     initial_handle = dispatcher._session.handle
 
     @dispatcher.on_session_change
@@ -111,6 +112,7 @@ def test_session_not_modified(dispatcher: SessionDispatcher) -> None:
 
 @pytest.mark.asyncio
 async def test_async_session_not_modified(dispatcher: SessionDispatcher) -> None:
+    assert dispatcher._session is not None
     initial_handle = dispatcher._session.handle
 
     @dispatcher.on_session_change
@@ -184,4 +186,4 @@ async def test_register_bound_async_method_callback(dispatcher: SessionDispatche
 
 def test_register_non_callable_callback(dispatcher: SessionDispatcher) -> None:
     with pytest.raises(TypeError):
-        dispatcher.on_session_change('not a callback')  # type: ignore[arg-type]
+        dispatcher.on_session_change('not a callback')  # pyrefly: ignore[bad-argument-type]

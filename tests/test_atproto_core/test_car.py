@@ -1,4 +1,6 @@
+import pytest
 from atproto_core.car import CAR
+from atproto_core.exceptions import InvalidCARFile
 
 
 def test_car() -> None:
@@ -8,3 +10,9 @@ def test_car() -> None:
     car = CAR.from_bytes(bytes.fromhex(car_bytes))
     assert expected_root == car.root
     assert len(car.blocks) == 0
+
+
+def test_car_rejects_non_cid_root() -> None:
+    # header {'roots': [1], 'version': 1}
+    with pytest.raises(InvalidCARFile):
+        CAR.from_bytes(bytes.fromhex('12a265726f6f747381016776657273696f6e01'))

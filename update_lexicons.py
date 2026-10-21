@@ -15,6 +15,7 @@ from io import BytesIO
 from pathlib import Path
 
 import httpx
+from pydantic import JsonValue
 from pydantic_core import from_json
 
 _GITHUB_BASE_URL = 'https://github.com'
@@ -258,7 +259,7 @@ def _parse_extracted_lexicons(extracted_files: ExtractedFiles) -> ParsedLexicons
     }
 
 
-def _flatten(node: t.Any, prefix: str = '') -> LexiconLeaves:
+def _flatten(node: JsonValue, prefix: str = '') -> LexiconLeaves:
     """Flatten a lexicon subtree into dotted paths, dropping human-facing descriptions."""
     if not isinstance(node, dict):
         return {prefix: node}
@@ -671,7 +672,7 @@ def _run_subprocess(command: t.List[str]) -> None:
         sys.exit(result.returncode)
 
 
-def _print(*args) -> None:
+def _print(*args: object) -> None:
     if 'CI' in os.environ:
         print(*args, file=sys.stderr)  # noqa: T201
         return
