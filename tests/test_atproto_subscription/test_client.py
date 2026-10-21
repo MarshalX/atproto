@@ -460,3 +460,35 @@ def test_sync_client_enables_keepalive(server: FirehoseTestServer) -> None:
 
     with client._get_client() as connection:
         assert connection.ping_interval is not None
+
+
+def test_sync_client_closes_the_socket_from_one_thread_at_a_time(
+    server: FirehoseTestServer, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Without the GIL, concurrent closes can close the same file descriptor twice."""
+    active = 0
+    overlaps = 0
+    counter_lock = threading.Lock()
+    original_close_socket = websocket_module.SyncWebSocketClient.close_socket
+
+    def tracking_close_socket(connection: websocket_module.SyncWebSocketClient) -> None:
+        nonlocal active, overlaps
+        with counter_lock:
+            active += 1
+            overlaps += active > 1
+        time.sleep(0.05)
+        with counter_lock:
+            active -= 1
+        original_close_socket(connection)
+
+    monkeypatch.setattr(websocket_module.SyncWebSocketClient, 'close_socket', tracking_close_socket)
+
+    connection = _WebsocketClient(server.new_method('idle'), server.base_uri)._get_client()
+    closers = [threading.Thread(target=connection.close_socket) for _ in range(2)]
+    for closer in closers:
+        closer.start()
+    for closer in closers:
+        closer.join()
+    connection.recv_events_thread.join()
+
+    assert overlaps == 0
