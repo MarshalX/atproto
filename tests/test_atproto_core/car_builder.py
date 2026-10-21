@@ -36,7 +36,7 @@ def _header(root: bytes) -> bytes:
     return b'\xa2\x65roots\x81' + _cbor_cid_link(root) + b'\x67version\x01'
 
 
-def encode_car(blocks: t.Sequence[dict]) -> bytes:
+def encode_car(blocks: t.Sequence[t.Mapping[str, object]]) -> bytes:
     """Encode blocks as a CARv1 file rooted at the first one."""
     encoded = [libipld.encode_dag_cbor(block) for block in blocks]
     cids = [make_cid(block) for block in encoded]

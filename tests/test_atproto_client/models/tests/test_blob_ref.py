@@ -1,5 +1,6 @@
 import base64
 import json
+import typing as t
 
 from atproto_client import models
 from atproto_client.models import get_model_as_dict, get_model_as_json, get_or_create
@@ -41,6 +42,7 @@ def test_blob_ref_from_ipld_json() -> None:
     assert plain_blob_ref2 == plain_blob_ref
 
     instance2 = get_or_create(plain_blob_ref2, BlobRef)
+    assert isinstance(instance2, BlobRef)
     assert instance2.cid == CID.decode(plain_cid)
     assert isinstance(instance2.ref, IpldLink)
     assert not isinstance(instance2.ref, str)
@@ -63,6 +65,7 @@ def test_blob_ref_to_ipld() -> None:
 
     # round trip
     blob_ref2 = get_or_create(get_model_as_dict(blob_ref), BlobRef)
+    assert isinstance(blob_ref2, BlobRef)
     assert plain_cid == blob_ref2.ref
     assert not isinstance(blob_ref2.ref, IpldLink)
     assert isinstance(blob_ref2.ref, str)
@@ -84,14 +87,15 @@ def test_blob_ref_to_ipld_json() -> None:
         size=0,
         ref=IpldLink(link=plain_cid),
     )
-    assert plain_cid == blob_ref.ref.link
     assert isinstance(blob_ref.ref, IpldLink)
+    assert plain_cid == blob_ref.ref.link
     assert not isinstance(blob_ref.ref, str)
 
     # round trip
     blob_ref2 = get_or_create(get_model_as_dict(blob_ref), BlobRef)
-    assert plain_cid == blob_ref2.ref.link
+    assert isinstance(blob_ref2, BlobRef)
     assert isinstance(blob_ref2.ref, IpldLink)
+    assert plain_cid == blob_ref2.ref.link
     assert not isinstance(blob_ref2.ref, str)
 
     assert blob_ref2 == blob_ref
@@ -116,6 +120,7 @@ def test_blob_ref_to_json_representation() -> None:
     json_blob_ref = bytes_blob_ref.to_json_representation()
     assert not json_blob_ref.is_bytes_representation
     assert json_blob_ref.is_json_representation
+    assert isinstance(json_blob_ref.ref, IpldLink)
     assert json_blob_ref.ref.link == bytes_blob_ref.ref
     assert json_blob_ref.ref.link == plain_cid
 
@@ -128,6 +133,7 @@ def test_blob_ref_to_json_representation() -> None:
     json_blob_ref3 = json_blob_ref2.to_json_representation()
     assert json_blob_ref3 is not json_blob_ref2
     assert json_blob_ref3 == json_blob_ref2
+    assert isinstance(json_blob_ref3.ref, IpldLink)
     assert json_blob_ref3.ref.link == bytes_blob_ref.ref
 
 
@@ -139,6 +145,7 @@ def test_blob_ref_to_bytes_representation() -> None:
         size=0,
         ref=IpldLink(link=plain_cid),
     )
+    assert isinstance(json_blob_ref.ref, IpldLink)
 
     bytes_blob_ref = json_blob_ref.to_bytes_representation()
     assert bytes_blob_ref.is_bytes_representation
@@ -181,8 +188,10 @@ def test_blob_ref_from_raw_cid_bytes_keeps_bytes_in_dict_dump() -> None:
 def test_blob_ref_from_raw_cid_bytes_round_trips_through_json() -> None:
     blob = BlobRef(mime_type='image/jpeg', size=1234, ref=_RAW_CID_BYTES)
 
-    reloaded = get_or_create(json.loads(blob.model_dump_json()), BlobRef)
+    dumped: t.Dict[str, t.Any] = json.loads(blob.model_dump_json())
+    reloaded = get_or_create(dumped, BlobRef)
 
+    assert isinstance(reloaded, BlobRef)
     assert isinstance(reloaded.ref, IpldLink)
     assert reloaded.cid == blob.cid
 
@@ -194,6 +203,7 @@ def test_blob_ref_from_raw_cid_bytes_to_json_representation() -> None:
     converted = blob.to_json_representation()
 
     assert converted.is_json_representation
+    assert isinstance(converted.ref, IpldLink)
     assert converted.ref.link == _RAW_CID_STR
     assert converted.cid == blob.cid
 
@@ -227,6 +237,7 @@ def test_record_with_a_cbor_blob_dumps_to_json() -> None:
         models.AppBskyFeedPost.Record,
         strict=False,
     )
+    assert isinstance(record, models.AppBskyFeedPost.Record)
 
     dumped = json.loads(record.model_dump_json())
 

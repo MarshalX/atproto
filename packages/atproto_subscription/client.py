@@ -1,5 +1,6 @@
 import typing as t
 
+import typing_extensions as te
 from atproto_client.models import get_model_as_dict
 from atproto_client.models.base import ParamsModelBase
 from atproto_client.models.common import XrpcError
@@ -27,7 +28,7 @@ def _get_message_frame_from_bytes_or_raise(data: bytes) -> MessageFrame:
     raise FrameDecodingError('Unknown frame type')
 
 
-class _SubscriptionClientMixin(WebsocketClientBase):
+class _SubscriptionClientMixin(WebsocketClientBase[MessageFrame]):
     """Firehose framing on top of the shared websocket client."""
 
     _error_class = SubscriptionError
@@ -47,6 +48,7 @@ class _SubscriptionClientMixin(WebsocketClientBase):
             max_message_size_bytes=_MAX_MESSAGE_SIZE_BYTES,
         )
 
+    @te.override
     def update_params(self, params: t.Union[ParamsModelBase, t.Dict[str, t.Any]]) -> None:
         """Update params.
 
@@ -59,6 +61,7 @@ class _SubscriptionClientMixin(WebsocketClientBase):
 
         super().update_params(params)
 
+    @te.override
     def _decode_frame(self, raw_frame: t.Union[str, bytes]) -> t.Optional[MessageFrame]:
         if isinstance(raw_frame, str):
             # skip text frames (should not be occurred)
@@ -66,6 +69,7 @@ class _SubscriptionClientMixin(WebsocketClientBase):
 
         return _get_message_frame_from_bytes_or_raise(raw_frame)
 
+    @te.override
     def _handle_frame_decoding_error(self, exception: Exception) -> None:
         if isinstance(exception, (DAGCBORDecodingError, FrameDecodingError)):
             # Ignore an invalid atproto_firehose frame that could not be properly decoded.
@@ -76,11 +80,11 @@ class _SubscriptionClientMixin(WebsocketClientBase):
         raise exception
 
 
-class _WebsocketClient(_SubscriptionClientMixin, WebsocketClient):
+class _WebsocketClient(_SubscriptionClientMixin, WebsocketClient[MessageFrame]):
     """Firehose subscription client."""
 
 
-class _AsyncWebsocketClient(_SubscriptionClientMixin, AsyncWebsocketClient):
+class _AsyncWebsocketClient(_SubscriptionClientMixin, AsyncWebsocketClient[MessageFrame]):
     """Async firehose subscription client."""
 
 

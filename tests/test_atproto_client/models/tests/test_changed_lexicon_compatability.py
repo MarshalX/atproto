@@ -52,7 +52,7 @@ def test_added_new_fields_as_optional() -> None:
     # also, we want to have access to new fields from SDK
     # the problem here is that we can't access them via snake_case,
     # could be fixed in the future
-    assert model.brandNewBackendField == 'foo'
+    assert model.brandNewBackendField == 'foo'  # pyrefly: ignore[missing-attribute]
     assert model['brandNewBackendField'] == 'foo'
 
 

@@ -8,7 +8,9 @@ import typing as t
 import libipld
 import pytest
 import zstandard
+from atproto_client import models
 from atproto_jetstream.archive import segment
+from atproto_jetstream.archive.events import to_messages
 from atproto_jetstream.archive.matcher import RowMatcher
 from atproto_jetstream.archive.segment import (
     KIND_ACCOUNT,
@@ -234,3 +236,28 @@ def test_matcher_advance_to_never_lowers_the_floor(events: t.List[SegmentEvent])
     matcher.advance_to(11)
 
     assert [event.seq for event in matcher.filter(events)] == [16]
+
+
+def _identity_row(seq: int, payload: object) -> SegmentEvent:
+    return SegmentEvent(
+        seq=seq,
+        witnessed_at=1_785_871_804_982_691,
+        indexed_at=0,
+        kind=KIND_IDENTITY,
+        did='did:plc:aaa',
+        collection='',
+        rkey='',
+        rev='',
+        payload=libipld.encode_dag_cbor(payload),
+    )
+
+
+def test_invalid_marker_payload_is_skipped() -> None:
+    valid = {'did': 'did:plc:aaa', 'seq': 7, 'time': '2026-08-17T12:00:00.000Z'}
+    rows = [_identity_row(1, {'$type': 'unexpected'}), _identity_row(2, None), _identity_row(3, valid)]
+
+    messages = list(to_messages(rows))
+
+    assert [message.seq for message in messages] == [3]
+    assert isinstance(messages[0], models.NetworkBskyJetstreamSubscribeEvents.Identity)
+    assert messages[0].identity.seq == 7

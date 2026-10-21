@@ -41,7 +41,8 @@ class RowMatcher:
         self._after_seq = after_seq
         self._before_seq = before_seq
 
-        exact, prefixes = set(), []
+        exact: t.Set[str] = set()
+        prefixes: t.List[str] = []
         for pattern in collections or ():
             if pattern.endswith(_WILDCARD_SUFFIX):
                 prefixes.append(pattern[: -len(_WILDCARD_SUFFIX)])

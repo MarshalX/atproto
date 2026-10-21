@@ -25,7 +25,7 @@ class UnknownUnionFallback:
     @classmethod
     def __get_pydantic_core_schema__(cls, source_type: t.Any, handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
         members = tuple(arg for arg in t.get_args(source_type) if arg is not DotDictType)
-        discriminated = te.Annotated[t.Union[members], Field(discriminator='py_type')]  # type: ignore[valid-type]
+        discriminated = te.Annotated[t.Union[members], Field(discriminator='py_type')]  # pyrefly: ignore[not-a-type]
 
         def validate(value: t.Any, validator: core_schema.ValidatorFunctionWrapHandler) -> t.Any:
             try:

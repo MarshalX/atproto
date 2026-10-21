@@ -4,6 +4,7 @@ import dns.asyncresolver
 import dns.resolver
 import httpx
 from dns.exception import DNSException
+from dns.rdtypes.txtbase import TXTBase
 
 from atproto_identity.exceptions import DidNotFoundError
 
@@ -19,6 +20,9 @@ class _HandleResolverBase:
     @staticmethod
     def _find_text_record(answers: dns.resolver.Answer) -> t.Optional[str]:
         for answer in answers:
+            if not isinstance(answer, TXTBase):
+                continue
+
             for item in answer.strings:
                 value = item.decode('UTF-8')
                 if value.startswith(_ATPROTO_TXT_PREFIX):

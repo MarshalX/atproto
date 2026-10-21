@@ -2,6 +2,7 @@ import typing as t
 from abc import ABC, abstractmethod
 
 from atproto_core.did_doc import DidDocument, is_valid_did_doc
+from pydantic_core import from_json
 
 from atproto_identity.did.atproto_data import ensure_atproto_document, ensure_atproto_key
 from atproto_identity.exceptions import DidNotFoundError, PoorlyFormattedDidDocumentError
@@ -14,6 +15,14 @@ _DID_KEY_PREFIX = 'did:key:'
 
 
 class _BaseResolver:
+    @staticmethod
+    def _decode_did_doc_json(did: str, content: bytes) -> t.Dict[str, t.Any]:
+        value = from_json(content)
+        if not isinstance(value, dict):
+            raise PoorlyFormattedDidDocumentError(f'Invalid DID document for DID {did}')
+
+        return value
+
     @staticmethod
     def validate_did_doc(did: str, value: t.Dict[str, t.Any]) -> 'DidDocument':
         # it performs double parsing, but it's ok for now
@@ -78,7 +87,7 @@ class BaseResolver(_BaseResolver, ABC):
                     self.refresh_cache(did)
                     cached_result = self._cache.get(did)
 
-                return cached_result and cached_result.document
+                return cached_result.document if cached_result is not None else None
 
         did_doc = self.resolve_no_cache(did)
         if did_doc is None:
@@ -200,7 +209,7 @@ class AsyncBaseResolver(_BaseResolver, ABC):
                     await self.refresh_cache(did)
                     cached_result = await self._cache.get(did)
 
-                return cached_result and cached_result.document
+                return cached_result.document if cached_result is not None else None
 
         did_doc = await self.resolve_no_cache(did)
         if did_doc is None:

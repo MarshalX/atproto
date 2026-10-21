@@ -105,7 +105,7 @@ def make_lazy_accessors(
             return module
 
         if name in _UTILS_EXPORTS:
-            utils = importlib.import_module(f'{package_name}.utils')
+            utils = importlib.import_module(f'{fallback or package_name}.utils')
             value = getattr(utils, name)
             package.__dict__[name] = value
             return value

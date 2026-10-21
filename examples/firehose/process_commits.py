@@ -4,19 +4,40 @@ import sys
 import time
 from collections import defaultdict
 from types import FrameType
-from typing import Any
+from typing import TYPE_CHECKING, Callable, Optional, TypedDict, TypeVar, Union
 
 from atproto import CAR, AtUri, FirehoseSubscribeReposClient, firehose_models, models, parse_subscribe_repos_message
 
-_INTERESTED_RECORDS = {
-    models.ids.AppBskyFeedLike: models.AppBskyFeedLike,
-    models.ids.AppBskyFeedPost: models.AppBskyFeedPost,
-    models.ids.AppBskyGraphFollow: models.AppBskyGraphFollow,
+if TYPE_CHECKING:
+    from multiprocessing.queues import Queue
+    from multiprocessing.sharedctypes import Synchronized
+
+R = TypeVar('R')
+
+
+InterestedRecord = Union[models.AppBskyFeedLike.Record, models.AppBskyFeedPost.Record, models.AppBskyGraphFollow.Record]
+
+_INTERESTED_RECORDS: dict[str, type[InterestedRecord]] = {
+    models.ids.AppBskyFeedLike: models.AppBskyFeedLike.Record,
+    models.ids.AppBskyFeedPost: models.AppBskyFeedPost.Record,
+    models.ids.AppBskyGraphFollow: models.AppBskyGraphFollow.Record,
 }
 
 
-def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> defaultdict:
-    operation_by_type = defaultdict(lambda: {'created': [], 'deleted': []})
+class CreatedOp(TypedDict):
+    record: InterestedRecord
+    uri: str
+    cid: str
+    author: str
+
+
+class Ops(TypedDict):
+    created: list[CreatedOp]
+    deleted: list[dict[str, str]]
+
+
+def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> defaultdict[str, Ops]:
+    operation_by_type: defaultdict[str, Ops] = defaultdict(lambda: {'created': [], 'deleted': []})
 
     car = CAR.from_bytes(commit.blocks)
     for op in commit.ops:
@@ -30,8 +51,6 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> defa
             if not op.cid:
                 continue
 
-            create_info = {'uri': str(uri), 'cid': str(op.cid), 'author': commit.repo}
-
             record_raw_data = car.blocks.get(op.cid)
             if not record_raw_data:
                 continue
@@ -39,7 +58,9 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> defa
             record = models.get_or_create(record_raw_data, strict=False)
             record_type = _INTERESTED_RECORDS.get(uri.collection)
             if record_type and models.is_record_type(record, record_type):
-                operation_by_type[uri.collection]['created'].append({'record': record, **create_info})
+                operation_by_type[uri.collection]['created'].append(
+                    {'record': record, 'uri': str(uri), 'cid': str(op.cid), 'author': commit.repo}
+                )
 
         if op.action == 'delete':
             operation_by_type[uri.collection]['deleted'].append({'uri': str(uri)})
@@ -47,7 +68,7 @@ def _get_ops_by_type(commit: models.ComAtprotoSyncSubscribeRepos.Commit) -> defa
     return operation_by_type
 
 
-def worker_main(cursor_value: multiprocessing.Value, pool_queue: multiprocessing.Queue) -> None:
+def worker_main(cursor_value: 'Synchronized[int]', pool_queue: 'Queue[firehose_models.MessageFrame]') -> None:
     signal.signal(signal.SIGINT, signal.SIG_IGN)  # we handle it in the main process
 
     while True:
@@ -67,34 +88,39 @@ def worker_main(cursor_value: multiprocessing.Value, pool_queue: multiprocessing
         for created_post in ops[models.ids.AppBskyFeedPost]['created']:
             author = created_post['author']
             record = created_post['record']
+            if not isinstance(record, models.AppBskyFeedPost.Record):
+                continue
 
             inlined_text = record.text.replace('\n', ' ')
             print(f'NEW POST [CREATED_AT={record.created_at}][AUTHOR={author}]: {inlined_text}')
 
 
-def get_firehose_params(cursor_value: multiprocessing.Value) -> models.ComAtprotoSyncSubscribeRepos.Params:
+def get_firehose_params(cursor_value: 'Synchronized[int]') -> models.ComAtprotoSyncSubscribeRepos.Params:
     return models.ComAtprotoSyncSubscribeRepos.Params(cursor=cursor_value.value)
 
 
-def measure_events_per_second(func: callable) -> callable:
-    def wrapper(*args) -> Any:
-        wrapper.calls += 1
+def measure_events_per_second(
+    func: Callable[[firehose_models.MessageFrame], R],
+) -> Callable[[firehose_models.MessageFrame], R]:
+    calls = 0
+    start_time = time.time()
+
+    def wrapper(message: firehose_models.MessageFrame) -> R:
+        nonlocal calls, start_time
+        calls += 1
         cur_time = time.time()
 
-        if cur_time - wrapper.start_time >= 1:
-            print(f'NETWORK LOAD: {wrapper.calls} events/second')
-            wrapper.start_time = cur_time
-            wrapper.calls = 0
+        if cur_time - start_time >= 1:
+            print(f'NETWORK LOAD: {calls} events/second')
+            start_time = cur_time
+            calls = 0
 
-        return func(*args)
-
-    wrapper.calls = 0
-    wrapper.start_time = time.time()
+        return func(message)
 
     return wrapper
 
 
-def signal_handler(_: int, __: FrameType) -> None:
+def signal_handler(_: int, __: Optional[FrameType]) -> None:
     print('Keyboard interrupt received. Waiting for the queue to empty before terminating processes...')
 
     # Stop receiving new messages
@@ -129,7 +155,7 @@ if __name__ == '__main__':
     workers_count = multiprocessing.cpu_count() * 2 - 1
     max_queue_size = 10000
 
-    queue = multiprocessing.Queue(maxsize=max_queue_size)
+    queue: 'Queue[firehose_models.MessageFrame]' = multiprocessing.Queue(maxsize=max_queue_size)
     pool = multiprocessing.Pool(workers_count, worker_main, (cursor, queue))
 
     @measure_events_per_second

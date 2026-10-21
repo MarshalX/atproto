@@ -33,7 +33,7 @@ _COMMIT = {
 }
 
 
-def _parse_record(record: dict) -> t.Any:
+def _parse_record(record: t.Dict[str, t.Any]) -> t.Any:
     commit = models.NetworkBskyJetstreamSubscribeEvents.Commit.model_validate({**_COMMIT, 'record': record})
     return commit.record
 
@@ -59,7 +59,7 @@ def test_extended_known_record_resolves_to_model() -> None:
         pytest.param({'$type': 'app.bsky.feed.like', 'createdAt': 123, 'subject': _SUBJECT}, id='wrong_field_type'),
     ],
 )
-def test_undescribable_record_falls_back_to_dot_dict(record: dict) -> None:
+def test_undescribable_record_falls_back_to_dot_dict(record: t.Dict[str, t.Any]) -> None:
     assert isinstance(_parse_record(record), DotDict)
 
 
@@ -67,7 +67,7 @@ def test_known_record_does_not_build_a_throwaway_dot_dict(monkeypatch: pytest.Mo
     created = []
     original_init = DotDict.__init__
 
-    def spy(self: DotDict, data: dict) -> None:
+    def spy(self: DotDict, data: t.Dict[str, t.Any]) -> None:
         created.append(data)
         original_init(self, data)
 
@@ -99,4 +99,5 @@ def test_strict_string_format_reaches_records_in_unknown_fields(created_at: str,
         {'uri': _SUBJECT['uri'], 'value': post}, models.ComAtprotoRepoGetRecord.Response, strict_string_format=True
     )
 
+    assert isinstance(response, models.ComAtprotoRepoGetRecord.Response)
     assert isinstance(response.value, expected)

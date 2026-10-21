@@ -43,7 +43,8 @@ def _links(text: str) -> t.List[t.Tuple[str, str]]:
 
 def _tags(text: str, *, cashtags: bool = False) -> t.Tuple[t.List[str], t.List[t.Tuple[int, int]]]:
     """Return tags and byte indices of every tag facet (cashtags are tags starting with $)."""
-    tags, indices = [], []
+    tags: t.List[str] = []
+    indices: t.List[t.Tuple[int, int]] = []
     for facet in facet_detection.detect_facets(text):
         for feature in facet.features:
             if isinstance(feature, models.AppBskyRichtextFacet.Tag) and feature.tag.startswith('$') == cashtags:

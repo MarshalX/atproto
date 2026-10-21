@@ -1,17 +1,27 @@
 import base64
 import os
+import typing as t
 
 import pytest
+import typing_extensions as te
 from atproto_crypto.verify import verify_signature
-from pydantic_core import from_json
+from pydantic import TypeAdapter
 
 # Ref: https://github.com/bluesky-social/atproto/blob/main/interop-test-files/crypto/signature-fixtures.json
 _FIXTURES_FILE_PATH = os.path.join(os.path.dirname(__file__), 'signature-fixtures.json')
 
 
-def _load_test_cases() -> list:
+class _SignatureFixture(te.TypedDict):
+    comment: str
+    publicKeyDid: str
+    messageBase64: str
+    signatureBase64: str
+    validSignature: bool
+
+
+def _load_test_cases() -> t.List[_SignatureFixture]:
     with open(_FIXTURES_FILE_PATH, encoding='UTF-8') as file:
-        return from_json(file.read())
+        return TypeAdapter(t.List[_SignatureFixture]).validate_json(file.read())
 
 
 def _fix_base64_padding(data: str) -> str:
@@ -23,7 +33,7 @@ def _decode_b64(data: str) -> bytes:
 
 
 @pytest.mark.parametrize('test_case', _load_test_cases(), ids=lambda x: x['comment'])
-def test_verify_signature(test_case: dict) -> None:
+def test_verify_signature(test_case: _SignatureFixture) -> None:
     did_key = test_case['publicKeyDid']
     data = _decode_b64(test_case['messageBase64'])
     signature = _decode_b64(test_case['signatureBase64'])

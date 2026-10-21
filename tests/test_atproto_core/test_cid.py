@@ -109,4 +109,4 @@ def test_car_blocks_lookup_by_cid_and_str() -> None:
     # a CID key must resolve both as itself and by its stringified form
     for block_cid in car.blocks:
         assert car.blocks[block_cid] in (root_block, child_block)
-        assert car.blocks[str(block_cid)] == car.blocks[block_cid]
+        assert car.blocks[str(block_cid)] == car.blocks[block_cid]  # pyrefly: ignore[bad-index]

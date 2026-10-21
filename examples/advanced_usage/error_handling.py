@@ -41,7 +41,8 @@ def main() -> None:
     try:
         client.com.atproto.identity.resolve_handle({'handle': 'not a handle'})
     except BadRequestError as e:
-        print('Status code:', e.response.status_code)
+        if e.response is not None:
+            print('Status code:', e.response.status_code)
         print('Server said:', describe(e))
 
 

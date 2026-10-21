@@ -178,7 +178,7 @@ def resolve_intersphinx_aliases(
 
 
 def resolve_internal_aliases(_: 'Sphinx', doctree: 'Node') -> None:
-    for node in doctree.traverse(condition=pending_xref):
+    for node in doctree.findall(pending_xref):
         alias = node.get('reftarget', None)
         if alias is None:
             continue

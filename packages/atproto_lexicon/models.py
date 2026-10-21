@@ -7,35 +7,35 @@ Number = t.Union[int, float]
 
 
 class LexDefinitionType:
-    RECORD = 'record'
+    RECORD: te.Final = 'record'
 
-    QUERY = 'query'
-    PROCEDURE = 'procedure'
-    SUBSCRIPTION = 'subscription'
+    QUERY: te.Final = 'query'
+    PROCEDURE: te.Final = 'procedure'
+    SUBSCRIPTION: te.Final = 'subscription'
 
-    PARAMS = 'params'
-    TOKEN = 'token'  # noqa: S105
-    OBJECT = 'object'
+    PARAMS: te.Final = 'params'
+    TOKEN: te.Final = 'token'  # noqa: S105
+    OBJECT: te.Final = 'object'
 
-    BLOB = 'blob'
-    ARRAY = 'array'
+    BLOB: te.Final = 'blob'
+    ARRAY: te.Final = 'array'
 
-    STRING = 'string'  # TODO(MarshalX): definitions could be primitives?
+    STRING: te.Final = 'string'  # TODO(MarshalX): definitions could be primitives?
 
-    PERMISSION = 'permission'
-    PERMISSION_SET = 'permission-set'
+    PERMISSION: te.Final = 'permission'
+    PERMISSION_SET: te.Final = 'permission-set'
 
 
 class LexPrimitiveType:
-    BOOLEAN = 'boolean'
-    NUMBER = 'number'
-    INTEGER = 'integer'
-    STRING = 'string'
-    REF = 'ref'
-    UNION = 'union'
-    UNKNOWN = 'unknown'
-    CID_LINK = 'cid-link'
-    BYTES = 'bytes'
+    BOOLEAN: te.Final = 'boolean'
+    NUMBER: te.Final = 'number'
+    INTEGER: te.Final = 'integer'
+    STRING: te.Final = 'string'
+    REF: te.Final = 'ref'
+    UNION: te.Final = 'union'
+    UNKNOWN: te.Final = 'unknown'
+    CID_LINK: te.Final = 'cid-link'
+    BYTES: te.Final = 'bytes'
 
 
 class LexBase(BaseModel):

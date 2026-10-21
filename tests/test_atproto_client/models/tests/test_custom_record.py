@@ -1,3 +1,5 @@
+import typing as t
+
 from atproto_client import models
 from atproto_client.models import get_model_as_dict, get_or_create
 from atproto_client.models.dot_dict import DotDict
@@ -5,7 +7,7 @@ from atproto_client.models.dot_dict import DotDict
 from tests.test_atproto_client.models.tests.utils import load_data_from_file
 
 
-def load_test_data() -> dict:
+def load_test_data() -> t.Dict[str, t.Any]:
     return load_data_from_file('custom_record')
 
 
@@ -31,13 +33,16 @@ def test_custom_record_deserialization() -> None:
 
 def test_custom_record_serialization() -> None:
     model = get_or_create(load_test_data(), models.ComAtprotoRepoGetRecord.Response)
+    assert isinstance(model, models.ComAtprotoRepoGetRecord.Response)
     expected_custom_record_id = 'app.bsky.feed.pythonSdkCustomRecordPost'
 
     model_dict = get_model_as_dict(model)
     restored_model = get_or_create(model_dict, models.ComAtprotoRepoGetRecord.Response)
+    assert isinstance(restored_model, models.ComAtprotoRepoGetRecord.Response)
 
     assert isinstance(get_model_as_dict(model.value), dict)
     assert model_dict == get_model_as_dict(restored_model)
+    assert isinstance(restored_model.value, DotDict)
 
     assert restored_model.value['$type'] != models.ids.AppBskyFeedPost
     assert restored_model.value['$type'] == expected_custom_record_id

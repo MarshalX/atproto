@@ -4,7 +4,7 @@ from atproto_core.nsid import NSID
 from atproto_lexicon.models import LexSubscription
 
 from atproto_codegen.config import CodegenConfig, get_config, use_config
-from atproto_codegen.consts import DISCLAIMER, PARAMS_MODEL
+from atproto_codegen.consts import DISCLAIMER, PARAMS_DICT, PARAMS_MODEL
 from atproto_codegen.models import builder
 from atproto_codegen.utils import (
     _resolve_nsid_ref,
@@ -84,8 +84,7 @@ def _generate_parse_function(nsid: NSID) -> t.List[str]:
         f'{_(1)}Returns:',
         f'{_(2)}:obj:`.{alias}`: Corresponding message model.',
         f'{_(1)}"""',
-        # TODO(MarshalX): fix return type in get_or_create instead of casting
-        f"{_(1)}return t.cast('{alias}', get_or_create(message.body, {_type_map_name(nsid)}[message.type]))",
+        f'{_(1)}return get_or_create(message.body, {_type_map_name(nsid)}[message.type])',
     ]
 
 
@@ -93,6 +92,7 @@ def _generate_client(nsid: NSID, *, sync: bool) -> t.List[str]:
     prefix = '' if sync else 'Async'
     base_class = 'SubscriptionClient' if sync else 'AsyncSubscriptionClient'
     params_model = f'models.{get_import_path(nsid)}.{PARAMS_MODEL}'
+    params_dict = f'models.{get_import_path(nsid)}.{PARAMS_DICT}'
 
     return [
         f'class {prefix}{get_import_path(nsid)}Client({base_class}):',
@@ -107,7 +107,7 @@ def _generate_client(nsid: NSID, *, sync: bool) -> t.List[str]:
         f'{_(1)}def __init__(',
         f'{_(2)}self,',
         f'{_(2)}base_uri: str,',
-        f"{_(2)}params: t.Optional[t.Union[dict, '{params_model}']] = None,",
+        f"{_(2)}params: t.Optional[t.Union['{params_model}', '{params_dict}']] = None,",
         f'{_(2)}recv_timeout: t.Optional[float] = None,',
         f'{_(1)}) -> None:',
         f'{_(2)}params_model = get_or_create(params, {params_model})',

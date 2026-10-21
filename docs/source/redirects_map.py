@@ -178,6 +178,7 @@ REDIRECTS = {
     'atproto/atproto_client.models.app.html': '/models/app/',
     'atproto/atproto_client.models.base.html': '/models/base/',
     'atproto/atproto_client.models.blob_ref.html': '/models/blob_ref/',
+    'atproto/atproto_client.models.bytes_type.html': '/models/bytes_type/',
     'atproto/atproto_client.models.chat.bsky.actor.declaration.html': '/models/chat/bsky/actor/declaration/',
     'atproto/atproto_client.models.chat.bsky.actor.defs.html': '/models/chat/bsky/actor/defs/',
     'atproto/atproto_client.models.chat.bsky.actor.delete_account.html': '/models/chat/bsky/actor/deleteAccount/',

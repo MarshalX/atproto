@@ -13,6 +13,9 @@ async def on_message_handler(event: jetstream_models.SubscribeEventsMessage) -> 
         return
 
     # already decoded into a model by the client; a non-conforming record falls back to DotDict
+    if not models.is_record_type(event.record, models.AppBskyFeedPost):
+        return
+
     print(f'[{event.seq}] {event.did}: {event.record.text}')
 
 

@@ -20,6 +20,10 @@ if t.TYPE_CHECKING:
     from _pytest.monkeypatch import MonkeyPatch
 
 
+def _always_valid(*_: object) -> bool:
+    return True
+
+
 class AuthorizationError(Exception): ...
 
 
@@ -35,7 +39,7 @@ def test_custom_feed_auth_flow(monkeypatch: 'MonkeyPatch') -> None:
     jwt = _TEST_AUTHORIZATION_HEADER_VALUE[len(HEADER_PREFIX) :].strip()
 
     # allow expired token only for tests
-    monkeypatch.setattr('atproto_server.auth.jwt._validate_exp', lambda *_: True)
+    monkeypatch.setattr('atproto_server.auth.jwt._validate_exp', _always_valid)
 
     # should not raise any exception
     jwt_payload = verify_jwt(jwt, resolver.did.resolve_atproto_key)
@@ -55,7 +59,7 @@ async def test_custom_feed_auth_flow_async(monkeypatch: 'MonkeyPatch') -> None:
     jwt = _TEST_AUTHORIZATION_HEADER_VALUE[len(HEADER_PREFIX) :].strip()
 
     # allow expired token only for tests
-    monkeypatch.setattr('atproto_server.auth.jwt._validate_exp', lambda *_: True)
+    monkeypatch.setattr('atproto_server.auth.jwt._validate_exp', _always_valid)
 
     # should not raise any exception
     jwt_payload = await verify_jwt_async(jwt, resolver.did.resolve_atproto_key)

@@ -39,7 +39,7 @@ class Record(base.RecordModelBase):
     bsky_post_ref: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = (
         None  #: Strong reference to a Bluesky post. Useful to keep track of comments off-platform.
     )
-    content: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field()]] = (
+    content: t.Optional[te.Annotated['base.UnknownUnionModel', Field()]] = (
         None  #: Open union used to define the record's content. Each entry must specify a $type and may be extended with other lexicons to support additional content formats.
     )
     contributors: t.Optional[t.List['models.SiteStandardDocument.Contributor']] = None  #: Contributors.
@@ -50,7 +50,7 @@ class Record(base.RecordModelBase):
     labels: t.Optional[unknown_union.OpenUnion['models.ComAtprotoLabelDefs.SelfLabels']] = (
         None  #: Self-label values for this post. Effectively content warnings.
     )
-    links: t.Optional[te.Annotated[t.Union['base.UnknownUnionModel'], Field()]] = (
+    links: t.Optional[te.Annotated['base.UnknownUnionModel', Field()]] = (
         None  #: Array of values describing relationships between this document and external resources.
     )
     path: t.Optional[str] = (

@@ -1,3 +1,5 @@
+import typing as t
+
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ec import ECDSA, EllipticCurve, EllipticCurvePublicKey
@@ -10,7 +12,7 @@ from atproto_crypto.exceptions import InvalidCompressedPubkeyError
 class AlgBase:
     """Base class for all algorithms."""
 
-    NAME = None
+    NAME: t.ClassVar[str]
 
     def __init__(self, curve: EllipticCurve, curve_order: int) -> None:
         self.curve = curve

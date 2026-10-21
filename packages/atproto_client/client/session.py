@@ -108,7 +108,7 @@ class Session:
     did: str
     access_jwt: str
     refresh_jwt: str
-    pds_endpoint: t.Optional[str] = 'https://bsky.social'  # Backward compatibility for old sessions
+    pds_endpoint: str = 'https://bsky.social'  # Backward compatibility for old sessions
 
     @property
     def access_jwt_payload(self) -> 'JwtPayload':

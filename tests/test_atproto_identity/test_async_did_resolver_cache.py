@@ -19,7 +19,9 @@ async def test_did_resolver_cache_with_web_feed() -> None:
         # Check that the object is cached (same object id)
         assert expected_object_id == id(new_did_doc)
 
-    cached_did_doc = (await cache.get(did_web)).document
+    cached_result = await cache.get(did_web)
+    assert cached_result is not None
+    cached_did_doc = cached_result.document
     assert cached_did_doc is did_doc
 
 
@@ -37,7 +39,9 @@ async def test_did_resolver_cache_with_did_plc() -> None:
         # Check that the object is cached (same object id)
         assert expected_object_id == id(new_did_doc)
 
-    cached_did_doc = (await cache.get(did_plc)).document
+    cached_result = await cache.get(did_plc)
+    assert cached_result is not None
+    cached_did_doc = cached_result.document
     assert cached_did_doc is did_doc
 
 

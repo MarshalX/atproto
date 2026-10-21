@@ -9,9 +9,13 @@ Any request to an unregistered URL or hostname fails loudly so that a test never
 import typing as t
 
 import dns.asyncresolver
+import dns.rdataclass
+import dns.rdatatype
 import dns.resolver
 import httpx
 import pytest
+import typing_extensions as te
+from dns.rdtypes.ANY.TXT import TXT
 
 _DID_PLC = 'did:plc:kvwvcn5iqfooopmyzvb4qzba'
 _DID_PLC_UNKNOWN = 'did:plc:kvwvcn5iqfooopmyzvb41234'
@@ -69,6 +73,7 @@ class _MockTransport(httpx.MockTransport):
         super().__init__(_http_handler)
         self._real = httpx.HTTPTransport()
 
+    @te.override
     def handle_request(self, request: httpx.Request) -> httpx.Response:
         if request.url.host in _LOOPBACK_HOSTS:
             return self._real.handle_request(request)
@@ -81,6 +86,7 @@ class _AsyncMockTransport(httpx.MockTransport):
         super().__init__(_http_handler)
         self._real = httpx.AsyncHTTPTransport()
 
+    @te.override
     async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
         if request.url.host in _LOOPBACK_HOSTS:
             return await self._real.handle_async_request(request)
@@ -88,20 +94,15 @@ class _AsyncMockTransport(httpx.MockTransport):
         return await super().handle_async_request(request)
 
 
-class _FakeRdata:
-    def __init__(self, strings: list) -> None:
-        self.strings = strings
-
-
-def _dns_resolve(qname: t.Any, rdtype: t.Any, *args: t.Any, **kwargs: t.Any) -> t.List[_FakeRdata]:
+def _dns_resolve(qname: t.Any, rdtype: t.Any, *args: t.Any, **kwargs: t.Any) -> t.List[TXT]:
     value = _DNS_TXT.get(str(qname))
     if value is None:
         raise dns.resolver.NXDOMAIN
 
-    return [_FakeRdata([value.encode('UTF-8')])]
+    return [TXT(dns.rdataclass.IN, dns.rdatatype.TXT, [value.encode('UTF-8')])]
 
 
-async def _dns_resolve_async(qname: t.Any, rdtype: t.Any, *args: t.Any, **kwargs: t.Any) -> t.List[_FakeRdata]:
+async def _dns_resolve_async(qname: t.Any, rdtype: t.Any, *args: t.Any, **kwargs: t.Any) -> t.List[TXT]:
     return _dns_resolve(qname, rdtype, *args, **kwargs)
 
 

@@ -1,5 +1,6 @@
 import stat
 import sys
+import typing as t
 import zipfile
 from io import BytesIO
 from pathlib import Path
@@ -42,7 +43,7 @@ def test_nsid_path_is_flattened_into_the_filename() -> None:
     assert filename == 'network.bsky.jetstream.subscribeEvents.json'
 
 
-def _zip(files: dict, symlinks: dict) -> BytesIO:
+def _zip(files: t.Dict[str, bytes], symlinks: t.Dict[str, str]) -> BytesIO:
     buffer = BytesIO()
     with zipfile.ZipFile(buffer, 'w') as archive:
         for name, content in files.items():
@@ -92,11 +93,11 @@ def test_merge_rejects_a_lexicon_claimed_by_two_sources() -> None:
         _merge_extracted_lexicons([(_ATPROTO, duplicated), (_JETSTREAM, duplicated)])
 
 
-def _lexicon(defs: dict) -> dict:
+def _lexicon(defs: t.Dict[str, object]) -> t.Dict[str, object]:
     return {'lexicon': 1, 'defs': defs}
 
 
-def _query(**properties: dict) -> dict:
+def _query(**properties: t.Dict[str, object]) -> t.Dict[str, object]:
     return _lexicon({'main': {'type': 'query', 'parameters': {'type': 'params', 'properties': properties}}})
 
 

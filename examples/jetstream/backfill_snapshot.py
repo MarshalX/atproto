@@ -17,7 +17,7 @@ for event in client.snapshot(after_seq=0):
     if not isinstance(event, models.NetworkBskyJetstreamSubscribeEvents.Commit):
         continue
 
-    if event.collection != models.ids.AppBskyFeedPost or event.operation != 'create':
+    if event.operation != 'create' or not models.is_record_type(event.record, models.AppBskyFeedPost):
         continue
 
     posts += 1

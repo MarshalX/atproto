@@ -2,12 +2,14 @@ import logging
 import os
 import typing as t
 
+import typing_extensions as te
 from atproto_client import Client
 from atproto_client.request import Request, Response
 from pydantic_core import to_json
 
 if t.TYPE_CHECKING:
     from atproto_client.models.common import XrpcError
+    from atproto_client.models.dot_dict import DotDict
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -16,18 +18,20 @@ OUTPUT_DIR = os.path.join(os.path.dirname(__file__), 'test_data')
 
 
 class LatestResponse:
-    def __init__(self, response: Response = None) -> None:
+    def __init__(self, response: t.Optional[Response] = None) -> None:
         self._response = response
 
     def set(self, response: Response) -> None:
         self._response = response
 
     @property
-    def content(self) -> t.Optional[t.Union[dict, bytes, 'XrpcError']]:
+    def content(self) -> t.Optional[t.Union[t.Dict[str, t.Any], bytes, 'XrpcError', 'DotDict']]:
+        assert self._response is not None
         return self._response.content
 
     @property
     def status_code(self) -> int:
+        assert self._response is not None
         return self._response.status_code
 
 
@@ -35,12 +39,14 @@ LATEST_RESPONSE = LatestResponse()
 
 
 class ProxyRequest(Request):
-    def get(self, *args, **kwargs: t.Any) -> Response:
+    @te.override
+    def get(self, *args: t.Any, **kwargs: t.Any) -> Response:
         response = super().get(*args, **kwargs)
         LATEST_RESPONSE.set(response)
         return response
 
-    def post(self, *args, **kwargs: t.Any) -> Response:
+    @te.override
+    def post(self, *args: t.Any, **kwargs: t.Any) -> Response:
         response = super().post(*args, **kwargs)
         LATEST_RESPONSE.set(response)
         return response
@@ -49,12 +55,13 @@ class ProxyRequest(Request):
 class Call(t.NamedTuple):
     name: str
     method: str
-    params: t.Optional[dict]
+    params: t.Optional[t.Dict[str, t.Union[str, int]]]
 
 
-def get_method_by_path(obj: object, path: str) -> callable:
+def get_method_by_path(obj: object, path: str) -> t.Callable[..., object]:
     for part in path.split('.'):
         obj = getattr(obj, part)
+    assert callable(obj)
     return obj
 
 
@@ -72,7 +79,7 @@ def get_unique_filename(name: str) -> str:
     return f'{name}.json'
 
 
-def get_pretty_json(data: dict) -> str:
+def get_pretty_json(data: t.Dict[str, t.Any]) -> str:
     return to_json(data, indent=4).decode('UTF-8')
 
 

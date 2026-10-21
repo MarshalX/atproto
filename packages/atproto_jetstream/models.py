@@ -1,6 +1,7 @@
 import typing as t
 from dataclasses import dataclass
 
+import typing_extensions as te
 from atproto_client.models.utils import get_or_create
 from atproto_client.subscriptions import (
     NETWORK_BSKY_JETSTREAM_SUBSCRIBE_EVENTS_MESSAGE_TYPE_TO_MODEL,
@@ -29,12 +30,13 @@ SubscribeEventsMessage = NetworkBskyJetstreamSubscribeEventsMessage
 class MessageFrame:
     """Jetstream message frame."""
 
-    payload: dict  #: Payload.
+    payload: t.Dict[str, object]  #: Payload.
 
     @property
     def type(self) -> t.Optional[str]:
         """:obj:`str`: Fully qualified type of the payload."""
-        return self.payload.get('$type')
+        payload_type = self.payload.get('$type')
+        return payload_type if isinstance(payload_type, str) else None
 
 
 @dataclass
@@ -47,6 +49,10 @@ class ErrorFrame:
 
 #: Base frame.
 Frame = t.Union[MessageFrame, ErrorFrame]
+
+
+def _is_json_object(value: object) -> te.TypeGuard[t.Dict[str, object]]:
+    return isinstance(value, dict)
 
 
 def parse_frame(data: t.Union[str, bytes]) -> Frame:
@@ -66,16 +72,21 @@ def parse_frame(data: t.Union[str, bytes]) -> Frame:
     except ValueError as e:
         raise JetstreamDecodingError('Invalid frame JSON') from e
 
-    if not isinstance(raw_frame, dict):
+    if not _is_json_object(raw_frame):
         raise JetstreamDecodingError('Frame is not an object')
 
     frame_type = raw_frame.get('$type')
     if frame_type == _ERROR_FRAME_TYPE:
-        return ErrorFrame(error=raw_frame.get('error', ''), message=raw_frame.get('message'))
+        error = raw_frame.get('error', '')
+        message = raw_frame.get('message')
+        return ErrorFrame(
+            error=error if isinstance(error, str) else '',
+            message=message if isinstance(message, str) else None,
+        )
 
     if frame_type == _MESSAGE_FRAME_TYPE:
         payload = raw_frame.get('payload')
-        if not isinstance(payload, dict):
+        if not _is_json_object(payload):
             raise JetstreamDecodingError('Message frame without payload')
 
         return MessageFrame(payload=payload)
@@ -99,4 +110,4 @@ def parse_subscribe_events_message(message: MessageFrame) -> SubscribeEventsMess
     if model_class is None:
         raise JetstreamDecodingError(f'Unknown message type: {message.type}')
 
-    return t.cast('SubscribeEventsMessage', get_or_create(message.payload, model_class))
+    return get_or_create(message.payload, model_class)

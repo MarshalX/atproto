@@ -1,4 +1,4 @@
-from atproto import Client
+from atproto import Client, models
 
 
 def main() -> None:
@@ -8,7 +8,7 @@ def main() -> None:
     handle = 'target-handle'
 
     cursor = None
-    follows = []
+    follows: list[models.AppBskyActorDefs.ProfileView] = []
 
     while True:
         fetched = client.get_follows(actor=handle, cursor=cursor)

@@ -21,7 +21,7 @@ from atproto_client.request import Response
 
 
 def _jwt() -> str:
-    def encode(payload: dict) -> str:
+    def encode(payload: t.Dict[str, object]) -> str:
         return base64.urlsafe_b64encode(json.dumps(payload).encode()).decode().rstrip('=')
 
     return f'{encode({"alg": "HS256"})}.{encode({"exp": int(time.time()) + 3600})}.sig'

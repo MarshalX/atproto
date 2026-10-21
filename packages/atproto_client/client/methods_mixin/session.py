@@ -3,6 +3,7 @@ from datetime import timedelta
 
 import typing_extensions as te
 
+from atproto_client.client.base import _ClientCommonMethodsMixin
 from atproto_client.client.methods_mixin.time import TimeMethodsMixin
 from atproto_client.client.session import (
     AsyncSessionChangeCallback,
@@ -16,82 +17,7 @@ from atproto_client.client.session import (
 from atproto_client.exceptions import LoginRequiredError
 
 
-class SessionDispatchMixin:
-    def on_session_change(self, callback: SessionChangeCallback) -> None:
-        """Register a callback for session change event.
-
-        Args:
-            callback: A callback to be called when the session changes.
-                The callback must accept two arguments: event and session.
-
-        Note:
-            Possible events: `SessionEvent.IMPORT`, `SessionEvent.CREATE`, `SessionEvent.REFRESH`.
-
-        Tip:
-            You should save the session string to persistent storage
-            on `SessionEvent.CREATE` and `SessionEvent.REFRESH` event.
-
-        Example:
-            >>> from atproto import Client, SessionEvent, Session
-            >>>
-            >>> client = Client()
-            >>>
-            >>> @client.on_session_change
-            >>> def on_session_change(event: SessionEvent, session: Session):
-            >>>     print(event, session)
-            >>>
-            >>> # or you can use this syntax:
-            >>> # client.on_session_change(on_session_change)
-
-        Returns:
-            :obj:`None`
-        """
-        self._session_dispatcher.on_session_change(callback)
-
-    def _call_on_session_change_callbacks(self, event: SessionEvent) -> None:
-        self._session_dispatcher.dispatch_session_change(event)
-
-
-class AsyncSessionDispatchMixin:
-    def on_session_change(self, callback: t.Union['AsyncSessionChangeCallback', 'SessionChangeCallback']) -> None:
-        """Register a callback for session change event.
-
-        Args:
-            callback: A callback to be called when the session changes.
-                The callback must accept two arguments: event and session.
-
-        Note:
-            Possible events: `SessionEvent.IMPORT`, `SessionEvent.CREATE`, `SessionEvent.REFRESH`.
-
-        Note:
-            You can register both synchronous and asynchronous callbacks.
-
-        Tip:
-            You should save the session string to persistent storage
-            on `SessionEvent.CREATE` and `SessionEvent.REFRESH` event.
-
-        Example:
-            >>> from atproto import AsyncClient, SessionEvent, Session
-            >>>
-            >>> client = AsyncClient()
-            >>>
-            >>> @client.on_session_change
-            >>> async def on_session_change(event: SessionEvent, session: Session):
-            >>>     print(event, session)
-            >>>
-            >>> # or you can use this syntax:
-            >>> # client.on_session_change(on_session_change)
-
-        Returns:
-            :obj:`None`
-        """
-        self._session_dispatcher.on_session_change(callback)
-
-    async def _call_on_session_change_callbacks(self, event: SessionEvent) -> None:
-        await self._session_dispatcher.dispatch_session_change_async(event)
-
-
-class SessionMethodsMixin(TimeMethodsMixin):
+class SessionMethodsMixin(TimeMethodsMixin, _ClientCommonMethodsMixin):
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
         self._session_dispatcher = SessionDispatcher()
@@ -101,6 +27,7 @@ class SessionMethodsMixin(TimeMethodsMixin):
     def _session(self) -> t.Optional[Session]:
         return self._session_dispatcher.session
 
+    @te.override
     def _inherit_clone_state(self, original: te.Self) -> None:
         super()._inherit_clone_state(original)
 
@@ -206,3 +133,78 @@ class SessionMethodsMixin(TimeMethodsMixin):
             raise LoginRequiredError
 
         return self._session.export()
+
+
+class SessionDispatchMixin(SessionMethodsMixin):
+    def on_session_change(self, callback: SessionChangeCallback) -> None:
+        """Register a callback for session change event.
+
+        Args:
+            callback: A callback to be called when the session changes.
+                The callback must accept two arguments: event and session.
+
+        Note:
+            Possible events: `SessionEvent.IMPORT`, `SessionEvent.CREATE`, `SessionEvent.REFRESH`.
+
+        Tip:
+            You should save the session string to persistent storage
+            on `SessionEvent.CREATE` and `SessionEvent.REFRESH` event.
+
+        Example:
+            >>> from atproto import Client, SessionEvent, Session
+            >>>
+            >>> client = Client()
+            >>>
+            >>> @client.on_session_change
+            >>> def on_session_change(event: SessionEvent, session: Session):
+            >>>     print(event, session)
+            >>>
+            >>> # or you can use this syntax:
+            >>> # client.on_session_change(on_session_change)
+
+        Returns:
+            :obj:`None`
+        """
+        self._session_dispatcher.on_session_change(callback)
+
+    def _call_on_session_change_callbacks(self, event: SessionEvent) -> None:
+        self._session_dispatcher.dispatch_session_change(event)
+
+
+class AsyncSessionDispatchMixin(SessionMethodsMixin):
+    def on_session_change(self, callback: t.Union['AsyncSessionChangeCallback', 'SessionChangeCallback']) -> None:
+        """Register a callback for session change event.
+
+        Args:
+            callback: A callback to be called when the session changes.
+                The callback must accept two arguments: event and session.
+
+        Note:
+            Possible events: `SessionEvent.IMPORT`, `SessionEvent.CREATE`, `SessionEvent.REFRESH`.
+
+        Note:
+            You can register both synchronous and asynchronous callbacks.
+
+        Tip:
+            You should save the session string to persistent storage
+            on `SessionEvent.CREATE` and `SessionEvent.REFRESH` event.
+
+        Example:
+            >>> from atproto import AsyncClient, SessionEvent, Session
+            >>>
+            >>> client = AsyncClient()
+            >>>
+            >>> @client.on_session_change
+            >>> async def on_session_change(event: SessionEvent, session: Session):
+            >>>     print(event, session)
+            >>>
+            >>> # or you can use this syntax:
+            >>> # client.on_session_change(on_session_change)
+
+        Returns:
+            :obj:`None`
+        """
+        self._session_dispatcher.on_session_change(callback)
+
+    async def _call_on_session_change_callbacks(self, event: SessionEvent) -> None:
+        await self._session_dispatcher.dispatch_session_change_async(event)

@@ -17,13 +17,13 @@ def main() -> None:
     convo_list = dm.list_convos()  # use limit and cursor to paginate
     print(f'Your conversations ({len(convo_list.convos)}):')
     for convo in convo_list.convos:
-        members = ', '.join(member.display_name for member in convo.members)
+        members = ', '.join(member.display_name or member.handle for member in convo.members)
         print(f'- ID: {convo.id} ({members})')
 
     # create resolver instance with in-memory cache
     id_resolver = IdResolver()
     # resolve DID
-    chat_to = id_resolver.handle.resolve('test.marshal.dev')
+    chat_to = id_resolver.handle.ensure_resolve('test.marshal.dev')
 
     # create or get conversation with chat_to
     convo = dm.get_convo_for_members(

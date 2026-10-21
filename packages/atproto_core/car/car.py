@@ -5,7 +5,7 @@ import libipld
 from atproto_core.cid import CID
 from atproto_core.exceptions import InvalidCARFile
 
-Blocks = t.Dict[CID, dict]
+Blocks = t.Dict[CID, t.Dict[str, t.Any]]
 
 
 class CAR:
@@ -51,7 +51,7 @@ class CAR:
         header, blocks = libipld.decode_car(data)
 
         roots = header.get('roots')
-        if isinstance(roots, list) and len(roots):
+        if isinstance(roots, list) and len(roots) and isinstance(roots[0], bytes):
             # The first element of the CAR roots metadata array must be the CID of the most relevant Commit object.
             # For a generic export, this is the current (most recent) commit.
             # Additional CIDs may also be present in the roots array, with (for now) undefined meaning or order.

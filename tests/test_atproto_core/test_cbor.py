@@ -17,6 +17,12 @@ def test_decode_dag_rejects_malformed_data(data: bytes) -> None:
         decode_dag(data)
 
 
+@pytest.mark.parametrize('data', [b'\x01', b'\x80'])
+def test_decode_dag_rejects_non_map(data: bytes) -> None:
+    with pytest.raises(DAGCBORDecodingError):
+        decode_dag(data)
+
+
 @pytest.mark.parametrize('data', [b'\xff\xff', b'\xa0\xff', b'\xa0\xa1'])
 def test_decode_dag_multi_rejects_malformed_data(data: bytes) -> None:
     with pytest.raises(DAGCBORDecodingError):

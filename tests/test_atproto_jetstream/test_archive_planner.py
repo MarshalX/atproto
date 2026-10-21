@@ -139,7 +139,7 @@ def test_work_unit_carries_the_checksum_for_if_range() -> None:
     assert units[0].checksum == '0123456789abcdef'
 
 
-def _error(status_code: int, headers: t.Optional[dict] = None) -> t.Any:
+def _error(status_code: int, headers: t.Optional[t.Dict[str, str]] = None) -> t.Any:
     return Response(
         success=False,
         status_code=status_code,
@@ -180,7 +180,7 @@ def test_quota_retry_after_ignores_other_failures() -> None:
     assert quota_retry_after(ValueError('unrelated')) is None
 
 
-def _raised_by_the_client(status_code: int, headers: t.Optional[dict] = None) -> BaseException:
+def _raised_by_the_client(status_code: int, headers: t.Optional[t.Dict[str, str]] = None) -> BaseException:
     """The exception the client actually raises for a status code."""
     response = httpx.Response(status_code, headers=headers, request=httpx.Request('GET', 'https://example.com'))
     with pytest.raises(RequestErrorBase) as exc_info:

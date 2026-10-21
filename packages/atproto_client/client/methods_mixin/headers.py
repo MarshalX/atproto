@@ -4,11 +4,18 @@ from enum import Enum
 import typing_extensions as te
 from atproto_core.exceptions import AtProtocolError
 
+from atproto_client.client.base import _ClientCommonMethodsMixin
+
+if t.TYPE_CHECKING:
+    from atproto_client import models
+
 _ATPROTO_PROXY_HEADER = 'atproto-proxy'
 _ATPROTO_ACCEPT_LABELERS_HEADER = 'atproto-accept-labelers'
 
 
-class HeadersConfigurationMethodsMixin:
+class HeadersConfigurationMethodsMixin(_ClientCommonMethodsMixin):
+    me: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed'] = None
+
     BSKY_CHAT_DID: t.ClassVar[t.Literal['did:web:api.bsky.chat']] = 'did:web:api.bsky.chat'
 
     # Bluesky hardcoded labeler https://docs.bsky.app/blog/blueskys-moderation-architecture
@@ -20,6 +27,7 @@ class HeadersConfigurationMethodsMixin:
         ATPROTO_LABELER = 'atproto_labeler'
         BSKY_CHAT = 'bsky_chat'
 
+    @te.override
     def clone(self) -> te.Self:
         """Clone the client instance.
 

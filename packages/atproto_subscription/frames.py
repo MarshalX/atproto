@@ -2,8 +2,9 @@
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional, Union
+from typing import Any, Generic, Optional, Union
 
+import typing_extensions as te
 from atproto_core.cbor import decode_dag_multi
 from atproto_core.exceptions import AtProtocolError
 
@@ -61,7 +62,7 @@ class ErrorFrameBody:
     message: Optional[str] = None  #: Description of the error.
 
 
-def parse_frame_header(raw_header: dict) -> FrameHeader:
+def parse_frame_header(raw_header: dict[str, Any]) -> FrameHeader:
     try:
         header_op = int(raw_header.get('op', 0))
         if not FrameType.has_value(header_op):
@@ -75,7 +76,7 @@ def parse_frame_header(raw_header: dict) -> FrameHeader:
         raise FrameDecodingError('Invalid frame header') from e
 
 
-def parse_frame(header: FrameHeader, raw_body: dict) -> Union['ErrorFrame', 'MessageFrame']:
+def parse_frame(header: FrameHeader, raw_body: dict[str, Any]) -> Union['ErrorFrame', 'MessageFrame']:
     try:
         if isinstance(header, ErrorFrameHeader):
             body = ErrorFrameBody(**raw_body)
@@ -87,12 +88,16 @@ def parse_frame(header: FrameHeader, raw_body: dict) -> Union['ErrorFrame', 'Mes
         raise FrameDecodingError('Invalid frame body') from e
 
 
+_HeaderT = te.TypeVar('_HeaderT', bound=FrameHeader, default=FrameHeader)
+_BodyT = te.TypeVar('_BodyT', default=Union[ErrorFrameBody, dict[str, Any]])
+
+
 @dataclass
-class Frame:
+class Frame(Generic[_HeaderT, _BodyT]):
     """Base subscription frame."""
 
-    header: Union[MessageFrameHeader, ErrorFrameHeader]  #: Header.
-    body: Union[ErrorFrameBody, dict]  #: Body
+    header: _HeaderT  #: Header.
+    body: _BodyT  #: Body
 
     @property
     def operation(self) -> FrameType:
@@ -122,7 +127,8 @@ class Frame:
         Raises:
             :class:`atproto.exceptions.SubscriptionError`: Invalid data frame.
         """
-        decoded_parts = decode_dag_multi(data)
+        # libipld rejects bytearray
+        decoded_parts = decode_dag_multi(bytes(data))
         if len(decoded_parts) > 2:
             raise FrameDecodingError('Too many CBOR data parts in the frame')
         if not len(decoded_parts):
@@ -142,21 +148,15 @@ class Frame:
 
 
 @dataclass
-class MessageFrame(Frame):
+class MessageFrame(Frame[MessageFrameHeader, dict[str, Any]]):
     """Subscription message frame."""
-
-    header: MessageFrameHeader  #: Header.
-    body: dict  #: Body.
 
     @property
     def type(self) -> str:
-        """:obj:`str`: Type of body."""
-        return self.header.t
+        """:obj:`str`: Type of body. Empty if the frame does not declare it."""
+        return self.header.t or ''
 
 
 @dataclass
-class ErrorFrame(Frame):
+class ErrorFrame(Frame[ErrorFrameHeader, ErrorFrameBody]):
     """Subscription error frame."""
-
-    header: ErrorFrameHeader  #: Header.
-    body: ErrorFrameBody  #: Body.

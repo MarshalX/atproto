@@ -10,8 +10,8 @@ def multibase_to_bytes(data: str) -> bytes:
     Returns:
         :obj:`bytes`: Decoded data.
     """
-    _, data = libipld.decode_multibase(data)
-    return data
+    _, decoded = libipld.decode_multibase(data)
+    return decoded
 
 
 def bytes_to_multibase(encoding: str, data: bytes) -> str:

@@ -7,10 +7,10 @@ from httpx import Headers
 from atproto_client.exceptions import RequestErrorBase
 from atproto_client.models.common import XrpcError
 from atproto_client.models.utils import get_model_as_dict, get_model_as_json
-from atproto_client.request import AsyncRequest, Request, Response
+from atproto_client.request import AsyncRequest, Request, RequestBase, Response
 
 if t.TYPE_CHECKING:
-    from atproto_client.models.base import DataModelBase, ParamsModelBase
+    from atproto_client.models.base import ModelBase, ParamsModelBase
 
 # TODO(MarshalX): Generate async version automatically!
 
@@ -29,7 +29,7 @@ _CONTENT_TYPE_JSON = 'application/json'
 _DEFAULT_CONTENT_TYPE = _CONTENT_TYPE_JSON
 
 
-def _handle_kwargs(kwargs: dict) -> None:
+def _handle_kwargs(kwargs: t.Dict[str, t.Any]) -> None:
     """Mutates input data."""
     headers = Headers(kwargs.get('headers'))  # case-insensitive dict
 
@@ -76,6 +76,17 @@ def _handle_base_url(base_url: t.Optional[str] = None) -> str:
 
 
 class _ClientCommonMethodsMixin:
+    def __init__(self, base_url: t.Optional[str] = None) -> None:
+        self._base_url = _handle_base_url(base_url)
+
+    @property
+    def request(self) -> RequestBase:
+        raise NotImplementedError
+
+    def _new_instance(self) -> te.Self:
+        """Construct a fresh client with this client's base URL and a clone of its request."""
+        raise NotImplementedError
+
     def _inherit_clone_state(self, original: te.Self) -> None:
         """Take over the state a freshly constructed clone must share with the client it was cloned from."""
 
@@ -87,7 +98,7 @@ class _ClientCommonMethodsMixin:
         Returns:
             Cloned client instance.
         """
-        cloned = type(self)(base_url=self._base_url, request=self.request.clone())
+        cloned = self._new_instance()
         cloned._inherit_clone_state(self)
         return cloned
 
@@ -110,21 +121,27 @@ class ClientBase(_ClientCommonMethodsMixin):
     """Low-level methods are here."""
 
     def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[Request] = None) -> None:
+        super().__init__(base_url)
+
         if request is None:
             request = Request()
 
         self._request = request
-        self._base_url = _handle_base_url(base_url)
 
     @property
+    @te.override
     def request(self) -> Request:
         return self._request
+
+    @te.override
+    def _new_instance(self) -> te.Self:
+        return type(self)(base_url=self._base_url, request=self.request.clone())
 
     def invoke_query(
         self,
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
-        data: t.Optional[t.Union['DataModelBase', bytes]] = None,
+        data: t.Optional[t.Union['ModelBase', bytes]] = None,
         **kwargs: t.Any,
     ) -> Response:
         return self._invoke(InvokeType.QUERY, url=self._build_url(nsid), params=params, data=data, **kwargs)
@@ -133,7 +150,7 @@ class ClientBase(_ClientCommonMethodsMixin):
         self,
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
-        data: t.Optional[t.Union['DataModelBase', bytes]] = None,
+        data: t.Optional[t.Union['ModelBase', bytes]] = None,
         **kwargs: t.Any,
     ) -> Response:
         return self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)
@@ -150,21 +167,27 @@ class AsyncClientBase(_ClientCommonMethodsMixin):
     """Low-level methods are here."""
 
     def __init__(self, base_url: t.Optional[str] = None, request: t.Optional[AsyncRequest] = None) -> None:
+        super().__init__(base_url)
+
         if request is None:
             request = AsyncRequest()
 
         self._request = request
-        self._base_url = _handle_base_url(base_url)
 
     @property
+    @te.override
     def request(self) -> AsyncRequest:
         return self._request
+
+    @te.override
+    def _new_instance(self) -> te.Self:
+        return type(self)(base_url=self._base_url, request=self.request.clone())
 
     async def invoke_query(
         self,
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
-        data: t.Optional[t.Union['DataModelBase', bytes]] = None,
+        data: t.Optional[t.Union['ModelBase', bytes]] = None,
         **kwargs: t.Any,
     ) -> Response:
         return await self._invoke(InvokeType.QUERY, url=self._build_url(nsid), params=params, data=data, **kwargs)
@@ -173,7 +196,7 @@ class AsyncClientBase(_ClientCommonMethodsMixin):
         self,
         nsid: str,
         params: t.Optional['ParamsModelBase'] = None,
-        data: t.Optional[t.Union['DataModelBase', bytes]] = None,
+        data: t.Optional[t.Union['ModelBase', bytes]] = None,
         **kwargs: t.Any,
     ) -> Response:
         return await self._invoke(InvokeType.PROCEDURE, url=self._build_url(nsid), params=params, data=data, **kwargs)

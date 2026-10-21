@@ -18,6 +18,12 @@ The hand-written machinery every generated model is built on.
 
       References to blobs stored on a PDS.
 
+   .. grid-item-card:: :octicon:`file-binary;1em;sd-mr-1` bytes_type
+      :link: /models/bytes_type
+      :link-type: doc
+
+      Lexicon bytes, carried as base64 in JSON.
+
    .. grid-item-card:: :octicon:`package;1em;sd-mr-1` common
       :link: /models/common
       :link-type: doc
@@ -84,6 +90,7 @@ The hand-written machinery every generated model is built on.
 
    base </models/base>
    blob_ref </models/blob_ref>
+   bytes_type </models/bytes_type>
    common </models/common>
    dot_dict </models/dot_dict>
    languages </models/languages>

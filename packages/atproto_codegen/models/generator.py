@@ -90,7 +90,7 @@ def _get_model_imports() -> str:
         'import typing_extensions as te',
         'from pydantic import Field',
         '',
-        f'from {base} import string_formats',
+        f'from {base} import bytes_type, string_formats',
         '',
         'if t.TYPE_CHECKING:',
         f'{_(1)}from {config.package} import models',
@@ -149,10 +149,8 @@ def _get_typeddict_class_def(name: str, model_type: TypedDictType) -> str:
     return join_code(lines)
 
 
-_LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT = {
-    models.LexInteger: 'int',
-    models.LexBoolean: 'bool',
-}
+#: Lexicon types a model field can have
+_FieldTypeDef = t.Union[models.LexPrimitive, models.LexArray, models.LexBlob, models.LexObject]
 
 
 def _get_optional_typehint(type_hint: str, *, optional: bool) -> str:
@@ -243,45 +241,42 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, o
 
     # an open union may carry a $type this SDK release doesn't know yet; OpenUnion adds the DotDict
     # fallback so such members don't fail the whole response. ref: https://github.com/MarshalX/atproto/issues/354
+    members = _union_typehint([f"'{name}'" for name in def_names])
     if not is_unknown_union and not field_type_def.closed:
-        quoted = [f"'{name}'" for name in def_names]
-        members = quoted[0] if len(quoted) == 1 else f't.Union[{", ".join(quoted)}]'
         return _get_optional_typehint(f'unknown_union.OpenUnion[{members}]', optional=optional)
-
-    def_names = ', '.join([f"'{name}'" for name in def_names])
 
     # For discriminated unions, optionality is handled by Optional[] wrapper, not Field(default=None)
     # Pydantic 2.12.3+ warns that default=None has no effect in union context
     # Unknown unions can't use discriminator because $type is unknown
     def_field_meta = 'Field()' if is_unknown_union else 'Field(discriminator="py_type")'
 
-    annotated_union = f'te.Annotated[t.Union[{def_names}], {def_field_meta}]'
+    annotated_union = f'te.Annotated[{members}, {def_field_meta}]'
     return _get_optional_typehint(annotated_union, optional=optional)
 
 
 def _get_model_field_typehint(  # noqa: C901
     nsid: NSID,
-    field_type_def: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob],
+    field_type_def: _FieldTypeDef,
     *,
     optional: bool,
     is_input_type: bool = False,
 ) -> str:
-    field_type = type(field_type_def)
-
-    if field_type == models.LexUnknown:
+    if isinstance(field_type_def, models.LexUnknown):
         # unknown type is a generic response with records or any not described type in the lexicon. for example, didDoc
         if is_input_type:
             return _get_optional_typehint("'UnknownInputType'", optional=optional)
         return _get_optional_typehint("'UnknownType'", optional=optional)
 
-    type_hint = _LEXICON_TYPE_TO_PRIMITIVE_TYPEHINT.get(field_type)
-    if type_hint:
-        return _get_optional_typehint(type_hint, optional=optional)
+    if isinstance(field_type_def, models.LexInteger):
+        return _get_optional_typehint('int', optional=optional)
 
-    if field_type is models.LexString:
+    if isinstance(field_type_def, models.LexBoolean):
+        return _get_optional_typehint('bool', optional=optional)
+
+    if isinstance(field_type_def, models.LexString):
         return _get_str_typehint(nsid, field_type_def, optional=optional)
 
-    if field_type is models.LexArray:
+    if isinstance(field_type_def, models.LexArray):
         items_type_hint = _get_model_field_typehint(
             nsid, field_type_def.items, optional=False, is_input_type=is_input_type
         )
@@ -290,41 +285,36 @@ def _get_model_field_typehint(  # noqa: C901
             items_type_hint = f'te.Annotated[{items_type_hint}, {items_constraints_field}]'
         return _get_optional_typehint(f't.List[{items_type_hint}]', optional=optional)
 
-    if field_type is models.LexRef:
+    if isinstance(field_type_def, models.LexRef):
         return _get_ref_typehint(nsid, field_type_def, optional=optional)
 
-    if field_type is models.LexRefUnion:
+    if isinstance(field_type_def, models.LexRefUnion):
         return _get_ref_union_typehint(nsid, field_type_def, optional=optional)
 
-    if field_type is models.LexCidLink:
+    if isinstance(field_type_def, models.LexCidLink):
         return _get_optional_typehint("'CIDType'", optional=optional)
 
-    if field_type is models.LexBytes:
-        # CAR file containing relevant blocks
-        return _get_optional_typehint('t.Union[str, bytes]', optional=optional)
+    if isinstance(field_type_def, models.LexBytes):
+        return _get_optional_typehint('bytes_type.BytesType', optional=optional)
 
-    if field_type is models.LexBlob:
+    if isinstance(field_type_def, models.LexBlob):
         # yes, it returns blob,but actually it's blob ref here
         return _get_optional_typehint("'BlobRef'", optional=optional)
 
-    raise ValueError(f'Unknown field type {field_type.__name__}')
+    raise ValueError(f'Unknown field type {type(field_type_def).__name__}')
 
 
-def _get_type_constraints(
-    field_type_def: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob],
-) -> t.Dict[str, t.Any]:
+def _get_type_constraints(field_type_def: _FieldTypeDef) -> t.Dict[str, t.Any]:
     """Pydantic constraints implied by the type itself (not by default, const, or alias)."""
-    constraints = {}
+    constraints: t.Dict[str, t.Any] = {}
 
-    field_type = type(field_type_def)
-
-    if field_type in (models.LexString, models.LexArray):
+    if isinstance(field_type_def, (models.LexString, models.LexArray)):
         if field_type_def.min_length is not None:
             constraints['min_length'] = field_type_def.min_length
         if field_type_def.max_length is not None:
             constraints['max_length'] = field_type_def.max_length
 
-    elif field_type in (models.LexInteger, models.LexNumber):
+    elif isinstance(field_type_def, (models.LexInteger, models.LexNumber)):
         if field_type_def.minimum is not None:
             constraints['ge'] = field_type_def.minimum
         if field_type_def.maximum is not None:
@@ -339,7 +329,7 @@ def _get_field_code(field_params: t.Dict[str, t.Any]) -> str:
     return f'Field({params})'
 
 
-def _get_constraints_field(field_type_def: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob]) -> str:
+def _get_constraints_field(field_type_def: _FieldTypeDef) -> str:
     """Generate the Field with constraints of the type itself. Empty string if there are no constraints."""
     constraints = _get_type_constraints(field_type_def)
     if not constraints:
@@ -349,7 +339,7 @@ def _get_constraints_field(field_type_def: t.Union[models.LexPrimitive, models.L
 
 
 def _get_model_field_value(
-    field_type_def: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob],
+    field_type_def: _FieldTypeDef,
     alias_name: t.Optional[str] = None,
     *,
     optional: bool,
@@ -362,17 +352,15 @@ def _get_model_field_value(
     """
     not_set = object()
 
-    default: t.Any = not_set
-    alias: t.Union[str, not_set] = alias_name or not_set
-    frozen: t.Union[bool, not_set] = not_set
-
-    field_type = type(field_type_def)
+    default: object = not_set
+    alias: object = alias_name or not_set
+    frozen: object = not_set
 
     # Ref and RefUnion types handle their own Field generation in the type hint
-    if field_type in (models.LexRef, models.LexRefUnion):
+    if isinstance(field_type_def, (models.LexRef, models.LexRefUnion)):
         return {'value': '', 'needs_annotated': False}
 
-    if field_type in (models.LexInteger, models.LexString, models.LexBoolean):
+    if isinstance(field_type_def, (models.LexInteger, models.LexString, models.LexBoolean)):
         if field_type_def.default is not None:
             default = field_type_def.default
         if field_type_def.const is not None:
@@ -406,8 +394,8 @@ def _get_model_field_value(
     return {'value': _get_field_code(field_params), 'needs_annotated': optional}
 
 
-def _get_req_fields_set(lex_obj: t.Union[models.LexObject, models.LexXrpcParameters]) -> set:
-    required_fields = set()
+def _get_req_fields_set(lex_obj: t.Union[models.LexObject, models.LexXrpcParameters]) -> t.Set[str]:
+    required_fields: t.Set[str] = set()
     if lex_obj.required:
         required_fields = set(lex_obj.required)
 
@@ -424,12 +412,10 @@ def _add_dot_to_end_if_not_exist(description: str) -> str:
     return description
 
 
-def _get_field_docstring(
-    field_name: str, field_type: t.Union[models.LexPrimitive, models.LexArray, models.LexBlob]
-) -> str:
-    field_desc = capitalize_first_symbol(field_type.description)
-    if field_desc is None:
-        field_desc = gen_description_by_camel_case_name(field_name)
+def _get_field_docstring(field_name: str, field_type: _FieldTypeDef) -> str:
+    field_desc = gen_description_by_camel_case_name(field_name)
+    if field_type.description is not None:
+        field_desc = capitalize_first_symbol(field_type.description)
 
     if isinstance(field_type, models.LexArray) and field_type.items.description:
         items_desc = capitalize_first_symbol(field_type.items.description)
@@ -584,7 +570,9 @@ def _get_model_raw_data(name: str) -> str:
     return join_code(lines)
 
 
-def _generate_params_model(nsid: NSID, definition: t.Union[models.LexXrpcQuery, models.LexSubscription]) -> str:
+def _generate_params_model(
+    nsid: NSID, definition: t.Union[models.LexXrpcQuery, models.LexXrpcProcedure, models.LexSubscription]
+) -> str:
     lines = [_get_model_class_def(nsid.name, ModelType.PARAMS)]
 
     if definition.parameters:
@@ -937,6 +925,7 @@ def _generate_import_aliases(root_package_path: Path) -> None:
     base = f'{config.base_package}.models'
 
     type_checking_imports = []
+    aliases = []
     ids_db = ['class _Ids:']
     for root, __, files in sorted(os.walk(root_package_path)):
         root_path = Path(root)
@@ -963,6 +952,7 @@ def _generate_import_aliases(root_package_path: Path) -> None:
             ids_db.append(f"{_(1)}{alias_name}: str = '{method_path}'")
 
             type_checking_imports.append(f'{_(1)}from {from_import} import {module_name} as {alias_name}')
+            aliases.append(alias_name)
 
     lazy_accessor_fallback = '' if config.is_self_gen else f", fallback='{base}'"
 
@@ -979,11 +969,23 @@ def _generate_import_aliases(root_package_path: Path) -> None:
         *[f'{_(2)}{name},' for name in sorted(_UTILS_EXPORTS)],
         f'{_(1)})',
         f'__getattr__, __dir__ = make_lazy_accessors(__name__{lazy_accessor_fallback})',
+        '__all__ = [',
+        *[f"{_(1)}'{name}'," for name in [*aliases, *sorted(_UTILS_EXPORTS), 'ids', 'type_conversion']],
+        ']',
         *ids_db,
         'ids = _Ids()',
     ]
 
     write_code(config.models_output_dir.joinpath('__init__.py'), join_code(lines))
+
+
+def _move_modules_shadowed_by_packages() -> None:
+    """Move each module shadowed by a same-named package into that package's ``__init__.py``."""
+    for nsid in _nsid_with_imports:
+        module_path = _model_path(nsid)
+        package_path = module_path.with_suffix('')
+        if module_path.is_file() and package_path.is_dir():
+            module_path.replace(package_path.joinpath('__init__.py'))
 
 
 def _generate_package_init(config: CodegenConfig) -> None:
@@ -1026,3 +1028,5 @@ def generate_models(config: t.Optional[CodegenConfig] = None) -> None:
         _generate_package_init(active)
 
         format_code(active.models_output_dir, root=active.output_dir)
+        # after formatting: ruff keeps unused imports in __init__.py
+        _move_modules_shadowed_by_packages()

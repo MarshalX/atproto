@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from atproto_lexicon import models
 
 
-def _iter_refs(node: t.Any) -> t.Iterator[str]:
+def _iter_refs(node: object) -> t.Iterator[str]:
     if isinstance(node, models.LexRef):
         yield node.ref
     elif isinstance(node, models.LexRefUnion):
@@ -17,12 +17,10 @@ def _iter_refs(node: t.Any) -> t.Iterator[str]:
     elif isinstance(node, BaseModel):
         for name in type(node).model_fields:
             yield from _iter_refs(getattr(node, name))
-    elif isinstance(node, dict):
-        for value in node.values():
-            yield from _iter_refs(value)
-    elif isinstance(node, list):
-        for value in node:
-            yield from _iter_refs(value)
+    elif isinstance(node, (dict, list)):
+        children: t.Iterable[object] = node.values() if isinstance(node, dict) else node
+        for child in children:
+            yield from _iter_refs(child)
 
 
 def _split_ref(doc_id: str, ref: str) -> t.Tuple[str, str]:

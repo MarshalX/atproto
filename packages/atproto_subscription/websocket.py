@@ -40,8 +40,10 @@ if t.TYPE_CHECKING:
 #: A decoded frame. Its type is defined by the subclass.
 Frame = t.Any
 
-OnMessageCallback = t.Callable[[Frame], None]
-AsyncOnMessageCallback = t.Callable[[Frame], t.Coroutine[t.Any, t.Any, None]]
+_FrameT = t.TypeVar('_FrameT')
+
+OnMessageCallback = t.Callable[[_FrameT], None]
+AsyncOnMessageCallback = t.Callable[[_FrameT], t.Coroutine[t.Any, t.Any, None]]
 
 OnCallbackErrorCallback = t.Callable[[BaseException], None]
 AsyncOnCallbackErrorCallback = t.Callable[[BaseException], t.Coroutine[t.Any, t.Any, None]]
@@ -65,7 +67,7 @@ def build_websocket_uri(method: str, base_uri: str, params: t.Optional[t.Dict[st
     return f'{base_uri}/{method}{query_string}'
 
 
-class WebsocketClientBase:
+class WebsocketClientBase(t.Generic[_FrameT]):
     """Base of the reconnecting websocket clients.
 
     Subclasses own frame decoding; this class owns the connection lifecycle.
@@ -93,7 +95,7 @@ class WebsocketClientBase:
         self._reconnect_no = 0
         self._max_reconnect_delay_sec = 64
 
-    def _decode_frame(self, raw_frame: t.Union[str, bytes]) -> t.Optional[Frame]:
+    def _decode_frame(self, raw_frame: t.Union[str, bytes]) -> t.Optional[_FrameT]:
         """Decode a raw websocket frame. Return :obj:`None` to skip it."""
         raise NotImplementedError
 
@@ -162,7 +164,7 @@ class WebsocketClientBase:
             self._reconnect_no += 1
 
 
-class WebsocketClient(WebsocketClientBase):
+class WebsocketClient(WebsocketClientBase[_FrameT]):
     """Reconnecting synchronous websocket client."""
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
@@ -171,13 +173,13 @@ class WebsocketClient(WebsocketClientBase):
         self._stopped = False
         self._client: t.Optional[SyncWebSocketClient] = None
 
-        self._on_message_callback: t.Optional[OnMessageCallback] = None
+        self._on_message_callback: t.Optional[OnMessageCallback[_FrameT]] = None
         self._on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None
 
     def _before_connect(self) -> None:
         """Prepare the next connection. Called before every dial, including reconnects."""
 
-    def _process_frame(self, frame: Frame) -> None:
+    def _process_frame(self, frame: _FrameT) -> None:
         try:
             if self._on_message_callback is not None:
                 self._on_message_callback(frame)
@@ -192,7 +194,7 @@ class WebsocketClient(WebsocketClientBase):
 
     def start(
         self,
-        on_message_callback: OnMessageCallback,
+        on_message_callback: OnMessageCallback[_FrameT],
         on_callback_error_callback: t.Optional[OnCallbackErrorCallback] = None,
     ) -> None:
         """Subscribe and start the client.
@@ -254,7 +256,7 @@ class WebsocketClient(WebsocketClientBase):
                 client.close()
 
 
-class AsyncWebsocketClient(WebsocketClientBase):
+class AsyncWebsocketClient(WebsocketClientBase[_FrameT]):
     """Reconnecting asynchronous websocket client."""
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
@@ -263,13 +265,13 @@ class AsyncWebsocketClient(WebsocketClientBase):
         self._stop_event = asyncio.Event()
         self._client: t.Optional[AsyncWebSocketClient] = None
 
-        self._on_message_callback: t.Optional[AsyncOnMessageCallback] = None
+        self._on_message_callback: t.Optional[AsyncOnMessageCallback[_FrameT]] = None
         self._on_callback_error_callback: t.Optional[AsyncOnCallbackErrorCallback] = None
 
     async def _before_connect(self) -> None:
         """Prepare the next connection. Called before every dial, including reconnects."""
 
-    async def _process_frame(self, frame: Frame) -> None:
+    async def _process_frame(self, frame: _FrameT) -> None:
         try:
             if self._on_message_callback is not None:
                 await self._on_message_callback(frame)
@@ -284,7 +286,7 @@ class AsyncWebsocketClient(WebsocketClientBase):
 
     async def start(
         self,
-        on_message_callback: AsyncOnMessageCallback,
+        on_message_callback: AsyncOnMessageCallback[_FrameT],
         on_callback_error_callback: t.Optional[AsyncOnCallbackErrorCallback] = None,
     ) -> None:
         """Subscribe and start the client.

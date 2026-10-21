@@ -10,7 +10,7 @@ class IpldLink(BaseModel):
 
     model_config = ConfigDict(extra='allow', populate_by_name=True, strict=True)
 
-    link: str = Field(alias='$link')  #: CID.
+    link: str = Field(validation_alias='$link', serialization_alias='$link')  #: CID.
 
 
 class BlobRef(BaseModel):
@@ -18,11 +18,11 @@ class BlobRef(BaseModel):
 
     model_config = ConfigDict(extra='allow', populate_by_name=True, strict=True)
 
-    mime_type: str = Field(alias='mimeType')  #: Mime type.
+    mime_type: str = Field(validation_alias='mimeType', serialization_alias='mimeType')  #: Mime type.
     size: int  #: Size in bytes.
     ref: t.Union[str, bytes, IpldLink]  #: CID.
 
-    py_type: te.Literal['blob'] = Field(default='blob', alias='$type')
+    py_type: te.Literal['blob'] = Field(default='blob', validation_alias='$type', serialization_alias='$type')
 
     @field_serializer('ref', when_used='json')
     def _serialize_ref(self, ref: t.Union[str, bytes, IpldLink]) -> t.Union[str, t.Dict[str, str]]:
@@ -38,7 +38,7 @@ class BlobRef(BaseModel):
     @property
     def cid(self) -> 'CID':
         """Get CID."""
-        if self.is_bytes_representation:
+        if isinstance(self.ref, (str, bytes)):
             return CID.decode(self.ref)
 
         return CID.decode(self.ref.link)
@@ -73,7 +73,7 @@ class BlobRef(BaseModel):
         Returns:
             BlobRef in JSON representation.
         """
-        if self.is_json_representation:
+        if isinstance(self.ref, IpldLink):
             return BlobRef(mime_type=self.mime_type, size=self.size, ref=IpldLink(link=self.ref.link))
 
         return BlobRef(mime_type=self.mime_type, size=self.size, ref=IpldLink(link=str(self.cid)))
@@ -90,7 +90,7 @@ class BlobRef(BaseModel):
         Returns:
             BlobRef in bytes representation.
         """
-        if self.is_bytes_representation:
+        if isinstance(self.ref, (str, bytes)):
             return BlobRef(mime_type=self.mime_type, size=self.size, ref=self.ref)
 
         return BlobRef(mime_type=self.mime_type, size=self.size, ref=self.ref.link)

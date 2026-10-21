@@ -13,7 +13,7 @@ _LEXICON_FILE_EXT = '.json'
 L = t.TypeVar('L')
 
 
-def lexicon_parse(data: dict, model_class: t.Type[L] = models.LexiconDoc) -> L:
+def lexicon_parse(data: t.Dict[str, t.Any], model_class: t.Type[L] = models.LexiconDoc) -> L:
     return model_class(**data)
 
 

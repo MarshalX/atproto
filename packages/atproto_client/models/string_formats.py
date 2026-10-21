@@ -4,16 +4,13 @@ import re
 from collections.abc import Mapping
 from datetime import datetime
 from functools import wraps
-from typing import TYPE_CHECKING, Annotated, Callable, Union, cast
+from typing import Annotated, Callable, Union
 from urllib.parse import urlparse
 
 from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import validate_nsid as atproto_core_validate_nsid
 from pydantic import BeforeValidator, Field, ValidationInfo
 from typing_extensions import Literal, TypeAliasType
-
-if TYPE_CHECKING:
-    from pydantic_core import core_schema
 
 _OPT_IN_KEY: Literal['strict_string_format'] = 'strict_string_format'
 
@@ -70,11 +67,12 @@ def _is_strict(info: ValidationInfo) -> bool:
     Runs for every string format field of every model, so the common `dict` context is checked
     without the (comparatively expensive) `Mapping` ABC lookup.
     """
-    context = info.context if info else None
-    if isinstance(context, dict):
-        return bool(context.get(_OPT_IN_KEY, False))
+    context: object = info.context if info else None
+    if isinstance(context, (dict, Mapping)):
+        opted_in: object = context.get(_OPT_IN_KEY, False)
+        return bool(opted_in)
 
-    return isinstance(context, Mapping) and bool(context.get(_OPT_IN_KEY, False))
+    return False
 
 
 class _NamedValidator:
@@ -83,11 +81,11 @@ class _NamedValidator:
     def __init__(self, validate_fn: Callable[..., str]) -> None:
         self.validate_fn = validate_fn
         # the opt-in gate is applied here, so skip the `only_validate_if_strict` wrapper frame
-        self._strict_fn = getattr(validate_fn, '__wrapped__', validate_fn)
+        self._strict_fn: Callable[..., str] = getattr(validate_fn, '__wrapped__', validate_fn)
 
     def __call__(self, v: str, info: ValidationInfo) -> str:
         if _is_strict(info):
-            return cast('core_schema.WithInfoValidatorFunction', self._strict_fn)(v, info)
+            return self._strict_fn(v, info)
         return v
 
     def __str__(self) -> str:
@@ -102,7 +100,7 @@ def only_validate_if_strict(validate_fn: Callable[..., str]) -> Callable[..., st
     def wrapper(v: str, info: ValidationInfo) -> str:
         """Could likely be generalized to support arbitrary signatures."""
         if _is_strict(info):
-            return cast('core_schema.WithInfoValidatorFunction', validate_fn)(v, info)
+            return validate_fn(v, info)
         return v
 
     return wrapper

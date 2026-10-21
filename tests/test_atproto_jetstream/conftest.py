@@ -19,9 +19,9 @@ import websockets
 import zstandard
 from atproto_jetstream import compression
 from pydantic_core import to_json
-from websockets.asyncio.server import serve
+from websockets.asyncio.server import ServerConnection, serve
 from websockets.datastructures import Headers
-from websockets.http11 import Response
+from websockets.http11 import Request, Response
 from websockets.typing import Subprotocol
 
 SUBPROTOCOL = Subprotocol('xrpc.v1.json')
@@ -55,7 +55,7 @@ def info_frame(name: str = 'OutdatedCursor') -> str:
     return message_frame({'$type': 'network.bsky.jetstream.subscribeEvents#info', 'name': name, 'message': 'clamped'})
 
 
-def message_frame(payload: dict) -> str:
+def message_frame(payload: t.Dict[str, object]) -> str:
     return to_json({'$type': 'message', 'payload': payload}).decode('UTF-8')
 
 
@@ -110,7 +110,7 @@ class JetstreamTestServer:
         if not self._ready.wait(_SERVER_START_TIMEOUT_SEC):
             raise RuntimeError('the test WebSocket server did not start in time')
 
-    def _process_request(self, connection: t.Any, request: t.Any) -> t.Any:
+    def _process_request(self, connection: ServerConnection, request: Request) -> t.Optional[Response]:
         """Serve the dictionary over HTTP, or reject the handshake before the upgrade."""
         path = urlparse(request.path).path
         if path.endswith(GET_ZSTD_DICTIONARY_PATH.rsplit('/', 1)[-1]):
@@ -136,7 +136,7 @@ class JetstreamTestServer:
 
         return connection.respond(status_code, body)
 
-    def _serve_dictionary(self, connection: t.Any, path: str) -> t.Any:
+    def _serve_dictionary(self, connection: ServerConnection, path: str) -> Response:
         method = path.strip('/').split('/')[0]
         state = self.state(method)
         with self._lock:
@@ -191,8 +191,8 @@ class JetstreamTestServer:
         """Return a unique XRPC method routing to ``scenario``, isolated from other tests."""
         return f'{scenario}.{uuid.uuid4().hex}'
 
-    async def _handle(self, websocket: t.Any) -> None:
-        parsed = urlparse(websocket.request.path)
+    async def _handle(self, websocket: ServerConnection) -> None:
+        parsed = urlparse(_request_path(websocket))
         method = parsed.path.rsplit('/', 1)[-1]
         scenario = method.split('.', 1)[0]
 
@@ -208,19 +208,24 @@ class JetstreamTestServer:
             await SCENARIOS[scenario](websocket, connection_no)
 
 
-async def _three_commits_then_close(ws: t.Any, connection_no: int) -> None:
+def _request_path(ws: ServerConnection) -> str:
+    assert ws.request is not None
+    return ws.request.path
+
+
+async def _three_commits_then_close(ws: ServerConnection, connection_no: int) -> None:
     for seq in range(1, 4):
         await ws.send(commit_frame(seq))
     await ws.close(1000)
 
 
-async def _info_then_commit(ws: t.Any, connection_no: int) -> None:
+async def _info_then_commit(ws: ServerConnection, connection_no: int) -> None:
     await ws.send(info_frame())
     await ws.send(commit_frame(7))
     await asyncio.sleep(_IDLE_SEC)
 
 
-async def _garbage_between_commits(ws: t.Any, connection_no: int) -> None:
+async def _garbage_between_commits(ws: ServerConnection, connection_no: int) -> None:
     await ws.send(commit_frame(1))
     await ws.send(GARBAGE_FRAME)
     await ws.send(message_frame({'$type': 'network.bsky.jetstream.subscribeEvents#somethingNew', 'seq': 2}))
@@ -229,7 +234,7 @@ async def _garbage_between_commits(ws: t.Any, connection_no: int) -> None:
     await asyncio.sleep(_IDLE_SEC)
 
 
-async def _consumer_too_slow_then_commit(ws: t.Any, connection_no: int) -> None:
+async def _consumer_too_slow_then_commit(ws: ServerConnection, connection_no: int) -> None:
     if connection_no == 1:
         await ws.send(error_frame('ConsumerTooSlow', 'you are too slow'))
         await asyncio.sleep(_IDLE_SEC)
@@ -238,12 +243,12 @@ async def _consumer_too_slow_then_commit(ws: t.Any, connection_no: int) -> None:
         await asyncio.sleep(_IDLE_SEC)
 
 
-async def _fatal_error_frame(ws: t.Any, connection_no: int) -> None:
+async def _fatal_error_frame(ws: ServerConnection, connection_no: int) -> None:
     await ws.send(error_frame('SomethingFatal', 'game over'))
     await asyncio.sleep(_IDLE_SEC)
 
 
-async def _redelivers_on_reconnect(ws: t.Any, connection_no: int) -> None:
+async def _redelivers_on_reconnect(ws: ServerConnection, connection_no: int) -> None:
     """Replays inclusively from the cursor, exactly as the real server does."""
     if connection_no == 1:
         await ws.send(commit_frame(10))
@@ -256,7 +261,7 @@ async def _redelivers_on_reconnect(ws: t.Any, connection_no: int) -> None:
         await asyncio.sleep(_IDLE_SEC)
 
 
-async def _silent_then_commit(ws: t.Any, connection_no: int) -> None:
+async def _silent_then_commit(ws: ServerConnection, connection_no: int) -> None:
     if connection_no == 1:
         await asyncio.sleep(_IDLE_SEC)  # the client must hit recv_timeout and reconnect
     else:
@@ -264,10 +269,10 @@ async def _silent_then_commit(ws: t.Any, connection_no: int) -> None:
         await asyncio.sleep(_IDLE_SEC)
 
 
-async def _compressed_commits(ws: t.Any, connection_no: int) -> None:
+async def _compressed_commits(ws: ServerConnection, connection_no: int) -> None:
     """Honour the client's choice: compressed frames when it negotiated a dictionary."""
-    query = parse_qs(urlparse(ws.request.path).query)
-    method = urlparse(ws.request.path).path.rsplit('/', 1)[-1]
+    query = parse_qs(urlparse(_request_path(ws)).query)
+    method = urlparse(_request_path(ws)).path.rsplit('/', 1)[-1]
     dictionary_id = query.get('zstdDictionary')
 
     for seq in range(1, 4):
@@ -279,9 +284,9 @@ async def _compressed_commits(ws: t.Any, connection_no: int) -> None:
     await asyncio.sleep(_IDLE_SEC)
 
 
-async def _compressed_garbage(ws: t.Any, connection_no: int) -> None:
+async def _compressed_garbage(ws: ServerConnection, connection_no: int) -> None:
     """A frame that is not valid zstd, then a good one. The bad frame must be skipped."""
-    method = urlparse(ws.request.path).path.rsplit('/', 1)[-1]
+    method = urlparse(_request_path(ws)).path.rsplit('/', 1)[-1]
     dictionary = SERVER.dictionary_for(method)
     await ws.send(compress(commit_frame(1), dictionary))
     await ws.send(b'\x28\xb5\x2f\xfd not really a zstd frame')
@@ -289,7 +294,7 @@ async def _compressed_garbage(ws: t.Any, connection_no: int) -> None:
     await asyncio.sleep(_IDLE_SEC)
 
 
-async def _commit_once(ws: t.Any, connection_no: int) -> None:
+async def _commit_once(ws: ServerConnection, connection_no: int) -> None:
     await ws.send(commit_frame(42))
     await asyncio.sleep(_IDLE_SEC)
 
@@ -305,7 +310,7 @@ PRE_UPGRADE_REJECTIONS: t.Dict[str, t.Tuple[int, str, bool]] = {
     'dict_stale': (400, '{"error":"UnknownZstdDictionary","message":"retired"}', False),
 }
 
-SCENARIOS: t.Dict[str, t.Callable[[t.Any, int], t.Coroutine[t.Any, t.Any, None]]] = {
+SCENARIOS: t.Dict[str, t.Callable[[ServerConnection, int], t.Coroutine[t.Any, t.Any, None]]] = {
     'three_commits_then_close': _three_commits_then_close,
     'info_then_commit': _info_then_commit,
     'garbage_between_commits': _garbage_between_commits,
@@ -334,8 +339,9 @@ if sys.version_info >= (3, 14):
 @pytest.fixture(autouse=True, params=list(ZSTD_BACKENDS))
 def zstd_backend(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> str:
     """Run every test against each zstd backend this Python has."""
-    monkeypatch.setattr(compression, '_select_backend', lambda: ZSTD_BACKENDS[request.param])
-    return request.param
+    backend: str = request.param
+    monkeypatch.setattr(compression, '_select_backend', lambda: ZSTD_BACKENDS[backend])
+    return backend
 
 
 @pytest.fixture(scope='session')

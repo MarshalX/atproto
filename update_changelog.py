@@ -6,6 +6,7 @@ import os
 import re
 import sys
 import traceback
+import typing as t
 from pathlib import Path
 
 import httpx
@@ -44,7 +45,7 @@ def _set_output(name: str, value: str) -> None:
         f.write(f'{name}={value}\n')
 
 
-def _print(*args) -> None:
+def _print(*args: object) -> None:
     if 'CI' in os.environ:
         print(*args, file=sys.stderr)  # noqa: T201
         return
@@ -69,7 +70,13 @@ def _format_date(published_at: str) -> str:
     return parsed.strftime('%d.%m.%Y')
 
 
-def _fetch_release(tag: str) -> dict:
+class _Release(t.TypedDict):
+    tag_name: str
+    published_at: str
+    body: t.Optional[str]
+
+
+def _fetch_release(tag: str) -> _Release:
     """Fetch a release from the GitHub API. Empty ``tag`` resolves to the latest release.
 
     Used by the manual (workflow_dispatch) path, where there is no release event payload.
@@ -88,16 +95,17 @@ def _fetch_release(tag: str) -> dict:
     _print(f'- Fetching release from {url} ...')
     response = httpx.get(url, headers=headers, follow_redirects=True)
     response.raise_for_status()
-    return response.json()
+    release: _Release = response.json()
+    return release
 
 
-def _link_pr_url(match: re.Match) -> str:
+def _link_pr_url(match: re.Match[str]) -> str:
     owner, repo, kind, number = match.groups()
     label = f'#{number}' if f'{owner}/{repo}' == _DEFAULT_REPO else f'{owner}/{repo}#{number}'
     return f'[{label}](https://github.com/{owner}/{repo}/{kind}/{number})'
 
 
-def _link_mention(match: re.Match) -> str:
+def _link_mention(match: re.Match[str]) -> str:
     name, bot_suffix = match.groups()
     profile = f'https://github.com/apps/{name}' if bot_suffix else f'https://github.com/{name}'
     return f'[@{name}{bot_suffix or ""}]({profile})'
