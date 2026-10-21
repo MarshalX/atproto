@@ -1,12 +1,14 @@
 import asyncio
 import contextlib
 import random
+import threading
 import time
 import traceback
 import typing as t
 from copy import deepcopy
 from urllib.parse import urlencode
 
+import typing_extensions as te
 from atproto_core.exceptions import AtProtocolError
 from websockets.asyncio.client import connect as aconnect
 from websockets.exceptions import (
@@ -16,6 +18,7 @@ from websockets.exceptions import (
     PayloadTooBig,
     ProtocolError,
 )
+from websockets.sync.client import ClientConnection as SyncWebSocketClient
 from websockets.sync.client import connect
 
 _HEALTHY_CONNECTION_SEC = 60
@@ -35,7 +38,24 @@ _ERR_ERRORS = (
 if t.TYPE_CHECKING:
     from websockets.asyncio.client import ClientConnection as AsyncWebSocketClient
     from websockets.asyncio.client import connect as AsyncConnect
-    from websockets.sync.client import ClientConnection as SyncWebSocketClient
+
+
+class _SyncClientConnection(SyncWebSocketClient):
+    """Sync connection that closes its socket from one thread at a time.
+
+    Without the GIL, concurrent :meth:`socket.socket.close` calls can close the same descriptor twice.
+    """
+
+    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
+        # the base __init__ starts the receiving thread, which may close the socket right away
+        self._close_socket_lock = threading.Lock()
+        super().__init__(*args, **kwargs)
+
+    @te.override
+    def close_socket(self) -> None:
+        with self._close_socket_lock:
+            super().close_socket()
+
 
 #: A decoded frame. Its type is defined by the subclass.
 Frame = t.Any
@@ -138,7 +158,7 @@ class WebsocketClientBase(t.Generic[_FrameT]):
         return kwargs
 
     def _get_client(self) -> 'SyncWebSocketClient':
-        return connect(self._websocket_uri, **self._get_connect_kwargs())
+        return connect(self._websocket_uri, create_connection=_SyncClientConnection, **self._get_connect_kwargs())
 
     def _get_async_client(self) -> 'AsyncConnect':
         # Async client connect function accepts ping_interval directly (default is 20s)
