@@ -11,6 +11,7 @@ import typing as t
 
 import pytest
 from atproto_client import models
+from atproto_jetstream import compression
 from atproto_jetstream.client import _AsyncJetstreamClient, _JetstreamClient
 from atproto_jetstream.exceptions import JetstreamCursorTooOldError, JetstreamError
 from atproto_jetstream.jetstream import AsyncJetstreamClient, JetstreamClient
@@ -353,6 +354,19 @@ def test_compression_off_sends_no_dictionary_param(server: JetstreamTestServer) 
 
     outcome = run_sync(server, method, stop_after=3, compress=False)
 
+    assert not outcome.compressed
+    assert seqs(outcome) == [1, 2, 3]
+    assert 'zstdDictionary' not in server.state(method).queries[0]
+    assert server.state(method).dictionary_fetches == 0
+
+
+def test_compression_without_backend_falls_back(server: JetstreamTestServer, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(compression, '_select_backend', lambda: None)
+    method = server.new_method('compressed')
+
+    outcome = run_sync(server, method, stop_after=3, compress=True)
+
+    assert outcome.exception is None
     assert not outcome.compressed
     assert seqs(outcome) == [1, 2, 3]
     assert 'zstdDictionary' not in server.state(method).queries[0]

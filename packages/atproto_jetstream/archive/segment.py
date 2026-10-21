@@ -2,8 +2,7 @@ import struct
 import typing as t
 from dataclasses import dataclass
 
-import zstandard
-
+from atproto_jetstream.compression import decompress_frame
 from atproto_jetstream.exceptions import JetstreamDecodingError
 
 _SEGMENT_MAGIC = b'jss0'
@@ -136,10 +135,11 @@ def decompress_block(frame: bytes) -> bytes:
 
     Raises:
         :class:`atproto.exceptions.JetstreamDecodingError`: Undecodable or oversized block.
+        :class:`ImportError`: No zstd backend is available.
     """
     try:
-        return zstandard.ZstdDecompressor().decompress(frame, max_output_size=_MAX_BLOCK_BYTES)
-    except zstandard.ZstdError as e:
+        return decompress_frame(frame, _MAX_BLOCK_BYTES)
+    except JetstreamDecodingError as e:
         raise JetstreamDecodingError('Could not decompress the block') from e
 
 
