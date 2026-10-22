@@ -1,4 +1,5 @@
 import libipld
+import pytest
 from atproto_core.car import CAR
 from atproto_core.cid import CID, CIDType
 from pydantic import BaseModel
@@ -110,3 +111,22 @@ def test_car_blocks_lookup_by_cid_and_str() -> None:
     for block_cid in car.blocks:
         assert car.blocks[block_cid] in (root_block, child_block)
         assert car.blocks[str(block_cid)] == car.blocks[block_cid]  # pyrefly: ignore[bad-index]
+
+
+def test_cid_decode_defers_the_multihash() -> None:
+    test_cid = 'bafyreihiurhwu7dp63wcu5x266pa7fiqm2zea7za4zfxz7hb3jhien7y5a'
+    decoded = libipld.decode_cid(test_cid)
+
+    cid = CID.decode(test_cid)
+    assert cid._hash is None
+
+    assert cid.version == decoded['version']
+    assert cid.codec == decoded['codec']
+    assert cid.hash.code == decoded['hash']['code']
+    assert cid.hash.size == decoded['hash']['size']
+    assert cid.hash.digest == decoded['hash']['digest']
+
+
+def test_cid_decode_still_validates() -> None:
+    with pytest.raises(ValueError):
+        CID.decode('not-a-cid')

@@ -1,6 +1,7 @@
 import base64
 import binascii
 import typing as t
+from collections.abc import Mapping
 
 import typing_extensions as te
 from pydantic import BeforeValidator, PlainSerializer
@@ -10,7 +11,9 @@ _BYTES_KEY = '$bytes'
 
 def _decode_json_bytes(value: object) -> object:
     """Decode the atproto JSON form ``{"$bytes": "<base64>"}``. Raw bytes (from CBOR) pass through."""
-    if not isinstance(value, t.Mapping) or set(value) != {_BYTES_KEY}:
+    if type(value) is bytes:
+        return value
+    if not isinstance(value, Mapping) or set(value) != {_BYTES_KEY}:
         return value
 
     encoded: object = value[_BYTES_KEY]

@@ -41,19 +41,10 @@ class CID:
 
     @classmethod
     def decode(cls, value: t.Union[str, bytes]) -> 'CID':
+        # validates the CID; the multihash is rarely read, so it is decoded again on first access
         cid = libipld.decode_cid(value)
 
-        multihash = Multihash(
-            code=cid['hash']['code'],
-            size=cid['hash']['size'],
-            digest=cid['hash']['digest'],
-        )
-
-        instance = cls(
-            version=cid['version'],
-            codec=cid['codec'],
-            hash=multihash,
-        )
+        instance = cls(version=cid['version'], codec=cid['codec'])
 
         if isinstance(value, str):
             instance._stringified_form = value

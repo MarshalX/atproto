@@ -22,7 +22,8 @@ def _convert_snake_case_to_camel_case(string: str) -> str:
 
 
 def _is_snake_case(string: str) -> bool:
-    return string == _convert_camel_case_to_snake_case(string)
+    # same as `string == _convert_camel_case_to_snake_case(string)`, which only changes strings with uppercase
+    return string == string.lower()
 
 
 def _convert_to_opposite_case(string: str) -> str:
@@ -62,14 +63,16 @@ class DotDict(UnknownDict):
         >>> assert model.to_dict() == test_data
     """
 
+    __slots__ = ('__weakref__', '_data')
+
+    _data: t.Dict[str, t.Any]
+
     def __init__(self, data: t.Dict[str, t.Any]) -> None:
-        self._data = deepcopy(data)
-        for k, v in self._data.items():
-            self.__setitem__(k, v)
+        self._data = {key: _deep_copy(value, DotDict) for key, value in data.items()}
 
     def to_dict(self) -> t.Dict[str, t.Any]:
         """Unwrap DotDict to Python built-in dict."""
-        return deepcopy(self._data)
+        return _to_dict(self._data)
 
     def __getitem__(self, item: str) -> t.Any:
         value = self._data.get(item)
@@ -82,14 +85,14 @@ class DotDict(UnknownDict):
 
     def __setitem__(self, key: str, value: t.Any) -> None:
         if key == '_data':
-            super().__setattr__(key, value)
+            object.__setattr__(self, key, value)
             return
 
         # we store the field in case that was firstly meet to not create duplicates
         if key not in self._data and _is_snake_case(key):
             key = _convert_snake_case_to_camel_case(key)
 
-        self._data.__setitem__(key, DotDict.__convert(value))
+        self._data[key] = _deep_copy(value, DotDict)
 
     __setattr__ = __setitem__
 
@@ -131,17 +134,36 @@ class DotDict(UnknownDict):
     def __reduce__(self) -> t.Union[str, t.Tuple[t.Any, ...]]:
         return self._data.__reduce__()
 
-    @staticmethod
-    def __convert(obj: t.Any) -> t.Any:
-        if isinstance(obj, dict):
-            return DotDict(t.cast('t.Dict[str, t.Any]', obj))
-        if isinstance(obj, list):
-            return [DotDict.__convert(v) for v in t.cast('t.List[t.Any]', obj)]
-        if isinstance(obj, set):
-            return {DotDict.__convert(v) for v in t.cast('t.Set[t.Any]', obj)}
-        if isinstance(obj, tuple):
-            return tuple(DotDict.__convert(v) for v in t.cast('t.Tuple[t.Any]', obj))
+
+#: Leaves that a deep copy returns as is.
+_ATOMIC_TYPES = frozenset({str, int, float, bool, bytes, type(None)})
+
+
+def _deep_copy(obj: t.Any, copy_dict: t.Callable[[t.Dict[str, t.Any]], t.Any]) -> t.Any:
+    """Deep copy ``obj``, building every dict, a :obj:`DotDict`'s included, with ``copy_dict``."""
+    obj_type = type(obj)
+    if obj_type in _ATOMIC_TYPES:
         return obj
+    # exact types first: they are the common case and skip the isinstance() checks
+    if obj_type is dict:
+        return copy_dict(obj)
+    if obj_type is list:
+        return [_deep_copy(v, copy_dict) for v in obj]
+    if isinstance(obj, DotDict):
+        return copy_dict(obj._data)
+    if isinstance(obj, dict):
+        return copy_dict(t.cast('t.Dict[str, t.Any]', obj))
+    if isinstance(obj, list):
+        return [_deep_copy(v, copy_dict) for v in t.cast('t.List[t.Any]', obj)]
+    if isinstance(obj, set):
+        return {_deep_copy(v, copy_dict) for v in t.cast('t.Set[t.Any]', obj)}
+    if isinstance(obj, tuple):
+        return tuple(_deep_copy(v, copy_dict) for v in t.cast('t.Tuple[t.Any]', obj))
+    return deepcopy(obj)
+
+
+def _to_dict(data: t.Dict[str, t.Any]) -> t.Dict[str, t.Any]:
+    return {key: _deep_copy(value, _to_dict) for key, value in data.items()}
 
 
 class _DotDictPydanticAnnotation:
