@@ -138,7 +138,7 @@ def get_or_create(
         :obj:`atproto.xrpc_client.models.dot_dict.DotDict` if `strict` is disabled.
     """
     try:
-        model_instance = _get_or_create(model_data, model, strict=strict, strict_string_format=strict_string_format)
+        model_instance = _get_or_create(model_data, model, strict_string_format=strict_string_format)
         if strict and model is not None and model_instance is not None and not isinstance(model_instance, model):
             raise ModelError(f"Can't properly parse model of type {model}")
 
@@ -151,7 +151,7 @@ def get_or_create(
 
 
 def _get_or_create(
-    model_data: ModelData[M], model: t.Optional[t.Type[M]], *, strict: bool, strict_string_format: bool
+    model_data: ModelData[M], model: t.Optional[t.Type[M]], *, strict_string_format: bool
 ) -> t.Optional[t.Union[M, UnknownRecordType, DotDict]]:
     if model_data is None:
         return None
@@ -166,12 +166,7 @@ def _get_or_create(
         if record_model is None:
             return None
 
-        return get_or_create(
-            model_data,
-            record_model,
-            strict=strict,
-            strict_string_format=strict_string_format,
-        )
+        model = t.cast('t.Type[M]', record_model)
 
     if isinstance(model_data, model):
         return model_data

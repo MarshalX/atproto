@@ -97,7 +97,8 @@ def make_lazy_accessors(
     def __getattr__(name: str) -> t.Any:
         package = importlib.import_module(package_name)
 
-        nsid = getattr(package.__dict__.get('ids'), name, None)
+        # aliases never start with an underscore, while dunders like `__module__` resolve on `ids` too
+        nsid = None if name.startswith('_') else getattr(package.__dict__.get('ids'), name, None)
         if nsid is not None:
             module = importlib.import_module(_module_path_from_nsid(package_name, nsid))
             prepare_model_module(module, package)

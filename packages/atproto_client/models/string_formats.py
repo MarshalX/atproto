@@ -84,9 +84,10 @@ class _NamedValidator:
         self._strict_fn: Callable[..., str] = getattr(validate_fn, '__wrapped__', validate_fn)
 
     def __call__(self, v: str, info: ValidationInfo) -> str:
-        if _is_strict(info):
-            return self._strict_fn(v, info)
-        return v
+        # runs for every string format field of every model, so the common dict context skips the call
+        context: object = info.context
+        is_strict = context.get(_OPT_IN_KEY) if type(context) is dict else _is_strict(info)
+        return self._strict_fn(v, info) if is_strict else v
 
     def __str__(self) -> str:
         func_str = f':func:`string_formats.{self.validate_fn.__name__}`'

@@ -1,8 +1,6 @@
 import typing as t
 from dataclasses import dataclass
 
-from atproto_crypto.algs.p256 import P256
-from atproto_crypto.algs.secp256k1 import Secp256k1
 from atproto_crypto.consts import (
     BASE58_MULTIBASE_PREFIX,
     DID_KEY_PREFIX,
@@ -13,6 +11,9 @@ from atproto_crypto.consts import (
 )
 from atproto_crypto.exceptions import IncorrectDidKeyPrefixError, IncorrectMultikeyPrefixError, UnsupportedKeyTypeError
 from atproto_crypto.multibase import bytes_to_multibase, multibase_to_bytes
+
+if t.TYPE_CHECKING:
+    from atproto_crypto.algs.base_alg import AlgBase
 
 
 @dataclass
@@ -39,6 +40,13 @@ class Multikey:
             str: Multikey.
         """
         return format_multikey(self.jwt_alg, self.key_bytes)
+
+
+def _get_algorithm(jwt_alg: str) -> 'AlgBase':
+    # imported on use: `cryptography` is slow to import, and parsing DID documents does not need it
+    from atproto_crypto.algs import ALGORITHM_TO_CLASS
+
+    return ALGORITHM_TO_CLASS[jwt_alg]()
 
 
 def get_multikey_alg(multikey: str) -> str:
@@ -82,11 +90,11 @@ def parse_multikey(multikey: str) -> Multikey:
     if prefixed_bytes.startswith(P256_DID_PREFIX):
         jwt_alg = P256_JWT_ALG
         compressed_key_bytes = prefixed_bytes[len(P256_DID_PREFIX) :]
-        key_bytes = P256().decompress_pubkey(compressed_key_bytes)
+        key_bytes = _get_algorithm(jwt_alg).decompress_pubkey(compressed_key_bytes)
     elif prefixed_bytes.startswith(SECP256K1_DID_PREFIX):
         jwt_alg = SECP256K1_JWT_ALG
         compressed_key_bytes = prefixed_bytes[len(SECP256K1_DID_PREFIX) :]
-        key_bytes = Secp256k1().decompress_pubkey(compressed_key_bytes)
+        key_bytes = _get_algorithm(jwt_alg).decompress_pubkey(compressed_key_bytes)
     else:
         raise UnsupportedKeyTypeError('Unsupported key type')
 
@@ -110,10 +118,10 @@ def format_multikey(jwt_alg: str, key: bytes) -> str:
     """
     if jwt_alg == P256_JWT_ALG:
         prefix = P256_DID_PREFIX
-        compressed_key_bytes = P256().compress_pubkey(key)
+        compressed_key_bytes = _get_algorithm(jwt_alg).compress_pubkey(key)
     elif jwt_alg == SECP256K1_JWT_ALG:
         prefix = SECP256K1_DID_PREFIX
-        compressed_key_bytes = Secp256k1().compress_pubkey(key)
+        compressed_key_bytes = _get_algorithm(jwt_alg).compress_pubkey(key)
     else:
         raise UnsupportedKeyTypeError('Unsupported key type')
 

@@ -1,4 +1,3 @@
-from atproto_crypto.algs import ALGORITHM_TO_CLASS
 from atproto_crypto.did import parse_did_key
 from atproto_crypto.exceptions import UnsupportedSignatureAlgorithmError
 
@@ -14,6 +13,9 @@ def verify_signature(did_key: str, signing_input: bytes, signature: bytes) -> bo
     Returns:
         bool: True if signature is valid, False otherwise.
     """
+    # imported on use: `cryptography` is slow to import, and decoding JWTs does not need it
+    from atproto_crypto.algs import ALGORITHM_TO_CLASS
+
     parsed_did_key = parse_did_key(did_key)
     if parsed_did_key.jwt_alg not in ALGORITHM_TO_CLASS:
         raise UnsupportedSignatureAlgorithmError('Unsupported signature alg')

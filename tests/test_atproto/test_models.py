@@ -14,3 +14,8 @@ def test_models_submodule_is_the_models_package() -> None:
 
     assert atproto.models is atproto_client.models
     assert models is atproto_client.models
+
+
+def test_missing_dunder_raises_attribute_error() -> None:
+    for name in ('__qualname__', '__wrapped__', '__does_not_exist__'):
+        assert not hasattr(atproto_client.models, name)

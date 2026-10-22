@@ -160,3 +160,42 @@ def test_dot_dict_mapping_protocol() -> None:
     assert 'a' in model
     assert 'b' in model
     assert 'c' not in model
+
+
+def test_dot_dict_copies_nested_containers() -> None:
+    nested = DotDict({'x': {'y': 1}})
+    leaf = bytearray(b'raw')
+    test_data: t.Dict[str, t.Any] = {'nested': nested, 'pair': ({'a': 1}, [2]), 'leaf': leaf}
+    model = DotDict(test_data)
+
+    assert model.nested is not nested
+    assert model.nested.x.y == 1
+    assert isinstance(model.pair, tuple)
+    assert model.pair[0]['a'] == 1
+    assert model.leaf == leaf
+    assert model.leaf is not leaf
+
+    model.nested.x.y = 2
+    assert nested.x.y == 1
+
+    output = model.to_dict()
+    assert output == {'nested': {'x': {'y': 2}}, 'pair': ({'a': 1}, [2]), 'leaf': bytearray(b'raw')}
+    assert type(output['nested']) is dict
+    assert type(output['nested']['x']) is dict
+    assert type(output['pair'][0]) is dict
+    assert output['leaf'] is not model.leaf
+
+
+def test_dot_dict_snake_case_check_matches_the_conversion() -> None:
+    from atproto_client.models.dot_dict import _convert_camel_case_to_snake_case, _is_snake_case
+
+    for string in ('a', 'snake_case', 'camelCase', 'HTTPServer', 'getHTTP2', 'x1', '_private', 'émoji', 'Émoji', ''):
+        assert _is_snake_case(string) == (string == _convert_camel_case_to_snake_case(string)), string
+
+
+def test_dot_dict_supports_weak_references() -> None:
+    import weakref
+
+    model = DotDict({'a': 1})
+
+    assert weakref.ref(model)() is model

@@ -62,13 +62,17 @@ class ErrorFrameBody:
     message: Optional[str] = None  #: Description of the error.
 
 
+#: Avoids an `Enum` call per frame.
+_FRAME_TYPE_BY_OP: dict[int, FrameType] = {frame_type.value: frame_type for frame_type in FrameType}
+
+
 def parse_frame_header(raw_header: dict[str, Any]) -> FrameHeader:
     try:
         header_op = int(raw_header.get('op', 0))
-        if not FrameType.has_value(header_op):
+        frame_type = _FRAME_TYPE_BY_OP.get(header_op)
+        if frame_type is None:
             raise FrameDecodingError('Invalid frame type')
 
-        frame_type = FrameType(header_op)
         if frame_type is FrameType.MESSAGE:
             return MessageFrameHeader(op=frame_type, t=raw_header.get('t'))
         return ErrorFrameHeader(op=frame_type)
