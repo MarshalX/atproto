@@ -8,6 +8,7 @@
 import typing as t
 
 import typing_extensions as te
+from pydantic import Field
 
 from atproto_client.models import string_formats
 
@@ -27,6 +28,7 @@ class Data(base.DataModelBase):
     created_by: t.Optional[string_formats.Did] = (
         None  #: Optional DID to credit as the creator. Only respected for admin_token authentication.
     )
+    source: te.Annotated[t.Optional[str], Field(max_length=128)] = None  #: Source of the rule to update.
 
 
 class DataDict(t.TypedDict):
@@ -38,3 +40,4 @@ class DataDict(t.TypedDict):
     created_by: te.NotRequired[
         t.Optional[string_formats.Did]
     ]  #: Optional DID to credit as the creator. Only respected for admin_token authentication.
+    source: te.NotRequired[t.Optional[str]]  #: Source of the rule to update.

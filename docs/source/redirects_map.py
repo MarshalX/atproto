@@ -471,6 +471,7 @@ REDIRECTS = {
     'atproto/atproto_client.models.tools.ozone.safelink.query_events.html': '/models/tools/ozone/safelink/queryEvents/',
     'atproto/atproto_client.models.tools.ozone.safelink.query_rules.html': '/models/tools/ozone/safelink/queryRules/',
     'atproto/atproto_client.models.tools.ozone.safelink.remove_rule.html': '/models/tools/ozone/safelink/removeRule/',
+    'atproto/atproto_client.models.tools.ozone.safelink.sync_source.html': '/models/tools/ozone/safelink/syncSource/',
     'atproto/atproto_client.models.tools.ozone.safelink.update_rule.html': '/models/tools/ozone/safelink/updateRule/',
     'atproto/atproto_client.models.tools.ozone.server.get_capabilities.html': '/models/tools/ozone/server/getCapabilities/',
     'atproto/atproto_client.models.tools.ozone.server.get_config.html': '/models/tools/ozone/server/getConfig/',

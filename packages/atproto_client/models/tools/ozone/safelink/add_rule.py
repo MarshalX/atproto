@@ -8,6 +8,7 @@
 import typing as t
 
 import typing_extensions as te
+from pydantic import Field
 
 from atproto_client.models import string_formats
 
@@ -25,6 +26,7 @@ class Data(base.DataModelBase):
     url: str  #: The URL or domain to apply the rule to.
     comment: t.Optional[str] = None  #: Optional comment about the decision.
     created_by: t.Optional[string_formats.Did] = None  #: Author DID. Only respected when using admin auth.
+    source: te.Annotated[t.Optional[str], Field(max_length=128)] = None  #: Source of the rule.
 
 
 class DataDict(t.TypedDict):
@@ -34,3 +36,4 @@ class DataDict(t.TypedDict):
     url: str  #: The URL or domain to apply the rule to.
     comment: te.NotRequired[t.Optional[str]]  #: Optional comment about the decision.
     created_by: te.NotRequired[t.Optional[string_formats.Did]]  #: Author DID. Only respected when using admin auth.
+    source: te.NotRequired[t.Optional[str]]  #: Source of the rule.

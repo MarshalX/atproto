@@ -41,6 +41,12 @@ Rules that mark URLs as unsafe.
 
       Remove an existing URL safety rule
 
+   .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` syncSource
+      :link: /models/tools/ozone/safelink/syncSource
+      :link-type: doc
+
+      Replace stored rules for one source from a complete snapshot.
+
    .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` updateRule
       :link: /models/tools/ozone/safelink/updateRule
       :link-type: doc
@@ -56,4 +62,5 @@ Rules that mark URLs as unsafe.
    queryEvents </models/tools/ozone/safelink/queryEvents>
    queryRules </models/tools/ozone/safelink/queryRules>
    removeRule </models/tools/ozone/safelink/removeRule>
+   syncSource </models/tools/ozone/safelink/syncSource>
    updateRule </models/tools/ozone/safelink/updateRule>

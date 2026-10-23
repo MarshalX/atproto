@@ -312,6 +312,9 @@ class ModEventReverseTakedown(base.ModelBase):
     strike_count: t.Optional[int] = (
         None  #: Number of strikes to subtract from the user's strike count. Usually set from the last policy infraction's severity.
     )
+    strike_expires_at: t.Optional[string_formats.DateTime] = (
+        None  #: When the strike should expire. If not provided, the strike never expires.
+    )
 
     py_type: t.Literal['tools.ozone.moderation.defs#modEventReverseTakedown'] = Field(
         default='tools.ozone.moderation.defs#modEventReverseTakedown', alias='$type', frozen=True
