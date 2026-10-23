@@ -400,6 +400,7 @@ ALIASES_DB = {
     'models.ToolsOzoneSafelinkQueryEvents': 'atproto_client.models.tools.ozone.safelink.query_events',
     'models.ToolsOzoneSafelinkQueryRules': 'atproto_client.models.tools.ozone.safelink.query_rules',
     'models.ToolsOzoneSafelinkRemoveRule': 'atproto_client.models.tools.ozone.safelink.remove_rule',
+    'models.ToolsOzoneSafelinkSyncSource': 'atproto_client.models.tools.ozone.safelink.sync_source',
     'models.ToolsOzoneSafelinkUpdateRule': 'atproto_client.models.tools.ozone.safelink.update_rule',
     'models.ToolsOzoneServerGetCapabilities': 'atproto_client.models.tools.ozone.server.get_capabilities',
     'models.ToolsOzoneServerGetConfig': 'atproto_client.models.tools.ozone.server.get_config',

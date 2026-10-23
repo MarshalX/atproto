@@ -27,6 +27,9 @@ class Data(base.DataModelBase):
     recommended_policies: t.Optional[t.List[str]] = (
         None  #: Policy keys to recommend when actioning reports in this queue.
     )
+    strict_access: t.Optional[bool] = (
+        None  #: Admins can always list this queue and browse its reports. Other roles require an active queue assignment. Individual report and moderation event access is unchanged.
+    )
 
 
 class DataDict(t.TypedDict):
@@ -40,6 +43,9 @@ class DataDict(t.TypedDict):
     recommended_policies: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: Policy keys to recommend when actioning reports in this queue.
+    strict_access: te.NotRequired[
+        t.Optional[bool]
+    ]  #: Admins can always list this queue and browse its reports. Other roles require an active queue assignment. Individual report and moderation event access is unchanged.
 
 
 class Response(base.ResponseModelBase):

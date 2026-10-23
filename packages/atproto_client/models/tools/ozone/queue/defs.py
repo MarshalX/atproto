@@ -27,8 +27,11 @@ class QueueView(base.ModelBase):
     name: str  #: Display name of the queue.
     stats: 'models.ToolsOzoneQueueDefs.QueueStats'  #: Statistics about this queue.
     updated_at: string_formats.DateTime  #: Updated at.
+    account_tags: te.Annotated[t.Optional[t.List[te.Annotated[str, Field(min_length=1)]]], Field(max_length=25)] = (
+        None  #: Match tags on the account that is being reported against. For record subjects, use the author account. Match any listed tag.
+    )
     collection: t.Optional[string_formats.Nsid] = (
-        None  #: Collection name for record subjects (e.g., 'app.bsky.feed.post').
+        None  #: Collection name for record subjects. Omit to accept every collection.
     )
     deleted_at: t.Optional[string_formats.DateTime] = None  #: When the queue was deleted, if applicable.
     description: t.Optional[str] = None  #: Optional description of the queue.
@@ -39,6 +42,12 @@ class QueueView(base.ModelBase):
         None  #: Policy keys recommended when actioning reports in this queue.
     )
     report_types: t.Optional[t.List[str]] = None  #: Report reason types this queue accepts (fully qualified NSIDs).
+    reporter_tags: te.Annotated[t.Optional[t.List[te.Annotated[str, Field(min_length=1)]]], Field(max_length=25)] = (
+        None  #: Match any listed tag on the account submitting the report.
+    )
+    strict_access: t.Optional[bool] = (
+        None  #: Admins can always list this queue and browse its reports. Other roles require an active queue assignment. Individual report and moderation event access is unchanged.
+    )
     subject_types: t.Optional[t.List[t.Union[t.Literal['account', 'record', 'message', 'conversation'], str]]] = (
         None  #: Subject types this queue accepts.
     )

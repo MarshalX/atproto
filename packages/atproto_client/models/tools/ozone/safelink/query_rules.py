@@ -27,6 +27,9 @@ class Data(base.DataModelBase):
     pattern_type: t.Optional[str] = None  #: Filter by pattern type.
     reason: t.Optional[str] = None  #: Filter by reason type.
     sort_direction: t.Optional[t.Union[t.Literal['asc', 'desc'], str]] = 'desc'  #: Sort direction.
+    source: te.Annotated[t.Optional[str], Field(max_length=128)] = (
+        None  #: Filter by exact rule source. Omit to include all sources.
+    )
     urls: t.Optional[t.List[str]] = None  #: Filter by specific URLs or domains.
 
 
@@ -38,6 +41,7 @@ class DataDict(t.TypedDict):
     pattern_type: te.NotRequired[t.Optional[str]]  #: Filter by pattern type.
     reason: te.NotRequired[t.Optional[str]]  #: Filter by reason type.
     sort_direction: te.NotRequired[t.Optional[t.Union[t.Literal['asc', 'desc'], str]]]  #: Sort direction.
+    source: te.NotRequired[t.Optional[str]]  #: Filter by exact rule source. Omit to include all sources.
     urls: te.NotRequired[t.Optional[t.List[str]]]  #: Filter by specific URLs or domains.
 
 

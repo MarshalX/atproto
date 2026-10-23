@@ -487,6 +487,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models.tools.ozone.safelink import query_events as ToolsOzoneSafelinkQueryEvents
     from atproto_client.models.tools.ozone.safelink import query_rules as ToolsOzoneSafelinkQueryRules
     from atproto_client.models.tools.ozone.safelink import remove_rule as ToolsOzoneSafelinkRemoveRule
+    from atproto_client.models.tools.ozone.safelink import sync_source as ToolsOzoneSafelinkSyncSource
     from atproto_client.models.tools.ozone.safelink import update_rule as ToolsOzoneSafelinkUpdateRule
     from atproto_client.models.tools.ozone.server import get_capabilities as ToolsOzoneServerGetCapabilities
     from atproto_client.models.tools.ozone.server import get_config as ToolsOzoneServerGetConfig
@@ -932,6 +933,7 @@ __all__ = [
     'ToolsOzoneSafelinkQueryEvents',
     'ToolsOzoneSafelinkQueryRules',
     'ToolsOzoneSafelinkRemoveRule',
+    'ToolsOzoneSafelinkSyncSource',
     'ToolsOzoneSafelinkUpdateRule',
     'ToolsOzoneServerGetCapabilities',
     'ToolsOzoneServerGetConfig',
@@ -1377,6 +1379,7 @@ class _Ids:
     ToolsOzoneSafelinkQueryEvents: str = 'tools.ozone.safelink.queryEvents'
     ToolsOzoneSafelinkQueryRules: str = 'tools.ozone.safelink.queryRules'
     ToolsOzoneSafelinkRemoveRule: str = 'tools.ozone.safelink.removeRule'
+    ToolsOzoneSafelinkSyncSource: str = 'tools.ozone.safelink.syncSource'
     ToolsOzoneSafelinkUpdateRule: str = 'tools.ozone.safelink.updateRule'
     ToolsOzoneServerGetCapabilities: str = 'tools.ozone.server.getCapabilities'
     ToolsOzoneServerGetConfig: str = 'tools.ozone.server.getConfig'

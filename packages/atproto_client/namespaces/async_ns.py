@@ -12924,7 +12924,7 @@ class ToolsOzoneQueueNamespace(AsyncNamespaceBase):
         data: t.Union[models.ToolsOzoneQueueCreateQueue.Data, models.ToolsOzoneQueueCreateQueue.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ToolsOzoneQueueCreateQueue.Response':
-        """Create a new moderation queue. A queue can have optional matching criteria that ozone's queue router will use to match reports. A queue with no criteria must have reports assigned to it manually via (1) `modTool.meta.queueId` in `tools.ozone.moderation.emitEvent` or (2) `tools.ozone.report.reassignQueue`.
+        """Create a new moderation queue. A queue with omitted or empty subjectTypes or reportTypes must have reports assigned to it manually via (1) `modTool.meta.queueId` in `tools.ozone.moderation.emitEvent` or (2) `tools.ozone.report.reassignQueue`.
 
         Args:
             data: Input data.
@@ -13573,6 +13573,33 @@ class ToolsOzoneSafelinkNamespace(AsyncNamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ToolsOzoneSafelinkDefs.Event)
+
+    async def sync_source(
+        self,
+        data: t.Union[models.ToolsOzoneSafelinkSyncSource.Data, models.ToolsOzoneSafelinkSyncSource.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneSafelinkSyncSource.Response':
+        """Replace stored rules for one source from a complete snapshot. Existing rules owned by another source remain unchanged.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneSafelinkSyncSource.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ToolsOzoneSafelinkSyncSource.Data)
+        response = await self._client.invoke_procedure(
+            'tools.ozone.safelink.syncSource',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneSafelinkSyncSource.Response)
 
     async def update_rule(
         self,

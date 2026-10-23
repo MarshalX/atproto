@@ -21,8 +21,11 @@ class Data(base.DataModelBase):
     """Input data model for :obj:`tools.ozone.queue.createQueue`."""
 
     name: str  #: Display name for the queue (must be unique).
+    account_tags: te.Annotated[t.Optional[t.List[te.Annotated[str, Field(min_length=1)]]], Field(max_length=25)] = (
+        None  #: Match any of these tags on the account that is being reported against.
+    )
     collection: t.Optional[string_formats.Nsid] = (
-        None  #: Collection name for record subjects. Required if subjectTypes includes 'record'.
+        None  #: Collection name for record subjects. Omit to accept every collection.
     )
     description: t.Optional[str] = None  #: Optional description of the queue.
     recommended_labels: t.Optional[t.List[str]] = (
@@ -31,8 +34,12 @@ class Data(base.DataModelBase):
     recommended_policies: t.Optional[t.List[str]] = (
         None  #: Policy keys to recommend when actioning reports in this queue.
     )
-    report_types: te.Annotated[t.Optional[t.List[str]], Field(max_length=25)] = (
-        None  #: Report reason types (fully qualified NSIDs).
+    report_types: t.Optional[t.List[str]] = None  #: Report reason types (fully qualified NSIDs).
+    reporter_tags: te.Annotated[t.Optional[t.List[te.Annotated[str, Field(min_length=1)]]], Field(max_length=25)] = (
+        None  #: Match any listed tag on the account submitting the report.
+    )
+    strict_access: t.Optional[bool] = (
+        None  #: Admins can always list this queue and browse its reports. Other roles require an active queue assignment. Individual report and moderation event access is unchanged.
     )
     subject_types: t.Optional[t.List[t.Union[t.Literal['account', 'record', 'message', 'conversation'], str]]] = (
         None  #: Subject types this queue accepts.
@@ -41,9 +48,12 @@ class Data(base.DataModelBase):
 
 class DataDict(t.TypedDict):
     name: str  #: Display name for the queue (must be unique).
+    account_tags: te.NotRequired[
+        t.Optional[t.List[te.Annotated[str, Field(min_length=1)]]]
+    ]  #: Match any of these tags on the account that is being reported against.
     collection: te.NotRequired[
         t.Optional[string_formats.Nsid]
-    ]  #: Collection name for record subjects. Required if subjectTypes includes 'record'.
+    ]  #: Collection name for record subjects. Omit to accept every collection.
     description: te.NotRequired[t.Optional[str]]  #: Optional description of the queue.
     recommended_labels: te.NotRequired[
         t.Optional[t.List[str]]
@@ -52,6 +62,12 @@ class DataDict(t.TypedDict):
         t.Optional[t.List[str]]
     ]  #: Policy keys to recommend when actioning reports in this queue.
     report_types: te.NotRequired[t.Optional[t.List[str]]]  #: Report reason types (fully qualified NSIDs).
+    reporter_tags: te.NotRequired[
+        t.Optional[t.List[te.Annotated[str, Field(min_length=1)]]]
+    ]  #: Match any listed tag on the account submitting the report.
+    strict_access: te.NotRequired[
+        t.Optional[bool]
+    ]  #: Admins can always list this queue and browse its reports. Other roles require an active queue assignment. Individual report and moderation event access is unchanged.
     subject_types: te.NotRequired[
         t.Optional[t.List[t.Union[t.Literal['account', 'record', 'message', 'conversation'], str]]]
     ]  #: Subject types this queue accepts.

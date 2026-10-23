@@ -28,6 +28,7 @@ class Event(base.ModelBase):
     reason: 'models.ToolsOzoneSafelinkDefs.ReasonType'  #: Reason.
     url: str  #: The URL that this rule applies to.
     comment: t.Optional[str] = None  #: Optional comment about the decision.
+    source: t.Optional[str] = 'ozone/default'  #: Source of the decision.
 
     py_type: t.Literal['tools.ozone.safelink.defs#event'] = Field(
         default='tools.ozone.safelink.defs#event', alias='$type', frozen=True
@@ -44,7 +45,7 @@ ReasonType = t.Union[t.Literal['csam', 'spam', 'phishing', 'none'], str]  #: Rea
 
 
 class UrlRule(base.ModelBase):
-    """Definition model for :obj:`tools.ozone.safelink.defs`. Input for creating a URL safety rule."""
+    """Definition model for :obj:`tools.ozone.safelink.defs`. An active URL safety rule."""
 
     action: 'models.ToolsOzoneSafelinkDefs.ActionType'  #: Action.
     created_at: string_formats.DateTime  #: Timestamp when the rule was created.
@@ -54,6 +55,7 @@ class UrlRule(base.ModelBase):
     updated_at: string_formats.DateTime  #: Timestamp when the rule was last updated.
     url: str  #: The URL or domain to apply the rule to.
     comment: t.Optional[str] = None  #: Optional comment about the decision.
+    source: t.Optional[str] = 'ozone/default'  #: Source of the rule.
 
     py_type: t.Literal['tools.ozone.safelink.defs#urlRule'] = Field(
         default='tools.ozone.safelink.defs#urlRule', alias='$type', frozen=True
