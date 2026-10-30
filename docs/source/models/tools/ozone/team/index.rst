@@ -35,6 +35,12 @@ Ozone team members and their roles.
 
       List all members with access to the ozone service.
 
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` listOnlineMembers
+      :link: /models/tools/ozone/team/listOnlineMembers
+      :link-type: doc
+
+      List recent active team members, ordered by latest activity.
+
    .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` updateMember
       :link: /models/tools/ozone/team/updateMember
       :link-type: doc
@@ -49,4 +55,5 @@ Ozone team members and their roles.
    defs </models/tools/ozone/team/defs>
    deleteMember </models/tools/ozone/team/deleteMember>
    listMembers </models/tools/ozone/team/listMembers>
+   listOnlineMembers </models/tools/ozone/team/listOnlineMembers>
    updateMember </models/tools/ozone/team/updateMember>

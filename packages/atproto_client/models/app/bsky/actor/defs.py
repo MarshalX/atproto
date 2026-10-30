@@ -90,7 +90,7 @@ class ProfileViewDetailed(base.ModelBase):
     status: t.Optional['models.AppBskyActorDefs.StatusView'] = None  #: Status.
     verification: t.Optional['models.AppBskyActorDefs.VerificationState'] = None  #: Verification.
     viewer: t.Optional['models.AppBskyActorDefs.ViewerState'] = None  #: Viewer.
-    website: t.Optional[string_formats.Uri] = None  #: Website.
+    website: t.Optional[string_formats.Uri] = None  #: Deprecated: use links instead.
 
     py_type: t.Literal['app.bsky.actor.defs#profileViewDetailed'] = Field(
         default='app.bsky.actor.defs#profileViewDetailed', alias='$type', frozen=True

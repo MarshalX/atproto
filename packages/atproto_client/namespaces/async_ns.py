@@ -5186,6 +5186,37 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereExploreTab.Response)
 
+    async def get_atmosphere_timeline(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetAtmosphereTimeline.Params,
+                models.AppBskyUnspeccedGetAtmosphereTimeline.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetAtmosphereTimeline.Response':
+        """Get the authenticated viewer's Atmosphere activity timeline. Grouping and related activity are limited to the returned page.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetAtmosphereTimeline.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.AppBskyUnspeccedGetAtmosphereTimeline.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getAtmosphereTimeline',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereTimeline.Response)
+
     async def get_config(self, **kwargs: t.Any) -> 'models.AppBskyUnspeccedGetConfig.Response':
         """Get miscellaneous runtime configuration.
 
@@ -13134,7 +13165,7 @@ class ToolsOzoneReportNamespace(AsyncNamespaceBase):
         data: t.Union[models.ToolsOzoneReportCloseReports.Data, models.ToolsOzoneReportCloseReports.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ToolsOzoneReportCloseReports.Response':
-        """Close all reports on a subject matching the given criteria. Reports whose current status does not permit a transition to closed are skipped silently. Intended for automated flows that resolve reports without taking action on the subject.
+        """Close eligible reports on a subject matching the given criteria. Assigned and escalated reports are excluded. Reports whose current status does not permit a transition to closed are skipped silently. Intended for automated flows that resolve reports without taking action on the subject.
 
         Args:
             data: Input data.
@@ -14046,6 +14077,31 @@ class ToolsOzoneTeamNamespace(AsyncNamespaceBase):
             'tools.ozone.team.listMembers', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneTeamListMembers.Response)
+
+    async def list_online_members(
+        self,
+        params: t.Optional[
+            t.Union[models.ToolsOzoneTeamListOnlineMembers.Params, models.ToolsOzoneTeamListOnlineMembers.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneTeamListOnlineMembers.Response':
+        """List recent active team members, ordered by latest activity.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneTeamListOnlineMembers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ToolsOzoneTeamListOnlineMembers.Params)
+        response = await self._client.invoke_query(
+            'tools.ozone.team.listOnlineMembers', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneTeamListOnlineMembers.Response)
 
     async def update_member(
         self,

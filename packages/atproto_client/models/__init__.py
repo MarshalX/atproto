@@ -142,6 +142,9 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_explore_tab as AppBskyUnspeccedGetAtmosphereExploreTab,
     )
+    from atproto_client.models.app.bsky.unspecced import (
+        get_atmosphere_timeline as AppBskyUnspeccedGetAtmosphereTimeline,
+    )
     from atproto_client.models.app.bsky.unspecced import get_config as AppBskyUnspeccedGetConfig
     from atproto_client.models.app.bsky.unspecced import (
         get_onboarding_suggested_starter_packs as AppBskyUnspeccedGetOnboardingSuggestedStarterPacks,
@@ -512,6 +515,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models.tools.ozone.team import defs as ToolsOzoneTeamDefs
     from atproto_client.models.tools.ozone.team import delete_member as ToolsOzoneTeamDeleteMember
     from atproto_client.models.tools.ozone.team import list_members as ToolsOzoneTeamListMembers
+    from atproto_client.models.tools.ozone.team import list_online_members as ToolsOzoneTeamListOnlineMembers
     from atproto_client.models.tools.ozone.team import update_member as ToolsOzoneTeamUpdateMember
     from atproto_client.models.tools.ozone.verification import defs as ToolsOzoneVerificationDefs
     from atproto_client.models.tools.ozone.verification import (
@@ -654,6 +658,7 @@ __all__ = [
     'AppBskyUnspeccedGetAgeAssuranceState',
     'AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations',
     'AppBskyUnspeccedGetAtmosphereExploreTab',
+    'AppBskyUnspeccedGetAtmosphereTimeline',
     'AppBskyUnspeccedGetConfig',
     'AppBskyUnspeccedGetOnboardingSuggestedStarterPacks',
     'AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton',
@@ -956,6 +961,7 @@ __all__ = [
     'ToolsOzoneTeamDefs',
     'ToolsOzoneTeamDeleteMember',
     'ToolsOzoneTeamListMembers',
+    'ToolsOzoneTeamListOnlineMembers',
     'ToolsOzoneTeamUpdateMember',
     'ToolsOzoneVerificationDefs',
     'ToolsOzoneVerificationGrantVerifications',
@@ -1096,6 +1102,7 @@ class _Ids:
         'app.bsky.unspecced.getAtmosphereExploreArticleRecommendations'
     )
     AppBskyUnspeccedGetAtmosphereExploreTab: str = 'app.bsky.unspecced.getAtmosphereExploreTab'
+    AppBskyUnspeccedGetAtmosphereTimeline: str = 'app.bsky.unspecced.getAtmosphereTimeline'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
     AppBskyUnspeccedGetOnboardingSuggestedStarterPacks: str = 'app.bsky.unspecced.getOnboardingSuggestedStarterPacks'
     AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton: str = (
@@ -1402,6 +1409,7 @@ class _Ids:
     ToolsOzoneTeamDefs: str = 'tools.ozone.team.defs'
     ToolsOzoneTeamDeleteMember: str = 'tools.ozone.team.deleteMember'
     ToolsOzoneTeamListMembers: str = 'tools.ozone.team.listMembers'
+    ToolsOzoneTeamListOnlineMembers: str = 'tools.ozone.team.listOnlineMembers'
     ToolsOzoneTeamUpdateMember: str = 'tools.ozone.team.updateMember'
     ToolsOzoneVerificationDefs: str = 'tools.ozone.verification.defs'
     ToolsOzoneVerificationGrantVerifications: str = 'tools.ozone.verification.grantVerifications'

@@ -35,6 +35,12 @@ Unstable endpoints that may change or disappear without notice.
 
       Get Atmosphere Explore content.
 
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereTimeline
+      :link: /models/app/bsky/unspecced/getAtmosphereTimeline
+      :link-type: doc
+
+      Get the authenticated viewer's Atmosphere activity timeline.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getConfig
       :link: /models/app/bsky/unspecced/getConfig
       :link-type: doc
@@ -217,6 +223,7 @@ Unstable endpoints that may change or disappear without notice.
    getAgeAssuranceState </models/app/bsky/unspecced/getAgeAssuranceState>
    getAtmosphereExploreArticleRecommendations </models/app/bsky/unspecced/getAtmosphereExploreArticleRecommendations>
    getAtmosphereExploreTab </models/app/bsky/unspecced/getAtmosphereExploreTab>
+   getAtmosphereTimeline </models/app/bsky/unspecced/getAtmosphereTimeline>
    getConfig </models/app/bsky/unspecced/getConfig>
    getOnboardingSuggestedStarterPacks </models/app/bsky/unspecced/getOnboardingSuggestedStarterPacks>
    getOnboardingSuggestedStarterPacksSkeleton </models/app/bsky/unspecced/getOnboardingSuggestedStarterPacksSkeleton>

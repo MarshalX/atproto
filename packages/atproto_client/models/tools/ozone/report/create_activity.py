@@ -11,6 +11,7 @@ import typing_extensions as te
 
 if t.TYPE_CHECKING:
     from atproto_client import models
+    from atproto_client.models.unknown_type import UnknownInputType
 from atproto_client.models import base, unknown_union
 
 
@@ -33,6 +34,9 @@ class Data(base.DataModelBase):
     internal_note: t.Optional[str] = None  #: Optional moderator-only note. Not visible to reporters.
     is_automated: t.Optional[bool] = (
         False  #: Set true when this activity is triggered by an automated process. Defaults to false.
+    )
+    meta: t.Optional['UnknownInputType'] = (
+        None  #: Optional metadata for the report activities. Lifecycle and resolution fields are controlled by the service.
     )
     public_note: t.Optional[str] = None  #: Optional public-facing note, potentially visible to the reporter.
     report_id: t.Optional[int] = (
@@ -58,6 +62,9 @@ class DataDict(t.TypedDict):
     is_automated: te.NotRequired[
         t.Optional[bool]
     ]  #: Set true when this activity is triggered by an automated process. Defaults to false.
+    meta: te.NotRequired[
+        t.Optional['UnknownInputType']
+    ]  #: Optional metadata for the report activities. Lifecycle and resolution fields are controlled by the service.
     public_note: te.NotRequired[t.Optional[str]]  #: Optional public-facing note, potentially visible to the reporter.
     report_id: te.NotRequired[
         t.Optional[int]

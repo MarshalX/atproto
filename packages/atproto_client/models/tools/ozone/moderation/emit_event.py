@@ -110,11 +110,12 @@ class DataDict(t.TypedDict):
 class ReportAction(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.emitEvent`. Target specific reports when emitting a moderation event."""
 
-    all: t.Optional[bool] = None  #: Target ALL reports on the subject.
+    all: t.Optional[bool] = None  #: Target ALL reports on the subject. Excludes assigned and escalated reports.
     ids: t.Optional[t.List[int]] = None  #: Target specific report IDs.
+    is_automated: t.Optional[bool] = None  #: Set true when the report activities are created by an automated process.
     note: t.Optional[str] = None  #: Note to send to reporter(s) when actioning their report.
     types: t.Optional[t.List[str]] = (
-        None  #: Target reports matching these report types on the subject (fully qualified NSIDs).
+        None  #: Target reports matching these report types on the subject (fully qualified NSIDs). Excludes assigned and escalated reports.
     )
 
     py_type: t.Literal['tools.ozone.moderation.emitEvent#reportAction'] = Field(

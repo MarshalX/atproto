@@ -37,7 +37,7 @@ class Record(base.RecordModelBase):
     )
     pinned_post: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = None  #: Pinned post.
     pronouns: te.Annotated[t.Optional[str], Field(max_length=200)] = None  #: Free-form pronouns text.
-    website: t.Optional[string_formats.Uri] = None  #: Website.
+    website: t.Optional[string_formats.Uri] = None  #: Deprecated: use links instead.
 
     py_type: t.Literal['app.bsky.actor.profile'] = Field(default='app.bsky.actor.profile', alias='$type', frozen=True)
 
