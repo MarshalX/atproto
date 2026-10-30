@@ -49,10 +49,7 @@
             },
             "associatedRefs": {
               "type": "array",
-              "items": {
-                "type": "ref",
-                "ref": "com.atproto.repo.strongRef"
-              },
+              "items": { "type": "ref", "ref": "com.atproto.repo.strongRef" },
               "description": "StrongRefs (URI+CID) of the Atmosphere records selected for persistence in a post, suitable for embedding into its external.associatedRefs: the canonical record, plus only the additional records the service chooses to persist for its collection. This can be a subset of the records used to render `data`, which may also draw on other hydrated records such as recommendations, subscriptions, or favorites. Present only when validation passed. Index-aligned with `associatedRecords`."
             },
             "associatedRecords": {
@@ -64,10 +61,7 @@
             },
             "unverifiedAssociatedRefs": {
               "type": "array",
-              "items": {
-                "type": "ref",
-                "ref": "com.atproto.repo.strongRef"
-              },
+              "items": { "type": "ref", "ref": "com.atproto.repo.strongRef" },
               "description": "StrongRefs (URI+CID) of the same persistence-selected Atmosphere records (the canonical record plus chosen additional records) when validation of the requested `url` failed. These must not be written to a post. Index-aligned with `unverifiedAssociatedRecords`."
             },
             "unverifiedAssociatedRecords": {
