@@ -23,6 +23,12 @@ Labels and the streams that publish them.
 
       Find labels relevant to the provided AT-URI patterns.
 
+   .. grid-item-card:: :octicon:`note;1em;sd-mr-1` record
+      :link: /models/com/atproto/label/record
+      :link-type: doc
+
+      Metadata tag on an atproto resource (eg, repo or record), published as a record in the labeler's repository.
+
    .. grid-item-card:: :octicon:`broadcast;1em;sd-mr-1` subscribeLabels
       :link: /models/com/atproto/label/subscribeLabels
       :link-type: doc
@@ -35,4 +41,5 @@ Labels and the streams that publish them.
 
    defs </models/com/atproto/label/defs>
    queryLabels </models/com/atproto/label/queryLabels>
+   record </models/com/atproto/label/record>
    subscribeLabels </models/com/atproto/label/subscribeLabels>

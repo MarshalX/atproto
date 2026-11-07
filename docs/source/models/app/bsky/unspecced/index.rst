@@ -23,6 +23,12 @@ Unstable endpoints that may change or disappear without notice.
 
       Returns the current state of the age assurance process for an account.
 
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereApps
+      :link: /models/app/bsky/unspecced/getAtmosphereApps
+      :link-type: doc
+
+      Get curated Atmosphere apps.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereExploreArticleRecommendations
       :link: /models/app/bsky/unspecced/getAtmosphereExploreArticleRecommendations
       :link-type: doc
@@ -34,6 +40,12 @@ Unstable endpoints that may change or disappear without notice.
       :link-type: doc
 
       Get Atmosphere Explore content.
+
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereRecordView
+      :link: /models/app/bsky/unspecced/getAtmosphereRecordView
+      :link-type: doc
+
+      Get a hydrated view of one Atmosphere record.
 
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereTimeline
       :link: /models/app/bsky/unspecced/getAtmosphereTimeline
@@ -221,8 +233,10 @@ Unstable endpoints that may change or disappear without notice.
 
    defs </models/app/bsky/unspecced/defs>
    getAgeAssuranceState </models/app/bsky/unspecced/getAgeAssuranceState>
+   getAtmosphereApps </models/app/bsky/unspecced/getAtmosphereApps>
    getAtmosphereExploreArticleRecommendations </models/app/bsky/unspecced/getAtmosphereExploreArticleRecommendations>
    getAtmosphereExploreTab </models/app/bsky/unspecced/getAtmosphereExploreTab>
+   getAtmosphereRecordView </models/app/bsky/unspecced/getAtmosphereRecordView>
    getAtmosphereTimeline </models/app/bsky/unspecced/getAtmosphereTimeline>
    getConfig </models/app/bsky/unspecced/getConfig>
    getOnboardingSuggestedStarterPacks </models/app/bsky/unspecced/getOnboardingSuggestedStarterPacks>

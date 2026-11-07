@@ -9,7 +9,11 @@ import typing as t
 
 import typing_extensions as te
 
-from atproto_client.models import base, string_formats
+from atproto_client.models import string_formats
+
+if t.TYPE_CHECKING:
+    from atproto_client import models
+from atproto_client.models import base
 
 
 class Params(base.ParamsModelBase):
@@ -32,6 +36,10 @@ class Response(base.ResponseModelBase):
     src: string_formats.Did  #: DID of the moderation service returning this status.
     standing: t.Union[t.Literal['good', 'warning', 'atRisk'], str]  #: Standing.
     updated_at: string_formats.DateTime  #: Newest account-status update or strike timestamp used to derive this standing, or the Unix epoch when neither exists. This is not a standing-transition timestamp; expiry can change standing without changing this value.
+    enforcement: t.Optional['models.ToolsOzoneInboxDefs.EnforcementView'] = (
+        None  #: Current account takedown or suspension, independent of strike standing.
+    )
     expires_at: t.Optional[string_formats.DateTime] = (
         None  #: Time at which the current suspension expires. Present only for a temporary suspension.
     )
+    has_active_strikes: t.Optional[bool] = None  #: Whether the account currently has any active strikes.

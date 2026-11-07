@@ -21,7 +21,7 @@ Report intake and handling.
       :link: /models/tools/ozone/report/closeReports
       :link-type: doc
 
-      Close eligible reports on a subject matching the given criteria.
+      Close eligible reports on a subject matching the given criteria, optionally linking an existing moderation action.
 
    .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` createActivity
       :link: /models/tools/ozone/report/createActivity

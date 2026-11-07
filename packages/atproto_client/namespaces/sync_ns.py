@@ -5124,6 +5124,33 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedDefs.AgeAssuranceState)
 
+    def get_atmosphere_apps(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetAtmosphereApps.Params, models.AppBskyUnspeccedGetAtmosphereApps.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetAtmosphereApps.Response':
+        """Get curated Atmosphere apps. Authentication is optional; authenticated requests include viewer-specific profile state and known followers.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetAtmosphereApps.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.AppBskyUnspeccedGetAtmosphereApps.Params)
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getAtmosphereApps', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereApps.Response)
+
     def get_atmosphere_explore_article_recommendations(
         self,
         params: t.Optional[
@@ -5165,7 +5192,7 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyUnspeccedGetAtmosphereExploreTab.Response':
-        """Get Atmosphere Explore content. Articles are recommended when algorithmic recommendations are enabled for the request, and curated otherwise; other sections are curated. Authentication is optional; authenticated requests include viewer-specific profile state.
+        """Get Atmosphere Explore content. Articles are recommended when algorithmic recommendations are enabled for the request, and curated otherwise; other sections are curated. Curated content is selected using the x-atproto-bsky-geo-country, x-atproto-bsky-geo-region, and x-atproto-bsky-topics request headers. Authentication is optional; authenticated requests include viewer-specific profile state.
 
         Args:
             params: Parameters.
@@ -5185,6 +5212,35 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereExploreTab.Response)
+
+    def get_atmosphere_record_view(
+        self,
+        params: t.Union[
+            models.AppBskyUnspeccedGetAtmosphereRecordView.Params,
+            models.AppBskyUnspeccedGetAtmosphereRecordView.ParamsDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetAtmosphereRecordView.Response':
+        """Get a hydrated view of one Atmosphere record. Requires authentication. Without `cid` the latest version of the record is returned; with `cid` exactly that version is returned, never another. Dependencies of the record are always latest. Returns an empty object when the record is missing or not visible. When the record is visible but cannot produce a view, only the associations are returned.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetAtmosphereRecordView.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.AppBskyUnspeccedGetAtmosphereRecordView.Params)
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getAtmosphereRecordView',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereRecordView.Response)
 
     def get_atmosphere_timeline(
         self,
@@ -8268,7 +8324,163 @@ class ComAtprotoIdentityNamespace(NamespaceBase):
         return get_response_model(response, bool)
 
 
+class ComAtprotoLabelRecordRecord(RecordBase):
+    def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.ComAtprotoLabelRecord.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoLabelRecord.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='com.atproto.label.record', repo=repo, rkey=rkey, cid=cid
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.ComAtprotoLabelRecord.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.ComAtprotoLabelRecord.Record', response_model.value),
+        )
+
+    def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoLabelRecord.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoLabelRecord.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='com.atproto.label.record',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.ComAtprotoLabelRecord.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.ComAtprotoLabelRecord.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    def create(
+        self,
+        repo: str,
+        record: 'models.ComAtprotoLabelRecord.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoLabelRecord.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoLabelRecord.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='com.atproto.label.record',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.ComAtprotoLabelRecord.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='com.atproto.label.record',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class ComAtprotoLabelNamespace(NamespaceBase):
+    def __init__(self, client: 'XrpcClient') -> None:
+        super().__init__(client)
+        self.record = ComAtprotoLabelRecordRecord(self._client)
+
     def query_labels(
         self,
         params: t.Union[models.ComAtprotoLabelQueryLabels.Params, models.ComAtprotoLabelQueryLabels.ParamsDict],
@@ -13163,7 +13375,7 @@ class ToolsOzoneReportNamespace(NamespaceBase):
         data: t.Union[models.ToolsOzoneReportCloseReports.Data, models.ToolsOzoneReportCloseReports.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ToolsOzoneReportCloseReports.Response':
-        """Close eligible reports on a subject matching the given criteria. Assigned and escalated reports are excluded. Reports whose current status does not permit a transition to closed are skipped silently. Intended for automated flows that resolve reports without taking action on the subject.
+        """Close eligible reports on a subject matching the given criteria, optionally linking an existing moderation action. Assigned, escalated, and actively assigned reports are excluded. Reports whose current status does not permit a transition to closed are skipped silently.
 
         Args:
             data: Input data.
