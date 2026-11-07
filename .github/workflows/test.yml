@@ -12,7 +12,7 @@ jobs:
   unit_tests:
     strategy:
       matrix:
-        os: [ macos-latest, ubuntu-latest, windows-latest ]
+        os: [ macos-latest, ubuntu-24.04, windows-latest ]
         python-version: [ "3.9", "3.10", "3.11", "3.12", "3.13", "3.14", "3.15", "3.14t", "3.15t" ]
 
     runs-on: ${{matrix.os}}
@@ -98,7 +98,7 @@ jobs:
         include:
           - { websockets: "15", python-version: "3.15", os: macos-latest }
           - { websockets: "16", python-version: "3.15", os: windows-latest }
-          - { websockets: "17", python-version: "3.11", os: ubuntu-latest }  # v17 needs 3.11+
+          - { websockets: "17", python-version: "3.11", os: ubuntu-24.04 }  # v17 needs 3.11+
 
     runs-on: ${{matrix.os}}
 

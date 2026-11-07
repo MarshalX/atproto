@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   update_lexicons:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       POETRY_VIRTUALENVS_IN_PROJECT: "true"

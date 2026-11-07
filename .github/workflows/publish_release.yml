@@ -22,7 +22,7 @@ permissions:
 jobs:
   publish_release:
     if: github.event.action == 'created'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout repository.
@@ -65,7 +65,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
 
   update_changelog:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     permissions:
       contents: write
