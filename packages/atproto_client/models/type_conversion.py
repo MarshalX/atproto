@@ -23,6 +23,7 @@ RECORD_TYPES = {
     'app.bsky.labeler.service': 'AppBskyLabelerService',
     'app.bsky.notification.declaration': 'AppBskyNotificationDeclaration',
     'chat.bsky.actor.declaration': 'ChatBskyActorDeclaration',
+    'com.atproto.label.record': 'ComAtprotoLabelRecord',
     'com.atproto.lexicon.schema': 'ComAtprotoLexiconSchema',
     'com.germnetwork.declaration': 'ComGermnetworkDeclaration',
     'place.stream.chat.pinnedRecord': 'PlaceStreamChatPinnedRecord',

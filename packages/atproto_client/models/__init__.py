@@ -136,11 +136,15 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
     from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
     from atproto_client.models.app.bsky.unspecced import get_age_assurance_state as AppBskyUnspeccedGetAgeAssuranceState
+    from atproto_client.models.app.bsky.unspecced import get_atmosphere_apps as AppBskyUnspeccedGetAtmosphereApps
     from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_explore_article_recommendations as AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations,
     )
     from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_explore_tab as AppBskyUnspeccedGetAtmosphereExploreTab,
+    )
+    from atproto_client.models.app.bsky.unspecced import (
+        get_atmosphere_record_view as AppBskyUnspeccedGetAtmosphereRecordView,
     )
     from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_timeline as AppBskyUnspeccedGetAtmosphereTimeline,
@@ -310,6 +314,7 @@ if t.TYPE_CHECKING:
     from atproto_client.models.com.atproto.identity import update_handle as ComAtprotoIdentityUpdateHandle
     from atproto_client.models.com.atproto.label import defs as ComAtprotoLabelDefs
     from atproto_client.models.com.atproto.label import query_labels as ComAtprotoLabelQueryLabels
+    from atproto_client.models.com.atproto.label import record as ComAtprotoLabelRecord
     from atproto_client.models.com.atproto.label import subscribe_labels as ComAtprotoLabelSubscribeLabels
     from atproto_client.models.com.atproto.lexicon import resolve_lexicon as ComAtprotoLexiconResolveLexicon
     from atproto_client.models.com.atproto.lexicon import schema as ComAtprotoLexiconSchema
@@ -656,8 +661,10 @@ __all__ = [
     'AppBskyRichtextFacet',
     'AppBskyUnspeccedDefs',
     'AppBskyUnspeccedGetAgeAssuranceState',
+    'AppBskyUnspeccedGetAtmosphereApps',
     'AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations',
     'AppBskyUnspeccedGetAtmosphereExploreTab',
+    'AppBskyUnspeccedGetAtmosphereRecordView',
     'AppBskyUnspeccedGetAtmosphereTimeline',
     'AppBskyUnspeccedGetConfig',
     'AppBskyUnspeccedGetOnboardingSuggestedStarterPacks',
@@ -782,6 +789,7 @@ __all__ = [
     'ComAtprotoIdentityUpdateHandle',
     'ComAtprotoLabelDefs',
     'ComAtprotoLabelQueryLabels',
+    'ComAtprotoLabelRecord',
     'ComAtprotoLabelSubscribeLabels',
     'ComAtprotoLexiconResolveLexicon',
     'ComAtprotoLexiconSchema',
@@ -1098,10 +1106,12 @@ class _Ids:
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetAgeAssuranceState: str = 'app.bsky.unspecced.getAgeAssuranceState'
+    AppBskyUnspeccedGetAtmosphereApps: str = 'app.bsky.unspecced.getAtmosphereApps'
     AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations: str = (
         'app.bsky.unspecced.getAtmosphereExploreArticleRecommendations'
     )
     AppBskyUnspeccedGetAtmosphereExploreTab: str = 'app.bsky.unspecced.getAtmosphereExploreTab'
+    AppBskyUnspeccedGetAtmosphereRecordView: str = 'app.bsky.unspecced.getAtmosphereRecordView'
     AppBskyUnspeccedGetAtmosphereTimeline: str = 'app.bsky.unspecced.getAtmosphereTimeline'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
     AppBskyUnspeccedGetOnboardingSuggestedStarterPacks: str = 'app.bsky.unspecced.getOnboardingSuggestedStarterPacks'
@@ -1230,6 +1240,7 @@ class _Ids:
     ComAtprotoIdentityUpdateHandle: str = 'com.atproto.identity.updateHandle'
     ComAtprotoLabelDefs: str = 'com.atproto.label.defs'
     ComAtprotoLabelQueryLabels: str = 'com.atproto.label.queryLabels'
+    ComAtprotoLabelRecord: str = 'com.atproto.label.record'
     ComAtprotoLabelSubscribeLabels: str = 'com.atproto.label.subscribeLabels'
     ComAtprotoLexiconResolveLexicon: str = 'com.atproto.lexicon.resolveLexicon'
     ComAtprotoLexiconSchema: str = 'com.atproto.lexicon.schema'

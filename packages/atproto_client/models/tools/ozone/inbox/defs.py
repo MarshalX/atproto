@@ -110,6 +110,9 @@ class SubjectViewDetail(base.ModelBase):
         t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
     ]  #: Subject.
     updated_at: string_formats.DateTime  #: Updated at.
+    account: t.Optional['models.ToolsOzoneInboxDefs.AccountPreview'] = (
+        None  #: Best-effort current profile information for an account subject.
+    )
     appeal: t.Optional['models.ToolsOzoneInboxDefs.AppealView'] = None  #: Appeal.
     available_actions: t.Optional[t.List[t.Union[t.Literal['appeal'], str]]] = None  #: Available actions.
     cursor: t.Optional[str] = None  #: Cursor for the next page of action history. Omitted when no older actions remain.
@@ -122,6 +125,17 @@ class SubjectViewDetail(base.ModelBase):
 
     py_type: t.Literal['tools.ozone.inbox.defs#subjectViewDetail'] = Field(
         default='tools.ozone.inbox.defs#subjectViewDetail', alias='$type', frozen=True
+    )
+
+
+class AccountPreview(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.inbox.defs`. Current account information, when available; this is not a snapshot of the account at the time of the action."""
+
+    handle: t.Optional[string_formats.Handle] = None  #: Handle.
+    profile: t.Optional['UnknownType'] = None  #: Raw app.bsky.actor.profile record, when available.
+
+    py_type: t.Literal['tools.ozone.inbox.defs#accountPreview'] = Field(
+        default='tools.ozone.inbox.defs#accountPreview', alias='$type', frozen=True
     )
 
 

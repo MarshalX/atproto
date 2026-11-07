@@ -30,6 +30,7 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.AppBskyLabelerService.Record',
     'models.AppBskyNotificationDeclaration.Record',
     'models.ChatBskyActorDeclaration.Record',
+    'models.ComAtprotoLabelRecord.Record',
     'models.ComAtprotoLexiconSchema.Record',
     'models.ComGermnetworkDeclaration.Record',
     'models.PlaceStreamChatPinnedRecord.Record',

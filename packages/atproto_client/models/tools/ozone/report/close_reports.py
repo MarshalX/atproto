@@ -8,6 +8,7 @@
 import typing as t
 
 import typing_extensions as te
+from pydantic import Field
 
 from atproto_client.models import string_formats
 
@@ -22,6 +23,9 @@ class Data(base.DataModelBase):
     subject: (
         string_formats.Uri
     )  #: Subject DID (account-level reports) or AT-URI (record-level reports) whose reports should be closed.
+    action_event_id: te.Annotated[t.Optional[int], Field(ge=1)] = (
+        None  #: Optional existing moderation event that closes reports. It must target the exact subject or its owning account; account-wide closure requires an account event. The event is linked to each closed report and may predate the report. The link does not imply the action is still in effect.
+    )
     excluded_report_types: t.Optional[t.List[str]] = (
         None  #: Reports of these types (fully qualified reason NSIDs) are excluded from closure and left unchanged. When omitted or empty, no report types are excluded.
     )
@@ -46,6 +50,9 @@ class DataDict(t.TypedDict):
     subject: (
         string_formats.Uri
     )  #: Subject DID (account-level reports) or AT-URI (record-level reports) whose reports should be closed.
+    action_event_id: te.NotRequired[
+        t.Optional[int]
+    ]  #: Optional existing moderation event that closes reports. It must target the exact subject or its owning account; account-wide closure requires an account event. The event is linked to each closed report and may predate the report. The link does not imply the action is still in effect.
     excluded_report_types: te.NotRequired[
         t.Optional[t.List[str]]
     ]  #: Reports of these types (fully qualified reason NSIDs) are excluded from closure and left unchanged. When omitted or empty, no report types are excluded.

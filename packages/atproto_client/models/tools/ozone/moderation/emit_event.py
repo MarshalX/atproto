@@ -111,6 +111,9 @@ class ReportAction(base.ModelBase):
     """Definition model for :obj:`tools.ozone.moderation.emitEvent`. Target specific reports when emitting a moderation event."""
 
     all: t.Optional[bool] = None  #: Target ALL reports on the subject. Excludes assigned and escalated reports.
+    all_owned: t.Optional[bool] = (
+        None  #: Target all eligible reports on the account and its owned subjects, including records, messages, and conversations. Only valid for account subjects and events that close reports. Excludes assigned, escalated, and actively assigned reports unless explicitly targeted by ID.
+    )
     ids: t.Optional[t.List[int]] = None  #: Target specific report IDs.
     is_automated: t.Optional[bool] = None  #: Set true when the report activities are created by an automated process.
     note: t.Optional[str] = None  #: Note to send to reporter(s) when actioning their report.

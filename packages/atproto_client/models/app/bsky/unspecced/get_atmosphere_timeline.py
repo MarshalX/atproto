@@ -84,6 +84,9 @@ class ActivityItem(base.ModelBase):
     collection: string_formats.Nsid  #: Collection.
     record: 'models.AppBskyUnspeccedGetAtmosphereTimeline.ActivityRecord'  #: Record.
     viewer_state: 'models.AppBskyUnspeccedGetAtmosphereTimeline.ViewerState'  #: Viewer state.
+    bsky_post_ref: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = (
+        None  #: The Bluesky post associated with the rendered article or livestream, as declared by its author. The referenced post may not be available.
+    )
     related_activity: t.Optional[t.List['models.AppBskyUnspeccedGetAtmosphereTimeline.ActivityItem']] = (
         None  #: Recommendations and shares attached to this article. Attached activities do not themselves contain related activity.
     )

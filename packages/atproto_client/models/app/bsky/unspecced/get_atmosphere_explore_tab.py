@@ -20,21 +20,15 @@ from atproto_client.models import base
 class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
-    country_code: t.Optional[str] = None  #: The ISO 3166-1 alpha-2 country code used to select curated content.
     langs: t.Optional[t.List[string_formats.Language]] = (
         None  #: Preferred languages for article recommendations when algorithmic recommendations are enabled. Ignored otherwise.
     )
-    region_code: t.Optional[str] = None  #: The ISO 3166-2 region code used to select curated content.
 
 
 class ParamsDict(t.TypedDict):
-    country_code: te.NotRequired[
-        t.Optional[str]
-    ]  #: The ISO 3166-1 alpha-2 country code used to select curated content.
     langs: te.NotRequired[
         t.Optional[t.List[string_formats.Language]]
     ]  #: Preferred languages for article recommendations when algorithmic recommendations are enabled. Ignored otherwise.
-    region_code: te.NotRequired[t.Optional[str]]  #: The ISO 3166-2 region code used to select curated content.
 
 
 class Response(base.ResponseModelBase):
@@ -105,8 +99,11 @@ class LivestreamList(base.ModelBase):
 class ArticleItem(base.ModelBase):
     """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
-    featured: bool  #: Featured.
+    featured: bool  #: Deprecated. Retained for compatibility; always false.
     view: 'models.AppBskyEmbedExternal.ViewArticle'  #: View.
+    bsky_post_ref: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = (
+        None  #: The Bluesky post associated with the article, as declared by its author. The referenced post may not be available.
+    )
 
     py_type: t.Literal['app.bsky.unspecced.getAtmosphereExploreTab#articleItem'] = Field(
         default='app.bsky.unspecced.getAtmosphereExploreTab#articleItem', alias='$type', frozen=True
@@ -116,7 +113,7 @@ class ArticleItem(base.ModelBase):
 class PublicationItem(base.ModelBase):
     """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
-    featured: bool  #: Featured.
+    featured: bool  #: Deprecated. Retained for compatibility; always false.
     view: 'models.AppBskyEmbedExternal.ViewArticlePublication'  #: View.
 
     py_type: t.Literal['app.bsky.unspecced.getAtmosphereExploreTab#publicationItem'] = Field(
@@ -127,7 +124,7 @@ class PublicationItem(base.ModelBase):
 class GalleryItem(base.ModelBase):
     """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
-    featured: bool  #: Featured.
+    featured: bool  #: Deprecated. Retained for compatibility; always false.
     view: 'models.AppBskyEmbedExternal.ViewGallery'  #: View.
 
     py_type: t.Literal['app.bsky.unspecced.getAtmosphereExploreTab#galleryItem'] = Field(
@@ -138,8 +135,11 @@ class GalleryItem(base.ModelBase):
 class LivestreamItem(base.ModelBase):
     """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
-    featured: bool  #: Featured.
+    featured: bool  #: Deprecated. Retained for compatibility; always false.
     view: 'models.AppBskyEmbedExternal.ViewLivestream'  #: View.
+    bsky_post_ref: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = (
+        None  #: The Bluesky post that announced the livestream, as declared by its author. The referenced post may not be available.
+    )
 
     py_type: t.Literal['app.bsky.unspecced.getAtmosphereExploreTab#livestreamItem'] = Field(
         default='app.bsky.unspecced.getAtmosphereExploreTab#livestreamItem', alias='$type', frozen=True
@@ -165,13 +165,22 @@ class AnnouncementBanner(base.ModelBase):
 class AppCard(base.ModelBase):
     """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
-    background_image: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = None  #: Background image.
+    background_image: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
+        None  #: Compatibility field. The profile banner when available, otherwise the editorial background image.
+    )
     category: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Category.
     description: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Description.
     id: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Id.
-    logo: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = None  #: Logo.
-    overlay_color: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Overlay color.
-    text_color: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Text color.
+    logo: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
+        None  #: Compatibility field. The profile avatar when available, otherwise the editorial logo.
+    )
+    overlay_color: te.Annotated[t.Optional[str], Field(max_length=4096)] = (
+        None  #: Deprecated. Retained for compatibility.
+    )
+    profile: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed'] = (
+        None  #: The app's account profile, when available.
+    )
+    text_color: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Deprecated. Retained for compatibility.
     title: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Title.
     url: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = None  #: Url.
 
