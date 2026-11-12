@@ -8,10 +8,25 @@ from atproto_oauth.scopes._mime import is_accept, matches_any_accept
 from atproto_oauth.scopes._parser import ParamSchema, Parser
 from atproto_oauth.scopes._syntax import ScopeStringSyntax
 
-_DID_RE: t.Final = re.compile(
-    r'^did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._%-]'
-    r'(?:#[a-zA-Z0-9._%-]+)?$'
-)
+_DID_PLC: t.Final = re.compile(r'did:plc:[a-z2-7]{24}')
+_DID_WEB_HOST: t.Final = re.compile(r'(?:[A-Za-z0-9._-]|%[0-9A-F]{2})+')
+_DID_WEB_LOCALHOST: t.Final = re.compile(r'localhost(?:%3A[0-9]+)?')
+_DID_FRAGMENT: t.Final = re.compile(r"(?:[A-Za-z0-9._~!$&'()*+,;=:@/?-]|%[0-9A-Fa-f]{2})+")
+
+
+def _is_atproto_did(value: str) -> bool:
+    if _DID_PLC.fullmatch(value):
+        return True
+
+    if not value.startswith('did:web:'):
+        return False
+
+    host = value[len('did:web:') :]
+    if not _DID_WEB_HOST.fullmatch(host):
+        return False
+
+    # a port is only allowed on localhost, and a path never
+    return '%' not in host or bool(_DID_WEB_LOCALHOST.fullmatch(host))
 
 
 def _is_nsid(value: str) -> bool:
@@ -23,11 +38,13 @@ def _is_nsid_or_wildcard(value: str) -> bool:
 
 
 def _is_atproto_audience(value: str) -> bool:
-    """Validate a DID or ``did:web:host#service_id`` audience string."""
-    if value == '*':
-        return True
+    """Tell whether a value is ``*`` or a service of an account, such as ``did:web:example.com#service``."""
+    return value == '*' or _is_atproto_service(value)
 
-    return bool(_DID_RE.match(value))
+
+def _is_atproto_service(value: str) -> bool:
+    did, separator, fragment = value.partition('#')
+    return bool(separator) and bool(_DID_FRAGMENT.fullmatch(fragment)) and _is_atproto_did(did)
 
 
 def _known_values_validator(values: t.FrozenSet[str]) -> t.Callable[[str], bool]:
@@ -132,7 +149,8 @@ def _normalize_accept(value: t.Sequence[str]) -> t.List[str]:
     if '*/*' in value:
         return list(_DEFAULT_ACCEPT)
 
-    return sorted(set(_filter_non_redundant(item.lower() for item in value)))
+    # duplicates are kept here and dropped when the scope is formatted, which decides its form
+    return sorted(_filter_non_redundant(item.lower() for item in value))
 
 
 _blob_parser = Parser(
@@ -369,7 +387,7 @@ _include_parser = Parser(
         'aud': ParamSchema(
             multiple=False,
             required=False,
-            validate=_is_atproto_audience,
+            validate=_is_atproto_service,
         ),
     },
     positional_name='nsid',

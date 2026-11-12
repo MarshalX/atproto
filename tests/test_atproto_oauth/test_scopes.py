@@ -55,19 +55,9 @@ def test_scope_string_syntax_parse_scope(
     assert syntax.params == params
 
 
-def test_scope_string_syntax_get_single_returns_none_for_absent() -> None:
-    syntax = ScopeStringSyntax.from_string('my-res')
-    assert syntax.get_single('nonexistent') is None
-
-
 def test_scope_string_syntax_get_multi_returns_none_for_absent() -> None:
     syntax = ScopeStringSyntax.from_string('my-res')
     assert syntax.get_multi('nonexistent') is None
-
-
-def test_scope_string_syntax_get_single_returns_none_for_multi_value() -> None:
-    syntax = ScopeStringSyntax.from_string('my-res?x=foo&x=bar')
-    assert syntax.get_single('x') is None
 
 
 def test_scope_string_syntax_get_multi_returns_values() -> None:
@@ -82,7 +72,7 @@ def test_scope_string_syntax_url_encoding_in_positional() -> None:
 
 def test_scope_string_syntax_url_encoding_in_params() -> None:
     syntax = ScopeStringSyntax.from_string('my-res?x=my%20value')
-    assert syntax.get_single('x') == 'my value'
+    assert syntax.get_multi('x') == ['my value']
 
 
 def test_scope_string_syntax_colon_in_positional() -> None:
@@ -552,10 +542,10 @@ def test_include_scope_parse() -> None:
 
 
 def test_include_scope_parse_with_aud() -> None:
-    scope = IncludeScope.from_string('include:com.example.appPermissions?aud=did:web:example.com')
+    scope = IncludeScope.from_string('include:com.example.appPermissions?aud=did:web:example.com%23service')
     assert scope is not None
     assert scope.nsid == 'com.example.appPermissions'
-    assert scope.aud == 'did:web:example.com'
+    assert scope.aud == 'did:web:example.com#service'
 
 
 def test_include_scope_is_parent_authority_of_same_namespace() -> None:
@@ -783,3 +773,75 @@ def test_mime_matches_any_accept() -> None:
 )
 def test_scope_string_syntax_canonical_form(scope: str, canonical: str) -> None:
     assert str(ScopeStringSyntax.from_string(scope)) == canonical
+
+
+_PERMISSIONS = {
+    'repo': RepoPermission,
+    'blob': BlobPermission,
+    'rpc': RpcPermission,
+    'account': AccountPermission,
+    'identity': IdentityPermission,
+    'include': IncludeScope,
+}
+
+
+@pytest.mark.parametrize(
+    ('scope', 'canonical'),
+    [
+        ('repo:*', 'repo:*'),
+        ('repo:*?action=create', 'repo:*?action=create'),
+        ('repo:app.bsky.feed.post?action=create&action=delete', 'repo:app.bsky.feed.post?action=create&action=delete'),
+        ('repo?collection=a.b.c&collection=d.e.f', 'repo?collection=a.b.c&collection=d.e.f'),
+        ('repo:a.b.c?action=create&action=create', 'repo:a.b.c?action=create'),
+        ('repo:a.b.c?action=delete&action=update&action=create', 'repo:a.b.c'),
+        ('blob:*/*', 'blob:*/*'),
+        ('blob?accept=image/*&accept=video/*', 'blob?accept=image/*&accept=video/*'),
+        ('blob?accept=image/png&accept=image/*', 'blob:image/*'),
+        ('blob?accept=image/png&accept=image/png', 'blob?accept=image/png'),
+        ('rpc:*?aud=did:web:api.bsky.app%23bsky_appview', 'rpc:*?aud=did:web:api.bsky.app%23bsky_appview'),
+        ('rpc:app.bsky.actor.getProfile?aud=*', 'rpc:app.bsky.actor.getProfile?aud=*'),
+        ('rpc?lxm=a.b.c&lxm=*&aud=did:web:x.test%23svc', 'rpc:*?aud=did:web:x.test%23svc'),
+        ('account:email', 'account:email'),
+        ('account:email?action=manage', 'account:email?action=manage'),
+        ('account:email?action=read&action=manage', 'account:email?action=read&action=manage'),
+        ('rpc:a.b.c?aud=did:web:localhost%253A2583%23svc', 'rpc:a.b.c?aud=did:web:localhost%3A2583%23svc'),
+        ('account:repo?action=read', 'account:repo'),
+        ('identity:handle', 'identity:handle'),
+        ('identity:*', 'identity:*'),
+        ('include:com.example.calendar.basePermissions', 'include:com.example.calendar.basePermissions'),
+        ('include:com.example.set?aud=did:web:x.test%23svc', 'include:com.example.set?aud=did:web:x.test%23svc'),
+    ],
+)
+def test_permission_canonical_form(scope: str, canonical: str) -> None:
+    permission = _PERMISSIONS[scope.replace('?', ':').split(':')[0]].from_string(scope)
+
+    assert permission is not None
+    assert str(permission) == canonical
+
+
+@pytest.mark.parametrize(
+    'scope',
+    [
+        # the same parameter as a positional value and by name
+        'repo:a.b.c?collection=d.e.f',
+        'blob:image/png?accept=image/jpeg',
+        'identity:%2A?attr=EMAIL&attr=email',
+        # an empty value
+        'repo:a.b.c?collection=',
+        'repo:app.bsky.feed.like?action=&action=update',
+        # several values for a parameter that takes one
+        'rpc:a.b.c?aud=did:web:x.test%23svc&aud=did:web:y.test%23svc',
+        'include:com.example.set?aud=did:web:x.test%23svc&aud=did:web:y.test%23svc',
+        # an audience has to name a service, and only an RPC may use the wildcard
+        'rpc:a.b.c',
+        'rpc:*?aud=*',
+        'rpc:app.bsky.feed.post?aud=did:web:api.bsky.app',
+        'rpc:app.bsky.feed.post?aud=did:example:123%23svc',
+        'rpc:app.bsky.feed.post?aud=did:web:example.com:path%23svc',
+        'rpc:app.bsky.feed.post?aud=did:web:example.com%253A8443%23svc',
+        'include:com.example.set?aud=*',
+        'include:com.example.set?aud=did:web:x.test',
+    ],
+)
+def test_invalid_permission_is_rejected(scope: str) -> None:
+    assert _PERMISSIONS[scope.replace('?', ':').split(':')[0]].from_string(scope) is None

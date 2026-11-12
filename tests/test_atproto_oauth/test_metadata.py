@@ -8,8 +8,11 @@ from pathlib import Path
 import pytest
 from atproto_crypto.jwk import generate_p256_jwk
 from atproto_oauth._effects import call
+from atproto_oauth.exceptions import UnsupportedAuthServerError
 from atproto_oauth.keys import Keyset
 from atproto_oauth.metadata import (
+    AuthServerMetadata,
+    _is_origin,
     build_client_metadata,
     build_loopback_client_id,
     validate_client_metadata,
@@ -101,6 +104,21 @@ def test_confidential_client_metadata() -> None:
         ('http://localhost/path', 'optional query'),
         ('http://localhost?redirect_uri=http%3A%2F%2Fexample.com%2F', 'Invalid redirect URI'),
         ('http://localhost?foo=bar', 'Unexpected parameter'),
+        ('http://localhost?scope=atproto&scope=atproto', 'scope twice'),
+        ('http://localhost?scope=', 'single spaces'),
+        ('http://localhost?scope=atproto++transition%3Ageneric', 'single spaces'),
+        ('http://localhost?scope=transition%3Ageneric', 'must include'),
+        ('http://localhost?redirect_uri=HTTP%3A%2F%2F127.0.0.1%2F', 'Invalid redirect URI'),
+        ('http://localhost?redirect_uri=http%3A%2F%2Fuser%40127.0.0.1%2F', 'Invalid redirect URI'),
+        ('HTTPS://app.example.com/client-metadata.json', 'https URL'),
+        ('https://example/client-metadata.json', 'domain name'),
+        ('https://app.example.local/client-metadata.json', 'domain name'),
+        ('https://ex ample.com/client-metadata.json', 'domain name'),
+        ('https://user@app.example.com/client-metadata.json', 'credentials'),
+        ('https://app.example.com/a/../client-metadata.json', 'canonical form'),
+        ('https://app.example.com/a/./client-metadata.json', 'canonical form'),
+        ('https://app.example.com/%2e%2e/client-metadata.json', 'canonical form'),
+        ('https://app.example.com/client metadata.json', 'canonical form'),
     ],
 )
 def test_client_id_rules(client_id: str, message: str) -> None:
@@ -314,3 +332,90 @@ def test_memory_store_drops_expired_values_it_is_never_asked_for() -> None:
     store.set('fresh', 'value')
 
     assert list(store._values) == ['fresh']
+
+
+@pytest.mark.parametrize(
+    'client_id',
+    [
+        'https://app.example.com/client-metadata.json',
+        'https://app.example.com/oauth/client-metadata.json?v=2',
+        'https://xn--bcher-kva.example/a%2Fb',
+        'https://app.example.com/a//b',
+        'http://localhost',
+        'http://localhost/',
+        'http://localhost?scope=atproto+repo%3Aa.b.c%3Faction%3Dcreate',
+        'http://localhost/?redirect_uri=http%3A%2F%2F127.0.0.1%3A8080%2Fcallback&redirect_uri=http%3A%2F%2F%5B%3A%3A1%5D%2F',
+    ],
+)
+def test_valid_client_ids(client_id: str) -> None:
+    redirect_uri = 'http://127.0.0.1/' if client_id.startswith('http:') else REDIRECT_URI
+
+    assert build_client_metadata(client_id, [redirect_uri], 'atproto')['client_id'] == client_id
+
+
+@pytest.mark.parametrize(
+    'scope',
+    [
+        '',
+        'transition:generic',
+        'atproto  transition:generic',
+        ' atproto',
+        'atproto ',
+        'atproto\ttransition:generic',
+        'atproto "x"',
+    ],
+)
+def test_malformed_scope_is_rejected(scope: str) -> None:
+    with pytest.raises(ValueError, match='Scope must'):
+        build_client_metadata(CLIENT_ID, [REDIRECT_URI], scope)
+
+
+@pytest.mark.parametrize(
+    ('issuer', 'valid'),
+    [
+        ('https://bsky.social', True),
+        ('https://pds.example.com:8443', True),
+        ('https://8.8.8.8', True),
+        ('https://bsky.social/', False),
+        ('https://bsky.social/path', False),
+        ('https://bsky.social:443', False),
+        ('https://bsky.social?x=1', False),
+        ('https://user@bsky.social', False),
+        ('https://localhost', False),
+        ('https://127.0.0.1:8443', False),
+        ('https://[::1]', False),
+        ('https://intranet', False),
+        ('https://printer.local', False),
+        ('https://ex ample.com', False),
+        ('http://bsky.social', False),
+        ('HTTPS://bsky.social', False),
+    ],
+)
+def test_issuer_identifier(issuer: str, valid: bool) -> None:
+    metadata = {
+        'issuer': issuer,
+        'authorization_endpoint': 'https://bsky.social/oauth/authorize',
+        'token_endpoint': 'https://bsky.social/oauth/token',
+        'pushed_authorization_request_endpoint': 'https://bsky.social/oauth/par',
+        'response_types_supported': ['code'],
+        'grant_types_supported': ['authorization_code', 'refresh_token'],
+        'code_challenge_methods_supported': ['S256'],
+        'token_endpoint_auth_methods_supported': ['none', 'private_key_jwt'],
+        'token_endpoint_auth_signing_alg_values_supported': ['ES256'],
+        'scopes_supported': ['atproto'],
+        'dpop_signing_alg_values_supported': ['ES256'],
+        'authorization_response_iss_parameter_supported': True,
+        'require_pushed_authorization_requests': True,
+        'client_id_metadata_document_supported': True,
+    }
+
+    if valid:
+        assert AuthServerMetadata.from_dict(metadata, issuer).issuer == issuer
+    else:
+        with pytest.raises(UnsupportedAuthServerError):
+            AuthServerMetadata.from_dict(metadata, issuer)
+
+
+def test_development_issuer_needs_allow_http() -> None:
+    assert _is_origin('http://localhost:2583', allow_http=True)
+    assert not _is_origin('http://localhost:2583', allow_http=False)

@@ -1,4 +1,5 @@
 import ipaddress
+import re
 import typing as t
 from dataclasses import dataclass, field
 from urllib.parse import parse_qsl, urlencode, urlsplit
@@ -19,6 +20,15 @@ _LOOPBACK_REDIRECT_HOSTS: t.Final = frozenset({'127.0.0.1', '::1'})
 
 _SUPPORTED_AUTH_METHODS: t.Final = frozenset({AUTH_METHOD_NONE, AUTH_METHOD_PRIVATE_KEY_JWT})
 
+_DOMAIN: t.Final = re.compile(r'[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+')
+_LOOPBACK_HOSTS: t.Final = frozenset({'localhost', '127.0.0.1', '[::1]'})
+# what a URL parser leaves untouched, so that the value is its own canonical form
+_CANONICAL_PATH: t.Final = re.compile(r"(?:/(?:[A-Za-z0-9._~!$&'()*+,;=:@-]|%[0-9A-Fa-f]{2})*)+")
+_CANONICAL_QUERY: t.Final = re.compile(r"(?:[A-Za-z0-9._~!$&'()*+,;=:@/?-]|%[0-9A-Fa-f]{2})*")
+_DOT_SEGMENT: t.Final = re.compile(r'/(?:\.|%2e){1,2}(?=/|$)', re.IGNORECASE)
+# scope-token of RFC 6749: printable ASCII without the double quote and the backslash
+_SCOPE: t.Final = re.compile(r'[\x21\x23-\x5B\x5D-\x7E]+(?: [\x21\x23-\x5B\x5D-\x7E]+)*')
+
 
 def _is_ip(hostname: str) -> bool:
     try:
@@ -29,17 +39,35 @@ def _is_ip(hostname: str) -> bool:
     return True
 
 
+def _is_public_domain(hostname: str) -> bool:
+    return bool(_DOMAIN.fullmatch(hostname)) and not hostname.endswith('.local') and not _is_ip(hostname)
+
+
 def _is_origin(url: t.Any, allow_http: bool) -> bool:
+    """Tell whether a value is the origin of a server, written the way a URL parser would write it."""
     if not isinstance(url, str):
         return False
 
     try:
         origin = get_origin(url)
+        parts = urlsplit(url)
     except ValueError:
         return False
 
-    scheme = urlsplit(url).scheme
-    return url == origin and (scheme == 'https' or (allow_http and scheme == 'http'))
+    if url != origin:
+        return False
+
+    if allow_http:
+        return parts.scheme in {'https', 'http'}
+
+    hostname = parts.hostname or ''
+    if parts.scheme != 'https' or hostname == 'localhost':
+        return False
+
+    if _is_ip(hostname):
+        return not ipaddress.ip_address(hostname).is_loopback
+
+    return _is_public_domain(hostname)
 
 
 def _is_endpoint(url: t.Any, allow_http: bool) -> bool:
@@ -212,13 +240,17 @@ def _parse_query(url: str) -> t.List[t.Tuple[str, str]]:
 
 
 def is_loopback_redirect_uri(redirect_uri: str) -> bool:
+    if not redirect_uri.startswith('http://'):
+        return False
+
     try:
         parts = urlsplit(redirect_uri)
         _ = parts.port
     except ValueError:
         return False
 
-    return parts.scheme == 'http' and parts.hostname in _LOOPBACK_REDIRECT_HOSTS and not parts.fragment
+    credentials = parts.username is not None or parts.password is not None
+    return parts.hostname in _LOOPBACK_REDIRECT_HOSTS and not parts.fragment and not credentials
 
 
 def _get_redirect_uri_without_port(redirect_uri: str) -> str:
@@ -260,7 +292,10 @@ def build_loopback_client_id(redirect_uris: t.Optional[t.Sequence[str]] = None, 
 
 
 def _ensure_scope(scope: t.Any) -> None:
-    if not isinstance(scope, str) or ATPROTO_SCOPE not in scope.split(' '):
+    if not isinstance(scope, str) or not _SCOPE.fullmatch(scope):
+        raise ValueError('Scope must be a list of scope values separated by single spaces')
+
+    if ATPROTO_SCOPE not in scope.split(' '):
         raise ValueError(f'Scope must include "{ATPROTO_SCOPE}"')
 
 
@@ -269,35 +304,52 @@ def _ensure_loopback_client_id(client_id: str) -> None:
     if '#' in rest or (rest and not rest.startswith(('?', '/?')) and rest != '/'):
         raise ValueError('Loopback client ID must be "http://localhost" with an optional query')
 
+    scopes: t.List[str] = []
     for name, value in _parse_query(client_id):
         if name == 'redirect_uri':
             if not is_loopback_redirect_uri(value):
                 raise ValueError(f'Invalid redirect URI in loopback client ID: {value!r}')
-        elif name != 'scope':
+        elif name == 'scope':
+            scopes.append(value)
+        else:
             raise ValueError(f'Unexpected parameter in loopback client ID: {name!r}')
+
+    if len(scopes) > 1:
+        raise ValueError('Loopback client ID must not declare the scope twice')
+
+    if scopes:
+        _ensure_scope(scopes[0])
 
 
 def _ensure_hosted_client_id(client_id: str) -> None:
+    if not client_id.startswith('https://'):
+        raise ValueError('Client ID must be an https URL')
+
     try:
         parts = urlsplit(client_id)
         port = parts.port
     except ValueError as e:
         raise ValueError(f'Client ID is not a URL: {client_id!r}') from e
 
-    if parts.scheme != 'https' or not parts.hostname:
-        raise ValueError('Client ID must be an https URL')
-
-    if port is not None or parts.username is not None or parts.password is not None:
+    if port is not None or '@' in parts.netloc:
         raise ValueError('Client ID must not contain a port or credentials')
 
-    if parts.fragment:
+    if '#' in client_id:
         raise ValueError('Client ID must not contain a fragment')
+
+    if _is_ip(parts.netloc.strip('[]')):
+        raise ValueError('Client ID hostname must not be an IP address')
+
+    if not _is_public_domain(parts.netloc):
+        raise ValueError('Client ID hostname must be a lowercase domain name')
 
     if parts.path in {'', '/'} or parts.path.endswith('/'):
         raise ValueError('Client ID must have a path that does not end with a slash')
 
-    if _is_ip(parts.hostname):
-        raise ValueError('Client ID hostname must not be an IP address')
+    # the authorization server compares the client ID with its parsed form, so it has to be written canonically
+    canonical = _CANONICAL_PATH.fullmatch(parts.path) and not _DOT_SEGMENT.search(parts.path)
+    if not canonical or not _CANONICAL_QUERY.fullmatch(parts.query):
+        raise ValueError('Client ID must be a URL in its canonical form')
 
 
 def is_loopback_client_id(client_id: str) -> bool:

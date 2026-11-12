@@ -14,14 +14,6 @@ class ScopeStringSyntax:
     def keys(self) -> t.Iterator[str]:
         yield from self.params
 
-    def get_single(self, key: str) -> t.Optional[str]:
-        """Return the value of a parameter, or :obj:`None` when it is absent or has several values."""
-        values = self.params.get(key)
-        if values is None or len(values) != 1:
-            return None
-
-        return values[0]
-
     def get_multi(self, key: str) -> t.Optional[t.List[str]]:
         return self.params.get(key)
 
@@ -59,7 +51,7 @@ class ScopeStringSyntax:
 
         params: t.Dict[str, t.List[str]] = {}
         if param_idx != -1 and param_idx < len(scope_value) - 1:
-            params = parse_qs(scope_value[param_idx + 1 :], keep_blank_values=False)
+            params = parse_qs(scope_value[param_idx + 1 :], keep_blank_values=True)
 
         return cls(prefix=prefix, positional=positional, params=params)
 

@@ -56,7 +56,7 @@ class Parser:
 
     def _parse_param(self, key: str, defn: ParamSchema, syntax: ScopeStringSyntax) -> t.Any:
         positional = syntax.positional if key == self.positional_name else None
-        param = syntax.get_multi(key) if defn.multiple else syntax.get_single(key)
+        param = syntax.get_multi(key)
 
         if param is None:
             if positional is None:
@@ -71,14 +71,14 @@ class Parser:
             # positional cannot coexist with named
             return _INVALID
 
-        if not defn.multiple:
-            return param if defn.validate(t.cast('str', param)) else _INVALID
-
-        values = param if isinstance(param, list) else [param]
-        if not values or not all(defn.validate(v) for v in values):
+        if not param or not all(defn.validate(value) for value in param):
             return _INVALID
 
-        return values
+        if defn.multiple:
+            return param
+
+        # a parameter that takes one value is invalid when given several
+        return param[0] if len(param) == 1 else _INVALID
 
     def format(self, values: t.Dict[str, t.Any]) -> str:
         """Format validated values back into a canonical scope string."""
