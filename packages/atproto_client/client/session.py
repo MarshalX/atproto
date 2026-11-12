@@ -9,9 +9,11 @@ from atproto_core.did_doc import DidDocument, is_valid_did_doc
 from atproto_server.auth.jwt import get_jwt_payload
 
 if t.TYPE_CHECKING:
+    import httpx
     from atproto_server.auth.jwt import JwtPayload
 
     from atproto_client import models
+    from atproto_client.client.auth import AuthSession
 
 
 _SESSION_STRING_SEPARATOR: t.Final = ':::'
@@ -43,6 +45,7 @@ def _session_exists(session: t.Optional['Session']) -> te.TypeGuard['Session']:
 class SessionDispatcher:
     def __init__(self, session: t.Optional['Session'] = None) -> None:
         self._session: t.Optional[Session] = session
+        self._auth_session: t.Optional[AuthSession] = None
 
         self._on_session_change_callbacks: t.List[SessionChangeCallback] = []
         self._on_session_change_async_callbacks: t.List[AsyncSessionChangeCallback] = []
@@ -54,6 +57,24 @@ class SessionDispatcher:
 
     def set_session(self, session: 'Session') -> None:
         self._session = session
+        self._auth_session = None
+
+    @property
+    def auth_session(self) -> t.Optional['AuthSession']:
+        """Session that authenticates requests by itself. Shared by every client cloned from the same original."""
+        return self._auth_session
+
+    def set_auth_session(self, auth_session: t.Optional['AuthSession']) -> None:
+        """Replace the session with one that authenticates requests by itself, or drop it."""
+        self._session = None
+        self._auth_session = auth_session
+
+    def get_httpx_auth(self) -> t.Optional['httpx.Auth']:
+        """Return the authentication of the session that authenticates requests by itself, if there is one."""
+        if self._auth_session is None:
+            return None
+
+        return self._auth_session.httpx_auth
 
     def get_auth_headers(self) -> t.Dict[str, str]:
         """Build the ``Authorization`` header from the access token. Empty when there is no session."""

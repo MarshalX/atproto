@@ -23,6 +23,13 @@ DIDs, handles, records, lexicons and NSIDs: the vocabulary behind every method n
 App passwords, two-factor login, session reuse, and automatic token refresh.
 :::
 
+:::{grid-item-card} {octicon}`shield-lock;1em;sd-mr-1` OAuth
+:link: oauth
+:link-type: doc
+
+Logging users in without their password: clients, scopes, session storage, and token refresh.
+:::
+
 :::{grid-item-card} {octicon}`sync;1em;sd-mr-1` Sync and async
 :link: async
 :link-type: doc
@@ -185,6 +192,7 @@ Generate typed models and a working client from lexicons of your own.
 
 concepts
 authentication
+oauth
 async
 posting
 reading

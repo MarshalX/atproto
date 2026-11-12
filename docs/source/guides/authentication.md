@@ -2,6 +2,10 @@
 
 The AT Protocol has two kinds of authentication: client-server and service-to-service. This page covers client-server authentication: logging a client in, and keeping it logged in. For the service-to-service side, where your server verifies a token another service sent it, see [Building a feed generator](feed-generator.md).
 
+:::{tip}
+To log users in without handling their password, use [OAuth](oauth.md) instead.
+:::
+
 ## Logging in
 
 [login](#atproto_client.client.client.Client.login) takes a handle and a password and returns a session. Under the hood it calls [create_session](#atproto_client.namespaces.sync_ns.ComAtprotoServerNamespace.create_session).

@@ -46,6 +46,15 @@ Jetstream
    :show-inheritance:
 
 
+OAuth
+#####
+
+.. automodule:: atproto_oauth.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 Identity
 ########
 
