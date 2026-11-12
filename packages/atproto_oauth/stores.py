@@ -103,8 +103,9 @@ class JsonFileStore:
     which the OAuth clients accept.
 
     Warning:
-        Sessions hold tokens and private keys. The file is created readable by its owner only;
-        keep it out of version control. Concurrent processes are not coordinated.
+        Sessions hold tokens and private keys. On POSIX systems the file is created readable by its owner only;
+        on Windows it gets the permissions of its directory. Keep it out of version control.
+        Concurrent processes are not coordinated.
 
     Args:
         path: Path of the file. Created on the first write.
@@ -128,7 +129,7 @@ class JsonFileStore:
 
     def _write(self, content: t.Dict[str, t.Any]) -> None:
         directory = os.path.dirname(os.path.abspath(self._path))
-        # mkstemp creates the file with owner-only permissions
+        # mkstemp creates the file with owner-only permissions where the system has them
         descriptor, temporary_path = tempfile.mkstemp(dir=directory, prefix='.oauth-', suffix='.tmp')
         try:
             with os.fdopen(descriptor, 'w', encoding='UTF-8') as f:

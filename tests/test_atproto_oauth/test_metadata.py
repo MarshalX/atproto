@@ -1,5 +1,6 @@
 import dataclasses
 import json
+import os
 import stat
 import time
 import typing as t
@@ -277,7 +278,9 @@ def test_json_file_store(tmp_path: Path) -> None:
     store.set('did:plc:alicealicealicealiceali2', session)
     store.set('did:plc:bobbobbobbobbobbobbobbob', {'other': 1})
 
-    assert stat.S_IMODE(path.stat().st_mode) == 0o600
+    if os.name == 'posix':
+        assert stat.S_IMODE(path.stat().st_mode) == 0o600
+
     assert list(tmp_path.iterdir()) == [path]
 
     reopened = JsonFileStore(str(path))
