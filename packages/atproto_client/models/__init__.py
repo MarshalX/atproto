@@ -141,10 +141,16 @@ if t.TYPE_CHECKING:
         get_atmosphere_explore_article_recommendations as AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations,
     )
     from atproto_client.models.app.bsky.unspecced import (
+        get_atmosphere_explore_gallery_recommendations as AppBskyUnspeccedGetAtmosphereExploreGalleryRecommendations,
+    )
+    from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_explore_tab as AppBskyUnspeccedGetAtmosphereExploreTab,
     )
     from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_record_view as AppBskyUnspeccedGetAtmosphereRecordView,
+    )
+    from atproto_client.models.app.bsky.unspecced import (
+        get_atmosphere_record_views as AppBskyUnspeccedGetAtmosphereRecordViews,
     )
     from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_timeline as AppBskyUnspeccedGetAtmosphereTimeline,
@@ -663,8 +669,10 @@ __all__ = [
     'AppBskyUnspeccedGetAgeAssuranceState',
     'AppBskyUnspeccedGetAtmosphereApps',
     'AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations',
+    'AppBskyUnspeccedGetAtmosphereExploreGalleryRecommendations',
     'AppBskyUnspeccedGetAtmosphereExploreTab',
     'AppBskyUnspeccedGetAtmosphereRecordView',
+    'AppBskyUnspeccedGetAtmosphereRecordViews',
     'AppBskyUnspeccedGetAtmosphereTimeline',
     'AppBskyUnspeccedGetConfig',
     'AppBskyUnspeccedGetOnboardingSuggestedStarterPacks',
@@ -1110,8 +1118,12 @@ class _Ids:
     AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations: str = (
         'app.bsky.unspecced.getAtmosphereExploreArticleRecommendations'
     )
+    AppBskyUnspeccedGetAtmosphereExploreGalleryRecommendations: str = (
+        'app.bsky.unspecced.getAtmosphereExploreGalleryRecommendations'
+    )
     AppBskyUnspeccedGetAtmosphereExploreTab: str = 'app.bsky.unspecced.getAtmosphereExploreTab'
     AppBskyUnspeccedGetAtmosphereRecordView: str = 'app.bsky.unspecced.getAtmosphereRecordView'
+    AppBskyUnspeccedGetAtmosphereRecordViews: str = 'app.bsky.unspecced.getAtmosphereRecordViews'
     AppBskyUnspeccedGetAtmosphereTimeline: str = 'app.bsky.unspecced.getAtmosphereTimeline'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
     AppBskyUnspeccedGetOnboardingSuggestedStarterPacks: str = 'app.bsky.unspecced.getOnboardingSuggestedStarterPacks'

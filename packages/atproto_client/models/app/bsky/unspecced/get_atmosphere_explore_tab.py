@@ -21,14 +21,14 @@ class Params(base.ParamsModelBase):
     """Parameters model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
     langs: t.Optional[t.List[string_formats.Language]] = (
-        None  #: Preferred languages for article recommendations when algorithmic recommendations are enabled. Ignored otherwise.
+        None  #: Preferred languages for article and photo gallery recommendations when their algorithmic recommendations are enabled. Ignored otherwise.
     )
 
 
 class ParamsDict(t.TypedDict):
     langs: te.NotRequired[
         t.Optional[t.List[string_formats.Language]]
-    ]  #: Preferred languages for article recommendations when algorithmic recommendations are enabled. Ignored otherwise.
+    ]  #: Preferred languages for article and photo gallery recommendations when their algorithmic recommendations are enabled. Ignored otherwise.
 
 
 class Response(base.ResponseModelBase):
@@ -104,6 +104,9 @@ class ArticleItem(base.ModelBase):
     bsky_post_ref: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = (
         None  #: The Bluesky post associated with the article, as declared by its author. The referenced post may not be available.
     )
+    view_bsky_post: t.Optional['models.AppBskyFeedDefs.PostView'] = (
+        None  #: The hydrated Bluesky post associated with the article, as declared by its author. Omitted when the post is unavailable to the viewer.
+    )
 
     py_type: t.Literal['app.bsky.unspecced.getAtmosphereExploreTab#articleItem'] = Field(
         default='app.bsky.unspecced.getAtmosphereExploreTab#articleItem', alias='$type', frozen=True
@@ -139,6 +142,9 @@ class LivestreamItem(base.ModelBase):
     view: 'models.AppBskyEmbedExternal.ViewLivestream'  #: View.
     bsky_post_ref: t.Optional['models.ComAtprotoRepoStrongRef.Main'] = (
         None  #: The Bluesky post that announced the livestream, as declared by its author. The referenced post may not be available.
+    )
+    view_bsky_post: t.Optional['models.AppBskyFeedDefs.PostView'] = (
+        None  #: The hydrated Bluesky post that announced the livestream, as declared by its author. Omitted when the post is unavailable to the viewer.
     )
 
     py_type: t.Literal['app.bsky.unspecced.getAtmosphereExploreTab#livestreamItem'] = Field(
