@@ -54,20 +54,11 @@ class Params(base.ParamsModelBase):
         None  #: Get all subject statuses that were reviewed by a specific moderator.
     )
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
-    min_account_suspend_count: t.Optional[int] = (
-        None  #: If specified, only subjects that belong to an account that has at least this many suspensions will be returned.
-    )
     min_priority_score: te.Annotated[t.Optional[int], Field(ge=0, le=100)] = (
         None  #: If specified, only subjects that have priority score value above the given value will be returned.
     )
-    min_reported_records_count: t.Optional[int] = (
-        None  #: If specified, only subjects that belong to an account that has at least this many reported records will be returned.
-    )
     min_strike_count: te.Annotated[t.Optional[int], Field(ge=1)] = (
         None  #: If specified, only subjects that belong to an account that has at least this many active strikes will be returned.
-    )
-    min_takendown_records_count: t.Optional[int] = (
-        None  #: If specified, only subjects that belong to an account that has at least this many taken down records will be returned.
     )
     only_muted: t.Optional[bool] = None  #: When set to true, only muted subjects and reporters will be returned.
     queue_count: t.Optional[int] = (
@@ -92,8 +83,8 @@ class Params(base.ParamsModelBase):
     reviewed_before: t.Optional[string_formats.DateTime] = None  #: Search subjects reviewed before a given timestamp.
     sort_direction: t.Optional[t.Literal['asc', 'desc']] = 'desc'  #: Sort direction.
     sort_field: t.Optional[
-        t.Literal['lastReviewedAt', 'lastReportedAt', 'reportedRecordsCount', 'takendownRecordsCount', 'priorityScore']
-    ] = 'lastReportedAt'  #: Sort field.
+        t.Literal['lastReviewedAt', 'lastReportedAt', 'priorityScore', 'reportedRecordsCount', 'takendownRecordsCount']
+    ] = 'lastReportedAt'  #: The reportedRecordsCount and takendownRecordsCount values are deprecated and use lastReportedAt instead.
     subject: t.Optional[string_formats.Uri] = None  #: The subject to get the status for.
     subject_type: t.Optional[t.Union[t.Literal['account', 'record', 'conversation'], str]] = (
         None  #: If specified, subjects of the given type (account, record, or conversation) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
@@ -141,21 +132,12 @@ class ParamsDict(t.TypedDict):
         t.Optional[string_formats.Did]
     ]  #: Get all subject statuses that were reviewed by a specific moderator.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
-    min_account_suspend_count: te.NotRequired[
-        t.Optional[int]
-    ]  #: If specified, only subjects that belong to an account that has at least this many suspensions will be returned.
     min_priority_score: te.NotRequired[
         t.Optional[int]
     ]  #: If specified, only subjects that have priority score value above the given value will be returned.
-    min_reported_records_count: te.NotRequired[
-        t.Optional[int]
-    ]  #: If specified, only subjects that belong to an account that has at least this many reported records will be returned.
     min_strike_count: te.NotRequired[
         t.Optional[int]
     ]  #: If specified, only subjects that belong to an account that has at least this many active strikes will be returned.
-    min_takendown_records_count: te.NotRequired[
-        t.Optional[int]
-    ]  #: If specified, only subjects that belong to an account that has at least this many taken down records will be returned.
     only_muted: te.NotRequired[
         t.Optional[bool]
     ]  #: When set to true, only muted subjects and reporters will be returned.
@@ -193,10 +175,10 @@ class ParamsDict(t.TypedDict):
     sort_field: te.NotRequired[
         t.Optional[
             t.Literal[
-                'lastReviewedAt', 'lastReportedAt', 'reportedRecordsCount', 'takendownRecordsCount', 'priorityScore'
+                'lastReviewedAt', 'lastReportedAt', 'priorityScore', 'reportedRecordsCount', 'takendownRecordsCount'
             ]
         ]
-    ]  #: Sort field.
+    ]  #: The reportedRecordsCount and takendownRecordsCount values are deprecated and use lastReportedAt instead.
     subject: te.NotRequired[t.Optional[string_formats.Uri]]  #: The subject to get the status for.
     subject_type: te.NotRequired[
         t.Optional[t.Union[t.Literal['account', 'record', 'conversation'], str]]

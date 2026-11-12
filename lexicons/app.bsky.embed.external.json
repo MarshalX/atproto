@@ -92,7 +92,7 @@
     },
     "viewExternalSourceTheme": {
       "type": "object",
-      "description": "The theme colors of an external source, such as a site.standard.publication. These colors may be used when rendering an embed from that source.",
+      "description": "The theme colors of an external source, such as a standard.site publication. These colors may be used when rendering an embed from that source.",
       "properties": {
         "backgroundRGB": { "type": "ref", "ref": "#colorRGB" },
         "foregroundRGB": { "type": "ref", "ref": "#colorRGB" },
@@ -237,6 +237,11 @@
           "type": "array",
           "items": { "type": "union", "refs": ["#viewGalleryImage"] },
           "description": "The media items in the gallery. Each item may be of a different type, but all types must be supported by the client."
+        },
+        "photoCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of gallery item backlinks, independent of the items included in this view."
         },
         "likeCount": { "type": "integer", "minimum": 0 },
         "likers": {

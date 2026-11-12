@@ -97,7 +97,7 @@ class ViewExternalSource(base.ModelBase):
 
 
 class ViewExternalSourceTheme(base.ModelBase):
-    """Definition model for :obj:`app.bsky.embed.external`. The theme colors of an external source, such as a site.standard.publication. These colors may be used when rendering an embed from that source."""
+    """Definition model for :obj:`app.bsky.embed.external`. The theme colors of an external source, such as a standard.site publication. These colors may be used when rendering an embed from that source."""
 
     accent_foreground_rgb: t.Optional['models.AppBskyEmbedExternal.ColorRGB'] = None  #: Accent foreground r g b.
     accent_rgb: t.Optional['models.AppBskyEmbedExternal.ColorRGB'] = None  #: Accent r g b.
@@ -198,6 +198,9 @@ class ViewGallery(base.ModelBase):
     like_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Like count.
     likers: te.Annotated[t.Optional[t.List['models.AppBskyActorDefs.ProfileViewBasic']], Field(max_length=3)] = (
         None  #: Available profile previews. Selected deterministically by DID; not a ranking.
+    )
+    photo_count: te.Annotated[t.Optional[int], Field(ge=0)] = (
+        None  #: Total number of gallery item backlinks, independent of the items included in this view.
     )
     updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
 

@@ -35,6 +35,12 @@ Unstable endpoints that may change or disappear without notice.
 
       Get a skeleton of recommended Atmosphere Explore articles.
 
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereExploreGalleryRecommendations
+      :link: /models/app/bsky/unspecced/getAtmosphereExploreGalleryRecommendations
+      :link-type: doc
+
+      Get a skeleton of recommended Atmosphere Explore Grain galleries.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereExploreTab
       :link: /models/app/bsky/unspecced/getAtmosphereExploreTab
       :link-type: doc
@@ -46,6 +52,12 @@ Unstable endpoints that may change or disappear without notice.
       :link-type: doc
 
       Get a hydrated view of one Atmosphere record.
+
+   .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` getAtmosphereRecordViews
+      :link: /models/app/bsky/unspecced/getAtmosphereRecordViews
+      :link-type: doc
+
+      Get hydrated views and raw associations for multiple Atmosphere records.
 
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereTimeline
       :link: /models/app/bsky/unspecced/getAtmosphereTimeline
@@ -235,8 +247,10 @@ Unstable endpoints that may change or disappear without notice.
    getAgeAssuranceState </models/app/bsky/unspecced/getAgeAssuranceState>
    getAtmosphereApps </models/app/bsky/unspecced/getAtmosphereApps>
    getAtmosphereExploreArticleRecommendations </models/app/bsky/unspecced/getAtmosphereExploreArticleRecommendations>
+   getAtmosphereExploreGalleryRecommendations </models/app/bsky/unspecced/getAtmosphereExploreGalleryRecommendations>
    getAtmosphereExploreTab </models/app/bsky/unspecced/getAtmosphereExploreTab>
    getAtmosphereRecordView </models/app/bsky/unspecced/getAtmosphereRecordView>
+   getAtmosphereRecordViews </models/app/bsky/unspecced/getAtmosphereRecordViews>
    getAtmosphereTimeline </models/app/bsky/unspecced/getAtmosphereTimeline>
    getConfig </models/app/bsky/unspecced/getConfig>
    getOnboardingSuggestedStarterPacks </models/app/bsky/unspecced/getOnboardingSuggestedStarterPacks>

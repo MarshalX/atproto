@@ -5182,6 +5182,37 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations.Response)
 
+    async def get_atmosphere_explore_gallery_recommendations(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetAtmosphereExploreGalleryRecommendations.Params,
+                models.AppBskyUnspeccedGetAtmosphereExploreGalleryRecommendations.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetAtmosphereExploreGalleryRecommendations.Response':
+        """Get a skeleton of recommended Atmosphere Explore Grain galleries. Intended to be called and hydrated by app.bsky.unspecced.getAtmosphereExploreTab.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetAtmosphereExploreGalleryRecommendations.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.AppBskyUnspeccedGetAtmosphereExploreGalleryRecommendations.Params)
+        response = await self._client.invoke_query(
+            'app.bsky.unspecced.getAtmosphereExploreGalleryRecommendations',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereExploreGalleryRecommendations.Response)
+
     async def get_atmosphere_explore_tab(
         self,
         params: t.Optional[
@@ -5192,7 +5223,7 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyUnspeccedGetAtmosphereExploreTab.Response':
-        """Get Atmosphere Explore content. Articles are recommended when algorithmic recommendations are enabled for the request, and curated otherwise; other sections are curated. Curated content is selected using the x-atproto-bsky-geo-country, x-atproto-bsky-geo-region, and x-atproto-bsky-topics request headers. Authentication is optional; authenticated requests include viewer-specific profile state.
+        """Get Atmosphere Explore content. Articles and photo galleries are recommended when their algorithmic recommendations are enabled for the request, and curated otherwise; other sections are curated. Curated content is selected using the x-atproto-bsky-geo-country, x-atproto-bsky-geo-region, and x-atproto-bsky-topics request headers. Authentication is optional; authenticated requests include viewer-specific profile state.
 
         Args:
             params: Parameters.
@@ -5242,6 +5273,36 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereRecordView.Response)
 
+    async def get_atmosphere_record_views(
+        self,
+        data: t.Union[
+            models.AppBskyUnspeccedGetAtmosphereRecordViews.Data,
+            models.AppBskyUnspeccedGetAtmosphereRecordViews.DataDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetAtmosphereRecordViews.Response':
+        """Get hydrated views and raw associations for multiple Atmosphere records. Requires authentication. Roots may be latest or pinned to exact CIDs; dependencies are always latest.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetAtmosphereRecordViews.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.AppBskyUnspeccedGetAtmosphereRecordViews.Data)
+        response = await self._client.invoke_procedure(
+            'app.bsky.unspecced.getAtmosphereRecordViews',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereRecordViews.Response)
+
     async def get_atmosphere_timeline(
         self,
         params: t.Optional[
@@ -5252,7 +5313,7 @@ class AppBskyUnspeccedNamespace(AsyncNamespaceBase):
         ] = None,
         **kwargs: t.Any,
     ) -> 'models.AppBskyUnspeccedGetAtmosphereTimeline.Response':
-        """Get the authenticated viewer's Atmosphere activity timeline. Grouping and related activity are limited to the returned page.
+        """Get the authenticated viewer's Atmosphere activity timeline. Groups contain visible activities from the returned page.
 
         Args:
             params: Parameters.
