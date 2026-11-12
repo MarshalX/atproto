@@ -1,5 +1,20 @@
 # Change Log
 
+## Version 0.0.74
+
+**12.11.2026**
+
+* Add Python 3.15 and free-threading support by [@MarshalX](https://github.com/MarshalX) in [#760](https://github.com/MarshalX/atproto/pull/760)
+* Add paginate helper for cursor-based methods by [@MarshalX](https://github.com/MarshalX) in [#761](https://github.com/MarshalX/atproto/pull/761)
+* Speed up model parsing, cut memory and import time by [@MarshalX](https://github.com/MarshalX) in [#764](https://github.com/MarshalX/atproto/pull/764)
+* Switch type checking to pyrefly and add py.typed markers by [@MarshalX](https://github.com/MarshalX) in [#762](https://github.com/MarshalX/atproto/pull/762)
+* Pin CI runners to Ubuntu 24.04 by [@MarshalX](https://github.com/MarshalX) in [#767](https://github.com/MarshalX/atproto/pull/767)
+* Fix double socket close in sync websocket client on free-threaded Python by [@MarshalX](https://github.com/MarshalX) in [#763](https://github.com/MarshalX/atproto/pull/763)
+* Update lexicons: add tools.ozone.safelink.syncSource (9 changed) by [@MarshalX](https://github.com/MarshalX) in [#765](https://github.com/MarshalX/atproto/pull/765)
+* Update lexicons: add app.bsky.unspecced.getAtmosphereTimeline by [@MarshalX](https://github.com/MarshalX) in [#766](https://github.com/MarshalX/atproto/pull/766)
+* Update lexicons: add app.bsky.unspecced.* +1 more (2 changed) by [@MarshalX](https://github.com/MarshalX) in [#768](https://github.com/MarshalX/atproto/pull/768)
+* Update lexicons: add app.bsky.unspecced.* (3 changed) by [@MarshalX](https://github.com/MarshalX) in [#769](https://github.com/MarshalX/atproto/pull/769)
+
 ## Version 0.0.73
 
 **17.10.2026**
