@@ -314,7 +314,7 @@ def _get_type_constraints(field_type_def: _FieldTypeDef) -> t.Dict[str, t.Any]:
         if field_type_def.max_length is not None:
             constraints['max_length'] = field_type_def.max_length
 
-    elif isinstance(field_type_def, (models.LexInteger, models.LexNumber)):
+    elif isinstance(field_type_def, models.LexInteger):
         if field_type_def.minimum is not None:
             constraints['ge'] = field_type_def.minimum
         if field_type_def.maximum is not None:
