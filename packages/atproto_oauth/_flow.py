@@ -14,7 +14,13 @@ from atproto_oauth.exceptions import (
     TokenRefreshError,
 )
 from atproto_oauth.keys import CLIENT_ASSERTION_ALG, Keyset
-from atproto_oauth.metadata import ATPROTO_SCOPE, AuthServerMetadata, ClientMetadata
+from atproto_oauth.metadata import (
+    ATPROTO_SCOPE,
+    AuthServerMetadata,
+    ClientMetadata,
+    get_redirect_uri_without_port,
+    is_loopback_redirect_uri,
+)
 from atproto_oauth.models import (
     AUTH_METHOD_NONE,
     AUTH_METHOD_PRIVATE_KEY_JWT,
@@ -60,10 +66,16 @@ def pick_redirect_uri(metadata: ClientMetadata, redirect_uri: t.Optional[str]) -
     if redirect_uri is None:
         return redirect_uris[0]
 
-    if redirect_uri not in redirect_uris:
-        raise ValueError(f'Redirect URI is not registered in the client metadata: {redirect_uri!r}')
+    if redirect_uri in redirect_uris:
+        return redirect_uri
 
-    return redirect_uri
+    # the authorization server ignores the port of a loopback redirect, so it may be picked at run time
+    if is_loopback_redirect_uri(redirect_uri):
+        registered = {get_redirect_uri_without_port(uri) for uri in redirect_uris if is_loopback_redirect_uri(uri)}
+        if get_redirect_uri_without_port(redirect_uri) in registered:
+            return redirect_uri
+
+    raise ValueError(f'Redirect URI is not registered in the client metadata: {redirect_uri!r}')
 
 
 def pick_scope(metadata: ClientMetadata, scope: t.Optional[str]) -> str:

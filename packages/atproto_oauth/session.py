@@ -209,7 +209,7 @@ class OAuthSession(_SessionBase):
 
         return TokenInfo.from_token_set(self._data.token_set)
 
-    def sign_out(self) -> None:
+    def revoke(self) -> None:
         """Revoke the session and delete it from the session store."""
         self._client.revoke(self.did)
 
@@ -243,6 +243,6 @@ class AsyncOAuthSession(_SessionBase):
 
         return TokenInfo.from_token_set(self._data.token_set)
 
-    async def sign_out(self) -> None:
+    async def revoke(self) -> None:
         """Revoke the session and delete it from the session store."""
         await self._client.revoke(self.did)

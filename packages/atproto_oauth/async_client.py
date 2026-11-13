@@ -1,6 +1,9 @@
 import asyncio
 import contextlib
 import typing as t
+import webbrowser
+
+import typing_extensions as te
 
 from atproto_oauth._base import (
     DEFAULT_MAX_PENDING_AUTHORIZATIONS,
@@ -10,6 +13,8 @@ from atproto_oauth._base import (
     _OAuthClientBase,
 )
 from atproto_oauth._effects import run_flow_async
+from atproto_oauth.loopback import DEFAULT_LOGIN_TIMEOUT, login_flow
+from atproto_oauth.metadata import ATPROTO_SCOPE
 from atproto_oauth.resolver import AsyncOAuthResolver
 from atproto_oauth.security import DEFAULT_TIMEOUT, AsyncHttpClient
 from atproto_oauth.session import AsyncOAuthSession
@@ -25,6 +30,21 @@ if t.TYPE_CHECKING:
 AsyncLockFactory = t.Callable[[str], t.AsyncContextManager[t.Any]]
 AsyncSessionUpdatedCallback = t.Callable[[str, 'OAuthSessionData'], t.Optional[t.Awaitable[None]]]
 AsyncSessionDeletedCallback = t.Callable[[str, BaseException], t.Optional[t.Awaitable[None]]]
+
+
+class _AsyncClientOptions(te.TypedDict, total=False):
+    """Arguments the client takes besides its metadata and keys."""
+
+    state_store: t.Union[AsyncStateStore, StateStore]
+    session_store: t.Union[AsyncSessionStore, SessionStore]
+    id_resolver: 'AsyncIdResolver'
+    transport: 'httpx.AsyncBaseTransport'
+    allow_http: bool
+    lock: AsyncLockFactory
+    on_session_updated: AsyncSessionUpdatedCallback
+    on_session_deleted: AsyncSessionDeletedCallback
+    state_ttl: float
+    timeout: float
 
 
 class AsyncOAuthClient(_OAuthClientBase):
@@ -55,6 +75,41 @@ class AsyncOAuthClient(_OAuthClientBase):
         state_ttl: Seconds an authorization request may take.
         timeout: Timeout of requests to the PDS and the authorization server, in seconds.
     """
+
+    @classmethod
+    @te.override
+    def loopback(
+        cls,
+        redirect_uri: t.Optional[t.Union[str, t.Sequence[str]]] = None,
+        scope: str = ATPROTO_SCOPE,
+        **kwargs: te.Unpack[_AsyncClientOptions],
+    ) -> te.Self:
+        return super().loopback(redirect_uri, scope, **kwargs)
+
+    @classmethod
+    @te.override
+    def public(
+        cls,
+        client_id: str,
+        redirect_uri: t.Union[str, t.Sequence[str]],
+        scope: str,
+        metadata: t.Optional[t.Mapping[str, t.Any]] = None,
+        **kwargs: te.Unpack[_AsyncClientOptions],
+    ) -> te.Self:
+        return super().public(client_id, redirect_uri, scope, metadata, **kwargs)
+
+    @classmethod
+    @te.override
+    def confidential(
+        cls,
+        client_id: str,
+        redirect_uri: t.Union[str, t.Sequence[str]],
+        scope: str,
+        keys: t.Iterable[t.Mapping[str, t.Any]],
+        metadata: t.Optional[t.Mapping[str, t.Any]] = None,
+        **kwargs: te.Unpack[_AsyncClientOptions],
+    ) -> te.Self:
+        return super().confidential(client_id, redirect_uri, scope, keys, metadata, **kwargs)
 
     def __init__(
         self,
@@ -151,11 +206,43 @@ class AsyncOAuthClient(_OAuthClientBase):
 
         return OAuthCallbackResult(AsyncOAuthSession(self, new.data), new.app_state)
 
-    async def restore(self, did: str, refresh: 'RefreshMode' = 'auto') -> AsyncOAuthSession:
+    async def login_with_browser(
+        self,
+        identifier: str,
+        *,
+        open_url: t.Optional[t.Callable[[str], t.Any]] = None,
+        timeout: t.Optional[float] = DEFAULT_LOGIN_TIMEOUT,
+        **params: t.Any,
+    ) -> AsyncOAuthSession:
+        """Authorize an account in the browser of this machine and return its session.
+
+        Runs a local HTTP server for the redirect back, so the client needs a redirect URI
+        on ``127.0.0.1`` or ``[::1]``, as a client made by :py:meth:`loopback` has.
+
+        Args:
+            identifier: Handle or DID of the account, or the URL of a PDS or an entryway.
+            open_url: Called with the authorization URL. Opens the default browser by default.
+            timeout: Seconds to wait for the user. :obj:`None` waits forever.
+            **params: Other arguments of :py:meth:`authorize`, such as ``scope``.
+
+        Returns:
+            :obj:`AsyncOAuthSession`: Session of the account.
+
+        Raises:
+            :class:`ValueError`: The client has no loopback redirect URI.
+            :class:`atproto_oauth.exceptions.OAuthCallbackError`: The authorization failed
+                or was not completed in time.
+        """
+        flow = login_flow(self, identifier, open_url or webbrowser.open, timeout, params)
+        session: AsyncOAuthSession = await run_flow_async(flow)
+        return session
+
+    async def restore(self, identifier: str, refresh: 'RefreshMode' = 'auto') -> AsyncOAuthSession:
         """Load the stored session of an account.
 
         Args:
-            did: DID of the account.
+            identifier: DID or handle of the account. A handle is resolved over the network first.
+                A web service must pass the DID it stored at login, not a handle typed by a visitor.
             refresh: ``'auto'`` refreshes the tokens when they are about to expire,
                 :obj:`True` always refreshes them, :obj:`False` never does.
 
@@ -163,11 +250,14 @@ class AsyncOAuthClient(_OAuthClientBase):
             :obj:`AsyncOAuthSession`: Session of the account.
 
         Raises:
+            :class:`atproto_oauth.exceptions.OAuthResolverError`: The handle could not be resolved.
             :class:`atproto_oauth.exceptions.TokenRefreshError`: There is no usable session.
             :class:`atproto_oauth.exceptions.AuthMethodUnsatisfiableError`: The client authentication key
                 of the session is gone. The session is deleted.
             :class:`atproto_oauth.exceptions.OAuthError`: The tokens could not be refreshed for now.
         """
+        did = await run_flow_async(self._resolve_did_flow(identifier))
+
         return AsyncOAuthSession(self, await self._get_session(did, refresh))
 
     async def revoke(self, did: str) -> None:

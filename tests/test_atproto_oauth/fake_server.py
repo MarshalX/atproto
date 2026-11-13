@@ -17,6 +17,9 @@ from atproto_identity.exceptions import DidNotFoundError
 from atproto_oauth import OAuthSessionData
 from cryptography.hazmat.primitives import serialization
 
+if t.TYPE_CHECKING:
+    from atproto_identity.resolver import AsyncIdResolver, IdResolver
+
 ISSUER = 'https://auth.test'
 PDS = 'https://pds.test'
 DID = 'did:plc:alicealicealicealiceali2'
@@ -506,6 +509,14 @@ class AsyncFakeIdResolver:
     def __init__(self, server: FakeServer) -> None:
         self.handle = _AsyncFakeHandleResolver(server)
         self.did = _AsyncFakeDidResolver(server)
+
+
+def fake_id_resolver(server: FakeServer) -> 'IdResolver':
+    return t.cast('IdResolver', FakeIdResolver(server))
+
+
+def async_fake_id_resolver(server: FakeServer) -> 'AsyncIdResolver':
+    return t.cast('AsyncIdResolver', AsyncFakeIdResolver(server))
 
 
 def get_stored_session(store: t.Any, did: str = DID) -> OAuthSessionData:

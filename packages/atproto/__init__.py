@@ -41,6 +41,9 @@ if t.TYPE_CHECKING:
     from atproto_oauth import (
         AsyncOAuthClient,
         AsyncOAuthSession,
+        JsonFileStore,
+        MemoryStore,
+        OAuthCallbackResult,
         OAuthClient,
         OAuthSession,
         OAuthSessionData,
@@ -85,6 +88,9 @@ __getattr__, __dir__ = lazy_exports(
         'atproto_oauth': (
             'AsyncOAuthClient',
             'AsyncOAuthSession',
+            'JsonFileStore',
+            'MemoryStore',
+            'OAuthCallbackResult',
             'OAuthClient',
             'OAuthSession',
             'OAuthSessionData',
@@ -155,6 +161,9 @@ __all__ = [  # noqa: RUF022
     # oauth
     'AsyncOAuthClient',
     'AsyncOAuthSession',
+    'JsonFileStore',
+    'MemoryStore',
+    'OAuthCallbackResult',
     'OAuthClient',
     'OAuthSession',
     'OAuthSessionData',

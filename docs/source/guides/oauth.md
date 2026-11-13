@@ -35,7 +35,19 @@ Authorization servers give confidential clients longer sessions, because a compr
 
 ### A command line tool
 
-A loopback client uses `http://localhost` as its client ID and receives the redirect on a port of the local machine. The authorization server ignores the port, so you can let the system pick one.
+A loopback client uses `http://localhost` as its client ID and receives the redirect on a port of the local machine. [login_with_browser](#atproto_oauth.OAuthClient.login_with_browser) does the three steps for you: it listens on a free port, opens the browser, waits for the user and returns the session.
+
+```python
+from atproto import Client, OAuthClient
+
+oauth_client = OAuthClient.loopback(scope='atproto repo:app.bsky.feed.post?action=create')
+session = oauth_client.login_with_browser('alice.bsky.social')
+
+client = Client()
+client.login_oauth(session)
+```
+
+The full example also keeps the session in a file, so the browser is needed only once:
 
 ```{literalinclude} ../../../examples/oauth/loopback_cli.py
 :language: python
@@ -51,9 +63,8 @@ import json
 import os
 import secrets
 
-from atproto import Client
-from atproto_oauth import OAuthClient
-from atproto_oauth.exceptions import OAuthCallbackError
+from atproto import Client, OAuthClient
+from atproto.exceptions import OAuthCallbackError
 from flask import Flask, jsonify, redirect, request, session
 
 app = Flask(__name__)
@@ -96,7 +107,7 @@ def callback():
     # the login must finish in the browser that started it
     expected_state = session.pop('oauth_state', None)
     if not expected_state or not result.state or not secrets.compare_digest(result.state, expected_state):
-        result.session.sign_out()
+        result.session.revoke()
         return 'Login failed', 400
 
     session['did'] = result.session.did
@@ -130,8 +141,7 @@ To rotate, put the new key first in `keys` and keep the old one after it. New se
 [AsyncOAuthClient](#atproto_oauth.AsyncOAuthClient) has the same methods as coroutines and produces an [AsyncOAuthSession](#atproto_oauth.AsyncOAuthSession) for [AsyncClient](#atproto_client.client.async_client.AsyncClient). Its stores and callbacks may be synchronous or asynchronous.
 
 ```python
-from atproto import AsyncClient
-from atproto_oauth import AsyncOAuthClient
+from atproto import AsyncClient, AsyncOAuthClient
 
 oauth_client = AsyncOAuthClient.loopback()
 session = await oauth_client.restore('did:plc:kvwvcn5iqfooopmyzvb4qzba')
@@ -172,7 +182,7 @@ A store is any object with `get`, `set` and `delete`:
 ```python
 import json
 
-from atproto_oauth import OAuthSessionData
+from atproto import OAuthSessionData
 
 
 class RedisSessionStore:
@@ -204,6 +214,8 @@ To get a session back later, ask the OAuth client for it by DID:
 session = oauth_client.restore('did:plc:kvwvcn5iqfooopmyzvb4qzba')
 ```
 
+A handle works too and is resolved to a DID first, which suits a script. A web service should restore by the DID it stored at login, because a handle can move to another account.
+
 `on_session_updated` and `on_session_deleted` tell you when a session changed or went away, for example because the user revoked it from their account settings. They run while the OAuth client holds the lock of that account, so they must not call the OAuth client for the same account. An exception raised by one propagates to the caller.
 
 ## Token refresh
@@ -221,7 +233,7 @@ When a session can no longer be refreshed, it is deleted from the store and `on_
 ## Logging out
 
 ```python
-session.sign_out()
+session.revoke()
 ```
 
 This revokes the tokens on the server and deletes the session from the store. [logout_oauth](#atproto_client.client.client.Client.logout_oauth) only detaches the session from a client.

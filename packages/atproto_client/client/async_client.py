@@ -174,7 +174,7 @@ class AsyncClient(
         """Detach the OAuth session from the client.
 
         Note:
-            The session is not revoked. Call ``sign_out()`` of the session for that.
+            The session is not revoked. Call ``revoke()`` of the session for that.
         """
         self._session_dispatcher.set_auth_session(None)
         self.me = None

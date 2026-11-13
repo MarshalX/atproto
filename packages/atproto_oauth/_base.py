@@ -402,6 +402,14 @@ class _OAuthClientBase:
         if self._on_session_deleted is not None:
             yield call(self._on_session_deleted, did, cause)
 
+    def _resolve_did_flow(self, identifier: str) -> Flow[str]:
+        if identifier.startswith('did:'):
+            return identifier
+
+        identity = yield from self._resolver._resolve_identity_flow(identifier, False)
+        did: str = identity.did
+        return did
+
     def _get_session_flow(
         self, did: str, refresh: 'RefreshMode', rejected: t.Optional[TokenSet]
     ) -> Flow[OAuthSessionData]:

@@ -25,6 +25,7 @@ from tests.test_atproto_oauth.fake_server import (
     Account,
     AsyncFakeIdResolver,
     FakeServer,
+    async_fake_id_resolver,
     get_stored_session,
     make_stale,
     record_causes,
@@ -84,7 +85,7 @@ async def test_confidential_client_and_key_removal(server: FakeServer) -> None:
             keys,
             session_store=store,
             transport=server.transport,
-            id_resolver=AsyncFakeIdResolver(server),
+            id_resolver=async_fake_id_resolver(server),
         )
         server.client_jwks = client.jwks
         return client
@@ -294,6 +295,14 @@ async def test_invalid_server_metadata(server: FakeServer) -> None:
 
     with pytest.raises(UnsupportedAuthServerError):
         await make_client(server).authorize(HANDLE)
+
+
+@pytest.mark.asyncio
+async def test_restore_by_handle(server: FakeServer) -> None:
+    client = make_client(server)
+    await login(client, server)
+
+    assert (await client.restore(HANDLE)).did == DID
 
 
 @pytest.mark.asyncio

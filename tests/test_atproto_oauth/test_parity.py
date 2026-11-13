@@ -10,6 +10,8 @@ from atproto_oauth import (
     OAuthResolver,
     OAuthSession,
 )
+from atproto_oauth.async_client import _AsyncClientOptions
+from atproto_oauth.client import _ClientOptions
 
 
 def _public_api(cls: type) -> t.Dict[str, t.List[str]]:
@@ -56,3 +58,15 @@ def test_async_classes_have_coroutine_methods(cls: type) -> None:
     for name, member in vars(cls).items():
         if name in declared_in_sync and not name.startswith('_') and inspect.isfunction(member):
             assert inspect.iscoroutinefunction(member), name
+
+
+@pytest.mark.parametrize(
+    ('cls', 'options'),
+    [(OAuthClient, _ClientOptions), (AsyncOAuthClient, _AsyncClientOptions)],
+)
+def test_constructor_options_match_the_client_arguments(cls: type, options: type) -> None:
+    arguments = _init_parameters(cls)
+    arguments.remove('client_metadata')
+    arguments.remove('keys')
+
+    assert list(options.__annotations__) == arguments

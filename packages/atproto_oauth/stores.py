@@ -15,8 +15,11 @@ V = t.TypeVar('V')
 class Store(te.Protocol[V]):
     """Key-value storage."""
 
-    def get(self, key: str) -> t.Optional[V]:
-        """Return the value of the key, or :obj:`None` when there is none."""
+    def get(self, key: str) -> t.Optional[t.Union[V, t.Dict[str, t.Any]]]:
+        """Return the value of the key, or :obj:`None` when there is none.
+
+        The value may come back as the dictionary its ``to_dict()`` made.
+        """
         ...
 
     def set(self, key: str, value: V) -> None: ...
@@ -29,8 +32,11 @@ class Store(te.Protocol[V]):
 class AsyncStore(te.Protocol[V]):
     """Asynchronous key-value storage."""
 
-    async def get(self, key: str) -> t.Optional[V]:
-        """Return the value of the key, or :obj:`None` when there is none."""
+    async def get(self, key: str) -> t.Optional[t.Union[V, t.Dict[str, t.Any]]]:
+        """Return the value of the key, or :obj:`None` when there is none.
+
+        The value may come back as the dictionary its ``to_dict()`` made.
+        """
         ...
 
     async def set(self, key: str, value: V) -> None: ...

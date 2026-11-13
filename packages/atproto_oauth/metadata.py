@@ -253,7 +253,7 @@ def is_loopback_redirect_uri(redirect_uri: str) -> bool:
     return parts.hostname in _LOOPBACK_REDIRECT_HOSTS and not parts.fragment and not credentials
 
 
-def _get_redirect_uri_without_port(redirect_uri: str) -> str:
+def get_redirect_uri_without_port(redirect_uri: str) -> str:
     parts = urlsplit(redirect_uri)
     hostname = f'[{parts.hostname}]' if ':' in (parts.hostname or '') else parts.hostname
     return parts._replace(netloc=hostname or '').geturl()
@@ -277,7 +277,7 @@ def build_loopback_client_id(redirect_uris: t.Optional[t.Sequence[str]] = None, 
                 f'Redirect URI of a loopback client must be an http URL on 127.0.0.1 or [::1]: {redirect_uri!r}'
             )
 
-    declared = [_get_redirect_uri_without_port(uri) for uri in redirect_uris or ()]
+    declared = [get_redirect_uri_without_port(uri) for uri in redirect_uris or ()]
     if declared and sorted(set(declared)) != sorted(DEFAULT_LOOPBACK_REDIRECT_URIS):
         params.extend(('redirect_uri', uri) for uri in dict.fromkeys(declared))
 

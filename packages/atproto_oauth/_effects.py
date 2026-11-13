@@ -15,6 +15,8 @@ class Call:
     # arguments carry tokens and request bodies
     args: t.Tuple[t.Any, ...] = field(default=(), repr=False)
     kwargs: t.Dict[str, t.Any] = field(default_factory=dict, repr=False)
+    # a blocking function would stall the event loop, so the asynchronous runner moves it to a thread
+    blocking: bool = False
 
 
 @dataclass(frozen=True)
@@ -24,6 +26,10 @@ class Sleep:
 
 def call(func: t.Callable[..., t.Any], *args: t.Any, **kwargs: t.Any) -> Call:
     return Call(func, args, kwargs)
+
+
+def call_blocking(func: t.Callable[..., t.Any], *args: t.Any, **kwargs: t.Any) -> Call:
+    return Call(func, args, kwargs, blocking=True)
 
 
 Effect = t.Union[Call, Sleep]
@@ -42,6 +48,9 @@ async def perform_async(effect: Effect) -> t.Any:
     if isinstance(effect, Sleep):
         await asyncio.sleep(effect.seconds)
         return None
+
+    if effect.blocking:
+        return await asyncio.to_thread(effect.func, *effect.args, **effect.kwargs)
 
     result = effect.func(*effect.args, **effect.kwargs)
     if inspect.isawaitable(result):

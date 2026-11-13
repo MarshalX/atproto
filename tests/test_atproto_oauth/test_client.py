@@ -35,6 +35,7 @@ from tests.test_atproto_oauth.fake_server import (
     FakeIdResolver,
     FakeServer,
     decode_jwt,
+    fake_id_resolver,
     get_stored_session,
     make_stale,
     record_access_tokens,
@@ -147,7 +148,7 @@ def test_confidential_client(server: FakeServer) -> None:
         SCOPE,
         keys,
         transport=server.transport,
-        id_resolver=FakeIdResolver(server),
+        id_resolver=fake_id_resolver(server),
     )
     server.client_jwks = client.jwks
 
@@ -177,7 +178,7 @@ def test_confidential_client_keeps_the_key_of_the_session_after_rotation(server:
             keys,
             session_store=store,
             transport=server.transport,
-            id_resolver=FakeIdResolver(server),
+            id_resolver=fake_id_resolver(server),
         )
         server.client_jwks = client.jwks
         return client
@@ -207,7 +208,7 @@ def _last_form(server: FakeServer) -> t.Dict[str, str]:
 def test_authorize_overrides(server: FakeServer) -> None:
     other = 'http://127.0.0.1/other'
     client = OAuthClient.loopback(
-        [REDIRECT_URI, other], SCOPE, transport=server.transport, id_resolver=FakeIdResolver(server)
+        [REDIRECT_URI, other], SCOPE, transport=server.transport, id_resolver=fake_id_resolver(server)
     )
 
     result = client.callback(server.approve(client.authorize(HANDLE, redirect_uri=other, scope='atproto')))
@@ -559,13 +560,24 @@ def test_corrupt_stored_session_is_deleted(server: FakeServer) -> None:
     assert store.get(BOB_DID) is None
 
 
+def test_restore_by_handle(server: FakeServer) -> None:
+    client = make_client(server)
+    login(client, server)
+
+    assert client.restore(HANDLE).did == DID
+    assert client.restore(f'@{HANDLE.upper()}').did == DID
+
+    with pytest.raises(OAuthResolverError, match='does not resolve'):
+        client.restore('nobody.test')
+
+
 def test_revoke(server: FakeServer) -> None:
     deleted: t.List[BaseException] = []
     client = make_client(server, on_session_deleted=record_causes(deleted))
     session = login(client, server).session
     token = get_stored_session(client._session_store).token_set.access_token
 
-    session.sign_out()
+    session.revoke()
 
     assert server.revoked_tokens == [token]
     assert client._session_store.get(DID) is None
@@ -694,7 +706,7 @@ def test_transport_failure_is_reported(server: FakeServer) -> None:
         raise httpx.ConnectError('boom', request=request)
 
     client = OAuthClient.loopback(
-        REDIRECT_URI, SCOPE, transport=httpx.MockTransport(handler), id_resolver=FakeIdResolver(server)
+        REDIRECT_URI, SCOPE, transport=httpx.MockTransport(handler), id_resolver=fake_id_resolver(server)
     )
     with pytest.raises(OAuthRequestError, match='boom'):
         client.authorize(HANDLE)

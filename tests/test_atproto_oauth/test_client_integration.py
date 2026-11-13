@@ -19,10 +19,10 @@ from tests.test_atproto_oauth.fake_server import (
     DID,
     HANDLE,
     PDS,
-    AsyncFakeIdResolver,
-    FakeIdResolver,
     FakeServer,
+    async_fake_id_resolver,
     decode_jwt,
+    fake_id_resolver,
     get_stored_session,
     record_causes,
 )
@@ -38,7 +38,9 @@ def server() -> FakeServer:
 
 
 def make_sync(server: FakeServer, **kwargs: t.Any) -> t.Tuple[Client, OAuthClient]:
-    oauth = OAuthClient.loopback(scope=SCOPE, transport=server.transport, id_resolver=FakeIdResolver(server), **kwargs)
+    oauth = OAuthClient.loopback(
+        scope=SCOPE, transport=server.transport, id_resolver=fake_id_resolver(server), **kwargs
+    )
     session = oauth.callback(server.approve(oauth.authorize(HANDLE))).session
 
     client = Client(request=Request(transport=server.transport))
@@ -48,7 +50,7 @@ def make_sync(server: FakeServer, **kwargs: t.Any) -> t.Tuple[Client, OAuthClien
 
 async def make_async(server: FakeServer, **kwargs: t.Any) -> t.Tuple[AsyncClient, AsyncOAuthClient]:
     oauth = AsyncOAuthClient.loopback(
-        scope=SCOPE, transport=server.transport, id_resolver=AsyncFakeIdResolver(server), **kwargs
+        scope=SCOPE, transport=server.transport, id_resolver=async_fake_id_resolver(server), **kwargs
     )
     session = (await oauth.callback(server.approve(await oauth.authorize(HANDLE)))).session
 
@@ -165,7 +167,7 @@ def test_send_post_works_without_a_profile(server: FakeServer) -> None:
 
 
 def test_profile_can_be_fetched_on_login(server: FakeServer) -> None:
-    oauth = OAuthClient.loopback(scope=SCOPE, transport=server.transport, id_resolver=FakeIdResolver(server))
+    oauth = OAuthClient.loopback(scope=SCOPE, transport=server.transport, id_resolver=fake_id_resolver(server))
     session = oauth.callback(server.approve(oauth.authorize(HANDLE))).session
 
     client = Client(request=Request(transport=server.transport))
@@ -188,7 +190,7 @@ def test_explicit_authorization_header_is_left_alone(server: FakeServer) -> None
 
 
 def test_clones_share_the_session(server: FakeServer) -> None:
-    oauth = OAuthClient.loopback(scope=SCOPE, transport=server.transport, id_resolver=FakeIdResolver(server))
+    oauth = OAuthClient.loopback(scope=SCOPE, transport=server.transport, id_resolver=fake_id_resolver(server))
     session = oauth.callback(server.approve(oauth.authorize(HANDLE))).session
 
     client = Client(request=Request(transport=server.transport))
@@ -226,7 +228,7 @@ def test_session_string_can_not_be_exported(server: FakeServer) -> None:
 
 
 def test_session_change_callbacks_are_not_called(server: FakeServer) -> None:
-    oauth = OAuthClient.loopback(scope=SCOPE, transport=server.transport, id_resolver=FakeIdResolver(server))
+    oauth = OAuthClient.loopback(scope=SCOPE, transport=server.transport, id_resolver=fake_id_resolver(server))
     session = oauth.callback(server.approve(oauth.authorize(HANDLE))).session
 
     events: t.List[t.Any] = []
@@ -319,7 +321,7 @@ def test_streamed_body_is_buffered_for_the_retry() -> None:
     http_server = HTTPServer(('127.0.0.1', 0), Handler)
     threading.Thread(target=http_server.serve_forever, daemon=True).start()
     try:
-        oauth = OAuthClient.loopback(scope=SCOPE, transport=fake.transport, id_resolver=FakeIdResolver(fake))
+        oauth = OAuthClient.loopback(scope=SCOPE, transport=fake.transport, id_resolver=fake_id_resolver(fake))
         oauth.callback(fake.approve(oauth.authorize(HANDLE)))
 
         # the session only signs requests to the PDS of the account, so the local server is made that PDS
@@ -400,12 +402,12 @@ async def test_async_concurrent_requests_refresh_once(server: FakeServer) -> Non
 
 
 @pytest.mark.asyncio
-async def test_async_sign_out(server: FakeServer) -> None:
+async def test_async_session_revoke(server: FakeServer) -> None:
     deleted: t.List[BaseException] = []
     _, oauth = await make_async(server, on_session_deleted=record_causes(deleted))
     session = await oauth.restore(DID)
 
-    await session.sign_out()
+    await session.revoke()
 
     assert isinstance(deleted[0], TokenRevokedError)
     assert len(server.revoked_tokens) == 1
