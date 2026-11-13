@@ -242,3 +242,71 @@ def test_union_body_is_reported_as_unsupported(tmp_path: Path) -> None:
 
     with pytest.raises(UnsupportedLexiconError, match=r'xyz\.shapes\.resolve'):
         _generate(tmp_path, [lexicon], 'union_pkg')
+
+
+def test_definition_named_like_a_module_class_keeps_its_own(tmp_path: Path) -> None:
+    record = {'type': 'record', 'key': 'tid', 'record': _object({'inner': {'type': 'ref', 'ref': '#record'}})}
+    lexicons = [
+        _lexicon('xyz.clash.thing', {'main': record, 'record': _object({'value': {'type': 'string'}})}),
+        _lexicon(
+            'xyz.clash.getThing',
+            {
+                'main': {
+                    'type': 'query',
+                    'output': {
+                        'encoding': 'application/json',
+                        'schema': _object({'r': {'type': 'ref', 'ref': '#response'}}),
+                    },
+                },
+                'response': _object({'ok': {'type': 'boolean'}}),
+                # not a class of a query module, so the name is free
+                'record': _object({'free': {'type': 'string'}}),
+            },
+        ),
+        _lexicon('xyz.clash.user', {'main': _object({'inner': {'type': 'ref', 'ref': 'xyz.clash.thing#record'}})}),
+    ]
+    package = 'clash_names_pkg'
+    _generate(tmp_path, lexicons, package)
+    sys.path.insert(0, str(tmp_path))
+    models = importlib.import_module(f'{package}.models')
+
+    thing = get_or_create({'inner': {'value': 'v'}}, models.XyzClashThing.Record)
+    assert isinstance(thing.inner, models.XyzClashThing.RecordDef)
+    assert thing.inner.py_type == 'xyz.clash.thing#record'
+
+    response = get_or_create({'r': {'ok': True}}, models.XyzClashGetThing.Response)
+    assert isinstance(response.r, models.XyzClashGetThing.ResponseDef)
+    assert models.XyzClashGetThing.Record(free='f').py_type == 'xyz.clash.getThing#record'
+
+    user = get_or_create({'inner': {'value': 'v'}}, models.XyzClashUser.Main)
+    assert isinstance(user.inner, models.XyzClashThing.RecordDef)
+
+
+_SHARED_ROOT_LEXICONS = [
+    _lexicon(
+        'app.shapes.thing',
+        {'main': {'type': 'record', 'key': 'tid', 'record': _object({'name': {'type': 'string'}})}},
+    ),
+    _lexicon('com.atproto.repo.shapesExtra', {'main': {'type': 'query'}}),
+]
+
+
+def test_namespaces_extend_the_ones_of_the_sdk(tmp_path: Path) -> None:
+    package = 'shared_root_pkg'
+    _generate(tmp_path, _SHARED_ROOT_LEXICONS, package)
+    sys.path.insert(0, str(tmp_path))
+
+    client = importlib.import_module(f'{package}.client').SharedRootPkgClient()
+    async_client = importlib.import_module(f'{package}.async_client').AsyncSharedRootPkgClient()
+
+    for attached in (client, async_client):
+        assert callable(attached.app.shapes.thing.create)
+        assert callable(attached.app.bsky.feed.post.create)
+        assert callable(attached.com.atproto.repo.shapes_extra)
+        assert callable(attached.com.atproto.repo.create_record)
+        assert callable(attached.com.atproto.server.describe_server)
+
+    plain: t.Any = Client()
+    importlib.import_module(f'{package}.client').attach_namespaces(plain)
+    assert callable(plain.app.bsky.feed.post.create)
+    assert callable(plain.app.shapes.thing.create)

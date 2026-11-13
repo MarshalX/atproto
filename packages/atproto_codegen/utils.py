@@ -10,8 +10,10 @@ from pathlib import Path
 
 from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import NSID
+from atproto_lexicon.models import LexDefinitionType
 
 from atproto_codegen.config import get_config
+from atproto_codegen.consts import INPUT_DICT, INPUT_MODEL, OUTPUT_MODEL, PARAMS_DICT, PARAMS_MODEL
 from atproto_codegen.diagnostics import warn
 from atproto_codegen.exceptions import RuffNotFoundError, UnresolvedReferenceError
 from atproto_codegen.models import builder
@@ -235,10 +237,32 @@ def capitalize_first_symbol(string: str) -> str:
 _RESERVED_CLASS_NAMES = frozenset({'BlobRef', 'CIDType', 'Field', 'UnknownInputType', 'UnknownType'})
 
 
-def get_def_model_name(method_name: str) -> str:
+_RECORD_CLASS_NAMES = frozenset({'Record', 'GetRecordResponse', 'ListRecordsResponse', 'CreateRecordResponse'})
+_PARAMS_CLASS_NAMES = frozenset({PARAMS_MODEL, PARAMS_DICT})
+#: Classes a model module defines for the main definition of its lexicon, by the type of that definition.
+_MODULE_CLASS_NAMES = {
+    LexDefinitionType.RECORD: _RECORD_CLASS_NAMES,
+    LexDefinitionType.QUERY: _PARAMS_CLASS_NAMES | {OUTPUT_MODEL},
+    LexDefinitionType.PROCEDURE: _PARAMS_CLASS_NAMES | {INPUT_MODEL, INPUT_DICT, OUTPUT_MODEL},
+    LexDefinitionType.SUBSCRIPTION: _PARAMS_CLASS_NAMES,
+}
+_DEF_SUFFIX = 'Def'
+
+
+def get_def_model_name(method_name: str, nsid: t.Optional[NSID] = None) -> str:
+    """Return the class name of a definition.
+
+    Args:
+        method_name: Name of the definition.
+        nsid: Lexicon of the definition. Given, the name is kept apart from the classes its module defines.
+    """
     name = to_identifier(capitalize_first_symbol(method_name))
     if name in _RESERVED_CLASS_NAMES:
         name = f'{name}_'
+
+    main = builder.get_defs(nsid).get('main') if nsid is not None else None
+    if main is not None and name in _MODULE_CLASS_NAMES.get(main.type, frozenset()):
+        name = f'{name}{_DEF_SUFFIX}'
 
     return name
 
@@ -305,21 +329,22 @@ def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> t.Tuple[s
     """Return the path to the model and model name."""
     if '#' in ref:
         ref_nsid_str, def_name = ref.split('#', 1)
-        def_name = get_def_model_name(def_name)
 
         try:
             ref_nsid = NSID.from_str(ref_nsid_str)
-            return get_model_path(ref_nsid, def_name), def_name
         except InvalidNsidError:
+            ref_nsid = nsid
             if local:
+                def_name = get_def_model_name(def_name, nsid)
                 return def_name, def_name
-            return get_model_path(nsid, def_name), def_name
-    else:
-        ref_nsid = NSID.from_str(ref)
-        def_name = get_def_model_name(nsid.name)
 
-        if local:
-            return def_name, def_name
+        def_name = get_def_model_name(def_name, ref_nsid)
+        return get_model_path(ref_nsid, def_name), def_name
+    ref_nsid = NSID.from_str(ref)
+    def_name = get_def_model_name(nsid.name)
 
-        # FIXME(MarshalX): Is it works well? ;d
-        return get_model_path(ref_nsid, 'Main'), def_name
+    if local:
+        return def_name, def_name
+
+    # FIXME(MarshalX): Is it works well? ;d
+    return get_model_path(ref_nsid, 'Main'), def_name
