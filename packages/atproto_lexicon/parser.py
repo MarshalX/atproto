@@ -2,6 +2,7 @@ import os
 import typing as t
 from pathlib import Path
 
+from pydantic import ValidationError
 from pydantic_core import from_json
 
 from atproto_lexicon import models
@@ -11,6 +12,17 @@ _PATH_TO_LEXICONS = Path(__file__).parent.parent.parent.joinpath('lexicons').abs
 _LEXICON_FILE_EXT = '.json'
 
 L = t.TypeVar('L')
+
+
+def _describe_error(error: Exception) -> str:
+    if not isinstance(error, ValidationError):
+        return str(error)
+
+    reasons = []
+    for details in error.errors(include_url=False, include_input=False):
+        location = '.'.join(str(part) for part in details['loc'])
+        reasons.append(f'{location}: {details["msg"]}' if location else details['msg'])
+    return '; '.join(reasons)
 
 
 def lexicon_parse(data: t.Dict[str, t.Any], model_class: t.Type[L] = models.LexiconDoc) -> L:
@@ -26,7 +38,7 @@ def lexicon_parse_file(lexicon_path: t.Union[Path, str], *, soft_fail: bool = Fa
         if soft_fail:
             return None
 
-        raise LexiconParsingError("Can't parse lexicon") from e
+        raise LexiconParsingError(f"Can't parse lexicon '{lexicon_path}': {_describe_error(e)}") from e
 
 
 def lexicon_parse_dir(

@@ -73,16 +73,24 @@ def test_nested_refs_are_found() -> None:
                     ),
                 },
             },
-            'record': {'type': 'record', 'record': _object(ref={'type': 'ref', 'ref': 'com.missing.record'})},
-            'sub': {
-                'type': 'subscription',
-                'message': {'schema': {'type': 'union', 'refs': ['com.missing.message#event']}},
-            },
             'kinds': {'type': 'string', 'enum': ['com.missing.enum#value']},
         },
     )
+    record = _doc(
+        'com.example.record',
+        {'main': {'type': 'record', 'key': 'tid', 'record': _object(ref={'type': 'ref', 'ref': 'com.missing.record'})}},
+    )
+    subscription = _doc(
+        'com.example.subscribe',
+        {
+            'main': {
+                'type': 'subscription',
+                'message': {'schema': {'type': 'union', 'refs': ['com.missing.message#event']}},
+            }
+        },
+    )
 
-    assert set(find_unresolved_refs([doc])) == {
+    assert set(find_unresolved_refs([doc, record, subscription])) == {
         'com.missing.array',
         'com.missing.enum',
         'com.missing.input',
