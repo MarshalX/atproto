@@ -155,6 +155,9 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_timeline as AppBskyUnspeccedGetAtmosphereTimeline,
     )
+    from atproto_client.models.app.bsky.unspecced import (
+        get_atmosphere_timeline_v2 as AppBskyUnspeccedGetAtmosphereTimelineV2,
+    )
     from atproto_client.models.app.bsky.unspecced import get_config as AppBskyUnspeccedGetConfig
     from atproto_client.models.app.bsky.unspecced import (
         get_onboarding_suggested_starter_packs as AppBskyUnspeccedGetOnboardingSuggestedStarterPacks,
@@ -674,6 +677,7 @@ __all__ = [
     'AppBskyUnspeccedGetAtmosphereRecordView',
     'AppBskyUnspeccedGetAtmosphereRecordViews',
     'AppBskyUnspeccedGetAtmosphereTimeline',
+    'AppBskyUnspeccedGetAtmosphereTimelineV2',
     'AppBskyUnspeccedGetConfig',
     'AppBskyUnspeccedGetOnboardingSuggestedStarterPacks',
     'AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton',
@@ -1125,6 +1129,7 @@ class _Ids:
     AppBskyUnspeccedGetAtmosphereRecordView: str = 'app.bsky.unspecced.getAtmosphereRecordView'
     AppBskyUnspeccedGetAtmosphereRecordViews: str = 'app.bsky.unspecced.getAtmosphereRecordViews'
     AppBskyUnspeccedGetAtmosphereTimeline: str = 'app.bsky.unspecced.getAtmosphereTimeline'
+    AppBskyUnspeccedGetAtmosphereTimelineV2: str = 'app.bsky.unspecced.getAtmosphereTimelineV2'
     AppBskyUnspeccedGetConfig: str = 'app.bsky.unspecced.getConfig'
     AppBskyUnspeccedGetOnboardingSuggestedStarterPacks: str = 'app.bsky.unspecced.getOnboardingSuggestedStarterPacks'
     AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton: str = (

@@ -40,17 +40,23 @@ class Response(base.ResponseModelBase):
 class AppCard(base.ModelBase):
     """Definition model for :obj:`app.bsky.unspecced.getAtmosphereApps`."""
 
+    app_store_url: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
+        None  #: Optional link to the app on the Apple App Store.
+    )
     banner: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
         None  #: The app's banner, using its account banner when available.
     )
     category: te.Annotated[t.Optional[str], Field(max_length=100)] = None  #: Category.
     description: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Description.
+    google_play_url: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
+        None  #: Optional link to the app on Google Play.
+    )
     id: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Id.
     logo: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
         None  #: The app's logo, using its account avatar when available.
     )
     profile: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed'] = (
-        None  #: The app's account profile, when available.
+        None  #: The app's optional Bluesky account profile. Omitted when no profile is configured or the profile is unavailable.
     )
     title: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Title.
     url: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = None  #: Url.

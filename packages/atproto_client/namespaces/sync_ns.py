@@ -5334,6 +5334,37 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereTimeline.Response)
 
+    def get_atmosphere_timeline_v2(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetAtmosphereTimelineV2.Params,
+                models.AppBskyUnspeccedGetAtmosphereTimelineV2.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetAtmosphereTimelineV2.Response':
+        """Get the requesting account's Atmosphere activity timeline, pre-grouped for rendering. Requires auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetAtmosphereTimelineV2.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.AppBskyUnspeccedGetAtmosphereTimelineV2.Params)
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getAtmosphereTimelineV2',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereTimelineV2.Response)
+
     def get_config(self, **kwargs: t.Any) -> 'models.AppBskyUnspeccedGetConfig.Response':
         """Get miscellaneous runtime configuration.
 

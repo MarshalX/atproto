@@ -140,6 +140,7 @@ REDIRECTS = {
     'atproto/atproto_client.models.app.bsky.unspecced.get_atmosphere_record_view.html': '/models/app/bsky/unspecced/getAtmosphereRecordView/',
     'atproto/atproto_client.models.app.bsky.unspecced.get_atmosphere_record_views.html': '/models/app/bsky/unspecced/getAtmosphereRecordViews/',
     'atproto/atproto_client.models.app.bsky.unspecced.get_atmosphere_timeline.html': '/models/app/bsky/unspecced/getAtmosphereTimeline/',
+    'atproto/atproto_client.models.app.bsky.unspecced.get_atmosphere_timeline_v2.html': '/models/app/bsky/unspecced/getAtmosphereTimelineV2/',
     'atproto/atproto_client.models.app.bsky.unspecced.get_config.html': '/models/app/bsky/unspecced/getConfig/',
     'atproto/atproto_client.models.app.bsky.unspecced.get_onboarding_suggested_starter_packs.html': '/models/app/bsky/unspecced/getOnboardingSuggestedStarterPacks/',
     'atproto/atproto_client.models.app.bsky.unspecced.get_onboarding_suggested_starter_packs_skeleton.html': '/models/app/bsky/unspecced/getOnboardingSuggestedStarterPacksSkeleton/',

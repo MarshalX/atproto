@@ -171,20 +171,26 @@ class AnnouncementBanner(base.ModelBase):
 class AppCard(base.ModelBase):
     """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
+    app_store_url: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
+        None  #: Optional link to the app on the Apple App Store.
+    )
     background_image: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
-        None  #: Compatibility field. The profile banner when available, otherwise the editorial background image.
+        None  #: The profile banner when available, otherwise the editorial background image.
     )
     category: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Category.
     description: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Description.
+    google_play_url: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
+        None  #: Optional link to the app on Google Play.
+    )
     id: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Id.
     logo: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
-        None  #: Compatibility field. The profile avatar when available, otherwise the editorial logo.
+        None  #: The profile avatar when available, otherwise the editorial logo.
     )
     overlay_color: te.Annotated[t.Optional[str], Field(max_length=4096)] = (
         None  #: Deprecated. Retained for compatibility.
     )
     profile: t.Optional['models.AppBskyActorDefs.ProfileViewDetailed'] = (
-        None  #: The app's account profile, when available.
+        None  #: The app's optional Bluesky account profile. Omitted when no profile is configured or the profile is unavailable.
     )
     text_color: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Deprecated. Retained for compatibility.
     title: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Title.
