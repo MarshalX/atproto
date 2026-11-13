@@ -125,7 +125,7 @@ def _save_code_import_if_not_exist(nsid: NSID) -> None:
         _nsid_with_imports.add(nsid)
 
 
-def _get_model_class_def(name: str, model_type: ModelType) -> str:
+def _get_model_class_def(nsid: NSID, name: str, model_type: ModelType) -> str:
     lines: t.List[str] = []
 
     if model_type is ModelType.PARAMS:
@@ -137,7 +137,7 @@ def _get_model_class_def(name: str, model_type: ModelType) -> str:
     elif model_type is ModelType.RECORD:
         lines.append(f'class {get_record_model_name(name)}(base.RecordModelBase):')
     elif model_type is ModelType.DEF:
-        lines.append(f'class {get_def_model_name(name)}(base.ModelBase):')
+        lines.append(f'class {get_def_model_name(name, nsid)}(base.ModelBase):')
 
     lines.append('')
 
@@ -178,7 +178,7 @@ def _resolve_token_ref(nsid: NSID, value: str) -> t.Optional[str]:
     except InvalidNsidError:
         return None
 
-    model_name = get_def_model_name(def_name)
+    model_name = get_def_model_name(def_name, ref_nsid)
     if not builder.is_token(ref_nsid, def_name, get_import_path(ref_nsid), model_name):
         return None
 
@@ -704,7 +704,7 @@ def _register_inline_model(
     registered = _inline_models.setdefault(nsid, {})
     if requested_name not in registered:
         taken = {model.name for model in registered.values()} | _MODULE_CLASS_NAMES
-        taken.update(get_def_model_name(def_name) for def_name in builder.get_defs(nsid))
+        taken.update(get_def_model_name(def_name, nsid) for def_name in builder.get_defs(nsid))
 
         name = requested_name
         attempt = 1
@@ -739,7 +739,7 @@ def _get_model_raw_data(name: str) -> str:
 def _generate_params_model(
     nsid: NSID, definition: t.Union[models.LexXrpcQuery, models.LexXrpcProcedure, models.LexSubscription]
 ) -> str:
-    lines = [_get_model_class_def(nsid.name, ModelType.PARAMS)]
+    lines = [_get_model_class_def(nsid, nsid.name, ModelType.PARAMS)]
 
     if definition.parameters:
         lines.append(_get_model_docstring(nsid, definition.parameters, ModelType.PARAMS))
@@ -757,7 +757,7 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
     lines = []
     if body.schema_:
         if isinstance(body.schema_, models.LexObject):
-            lines.append(_get_model_class_def(nsid.name, model_type))
+            lines.append(_get_model_class_def(nsid, nsid.name, model_type))
             lines.append(_get_model_docstring(nsid, body.schema_, model_type))
             is_input_type = model_type is ModelType.DATA
             owner = INPUT_MODEL if is_input_type else OUTPUT_MODEL
@@ -853,9 +853,9 @@ def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str
 
 
 def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, model_type: ModelType) -> str:
-    owner = get_record_model_name() if model_type is ModelType.RECORD else get_def_model_name(def_name)
+    owner = get_record_model_name() if model_type is ModelType.RECORD else get_def_model_name(def_name, nsid)
     lines = [
-        _get_model_class_def(def_name, model_type),
+        _get_model_class_def(nsid, def_name, model_type),
         _get_model_docstring(nsid, def_model, model_type),
         _get_model(nsid, def_model, owner),
     ]
@@ -875,7 +875,7 @@ def _generate_def_token(nsid: NSID, def_name: str, def_model: models.LexToken) -
     token = f'{nsid}#{def_name}'
 
     lines = [
-        f'{get_def_model_name(def_name)} = t.Literal[{token!r}] #: {description}',
+        f'{get_def_model_name(def_name, nsid)} = t.Literal[{token!r}] #: {description}',
         '',
         '',
     ]
@@ -895,7 +895,7 @@ _AliasDef = t.Union[
 
 def _generate_def_alias(nsid: NSID, def_name: str, def_model: _AliasDef) -> str:
     """Generate a type alias for a definition that is not a model."""
-    name = get_def_model_name(def_name)
+    name = get_def_model_name(def_name, nsid)
     type_hint = _get_model_field_typehint(nsid, def_model, optional=False, inline_name=name)
 
     constraints_field = _get_constraints_field(def_model)

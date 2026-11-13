@@ -22,6 +22,10 @@ ignore = [
     "S101",
     "FA100", "FA102",
     "UP006",
+    # descriptions come from the lexicons as written, in any language
+    "RUF001", "RUF002", "RUF003",
+    # backslashes in descriptions are escaped on purpose
+    "D301",
     # generated modules carry no docstrings of their own
     "D100", "D101", "D102", "D103", "D104", "D105", "D107", "D415",
 ]

@@ -1,3 +1,4 @@
+import importlib
 import typing as t
 from pathlib import Path
 
@@ -108,7 +109,7 @@ def _filter_generatable_methods(methods: t.List[MethodInfo]) -> t.List[MethodInf
     return generatable
 
 
-def _get_namespace_imports() -> str:
+def _get_namespace_imports(*, sync: bool) -> str:
     config = get_config()
     base = config.base_package
 
@@ -123,17 +124,46 @@ def _get_namespace_imports() -> str:
         'if t.TYPE_CHECKING:',
         f'{_(1)}from {base}.namespaces.base import AsyncXrpcClient, XrpcClient',
     ]
+    if not config.is_self_gen:
+        module_name = _get_namespaces_module_name(sync=sync)
+        lines.insert(-2, f'from {base}.namespaces import {module_name} as {_get_base_namespaces_alias(sync=sync)}')
 
     return join_code(lines)
 
 
+def _get_base_namespaces_alias(*, sync: bool) -> str:
+    return f'base_{_get_namespaces_module_name(sync=sync)}'
+
+
+def _get_namespaces_module_name(*, sync: bool) -> str:
+    return (_NAMESPACES_SYNC_FILENAME if sync else _NAMESPACES_ASYNC_FILENAME)[:-3]
+
+
+def _base_package_has_namespace(class_name: str, *, sync: bool) -> bool:
+    """Return whether the package the generated code builds on defines a namespace of the same name."""
+    config = get_config()
+    if config.is_self_gen:
+        return False
+
+    module_name = _get_namespaces_module_name(sync=sync)
+    namespaces = importlib.import_module(f'{config.base_package}.namespaces.{module_name}')
+    return hasattr(namespaces, class_name)
+
+
 def _get_namespace_class_def(name_parts: t.List[str], *, sync: bool, is_record: bool = False) -> str:
-    base_class = 'NamespaceBase' if sync else 'AsyncNamespaceBase'
+    class_name = get_namespace_name(name_parts)
+
+    base_classes = []
     if is_record:
         # the NSID is both a record and the namespace of other lexicons, so one attribute serves both
-        base_class = get_record_name(name_parts)
+        base_classes.append(get_record_name(name_parts))
+    if _base_package_has_namespace(class_name, sync=sync):
+        # extend the namespace of the base package, so that attaching this one does not hide its content
+        base_classes.append(f'{_get_base_namespaces_alias(sync=sync)}.{class_name}')
+    if not base_classes:
+        base_classes.append('NamespaceBase' if sync else 'AsyncNamespaceBase')
 
-    lines = [f'class {get_namespace_name(name_parts)}({base_class}):']
+    lines = [f'class {class_name}({", ".join(base_classes)}):']
 
     return join_code(lines)
 
@@ -562,7 +592,7 @@ def generate_namespaces(
             generated_code_lines_buffer: t.List[str] = []
             _generate_namespace_in_output(namespace_tree, generated_code_lines_buffer, sync=sync, parent_nodes=[])
 
-            code = join_code([_get_namespace_imports(), *generated_code_lines_buffer])
+            code = join_code([_get_namespace_imports(sync=sync), *generated_code_lines_buffer])
 
             filename = sync_filename if sync else async_filename
             write_code(output_dir.joinpath(filename), code)

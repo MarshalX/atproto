@@ -99,6 +99,8 @@ Two ways in. Either instantiate the generated client, or graft the namespaces on
 
 `StatusphereClient` subclasses the SDK's [Client](#atproto_client.client.client.Client), so it keeps everything: login and session refresh, the transport, the headers machinery, and all seven built-in namespace roots. It adds `xyz` on top.
 
+A root the SDK already has is extended, not replaced. Generate `app.example.*` and the client has `client.app.example` next to `client.app.bsky`; the same holds deeper down, so `com.atproto.repo` keeps its own methods when your lexicons add one there.
+
 The class name is derived from `--package`: underscores become word boundaries and each word is capitalised, then `Client` is appended. `--package my_pkg` gives you `MyPkgClient` and `AsyncMyPkgClient`.
 
 ### attach_namespaces
