@@ -56,7 +56,23 @@ Going the other way:
 | `p256` (NIST P-256, secp256r1) | `ES256`  | `0x8024`          |
 | `secp256k1`                    | `ES256K` | `0xe701`          |
 
-Both are ECDSA over SHA-256, and both are verify-only here: this package does not generate keys or sign. Signatures must be in the compact 64-byte form, and only the low-S variant is accepted; a high-S signature over otherwise valid data verifies as `False`, per [the cryptography spec](https://atproto.com/specs/cryptography#ecdsa-signature-malleability).
+Both are ECDSA over SHA-256. Signatures must be in the compact 64-byte form, and only the low-S variant is accepted; a high-S signature over otherwise valid data verifies as `False`, per [the cryptography spec](https://atproto.com/specs/cryptography#ecdsa-signature-malleability).
+
+## Signing and JWKs
+
+P-256 keys can be generated, exchanged as JWKs and used to sign, which is what [OAuth](../guides/oauth.md) needs for DPoP proofs and client authentication:
+
+```python
+from atproto_crypto.jwk import generate_p256_jwk, get_public_jwk, load_private_jwk
+from atproto_crypto.jws import sign_jwt
+
+jwk = generate_p256_jwk(kid='key-1')  # private JWK; keep it secret
+public_jwk = get_public_jwk(jwk)
+
+jwt = sign_jwt({'typ': 'JWT', 'kid': 'key-1'}, {'iss': 'did:web:example.com'}, load_private_jwk(jwk))
+```
+
+Signatures are produced in the low-S form, so they verify with [verify_signature](#atproto_crypto.verify.verify_signature). secp256k1 keys remain verify-only.
 
 ```{eval-rst}
 .. automodule:: atproto_crypto
@@ -71,6 +87,8 @@ Both are ECDSA over SHA-256, and both are verify-only here: this package does no
 :maxdepth: 4
 
 did
+jwk
+jws
 multibase
 verify
 ```

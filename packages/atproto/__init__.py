@@ -38,6 +38,18 @@ if t.TYPE_CHECKING:
     )
     from atproto_jetstream import archive as jetstream_archive
     from atproto_jetstream import models as jetstream_models
+    from atproto_oauth import (
+        AsyncOAuthClient,
+        AsyncOAuthSession,
+        JsonFileStore,
+        LoopbackCallbackServer,
+        MemoryStore,
+        OAuthCallbackResult,
+        OAuthClient,
+        OAuthSession,
+        OAuthSessionData,
+        OAuthStateData,
+    )
     from atproto_server.auth.jwt import (
         JwtPayload,
         decode_jwt_payload,
@@ -74,6 +86,18 @@ __getattr__, __dir__ = lazy_exports(
         'atproto_identity.did.atproto_data': ('AtprotoData',),
         'atproto_identity.resolver': ('AsyncIdResolver', 'IdResolver'),
         'atproto_jetstream': ('AsyncJetstreamClient', 'JetstreamClient', 'parse_subscribe_events_message'),
+        'atproto_oauth': (
+            'AsyncOAuthClient',
+            'AsyncOAuthSession',
+            'JsonFileStore',
+            'LoopbackCallbackServer',
+            'MemoryStore',
+            'OAuthCallbackResult',
+            'OAuthClient',
+            'OAuthSession',
+            'OAuthSessionData',
+            'OAuthStateData',
+        ),
         'atproto_server.auth.jwt': (
             'JwtPayload',
             'decode_jwt_payload',
@@ -136,6 +160,17 @@ __all__ = [  # noqa: RUF022
     'DidInMemoryCache',
     'AsyncIdResolver',
     'IdResolver',
+    # oauth
+    'AsyncOAuthClient',
+    'AsyncOAuthSession',
+    'JsonFileStore',
+    'LoopbackCallbackServer',
+    'MemoryStore',
+    'OAuthCallbackResult',
+    'OAuthClient',
+    'OAuthSession',
+    'OAuthSessionData',
+    'OAuthStateData',
     # server jwt
     'JwtPayload',
     'decode_jwt_payload',

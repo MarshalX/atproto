@@ -2,8 +2,9 @@ import typing as t
 from datetime import timedelta
 
 import typing_extensions as te
+from atproto_core.exceptions import AtProtocolError
 
-from atproto_client.client.base import _ClientCommonMethodsMixin
+from atproto_client.client.base import _ClientCommonMethodsMixin, _handle_base_url
 from atproto_client.client.methods_mixin.time import TimeMethodsMixin
 from atproto_client.client.session import (
     AsyncSessionChangeCallback,
@@ -16,6 +17,9 @@ from atproto_client.client.session import (
 )
 from atproto_client.exceptions import LoginRequiredError
 
+if t.TYPE_CHECKING:
+    from atproto_client.client.auth import AuthSession
+
 
 class SessionMethodsMixin(TimeMethodsMixin, _ClientCommonMethodsMixin):
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
@@ -26,6 +30,27 @@ class SessionMethodsMixin(TimeMethodsMixin, _ClientCommonMethodsMixin):
     @property
     def _session(self) -> t.Optional[Session]:
         return self._session_dispatcher.session
+
+    @property
+    def _auth_session(self) -> t.Optional['AuthSession']:
+        return self._session_dispatcher.auth_session
+
+    @property
+    def _auth_session_did(self) -> t.Optional[str]:
+        auth_session = self._auth_session
+        if auth_session is not None:
+            return auth_session.did
+
+        return None
+
+    @te.override
+    def _build_url(self, nsid: str) -> str:
+        auth_session = self._auth_session
+        if auth_session is None:
+            return super()._build_url(nsid)
+
+        # read on every request so that every clone follows the account to another PDS
+        return f'{_handle_base_url(auth_session.pds_endpoint)}/{nsid}'
 
     @te.override
     def _inherit_clone_state(self, original: te.Self) -> None:
@@ -42,6 +67,8 @@ class SessionMethodsMixin(TimeMethodsMixin, _ClientCommonMethodsMixin):
         source = self._session_dispatcher.get_auth_headers
         if source not in request._additional_header_sources:
             request.add_additional_headers_source(source)
+
+        request.set_auth_source(self._session_dispatcher.get_httpx_auth)
 
     def _unregister_auth_headers_source(self) -> None:
         sources = self.request._additional_header_sources
@@ -129,6 +156,12 @@ class SessionMethodsMixin(TimeMethodsMixin, _ClientCommonMethodsMixin):
         Returns:
             :obj:`str`: Session string.
         """
+        if self._auth_session is not None:
+            raise AtProtocolError(
+                'An OAuth session can not be exported as a session string. '
+                'It is kept in the session store of the OAuth client; restore it from there.'
+            )
+
         if not self._session:
             raise LoginRequiredError
 

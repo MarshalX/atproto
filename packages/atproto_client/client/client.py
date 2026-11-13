@@ -18,6 +18,7 @@ from atproto_client.models.languages import DEFAULT_LANGUAGE_CODE1
 from atproto_client.utils import TextBuilder, facet_detection
 
 if t.TYPE_CHECKING:
+    from atproto_client.client.auth import AuthSession
     from atproto_client.client.base import InvokeType
     from atproto_client.request import Response
 
@@ -128,6 +129,47 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
 
         return self.me
 
+    def login_oauth(
+        self, session: 'AuthSession', fetch_bsky_profile: bool = False
+    ) -> t.Optional['models.AppBskyActorDefs.ProfileViewDetailed']:
+        """Authorize a client with an OAuth session.
+
+        Every request is then sent to the PDS of the account and signed by the session,
+        which also keeps its tokens fresh. A previous session of the client is replaced.
+
+        Args:
+            session: OAuth session from :py:mod:`atproto_oauth`.
+            fetch_bsky_profile: Look up the Bluesky profile of the account.
+                The granted scope must allow ``app.bsky.actor.getProfile``.
+
+        Note:
+            Session change callbacks are not called and the session can not be exported as a string.
+            An OAuth session is persisted by the session store of the OAuth client.
+
+        Returns:
+            :obj:`models.AppBskyActorDefs.ProfileViewDetailed`: Profile information,
+            or :obj:`None` when it was not fetched.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        self._session_dispatcher.set_auth_session(session)
+
+        self.me = None
+        if fetch_bsky_profile:
+            self.me = self._fetch_bsky_profile(session.did)
+
+        return self.me
+
+    def logout_oauth(self) -> None:
+        """Detach the OAuth session from the client.
+
+        Note:
+            The session is not revoked. Call ``revoke()`` of the session for that.
+        """
+        self._session_dispatcher.set_auth_session(None)
+        self.me = None
+
     def _fetch_bsky_profile(self, handle: str) -> t.Optional['models.AppBskyActorDefs.ProfileViewDetailed']:
         try:
             return self.app.bsky.actor.get_profile(models.AppBskyActorGetProfile.Params(actor=handle))
@@ -234,7 +276,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
             facets = text.build_facets()
             text = text.build_text()
 
-        repo = self.me.did if self.me else None
+        repo = self.me.did if self.me else self._auth_session_did
         if profile_identify:
             repo = profile_identify
 
@@ -441,7 +483,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        repo = self.me.did if self.me else None
+        repo = self.me.did if self.me else self._auth_session_did
         if profile_identify:
             repo = profile_identify
 
@@ -606,7 +648,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         """
         subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
-        repo = self.me.did if self.me else None
+        repo = self.me.did if self.me else self._auth_session_did
         if not repo:
             raise LoginRequiredError
 
@@ -643,7 +685,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         """
         subject_obj = models.ComAtprotoRepoStrongRef.Main(cid=cid, uri=uri)
 
-        repo = self.me.did if self.me else None
+        repo = self.me.did if self.me else self._auth_session_did
         if not repo:
             raise LoginRequiredError
 
@@ -677,7 +719,7 @@ class Client(SessionDispatchMixin, SessionMethodsMixin, TimeMethodsMixin, Header
         Raises:
             :class:`atproto.exceptions.AtProtocolError`: Base exception.
         """
-        repo = self.me.did if self.me else None
+        repo = self.me.did if self.me else self._auth_session_did
         if not repo:
             raise LoginRequiredError
 

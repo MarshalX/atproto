@@ -119,6 +119,7 @@ class RequestBase:
     def __init__(self) -> None:
         self._additional_headers: t.Dict[str, str] = {}
         self._additional_header_sources: t.List[t.Callable[[], t.Dict[str, str]]] = []
+        self._auth_source: t.Optional[t.Callable[[], t.Optional[httpx.Auth]]] = None
 
     def get_headers(self, additional_headers: t.Optional[t.Dict[str, str]] = None) -> t.Dict[str, str]:
         """Get headers for the request.
@@ -160,6 +161,23 @@ class RequestBase:
         """
         self._additional_header_sources.append(callback)
 
+    def set_auth_source(self, callback: t.Optional[t.Callable[[], t.Optional[httpx.Auth]]]) -> None:
+        """Set the source of the authentication of requests.
+
+        Args:
+            callback: Function to get the ``httpx`` authentication of a request,
+                or :obj:`None` to send the request as is.
+        """
+        self._auth_source = callback
+
+    def _apply_auth(self, kwargs: t.Dict[str, t.Any]) -> None:
+        if self._auth_source is None or 'auth' in kwargs:
+            return
+
+        auth = self._auth_source()
+        if auth is not None:
+            kwargs['auth'] = auth
+
     def add_additional_header(self, header_name: str, header_value: str) -> None:
         """Add additional headers for the request.
 
@@ -193,6 +211,7 @@ class RequestBase:
 
         cloned_request._additional_headers = self._additional_headers.copy()
         cloned_request._additional_header_sources = self._additional_header_sources.copy()
+        cloned_request._auth_source = self._auth_source
 
         return cloned_request
 
@@ -215,6 +234,7 @@ class Request(RequestBase):
 
     def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers', None))
+        self._apply_auth(kwargs)
 
         try:
             response = self._client.request(method=method, url=url, headers=headers, **kwargs)
@@ -251,6 +271,7 @@ class AsyncRequest(RequestBase):
 
     async def _send_request(self, method: str, url: str, **kwargs: t.Any) -> httpx.Response:
         headers = self.get_headers(kwargs.pop('headers', None))
+        self._apply_auth(kwargs)
 
         try:
             response = await self._client.request(method=method, url=url, headers=headers, **kwargs)

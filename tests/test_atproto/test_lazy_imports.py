@@ -40,6 +40,7 @@ def test_client_does_not_load_streams_or_crypto() -> None:
 
     assert 'atproto_firehose' not in modules
     assert 'atproto_jetstream' not in modules
+    assert 'atproto_oauth' not in modules
     assert 'cryptography' not in modules
 
 

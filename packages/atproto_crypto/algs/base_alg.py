@@ -2,8 +2,13 @@ import typing as t
 
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric.ec import ECDSA, EllipticCurve, EllipticCurvePublicKey
-from cryptography.hazmat.primitives.asymmetric.utils import encode_dss_signature
+from cryptography.hazmat.primitives.asymmetric.ec import (
+    ECDSA,
+    EllipticCurve,
+    EllipticCurvePrivateKey,
+    EllipticCurvePublicKey,
+)
+from cryptography.hazmat.primitives.asymmetric.utils import decode_dss_signature, encode_dss_signature
 from cryptography.hazmat.primitives.hashes import SHA256
 
 from atproto_crypto.exceptions import InvalidCompressedPubkeyError
@@ -74,3 +79,19 @@ class AlgBase:
             return True
         except InvalidSignature:
             return False
+
+    def sign(self, private_key: EllipticCurvePrivateKey, signing_input: bytes) -> bytes:
+        """Sign data.
+
+        Args:
+            private_key: Private key on the curve of this algorithm.
+            signing_input: Signing input (data).
+
+        Returns:
+            :obj:`bytes`: Signature as 64 bytes of ``r || s`` in the low-S form.
+        """
+        r, s = decode_dss_signature(private_key.sign(signing_input, ECDSA(SHA256())))
+        if s > self.curve_order // 2:
+            s = self.curve_order - s
+
+        return r.to_bytes(32, 'big') + s.to_bytes(32, 'big')

@@ -39,6 +39,13 @@ Subscribe to the whole network's repository and label events, and decode the com
 The same stream as plain JSON, filtered server-side, plus archive backfill.
 :::
 
+:::{grid-item-card} {octicon}`shield-lock;1em;sd-mr-1` OAuth
+:link: oauth
+:link-type: doc
+
+Log in from the command line with a loopback client and reuse the session.
+:::
+
 ::::
 
 Two more live elsewhere because they need their surrounding prose:
@@ -54,4 +61,5 @@ basics
 advanced
 firehose
 jetstream
+oauth
 ```
