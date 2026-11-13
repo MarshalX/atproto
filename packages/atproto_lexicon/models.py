@@ -6,8 +6,6 @@ from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import validate_nsid
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-Number = t.Union[int, float]
-
 
 class LexDefinitionType:
     RECORD: te.Final = 'record'
@@ -97,8 +95,8 @@ class LexCidLink(LexPrimitiveBase):
 class LexBytes(LexPrimitiveBase):
     type: te.Literal['bytes'] = Field(default=LexPrimitiveType.BYTES, frozen=True)
 
-    max_length: t.Optional[Number] = Field(default=None, alias='maxLength')
-    min_length: t.Optional[Number] = Field(default=None, alias='minLength')
+    max_length: t.Optional[int] = Field(default=None, alias='maxLength')
+    min_length: t.Optional[int] = Field(default=None, alias='minLength')
 
 
 class LexBoolean(LexPrimitiveBase):
@@ -160,17 +158,14 @@ LexPrimitive = te.Annotated[
     Field(discriminator='type'),
 ]
 
-LexLimitedScopedPrimitive = te.Annotated[
-    t.Union[LexBoolean, LexInteger, LexString],
-    Field(discriminator='type'),
-]
+_PARAMETER_PRIMITIVE_TYPES = frozenset({LexPrimitiveType.BOOLEAN, LexPrimitiveType.INTEGER, LexPrimitiveType.STRING})
 
 
 class LexBlob(LexDefinitionBase):
     type: te.Literal['blob'] = Field(default=LexDefinitionType.BLOB, frozen=True)
 
     accept: t.Optional[t.List[str]] = None
-    max_size: t.Optional[Number] = Field(default=None, alias='maxSize')
+    max_size: t.Optional[int] = Field(default=None, alias='maxSize')
 
 
 class LexArray(LexDefinitionBase):
@@ -181,12 +176,6 @@ class LexArray(LexDefinitionBase):
     ]
     min_length: t.Optional[int] = Field(default=None, alias='minLength')
     max_length: t.Optional[int] = Field(default=None, alias='maxLength')
-
-
-class LexPrimitiveArray(LexArray):
-    """Array of the primitives allowed in XRPC parameters."""
-
-    items: LexLimitedScopedPrimitive  # type: ignore[assignment]
 
 
 class LexToken(LexDefinitionBase):
@@ -234,12 +223,16 @@ class LexXrpcParameters(LexDefinitionBase):
 
     required: t.Optional[t.List[str]] = None
     properties: t.Dict[
-        str, te.Annotated[t.Union[LexBoolean, LexInteger, LexString, LexPrimitiveArray], Field(discriminator='type')]
+        str, te.Annotated[t.Union[LexBoolean, LexInteger, LexString, LexArray], Field(discriminator='type')]
     ]
 
     @model_validator(mode='after')
-    def _check_listed_properties(self) -> te.Self:
+    def _check_properties(self) -> te.Self:
         _check_listed_properties(self.required, self.properties, 'required')
+        arrays = {name: prop.items for name, prop in self.properties.items() if isinstance(prop, LexArray)}
+        invalid = sorted(name for name, items in arrays.items() if items.type not in _PARAMETER_PRIMITIVE_TYPES)
+        if invalid:
+            raise ValueError(f'Items of array parameters must be boolean, integer or string: {", ".join(invalid)}')
         return self
 
 

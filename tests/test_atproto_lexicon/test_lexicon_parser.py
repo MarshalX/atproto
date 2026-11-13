@@ -102,6 +102,8 @@ def test_lexicon_parse_accepts(doc: t.Dict[str, t.Any]) -> None:
         _doc({'main': {'type': 'query', 'output': {'encoding': 'text/plain; charset=utf-8'}}}),
         _doc({'main': {'type': 'query', 'errors': [{'name': ''}]}}),
         _doc({'main': _object({'matrix': {'type': 'array', 'items': {'type': 'array', 'items': {'type': 'string'}}}})}),
+        _doc({'main': _object({'raw': {'type': 'bytes', 'maxLength': 1.5}})}),
+        _doc({'main': _object({'file': {'type': 'blob', 'maxSize': 1.5}})}),
     ],
     ids=[
         'lexicon-version',
@@ -123,6 +125,8 @@ def test_lexicon_parse_accepts(doc: t.Dict[str, t.Any]) -> None:
         'encoding-with-parameters',
         'empty-error-name',
         'array-of-arrays',
+        'fractional-bytes-length',
+        'fractional-blob-size',
     ],
 )
 def test_lexicon_parse_rejects(doc: t.Dict[str, t.Any]) -> None:
