@@ -10,10 +10,6 @@ def _iter_refs(node: object) -> t.Iterator[str]:
         yield node.ref
     elif isinstance(node, models.LexRefUnion):
         yield from node.refs
-    elif isinstance(node, models.LexString):
-        # tokens named in knownValues or enum resolve to models just like refs
-        values = [*(node.known_values or []), *(node.enum or [])]
-        yield from (value for value in values if '#' in value)
     elif isinstance(node, BaseModel):
         for name in type(node).model_fields:
             yield from _iter_refs(getattr(node, name))

@@ -54,15 +54,6 @@ class CodegenConfig:
     def with_overrides(self, **kwargs: t.Any) -> 'CodegenConfig':
         return replace(self, **kwargs)
 
-    def module_import_path(self, models_subdir: Path) -> str:
-        """Return the dotted import path of a directory inside the generated models package."""
-        rel = models_subdir.relative_to(self.models_output_dir)
-        return '.'.join([self.models_package, *rel.parts])
-
-    def nsid_segments(self, models_subdir: Path) -> t.List[str]:
-        """Return the NSID segments a directory inside the generated models package stands for."""
-        return list(models_subdir.relative_to(self.models_output_dir).parts)
-
 
 _active: ContextVar[t.Optional[CodegenConfig]] = ContextVar('atproto_codegen_config', default=None)
 

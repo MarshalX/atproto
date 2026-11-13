@@ -1,3 +1,4 @@
+import keyword
 import re
 import shutil
 import subprocess
@@ -110,17 +111,50 @@ def _write_code(filepath: Path, code: str, *, append: bool = False) -> None:
         f.write(code)
 
 
+def to_identifier(name: str) -> str:
+    """Turn a lexicon name into a valid Python identifier that is not a keyword.
+
+    Mirrored by ``atproto_client.models.models_loader._to_module_name``, which locates the generated
+    modules at runtime. Keep the two in sync!
+    """
+    identifier = re.sub(r'\W', '_', name)
+    if not identifier or identifier[0].isdigit():
+        identifier = f'_{identifier}'
+    if keyword.iskeyword(identifier):
+        identifier = f'{identifier}_'
+
+    return identifier
+
+
+def to_pascal_case(parts: t.Iterable[str]) -> str:
+    """Join name parts into a class name, dropping the characters an identifier can not hold."""
+    words = [word for part in parts for word in re.split(r'[^a-zA-Z0-9]+', part) if word]
+    return ''.join(word.capitalize() for word in words)
+
+
+def to_one_line(text: str) -> str:
+    """Collapse whitespace so that the text can not leave the comment it is written into."""
+    return ' '.join(text.split())
+
+
+def to_docstring_text(text: str) -> str:
+    """Make the text safe to place between triple double quotes."""
+    return to_one_line(text).replace('\\', '\\\\').replace('"""', '\\"\\"\\"')
+
+
+def get_module_path_parts(nsid: NSID) -> t.List[str]:
+    """Return the package path and the module name a lexicon is generated into."""
+    module_name = to_identifier(convert_camel_case_to_snake_case(nsid.name))
+    return [*(to_identifier(segment) for segment in nsid.segments[:-1]), module_name]
+
+
 def get_file_path_parts(nsid: NSID) -> t.List[str]:
-    return [*nsid.segments[:-1], f'{convert_camel_case_to_snake_case(nsid.name)}.py']
-
-
-def get_import_path_old(nsid: NSID) -> str:
-    return '.'.join([*nsid.segments[:-1], f'{convert_camel_case_to_snake_case(nsid.name)}'])
+    *packages, module_name = get_module_path_parts(nsid)
+    return [*packages, f'{module_name}.py']
 
 
 def get_import_path(nsid: NSID) -> str:
-    nsid_parts = nsid.segments[:-1] + camel_case_split(nsid.name)
-    return ''.join([p.capitalize() for p in nsid_parts])
+    return to_pascal_case([*nsid.segments[:-1], *camel_case_split(nsid.name)])
 
 
 def convert_camel_case_to_snake_case(string: str) -> str:
@@ -168,8 +202,16 @@ def capitalize_first_symbol(string: str) -> str:
     return string
 
 
+#: Names every generated model module resolves annotations with. A class of the same name would replace them.
+_RESERVED_CLASS_NAMES = frozenset({'BlobRef', 'CIDType', 'Field', 'UnknownInputType', 'UnknownType'})
+
+
 def get_def_model_name(method_name: str) -> str:
-    return f'{capitalize_first_symbol(method_name)}'
+    name = to_identifier(capitalize_first_symbol(method_name))
+    if name in _RESERVED_CLASS_NAMES:
+        name = f'{name}_'
+
+    return name
 
 
 def get_record_model_name(_: t.Optional[str] = None) -> str:

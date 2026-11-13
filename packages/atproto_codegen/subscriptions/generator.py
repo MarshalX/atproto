@@ -65,7 +65,7 @@ def _generate_message_types(nsid: NSID, definition: LexSubscription) -> t.List[s
     lines.append(']')
 
     lines.append(f'{_type_map_name(nsid)} = {{')
-    lines.extend(f"{_(1)}'{ref}': {path}," for ref, path in zip(refs, model_paths))
+    lines.extend(f'{_(1)}{ref!r}: {path},' for ref, path in zip(refs, model_paths))
     lines.append('}')
 
     return lines

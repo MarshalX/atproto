@@ -78,10 +78,32 @@ def reference_record_types(config: CodegenConfig) -> t.FrozenSet[str]:
     return frozenset(type_conversion.RECORD_TYPES)
 
 
+@lru_cache(maxsize=16)
+def _emitted_defs(config: CodegenConfig) -> t.Dict[NSID, t.Dict[str, models.LexDefinition]]:
+    return {NSID.from_str(lexicon.id): lexicon.defs for lexicon in parse_lexicons(config)}
+
+
+def get_defs(nsid: NSID, config: t.Optional[CodegenConfig] = None) -> t.Dict[str, models.LexDefinition]:
+    """Return the definitions of an emitted lexicon. Empty for a lexicon that is not emitted."""
+    return _emitted_defs(config or get_config()).get(nsid, {})
+
+
+def is_token(nsid: NSID, def_name: str, alias: str, model_name: str, config: t.Optional[CodegenConfig] = None) -> bool:
+    """Return whether a definition is a token, in the emitted lexicons or the referenced package."""
+    if config is None:
+        config = get_config()
+
+    if nsid in emitted_nsids(config):
+        return isinstance(get_defs(nsid, config).get(def_name), models.LexToken)
+
+    return reference_model_exists(nsid, alias, model_name, config)
+
+
 def clear_caches() -> None:
     """Forget parsed lexicons so that a new run sees lexicons edited since the previous one in this process."""
     parse_lexicons.cache_clear()
     emitted_nsids.cache_clear()
+    _emitted_defs.cache_clear()
     reference_record_types.cache_clear()
 
 
@@ -161,10 +183,34 @@ def build_response_models(config: t.Optional[CodegenConfig] = None) -> BuiltResp
 
 
 BuiltDefModels = t.Dict[
-    NSID, t.Dict[str, t.Union[models.LexObject, models.LexString, models.LexToken, models.LexArray]]
+    NSID,
+    t.Dict[
+        str,
+        t.Union[
+            models.LexObject,
+            models.LexToken,
+            models.LexArray,
+            models.LexBlob,
+            models.LexBoolean,
+            models.LexBytes,
+            models.LexCidLink,
+            models.LexInteger,
+            models.LexString,
+        ],
+    ],
 ]
 
-_LEX_DEF_TYPES_FOR_DEF = (models.LexObject, models.LexString, models.LexToken, models.LexArray)
+_LEX_DEF_TYPES_FOR_DEF = (
+    models.LexObject,
+    models.LexToken,
+    models.LexArray,
+    models.LexBlob,
+    models.LexBoolean,
+    models.LexBytes,
+    models.LexCidLink,
+    models.LexInteger,
+    models.LexString,
+)
 
 
 def build_def_models(config: t.Optional[CodegenConfig] = None) -> BuiltDefModels:

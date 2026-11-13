@@ -42,6 +42,9 @@ from atproto_codegen.utils import (
     get_sync_async_keywords,
     join_code,
     sort_dict_by_key,
+    to_docstring_text,
+    to_identifier,
+    to_pascal_case,
     write_code,
 )
 from atproto_codegen.utils import get_code_intent as _
@@ -54,11 +57,11 @@ _RECORD_SUFFIX = 'Record'
 
 
 def get_namespace_name(path_parts: t.List[str]) -> str:
-    return ''.join([p.capitalize() for p in path_parts]) + _NAMESPACE_SUFFIX
+    return to_pascal_case(path_parts) + _NAMESPACE_SUFFIX
 
 
 def get_record_name(path_parts: t.List[str]) -> str:
-    return ''.join([p.capitalize() for p in path_parts]) + _RECORD_SUFFIX
+    return to_pascal_case(path_parts) + _RECORD_SUFFIX
 
 
 def _get_namespace_imports() -> str:
@@ -113,17 +116,19 @@ def _get_init_method(
     lines = [f'{_(1)}def __init__(self, client: {client_typehint}) -> None:', f'{_(2)}super().__init__(client)']
 
     for sub_namespace in sub_namespaces:
-        lines.append(f'{_(2)}self.{sub_namespace} = {get_namespace_name([*parent_nodes, sub_namespace])}(self._client)')
+        namespace_name = get_namespace_name([*parent_nodes, sub_namespace])
+        lines.append(f'{_(2)}self.{to_identifier(sub_namespace)} = {namespace_name}(self._client)')
     for record_name in record_names:
-        lines.append(f'{_(2)}self.{record_name} = {get_record_name([*parent_nodes, record_name])}(self._client)')
+        record_class_name = get_record_name([*parent_nodes, record_name])
+        lines.append(f'{_(2)}self.{to_identifier(record_name)} = {record_class_name}(self._client)')
 
     return join_code(lines)
 
 
 def _get_method_docstring(method_info: MethodInfo) -> str:
-    method_desc = f'{gen_description_by_camel_case_name(method_info.name)}.'
-    if method_info.definition.description:
-        method_desc = method_info.definition.description
+    method_desc = to_docstring_text(method_info.definition.description or '')
+    if not method_desc:
+        method_desc = f'{gen_description_by_camel_case_name(method_info.name)}.'
     if method_desc[-1] not in {'.', '?', '!'}:
         method_desc += '.'
 
@@ -200,9 +205,9 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
     if 'data_alias' in presented_args:
         invoke_args.append('data=data')
     if input_body and input_body.encoding:
-        invoke_args.append(f"input_encoding='{input_body.encoding}'")
+        invoke_args.append(f'input_encoding={input_body.encoding!r}')
     if definition.output and definition.output.encoding:
-        invoke_args.append(f"output_encoding='{definition.output.encoding}'")
+        invoke_args.append(f'output_encoding={definition.output.encoding!r}')
 
     invoke_args.append('**kwargs')
     invoke_args_str = ', '.join(invoke_args)
@@ -324,7 +329,7 @@ def _get_namespace_method_return_type(method_info: MethodInfo) -> t.Tuple[str, b
 def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> str:
     d, __ = get_sync_async_keywords(sync=sync)
 
-    name = convert_camel_case_to_snake_case(method_info.name)
+    name = to_identifier(convert_camel_case_to_snake_case(method_info.name))
     args = _get_namespace_method_signature_args(method_info)
     return_type, is_model = _get_namespace_method_return_type(method_info)
 
@@ -425,7 +430,7 @@ def _generate_raw_client(namespace_tree: NamespaceNode, config: CodegenConfig, *
         f'{_(1)}"""Group all root namespaces."""',
         '',
     ]
-    lines.extend(f"{_(1)}{root}: '{ns_module}.{get_namespace_name([root])}'" for root in roots)
+    lines.extend(f"{_(1)}{to_identifier(root)}: '{ns_module}.{get_namespace_name([root])}'" for root in roots)
     lines.extend(
         [
             '',
@@ -434,7 +439,7 @@ def _generate_raw_client(namespace_tree: NamespaceNode, config: CodegenConfig, *
             '',
         ]
     )
-    lines.extend(f'{_(2)}self.{root} = {ns_module}.{get_namespace_name([root])}(self)' for root in roots)
+    lines.extend(f'{_(2)}self.{to_identifier(root)} = {ns_module}.{get_namespace_name([root])}(self)' for root in roots)
 
     filename = 'raw.py' if sync else 'async_raw.py'
     filepath = config.output_dir.joinpath('client', filename)
@@ -450,7 +455,7 @@ def _generate_custom_client(namespace_tree: NamespaceNode, config: CodegenConfig
     sdk_client = f'{prefix}Client'
 
     roots = sorted(namespace_tree.children)
-    package_class = ''.join(p.capitalize() for p in config.package.split('_'))
+    package_class = to_pascal_case(config.package.split('_'))
     class_name = f'{prefix}{package_class}Client'
 
     lines = [
@@ -464,7 +469,9 @@ def _generate_custom_client(namespace_tree: NamespaceNode, config: CodegenConfig
         f'def attach_{"" if sync else "async_"}namespaces(client: t.Any) -> None:',
         f'{_(1)}"""Add this package\'s root namespaces to an existing client."""',
     ]
-    lines.extend(f'{_(1)}client.{root} = {ns_module}.{get_namespace_name([root])}(client)' for root in roots)
+    lines.extend(
+        f'{_(1)}client.{to_identifier(root)} = {ns_module}.{get_namespace_name([root])}(client)' for root in roots
+    )
     lines.extend(
         [
             '',
@@ -474,7 +481,7 @@ def _generate_custom_client(namespace_tree: NamespaceNode, config: CodegenConfig
             '',
         ]
     )
-    lines.extend(f"{_(1)}{root}: '{ns_module}.{get_namespace_name([root])}'" for root in roots)
+    lines.extend(f"{_(1)}{to_identifier(root)}: '{ns_module}.{get_namespace_name([root])}'" for root in roots)
     lines.extend(
         [
             '',
