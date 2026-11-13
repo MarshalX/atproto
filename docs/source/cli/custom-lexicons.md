@@ -188,14 +188,31 @@ The generated client takes `base_uri` and `recv_timeout` rather than hardcoding 
 A subscription that declares a `subprotocol` gets the union, the type map, and the parser, but **no client**, because the transport is not the standard one. Jetstream is the example; its client is hand-written for that reason.
 :::
 
+## Lexicons that are not valid
+
+By default, generation stops at the first lexicon that can not be parsed and at the first reference that names something missing. That is the right behavior for lexicons you maintain.
+
+Lexicons published by someone else are not always valid. Pass `--skip-invalid` to generate everything that can be generated:
+
+```bash
+atp gen --lexicon-dir ./lexicons custom --output-dir ./my_pkg --package my_pkg --skip-invalid
+```
+
+| What is wrong                                                          | What you get                                                        |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| A lexicon can not be parsed                                            | The lexicon is skipped.                                             |
+| A property or array item references a missing lexicon or definition    | The field is typed as unknown and holds a `DotDict` at runtime.     |
+| A union lists a missing definition                                     | That member is dropped. A closed union that loses a member is open. |
+| A query or procedure has a missing reference or a union as its body    | The method is skipped.                                              |
+
+Everything left out is printed at the end of the run. A lexicon that refers to a skipped one is still generated; only the field that pointed at it is weakened.
+
 ## Limitations
 
 The generator does not yet cover everything a lexicon can express:
 
-- **Top-level defs that are bare primitives**. A def that is an `integer`, `boolean`, `bytes`, `cid-link`, `blob`, or `unknown` rather than an `object`, `string`, `token`, or `array` is skipped silently. Wrap it in an object if you need it.
+- **A union as the body of a query or procedure**. Generation fails with an error naming the lexicon, or skips the method under `--skip-invalid`.
 - **`permission` and `permission-set` defs** are not generated.
-
-Neither blocks generating a working package; they mean those particular defs produce no code.
 
 ## Keeping generated code out of your diffs
 

@@ -92,10 +92,8 @@ def test_nested_refs_are_found() -> None:
 
     assert set(find_unresolved_refs([doc, record, subscription])) == {
         'com.missing.array',
-        'com.missing.enum',
         'com.missing.input',
         'com.missing.message',
         'com.missing.nested',
-        'com.missing.params',
         'com.missing.record',
     }

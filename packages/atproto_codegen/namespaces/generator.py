@@ -5,6 +5,7 @@ from atproto_core.nsid import NSID
 from atproto_lexicon.models import (
     LexObject,
     LexRef,
+    LexRefUnion,
     LexXrpcParameters,
     LexXrpcProcedure,
     LexXrpcQuery,
@@ -19,6 +20,8 @@ from atproto_codegen.consts import (
     PARAMS_DICT,
     PARAMS_MODEL,
 )
+from atproto_codegen.diagnostics import warn
+from atproto_codegen.exceptions import UnresolvedReferenceError
 from atproto_codegen.namespaces.builder import (
     MethodInfo,
     NamespaceNode,
@@ -34,14 +37,17 @@ from atproto_codegen.record_templates import (
     RECORD_LIST_METHOD_TEMPLATE,
 )
 from atproto_codegen.utils import (
-    _resolve_nsid_ref,
     convert_camel_case_to_snake_case,
     format_code,
     gen_description_by_camel_case_name,
     get_import_path,
     get_sync_async_keywords,
     join_code,
+    resolve_ref,
     sort_dict_by_key,
+    to_docstring_text,
+    to_identifier,
+    to_pascal_case,
     write_code,
 )
 from atproto_codegen.utils import get_code_intent as _
@@ -54,11 +60,52 @@ _RECORD_SUFFIX = 'Record'
 
 
 def get_namespace_name(path_parts: t.List[str]) -> str:
-    return ''.join([p.capitalize() for p in path_parts]) + _NAMESPACE_SUFFIX
+    return to_pascal_case(path_parts) + _NAMESPACE_SUFFIX
 
 
 def get_record_name(path_parts: t.List[str]) -> str:
-    return ''.join([p.capitalize() for p in path_parts]) + _RECORD_SUFFIX
+    return to_pascal_case(path_parts) + _RECORD_SUFFIX
+
+
+def _get_body_model_path(nsid: NSID, ref: str) -> str:
+    model_path = resolve_ref(nsid, ref)
+    if model_path is None:
+        raise UnresolvedReferenceError(f"'{ref}' is the body of '{nsid}' and can not be left out.")
+
+    return model_path
+
+
+def _get_skip_reason(method_info: MethodInfo) -> t.Optional[str]:
+    """Return why a method can not be generated, or :obj:`None` if it can."""
+    definition = method_info.definition
+    bodies = [definition.output]
+    if isinstance(definition, LexXrpcProcedure):
+        bodies.append(definition.input)
+
+    for body in bodies:
+        schema = body.schema_ if body else None
+        if isinstance(schema, LexRefUnion):
+            return 'its body is a union, which is not supported yet'
+        if isinstance(schema, LexRef) and resolve_ref(method_info.nsid, schema.ref) is None:
+            return f"its body '{schema.ref}' is not available"
+
+    return None
+
+
+def _filter_generatable_methods(methods: t.List[MethodInfo]) -> t.List[MethodInfo]:
+    """Leave out the methods that can not be generated if the run skips invalid input. A strict run fails on them."""
+    if not get_config().skip_invalid:
+        return methods
+
+    generatable = []
+    for method_info in methods:
+        reason = _get_skip_reason(method_info)
+        if reason:
+            warn(f'Skipped method {method_info.nsid}: {reason}')
+        else:
+            generatable.append(method_info)
+
+    return generatable
 
 
 def _get_namespace_imports() -> str:
@@ -113,17 +160,19 @@ def _get_init_method(
     lines = [f'{_(1)}def __init__(self, client: {client_typehint}) -> None:', f'{_(2)}super().__init__(client)']
 
     for sub_namespace in sub_namespaces:
-        lines.append(f'{_(2)}self.{sub_namespace} = {get_namespace_name([*parent_nodes, sub_namespace])}(self._client)')
+        namespace_name = get_namespace_name([*parent_nodes, sub_namespace])
+        lines.append(f'{_(2)}self.{to_identifier(sub_namespace)} = {namespace_name}(self._client)')
     for record_name in record_names:
-        lines.append(f'{_(2)}self.{record_name} = {get_record_name([*parent_nodes, record_name])}(self._client)')
+        record_class_name = get_record_name([*parent_nodes, record_name])
+        lines.append(f'{_(2)}self.{to_identifier(record_name)} = {record_class_name}(self._client)')
 
     return join_code(lines)
 
 
 def _get_method_docstring(method_info: MethodInfo) -> str:
-    method_desc = f'{gen_description_by_camel_case_name(method_info.name)}.'
-    if method_info.definition.description:
-        method_desc = method_info.definition.description
+    method_desc = to_docstring_text(method_info.definition.description or '')
+    if not method_desc:
+        method_desc = f'{gen_description_by_camel_case_name(method_info.name)}.'
     if method_desc[-1] not in {'.', '?', '!'}:
         method_desc += '.'
 
@@ -195,14 +244,14 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
         lines.append(_override_arg_line('data', INPUT_MODEL))
     if input_body and isinstance(input_body.schema_, LexRef):  # special case
         invoke_args.append('data=data_model')
-        model_path, __ = _resolve_nsid_ref(method_info.nsid, input_body.schema_.ref)
+        model_path = _get_body_model_path(method_info.nsid, input_body.schema_.ref)
         lines.append(f'{_(2)}data_model = get_or_create(data, {model_path})')
     if 'data_alias' in presented_args:
         invoke_args.append('data=data')
     if input_body and input_body.encoding:
-        invoke_args.append(f"input_encoding='{input_body.encoding}'")
+        invoke_args.append(f'input_encoding={input_body.encoding!r}')
     if definition.output and definition.output.encoding:
-        invoke_args.append(f"output_encoding='{definition.output.encoding}'")
+        invoke_args.append(f'output_encoding={definition.output.encoding!r}')
 
     invoke_args.append('**kwargs')
     invoke_args_str = ', '.join(invoke_args)
@@ -292,7 +341,7 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
                 )
                 _add_arg(arg, optional=is_optional)
             elif isinstance(schema, LexRef):
-                model_path, _ = _resolve_nsid_ref(method_info.nsid, schema.ref)
+                model_path = _get_body_model_path(method_info.nsid, schema.ref)
                 # there is no info about the requirement of LexRef ??? why
                 _add_arg(f'data: {model_path}', optional=False)
             else:
@@ -308,7 +357,7 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
 
 def _get_namespace_method_return_type(method_info: MethodInfo) -> t.Tuple[str, bool]:
     if method_info.definition.output and isinstance(method_info.definition.output.schema_, LexRef):
-        ref_class, _ = _resolve_nsid_ref(method_info.nsid, method_info.definition.output.schema_.ref)
+        ref_class = _get_body_model_path(method_info.nsid, method_info.definition.output.schema_.ref)
         return ref_class, True
 
     is_model = False
@@ -324,7 +373,7 @@ def _get_namespace_method_return_type(method_info: MethodInfo) -> t.Tuple[str, b
 def _get_namespace_method_signature(method_info: MethodInfo, *, sync: bool) -> str:
     d, __ = get_sync_async_keywords(sync=sync)
 
-    name = convert_camel_case_to_snake_case(method_info.name)
+    name = to_identifier(convert_camel_case_to_snake_case(method_info.name))
     args = _get_namespace_method_signature_args(method_info)
     return_type, is_model = _get_namespace_method_return_type(method_info)
 
@@ -384,7 +433,9 @@ def _generate_namespace_in_output(
         nodes_path = [*parent_nodes, node_name]
 
         records = [info for info in sub_node.objects if isinstance(info, RecordInfo)]
-        methods = [info for info in sub_node.objects if isinstance(info, (ProcedureInfo, QueryInfo))]
+        methods = _filter_generatable_methods(
+            [info for info in sub_node.objects if isinstance(info, (ProcedureInfo, QueryInfo))]
+        )
 
         if records:
             output.append(_get_record_class(records, sync=sync))
@@ -425,7 +476,7 @@ def _generate_raw_client(namespace_tree: NamespaceNode, config: CodegenConfig, *
         f'{_(1)}"""Group all root namespaces."""',
         '',
     ]
-    lines.extend(f"{_(1)}{root}: '{ns_module}.{get_namespace_name([root])}'" for root in roots)
+    lines.extend(f"{_(1)}{to_identifier(root)}: '{ns_module}.{get_namespace_name([root])}'" for root in roots)
     lines.extend(
         [
             '',
@@ -434,7 +485,7 @@ def _generate_raw_client(namespace_tree: NamespaceNode, config: CodegenConfig, *
             '',
         ]
     )
-    lines.extend(f'{_(2)}self.{root} = {ns_module}.{get_namespace_name([root])}(self)' for root in roots)
+    lines.extend(f'{_(2)}self.{to_identifier(root)} = {ns_module}.{get_namespace_name([root])}(self)' for root in roots)
 
     filename = 'raw.py' if sync else 'async_raw.py'
     filepath = config.output_dir.joinpath('client', filename)
@@ -450,7 +501,7 @@ def _generate_custom_client(namespace_tree: NamespaceNode, config: CodegenConfig
     sdk_client = f'{prefix}Client'
 
     roots = sorted(namespace_tree.children)
-    package_class = ''.join(p.capitalize() for p in config.package.split('_'))
+    package_class = to_pascal_case(config.package.split('_'))
     class_name = f'{prefix}{package_class}Client'
 
     lines = [
@@ -464,7 +515,9 @@ def _generate_custom_client(namespace_tree: NamespaceNode, config: CodegenConfig
         f'def attach_{"" if sync else "async_"}namespaces(client: t.Any) -> None:',
         f'{_(1)}"""Add this package\'s root namespaces to an existing client."""',
     ]
-    lines.extend(f'{_(1)}client.{root} = {ns_module}.{get_namespace_name([root])}(client)' for root in roots)
+    lines.extend(
+        f'{_(1)}client.{to_identifier(root)} = {ns_module}.{get_namespace_name([root])}(client)' for root in roots
+    )
     lines.extend(
         [
             '',
@@ -474,7 +527,7 @@ def _generate_custom_client(namespace_tree: NamespaceNode, config: CodegenConfig
             '',
         ]
     )
-    lines.extend(f"{_(1)}{root}: '{ns_module}.{get_namespace_name([root])}'" for root in roots)
+    lines.extend(f"{_(1)}{to_identifier(root)}: '{ns_module}.{get_namespace_name([root])}'" for root in roots)
     lines.extend(
         [
             '',

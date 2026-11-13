@@ -383,7 +383,7 @@ class InterestsPref(base.ModelBase):
     )
 
 
-MutedWordTarget = t.Union[t.Literal['content', 'tag'], str]  #: Muted word target
+MutedWordTarget = te.Annotated[t.Union[t.Literal['content', 'tag'], str], Field(max_length=640)]  #: Muted word target
 
 
 class MutedWord(base.ModelBase):

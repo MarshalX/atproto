@@ -1,3 +1,4 @@
+import keyword
 import re
 import shutil
 import subprocess
@@ -11,6 +12,7 @@ from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import NSID
 
 from atproto_codegen.config import get_config
+from atproto_codegen.diagnostics import warn
 from atproto_codegen.exceptions import RuffNotFoundError, UnresolvedReferenceError
 from atproto_codegen.models import builder
 
@@ -110,17 +112,78 @@ def _write_code(filepath: Path, code: str, *, append: bool = False) -> None:
         f.write(code)
 
 
+def to_identifier(name: str) -> str:
+    """Turn a lexicon name into a valid Python identifier that is not a keyword.
+
+    Mirrored by ``atproto_client.models.models_loader._to_module_name``, which locates the generated
+    modules at runtime. Keep the two in sync!
+    """
+    identifier = re.sub(r'\W', '_', name)
+    if not identifier or identifier[0].isdigit():
+        identifier = f'_{identifier}'
+    if keyword.iskeyword(identifier):
+        identifier = f'{identifier}_'
+
+    return identifier
+
+
+def to_pascal_case(parts: t.Iterable[str]) -> str:
+    """Join name parts into a class name, dropping the characters an identifier can not hold."""
+    words = [word for part in parts for word in re.split(r'[^a-zA-Z0-9]+', part) if word]
+    return ''.join(word.capitalize() for word in words)
+
+
+def to_one_line(text: str) -> str:
+    """Collapse whitespace so that the text can not leave the comment it is written into."""
+    return ' '.join(text.split())
+
+
+def to_docstring_text(text: str) -> str:
+    """Make the text safe to place between triple double quotes."""
+    return to_one_line(text).replace('\\', '\\\\').replace('"""', '\\"\\"\\"')
+
+
+def get_module_path_parts(nsid: NSID) -> t.List[str]:
+    """Return the package path and the module name a lexicon is generated into."""
+    module_name = to_identifier(convert_camel_case_to_snake_case(nsid.name))
+    return [*(to_identifier(segment) for segment in nsid.segments[:-1]), module_name]
+
+
 def get_file_path_parts(nsid: NSID) -> t.List[str]:
-    return [*nsid.segments[:-1], f'{convert_camel_case_to_snake_case(nsid.name)}.py']
+    *packages, module_name = get_module_path_parts(nsid)
+    return [*packages, f'{module_name}.py']
 
 
-def get_import_path_old(nsid: NSID) -> str:
-    return '.'.join([*nsid.segments[:-1], f'{convert_camel_case_to_snake_case(nsid.name)}'])
+def _get_plain_alias(nsid: NSID) -> str:
+    return to_pascal_case([*nsid.segments[:-1], *camel_case_split(nsid.name)])
+
+
+def _get_distinct_alias(nsid: NSID) -> str:
+    # keeps the segment boundaries, which the plain alias loses: `a.bC` and `a.b.c` are both `ABC`
+    parts = [*([segment] for segment in nsid.segments[:-1]), camel_case_split(nsid.name)]
+    return '_'.join(to_pascal_case(part) for part in parts)
+
+
+def build_aliases(nsids: t.Iterable[NSID]) -> t.Dict[NSID, str]:
+    """Map lexicons to the names their model modules are exposed under.
+
+    Lexicons whose plain aliases collide keep it only for the one with the fewest segments.
+    """
+    by_alias: t.Dict[str, t.List[NSID]] = {}
+    for nsid in nsids:
+        by_alias.setdefault(_get_plain_alias(nsid), []).append(nsid)
+
+    aliases = {}
+    for alias, group in by_alias.items():
+        first, *rest = sorted(group, key=lambda nsid: (len(nsid.segments), str(nsid)))
+        aliases[first] = alias
+        aliases.update({nsid: _get_distinct_alias(nsid) for nsid in rest})
+
+    return aliases
 
 
 def get_import_path(nsid: NSID) -> str:
-    nsid_parts = nsid.segments[:-1] + camel_case_split(nsid.name)
-    return ''.join([p.capitalize() for p in nsid_parts])
+    return builder.get_alias(nsid) or _get_plain_alias(nsid)
 
 
 def convert_camel_case_to_snake_case(string: str) -> str:
@@ -168,8 +231,16 @@ def capitalize_first_symbol(string: str) -> str:
     return string
 
 
+#: Names every generated model module resolves annotations with. A class of the same name would replace them.
+_RESERVED_CLASS_NAMES = frozenset({'BlobRef', 'CIDType', 'Field', 'UnknownInputType', 'UnknownType'})
+
+
 def get_def_model_name(method_name: str) -> str:
-    return f'{capitalize_first_symbol(method_name)}'
+    name = to_identifier(capitalize_first_symbol(method_name))
+    if name in _RESERVED_CLASS_NAMES:
+        name = f'{name}_'
+
+    return name
 
 
 def get_record_model_name(_: t.Optional[str] = None) -> str:
@@ -196,6 +267,38 @@ def get_model_path(nsid: NSID, method_name: str) -> str:
         )
 
     return f'models.{alias}.{model_name}'
+
+
+def _check_emitted_def_exists(nsid: NSID, ref: str) -> None:
+    ref_nsid_str, _, def_name = ref.partition('#')
+    target = NSID.from_str(ref_nsid_str) if ref_nsid_str else nsid
+    if target in builder.emitted_nsids(get_config()) and (def_name or 'main') not in builder.get_defs(target):
+        raise UnresolvedReferenceError(f"'{ref}' names a definition that '{target}' does not have.")
+
+
+def resolve_ref(nsid: NSID, ref: str) -> t.Optional[str]:
+    """Return the path to the model a reference names.
+
+    Returns:
+        :obj:`None` if the reference can not be resolved and the run skips invalid input.
+
+    Raises:
+        UnresolvedReferenceError: The reference can not be resolved and the run is strict.
+    """
+    try:
+        _check_emitted_def_exists(nsid, ref)
+        return _resolve_nsid_ref(nsid, ref)[0]
+    except InvalidNsidError as e:
+        error = UnresolvedReferenceError(f"'{ref}' is not a reference.")
+        error.__cause__ = e
+    except UnresolvedReferenceError as e:
+        error = e
+
+    if not get_config().skip_invalid:
+        raise error
+
+    warn(f"Unresolved reference '{ref}' in {nsid}: {error}")
+    return None
 
 
 def _resolve_nsid_ref(nsid: NSID, ref: str, *, local: bool = False) -> t.Tuple[str, str]:

@@ -99,10 +99,22 @@ class ViewExternalSource(base.ModelBase):
 class ViewExternalSourceTheme(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.external`. The theme colors of an external source, such as a standard.site publication. These colors may be used when rendering an embed from that source."""
 
-    accent_foreground_rgb: t.Optional['models.AppBskyEmbedExternal.ColorRGB'] = None  #: Accent foreground r g b.
-    accent_rgb: t.Optional['models.AppBskyEmbedExternal.ColorRGB'] = None  #: Accent r g b.
-    background_rgb: t.Optional['models.AppBskyEmbedExternal.ColorRGB'] = None  #: Background r g b.
-    foreground_rgb: t.Optional['models.AppBskyEmbedExternal.ColorRGB'] = None  #: Foreground r g b.
+    accent_foreground_rgb: te.Annotated[
+        t.Optional['models.AppBskyEmbedExternal.ColorRGB'],
+        Field(validation_alias='accentForegroundRGB', serialization_alias='accentForegroundRGB', alias_priority=2),
+    ] = None  #: Accent foreground r g b.
+    accent_rgb: te.Annotated[
+        t.Optional['models.AppBskyEmbedExternal.ColorRGB'],
+        Field(validation_alias='accentRGB', serialization_alias='accentRGB', alias_priority=2),
+    ] = None  #: Accent r g b.
+    background_rgb: te.Annotated[
+        t.Optional['models.AppBskyEmbedExternal.ColorRGB'],
+        Field(validation_alias='backgroundRGB', serialization_alias='backgroundRGB', alias_priority=2),
+    ] = None  #: Background r g b.
+    foreground_rgb: te.Annotated[
+        t.Optional['models.AppBskyEmbedExternal.ColorRGB'],
+        Field(validation_alias='foregroundRGB', serialization_alias='foregroundRGB', alias_priority=2),
+    ] = None  #: Foreground r g b.
 
     py_type: t.Literal['app.bsky.embed.external#viewExternalSourceTheme'] = Field(
         default='app.bsky.embed.external#viewExternalSourceTheme', alias='$type', frozen=True

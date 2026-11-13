@@ -75,6 +75,7 @@ atp gen --lexicon-dir ./lexicons custom --output-dir ./my_pkg --package my_pkg
 | `--output-dir PATH`   | yes      | Root of the package to generate. Created if it does not exist.                                                             |
 | `--package NAME`      | yes      | Import name of the generated package. Must match the last path segment of `--output-dir` for the package to be importable. |
 | `--no-client`         | no       | Emit models and namespaces only, no `client.py` / `async_client.py`.                                                       |
+| `--skip-invalid`      | no       | Leave out what can not be generated instead of failing. See [Lexicons that are not valid](custom-lexicons.md#lexicons-that-are-not-valid). |
 
 ### atp gen all
 

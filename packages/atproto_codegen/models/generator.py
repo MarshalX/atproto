@@ -5,9 +5,11 @@ from enum import Enum
 from functools import cache
 from pathlib import Path
 
+from atproto_core.exceptions import InvalidNsidError
 from atproto_core.nsid import NSID
 from atproto_lexicon import models
 from atproto_lexicon.refs import find_unresolved_refs
+from pydantic import alias_generators
 
 from atproto_codegen.config import CodegenConfig, get_config, use_config
 from atproto_codegen.consts import (
@@ -18,7 +20,7 @@ from atproto_codegen.consts import (
     PARAMS_DICT,
     PARAMS_MODEL,
 )
-from atproto_codegen.exceptions import UnresolvedReferenceError
+from atproto_codegen.exceptions import UnresolvedReferenceError, UnsupportedLexiconError
 from atproto_codegen.models import builder
 from atproto_codegen.record_templates import (
     RECORD_CREATE_RESPONSE_MODEL_TEMPLATE,
@@ -26,8 +28,8 @@ from atproto_codegen.record_templates import (
     RECORD_LIST_RESPONSE_MODEL_TEMPLATE,
 )
 from atproto_codegen.utils import (
-    _resolve_nsid_ref,
     append_code,
+    camel_case_split,
     capitalize_first_symbol,
     convert_camel_case_to_snake_case,
     format_code,
@@ -35,8 +37,14 @@ from atproto_codegen.utils import (
     get_def_model_name,
     get_file_path_parts,
     get_import_path,
+    get_module_path_parts,
     get_record_model_name,
     join_code,
+    resolve_ref,
+    to_docstring_text,
+    to_identifier,
+    to_one_line,
+    to_pascal_case,
     write_code,
 )
 from atproto_codegen.utils import get_code_intent as _
@@ -159,6 +167,24 @@ def _get_optional_typehint(type_hint: str, *, optional: bool) -> str:
     return type_hint
 
 
+def _resolve_token_ref(nsid: NSID, value: str) -> t.Optional[str]:
+    """Return the model path of the token a string value names, or :obj:`None` for a plain string."""
+    if '#' not in value:
+        return None
+
+    ref_nsid_str, def_name = value.split('#', 1)
+    try:
+        ref_nsid = NSID.from_str(ref_nsid_str) if ref_nsid_str else nsid
+    except InvalidNsidError:
+        return None
+
+    model_name = get_def_model_name(def_name)
+    if not builder.is_token(ref_nsid, def_name, get_import_path(ref_nsid), model_name):
+        return None
+
+    return f'models.{get_import_path(ref_nsid)}.{model_name}'
+
+
 def _get_str_enum_typehint(nsid: NSID, field_type_def: models.LexString, *, optional: bool) -> str:
     values = field_type_def.known_values or field_type_def.enum or []
 
@@ -166,16 +192,15 @@ def _get_str_enum_typehint(nsid: NSID, field_type_def: models.LexString, *, opti
     literals = []
     literals_index = None
     for value in values:
-        if '#' in value:
-            # reference to literal (token)
-            model_path, _ = _resolve_nsid_ref(nsid, value)
-            union_type_parts.append(f"'{model_path}'")
+        token_path = _resolve_token_ref(nsid, value)
+        if token_path:
+            union_type_parts.append(f"'{token_path}'")
         else:
             # literal; all of them are merged into a single multi-member t.Literal
             if literals_index is None:
                 literals_index = len(union_type_parts)
                 union_type_parts.append('')
-            literals.append(f"'{value}'")
+            literals.append(repr(value))
 
     if literals_index is not None:
         union_type_parts[literals_index] = f't.Literal[{", ".join(literals)}]'
@@ -192,6 +217,9 @@ def _get_str_enum_typehint(nsid: NSID, field_type_def: models.LexString, *, opti
 
 
 def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional: bool) -> str:
+    if field_type_def.const is not None:
+        return _get_optional_typehint(f't.Literal[{field_type_def.const!r}]', optional=optional)
+
     str_typehint = 'str'
 
     # Map lexicon string formats to our validator types
@@ -219,18 +247,25 @@ def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional:
     return _get_optional_typehint(str_typehint, optional=optional)
 
 
-def _get_ref_typehint(nsid: NSID, field_type_def: models.LexRef, *, optional: bool) -> str:
-    model_path, _ = _resolve_nsid_ref(nsid, field_type_def.ref)
+def _get_unknown_typehint(*, optional: bool, is_input_type: bool) -> str:
+    return _get_optional_typehint("'UnknownInputType'" if is_input_type else "'UnknownType'", optional=optional)
+
+
+def _get_ref_typehint(nsid: NSID, field_type_def: models.LexRef, *, optional: bool, is_input_type: bool) -> str:
+    model_path = resolve_ref(nsid, field_type_def.ref)
+    if model_path is None:
+        return _get_unknown_typehint(optional=optional, is_input_type=is_input_type)
+
     return _get_optional_typehint(f"'{model_path}'", optional=optional)
 
 
 def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, optional: bool) -> str:
-    def_names = []
-    for ref in field_type_def.refs:
-        import_path, _ = _resolve_nsid_ref(nsid, ref)
-        def_names.append(import_path)
+    model_paths = [resolve_ref(nsid, ref) for ref in field_type_def.refs]
+    def_names = [model_path for model_path in model_paths if model_path is not None]
+    # a union that lost members must accept the types it can no longer name
+    is_closed = bool(field_type_def.closed) and len(def_names) == len(model_paths)
 
-    if not def_names and field_type_def.closed:
+    if not model_paths and field_type_def.closed:
         raise ValueError('The schema is invalid because union must have at least one type when it is closed')
 
     is_unknown_union = not def_names
@@ -242,7 +277,7 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, o
     # an open union may carry a $type this SDK release doesn't know yet; OpenUnion adds the DotDict
     # fallback so such members don't fail the whole response. ref: https://github.com/MarshalX/atproto/issues/354
     members = _union_typehint([f"'{name}'" for name in def_names])
-    if not is_unknown_union and not field_type_def.closed:
+    if not is_unknown_union and not is_closed:
         return _get_optional_typehint(f'unknown_union.OpenUnion[{members}]', optional=optional)
 
     # For discriminated unions, optionality is handled by Optional[] wrapper, not Field(default=None)
@@ -260,14 +295,21 @@ def _get_model_field_typehint(  # noqa: C901
     *,
     optional: bool,
     is_input_type: bool = False,
+    inline_name: t.Optional[str] = None,
 ) -> str:
+    if isinstance(field_type_def, models.LexObject):
+        if inline_name is None:
+            raise ValueError('Inline object is not supported here')
+        model_path = _register_inline_model(nsid, inline_name, field_type_def, is_input_type=is_input_type)
+        return _get_optional_typehint(f"'{model_path}'", optional=optional)
+
     if isinstance(field_type_def, models.LexUnknown):
         # unknown type is a generic response with records or any not described type in the lexicon. for example, didDoc
-        if is_input_type:
-            return _get_optional_typehint("'UnknownInputType'", optional=optional)
-        return _get_optional_typehint("'UnknownType'", optional=optional)
+        return _get_unknown_typehint(optional=optional, is_input_type=is_input_type)
 
     if isinstance(field_type_def, models.LexInteger):
+        if field_type_def.const is not None:
+            return _get_optional_typehint(f't.Literal[{field_type_def.const!r}]', optional=optional)
         return _get_optional_typehint('int', optional=optional)
 
     if isinstance(field_type_def, models.LexBoolean):
@@ -278,7 +320,11 @@ def _get_model_field_typehint(  # noqa: C901
 
     if isinstance(field_type_def, models.LexArray):
         items_type_hint = _get_model_field_typehint(
-            nsid, field_type_def.items, optional=False, is_input_type=is_input_type
+            nsid,
+            field_type_def.items,
+            optional=False,
+            is_input_type=is_input_type,
+            inline_name=f'{inline_name}{_INLINE_ITEM_SUFFIX}' if inline_name else None,
         )
         items_constraints_field = _get_constraints_field(field_type_def.items)
         if items_constraints_field:
@@ -286,7 +332,7 @@ def _get_model_field_typehint(  # noqa: C901
         return _get_optional_typehint(f't.List[{items_type_hint}]', optional=optional)
 
     if isinstance(field_type_def, models.LexRef):
-        return _get_ref_typehint(nsid, field_type_def, optional=optional)
+        return _get_ref_typehint(nsid, field_type_def, optional=optional, is_input_type=is_input_type)
 
     if isinstance(field_type_def, models.LexRefUnion):
         return _get_ref_union_typehint(nsid, field_type_def, optional=optional)
@@ -338,6 +384,15 @@ def _get_constraints_field(field_type_def: _FieldTypeDef) -> str:
     return _get_field_code(constraints)
 
 
+def _get_alias_params(alias_name: str) -> t.Dict[str, t.Any]:
+    """Field params that pin a field to a property name the alias generator would not produce.
+
+    Not ``alias``: type checkers would then require the alias as the constructor argument name.
+    """
+    # priority 2 keeps the alias generator of the base model from overriding them
+    return {'validation_alias': alias_name, 'serialization_alias': alias_name, 'alias_priority': 2}
+
+
 def _get_model_field_value(
     field_type_def: _FieldTypeDef,
     alias_name: t.Optional[str] = None,
@@ -353,25 +408,26 @@ def _get_model_field_value(
     not_set = object()
 
     default: object = not_set
-    alias: object = alias_name or not_set
     frozen: object = not_set
 
     # Ref and RefUnion types handle their own Field generation in the type hint
     if isinstance(field_type_def, (models.LexRef, models.LexRefUnion)):
+        if alias_name:
+            return {'value': _get_field_code(_get_alias_params(alias_name)), 'needs_annotated': True}
         return {'value': '', 'needs_annotated': False}
 
     if isinstance(field_type_def, (models.LexInteger, models.LexString, models.LexBoolean)):
         if field_type_def.default is not None:
             default = field_type_def.default
         if field_type_def.const is not None:
-            frozen = field_type_def.const
+            frozen = True
 
     if default is not_set and optional:
         default = None
 
     field_params = {
         'default': default,
-        'alias': alias,
+        **(_get_alias_params(alias_name) if alias_name else {}),
         **_get_type_constraints(field_type_def),
         'frozen': frozen,
     }
@@ -412,14 +468,19 @@ def _add_dot_to_end_if_not_exist(description: str) -> str:
     return description
 
 
+def _get_def_comment(name: str, description: t.Optional[str]) -> str:
+    """Return the one-line description of a definition, made up from its name if it has none."""
+    description = to_one_line(description or '')
+    return description or gen_description_by_camel_case_name(name)
+
+
 def _get_field_docstring(field_name: str, field_type: _FieldTypeDef) -> str:
-    field_desc = gen_description_by_camel_case_name(field_name)
-    if field_type.description is not None:
-        field_desc = capitalize_first_symbol(field_type.description)
+    field_desc = capitalize_first_symbol(_get_def_comment(field_name, field_type.description))
 
     if isinstance(field_type, models.LexArray) and field_type.items.description:
-        items_desc = capitalize_first_symbol(field_type.items.description)
-        field_desc = f'{_add_dot_to_end_if_not_exist(field_desc)} {items_desc}'
+        items_desc = capitalize_first_symbol(to_one_line(field_type.items.description))
+        if items_desc:
+            field_desc = f'{_add_dot_to_end_if_not_exist(field_desc)} {items_desc}'
 
     return _add_dot_to_end_if_not_exist(field_desc)
 
@@ -429,7 +490,8 @@ def _get_model_docstring(
     lex_object: t.Union[models.LexXrpcQuery, models.LexSubscription, models.LexObject, models.LexXrpcParameters],
     model_type: ModelType,
 ) -> str:
-    model_desc = f' {lex_object.description}' if lex_object.description else ''
+    description = to_docstring_text(lex_object.description or '')
+    model_desc = f' {description}' if description else ''
     model_desc = f'{model_type.value} model for :obj:`{nsid}`.{model_desc}'
     model_desc = _add_dot_to_end_if_not_exist(model_desc)
 
@@ -454,49 +516,80 @@ def _get_python_reserved_names() -> t.Sequence[str]:
     return keyword.kwlist
 
 
+#: Names the generated modules import. A field of the same name would shadow them in the class body.
+_MODULE_RESERVED_NAMES = frozenset({'base', 'bytes_type', 'models', 'string_formats', 't', 'te', 'unknown_union'})
+
+_TYPE_PROPERTY = '$type'
+_FIELD_PREFIX = 'field'
+
+
 def _is_reserved_variable_name(name: str) -> bool:
-    return name in _get_pydantic_reserved_names() or name in _get_python_reserved_names()
+    return (
+        name in _get_pydantic_reserved_names() or name in _get_python_reserved_names() or name in _MODULE_RESERVED_NAMES
+    )
+
+
+def _get_field_name(property_name: str) -> str:
+    """Return the attribute name a lexicon property is generated as."""
+    name = to_identifier(convert_camel_case_to_snake_case(property_name)).rstrip('_')
+    if not name or name.startswith('_'):
+        # a leading underscore makes a private attribute out of a pydantic field
+        name = f'{_FIELD_PREFIX}{name}'
+    if _is_reserved_variable_name(name):
+        name += '_'
+
+    return name
+
+
+def _get_field_alias(field_name: str, property_name: str) -> t.Optional[str]:
+    """Return the property name if the alias generator of the base model would not restore it."""
+    if alias_generators.to_camel(field_name).removesuffix('_') == property_name:
+        return None
+
+    return property_name
+
+
+def _iter_properties(
+    lex_object: t.Union[models.LexObject, models.LexXrpcParameters],
+) -> t.Iterator[t.Tuple[str, str, _FieldTypeDef]]:
+    """Yield the property name, the field name and the type of every field to generate."""
+    for property_name, field_type_def in lex_object.properties.items():
+        # the type discriminator is a field of the model already
+        if property_name != _TYPE_PROPERTY:
+            yield property_name, _get_field_name(property_name), field_type_def
 
 
 def _get_model(
-    nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters], *, is_input_type: bool = False
+    nsid: NSID,
+    lex_object: t.Union[models.LexObject, models.LexXrpcParameters],
+    owner: str,
+    *,
+    is_input_type: bool = False,
 ) -> str:
     required_fields = _get_req_fields_set(lex_object)
 
     fields = []
     optional_fields = []
 
-    for field_name, field_type_def in lex_object.properties.items():
-        is_optional = field_name not in required_fields
+    for property_name, field_name, field_type_def in _iter_properties(lex_object):
+        is_optional = property_name not in required_fields
 
-        alias_name = None
-        snake_cased_field_name = convert_camel_case_to_snake_case(field_name)
-
-        # previously, camel cases aliases were applied to fields directly.
-        # but it doesn't work well with pyright checks because of "populate_by_name"
-        # that's why aliases are now implemented via alias_generator
-        """
-        if snake_cased_field_name != field_name:
-            # make aliases for fields with camel case names
-            alias_name = field_name
-        """
-
-        if _is_reserved_variable_name(snake_cased_field_name):
-            # make aliases for fields with reserved names
-            snake_cased_field_name += '_'  # add underscore to the end
-
-            # handled in alias_generator.py
-            # alias_name = field_name  # noqa: ERA001
-
-        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional, is_input_type=is_input_type)
+        type_hint = _get_model_field_typehint(
+            nsid,
+            field_type_def,
+            optional=is_optional,
+            is_input_type=is_input_type,
+            inline_name=_get_inline_name(owner, property_name),
+        )
+        alias_name = _get_field_alias(field_name, property_name)
         field_value_info = _get_model_field_value(field_type_def, alias_name, optional=is_optional)
-        description = _get_field_docstring(field_name, field_type_def)
+        description = _get_field_docstring(property_name, field_type_def)
 
-        # Handle Annotated pattern for optional fields with Field constraints
+        # Handle Annotated pattern for fields whose Field can not be the assigned value
         if field_value_info['needs_annotated']:
             # Wrap type in Annotated and add Field metadata
             type_hint = f'te.Annotated[{type_hint}, {field_value_info["value"]}]'
-            value_def = ' = None'
+            value_def = ' = None' if is_optional else ''
         else:
             # Simple assignment
             if field_value_info['value']:
@@ -507,7 +600,7 @@ def _get_model(
             else:
                 value_def = ''
 
-        field_def = f'{_(1)}{snake_cased_field_name}: {type_hint}{value_def} #: {description}'
+        field_def = f'{_(1)}{field_name}: {type_hint}{value_def} #: {description}'
 
         if is_optional:
             optional_fields.append(field_def)
@@ -525,27 +618,32 @@ def _get_model(
 
 
 def _get_typeddict(
-    nsid: NSID, lex_object: t.Union[models.LexObject, models.LexXrpcParameters], *, is_input_type: bool = False
+    nsid: NSID,
+    lex_object: t.Union[models.LexObject, models.LexXrpcParameters],
+    owner: str,
+    *,
+    is_input_type: bool = False,
 ) -> str:
     required_fields = _get_req_fields_set(lex_object)
 
     fields: t.List[str] = []
     optional_fields: t.List[str] = []
 
-    for field_name, field_type_def in lex_object.properties.items():
-        is_optional = field_name not in required_fields
+    for property_name, field_name, field_type_def in _iter_properties(lex_object):
+        is_optional = property_name not in required_fields
 
-        snake_cased_field_name = convert_camel_case_to_snake_case(field_name)
-        if _is_reserved_variable_name(snake_cased_field_name):
-            # make aliases for fields with reserved names
-            snake_cased_field_name += '_'  # add underscore to the end
-
-        type_hint = _get_model_field_typehint(nsid, field_type_def, optional=is_optional, is_input_type=is_input_type)
-        description = _get_field_docstring(field_name, field_type_def)
+        type_hint = _get_model_field_typehint(
+            nsid,
+            field_type_def,
+            optional=is_optional,
+            is_input_type=is_input_type,
+            inline_name=_get_inline_name(owner, property_name),
+        )
+        description = _get_field_docstring(property_name, field_type_def)
 
         # Allow optional params to actually be omitted from the dict entirely
         type_hint_defaulting = f'te.NotRequired[{type_hint}]' if is_optional else type_hint
-        field_def = f'{_(1)}{snake_cased_field_name}: {type_hint_defaulting} #: {description}'
+        field_def = f'{_(1)}{field_name}: {type_hint_defaulting} #: {description}'
 
         if is_optional:
             optional_fields.append(field_def)
@@ -565,6 +663,74 @@ def _get_typeddict(
     return join_code(fields)
 
 
+class _InlineModel(t.NamedTuple):
+    """Object declared in place of a property type, generated as a model of its own."""
+
+    name: str
+    lex_object: models.LexObject
+    is_input_type: bool
+
+
+_INLINE_ITEM_SUFFIX = 'Item'
+_INLINE_NAME_SUFFIX = 'Object'
+#: Class names every generated module may define besides the ones of its lexicon.
+_MODULE_CLASS_NAMES = frozenset(
+    {
+        PARAMS_MODEL,
+        PARAMS_DICT,
+        INPUT_MODEL,
+        INPUT_DICT,
+        OUTPUT_MODEL,
+        get_record_model_name(),
+        'GetRecordResponse',
+        'ListRecordsResponse',
+        'CreateRecordResponse',
+    }
+)
+
+#: Inline models of each lexicon by the name they were requested under.
+_inline_models: t.Dict[NSID, t.Dict[str, _InlineModel]] = {}
+_pending_inline_models: t.List[t.Tuple[NSID, _InlineModel]] = []
+
+
+def _get_inline_name(owner: str, property_name: str) -> str:
+    return f'{owner}{to_pascal_case(camel_case_split(property_name))}'
+
+
+def _register_inline_model(
+    nsid: NSID, requested_name: str, lex_object: models.LexObject, *, is_input_type: bool
+) -> str:
+    """Queue an inline object for generation and return the path to its model."""
+    registered = _inline_models.setdefault(nsid, {})
+    if requested_name not in registered:
+        taken = {model.name for model in registered.values()} | _MODULE_CLASS_NAMES
+        taken.update(get_def_model_name(def_name) for def_name in builder.get_defs(nsid))
+
+        name = requested_name
+        attempt = 1
+        while name in taken:
+            name = f'{requested_name}{_INLINE_NAME_SUFFIX}{attempt if attempt > 1 else ""}'
+            attempt += 1
+
+        registered[requested_name] = _InlineModel(name, lex_object, is_input_type)
+        _pending_inline_models.append((nsid, registered[requested_name]))
+
+    return f'models.{get_import_path(nsid)}.{registered[requested_name].name}'
+
+
+def _generate_inline_models() -> None:
+    # generating a model may queue the inline objects nested in it
+    while _pending_inline_models:
+        nsid, model = _pending_inline_models.pop(0)
+        lines = [
+            f'class {model.name}(base.ModelBase):',
+            '',
+            _get_model_docstring(nsid, model.lex_object, ModelType.DEF),
+            _get_model(nsid, model.lex_object, model.name, is_input_type=model.is_input_type),
+        ]
+        save_code_part(nsid, join_code(lines))
+
+
 def _get_model_raw_data(name: str) -> str:
     lines = [f'#: {name} raw data type.', f'{name}: te.TypeAlias = bytes\n\n']
     return join_code(lines)
@@ -577,12 +743,12 @@ def _generate_params_model(
 
     if definition.parameters:
         lines.append(_get_model_docstring(nsid, definition.parameters, ModelType.PARAMS))
-        lines.append(_get_model(nsid, definition.parameters, is_input_type=True))
+        lines.append(_get_model(nsid, definition.parameters, PARAMS_MODEL, is_input_type=True))
 
     lines.append(_get_typeddict_class_def(nsid.name, TypedDictType.PARAMS))
 
     if definition.parameters:
-        lines.append(_get_typeddict(nsid, definition.parameters, is_input_type=True))
+        lines.append(_get_typeddict(nsid, definition.parameters, PARAMS_MODEL, is_input_type=True))
 
     return join_code(lines)
 
@@ -593,16 +759,18 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
         if isinstance(body.schema_, models.LexObject):
             lines.append(_get_model_class_def(nsid.name, model_type))
             lines.append(_get_model_docstring(nsid, body.schema_, model_type))
-            lines.append(_get_model(nsid, body.schema_, is_input_type=(model_type is ModelType.DATA)))
+            is_input_type = model_type is ModelType.DATA
+            owner = INPUT_MODEL if is_input_type else OUTPUT_MODEL
+            lines.append(_get_model(nsid, body.schema_, owner, is_input_type=is_input_type))
         elif isinstance(body.schema_, models.LexRef):
-            _, __ = _resolve_nsid_ref(nsid, body.schema_.ref)
+            resolve_ref(nsid, body.schema_.ref)
 
             # here we can generate input and output model alises from the reference
             # but instead we just resolve reference inplace without intermediate model
             # maybe we will want to generate aliases in the future
             # so I leave this code here: https://github.com/MarshalX/atproto/pull/412
-        else:
-            raise ValueError('Wrong schema type or not implemented')
+        elif not get_config().skip_invalid:
+            raise UnsupportedLexiconError(f"'{nsid}' has a union as its body, which is not supported yet")
     else:
         if model_type is ModelType.DATA:
             model_name = INPUT_MODEL
@@ -620,7 +788,7 @@ def _generate_data_typedict(nsid: NSID, body: models.LexXrpcBody) -> str:
     lines: t.List[str] = []
     if isinstance(body.schema_, models.LexObject):
         lines.append(_get_typeddict_class_def(nsid.name, TypedDictType.DATA))
-        lines.append(_get_typeddict(nsid, body.schema_, is_input_type=True))
+        lines.append(_get_typeddict(nsid, body.schema_, INPUT_MODEL, is_input_type=True))
     return join_code(lines)
 
 
@@ -661,11 +829,10 @@ def _generate_page_items_method(nsid: NSID, definition: t.Union[models.LexXrpcQu
         return ''
 
     schema, field_name, field = page_items_field
-    type_hint = _get_model_field_typehint(nsid, field, optional=False)
+    inline_name = _get_inline_name(OUTPUT_MODEL, field_name)
+    type_hint = _get_model_field_typehint(nsid, field, optional=False, inline_name=inline_name)
 
-    attr_name = convert_camel_case_to_snake_case(field_name)
-    if _is_reserved_variable_name(attr_name):
-        attr_name += '_'
+    attr_name = _get_field_name(field_name)
 
     value = f'self.{attr_name}'
     if field_name not in _get_req_fields_set(schema):
@@ -686,58 +853,60 @@ def _generate_response_model(nsid: NSID, output_body: models.LexXrpcBody) -> str
 
 
 def _generate_def_model(nsid: NSID, def_name: str, def_model: models.LexObject, model_type: ModelType) -> str:
+    owner = get_record_model_name() if model_type is ModelType.RECORD else get_def_model_name(def_name)
     lines = [
         _get_model_class_def(def_name, model_type),
         _get_model_docstring(nsid, def_model, model_type),
-        _get_model(nsid, def_model),
+        _get_model(nsid, def_model, owner),
     ]
 
     def_type = f'{nsid}#{def_name}'
     if def_name == 'main':
         def_type = str(nsid)
 
-    lines.append(f"{_(1)}py_type: t.Literal['{def_type}'] = Field(default='{def_type}', alias='$type', frozen=True)")
+    lines.append(f"{_(1)}py_type: t.Literal[{def_type!r}] = Field(default={def_type!r}, alias='$type', frozen=True)")
     lines.append('')
 
     return join_code(lines)
 
 
 def _generate_def_token(nsid: NSID, def_name: str, def_model: models.LexToken) -> str:
-    description = def_model.description
-    if not description:
-        description = gen_description_by_camel_case_name(def_name)
+    description = _get_def_comment(def_name, def_model.description)
+    token = f'{nsid}#{def_name}'
 
     lines = [
-        f"{get_def_model_name(def_name)} = t.Literal['{nsid}#{def_name}'] #: {description}",
+        f'{get_def_model_name(def_name)} = t.Literal[{token!r}] #: {description}',
         '',
         '',
     ]
     return join_code(lines)
 
 
-def _generate_def_array(nsid: NSID, def_name: str, def_model: models.LexArray) -> str:
-    type_hint = _get_model_field_typehint(nsid, def_model, optional=False)
+_AliasDef = t.Union[
+    models.LexArray,
+    models.LexBlob,
+    models.LexBoolean,
+    models.LexBytes,
+    models.LexCidLink,
+    models.LexInteger,
+    models.LexString,
+]
+
+
+def _generate_def_alias(nsid: NSID, def_name: str, def_model: _AliasDef) -> str:
+    """Generate a type alias for a definition that is not a model."""
+    name = get_def_model_name(def_name)
+    type_hint = _get_model_field_typehint(nsid, def_model, optional=False, inline_name=name)
 
     constraints_field = _get_constraints_field(def_model)
     if constraints_field:
         type_hint = f'te.Annotated[{type_hint}, {constraints_field}]'
 
-    return f'{get_def_model_name(def_name)} = {type_hint}\n'
-
-
-def _generate_def_string(nsid: NSID, def_name: str, def_model: models.LexString) -> str:
-    # FIXME(MarshalX): support more fields. only known_values field is supported for now
-
-    if not def_model.known_values and not def_model.enum:
-        return ''
-
-    type_hint = _get_str_typehint(nsid, def_model, optional=False)
-    description = def_model.description
-    if not description:
-        description = gen_description_by_camel_case_name(def_name)
+    if isinstance(def_model, models.LexArray):
+        return f'{name} = {type_hint}\n'
 
     lines = [
-        f'{get_def_model_name(def_name)} = {type_hint} #: {description}',
+        f'{name} = {type_hint} #: {_get_def_comment(def_name, def_model.description)}',
         '',
         '',
     ]
@@ -784,12 +953,10 @@ def _generate_def_models(lex_db: builder.BuiltDefModels) -> None:
         for def_name, def_model in defs.items():
             if isinstance(def_model, models.LexToken):
                 save_code_part(nsid, _generate_def_token(nsid, def_name, def_model))
-            elif isinstance(def_model, models.LexString):
-                save_code_part(nsid, _generate_def_string(nsid, def_name, def_model))
             elif isinstance(def_model, models.LexObject):
                 save_code_part(nsid, _generate_def_model(nsid, def_name, def_model, ModelType.DEF))
-            elif isinstance(def_model, models.LexArray):
-                save_code_part(nsid, _generate_def_array(nsid, def_name, def_model))
+            elif isinstance(def_model, t.get_args(_AliasDef)):
+                save_code_part(nsid, _generate_def_alias(nsid, def_name, def_model))
             else:
                 # TRY004 is suppressed: this is an invalid lexicon schema, not a Python type
                 # error; the rest of the generator reports such cases as ValueError too
@@ -914,7 +1081,7 @@ def _generate_empty_init_files(root_package_path: Path) -> None:
         write_code(root_path.joinpath('__init__.py'), DISCLAIMER)
 
 
-def _generate_import_aliases(root_package_path: Path) -> None:
+def _generate_import_aliases() -> None:
     """Generate the models package __init__.py.
 
     The package defines ~1k pydantic models across hundreds of modules. Importing all of them
@@ -927,32 +1094,17 @@ def _generate_import_aliases(root_package_path: Path) -> None:
     type_checking_imports = []
     aliases = []
     ids_db = ['class _Ids:']
-    for root, __, files in sorted(os.walk(root_package_path)):
-        root_path = Path(root)
 
-        if root_path == root_package_path:
-            continue
+    modules = {nsid: get_module_path_parts(nsid) for nsid in _nsid_with_imports}
+    for nsid, (*packages, module_name) in sorted(
+        modules.items(), key=lambda item: ('/'.join(item[1][:-1]), item[1][-1])
+    ):
+        alias_name = get_import_path(nsid)
+        from_import = '.'.join([config.models_package, *packages])
 
-        from_import = config.module_import_path(root_path)
-        nsid_parts = config.nsid_segments(root_path)
-
-        for file in sorted(files):
-            if file.startswith(('.', '__', '.pyc')):
-                continue
-            if '.cpython-' in file:
-                continue
-
-            module_name = file[:-3]
-
-            method_name_parts = module_name.split('_')
-            alias_name = ''.join([p.capitalize() for p in [*nsid_parts, *method_name_parts]])
-
-            camel_case_method_name = method_name_parts[0] + ''.join(ele.title() for ele in method_name_parts[1:])
-            method_path = f'{".".join(nsid_parts)}.{camel_case_method_name}'
-            ids_db.append(f"{_(1)}{alias_name}: str = '{method_path}'")
-
-            type_checking_imports.append(f'{_(1)}from {from_import} import {module_name} as {alias_name}')
-            aliases.append(alias_name)
+        ids_db.append(f'{_(1)}{alias_name}: str = {str(nsid)!r}')
+        type_checking_imports.append(f'{_(1)}from {from_import} import {module_name} as {alias_name}')
+        aliases.append(alias_name)
 
     lazy_accessor_fallback = '' if config.is_self_gen else f", fallback='{base}'"
 
@@ -1000,6 +1152,10 @@ def _generate_package_init(config: CodegenConfig) -> None:
 
 def _check_references(config: CodegenConfig) -> None:
     lexicons = builder.parse_lexicons(config)
+    if config.skip_invalid:
+        # such a run resolves every reference where it is used and weakens the ones it can not
+        return
+
     unresolved = find_unresolved_refs(lexicons)
     if not config.is_self_gen:
         emitted = {lexicon.id for lexicon in lexicons}
@@ -1014,6 +1170,8 @@ def generate_models(config: t.Optional[CodegenConfig] = None) -> None:
     with use_config(config or get_config()) as active:
         _check_references(active)
         _nsid_with_imports.clear()
+        _inline_models.clear()
+        _pending_inline_models.clear()
 
         _generate_params_models(builder.build_params_models(active))
         _generate_data_models(builder.build_data_models(active))
@@ -1021,10 +1179,11 @@ def generate_models(config: t.Optional[CodegenConfig] = None) -> None:
         _generate_def_models(builder.build_def_models(active))
 
         _generate_record_models(builder.build_record_models(active))
+        _generate_inline_models()
         _generate_record_type_database(builder.build_record_models(active))
 
         _generate_empty_init_files(active.models_output_dir)
-        _generate_import_aliases(active.models_output_dir)
+        _generate_import_aliases()
         _generate_package_init(active)
 
         format_code(active.models_output_dir, root=active.output_dir)

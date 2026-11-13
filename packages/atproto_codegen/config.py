@@ -34,6 +34,13 @@ class CodegenConfig:
     References out of the emitted lexicons resolve into its models, so they must name something it defines.
     """
 
+    skip_invalid: bool = False
+    """Generate what can be generated instead of failing on the first lexicon that can not.
+
+    Unparseable lexicons are left out, references to missing definitions are typed as unknown, and
+    methods without a usable body are skipped. Each case is reported through ``diagnostics``.
+    """
+
     @property
     def models_output_dir(self) -> Path:
         return self.output_dir.joinpath('models')
@@ -53,15 +60,6 @@ class CodegenConfig:
 
     def with_overrides(self, **kwargs: t.Any) -> 'CodegenConfig':
         return replace(self, **kwargs)
-
-    def module_import_path(self, models_subdir: Path) -> str:
-        """Return the dotted import path of a directory inside the generated models package."""
-        rel = models_subdir.relative_to(self.models_output_dir)
-        return '.'.join([self.models_package, *rel.parts])
-
-    def nsid_segments(self, models_subdir: Path) -> t.List[str]:
-        """Return the NSID segments a directory inside the generated models package stands for."""
-        return list(models_subdir.relative_to(self.models_output_dir).parts)
 
 
 _active: ContextVar[t.Optional[CodegenConfig]] = ContextVar('atproto_codegen_config', default=None)
