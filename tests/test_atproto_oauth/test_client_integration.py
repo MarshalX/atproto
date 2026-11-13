@@ -1,5 +1,6 @@
 import asyncio
 import dataclasses
+import socketserver
 import threading
 import typing as t
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -30,6 +31,14 @@ from tests.test_atproto_oauth.fake_server import (
 SCOPE = 'atproto transition:generic'
 PROFILE = models.AppBskyActorGetProfile.Params(actor=HANDLE)
 PROFILE_PATH = '/xrpc/app.bsky.actor.getProfile'
+
+
+class _LocalServer(HTTPServer):
+    @te.override
+    def server_bind(self) -> None:
+        # the base class also looks up the name of the host, which takes seconds on some systems
+        socketserver.TCPServer.server_bind(self)
+        self.server_port = self.server_address[1]
 
 
 @pytest.fixture
@@ -318,7 +327,7 @@ def test_streamed_body_is_buffered_for_the_retry() -> None:
             pass
 
     fake = FakeServer()
-    http_server = HTTPServer(('127.0.0.1', 0), Handler)
+    http_server = _LocalServer(('127.0.0.1', 0), Handler)
     threading.Thread(target=http_server.serve_forever, daemon=True).start()
     try:
         oauth = OAuthClient.loopback(scope=SCOPE, transport=fake.transport, id_resolver=fake_id_resolver(fake))

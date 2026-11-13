@@ -13,7 +13,7 @@ from atproto_oauth._base import (
     _OAuthClientBase,
 )
 from atproto_oauth._effects import run_flow
-from atproto_oauth.loopback import DEFAULT_LOGIN_TIMEOUT, login_flow
+from atproto_oauth.loopback import DEFAULT_LOGIN_TIMEOUT, CallbackPage, login_flow
 from atproto_oauth.metadata import ATPROTO_SCOPE
 from atproto_oauth.resolver import OAuthResolver
 from atproto_oauth.security import DEFAULT_TIMEOUT, HttpClient
@@ -207,6 +207,7 @@ class OAuthClient(_OAuthClientBase):
         identifier: str,
         *,
         open_url: t.Optional[t.Callable[[str], t.Any]] = None,
+        page: t.Optional[CallbackPage] = None,
         timeout: t.Optional[float] = DEFAULT_LOGIN_TIMEOUT,
         **params: t.Any,
     ) -> OAuthSession:
@@ -218,6 +219,8 @@ class OAuthClient(_OAuthClientBase):
         Args:
             identifier: Handle or DID of the account, or the URL of a PDS or an entryway.
             open_url: Called with the authorization URL. Opens the default browser by default.
+            page: Returns the HTML shown in the browser afterwards, given the query parameters
+                of the redirect. They come from the network, so escape any of them the page includes.
             timeout: Seconds to wait for the user. :obj:`None` waits forever.
             **params: Other arguments of :py:meth:`authorize`, such as ``scope``.
 
@@ -229,7 +232,7 @@ class OAuthClient(_OAuthClientBase):
             :class:`atproto_oauth.exceptions.OAuthCallbackError`: The authorization failed
                 or was not completed in time.
         """
-        flow = login_flow(self, identifier, open_url or webbrowser.open, timeout, params)
+        flow = login_flow(self, identifier, open_url or webbrowser.open, page, timeout, params)
         session: OAuthSession = run_flow(flow)
         return session
 

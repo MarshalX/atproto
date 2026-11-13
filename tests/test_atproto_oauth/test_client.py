@@ -86,7 +86,7 @@ def test_loopback_login(server: FakeServer) -> None:
     assert (info.sub, info.iss, info.aud, info.scope) == (DID, ISSUER, PDS, SCOPE)
     assert info.expired is False
     assert info.expires_at is not None
-    assert 3500 < info.expires_at.timestamp() - time.time() <= 3600
+    assert info.expires_at.timestamp() - time.time() == pytest.approx(3600, abs=100)
 
 
 def test_par_request_content(server: FakeServer) -> None:

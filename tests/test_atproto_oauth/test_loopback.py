@@ -37,6 +37,12 @@ def get(url: str) -> int:
         return e.code
 
 
+def read(url: str) -> str:
+    with urllib.request.urlopen(url) as response:  # noqa: S310
+        assert response.headers['Content-Type'] == 'text/html; charset=utf-8'
+        return str(response.read().decode('UTF-8'))
+
+
 def browser(server: FakeServer, redirects: t.List[str], deny: bool = False) -> t.Callable[[str], None]:
     """Act as the browser: the user decides and the authorization server redirects back."""
 
@@ -169,3 +175,49 @@ def test_authorize_accepts_a_registered_loopback_redirect_uri_on_any_port(server
     )
     with pytest.raises(ValueError, match='not registered'):
         public.authorize(HANDLE, redirect_uri='https://app.test:8443/callback')
+
+
+def test_callback_page_tells_a_failure_from_a_success_without_echoing_parameters() -> None:
+    with LoopbackCallbackServer(['http://127.0.0.1/']) as callback_server:
+        page = read(f'{callback_server.redirect_uri}?code=%3Cscript%3E&state=s')
+
+    assert 'Authorization complete' in page
+    assert 'script' not in page
+
+    with LoopbackCallbackServer(['http://127.0.0.1/']) as callback_server:
+        page = read(f'{callback_server.redirect_uri}?error=access_denied&error_description=%3Cscript%3E&state=s')
+
+    assert 'Authorization failed' in page
+    assert 'script' not in page
+
+
+def test_login_with_browser_shows_a_custom_page(server: FakeServer) -> None:
+    client = make_client(server)
+    seen: t.List[t.Mapping[str, str]] = []
+    pages: t.List[str] = []
+
+    def page(params: t.Mapping[str, str]) -> str:
+        seen.append(params)
+        return '<h1>Done ✓</h1>'
+
+    def open_url(url: str) -> None:
+        query = dict(parse_qsl(urlsplit(url).query))
+        redirect_uri = server.par_requests[query['request_uri']]['redirect_uri']
+        pages.append(read(f'{redirect_uri}?{urlencode(server.approve(url))}'))
+
+    session = client.login_with_browser(HANDLE, open_url=open_url, page=page)
+
+    assert session.did == DID
+    assert pages == ['<h1>Done ✓</h1>']
+    assert set(seen[0]) == {'code', 'state', 'iss'}
+
+
+def test_error_of_a_custom_page_reaches_the_caller() -> None:
+    def page(params: t.Mapping[str, str]) -> str:
+        raise RuntimeError('broken page')
+
+    with LoopbackCallbackServer(['http://127.0.0.1/'], page) as callback_server:
+        assert get(f'{callback_server.redirect_uri}?code=c&state=s') == 500
+
+        with pytest.raises(RuntimeError, match='broken page'):
+            callback_server.wait(0)

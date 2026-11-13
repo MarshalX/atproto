@@ -1,6 +1,7 @@
 from atproto_oauth._base import OAuthCallbackResult
 from atproto_oauth.async_client import AsyncOAuthClient
 from atproto_oauth.client import OAuthClient
+from atproto_oauth.loopback import LoopbackCallbackServer
 from atproto_oauth.metadata import AuthServerMetadata, build_loopback_client_id
 from atproto_oauth.models import AuthMethod, OAuthSessionData, OAuthStateData, TokenInfo, TokenSet
 from atproto_oauth.resolver import AsyncOAuthResolver, OAuthResolver, ResolvedIdentity, ResolvedServer
@@ -16,6 +17,7 @@ __all__ = [
     'AuthMethod',
     'AuthServerMetadata',
     'JsonFileStore',
+    'LoopbackCallbackServer',
     'MemoryStore',
     'OAuthCallbackResult',
     'OAuthClient',

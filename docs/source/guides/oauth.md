@@ -54,6 +54,33 @@ The full example also keeps the session in a file, so the browser is needed only
 :caption: examples/oauth/loopback_cli.py
 ```
 
+The browser ends on a short page that says whether the authorization went through. Pass `page` to show your own. It receives the query parameters of the redirect and returns HTML:
+
+```python
+def page(params):
+    if 'error' in params:
+        return '<h1>Login was cancelled</h1>'
+
+    return '<h1>Logged in. You can close this tab.</h1>'
+
+
+session = oauth_client.login_with_browser('alice.bsky.social', page=page)
+```
+
+The parameters come from the network. Escape any of them you put into the page, for example with `html.escape`.
+
+If you need more control, such as your own waiting loop or user interface, run the steps yourself with [LoopbackCallbackServer](#atproto_oauth.LoopbackCallbackServer). This is what `login_with_browser` does:
+
+```python
+from atproto import LoopbackCallbackServer
+
+with LoopbackCallbackServer(oauth_client.client_metadata['redirect_uris']) as server:
+    url = oauth_client.authorize('alice.bsky.social', redirect_uri=server.redirect_uri)
+    print(url)
+
+    session = oauth_client.callback(server.wait(timeout=300)).session
+```
+
 ### A web service
 
 Publish the metadata and the public keys at the URLs you declared, and wire two routes: one that starts the authorization and one that receives the callback. The sketch below uses Flask; the SDK does not depend on it.
