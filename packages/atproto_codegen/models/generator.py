@@ -28,7 +28,6 @@ from atproto_codegen.record_templates import (
     RECORD_LIST_RESPONSE_MODEL_TEMPLATE,
 )
 from atproto_codegen.utils import (
-    _resolve_nsid_ref,
     append_code,
     camel_case_split,
     capitalize_first_symbol,
@@ -41,6 +40,7 @@ from atproto_codegen.utils import (
     get_module_path_parts,
     get_record_model_name,
     join_code,
+    resolve_ref,
     to_docstring_text,
     to_identifier,
     to_one_line,
@@ -247,18 +247,25 @@ def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional:
     return _get_optional_typehint(str_typehint, optional=optional)
 
 
-def _get_ref_typehint(nsid: NSID, field_type_def: models.LexRef, *, optional: bool) -> str:
-    model_path, _ = _resolve_nsid_ref(nsid, field_type_def.ref)
+def _get_unknown_typehint(*, optional: bool, is_input_type: bool) -> str:
+    return _get_optional_typehint("'UnknownInputType'" if is_input_type else "'UnknownType'", optional=optional)
+
+
+def _get_ref_typehint(nsid: NSID, field_type_def: models.LexRef, *, optional: bool, is_input_type: bool) -> str:
+    model_path = resolve_ref(nsid, field_type_def.ref)
+    if model_path is None:
+        return _get_unknown_typehint(optional=optional, is_input_type=is_input_type)
+
     return _get_optional_typehint(f"'{model_path}'", optional=optional)
 
 
 def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, optional: bool) -> str:
-    def_names = []
-    for ref in field_type_def.refs:
-        import_path, _ = _resolve_nsid_ref(nsid, ref)
-        def_names.append(import_path)
+    model_paths = [resolve_ref(nsid, ref) for ref in field_type_def.refs]
+    def_names = [model_path for model_path in model_paths if model_path is not None]
+    # a union that lost members must accept the types it can no longer name
+    is_closed = bool(field_type_def.closed) and len(def_names) == len(model_paths)
 
-    if not def_names and field_type_def.closed:
+    if not model_paths and field_type_def.closed:
         raise ValueError('The schema is invalid because union must have at least one type when it is closed')
 
     is_unknown_union = not def_names
@@ -270,7 +277,7 @@ def _get_ref_union_typehint(nsid: NSID, field_type_def: models.LexRefUnion, *, o
     # an open union may carry a $type this SDK release doesn't know yet; OpenUnion adds the DotDict
     # fallback so such members don't fail the whole response. ref: https://github.com/MarshalX/atproto/issues/354
     members = _union_typehint([f"'{name}'" for name in def_names])
-    if not is_unknown_union and not field_type_def.closed:
+    if not is_unknown_union and not is_closed:
         return _get_optional_typehint(f'unknown_union.OpenUnion[{members}]', optional=optional)
 
     # For discriminated unions, optionality is handled by Optional[] wrapper, not Field(default=None)
@@ -298,9 +305,7 @@ def _get_model_field_typehint(  # noqa: C901
 
     if isinstance(field_type_def, models.LexUnknown):
         # unknown type is a generic response with records or any not described type in the lexicon. for example, didDoc
-        if is_input_type:
-            return _get_optional_typehint("'UnknownInputType'", optional=optional)
-        return _get_optional_typehint("'UnknownType'", optional=optional)
+        return _get_unknown_typehint(optional=optional, is_input_type=is_input_type)
 
     if isinstance(field_type_def, models.LexInteger):
         if field_type_def.const is not None:
@@ -327,7 +332,7 @@ def _get_model_field_typehint(  # noqa: C901
         return _get_optional_typehint(f't.List[{items_type_hint}]', optional=optional)
 
     if isinstance(field_type_def, models.LexRef):
-        return _get_ref_typehint(nsid, field_type_def, optional=optional)
+        return _get_ref_typehint(nsid, field_type_def, optional=optional, is_input_type=is_input_type)
 
     if isinstance(field_type_def, models.LexRefUnion):
         return _get_ref_union_typehint(nsid, field_type_def, optional=optional)
@@ -758,13 +763,13 @@ def _generate_xrpc_body_model(nsid: NSID, body: models.LexXrpcBody, model_type: 
             owner = INPUT_MODEL if is_input_type else OUTPUT_MODEL
             lines.append(_get_model(nsid, body.schema_, owner, is_input_type=is_input_type))
         elif isinstance(body.schema_, models.LexRef):
-            _, __ = _resolve_nsid_ref(nsid, body.schema_.ref)
+            resolve_ref(nsid, body.schema_.ref)
 
             # here we can generate input and output model alises from the reference
             # but instead we just resolve reference inplace without intermediate model
             # maybe we will want to generate aliases in the future
             # so I leave this code here: https://github.com/MarshalX/atproto/pull/412
-        else:
+        elif not get_config().skip_invalid:
             raise UnsupportedLexiconError(f"'{nsid}' has a union as its body, which is not supported yet")
     else:
         if model_type is ModelType.DATA:
@@ -1147,6 +1152,10 @@ def _generate_package_init(config: CodegenConfig) -> None:
 
 def _check_references(config: CodegenConfig) -> None:
     lexicons = builder.parse_lexicons(config)
+    if config.skip_invalid:
+        # such a run resolves every reference where it is used and weakens the ones it can not
+        return
+
     unresolved = find_unresolved_refs(lexicons)
     if not config.is_self_gen:
         emitted = {lexicon.id for lexicon in lexicons}

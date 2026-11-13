@@ -7,11 +7,11 @@ from atproto_codegen.config import CodegenConfig, get_config, use_config
 from atproto_codegen.consts import DISCLAIMER, PARAMS_DICT, PARAMS_MODEL
 from atproto_codegen.models import builder
 from atproto_codegen.utils import (
-    _resolve_nsid_ref,
     convert_camel_case_to_snake_case,
     format_code,
     get_import_path,
     join_code,
+    resolve_ref,
     write_code,
 )
 from atproto_codegen.utils import get_code_intent as _
@@ -56,9 +56,15 @@ def _get_imports(config: CodegenConfig) -> str:
     )
 
 
-def _generate_message_types(nsid: NSID, definition: LexSubscription) -> t.List[str]:
-    refs = _refs(definition)
-    model_paths = [_resolve_nsid_ref(nsid, ref)[0] for ref in refs]
+def _resolve_messages(nsid: NSID, definition: LexSubscription) -> t.Dict[str, str]:
+    """Map each message type to the path of its model, leaving out the ones that do not resolve."""
+    resolved = {ref: resolve_ref(nsid, ref) for ref in _refs(definition)}
+    return {ref: model_path for ref, model_path in resolved.items() if model_path is not None}
+
+
+def _generate_message_types(nsid: NSID, messages: t.Dict[str, str]) -> t.List[str]:
+    refs = list(messages)
+    model_paths = list(messages.values())
 
     lines = [f'#: Messages of the ``{nsid}`` subscription.', f'{_message_alias(nsid)} = t.Union[']
     lines.extend(f"{_(1)}'{path}'," for path in model_paths)
@@ -127,10 +133,14 @@ def generate_subscriptions(config: t.Optional[CodegenConfig] = None) -> None:
 
         for nsid, defs in builder.build_subscriptions(active).items():
             for definition in defs.values():
-                if not isinstance(definition, LexSubscription) or not _refs(definition):
+                if not isinstance(definition, LexSubscription):
                     continue
 
-                blocks.extend(_generate_message_types(nsid, definition))
+                messages = _resolve_messages(nsid, definition)
+                if not messages:
+                    continue
+
+                blocks.extend(_generate_message_types(nsid, messages))
                 blocks.append('')
                 blocks.extend(_generate_parse_function(nsid))
                 blocks.append('')

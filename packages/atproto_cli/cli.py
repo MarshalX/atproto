@@ -7,6 +7,7 @@ import click
 import typing_extensions as te
 from atproto_codegen.clients.generate_async_client import gen_client
 from atproto_codegen.config import CodegenConfig
+from atproto_codegen.diagnostics import clear_warnings, get_warnings
 from atproto_codegen.exceptions import CodegenError
 from atproto_codegen.models import builder
 from atproto_codegen.models.generator import generate_models
@@ -185,15 +186,25 @@ def _remove_generated_code(output_dir: Path) -> None:
 )
 @click.option('--package', type=click.STRING, required=True, help='Import name of the generated package.')
 @click.option('--no-client', is_flag=True, default=False, help='Generate models and namespaces only.')
+@click.option(
+    '--skip-invalid',
+    is_flag=True,
+    default=False,
+    help='Leave out what can not be generated instead of failing: unparseable lexicons, '
+    'references to missing definitions (typed as unknown), and methods without a usable body.',
+)
 @click.pass_context
 @_reports_codegen_errors
-def gen_custom(ctx: click.Context, output_dir: str, package: str, no_client: bool) -> None:
+def gen_custom(ctx: click.Context, output_dir: str, package: str, no_client: bool, skip_invalid: bool) -> None:
     lexicon_dir = ctx.obj.get('lexicon_dir')
     if not lexicon_dir:
         raise click.UsageError("'--lexicon-dir' is required. Pass it before the subcommand: atp gen --lexicon-dir ...")
 
-    config = CodegenConfig(emit_lexicon_dirs=(lexicon_dir,), output_dir=Path(output_dir), package=package)
+    config = CodegenConfig(
+        emit_lexicon_dirs=(lexicon_dir,), output_dir=Path(output_dir), package=package, skip_invalid=skip_invalid
+    )
 
+    clear_warnings()
     echo(ctx, f'Generating {package}:')
     _remove_generated_code(config.output_dir)
     echo(ctx, '- models...')
@@ -202,6 +213,12 @@ def gen_custom(ctx: click.Context, output_dir: str, package: str, no_client: boo
     generate_namespaces(config, with_client=not no_client)
     echo(ctx, '- subscriptions...')
     generate_subscriptions(config)
+
+    warnings = get_warnings()
+    if warnings:
+        echo(ctx, f'Warnings ({len(warnings)}):')
+        for warning in warnings:
+            echo(ctx, f'- {warning}')
 
     echo(ctx, f'Done! Package written to {config.output_dir}')
 

@@ -34,6 +34,13 @@ class CodegenConfig:
     References out of the emitted lexicons resolve into its models, so they must name something it defines.
     """
 
+    skip_invalid: bool = False
+    """Generate what can be generated instead of failing on the first lexicon that can not.
+
+    Unparseable lexicons are left out, references to missing definitions are typed as unknown, and
+    methods without a usable body are skipped. Each case is reported through ``diagnostics``.
+    """
+
     @property
     def models_output_dir(self) -> Path:
         return self.output_dir.joinpath('models')

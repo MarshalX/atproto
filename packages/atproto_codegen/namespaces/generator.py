@@ -5,6 +5,7 @@ from atproto_core.nsid import NSID
 from atproto_lexicon.models import (
     LexObject,
     LexRef,
+    LexRefUnion,
     LexXrpcParameters,
     LexXrpcProcedure,
     LexXrpcQuery,
@@ -19,6 +20,8 @@ from atproto_codegen.consts import (
     PARAMS_DICT,
     PARAMS_MODEL,
 )
+from atproto_codegen.diagnostics import warn
+from atproto_codegen.exceptions import UnresolvedReferenceError
 from atproto_codegen.namespaces.builder import (
     MethodInfo,
     NamespaceNode,
@@ -34,13 +37,13 @@ from atproto_codegen.record_templates import (
     RECORD_LIST_METHOD_TEMPLATE,
 )
 from atproto_codegen.utils import (
-    _resolve_nsid_ref,
     convert_camel_case_to_snake_case,
     format_code,
     gen_description_by_camel_case_name,
     get_import_path,
     get_sync_async_keywords,
     join_code,
+    resolve_ref,
     sort_dict_by_key,
     to_docstring_text,
     to_identifier,
@@ -62,6 +65,47 @@ def get_namespace_name(path_parts: t.List[str]) -> str:
 
 def get_record_name(path_parts: t.List[str]) -> str:
     return to_pascal_case(path_parts) + _RECORD_SUFFIX
+
+
+def _get_body_model_path(nsid: NSID, ref: str) -> str:
+    model_path = resolve_ref(nsid, ref)
+    if model_path is None:
+        raise UnresolvedReferenceError(f"'{ref}' is the body of '{nsid}' and can not be left out.")
+
+    return model_path
+
+
+def _get_skip_reason(method_info: MethodInfo) -> t.Optional[str]:
+    """Return why a method can not be generated, or :obj:`None` if it can."""
+    definition = method_info.definition
+    bodies = [definition.output]
+    if isinstance(definition, LexXrpcProcedure):
+        bodies.append(definition.input)
+
+    for body in bodies:
+        schema = body.schema_ if body else None
+        if isinstance(schema, LexRefUnion):
+            return 'its body is a union, which is not supported yet'
+        if isinstance(schema, LexRef) and resolve_ref(method_info.nsid, schema.ref) is None:
+            return f"its body '{schema.ref}' is not available"
+
+    return None
+
+
+def _filter_generatable_methods(methods: t.List[MethodInfo]) -> t.List[MethodInfo]:
+    """Leave out the methods that can not be generated if the run skips invalid input. A strict run fails on them."""
+    if not get_config().skip_invalid:
+        return methods
+
+    generatable = []
+    for method_info in methods:
+        reason = _get_skip_reason(method_info)
+        if reason:
+            warn(f'Skipped method {method_info.nsid}: {reason}')
+        else:
+            generatable.append(method_info)
+
+    return generatable
 
 
 def _get_namespace_imports() -> str:
@@ -200,7 +244,7 @@ def _get_namespace_method_body(method_info: MethodInfo, *, sync: bool) -> str:
         lines.append(_override_arg_line('data', INPUT_MODEL))
     if input_body and isinstance(input_body.schema_, LexRef):  # special case
         invoke_args.append('data=data_model')
-        model_path, __ = _resolve_nsid_ref(method_info.nsid, input_body.schema_.ref)
+        model_path = _get_body_model_path(method_info.nsid, input_body.schema_.ref)
         lines.append(f'{_(2)}data_model = get_or_create(data, {model_path})')
     if 'data_alias' in presented_args:
         invoke_args.append('data=data')
@@ -297,7 +341,7 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
                 )
                 _add_arg(arg, optional=is_optional)
             elif isinstance(schema, LexRef):
-                model_path, _ = _resolve_nsid_ref(method_info.nsid, schema.ref)
+                model_path = _get_body_model_path(method_info.nsid, schema.ref)
                 # there is no info about the requirement of LexRef ??? why
                 _add_arg(f'data: {model_path}', optional=False)
             else:
@@ -313,7 +357,7 @@ def _get_namespace_method_signature_args(method_info: MethodInfo) -> str:
 
 def _get_namespace_method_return_type(method_info: MethodInfo) -> t.Tuple[str, bool]:
     if method_info.definition.output and isinstance(method_info.definition.output.schema_, LexRef):
-        ref_class, _ = _resolve_nsid_ref(method_info.nsid, method_info.definition.output.schema_.ref)
+        ref_class = _get_body_model_path(method_info.nsid, method_info.definition.output.schema_.ref)
         return ref_class, True
 
     is_model = False
@@ -389,7 +433,9 @@ def _generate_namespace_in_output(
         nodes_path = [*parent_nodes, node_name]
 
         records = [info for info in sub_node.objects if isinstance(info, RecordInfo)]
-        methods = [info for info in sub_node.objects if isinstance(info, (ProcedureInfo, QueryInfo))]
+        methods = _filter_generatable_methods(
+            [info for info in sub_node.objects if isinstance(info, (ProcedureInfo, QueryInfo))]
+        )
 
         if records:
             output.append(_get_record_class(records, sync=sync))
