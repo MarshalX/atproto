@@ -65,6 +65,12 @@ Unstable endpoints that may change or disappear without notice.
 
       Get the authenticated viewer's Atmosphere activity timeline.
 
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereTimelineV2
+      :link: /models/app/bsky/unspecced/getAtmosphereTimelineV2
+      :link-type: doc
+
+      Get the requesting account's Atmosphere activity timeline, pre-grouped for rendering.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getConfig
       :link: /models/app/bsky/unspecced/getConfig
       :link-type: doc
@@ -252,6 +258,7 @@ Unstable endpoints that may change or disappear without notice.
    getAtmosphereRecordView </models/app/bsky/unspecced/getAtmosphereRecordView>
    getAtmosphereRecordViews </models/app/bsky/unspecced/getAtmosphereRecordViews>
    getAtmosphereTimeline </models/app/bsky/unspecced/getAtmosphereTimeline>
+   getAtmosphereTimelineV2 </models/app/bsky/unspecced/getAtmosphereTimelineV2>
    getConfig </models/app/bsky/unspecced/getConfig>
    getOnboardingSuggestedStarterPacks </models/app/bsky/unspecced/getOnboardingSuggestedStarterPacks>
    getOnboardingSuggestedStarterPacksSkeleton </models/app/bsky/unspecced/getOnboardingSuggestedStarterPacksSkeleton>

@@ -117,6 +117,19 @@ class ReportAction(base.ModelBase):
     ids: t.Optional[t.List[int]] = None  #: Target specific report IDs.
     is_automated: t.Optional[bool] = None  #: Set true when the report activities are created by an automated process.
     note: t.Optional[str] = None  #: Note to send to reporter(s) when actioning their report.
+    subject_types: te.Annotated[
+        t.Optional[t.List[t.Literal['account', 'record', 'message', 'conversation']]], Field(max_length=4)
+    ] = None  #: Expands report targeting to include owned subjects of these types. Requires event subject to be an account. Mutually exclusive with `subjects`.
+    subjects: te.Annotated[
+        t.Optional[
+            t.List[
+                unknown_union.OpenUnion[
+                    t.Union['models.ComAtprotoAdminDefs.RepoRef', 'models.ComAtprotoRepoStrongRef.Main']
+                ]
+            ]
+        ],
+        Field(max_length=100),
+    ] = None  #: Expands report targeting to include additional subjects. Requires event subject to be an account. Mutually exclusive with `subjectTypes`.
     types: t.Optional[t.List[str]] = (
         None  #: Target reports matching these report types on the subject (fully qualified NSIDs). Excludes assigned and escalated reports.
     )

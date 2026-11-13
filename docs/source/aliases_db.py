@@ -126,6 +126,7 @@ ALIASES_DB = {
     'models.AppBskyUnspeccedGetAtmosphereRecordView': 'atproto_client.models.app.bsky.unspecced.get_atmosphere_record_view',
     'models.AppBskyUnspeccedGetAtmosphereRecordViews': 'atproto_client.models.app.bsky.unspecced.get_atmosphere_record_views',
     'models.AppBskyUnspeccedGetAtmosphereTimeline': 'atproto_client.models.app.bsky.unspecced.get_atmosphere_timeline',
+    'models.AppBskyUnspeccedGetAtmosphereTimelineV2': 'atproto_client.models.app.bsky.unspecced.get_atmosphere_timeline_v2',
     'models.AppBskyUnspeccedGetConfig': 'atproto_client.models.app.bsky.unspecced.get_config',
     'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacks': 'atproto_client.models.app.bsky.unspecced.get_onboarding_suggested_starter_packs',
     'models.AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton': 'atproto_client.models.app.bsky.unspecced.get_onboarding_suggested_starter_packs_skeleton',

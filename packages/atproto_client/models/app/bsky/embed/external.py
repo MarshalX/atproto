@@ -163,9 +163,22 @@ class ViewArticlePublication(base.ModelBase):
     subscription_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Subscription count.
     theme: t.Optional['models.AppBskyEmbedExternal.ViewArticlePublicationTheme'] = None  #: Theme.
     updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
+    viewer: t.Optional['models.AppBskyEmbedExternal.ViewArticlePublicationViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.embed.external#viewArticlePublication'] = Field(
         default='app.bsky.embed.external#viewArticlePublication', alias='$type', frozen=True
+    )
+
+
+class ViewArticlePublicationViewerState(base.ModelBase):
+    """Definition model for :obj:`app.bsky.embed.external`. Metadata about the requesting account's relationship with the subject publication. Only has meaningful content for authed requests."""
+
+    subscription: t.Optional[string_formats.AtUri] = (
+        None  #: The requesting account's site.standard.graph.subscription record for this publication, if subscribed.
+    )
+
+    py_type: t.Literal['app.bsky.embed.external#viewArticlePublicationViewerState'] = Field(
+        default='app.bsky.embed.external#viewArticlePublicationViewerState', alias='$type', frozen=True
     )
 
 
@@ -235,6 +248,9 @@ class ViewLivestream(base.ModelBase):
     ended_at: t.Optional[string_formats.DateTime] = None  #: Ended at.
     image: t.Optional[string_formats.Uri] = None  #: Image.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
+    last_seen_at: t.Optional[string_formats.DateTime] = (
+        None  #: When the livestream last reported that it was live. A livestream without endedAt is considered active until two minutes after its last heartbeat; clients can apply the same window to tell whether a cached view is still live.
+    )
     started_at: t.Optional[string_formats.DateTime] = None  #: Started at.
     updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
 
