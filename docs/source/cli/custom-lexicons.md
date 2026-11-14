@@ -4,6 +4,10 @@ The models, namespaces, and clients that ship with this SDK are not hand-written
 
 Nothing about that is specific to Bluesky. Point the generator at lexicons of your own and it produces the same thing for them: Pydantic models, typed namespaces, record sugar, subscription clients, and a `Client` subclass that talks to your service. You do not fork the SDK and you do not edit anything under `atproto_client/`.
 
+:::{tip}
+Need the lexicons of a service that already publishes them, such as Teal.fm, Tangled or Leaflet? They are generated for you in [Atmosphere lexicons](https://lex.atproto.blue): `pip install atproto-lexicons`, then search the catalog for the import path. This page is for lexicons of your own.
+:::
+
 :::{note}
 This page is about the Python side. For what a lexicon *is* and how to write one, read [the lexicon guide](https://atproto.com/guides/lexicon) and [the lexicon spec](https://atproto.com/specs/lexicon) on atproto.com.
 :::

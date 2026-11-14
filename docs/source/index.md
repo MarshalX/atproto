@@ -28,6 +28,12 @@ pip install atproto
 Under construction. Until the 1.0.0 release, compatibility between versions is not guaranteed.
 :::
 
+:::{card} {octicon}`telescope;1em;sd-mr-1` New: Atmosphere lexicons
+:link: https://lex.atproto.blue
+
+Building on Teal.fm, Tangled, Leaflet or another service of the Atmosphere? `pip install atproto-lexicons` adds typed models and client methods for third-party lexicons to this SDK, rebuilt daily from what each service publishes. Search the catalog at **lex.atproto.blue**.
+:::
+
 ## Where to start
 
 ::::{grid} 1 2 2 3
@@ -81,7 +87,7 @@ Every lexicon on the network, generated as a Pydantic model and browsable by NSI
 
 This SDK implements what the AT Protocol provides: lexicon schemas, XRPC clients, OAuth, the firehose, Jetstream, identity resolution, DID keys, signatures, and the utilities around CIDs, NSIDs, AT-URIs, DAG-CBOR, CAR files, and DID documents.
 
-Every model, query, and procedure is generated from lexicons. The focus is on the lexicons of `atproto.com` and `bsky.app`, but there is no vendor lock: point [the code generator](cli/custom-lexicons.md) at your own and it produces the same typed models and clients for them.
+Every model, query, and procedure is generated from lexicons. The focus is on the lexicons of `atproto.com` and `bsky.app`, but there is no vendor lock: point [the code generator](cli/custom-lexicons.md) at your own and it produces the same typed models and clients for them. For the lexicons other services publish, that is already done: [Atmosphere lexicons](https://lex.atproto.blue) is an add-on package with them generated ahead of time.
 
 - Sync and async clients with identical method sets
 - Type hints throughout, so your IDE can navigate the whole protocol
@@ -186,6 +192,7 @@ licence
 
 GitHub <https://github.com/MarshalX/atproto>
 PyPI <https://pypi.org/project/atproto/>
+Atmosphere lexicons <https://lex.atproto.blue>
 Author <https://github.com/MarshalX>
 AT Protocol Docs <https://atproto.com/>
 Bluesky Docs <https://bsky.network/docs/bluesky-api>
