@@ -79,13 +79,14 @@ Every lexicon on the network, generated as a Pydantic model and browsable by NSI
 
 ## What it covers
 
-This SDK implements what the AT Protocol provides: lexicon schemas, XRPC clients, the firehose, Jetstream, identity resolution, DID keys, signatures, and the utilities around CIDs, NSIDs, AT-URIs, DAG-CBOR, CAR files, and DID documents.
+This SDK implements what the AT Protocol provides: lexicon schemas, XRPC clients, OAuth, the firehose, Jetstream, identity resolution, DID keys, signatures, and the utilities around CIDs, NSIDs, AT-URIs, DAG-CBOR, CAR files, and DID documents.
 
 Every model, query, and procedure is generated from lexicons. The focus is on the lexicons of `atproto.com` and `bsky.app`, but there is no vendor lock: point [the code generator](cli/custom-lexicons.md) at your own and it produces the same typed models and clients for them.
 
 - Sync and async clients with identical method sets
 - Type hints throughout, so your IDE can navigate the whole protocol
 - A high-level client for common tasks, with the full XRPC surface underneath it
+- [OAuth](guides/oauth.md) and app password login, with token refresh handled for you
 - [Direct messages](guides/direct-messages.md), [firehose](guides/firehose.md) and [Jetstream](guides/jetstream.md) streaming, and [identity resolvers](guides/identity.md)
 
 ## Not the protocol documentation

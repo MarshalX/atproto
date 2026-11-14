@@ -78,11 +78,12 @@ Python 3.9 or higher.
 
 ### What you get
 
-This SDK attempts to implement everything that ATProto provides. There is support for Lexicon schemas, XRPC clients, Firehose, Jetstream, Identity, DID keys, signatures, and more. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but there is no vendor lock on it. Point the code generator at your own lexicon schemas and it produces the same typed models and clients for them. The SDK also provides utilities to work with CID, NSID, AT URI schemes, DAG-CBOR, CAR files, DID documents and more.
+This SDK attempts to implement everything that ATProto provides. There is support for Lexicon schemas, XRPC clients, OAuth, Firehose, Jetstream, Identity, DID keys, signatures, and more. All models, queries, and procedures are generated automatically. The main focus is on the lexicons of atproto.com and bsky.app, but there is no vendor lock on it. Point the code generator at your own lexicon schemas and it produces the same typed models and clients for them. The SDK also provides utilities to work with CID, NSID, AT URI schemes, DAG-CBOR, CAR files, DID documents and more.
 
 - **Sync and async clients** with identical method sets.
 - **Type hints everywhere**, so your IDE can navigate the whole protocol.
 - **A high-level client** for common tasks, with the complete XRPC surface underneath it.
+- **OAuth and app passwords**, with PAR, PKCE, DPoP and token refresh handled for you.
 - **Real-time streaming** over the Firehose or Jetstream, including archive backfill.
 - **Your own lexicons**, compiled into an importable package by `atp gen custom`.
 
@@ -97,6 +98,7 @@ The documentation is live at [atproto.blue](https://atproto.blue/).
 | 💡 [Examples](https://atproto.blue/en/latest/examples/)                                                                        | Every runnable example, inlined                    |
 | 🧩 [Custom lexicons](https://atproto.blue/en/latest/cli/custom-lexicons/)                                                      | Generate models and clients from your own lexicons |
 | 🛠 [The `atp` CLI](https://atproto.blue/en/latest/cli/)                                                                        | The code generator's command line                  |
+| 🔐 [OAuth](https://atproto.blue/en/latest/guides/oauth/)                                                                       | Log users in without their password                |
 | 💬 [Direct messages](https://atproto.blue/en/latest/guides/direct-messages/)                                                   | Chats, messages, and reactions                     |
 | 🔥 [Firehose](https://atproto.blue/en/latest/guides/firehose/) & [Jetstream](https://atproto.blue/en/latest/guides/jetstream/) | Data streaming from the whole network              |
 | 🌐 [Identity](https://atproto.blue/en/latest/guides/identity/)                                                                 | DID and handle resolvers                           |
@@ -121,6 +123,7 @@ The SDK is built upon the following components:
 | `atproto_identity`     | Identity resolvers for DID, Handle, AT Protocol data, signing keys.         |
 | `atproto_jetstream`    | Jetstream v2 (data streaming) client and models.                            |
 | `atproto_lexicon`      | Lexicon parser.                                                             |
+| `atproto_oauth`        | OAuth client with PAR, PKCE, DPoP, scopes and session storage.              |
 | `atproto_server`       | Server-side utils like JWT.                                                 |
 | `atproto_subscription` | Websocket subscription runtime behind the streaming clients.                |
 
