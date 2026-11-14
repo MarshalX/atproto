@@ -92,6 +92,7 @@ def _model_aliases(package: 'ModuleType') -> t.List[str]:
     if ids is None:
         return []
 
+    # the entries that the registry inherits are permission sets, which have no model module
     return [alias for alias in vars(type(ids)) if not alias.startswith('_')]
 
 
@@ -112,9 +113,8 @@ def make_lazy_accessors(
     def __getattr__(name: str) -> t.Any:
         package = importlib.import_module(package_name)
 
-        # aliases never start with an underscore, while dunders like `__module__` resolve on `ids` too
-        nsid = None if name.startswith('_') else getattr(package.__dict__.get('ids'), name, None)
-        if nsid is not None:
+        if name in _model_aliases(package):
+            nsid = getattr(package.__dict__['ids'], name)
             module = importlib.import_module(_module_path_from_nsid(package_name, nsid))
             prepare_model_module(module, package)
             package.__dict__[name] = module

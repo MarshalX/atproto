@@ -11,11 +11,11 @@ The session is kept in ``oauth-session.json``. Run the script again to reuse it 
 import sys
 import webbrowser
 
-from atproto import Client, JsonFileStore, OAuthClient, OAuthSession
+from atproto import Client, JsonFileStore, OAuthClient, OAuthSession, models
 from atproto.exceptions import OAuthError
 
 # ask only for what the script does: create posts
-SCOPE = 'atproto repo:app.bsky.feed.post?action=create'
+SCOPE = f'atproto repo:{models.ids.AppBskyFeedPost}?action=create'
 SESSION_FILE = 'oauth-session.json'
 
 

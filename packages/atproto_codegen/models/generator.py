@@ -1106,6 +1106,16 @@ def _generate_import_aliases() -> None:
         type_checking_imports.append(f'{_(1)}from {from_import} import {module_name} as {alias_name}')
         aliases.append(alias_name)
 
+    # the runtime takes only the entries of _Ids itself as model aliases, and a permission set has no module
+    permission_sets = sorted(set(builder.build_permission_sets(config)) - _nsid_with_imports, key=str)
+    if permission_sets:
+        ids_db = [
+            'class _PermissionSetIds:',
+            *[f'{_(1)}{get_import_path(nsid)}: str = {str(nsid)!r}' for nsid in permission_sets],
+            'class _Ids(_PermissionSetIds):',
+            *(ids_db[1:] or [f'{_(1)}pass']),
+        ]
+
     lazy_accessor_fallback = '' if config.is_self_gen else f", fallback='{base}'"
 
     # The TYPE_CHECKING import block (so type checkers/IDEs resolve every `models.Alias` symbol)
