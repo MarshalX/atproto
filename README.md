@@ -17,6 +17,10 @@
         Examples
     </a>
     •
+    <a href="https://lex.atproto.blue">
+        Atmosphere lexicons
+    </a>
+    •
     <a href="https://discord.gg/PCyVJXU9jN">
         Discord Bluesky API
     </a>
@@ -86,6 +90,7 @@ This SDK attempts to implement everything that ATProto provides. There is suppor
 - **OAuth and app passwords**, with PAR, PKCE, DPoP and token refresh handled for you.
 - **Real-time streaming** over the Firehose or Jetstream, including archive backfill.
 - **Your own lexicons**, compiled into an importable package by `atp gen custom`.
+- **Third-party lexicons, ready to import**: `pip install atproto-lexicons` adds typed models and client methods for the services of the Atmosphere. Search them at [lex.atproto.blue](https://lex.atproto.blue).
 
 ### Documentation
 
@@ -97,6 +102,7 @@ The documentation is live at [atproto.blue](https://atproto.blue/).
 | 📚 [Guides](https://atproto.blue/en/latest/guides/)                                                                            | Posting, reading, streaming, identity, errors      |
 | 💡 [Examples](https://atproto.blue/en/latest/examples/)                                                                        | Every runnable example, inlined                    |
 | 🧩 [Custom lexicons](https://atproto.blue/en/latest/cli/custom-lexicons/)                                                      | Generate models and clients from your own lexicons |
+| 🪐 [Atmosphere lexicons](https://lex.atproto.blue)                                                                             | Third-party lexicons, generated ahead of time      |
 | 🛠 [The `atp` CLI](https://atproto.blue/en/latest/cli/)                                                                        | The code generator's command line                  |
 | 🔐 [OAuth](https://atproto.blue/en/latest/guides/oauth/)                                                                       | Log users in without their password                |
 | 💬 [Direct messages](https://atproto.blue/en/latest/guides/direct-messages/)                                                   | Chats, messages, and reactions                     |
