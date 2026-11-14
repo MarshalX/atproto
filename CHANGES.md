@@ -1,5 +1,18 @@
 # Change Log
 
+## Version 0.0.75
+
+**14.11.2026**
+
+**🔐 [OAuth](https://atproto.blue/guides/oauth/): `OAuthClient` signs users in without app passwords. Loopback, public and confidential clients, with PAR, PKCE, DPoP, token refresh and revoke handled for you, sync and async, granular scopes, pluggable session storage and no new dependencies**
+
+* Add OAuth client support with DPoP, PKCE and PAR by [@MarshalX](https://github.com/MarshalX) in [#771](https://github.com/MarshalX/atproto/pull/771)
+* Add permission set NSIDs to `models.ids` by [@MarshalX](https://github.com/MarshalX) in [#776](https://github.com/MarshalX/atproto/pull/776)
+* Make codegen work with third-party lexicons and add `atp gen --skip-invalid` by [@MarshalX](https://github.com/MarshalX) in [#774](https://github.com/MarshalX/atproto/pull/774)
+* Extend SDK namespaces from generated packages instead of replacing them by [@MarshalX](https://github.com/MarshalX) in [#775](https://github.com/MarshalX/atproto/pull/775)
+* Align lexicon parser with upstream implementations by [@MarshalX](https://github.com/MarshalX) in [#773](https://github.com/MarshalX/atproto/pull/773)
+* Update lexicons: add app.bsky.unspecced.getAtmosphereTimelineV2 (3 changed) by [@MarshalX](https://github.com/MarshalX) in [#772](https://github.com/MarshalX/atproto/pull/772)
+
 ## Version 0.0.74
 
 **12.11.2026**
