@@ -6,7 +6,7 @@ pip install atproto
 
 Python 3.9 or newer is required.
 
-That single package pulls in everything: the XRPC clients, the generated models for every lexicon the network publishes, the firehose and Jetstream clients, the identity resolvers, the crypto and JWT helpers, and the [`atp` code generator](../cli/index.md).
+That single package pulls in everything: the XRPC clients, the generated models for every lexicon the network publishes, the firehose and Jetstream clients, the identity resolvers, the OAuth client, the crypto and JWT helpers, and the [`atp` code generator](../cli/index.md).
 
 ## Verify it
 
@@ -22,17 +22,18 @@ The distribution is one PyPI package built from several importable ones. You rar
 | Package                | What lives there                                                           |
 | ---------------------- | -------------------------------------------------------------------------- |
 | `atproto`              | Import shortcuts to everything below. Import from here.                    |
+| `atproto_cli`          | The `atp` command.                                                         |
 | `atproto_client`       | The XRPC clients, generated models, namespaces, and the rich text builder. |
+| `atproto_codegen`      | The code generator.                                                        |
 | `atproto_core`         | NSID, AT-URI, CID, CAR files, DAG-CBOR, DID documents.                     |
-| `atproto_identity`     | Handle and DID resolvers, with caching.                                    |
 | `atproto_crypto`       | Multibase, `did:key`, signature verification.                              |
-| `atproto_server`       | Server-side helpers, notably JWT verification.                             |
-| `atproto_subscription` | The websocket subscription runtime the streaming clients are built on.     |
 | `atproto_firehose`     | The firehose clients and their deployment defaults.                        |
+| `atproto_identity`     | Handle and DID resolvers, with caching.                                    |
 | `atproto_jetstream`    | The Jetstream v2 client and its archive replay.                            |
 | `atproto_lexicon`      | The lexicon parser.                                                        |
-| `atproto_codegen`      | The code generator.                                                        |
-| `atproto_cli`          | The `atp` command.                                                         |
+| `atproto_oauth`        | The OAuth clients, sessions, scopes, and session storage.                  |
+| `atproto_server`       | Server-side helpers, notably JWT verification.                             |
+| `atproto_subscription` | The websocket subscription runtime the streaming clients are built on.     |
 
 :::{tip}
 Import from `atproto` rather than from the individual packages. It is the stable surface, and it saves you from tracking which package a name currently lives in.
