@@ -997,7 +997,20 @@ __all__ = [
 ]
 
 
-class _Ids:
+class _PermissionSetIds:
+    AppBskyAuthCreatePosts: str = 'app.bsky.authCreatePosts'
+    AppBskyAuthDeleteContent: str = 'app.bsky.authDeleteContent'
+    AppBskyAuthFullApp: str = 'app.bsky.authFullApp'
+    AppBskyAuthManageFeedDeclarations: str = 'app.bsky.authManageFeedDeclarations'
+    AppBskyAuthManageLabelerService: str = 'app.bsky.authManageLabelerService'
+    AppBskyAuthManageModeration: str = 'app.bsky.authManageModeration'
+    AppBskyAuthManageNotifications: str = 'app.bsky.authManageNotifications'
+    AppBskyAuthManageProfile: str = 'app.bsky.authManageProfile'
+    AppBskyAuthViewAll: str = 'app.bsky.authViewAll'
+    ChatBskyAuthFullChatClient: str = 'chat.bsky.authFullChatClient'
+
+
+class _Ids(_PermissionSetIds):
     AppBskyActorContentVisibilityDeclaration: str = 'app.bsky.actor.contentVisibilityDeclaration'
     AppBskyActorDefs: str = 'app.bsky.actor.defs'
     AppBskyActorGetPreferences: str = 'app.bsky.actor.getPreferences'

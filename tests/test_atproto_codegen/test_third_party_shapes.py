@@ -94,6 +94,15 @@ _LEXICONS = [
         'is.shapes.thing',
         {'main': {'type': 'record', 'key': 'tid', 'record': _object({'name': {'type': 'string'}}, required=['name'])}},
     ),
+    _lexicon(
+        'xyz.shapes.authBasic',
+        {
+            'main': {
+                'type': 'permission-set',
+                'permissions': [{'type': 'permission', 'resource': 'repo', 'collection': ['is.shapes.thing']}],
+            }
+        },
+    ),
 ]
 
 
@@ -147,6 +156,26 @@ def test_models_load_eagerly(models: t.Any) -> None:
     load_models(f'{PACKAGE}.models')
 
     assert models.XyzShapesDefs.Nested.__pydantic_complete__
+
+
+def test_permission_set_has_an_id_and_no_module(models: t.Any) -> None:
+    assert models.ids.XyzShapesAuthBasic == 'xyz.shapes.authBasic'
+    assert 'XyzShapesAuthBasic' not in dir(models)
+
+    with pytest.raises(AttributeError):
+        _ = models.XyzShapesAuthBasic
+
+
+def test_package_of_permission_sets_only_is_importable(tmp_path: Path) -> None:
+    _generate(tmp_path, [lexicon for lexicon in _LEXICONS if lexicon['id'] == 'xyz.shapes.authBasic'], 'sets_pkg')
+
+    sys.path.insert(0, str(tmp_path))
+    try:
+        models = importlib.import_module('sets_pkg.models')
+    finally:
+        sys.path.remove(str(tmp_path))
+
+    assert models.ids.XyzShapesAuthBasic == 'xyz.shapes.authBasic'
 
 
 def test_unsafe_nsid_segments_get_safe_module_names(package: Path, models: t.Any) -> None:

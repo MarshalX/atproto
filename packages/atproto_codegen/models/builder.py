@@ -250,6 +250,15 @@ def build_record_models(config: t.Optional[CodegenConfig] = None) -> BuiltRecord
     return _build(_LEX_DEF_TYPES_FOR_RECORDS, config)
 
 
+BuiltPermissionSets = t.Dict[NSID, t.Dict[str, models.LexPermissionSet]]
+
+_LEX_DEF_TYPES_FOR_PERMISSION_SETS = (models.LexPermissionSet,)
+
+
+def build_permission_sets(config: t.Optional[CodegenConfig] = None) -> BuiltPermissionSets:
+    return _build(_LEX_DEF_TYPES_FOR_PERMISSION_SETS, config)
+
+
 BuiltSubscriptions = t.Dict[NSID, t.Dict[str, models.LexSubscription]]
 
 _LEX_DEF_TYPES_FOR_SUBSCRIPTIONS = (models.LexSubscription,)

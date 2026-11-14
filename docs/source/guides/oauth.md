@@ -38,9 +38,9 @@ Authorization servers give confidential clients longer sessions, because a compr
 A loopback client uses `http://localhost` as its client ID and receives the redirect on a port of the local machine. [login_with_browser](#atproto_oauth.OAuthClient.login_with_browser) does the three steps for you: it listens on a free port, opens the browser, waits for the user and returns the session.
 
 ```python
-from atproto import Client, OAuthClient
+from atproto import Client, OAuthClient, models
 
-oauth_client = OAuthClient.loopback(scope='atproto repo:app.bsky.feed.post?action=create')
+oauth_client = OAuthClient.loopback(scope=f'atproto repo:{models.ids.AppBskyFeedPost}?action=create')
 session = oauth_client.login_with_browser('alice.bsky.social')
 
 client = Client()
@@ -90,7 +90,7 @@ import json
 import os
 import secrets
 
-from atproto import Client, OAuthClient
+from atproto import Client, OAuthClient, models
 from atproto.exceptions import OAuthCallbackError
 from flask import Flask, jsonify, redirect, request, session
 
@@ -100,7 +100,7 @@ app.secret_key = os.environ['FLASK_SECRET_KEY']
 oauth_client = OAuthClient.confidential(
     client_id='https://app.example.com/oauth-client-metadata.json',
     redirect_uri='https://app.example.com/oauth/callback',
-    scope='atproto repo:app.bsky.feed.post?action=create',
+    scope=f'atproto repo:{models.ids.AppBskyFeedPost}?action=create',
     keys=[json.loads(os.environ['OAUTH_PRIVATE_JWK'])],
     metadata={'client_name': 'Example', 'jwks_uri': 'https://app.example.com/oauth/jwks.json'},
     state_store=state_store,  # your database, see "Storing sessions"
@@ -184,7 +184,17 @@ A session works only with the client of its kind. Using an `OAuthSession` with `
 A scope is the list of permissions your application asks for. `atproto` is mandatory. The rest should be as narrow as the application allows:
 
 ```python
-scope = 'atproto repo:app.bsky.feed.post?action=create blob:image/*'
+scope = f'atproto repo:{models.ids.AppBskyFeedPost}?action=create blob:image/*'
+```
+
+A lexicon can bundle permissions into a permission set, which is requested by its NSID. Those of the bundled lexicons are in `models.ids`:
+
+```python
+from atproto import models
+from atproto_oauth.scopes import IncludeScope
+
+full_app = IncludeScope(models.ids.AppBskyAuthFullApp, aud='did:web:api.bsky.app#bsky_appview')
+scope = f'atproto {full_app}'
 ```
 
 `transition:generic` grants roughly what an app password does. The protocol marks it as transitional; prefer granular permissions in new applications.
@@ -192,7 +202,7 @@ scope = 'atproto repo:app.bsky.feed.post?action=create blob:image/*'
 The user may approve less than you asked for. Check what was granted instead of assuming:
 
 ```python
-if session.permissions.allows_repo(collection='app.bsky.feed.post', action='create'):
+if session.permissions.allows_repo(collection=models.ids.AppBskyFeedPost, action='create'):
     ...
 ```
 
