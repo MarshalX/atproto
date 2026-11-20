@@ -24,10 +24,7 @@
             "apps": {
               "type": "array",
               "maxLength": 100,
-              "items": {
-                "type": "ref",
-                "ref": "#appCard"
-              }
+              "items": { "type": "ref", "ref": "#appCard" }
             }
           }
         }
@@ -36,18 +33,9 @@
     "appCard": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "maxLength": 4096
-        },
-        "title": {
-          "type": "string",
-          "maxLength": 4096
-        },
-        "description": {
-          "type": "string",
-          "maxLength": 4096
-        },
+        "id": { "type": "string", "maxLength": 4096 },
+        "title": { "type": "string", "maxLength": 4096 },
+        "description": { "type": "string", "maxLength": 4096 },
         "logo": {
           "type": "string",
           "format": "uri",
@@ -60,27 +48,8 @@
           "maxLength": 4096,
           "description": "The app's banner, using its account banner when available."
         },
-        "url": {
-          "type": "string",
-          "format": "uri",
-          "maxLength": 4096
-        },
-        "appStoreUrl": {
-          "type": "string",
-          "format": "uri",
-          "maxLength": 4096,
-          "description": "Optional link to the app on the Apple App Store."
-        },
-        "googlePlayUrl": {
-          "type": "string",
-          "format": "uri",
-          "maxLength": 4096,
-          "description": "Optional link to the app on Google Play."
-        },
-        "category": {
-          "type": "string",
-          "maxLength": 100
-        },
+        "url": { "type": "string", "format": "uri", "maxLength": 4096 },
+        "category": { "type": "string", "maxLength": 100 },
         "profile": {
           "type": "ref",
           "ref": "app.bsky.actor.defs#profileViewDetailed",

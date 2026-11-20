@@ -65,6 +65,12 @@ Report intake and handling.
 
       Get details about a single moderation report by ID.
 
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getStatGroupDetails
+      :link: /models/tools/ozone/report/getStatGroupDetails
+      :link-type: doc
+
+      Get additional details for a stat group.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` listActivities
       :link: /models/tools/ozone/report/listActivities
       :link-type: doc
@@ -76,6 +82,12 @@ Report intake and handling.
       :link-type: doc
 
       Query report activities across all reports, ordered by createdAt.
+
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` queryModeratorActivity
+      :link: /models/tools/ozone/report/queryModeratorActivity
+      :link-type: doc
+
+      Read authorized moderator events and report activity in one chronological history.
 
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` queryReports
       :link: /models/tools/ozone/report/queryReports
@@ -114,8 +126,10 @@ Report intake and handling.
    getLatestReport </models/tools/ozone/report/getLatestReport>
    getLiveStats </models/tools/ozone/report/getLiveStats>
    getReport </models/tools/ozone/report/getReport>
+   getStatGroupDetails </models/tools/ozone/report/getStatGroupDetails>
    listActivities </models/tools/ozone/report/listActivities>
    queryActivities </models/tools/ozone/report/queryActivities>
+   queryModeratorActivity </models/tools/ozone/report/queryModeratorActivity>
    queryReports </models/tools/ozone/report/queryReports>
    reassignQueue </models/tools/ozone/report/reassignQueue>
    refreshStats </models/tools/ozone/report/refreshStats>

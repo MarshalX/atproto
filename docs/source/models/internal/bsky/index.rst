@@ -17,8 +17,15 @@ Internal Bluesky lexicons.
 
       Internal actor endpoints.
 
+   .. grid-item-card:: :octicon:`file-directory;1em;sd-mr-1` feed
+      :link: /models/internal/bsky/feed/index
+      :link-type: doc
+
+      Feed.
+
 .. toctree::
    :hidden:
    :maxdepth: 1
 
    actor </models/internal/bsky/actor/index>
+   feed </models/internal/bsky/feed/index>

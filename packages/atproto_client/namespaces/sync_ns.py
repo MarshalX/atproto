@@ -5124,6 +5124,37 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
         )
         return get_response_model(response, models.AppBskyUnspeccedDefs.AgeAssuranceState)
 
+    def get_atmosphere_activity_recommendations(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetAtmosphereActivityRecommendations.Params,
+                models.AppBskyUnspeccedGetAtmosphereActivityRecommendations.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetAtmosphereActivityRecommendations.Response':
+        """Get an ordered skeleton of recommended Standard.site articles and Grain galleries. Intended to be called and hydrated by app.bsky.unspecced.getAtmosphereRecommendedActivity.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetAtmosphereActivityRecommendations.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.AppBskyUnspeccedGetAtmosphereActivityRecommendations.Params)
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getAtmosphereActivityRecommendations',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereActivityRecommendations.Response)
+
     def get_atmosphere_apps(
         self,
         params: t.Optional[
@@ -5243,6 +5274,37 @@ class AppBskyUnspeccedNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereExploreTab.Response)
+
+    def get_atmosphere_recommended_activity(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.AppBskyUnspeccedGetAtmosphereRecommendedActivity.Params,
+                models.AppBskyUnspeccedGetAtmosphereRecommendedActivity.ParamsDict,
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.AppBskyUnspeccedGetAtmosphereRecommendedActivity.Response':
+        """Get recommended Standard.site articles and Grain galleries for Atmosphere Activity in recommendation order. Authentication is optional. Unavailable items are omitted, so the response may contain fewer than the requested limit.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.AppBskyUnspeccedGetAtmosphereRecommendedActivity.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.AppBskyUnspeccedGetAtmosphereRecommendedActivity.Params)
+        response = self._client.invoke_query(
+            'app.bsky.unspecced.getAtmosphereRecommendedActivity',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.AppBskyUnspeccedGetAtmosphereRecommendedActivity.Response)
 
     def get_atmosphere_record_view(
         self,
@@ -10291,6 +10353,7 @@ class InternalBskyNamespace(NamespaceBase):
     def __init__(self, client: 'XrpcClient') -> None:
         super().__init__(client)
         self.actor = InternalBskyActorNamespace(self._client)
+        self.feed = InternalBskyFeedNamespace(self._client)
 
 
 class InternalBskyActorNamespace(NamespaceBase):
@@ -10316,6 +10379,31 @@ class InternalBskyActorNamespace(NamespaceBase):
             'internal.bsky.actor.getProfiles', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.InternalBskyActorGetProfiles.Response)
+
+
+class InternalBskyFeedNamespace(NamespaceBase):
+    def get_posts(
+        self,
+        params: t.Union[models.InternalBskyFeedGetPosts.Params, models.InternalBskyFeedGetPosts.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.InternalBskyFeedGetPosts.Response':
+        """Get post views for a list of posts (by AT-URI). Intended for internal service-to-service use.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.InternalBskyFeedGetPosts.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.InternalBskyFeedGetPosts.Params)
+        response = self._client.invoke_query(
+            'internal.bsky.feed.getPosts', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.InternalBskyFeedGetPosts.Response)
 
 
 class NetworkNamespace(NamespaceBase):
@@ -12511,6 +12599,35 @@ class ToolsOzoneHostingNamespace(NamespaceBase):
 
 
 class ToolsOzoneInboxNamespace(NamespaceBase):
+    def ack_push_notifications(
+        self,
+        data: t.Union[
+            models.ToolsOzoneInboxAckPushNotifications.Data, models.ToolsOzoneInboxAckPushNotifications.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneInboxAckPushNotifications.Response':
+        """Ack push notifications.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneInboxAckPushNotifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ToolsOzoneInboxAckPushNotifications.Data)
+        response = self._client.invoke_procedure(
+            'tools.ozone.inbox.ackPushNotifications',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneInboxAckPushNotifications.Response)
+
     def appeal_actioned_subject(
         self,
         data: t.Union[
@@ -12539,6 +12656,37 @@ class ToolsOzoneInboxNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ToolsOzoneInboxDefs.SubjectView)
+
+    def claim_push_notifications(
+        self,
+        data: t.Optional[
+            t.Union[
+                models.ToolsOzoneInboxClaimPushNotifications.Data, models.ToolsOzoneInboxClaimPushNotifications.DataDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneInboxClaimPushNotifications.Response':
+        """Claim push notifications.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneInboxClaimPushNotifications.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ToolsOzoneInboxClaimPushNotifications.Data)
+        response = self._client.invoke_procedure(
+            'tools.ozone.inbox.claimPushNotifications',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneInboxClaimPushNotifications.Response)
 
     def get_account_status(
         self,
@@ -12620,6 +12768,31 @@ class ToolsOzoneInboxNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ToolsOzoneInboxGetNotificationPreferences.Response)
+
+    def get_push_preference(
+        self,
+        params: t.Union[
+            models.ToolsOzoneInboxGetPushPreference.Params, models.ToolsOzoneInboxGetPushPreference.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneInboxGetPushPreference.Response':
+        """Get push preference.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneInboxGetPushPreference.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ToolsOzoneInboxGetPushPreference.Params)
+        response = self._client.invoke_query(
+            'tools.ozone.inbox.getPushPreference', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneInboxGetPushPreference.Response)
 
     def get_report(
         self,
@@ -12863,6 +13036,33 @@ class ToolsOzoneModerationNamespace(NamespaceBase):
             **kwargs,
         )
         return get_response_model(response, models.ToolsOzoneModerationDefs.ModEventView)
+
+    def emit_events(
+        self,
+        data: t.Union[models.ToolsOzoneModerationEmitEvents.Data, models.ToolsOzoneModerationEmitEvents.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneModerationEmitEvents.Response':
+        """Take a moderation action on multiple subjects at once. Each subject is processed independently; failures are listed in failedEvents. Only the listed event types are supported.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneModerationEmitEvents.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ToolsOzoneModerationEmitEvents.Data)
+        response = self._client.invoke_procedure(
+            'tools.ozone.moderation.emitEvents',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneModerationEmitEvents.Response)
 
     def get_account_preferences(
         self,
@@ -13467,7 +13667,7 @@ class ToolsOzoneReportNamespace(NamespaceBase):
         data: t.Union[models.ToolsOzoneReportCloseReports.Data, models.ToolsOzoneReportCloseReports.DataDict],
         **kwargs: t.Any,
     ) -> 'models.ToolsOzoneReportCloseReports.Response':
-        """Close eligible reports on a subject matching the given criteria, optionally linking an existing moderation action. Assigned, escalated, and actively assigned reports are excluded. Reports whose current status does not permit a transition to closed are skipped silently.
+        """Close eligible reports on a subject matching the given criteria, optionally linking an existing moderation action. Assigned, escalated, and actively assigned reports are excluded unless explicitly targeted by reportId. Reports whose current status does not permit a transition to closed are skipped silently.
 
         Args:
             data: Input data.
@@ -13641,6 +13841,33 @@ class ToolsOzoneReportNamespace(NamespaceBase):
         )
         return get_response_model(response, models.ToolsOzoneReportDefs.ReportView)
 
+    def get_stat_group_details(
+        self,
+        params: t.Optional[
+            t.Union[
+                models.ToolsOzoneReportGetStatGroupDetails.Params, models.ToolsOzoneReportGetStatGroupDetails.ParamsDict
+            ]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportGetStatGroupDetails.Response':
+        """Get additional details for a stat group. Omit all group selectors for aggregate details.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportGetStatGroupDetails.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ToolsOzoneReportGetStatGroupDetails.Params)
+        response = self._client.invoke_query(
+            'tools.ozone.report.getStatGroupDetails', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ToolsOzoneReportGetStatGroupDetails.Response)
+
     def list_activities(
         self,
         params: t.Union[models.ToolsOzoneReportListActivities.Params, models.ToolsOzoneReportListActivities.ParamsDict],
@@ -13688,6 +13915,35 @@ class ToolsOzoneReportNamespace(NamespaceBase):
             'tools.ozone.report.queryActivities', params=params_model, output_encoding='application/json', **kwargs
         )
         return get_response_model(response, models.ToolsOzoneReportQueryActivities.Response)
+
+    def query_moderator_activity(
+        self,
+        params: t.Union[
+            models.ToolsOzoneReportQueryModeratorActivity.Params,
+            models.ToolsOzoneReportQueryModeratorActivity.ParamsDict,
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ToolsOzoneReportQueryModeratorActivity.Response':
+        """Read authorized moderator events and report activity in one chronological history.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ToolsOzoneReportQueryModeratorActivity.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ToolsOzoneReportQueryModeratorActivity.Params)
+        response = self._client.invoke_query(
+            'tools.ozone.report.queryModeratorActivity',
+            params=params_model,
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ToolsOzoneReportQueryModeratorActivity.Response)
 
     def query_reports(
         self,

@@ -46,6 +46,9 @@ class PostView(base.ModelBase):
     reply_count: t.Optional[int] = None  #: Reply count.
     repost_count: t.Optional[int] = None  #: Repost count.
     threadgate: t.Optional['models.AppBskyFeedDefs.ThreadgateView'] = None  #: Threadgate.
+    view_count: t.Optional[int] = (
+        None  #: Approximate number of times the post has been viewed. Only included in authenticated responses to the post's author when eligible to see the count. Counts less than 100 are omitted.
+    )
     viewer: t.Optional['models.AppBskyFeedDefs.ViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.feed.defs#postView'] = Field(
