@@ -29,6 +29,12 @@ Moderation events, reports, and subject state.
 
       Take a moderation action on an actor.
 
+   .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` emitEvents
+      :link: /models/tools/ozone/moderation/emitEvents
+      :link-type: doc
+
+      Take a moderation action on multiple subjects at once.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAccountPreferences
       :link: /models/tools/ozone/moderation/getAccountPreferences
       :link-type: doc
@@ -120,6 +126,7 @@ Moderation events, reports, and subject state.
    cancelScheduledActions </models/tools/ozone/moderation/cancelScheduledActions>
    defs </models/tools/ozone/moderation/defs>
    emitEvent </models/tools/ozone/moderation/emitEvent>
+   emitEvents </models/tools/ozone/moderation/emitEvents>
    getAccountPreferences </models/tools/ozone/moderation/getAccountPreferences>
    getAccountTimeline </models/tools/ozone/moderation/getAccountTimeline>
    getEvent </models/tools/ozone/moderation/getEvent>

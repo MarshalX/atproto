@@ -41,8 +41,11 @@ class Data(base.DataModelBase):
     meta: t.Optional['UnknownInputType'] = (
         None  #: Optional metadata for the report activities. Lifecycle and resolution fields are controlled by the service.
     )
+    report_id: te.Annotated[t.Optional[int], Field(ge=1)] = (
+        None  #: An explicitly targeted report in the requested subject scope. It is included even if assigned, escalated, or not in reportTypes; excludedReportTypes still applies.
+    )
     report_types: t.Optional[t.List[str]] = (
-        None  #: If nonempty, only reports of the given report types (fully qualified reason NSIDs) are closed. When omitted or empty, all eligible reports in the requested subject scope are targeted, except excludedReportTypes. Assigned and escalated reports are always excluded.
+        None  #: If nonempty, eligible reports of the given report types (fully qualified reason NSIDs) are closed, in addition to reportId. When omitted or empty, all eligible reports in the requested subject scope are targeted, except excludedReportTypes. Assigned, escalated, and actively assigned reports are excluded unless explicitly targeted by reportId.
     )
 
 
@@ -68,9 +71,12 @@ class DataDict(t.TypedDict):
     meta: te.NotRequired[
         t.Optional['UnknownInputType']
     ]  #: Optional metadata for the report activities. Lifecycle and resolution fields are controlled by the service.
+    report_id: te.NotRequired[
+        t.Optional[int]
+    ]  #: An explicitly targeted report in the requested subject scope. It is included even if assigned, escalated, or not in reportTypes; excludedReportTypes still applies.
     report_types: te.NotRequired[
         t.Optional[t.List[str]]
-    ]  #: If nonempty, only reports of the given report types (fully qualified reason NSIDs) are closed. When omitted or empty, all eligible reports in the requested subject scope are targeted, except excludedReportTypes. Assigned and escalated reports are always excluded.
+    ]  #: If nonempty, eligible reports of the given report types (fully qualified reason NSIDs) are closed, in addition to reportId. When omitted or empty, all eligible reports in the requested subject scope are targeted, except excludedReportTypes. Assigned, escalated, and actively assigned reports are excluded unless explicitly targeted by reportId.
 
 
 class Response(base.ResponseModelBase):

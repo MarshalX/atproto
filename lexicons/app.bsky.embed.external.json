@@ -26,7 +26,19 @@
     "view": {
       "type": "object",
       "required": ["external"],
-      "properties": { "external": { "type": "ref", "ref": "#viewExternal" } }
+      "properties": {
+        "external": { "type": "ref", "ref": "#viewExternal" },
+        "data": {
+          "type": "union",
+          "refs": [
+            "#viewArticle",
+            "#viewArticlePublication",
+            "#viewGallery",
+            "#viewLivestream"
+          ],
+          "description": "Hydrated modality-specific data for the external embed, when available."
+        }
+      }
     },
     "viewExternal": {
       "type": "object",
@@ -92,7 +104,7 @@
     },
     "viewExternalSourceTheme": {
       "type": "object",
-      "description": "The theme colors of an external source, such as a standard.site publication. These colors may be used when rendering an embed from that source.",
+      "description": "The theme colors of an external source, such as a site.standard.publication. These colors may be used when rendering an embed from that source.",
       "properties": {
         "backgroundRGB": { "type": "ref", "ref": "#colorRGB" },
         "foregroundRGB": { "type": "ref", "ref": "#colorRGB" },
@@ -114,6 +126,11 @@
       "type": "object",
       "required": ["uri", "title", "description"],
       "properties": {
+        "providerId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Best-effort provider domain for cosmetic attribution, such as pckt.blog. Not verified provenance."
+        },
         "uri": { "type": "string", "format": "uri" },
         "title": { "type": "string" },
         "description": { "type": "string" },
@@ -137,6 +154,7 @@
         "image": { "type": "string", "format": "uri" },
         "publisher": { "type": "ref", "ref": "#viewArticlePublication" },
         "readingTime": { "type": "integer", "minimum": 1 },
+        "viewer": { "type": "ref", "ref": "#viewArticleViewerState" },
         "likeCount": { "type": "integer", "minimum": 0 },
         "likers": {
           "type": "array",
@@ -149,10 +167,26 @@
         }
       }
     },
+    "viewArticleViewerState": {
+      "type": "object",
+      "description": "Metadata about the requesting account's relationship with the subject article. Only has meaningful content for authed requests.",
+      "properties": {
+        "like": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "The requesting account's site.standard.graph.recommend record for this article, if recommended."
+        }
+      }
+    },
     "viewArticlePublication": {
       "type": "object",
       "required": ["uri", "title", "description"],
       "properties": {
+        "providerId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Best-effort provider domain for cosmetic attribution, such as pckt.blog. Not verified provenance."
+        },
         "uri": { "type": "string", "format": "uri" },
         "title": { "type": "string" },
         "description": { "type": "string" },
@@ -176,6 +210,10 @@
         "logo": { "type": "string", "format": "uri" },
         "image": { "type": "string", "format": "uri" },
         "theme": { "type": "ref", "ref": "#viewArticlePublicationTheme" },
+        "viewer": {
+          "type": "ref",
+          "ref": "#viewArticlePublicationViewerState"
+        },
         "subscriptionCount": { "type": "integer", "minimum": 0 },
         "subscribers": {
           "type": "array",
@@ -185,10 +223,6 @@
             "type": "ref",
             "ref": "app.bsky.actor.defs#profileViewBasic"
           }
-        },
-        "viewer": {
-          "type": "ref",
-          "ref": "#viewArticlePublicationViewerState"
         }
       }
     },
@@ -228,6 +262,11 @@
       "type": "object",
       "required": ["uri", "title", "description", "items"],
       "properties": {
+        "providerId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Best-effort provider domain for cosmetic attribution, such as grain.social. Not verified provenance."
+        },
         "uri": { "type": "string", "format": "uri" },
         "title": { "type": "string" },
         "description": { "type": "string" },
@@ -258,6 +297,7 @@
           "minimum": 0,
           "description": "Total number of gallery item backlinks, independent of the items included in this view."
         },
+        "viewer": { "type": "ref", "ref": "#viewGalleryViewerState" },
         "likeCount": { "type": "integer", "minimum": 0 },
         "likers": {
           "type": "array",
@@ -267,6 +307,17 @@
             "type": "ref",
             "ref": "app.bsky.actor.defs#profileViewBasic"
           }
+        }
+      }
+    },
+    "viewGalleryViewerState": {
+      "type": "object",
+      "description": "Metadata about the requesting account's relationship with the subject gallery. Only has meaningful content for authed requests.",
+      "properties": {
+        "like": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "The requesting account's social.grain.favorite record for this gallery, if favorited."
         }
       }
     },
@@ -298,6 +349,11 @@
       "type": "object",
       "required": ["uri", "title", "description", "active"],
       "properties": {
+        "providerId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Best-effort provider domain for cosmetic attribution, such as stream.place. Not verified provenance."
+        },
         "uri": { "type": "string", "format": "uri" },
         "title": { "type": "string" },
         "description": { "type": "string" },

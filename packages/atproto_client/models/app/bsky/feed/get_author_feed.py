@@ -26,6 +26,7 @@ class Params(base.ParamsModelBase):
         t.Union[
             t.Literal[
                 'posts_with_replies',
+                'posts_and_replies_only',
                 'posts_no_replies',
                 'posts_with_media',
                 'posts_and_author_threads',
@@ -33,7 +34,7 @@ class Params(base.ParamsModelBase):
             ],
             str,
         ]
-    ] = 'posts_with_replies'  #: Combinations of post/repost types to include in response.
+    ] = 'posts_with_replies'  #: Combinations of post/repost types to include in response. The posts_and_replies_only filter includes authored top-level posts and replies, but excludes reposts.
     include_pins: t.Optional[bool] = False  #: Include pins.
     limit: te.Annotated[t.Optional[int], Field(ge=1, le=100)] = None  #: Limit.
 
@@ -46,6 +47,7 @@ class ParamsDict(t.TypedDict):
             t.Union[
                 t.Literal[
                     'posts_with_replies',
+                    'posts_and_replies_only',
                     'posts_no_replies',
                     'posts_with_media',
                     'posts_and_author_threads',
@@ -54,7 +56,7 @@ class ParamsDict(t.TypedDict):
                 str,
             ]
         ]
-    ]  #: Combinations of post/repost types to include in response.
+    ]  #: Combinations of post/repost types to include in response. The posts_and_replies_only filter includes authored top-level posts and replies, but excludes reposts.
     include_pins: te.NotRequired[t.Optional[bool]]  #: Include pins.
     limit: te.NotRequired[t.Optional[int]]  #: Limit.
 

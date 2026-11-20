@@ -171,17 +171,11 @@ class AnnouncementBanner(base.ModelBase):
 class AppCard(base.ModelBase):
     """Definition model for :obj:`app.bsky.unspecced.getAtmosphereExploreTab`."""
 
-    app_store_url: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
-        None  #: Optional link to the app on the Apple App Store.
-    )
     background_image: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
         None  #: The profile banner when available, otherwise the editorial background image.
     )
     category: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Category.
     description: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Description.
-    google_play_url: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
-        None  #: Optional link to the app on Google Play.
-    )
     id: te.Annotated[t.Optional[str], Field(max_length=4096)] = None  #: Id.
     logo: te.Annotated[t.Optional[string_formats.Uri], Field(max_length=4096)] = (
         None  #: The profile avatar when available, otherwise the editorial logo.
