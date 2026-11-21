@@ -51,13 +51,12 @@ class CAR:
         header, blocks = libipld.decode_car(data)
 
         roots = header.get('roots')
-        if isinstance(roots, list) and len(roots) and isinstance(roots[0], bytes):
+        if isinstance(roots, list) and len(roots) and isinstance(roots[0], CID):
             # The first element of the CAR roots metadata array must be the CID of the most relevant Commit object.
             # For a generic export, this is the current (most recent) commit.
             # Additional CIDs may also be present in the roots array, with (for now) undefined meaning or order.
-            root: CID = CID.from_decoded_bytes(roots[0])
+            root: CID = roots[0]
         else:
             raise InvalidCARFile('Invalid CAR file. Expected at least one root.')
 
-        blocks = {CID.from_decoded_bytes(cid): block for cid, block in blocks.items()}
         return cls(root=root, blocks=blocks)

@@ -2,6 +2,7 @@
 
 import libipld
 import pytest
+from atproto_core.cid import CID
 from atproto_subscription.exceptions import FrameDecodingError
 from atproto_subscription.frames import (
     ErrorFrame,
@@ -52,6 +53,19 @@ def test_bytearray_is_accepted() -> None:
 
     assert isinstance(frame, MessageFrame)
     assert frame.body['seq'] == 1
+
+
+def test_links_are_decoded_to_cids() -> None:
+    cid = CID('bafyreie5737gdxlw5i64vzichcalba3z2v5n6icifvx5xytvske7mr3hpm')
+    raw = libipld.encode_dag_cbor({'op': 1, 't': '#commit'}) + libipld.encode_dag_cbor(
+        {'commit': cid, 'blocks': b'\x00\x01'}
+    )
+    frame = Frame.from_bytes(raw)
+
+    assert isinstance(frame, MessageFrame)
+    assert isinstance(frame.body['commit'], CID)
+    assert frame.body['commit'] == cid
+    assert frame.body['blocks'] == b'\x00\x01'
 
 
 def test_message_frame_without_type() -> None:

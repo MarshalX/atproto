@@ -150,8 +150,7 @@ def test_blob_ref_to_bytes_representation() -> None:
     bytes_blob_ref = json_blob_ref.to_bytes_representation()
     assert bytes_blob_ref.is_bytes_representation
     assert not bytes_blob_ref.is_json_representation
-    assert bytes_blob_ref.ref == json_blob_ref.ref.link
-    assert bytes_blob_ref.ref == plain_cid
+    assert bytes_blob_ref.ref == CID(plain_cid)
 
     bytes_blob_ref2 = BlobRef(
         mime_type='text/plain',
@@ -242,3 +241,13 @@ def test_record_with_a_cbor_blob_dumps_to_json() -> None:
     dumped = json.loads(record.model_dump_json())
 
     assert dumped['embed']['images'][0]['image']['ref'] == {'$link': _RAW_CID_STR}
+
+
+def test_blob_ref_from_decoded_cbor_cid() -> None:
+    blob = BlobRef(mime_type='image/jpeg', size=1234, ref=CID(_RAW_CID_BYTES))
+
+    assert blob.is_bytes_representation
+    assert blob.cid == CID(_RAW_CID_STR)
+    assert get_model_as_dict(blob)['ref'] == CID(_RAW_CID_BYTES)
+    assert json.loads(blob.model_dump_json())['ref'] == {'$link': _RAW_CID_STR}
+    assert blob.to_json_representation().ref == IpldLink(link=_RAW_CID_STR)
