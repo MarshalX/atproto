@@ -2,7 +2,7 @@ import typing as t
 
 import typing_extensions as te
 from atproto_core.cid import CID
-from pydantic import BaseModel, ConfigDict, Field, field_serializer
+from pydantic import BaseModel, ConfigDict, Field, InstanceOf, field_serializer
 
 
 class IpldLink(BaseModel):
@@ -20,15 +20,15 @@ class BlobRef(BaseModel):
 
     mime_type: str = Field(validation_alias='mimeType', serialization_alias='mimeType')  #: Mime type.
     size: int  #: Size in bytes.
-    ref: t.Union[str, bytes, IpldLink]  #: CID.
+    ref: t.Union[InstanceOf[CID], IpldLink, str, bytes]  #: CID.
 
     py_type: te.Literal['blob'] = Field(default='blob', validation_alias='$type', serialization_alias='$type')
 
     @field_serializer('ref', when_used='json')
-    def _serialize_ref(self, ref: t.Union[str, bytes, IpldLink]) -> t.Union[str, t.Dict[str, str]]:
-        """Render a raw CID as the atproto JSON link. `model_dump` keeps the bytes as they are."""
-        if isinstance(ref, bytes):
-            return {'$link': str(CID.decode(ref))}
+    def _serialize_ref(self, ref: t.Union[CID, IpldLink, str, bytes]) -> t.Union[str, t.Dict[str, str]]:
+        """Render a binary CID as the atproto JSON link. `model_dump` keeps it as it is."""
+        if isinstance(ref, (CID, bytes)):
+            return {'$link': str(CID(ref))}
 
         if isinstance(ref, IpldLink):
             return {'$link': ref.link}
@@ -38,10 +38,10 @@ class BlobRef(BaseModel):
     @property
     def cid(self) -> 'CID':
         """Get CID."""
-        if isinstance(self.ref, (str, bytes)):
-            return CID.decode(self.ref)
+        if isinstance(self.ref, IpldLink):
+            return CID(self.ref.link)
 
-        return CID.decode(self.ref.link)
+        return CID(self.ref)
 
     @property
     def is_json_representation(self) -> bool:
@@ -59,7 +59,7 @@ class BlobRef(BaseModel):
         Returns:
             True if it is bytes representation.
         """
-        return isinstance(self.ref, (str, bytes))
+        return not isinstance(self.ref, IpldLink)
 
     def to_json_representation(self) -> 'BlobRef':
         """Get JSON representation.
@@ -90,7 +90,7 @@ class BlobRef(BaseModel):
         Returns:
             BlobRef in bytes representation.
         """
-        if isinstance(self.ref, (str, bytes)):
-            return BlobRef(mime_type=self.mime_type, size=self.size, ref=self.ref)
+        if isinstance(self.ref, IpldLink):
+            return BlobRef(mime_type=self.mime_type, size=self.size, ref=CID(self.ref.link))
 
-        return BlobRef(mime_type=self.mime_type, size=self.size, ref=self.ref.link)
+        return BlobRef(mime_type=self.mime_type, size=self.size, ref=self.ref)

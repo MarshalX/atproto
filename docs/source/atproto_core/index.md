@@ -10,7 +10,7 @@ You reach for it when you are handling protocol data rather than calling a metho
 : Content Addressable aRchive. Repository exports and firehose commit blocks are CAR files. [from_bytes](#atproto_core.car.CAR.from_bytes) decodes one into [root](#atproto_core.car.CAR.root), the CID of the commit, and [blocks](#atproto_core.car.CAR.blocks), a mapping of CID to raw record data.
 
 [CID](#atproto_core.cid.CID)
-: Content Identifier. Hashable and comparable, and decoded lazily, so code that only compares or stringifies CIDs never pays for the multihash.
+: Content Identifier, the `CID` type of [libipld](https://github.com/MarshalX/python-libipld). DAG-CBOR links decode to it. Equal only to another `CID`: compare with a string as `cid == CID(s)`.
 
 [NSID](#atproto_core.nsid.NSID)
 : NameSpaced ID, the reverse-domain identifier of every lexicon (`app.bsky.feed.post`). [validate_nsid](#atproto_core.nsid.validate_nsid) checks one without building it.

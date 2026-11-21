@@ -8,7 +8,7 @@ def test_car() -> None:
     expected_root = 'bafyreidjkjjuzhkept4ob2jevrsgua3kg5u3h23vlqi23ouhfz4m5qu7se'
 
     car = CAR.from_bytes(bytes.fromhex(car_bytes))
-    assert expected_root == car.root
+    assert str(car.root) == expected_root
     assert len(car.blocks) == 0
 
 
