@@ -1,0 +1,93 @@
+[
+    {
+        "name": "too big positive integer - serialize",
+        "header_type": "item",
+        "expected": [1000000000000000, []],
+        "must_fail": true
+    },
+    {
+        "name": "too big negative integer - serialize",
+        "header_type": "item",
+        "expected": [-1000000000000000, []],
+        "must_fail": true
+    },
+    {
+        "name": "too big positive decimal - serialize",
+        "header_type": "item",
+        "expected": [1000000000000.1, []],
+        "must_fail": true
+    },
+    {
+        "name": "too big negative decimal - serialize",
+        "header_type": "item",
+        "expected": [-1000000000000.1, []],
+        "must_fail": true
+    },
+    {
+        "name": "decimal rounds up to too many integer digits - serialize",
+        "header_type": "item",
+        "expected": [999999999999.9996, []],
+        "must_fail": true
+    },
+    {
+        "name": "decimal with 12 integer digits and no rounding - serialize",
+        "header_type": "item",
+        "expected": [999999999999.999, []],
+        "canonical": ["999999999999.999"]
+    },
+    {
+        "name": "round positive odd decimal - serialize",
+        "header_type": "item",
+        "expected": [0.0015, []],
+        "canonical": ["0.002"]
+    },
+    {
+        "name": "round positive even decimal - serialize",
+        "header_type": "item",
+        "expected": [0.0025, []],
+        "canonical": ["0.002"]
+    },
+    {
+        "name": "round negative odd decimal - serialize",
+        "header_type": "item",
+        "expected": [-0.0015, []],
+        "canonical": ["-0.002"]
+    },
+    {
+        "name": "round negative even decimal - serialize",
+        "header_type": "item",
+        "expected": [-0.0025, []],
+        "canonical": ["-0.002"]
+    },
+    {
+        "name": "decimal round up to integer part - serialize",
+        "header_type": "item",
+        "expected": [9.9995, []],
+        "canonical": ["10.0"]
+    },
+    {
+        "name": "round tie to even, below the midpoint as a float - serialize",
+        "header_type": "item",
+        "expected": [0.5015, []],
+        "canonical": ["0.502"]
+    },
+    {
+        "name": "round negative tie to even, below the midpoint as a float - serialize",
+        "header_type": "item",
+        "expected": [-0.5015, []],
+        "canonical": ["-0.502"]
+    },
+    {
+        "name": "round tie to even, second below-midpoint witness - serialize",
+        "header_type": "item",
+        "expected": [0.5035, []],
+        "canonical": ["0.504"]
+    },
+    {
+        "name": "round tie to even, above the midpoint as a float - serialize",
+        "header_type": "item",
+        "expected": [2.0005, []],
+        "canonical": ["2.0"]
+    }
+]
+

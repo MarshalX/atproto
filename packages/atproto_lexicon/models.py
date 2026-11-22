@@ -30,6 +30,8 @@ class LexDefinitionType:
     PERMISSION: te.Final = 'permission'
     PERMISSION_SET: te.Final = 'permission-set'
 
+    SPACE: te.Final = 'space'
+
 
 class LexPrimitiveType:
     BOOLEAN: te.Final = 'boolean'
@@ -47,9 +49,20 @@ _RECORD_KEY_LITERAL_PREFIX = 'literal:'
 _RECORD_KEY_REGEX = re.compile(r'^[a-zA-Z0-9._:~-]{1,512}$')
 _RECORD_KEY_FORBIDDEN = frozenset({'.', '..'})
 
+_SPACE_TITLE_MAX_LEN = 64
+
 _DEF_NAME_FORBIDDEN_CHARS = ('#', '.')
 _ENCODING_FORBIDDEN_CHARS = (',', ';', ' ')
 _MAIN_DEF_NAME = 'main'
+
+
+def _is_record_key_type(key: str) -> bool:
+    if key in _RECORD_KEY_TYPES:
+        return True
+
+    literal = key[len(_RECORD_KEY_LITERAL_PREFIX) :]
+    is_literal = key.startswith(_RECORD_KEY_LITERAL_PREFIX)
+    return is_literal and bool(_RECORD_KEY_REGEX.fullmatch(literal)) and literal not in _RECORD_KEY_FORBIDDEN
 
 
 def _check_listed_properties(listed: t.Optional[t.List[str]], properties: t.Dict[str, t.Any], field: str) -> None:
@@ -207,12 +220,7 @@ class LexRecord(LexDefinitionBase):
     @field_validator('key')
     @classmethod
     def _check_key(cls, key: str) -> str:
-        if key in _RECORD_KEY_TYPES:
-            return key
-
-        literal = key[len(_RECORD_KEY_LITERAL_PREFIX) :]
-        is_literal = key.startswith(_RECORD_KEY_LITERAL_PREFIX)
-        if not is_literal or not _RECORD_KEY_REGEX.match(literal) or literal in _RECORD_KEY_FORBIDDEN:
+        if not _is_record_key_type(key):
             raise ValueError("Record key must be 'any', 'nsid', 'tid' or 'literal:<record key>'")
 
         return key
@@ -303,7 +311,43 @@ class LexPermissionSet(LexDefinitionBase):
     permissions: te.List[LexPermission]
 
 
-LexMainDefinition = (LexRecord, LexSubscription, LexXrpcQuery, LexXrpcProcedure, LexPermissionSet)
+class LexSpace(LexDefinitionBase):
+    type: te.Literal['space'] = Field(default=LexDefinitionType.SPACE, frozen=True)
+
+    key: str
+    title: t.Optional[str] = None
+    title_lang: t.Optional[LexLang] = Field(default=None, alias='title:lang')
+    collections: t.List[str]
+
+    @field_validator('key')
+    @classmethod
+    def _check_key(cls, key: str) -> str:
+        if not _is_record_key_type(key):
+            raise ValueError("Space key must be 'any', 'nsid', 'tid' or 'literal:<record key>'")
+
+        return key
+
+    @field_validator('title')
+    @classmethod
+    def _check_title(cls, title: t.Optional[str]) -> t.Optional[str]:
+        if title is not None and not 1 <= len(title.encode()) <= _SPACE_TITLE_MAX_LEN:
+            raise ValueError(f'Space title must be 1 to {_SPACE_TITLE_MAX_LEN} bytes long')
+
+        return title
+
+    @field_validator('collections')
+    @classmethod
+    def _check_collections(cls, collections: t.List[str]) -> t.List[str]:
+        for nsid in collections:
+            try:
+                validate_nsid(nsid)
+            except InvalidNsidError as e:
+                raise ValueError(f'Space collection must be a valid NSID: {e}') from e
+
+        return collections
+
+
+LexMainDefinition = (LexRecord, LexSubscription, LexXrpcQuery, LexXrpcProcedure, LexPermissionSet, LexSpace)
 """Definitions allowed only under the name ``main``."""
 
 LexDefinition = te.Annotated[
@@ -317,6 +361,7 @@ LexDefinition = te.Annotated[
         LexXrpcQuery,
         LexXrpcProcedure,
         LexPermissionSet,
+        LexSpace,
         LexBoolean,
         LexInteger,
         LexString,

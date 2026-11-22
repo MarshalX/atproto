@@ -1,0 +1,26 @@
+#######################################################################
+# THIS IS THE AUTO-GENERATED CODE. DON'T EDIT IT BY HANDS!
+# Copyright (C) 2023-2026 Ilya (Marshal) <https://github.com/MarshalX>.
+# This file is part of Python atproto SDK. Licenced under MIT.
+#######################################################################
+
+
+import typing as t
+
+from atproto_client.models import base, string_formats
+
+
+class Params(base.ParamsModelBase):
+    """Parameters model for :obj:`com.atproto.space.getDelegationToken`."""
+
+    space: string_formats.SpaceRef  #: Space.
+
+
+class ParamsDict(t.TypedDict):
+    space: string_formats.SpaceRef  #: Space.
+
+
+class Response(base.ResponseModelBase):
+    """Output data model for :obj:`com.atproto.space.getDelegationToken`."""
+
+    token: str  #: Token.

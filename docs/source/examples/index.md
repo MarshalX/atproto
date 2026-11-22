@@ -46,6 +46,13 @@ The same stream as plain JSON, filtered server-side, plus archive backfill.
 Log in from the command line with a loopback client and reuse the session.
 :::
 
+:::{grid-item-card} {octicon}`lock;1em;sd-mr-1` Spaces
+:link: spaces
+:link-type: doc
+
+Keep private bookmarks in a personal space. In alpha.
+:::
+
 ::::
 
 Two more live elsewhere because they need their surrounding prose:
@@ -62,4 +69,5 @@ advanced
 firehose
 jetstream
 oauth
+spaces
 ```

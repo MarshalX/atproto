@@ -2,9 +2,9 @@ import re
 import typing as t
 from dataclasses import dataclass
 
+from atproto_core._effects import Flow, call, run_flow, run_flow_async
 from atproto_core.exceptions import AtProtocolError
 
-from atproto_oauth._effects import Flow, call, run_flow, run_flow_async
 from atproto_oauth.exceptions import OAuthError, OAuthResolverError
 from atproto_oauth.metadata import AuthServerMetadata, get_issuer_from_protected_resource_metadata
 from atproto_oauth.security import AsyncHttpClient, HttpClient, HttpResponse, ensure_safe_url, get_origin

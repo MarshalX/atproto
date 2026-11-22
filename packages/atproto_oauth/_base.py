@@ -1,15 +1,14 @@
 import contextlib
 import random
-import threading
 import time
 import typing as t
 from dataclasses import dataclass
 
 import typing_extensions as te
+from atproto_core._effects import Flow, Sleep, call
 from atproto_crypto.jwk import generate_p256_jwk
 
 from atproto_oauth import _flow
-from atproto_oauth._effects import Flow, Sleep, call
 from atproto_oauth.dpop import DpopKey, NonceCache, generate_nonce, is_auth_server_nonce_error
 from atproto_oauth.exceptions import (
     AuthMethodUnsatisfiableError,
@@ -45,7 +44,6 @@ DEFAULT_MAX_PENDING_AUTHORIZATIONS: t.Final = 10_000
 CONCURRENT_REFRESH_DELAY: t.Final = 1.0
 
 SessionT = t.TypeVar('SessionT')
-LockT = t.TypeVar('LockT')
 
 
 @dataclass(frozen=True)
@@ -73,33 +71,6 @@ class NewSession:
     @property
     def did(self) -> str:
         return self.data.token_set.sub
-
-
-class KeyedLocks(t.Generic[LockT]):
-    """One lock per key, dropped when nobody holds or waits for it."""
-
-    def __init__(self, lock_factory: t.Callable[[], LockT]) -> None:
-        self._lock_factory = lock_factory
-        self._guard = threading.Lock()
-        self._locks: t.Dict[str, t.Tuple[LockT, int]] = {}
-
-    def __len__(self) -> int:
-        return len(self._locks)
-
-    def enter(self, key: str) -> LockT:
-        with self._guard:
-            lock, holders = self._locks.get(key) or (self._lock_factory(), 0)
-            self._locks[key] = (lock, holders + 1)
-
-        return lock
-
-    def leave(self, key: str) -> None:
-        with self._guard:
-            lock, holders = self._locks[key]
-            if holders > 1:
-                self._locks[key] = (lock, holders - 1)
-            else:
-                del self._locks[key]
 
 
 def _as_list(value: t.Union[str, t.Sequence[str]]) -> t.List[str]:

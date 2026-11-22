@@ -48,15 +48,30 @@ class LexiconSource(t.NamedTuple):
 
     repo: str
     branch: str = _DEFAULT_BRANCH_NAME
-    subpath: str = ''  #: Restricts the fetch to a subtree of the repo's lexicons dir.
+    subpaths: t.Tuple[str, ...] = ('',)  #: Restricts the fetch to subtrees of the repo's lexicons dir.
     org: str = _ORG_NAME
     lexicons_dir: str = _LEXICONS_FOLDER_NAME
+    commit: str = ''  #: Pins the fetch to a commit instead of the head of the branch.
 
+
+#: Spaces lexicons live on a branch that upstream has not merged yet. Drop the pinned source once they reach main.
+_SPACES_COMMIT = 'b5fd12fa57b10cf068efa879812f558780f37109'
 
 _SOURCES = (
     LexiconSource(repo='atproto'),
     LexiconSource(repo='atproto', lexicons_dir='packages/bsky/lexicons'),
-    LexiconSource(repo='jetstream', subpath='network/'),
+    LexiconSource(repo='jetstream', subpaths=('network/',)),
+    LexiconSource(
+        repo='atproto',
+        branch='permissioned-data',
+        commit=_SPACES_COMMIT,
+        subpaths=(
+            'com/atproto/space/',
+            'com/atproto/memberspace/',
+            'com/atproto/managedspace/',
+            'com/atproto/personalspace/',
+        ),
+    ),
 )
 
 
@@ -79,18 +94,24 @@ def _build_last_commit_api_url(source: LexiconSource) -> str:
     return f'{_GITHUB_API_BASE_URL}/repos/{source.org}/{source.repo}/commits'
 
 
+def _build_last_commit_api_params(source: LexiconSource) -> t.Dict[str, t.Union[str, int]]:
+    params: t.Dict[str, t.Union[str, int]] = {'sha': source.commit or source.branch, 'per_page': 1}
+    if not source.commit:
+        subpath = source.subpaths[0] if len(source.subpaths) == 1 else ''
+        params['path'] = f'{source.lexicons_dir}/{subpath}'.rstrip('/')
+
+    return params
+
+
 def _build_src_download_url(source: LexiconSource) -> str:
-    return f'{_GITHUB_BASE_URL}/{source.org}/{source.repo}/archive/refs/heads/{source.branch}.zip'
+    ref = source.commit or f'refs/heads/{source.branch}'
+    return f'{_GITHUB_BASE_URL}/{source.org}/{source.repo}/archive/{ref}.zip'
 
 
 def _get_last_commit_info(source: LexiconSource) -> t.Tuple[str, str, str]:
     response = httpx.get(
         url=_build_last_commit_api_url(source),
-        params={
-            'path': f'{source.lexicons_dir}/{source.subpath}'.rstrip('/'),
-            'sha': source.branch,
-            'per_page': 1,
-        },
+        params=_build_last_commit_api_params(source),
         headers=_MANDATORY_REQUEST_HEADERS,
         timeout=5,
     )
@@ -117,11 +138,12 @@ def _download_zip_with_code(source: LexiconSource) -> BytesIO:
 
 
 def _build_valid_path_to_lexicons(source: LexiconSource) -> str:
-    return f'{source.repo}-{source.branch}/{source.lexicons_dir}/'
+    return f'{source.repo}-{source.commit or source.branch}/{source.lexicons_dir}/'
 
 
 def _validate_lexicon_path_prefix(path: str, source: LexiconSource) -> bool:
-    return path.startswith(f'{_build_valid_path_to_lexicons(source)}{source.subpath}')
+    path_to_lexicons = _build_valid_path_to_lexicons(source)
+    return path.startswith(tuple(f'{path_to_lexicons}{subpath}' for subpath in source.subpaths))
 
 
 ExtractedFiles = t.Dict[str, bytes]
@@ -151,18 +173,31 @@ def _extract_zip(zip_file: BytesIO, source: LexiconSource) -> ExtractedFiles:
 
 
 def _merge_extracted_lexicons(sources_files: t.List[t.Tuple[LexiconSource, ExtractedFiles]]) -> ExtractedFiles:
-    """Merge lexicons of all sources, rejecting any filename claimed by more than one."""
-    merged: ExtractedFiles = {}
-    owner_by_filename: t.Dict[str, str] = {}
+    """Merge lexicons of all sources, rejecting any filename claimed by more than one.
 
-    for source, files in sources_files:
+    A pinned source yields to an unpinned one, so the update keeps working once upstream merges the pinned branch.
+    """
+    merged: ExtractedFiles = {}
+    owner_by_filename: t.Dict[str, LexiconSource] = {}
+
+    # unpinned sources go first, so a pinned one finds its lexicons already taken
+    for source, files in sorted(sources_files, key=lambda item: bool(item[0].commit)):
+        providers: t.List[str] = []
         for filename, content in files.items():
             owner = owner_by_filename.get(filename)
-            if owner is not None:
-                raise RuntimeError(f'Lexicon {filename} is provided by both {owner} and {source.repo}')
+            if owner is None:
+                owner_by_filename[filename] = source
+                merged[filename] = content
+            elif source.commit and not owner.commit:
+                providers.append(owner.repo)
+            else:
+                raise RuntimeError(f'Lexicon {filename} is provided by both {owner.repo} and {source.repo}')
 
-            owner_by_filename[filename] = source.repo
-            merged[filename] = content
+        if providers:
+            _print(
+                f'- Dropped {_pluralize(len(providers), "lexicon")} of the pinned {source.repo}@{source.commit[:7]}, '
+                f'now provided by {", ".join(sorted(set(providers)))}; remove the pin'
+            )
 
     return merged
 
@@ -685,7 +720,8 @@ def main() -> None:
     sources_files = []
     revisions = []
     for source in _SOURCES:
-        _print(f'- Fetching lexicons from the latest commit of {source.repo}...')
+        ref = f'commit {source.commit[:7]}' if source.commit else 'the latest commit'
+        _print(f'- Fetching lexicons from {ref} of {source.repo}...')
         sha, commit_date, _ = _get_last_commit_info(source)
         revisions.append(SourceRevision(source=source, sha=sha, date=commit_date))
         sources_files.append((source, _extract_zip(_download_zip_with_code(source), source)))

@@ -35,11 +35,29 @@ Core AT Protocol: identities, repositories, servers, and sync.
 
       Lexicon schemas published as records.
 
+   .. grid-item-card:: :octicon:`plug;1em;sd-mr-1` managedspace
+      :link: /models/com/atproto/managedspace/index
+      :link-type: doc
+
+      Space policy that leaves access decisions to an external app.
+
+   .. grid-item-card:: :octicon:`people;1em;sd-mr-1` memberspace
+      :link: /models/com/atproto/memberspace/index
+      :link-type: doc
+
+      Space policy that grants access to the accounts on a member list.
+
    .. grid-item-card:: :octicon:`report;1em;sd-mr-1` moderation
       :link: /models/com/atproto/moderation/index
       :link-type: doc
 
       Moderation reports submitted by users.
+
+   .. grid-item-card:: :octicon:`person;1em;sd-mr-1` personalspace
+      :link: /models/com/atproto/personalspace/index
+      :link-type: doc
+
+      Space policy for the personal data of one account.
 
    .. grid-item-card:: :octicon:`repo;1em;sd-mr-1` repo
       :link: /models/com/atproto/repo/index
@@ -52,6 +70,12 @@ Core AT Protocol: identities, repositories, servers, and sync.
       :link-type: doc
 
       Accounts, sessions, invites, and app passwords.
+
+   .. grid-item-card:: :octicon:`shield-lock;1em;sd-mr-1` space
+      :link: /models/com/atproto/space/index
+      :link-type: doc
+
+      Spaces of permissioned data: records, policies, credentials, and sync.
 
    .. grid-item-card:: :octicon:`sync;1em;sd-mr-1` sync
       :link: /models/com/atproto/sync/index
@@ -73,8 +97,12 @@ Core AT Protocol: identities, repositories, servers, and sync.
    identity </models/com/atproto/identity/index>
    label </models/com/atproto/label/index>
    lexicon </models/com/atproto/lexicon/index>
+   managedspace </models/com/atproto/managedspace/index>
+   memberspace </models/com/atproto/memberspace/index>
    moderation </models/com/atproto/moderation/index>
+   personalspace </models/com/atproto/personalspace/index>
    repo </models/com/atproto/repo/index>
    server </models/com/atproto/server/index>
+   space </models/com/atproto/space/index>
    sync </models/com/atproto/sync/index>
    temp </models/com/atproto/temp/index>

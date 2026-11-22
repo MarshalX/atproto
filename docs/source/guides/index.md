@@ -114,6 +114,13 @@ Handles, DIDs, NSIDs, AT-URIs, TIDs, and how to turn on strict validation.
 Resolving handles and DIDs, DID documents, and caching the results.
 :::
 
+:::{grid-item-card} {octicon}`lock;1em;sd-mr-1` Spaces
+:link: spaces
+:link-type: doc
+
+Permissioned data: private records, group spaces, members, and syncing a space. In alpha.
+:::
+
 ::::
 
 ## Streaming the network
@@ -203,6 +210,7 @@ records-and-repos
 models
 string-formats
 identity
+spaces
 firehose
 jetstream
 error-handling

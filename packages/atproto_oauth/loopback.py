@@ -6,8 +6,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qsl, urlsplit
 
 import typing_extensions as te
+from atproto_core._effects import Flow, call, call_blocking
 
-from atproto_oauth._effects import Flow, call, call_blocking
 from atproto_oauth.exceptions import OAuthCallbackError
 from atproto_oauth.metadata import is_loopback_redirect_uri
 

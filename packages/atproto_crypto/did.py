@@ -13,6 +13,8 @@ from atproto_crypto.exceptions import IncorrectDidKeyPrefixError, IncorrectMulti
 from atproto_crypto.multibase import bytes_to_multibase, multibase_to_bytes
 
 if t.TYPE_CHECKING:
+    from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePrivateKey
+
     from atproto_crypto.algs.base_alg import AlgBase
 
 
@@ -194,3 +196,28 @@ def get_did_key(key_type: str, key: str) -> t.Optional[str]:
         did_key = format_did_key_multikey(key)
 
     return did_key
+
+
+def private_key_to_did_key(private_key: 'EllipticCurvePrivateKey') -> str:
+    """Get DID key of the public key of a P-256 private key.
+
+    Args:
+        private_key: P-256 private key.
+
+    Returns:
+        :obj:`str`: DID key.
+
+    Raises:
+        :obj:`UnsupportedKeyTypeError`: Unsupported key type.
+    """
+    # imported on use: `cryptography` is slow to import, and parsing DID documents does not need it
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric.ec import SECP256R1
+
+    if not isinstance(private_key.curve, SECP256R1):
+        raise UnsupportedKeyTypeError('Unsupported key type')
+
+    key_bytes = private_key.public_key().public_bytes(
+        encoding=serialization.Encoding.X962, format=serialization.PublicFormat.UncompressedPoint
+    )
+    return format_did_key(P256_JWT_ALG, key_bytes)

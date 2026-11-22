@@ -7,8 +7,9 @@ from functools import wraps
 from typing import Annotated, Callable, Union
 from urllib.parse import urlparse
 
-from atproto_core.exceptions import InvalidNsidError
+from atproto_core.exceptions import InvalidAtUriError, InvalidNsidError
 from atproto_core.nsid import validate_nsid as atproto_core_validate_nsid
+from atproto_core.uri import SpaceRef as AtProtoCoreSpaceRef
 from pydantic import BeforeValidator, Field, ValidationInfo
 from typing_extensions import Literal, TypeAliasType
 
@@ -59,6 +60,7 @@ AT_URI_RE = re.compile(
     r'(?:/(?!\.\.?(?:/|$))[A-Za-z0-9._:~-]+)?'  # Record key: must not be . or .. and must not be empty
     r')?$'
 )
+SPACE_AT_URI_RE = re.compile(r'^at://[^/]*/space(/|$)')
 
 
 def _is_strict(info: ValidationInfo) -> bool:
@@ -332,6 +334,8 @@ def validate_at_uri(v: str, _: ValidationInfo) -> str:
 
     - Optional /collection/record-key path
 
+    - Or a DID followed by /space/space-type/space-key and an optional /did/collection/record-key path
+
     - Max 8KB length
 
     - No query parameters or fragments
@@ -348,10 +352,51 @@ def validate_at_uri(v: str, _: ValidationInfo) -> str:
     if len(v) >= MAX_AT_URI_LENGTH:
         raise ValueError(f'Invalid AT-URI: must be under {MAX_AT_URI_LENGTH} chars')
 
+    if SPACE_AT_URI_RE.match(v):
+        try:
+            AtProtoCoreSpaceRef.from_uri(v)
+            return v
+        except InvalidAtUriError as e:
+            raise ValueError(f'Invalid AT-URI: {e}') from None
+
     if not AT_URI_RE.match(v):
         raise ValueError('Invalid AT-URI: invalid format')
 
     return v
+
+
+@only_validate_if_strict
+def validate_space_ref(v: str, _: ValidationInfo) -> str:
+    """Validate an AT Protocol space reference.
+
+    Must follow pattern:
+
+    - Starts with at://
+
+    - Contains DID
+
+    - Followed by /space/space-type/space-key path
+
+    - Space type is an NSID
+
+    - Space key follows the record key syntax
+
+    - No query parameters or fragments
+
+    Args:
+        v: The space reference to validate (e.g. at://did:plc:z72i7hdynmk6r22z27h6tvur/space/com.example.group/default)
+
+    Returns:
+        The validated space reference
+
+    Raises:
+        ValueError: If space reference format is invalid
+    """
+    try:
+        AtProtoCoreSpaceRef.from_str(v)
+        return v
+    except InvalidAtUriError as e:
+        raise ValueError(f'Invalid space reference: {e}') from None
 
 
 @only_validate_if_strict
@@ -529,9 +574,12 @@ RecordKey = TypeAliasType('RecordKey', Annotated[str, BeforeValidator(_NamedVali
 #: A content identifier.
 #: Validated by :func:`validate_cid` when ``strict_string_format=True``.
 Cid = TypeAliasType('Cid', Annotated[str, BeforeValidator(_NamedValidator(validate_cid))])
-#: An ``at://`` URI addressing a repository, collection, or record.
+#: An ``at://`` URI addressing a repository, collection, record, or space.
 #: Validated by :func:`validate_at_uri` when ``strict_string_format=True``.
 AtUri = TypeAliasType('AtUri', Annotated[str, BeforeValidator(_NamedValidator(validate_at_uri))])
+#: A reference to a space, such as ``at://did:plc:z72i7hdynmk6r22z27h6tvur/space/com.example.group/default``.
+#: Validated by :func:`validate_space_ref` when ``strict_string_format=True``.
+SpaceRef = TypeAliasType('SpaceRef', Annotated[str, BeforeValidator(_NamedValidator(validate_space_ref))])
 # see https://github.com/python-pendulum/pendulum/issues/844
 #: An ISO 8601 timestamp.
 #: Validated by :func:`validate_datetime` when ``strict_string_format=True``.
@@ -551,7 +599,7 @@ AtIdentifier = TypeAliasType('AtIdentifier', Union[Handle, Did])
 AtProtoString = TypeAliasType(
     'AtProtoString',
     Annotated[
-        Union[Handle, Did, Nsid, AtUri, Cid, DateTime, Tid, RecordKey, Uri, Language],
+        Union[Handle, Did, Nsid, AtUri, SpaceRef, Cid, DateTime, Tid, RecordKey, Uri, Language],
         Field(description='ATProto string format'),
     ],
 )

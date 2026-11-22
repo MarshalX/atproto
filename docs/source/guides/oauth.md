@@ -197,7 +197,13 @@ full_app = IncludeScope(models.ids.AppBskyAuthFullApp, aud='did:web:api.bsky.app
 scope = f'atproto {full_app}'
 ```
 
-`transition:generic` grants roughly what an app password does. The protocol marks it as transitional; prefer granular permissions in new applications.
+Access to [Spaces](spaces.md) is granted by `space:` permissions, by space type and authority. The [Spaces guide](spaces.md#scopes) lists what each form grants:
+
+```python
+scope = 'atproto space:com.example.forum?authority=*&action=read'
+```
+
+`transition:generic` grants roughly what an app password does, and no access to spaces. The protocol marks it as transitional; prefer granular permissions in new applications.
 
 The user may approve less than you asked for. Check what was granted instead of assuming:
 
@@ -206,7 +212,12 @@ if session.permissions.allows_repo(collection=models.ids.AppBskyFeedPost, action
     ...
 ```
 
-[permissions](#atproto_oauth.OAuthSession.permissions) understands both granular permissions and the transitional scopes.
+[permissions](#atproto_oauth.OAuthSession.permissions) understands both granular permissions and the transitional scopes. A space is checked by its type, authority and key:
+
+```python
+if session.permissions.allows_space('com.example.forum', 'did:plc:abc', 'general', action='read'):
+    ...
+```
 
 [login_oauth](#atproto_client.client.client.Client.login_oauth) does not fetch the profile of the account, because a narrow scope does not cover `app.bsky.actor.getProfile`. Pass `fetch_bsky_profile=True` if yours does. Without a profile, `client.me` is `None`; methods such as `send_post` use the DID of the session.
 

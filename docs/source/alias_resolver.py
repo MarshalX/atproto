@@ -35,6 +35,7 @@ _GLOBAL_ALIASES_DB = {
     'string_formats.validate_language': 'atproto_client.models.string_formats.validate_language',
     'string_formats.validate_nsid': 'atproto_client.models.string_formats.validate_nsid',
     'string_formats.validate_record_key': 'atproto_client.models.string_formats.validate_record_key',
+    'string_formats.validate_space_ref': 'atproto_client.models.string_formats.validate_space_ref',
     'string_formats.validate_tid': 'atproto_client.models.string_formats.validate_tid',
     'string_formats.validate_uri': 'atproto_client.models.string_formats.validate_uri',
 }

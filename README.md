@@ -105,6 +105,7 @@ The documentation is live at [atproto.blue](https://atproto.blue/).
 | 🪐 [Atmosphere lexicons](https://lex.atproto.blue)                                                                             | Third-party lexicons, generated ahead of time      |
 | 🛠 [The `atp` CLI](https://atproto.blue/en/latest/cli/)                                                                        | The code generator's command line                  |
 | 🔐 [OAuth](https://atproto.blue/en/latest/guides/oauth/)                                                                       | Log users in without their password                |
+| 🔒 [Spaces](https://atproto.blue/en/latest/guides/spaces/)                                                                     | Permissioned data: private and group records       |
 | 💬 [Direct messages](https://atproto.blue/en/latest/guides/direct-messages/)                                                   | Chats, messages, and reactions                     |
 | 🔥 [Firehose](https://atproto.blue/en/latest/guides/firehose/) & [Jetstream](https://atproto.blue/en/latest/guides/jetstream/) | Data streaming from the whole network              |
 | 🌐 [Identity](https://atproto.blue/en/latest/guides/identity/)                                                                 | DID and handle resolvers                           |
@@ -131,6 +132,7 @@ The SDK is built upon the following components:
 | `atproto_lexicon`      | Lexicon parser.                                                             |
 | `atproto_oauth`        | OAuth client with PAR, PKCE, DPoP, scopes and session storage.              |
 | `atproto_server`       | Server-side utils like JWT.                                                 |
+| `atproto_space`        | Spaces (permissioned data) client, in alpha.                                |
 | `atproto_subscription` | Websocket subscription runtime behind the streaming clients.                |
 
 I highly recommend that you use the `atproto` package to import everything that you need. It contains shortcuts to all other packages.

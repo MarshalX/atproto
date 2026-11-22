@@ -19,3 +19,7 @@ def test_nsid_validation_with_valid(nsid: str) -> None:
 @pytest.mark.parametrize('nsid', get_test_cases('nsid_syntax_invalid.txt'))
 def test_nsid_validation_with_invalid(nsid: str) -> None:
     assert validate_nsid(nsid, soft_fail=True) is False
+
+
+def test_nsid_validation_with_trailing_line_break() -> None:
+    assert validate_nsid('com.example.foo\n', soft_fail=True) is False

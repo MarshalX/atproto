@@ -3,6 +3,7 @@ import typing as t
 from dataclasses import dataclass
 
 from atproto_core.nsid import validate_nsid
+from atproto_core.uri.space import is_did, is_record_key
 
 from atproto_oauth.scopes._mime import is_accept, matches_any_accept
 from atproto_oauth.scopes._parser import ParamSchema, Parser
@@ -374,6 +375,176 @@ class IdentityPermission:
     @staticmethod
     def scope_needed_for(attr: str) -> str:
         return _identity_parser.format({'attr': attr})
+
+
+SPACE_ACTIONS: t.Tuple[str, ...] = ('read_self', 'read', 'create', 'update', 'delete')
+SPACE_MANAGE_OPERATIONS: t.Tuple[str, ...] = ('create', 'update', 'delete')
+
+# read already implies read_self
+_SPACE_DEFAULT_ACTIONS: t.Final = ('read', 'create', 'update', 'delete')
+_SPACE_READ_ACTIONS: t.Final = ('read_self', 'read')
+
+
+def _is_space_authority(value: str) -> bool:
+    return value in ('*', 'self') or is_did(value)
+
+
+def _is_space_key(value: str) -> bool:
+    return value == '*' or is_record_key(value)
+
+
+def _normalize_space_actions(value: t.Sequence[str]) -> t.List[str]:
+    return [action for action in SPACE_ACTIONS if action in value]
+
+
+def _normalize_space_manage_operations(value: t.Sequence[str]) -> t.List[str]:
+    return [operation for operation in SPACE_MANAGE_OPERATIONS if operation in value]
+
+
+_space_parser = Parser(
+    'space',
+    {
+        'spaceType': ParamSchema(
+            multiple=False,
+            required=True,
+            validate=_is_nsid_or_wildcard,
+        ),
+        'authority': ParamSchema(
+            multiple=False,
+            required=False,
+            validate=_is_space_authority,
+            default='self',
+        ),
+        'skey': ParamSchema(
+            multiple=False,
+            required=False,
+            validate=_is_space_key,
+            default='*',
+        ),
+        'collection': ParamSchema(
+            multiple=True,
+            required=False,
+            validate=_is_nsid_or_wildcard,
+            normalize=_normalize_collections,
+        ),
+        'action': ParamSchema(
+            multiple=True,
+            required=False,
+            validate=_known_values_validator(frozenset(SPACE_ACTIONS)),
+            default=list(_SPACE_DEFAULT_ACTIONS),
+            normalize=_normalize_space_actions,
+        ),
+        'manage': ParamSchema(
+            multiple=True,
+            required=False,
+            validate=_known_values_validator(frozenset(SPACE_MANAGE_OPERATIONS)),
+            normalize=_normalize_space_manage_operations,
+        ),
+    },
+    positional_name='spaceType',
+)
+
+
+@dataclass(frozen=True)
+class SpacePermission:
+    """Permission for operations on spaces and their records."""
+
+    space_type: str
+    authority: str
+    skey: str
+    collection: t.Optional[t.Tuple[str, ...]]
+    action: t.Tuple[str, ...]
+    manage: t.Optional[t.Tuple[str, ...]]
+
+    def matches(
+        self,
+        space_type: str,
+        authority: str,
+        skey: str,
+        action: t.Optional[str] = None,
+        collection: t.Optional[str] = None,
+        manage: t.Optional[str] = None,
+    ) -> bool:
+        if self.space_type not in ('*', space_type) or self.skey not in ('*', skey):
+            return False
+
+        # an authority of self matches nothing, as the authority of a space is always a DID
+        if self.authority not in ('*', authority):
+            return False
+
+        if action is None:
+            return self.manage is not None and manage in self.manage
+
+        # reads do not depend on the collection
+        if action in _SPACE_READ_ACTIONS:
+            return 'read' in self.action or action in self.action
+
+        return (
+            action in self.action
+            and self.collection is not None
+            and ('*' in self.collection or collection in self.collection)
+        )
+
+    def __str__(self) -> str:
+        values: t.Dict[str, t.Any] = {
+            'spaceType': self.space_type,
+            'authority': self.authority,
+            'skey': self.skey,
+            'action': list(self.action),
+        }
+        if self.collection is not None:
+            values['collection'] = list(self.collection)
+        if self.manage is not None:
+            values['manage'] = list(self.manage)
+
+        return _space_parser.format(values)
+
+    @classmethod
+    def from_string(cls, scope: str) -> t.Optional['SpacePermission']:
+        if not _is_scope_string_for(scope, 'space'):
+            return None
+
+        syntax = ScopeStringSyntax.from_string(scope)
+        return cls.from_syntax(syntax)
+
+    @classmethod
+    def from_syntax(cls, syntax: ScopeStringSyntax) -> t.Optional['SpacePermission']:
+        result = _space_parser.parse(syntax)
+        if result is None:
+            return None
+
+        collection = result['collection']
+        manage = result['manage']
+
+        return cls(
+            space_type=result['spaceType'],
+            authority=result['authority'],
+            skey=result['skey'],
+            collection=None if collection is None else tuple(collection),
+            action=tuple(result['action']),
+            manage=None if manage is None else tuple(manage),
+        )
+
+    @staticmethod
+    def scope_needed_for(
+        space_type: str,
+        authority: str,
+        skey: str,
+        action: t.Optional[str] = None,
+        collection: t.Optional[str] = None,
+        manage: t.Optional[str] = None,
+    ) -> str:
+        values: t.Dict[str, t.Any] = {'spaceType': space_type, 'authority': authority, 'skey': skey}
+        if manage is not None:
+            # the narrowest action, so that no broader permission is suggested
+            values['action'] = ['read_self']
+            values['manage'] = [manage]
+        else:
+            values['action'] = [action]
+            if action not in _SPACE_READ_ACTIONS:
+                values['collection'] = [collection]
+
+        return _space_parser.format(values)
 
 
 _include_parser = Parser(

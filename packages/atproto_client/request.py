@@ -67,7 +67,17 @@ def _parse_response(response: httpx.Response) -> Response:
     content = response.content
     content_type = response.headers.get('content-type')
     if content_type and 'application/json' in content_type.lower():
-        content = from_json(response.content)
+        try:
+            content = from_json(response.content)
+        except ValueError as e:
+            raise exceptions.RequestException(
+                Response(
+                    success=False,
+                    status_code=response.status_code,
+                    content=response.content,
+                    headers=_convert_headers_to_dict(response.headers),
+                )
+            ) from e
 
     return Response(
         success=True,
@@ -82,9 +92,8 @@ def _handle_request_errors(exception: Exception) -> None:
         raise exception
     except httpx.TimeoutException as e:
         raise exceptions.InvokeTimeoutError from e
-    except httpx.NetworkError as e:
+    except (httpx.HTTPError, httpx.InvalidURL) as e:
         raise exceptions.NetworkError from e
-    # TODO(MarshalX): add more exceptions
 
 
 def _handle_response(response: httpx.Response) -> httpx.Response:

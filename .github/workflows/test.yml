@@ -77,7 +77,7 @@ jobs:
         if: endsWith(matrix.python-version, 't')
         run: >
           poetry run python -W error::RuntimeWarning -c
-          "import sys, atproto, atproto_firehose, atproto_jetstream, cryptography.hazmat.bindings._rust;
+          "import sys, atproto, atproto_firehose, atproto_jetstream, blake3, cryptography.hazmat.bindings._rust;
           assert not sys._is_gil_enabled(), 'GIL is enabled'"
 
       - name: Run Tests.

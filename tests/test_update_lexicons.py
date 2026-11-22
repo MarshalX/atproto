@@ -11,10 +11,13 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from update_lexicons import (
     _SOURCES,
+    _SPACES_COMMIT,
     LexiconSource,
     SourceRevision,
     _build_body,
     _build_commit_message,
+    _build_last_commit_api_params,
+    _build_src_download_url,
     _build_title,
     _diff_lexicons,
     _extract_zip,
@@ -26,13 +29,46 @@ from update_lexicons import (
 
 _ATPROTO = LexiconSource(repo='atproto')
 _ATPROTO_BSKY = LexiconSource(repo='atproto', lexicons_dir='packages/bsky/lexicons')
-_JETSTREAM = LexiconSource(repo='jetstream', subpath='network/')
+_JETSTREAM = LexiconSource(repo='jetstream', subpaths=('network/',))
+_PINNED = LexiconSource(
+    repo='atproto',
+    branch='permissioned-data',
+    commit='b5fd12f' + '0' * 33,
+    subpaths=('com/atproto/space/', 'com/atproto/memberspace/'),
+)
 
 
 def test_jetstream_source_is_restricted_to_its_own_namespace() -> None:
     jetstream = next(source for source in _SOURCES if source.repo == 'jetstream')
 
-    assert jetstream.subpath == 'network/'
+    assert jetstream.subpaths == ('network/',)
+
+
+def test_spaces_lexicons_come_from_the_only_pinned_source() -> None:
+    pinned = [source for source in _SOURCES if source.commit]
+
+    assert [source.commit for source in pinned] == [_SPACES_COMMIT]
+    assert pinned[0].subpaths == (
+        'com/atproto/space/',
+        'com/atproto/memberspace/',
+        'com/atproto/managedspace/',
+        'com/atproto/personalspace/',
+    )
+
+
+def test_source_is_downloaded_from_the_branch_head_unless_pinned() -> None:
+    assert _build_src_download_url(_ATPROTO) == 'https://github.com/bluesky-social/atproto/archive/refs/heads/main.zip'
+    assert _build_src_download_url(_PINNED) == f'https://github.com/bluesky-social/atproto/archive/{_PINNED.commit}.zip'
+
+
+def test_last_commit_is_looked_up_under_the_lexicons_of_the_source() -> None:
+    assert _build_last_commit_api_params(_ATPROTO) == {'sha': 'main', 'per_page': 1, 'path': 'lexicons'}
+    assert _build_last_commit_api_params(_ATPROTO_BSKY)['path'] == 'packages/bsky/lexicons'
+    assert _build_last_commit_api_params(_JETSTREAM)['path'] == 'lexicons/network'
+
+
+def test_last_commit_of_a_pinned_source_is_the_pin_itself() -> None:
+    assert _build_last_commit_api_params(_PINNED) == {'sha': _PINNED.commit, 'per_page': 1}
 
 
 def test_nsid_path_is_flattened_into_the_filename() -> None:
@@ -74,6 +110,25 @@ def test_package_snapshot_lexicons_are_extracted_with_symlinks_resolved() -> Non
     }
 
 
+def test_pinned_source_lexicons_are_extracted_from_every_subtree_of_the_commit_archive() -> None:
+    root = f'atproto-{_PINNED.commit}/lexicons/com/atproto'
+    archive = _zip(
+        {
+            f'{root}/space/getRecord.json': b'{"id": "com.atproto.space.getRecord"}',
+            f'{root}/memberspace/listMembers.json': b'{"id": "com.atproto.memberspace.listMembers"}',
+            f'{root}/spaces/getRecord.json': b'{"id": "com.atproto.spaces.getRecord"}',
+            f'{root}/repo/getRecord.json': b'{"id": "com.atproto.repo.getRecord"}',
+            'atproto-permissioned-data/lexicons/com/atproto/space/putRecord.json': b'{}',
+        },
+        {},
+    )
+
+    assert _extract_zip(archive, _PINNED) == {
+        'com.atproto.space.getRecord.json': b'{"id": "com.atproto.space.getRecord"}',
+        'com.atproto.memberspace.listMembers.json': b'{"id": "com.atproto.memberspace.listMembers"}',
+    }
+
+
 def test_merge_keeps_lexicons_of_every_source() -> None:
     merged = _merge_extracted_lexicons(
         [
@@ -91,6 +146,55 @@ def test_merge_rejects_a_lexicon_claimed_by_two_sources() -> None:
 
     with pytest.raises(RuntimeError, match='provided by both'):
         _merge_extracted_lexicons([(_ATPROTO, duplicated), (_JETSTREAM, duplicated)])
+
+
+@pytest.mark.parametrize('pinned_first', [True, False])
+def test_merge_prefers_an_unpinned_source_over_a_pinned_one(
+    pinned_first: bool, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.delenv('CI', raising=False)
+    pinned = (
+        _PINNED,
+        {
+            'com.atproto.space.getRecord.json': b'{"pinned": true}',
+            'com.atproto.space.putRecord.json': b'{"pinned": true}',
+            'com.atproto.space.listSpaces.json': b'{"pinned": true}',
+        },
+    )
+    unpinned = (
+        _ATPROTO,
+        {'com.atproto.space.getRecord.json': b'{}', 'com.atproto.space.putRecord.json': b'{}'},
+    )
+
+    merged = _merge_extracted_lexicons([pinned, unpinned] if pinned_first else [unpinned, pinned])
+
+    assert merged == {
+        'com.atproto.space.getRecord.json': b'{}',
+        'com.atproto.space.putRecord.json': b'{}',
+        'com.atproto.space.listSpaces.json': b'{"pinned": true}',
+    }
+    assert capsys.readouterr().out.splitlines() == [
+        '- Dropped 2 lexicons of the pinned atproto@b5fd12f, now provided by atproto; remove the pin'
+    ]
+
+
+def test_merge_is_silent_while_the_pinned_lexicons_are_not_upstream(capsys: pytest.CaptureFixture[str]) -> None:
+    merged = _merge_extracted_lexicons(
+        [
+            (_ATPROTO, {'com.atproto.repo.getRecord.json': b'{}'}),
+            (_PINNED, {'com.atproto.space.getRecord.json': b'{}'}),
+        ]
+    )
+
+    assert sorted(merged) == ['com.atproto.repo.getRecord.json', 'com.atproto.space.getRecord.json']
+    assert capsys.readouterr() == ('', '')
+
+
+def test_merge_rejects_a_lexicon_claimed_by_two_pinned_sources() -> None:
+    duplicated = {'com.atproto.space.getRecord.json': b'{}'}
+
+    with pytest.raises(RuntimeError, match='provided by both'):
+        _merge_extracted_lexicons([(_PINNED, duplicated), (_PINNED._replace(commit='9bd8007' + '0' * 33), duplicated)])
 
 
 def _lexicon(defs: t.Dict[str, object]) -> t.Dict[str, object]:
@@ -207,6 +311,17 @@ def test_commit_message_carries_a_trailer_per_source() -> None:
         f'Lexicon-Source: bluesky-social/atproto@{revisions[0].sha} 2026-08-20T13:33:59Z',
         f'Lexicon-Source: bluesky-social/jetstream@{revisions[1].sha} 2026-08-12T16:51:26Z',
     ]
+
+
+def test_commit_message_carries_one_trailer_for_the_pinned_source() -> None:
+    revisions = [
+        SourceRevision(source, source.commit or 'c400731' + '0' * 33, '2026-08-20T13:33:59Z') for source in _SOURCES
+    ]
+
+    message = _build_commit_message('Update lexicons', revisions)
+
+    assert message.count(f'Lexicon-Source: bluesky-social/atproto@{_SPACES_COMMIT} ') == 1
+    assert message.count('Lexicon-Source: ') == len(_SOURCES)
 
 
 def test_body_links_every_source_commit() -> None:

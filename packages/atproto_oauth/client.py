@@ -4,15 +4,15 @@ import typing as t
 import webbrowser
 
 import typing_extensions as te
+from atproto_core._effects import run_flow
+from atproto_core._locks import KeyedLocks
 
 from atproto_oauth._base import (
     DEFAULT_MAX_PENDING_AUTHORIZATIONS,
     DEFAULT_STATE_TTL,
-    KeyedLocks,
     OAuthCallbackResult,
     _OAuthClientBase,
 )
-from atproto_oauth._effects import run_flow
 from atproto_oauth.loopback import DEFAULT_LOGIN_TIMEOUT, CallbackPage, login_flow
 from atproto_oauth.metadata import ATPROTO_SCOPE
 from atproto_oauth.resolver import OAuthResolver

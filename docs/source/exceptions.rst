@@ -55,6 +55,15 @@ OAuth
    :show-inheritance:
 
 
+Spaces
+######
+
+.. automodule:: atproto_space.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 Identity
 ########
 

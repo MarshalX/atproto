@@ -1,7 +1,16 @@
 import pytest
 from atproto_crypto.consts import P256_JWT_ALG, SECP256K1_JWT_ALG
-from atproto_crypto.did import Multikey, format_did_key, format_multikey, get_did_key, get_multikey_alg
+from atproto_crypto.did import (
+    Multikey,
+    format_did_key,
+    format_multikey,
+    get_did_key,
+    get_multikey_alg,
+    parse_did_key,
+    private_key_to_did_key,
+)
 from atproto_crypto.exceptions import IncorrectMultikeyPrefixError, UnsupportedKeyTypeError
+from cryptography.hazmat.primitives.asymmetric import ec
 
 
 def test_get_multikey_alg_secp256k1() -> None:
@@ -92,3 +101,23 @@ def test_get_did_key_with_multikey() -> None:
 def test_format_did_key_unsupported_key_type() -> None:
     with pytest.raises(UnsupportedKeyTypeError):
         format_did_key('blabla', b'')
+
+
+def test_private_key_to_did_key() -> None:
+    # the public key of the private value 3
+    expected_key_bytes = bytes.fromhex(
+        '045ecbe4d1a6330a44c8f7ef951d4bf165e6c6b721efada985fb41661bc6e7fd6c'
+        '8734640c4998ff7e374b06ce1a64a2ecd82ab036384fb83d9a79b127a27d5032'
+    )
+
+    did_key = private_key_to_did_key(ec.derive_private_key(3, ec.SECP256R1()))
+    assert did_key == format_did_key(P256_JWT_ALG, expected_key_bytes)
+
+    multikey = parse_did_key(did_key)
+    assert multikey.jwt_alg == P256_JWT_ALG
+    assert multikey.key_bytes == expected_key_bytes
+
+
+def test_private_key_to_did_key_unsupported_key_type() -> None:
+    with pytest.raises(UnsupportedKeyTypeError):
+        private_key_to_did_key(ec.generate_private_key(ec.SECP256K1()))

@@ -3,6 +3,8 @@ from pathlib import Path
 
 # Test data sourced directly from bluesky-social/atproto repo:
 # https://github.com/bluesky-social/atproto/tree/main/interop-test-files/syntax
+# The spaceref_syntax_*.txt files are sourced from bluesky-social/indigo repo:
+# https://github.com/bluesky-social/indigo/tree/066d55aa678f62c70ada9e7c2b6ee5026283cf2a/atproto/syntax/testdata
 INTEROP_TEST_FILES_DIR = Path(os.path.join(Path(__file__).parent, 'interop-test-files', 'syntax'))
 
 

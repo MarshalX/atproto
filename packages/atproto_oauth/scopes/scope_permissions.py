@@ -7,6 +7,7 @@ from atproto_oauth.scopes.permissions import (
     IdentityPermission,
     RepoPermission,
     RpcPermission,
+    SpacePermission,
 )
 from atproto_oauth.scopes.scopes_set import ScopesSet
 
@@ -57,3 +58,36 @@ class ScopePermissions:
     def assert_identity(self, attr: str) -> None:
         if not self.allows_identity(attr):
             raise ScopeMissingError(IdentityPermission.scope_needed_for(attr))
+
+    def allows_space(
+        self,
+        space_type: str,
+        authority: str,
+        skey: str,
+        action: t.Optional[str] = None,
+        collection: t.Optional[str] = None,
+        manage: t.Optional[str] = None,
+    ) -> bool:
+        return self.scopes.matches(
+            'space',
+            space_type=space_type,
+            authority=authority,
+            skey=skey,
+            action=action,
+            collection=collection,
+            manage=manage,
+        )
+
+    def assert_space(
+        self,
+        space_type: str,
+        authority: str,
+        skey: str,
+        action: t.Optional[str] = None,
+        collection: t.Optional[str] = None,
+        manage: t.Optional[str] = None,
+    ) -> None:
+        if not self.allows_space(space_type, authority, skey, action, collection, manage):
+            raise ScopeMissingError(
+                SpacePermission.scope_needed_for(space_type, authority, skey, action, collection, manage)
+            )
