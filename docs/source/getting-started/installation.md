@@ -33,6 +33,7 @@ The distribution is one PyPI package built from several importable ones. You rar
 | `atproto_lexicon`      | The lexicon parser.                                                        |
 | `atproto_oauth`        | The OAuth clients, sessions, scopes, and session storage.                  |
 | `atproto_server`       | Server-side helpers, notably JWT verification.                             |
+| `atproto_space`        | The Spaces (permissioned data) clients, in alpha.                          |
 | `atproto_subscription` | The websocket subscription runtime the streaming clients are built on.     |
 
 :::{tip}

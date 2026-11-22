@@ -235,6 +235,7 @@ def _get_str_typehint(nsid: NSID, field_type_def: models.LexString, *, optional:
             'nsid': 'string_formats.Nsid',
             'tid': 'string_formats.Tid',
             'record-key': 'string_formats.RecordKey',
+            'space-ref': 'string_formats.SpaceRef',
             'uri': 'string_formats.Uri',
             'language': 'string_formats.Language',
         }

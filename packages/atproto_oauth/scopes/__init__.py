@@ -6,6 +6,7 @@ from atproto_oauth.scopes.permissions import (
     IncludeScope,
     RepoPermission,
     RpcPermission,
+    SpacePermission,
 )
 from atproto_oauth.scopes.scope_permissions import ScopePermissions
 from atproto_oauth.scopes.scopes_set import ScopesSet
@@ -22,4 +23,5 @@ __all__ = [
     'ScopePermissions',
     'ScopePermissionsTransition',
     'ScopesSet',
+    'SpacePermission',
 ]

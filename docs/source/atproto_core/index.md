@@ -15,14 +15,20 @@ You reach for it when you are handling protocol data rather than calling a metho
 [NSID](#atproto_core.nsid.NSID)
 : NameSpaced ID, the reverse-domain identifier of every lexicon (`app.bsky.feed.post`). [validate_nsid](#atproto_core.nsid.validate_nsid) checks one without building it.
 
+[STAR](#atproto_core.star.STAR)
+: The archive that the repo of an account in a space is exported as. [from_bytes](#atproto_core.star.STAR.from_bytes) decodes one into [meta](#atproto_core.star.STAR.meta), a DAG-CBOR map, and [pairs](#atproto_core.star.STAR.pairs) of key and value in the order of the file.
+
 [AtUri](#atproto_core.uri.AtUri)
 : The `at://` scheme. Splits a record URI into [host](#atproto_core.uri.AtUri.hostname), [collection](#atproto_core.uri.AtUri.collection) and [rkey](#atproto_core.uri.AtUri.rkey).
 
-[decode_dag](#atproto_core.cbor.decode_dag) and [decode_dag_multi](#atproto_core.cbor.decode_dag_multi)
-: DAG-CBOR, the codec records are stored in. `decode_dag_multi` reads several concatenated items out of one buffer, which is how subscription frames carry a header and a body.
+[SpaceRef](#atproto_core.uri.SpaceRef)
+: The reference to a space, `at://<did>/space/<type>/<skey>`. [from_str](#atproto_core.uri.SpaceRef.from_str) parses one, and [record_uri](#atproto_core.uri.SpaceRef.record_uri) builds the URI of a record in the space.
+
+[decode_dag](#atproto_core.cbor.decode_dag), [decode_dag_multi](#atproto_core.cbor.decode_dag_multi) and [encode_dag](#atproto_core.cbor.encode_dag)
+: DAG-CBOR, the codec records are stored in. `decode_dag_multi` reads several concatenated items out of one buffer, which is how subscription frames carry a header and a body. `encode_dag` writes the canonical form, the one that the CID of a record is computed over, and `canonical=True` makes the decoders reject any other. A link decodes to a [CID](#atproto_core.cid.CID), and a `CID` encodes as a link.
 
 [DidDocument](#atproto_core.did_doc.DidDocument)
-: The resolved identity document, with the getters that pull the atproto-specific parts out of it: [get_pds_endpoint](#atproto_core.did_doc.DidDocument.get_pds_endpoint), [get_feed_gen_endpoint](#atproto_core.did_doc.DidDocument.get_feed_gen_endpoint), [get_signing_key](#atproto_core.did_doc.DidDocument.get_signing_key), [get_handle](#atproto_core.did_doc.DidDocument.get_handle).
+: The resolved identity document, with the getters that pull the atproto-specific parts out of it: [get_pds_endpoint](#atproto_core.did_doc.DidDocument.get_pds_endpoint), [get_feed_gen_endpoint](#atproto_core.did_doc.DidDocument.get_feed_gen_endpoint), [get_signing_key](#atproto_core.did_doc.DidDocument.get_signing_key), [get_kem_key](#atproto_core.did_doc.DidDocument.get_kem_key), [get_handle](#atproto_core.did_doc.DidDocument.get_handle).
 
 Decoding a repository export touches most of them at once:
 
@@ -61,6 +67,7 @@ nsid
 cid
 uri
 car
+star
 cbor
 did_doc
 ```

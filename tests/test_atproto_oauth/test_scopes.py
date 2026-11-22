@@ -12,9 +12,24 @@ from atproto_oauth.scopes import (
     ScopePermissions,
     ScopePermissionsTransition,
     ScopesSet,
+    SpacePermission,
 )
 from atproto_oauth.scopes._mime import is_accept, is_mime, matches_accept, matches_any_accept
 from atproto_oauth.scopes._syntax import ScopeStringSyntax
+
+_FORUM = {'space_type': 'com.atmoboards.forum', 'authority': 'did:plc:abc', 'skey': 'default'}
+_ANY_SPACE = {'space_type': '*', 'authority': '*', 'skey': '*'}
+_THREAD = 'com.atmoboards.thread'
+_CREATE_THREAD_SCOPE = (
+    'space:com.atmoboards.forum?authority=did:plc:abc&skey=default&collection=com.atmoboards.thread&action=create'
+)
+
+
+def _forum_grant(params: str = '') -> SpacePermission:
+    """Grant for the forums of any authority, so that only ``params`` decide the outcome."""
+    scope = SpacePermission.from_string(f'space:com.atmoboards.forum?authority=*{params}')
+    assert scope is not None
+    return scope
 
 
 @pytest.mark.parametrize(
@@ -534,6 +549,221 @@ def test_identity_permission_rejects_invalid() -> None:
     assert IdentityPermission.from_string('invalid') is None
 
 
+def test_space_permission_parse_defaults() -> None:
+    scope = SpacePermission.from_string('space:com.atmoboards.forum')
+    assert scope is not None
+    assert scope.space_type == 'com.atmoboards.forum'
+    assert scope.authority == 'self'
+    assert scope.skey == '*'
+    assert scope.collection is None
+    assert scope.action == ('read', 'create', 'update', 'delete')
+    assert scope.manage is None
+
+
+def test_space_permission_parse_fully_specified() -> None:
+    scope = SpacePermission.from_string(
+        'space:com.atmoboards.forum?authority=did:plc:abc&skey=default&collection=com.atmoboards.thread'
+        '&action=create&action=update&manage=update&manage=delete'
+    )
+    assert scope is not None
+    assert scope.space_type == 'com.atmoboards.forum'
+    assert scope.authority == 'did:plc:abc'
+    assert scope.skey == 'default'
+    assert scope.collection == ('com.atmoboards.thread',)
+    assert scope.action == ('create', 'update')
+    assert scope.manage == ('update', 'delete')
+
+
+def test_space_permission_parse_authority() -> None:
+    scope = SpacePermission.from_string('space:com.example.forum?authority=did:plc:abc')
+    assert scope is not None
+    assert scope.authority == 'did:plc:abc'
+
+
+@pytest.mark.parametrize(
+    'invalid',
+    [
+        'repo:com.atmoboards.forum',
+        'space',
+        'space:invalid',
+        'space:com.example.foo%0A',
+        'space?type=com.atmoboards.forum',
+        'space:*?authority=not-a-did',
+        'space:com.atmoboards.forum?action=bogus',
+        'space:com.atmoboards.forum?manage=bogus',
+        'space:com.atmoboards.forum?collection=not_an_nsid',
+        'space:com.atmoboards.forum?skey=',
+        'space:com.atmoboards.forum?skey=..',
+        'space:com.atmoboards.forum?skey=a%2Fb',
+        'space:com.example.forum?spaceDid=did:plc:abc',
+    ],
+)
+def test_space_permission_rejects_invalid(invalid: str) -> None:
+    assert SpacePermission.from_string(invalid) is None
+
+
+@pytest.mark.parametrize(
+    ('params', 'operation', 'expected'),
+    [
+        ('', {'action': 'read'}, True),
+        ('&action=create', {'action': 'read'}, False),
+        ('&action=read&collection=*', {'action': 'create', 'collection': _THREAD}, False),
+        ('', {'action': 'create', 'collection': _THREAD}, False),
+        ('&collection=*', {'action': 'create', 'collection': _THREAD}, True),
+        ('&collection=*', {'action': 'delete', 'collection': '*'}, True),
+        (f'&collection={_THREAD}', {'action': 'delete', 'collection': '*'}, False),
+        (f'&collection={_THREAD}', {'action': 'create', 'collection': _THREAD}, True),
+        (f'&collection={_THREAD}', {'action': 'create', 'collection': 'com.atmoboards.reply'}, False),
+        ('&manage=update', {'manage': 'update'}, True),
+        ('&manage=update', {'manage': 'delete'}, False),
+        ('', {'manage': 'update'}, False),
+        ('&action=read', {'action': 'read_self'}, True),
+        ('&action=read_self', {'action': 'read_self'}, True),
+        ('&action=read_self', {'action': 'read'}, False),
+        (f'&action=read_self&collection={_THREAD}', {'action': 'read_self'}, True),
+    ],
+    ids=[
+        'read',
+        'read-not-listed',
+        'write-on-read-only-grant',
+        'write-without-collection',
+        'write-with-wildcard-collection',
+        'write-to-every-collection',
+        'write-to-every-collection-on-named-collection',
+        'write-to-named-collection',
+        'write-to-other-collection',
+        'manage',
+        'manage-not-listed',
+        'manage-by-default',
+        'read-implies-read-self',
+        'read-self',
+        'read-self-does-not-imply-read',
+        'read-self-ignores-collection',
+    ],
+)
+def test_space_permission_matches_operation(params: str, operation: t.Dict[str, str], expected: bool) -> None:
+    assert _forum_grant(params).matches(**_FORUM, **operation) is expected
+
+
+def test_space_permission_matches_wildcard_space_type() -> None:
+    scope = SpacePermission.from_string('space:*?authority=*')
+    assert scope is not None
+    assert scope.matches(space_type='com.example.group', authority='did:plc:abc', skey='default', action='read')
+
+
+def test_space_permission_not_matches_other_space_type() -> None:
+    scope = _forum_grant()
+    assert not scope.matches(space_type='com.example.group', authority='did:plc:abc', skey='default', action='read')
+
+
+def test_space_permission_matches_named_authority_and_skey() -> None:
+    scope = SpacePermission.from_string('space:com.atmoboards.forum?authority=did:plc:abc&skey=default')
+    assert scope is not None
+    assert scope.matches(**_FORUM, action='read')
+    assert not scope.matches(**{**_FORUM, 'authority': 'did:plc:other'}, action='read')
+    assert not scope.matches(**{**_FORUM, 'skey': 'other'}, action='read')
+
+
+def test_space_permission_matches_wildcard_target_only_with_wildcard_grant() -> None:
+    scope = SpacePermission.from_string('space:*?authority=*')
+    assert scope is not None
+    assert scope.matches(**_ANY_SPACE, action='read_self')
+    assert not _forum_grant().matches(**_ANY_SPACE, action='read_self')
+
+
+def test_space_permission_self_authority_matches_nothing() -> None:
+    scope = SpacePermission.from_string('space:com.atmoboards.forum')
+    assert scope is not None
+    assert not scope.matches(**_FORUM, action='read')
+
+
+def test_space_permission_scope_needed_for() -> None:
+    assert (
+        SpacePermission.scope_needed_for(**_FORUM, action='read')
+        == 'space:com.atmoboards.forum?authority=did:plc:abc&skey=default&action=read'
+    )
+    assert SpacePermission.scope_needed_for(**_FORUM, action='create', collection=_THREAD) == _CREATE_THREAD_SCOPE
+    assert (
+        SpacePermission.scope_needed_for(**_FORUM, manage='update')
+        == 'space:com.atmoboards.forum?authority=did:plc:abc&skey=default&action=read_self&manage=update'
+    )
+    assert SpacePermission.scope_needed_for(**_ANY_SPACE, action='read_self') == 'space:*?authority=*&action=read_self'
+
+
+@pytest.mark.parametrize(
+    'operation',
+    [
+        {'action': 'read'},
+        {'action': 'read_self'},
+        {'action': 'create', 'collection': _THREAD},
+        {'action': 'delete', 'collection': '*'},
+        {'manage': 'delete'},
+    ],
+)
+def test_space_permission_scope_needed_for_matches_operation(operation: t.Dict[str, str]) -> None:
+    scope = SpacePermission.from_string(SpacePermission.scope_needed_for(**_FORUM, **operation))
+    assert scope is not None
+    assert scope.matches(**_FORUM, **operation)
+
+
+def test_space_permission_format() -> None:
+    scope = SpacePermission(
+        space_type='com.atmoboards.forum',
+        authority='did:plc:abc',
+        skey='default',
+        collection=(_THREAD,),
+        action=('create',),
+        manage=None,
+    )
+    assert str(scope) == _CREATE_THREAD_SCOPE
+
+
+@pytest.mark.parametrize(
+    ('input_scope', 'expected'),
+    [
+        ('space:com.atmoboards.forum', 'space:com.atmoboards.forum'),
+        ('space?spaceType=com.atmoboards.forum', 'space:com.atmoboards.forum'),
+        ('space:com.atmoboards.forum?authority=self&skey=*', 'space:com.atmoboards.forum'),
+        (
+            'space:com.atmoboards.forum?action=delete&action=update&action=create&action=read',
+            'space:com.atmoboards.forum',
+        ),
+        (
+            'space:com.atmoboards.forum?action=delete&action=read_self',
+            'space:com.atmoboards.forum?action=read_self&action=delete',
+        ),
+        (
+            'space:com.atmoboards.forum?manage=delete&manage=update',
+            'space:com.atmoboards.forum?manage=update&manage=delete',
+        ),
+        (
+            f'space:com.atmoboards.forum?collection={_THREAD}&collection=com.atmoboards.reply&collection={_THREAD}',
+            'space:com.atmoboards.forum?collection=com.atmoboards.reply&collection=com.atmoboards.thread',
+        ),
+        (
+            'space:com.atmoboards.forum?collection=com.atmoboards.thread&collection=*',
+            'space:com.atmoboards.forum?collection=*',
+        ),
+        ('space:*?authority=*', 'space:*?authority=*'),
+        (
+            (
+                'space?action=create&collection=com.atmoboards.thread&skey=default&authority=did:plc:abc'
+                '&spaceType=com.atmoboards.forum'
+            ),
+            _CREATE_THREAD_SCOPE,
+        ),
+        (
+            'space:com.atmoboards.forum?action=read&manage=update',
+            'space:com.atmoboards.forum?action=read&manage=update',
+        ),
+    ],
+)
+def test_space_permission_normalization_roundtrip(input_scope: str, expected: str) -> None:
+    result = SpacePermission.from_string(input_scope)
+    assert result is not None
+    assert str(result) == expected
+
+
 def test_include_scope_parse() -> None:
     scope = IncludeScope.from_string('include:com.example.appPermissions')
     assert scope is not None
@@ -624,6 +854,26 @@ def test_scopes_set_assert_matches_raises() -> None:
     assert 'com.example.bar' in exc_info.value.scope
 
 
+def test_scopes_set_matches_space() -> None:
+    ss = ScopesSet(['space:com.example.group?authority=did:plc:abc&skey=default&collection=com.example.event'])
+    assert ss.matches('space', space_type='com.example.group', authority='did:plc:abc', skey='default', action='read')
+    assert not ss.matches(
+        'space', space_type='com.example.group', authority='did:plc:other', skey='default', action='read'
+    )
+
+
+def test_scopes_set_assert_matches_space_raises() -> None:
+    ss = ScopesSet(['space:com.example.group?authority=did:plc:abc'])
+    with pytest.raises(ScopeMissingError) as exc_info:
+        ss.assert_matches(
+            'space', space_type='com.example.group', authority='did:plc:abc', skey='default', manage='update'
+        )
+
+    assert exc_info.value.scope == (
+        'space:com.example.group?authority=did:plc:abc&skey=default&action=read_self&manage=update'
+    )
+
+
 def test_scope_permissions_allows_repo() -> None:
     perms = ScopePermissions('repo:com.example.foo blob:*/*')
     assert perms.allows_repo('com.example.foo', 'create')
@@ -655,6 +905,49 @@ def test_scope_permissions_assert_repo_raises() -> None:
     perms = ScopePermissions('repo:com.example.foo')
     with pytest.raises(ScopeMissingError):
         perms.assert_repo('com.example.bar', 'create')
+
+
+def test_scope_permissions_allows_space() -> None:
+    perms = ScopePermissions('space:com.atmoboards.forum?authority=did:plc:owner&action=read')
+    assert perms.allows_space('com.atmoboards.forum', 'did:plc:owner', 'default', action='read')
+    assert perms.allows_space('com.atmoboards.forum', 'did:plc:owner', '*', action='read')
+    assert not perms.allows_space('com.atmoboards.forum', 'did:plc:other', 'default', action='read')
+    assert not perms.allows_space('com.atmoboards.forum', 'did:plc:owner', 'default', manage='update')
+
+
+def test_scope_permissions_allows_space_by_any_grant() -> None:
+    perms = ScopePermissions(
+        'space:com.atmoboards.forum?authority=*&action=read '
+        'space:com.atmoboards.forum?authority=did:plc:owner&collection=com.atmoboards.thread&action=create'
+    )
+    assert perms.allows_space('com.atmoboards.forum', 'did:plc:owner', 'default', action='read')
+    assert perms.allows_space('com.atmoboards.forum', 'did:plc:owner', 'default', action='create', collection=_THREAD)
+    assert not perms.allows_space(
+        'com.atmoboards.forum', 'did:plc:owner', 'default', action='delete', collection=_THREAD
+    )
+
+
+def test_scope_permissions_assert_space() -> None:
+    perms = ScopePermissions('space:com.atmoboards.forum?authority=did:plc:owner&action=read')
+    perms.assert_space('com.atmoboards.forum', 'did:plc:owner', 'default', action='read')
+
+
+@pytest.mark.parametrize(
+    ('space', 'scope'),
+    [
+        (
+            {'space_type': 'com.atmoboards.forum', 'authority': 'did:plc:owner', 'skey': 'default'},
+            'space:com.atmoboards.forum?authority=did:plc:owner&skey=default&action=read',
+        ),
+        (_ANY_SPACE, 'space:*?authority=*&action=read'),
+    ],
+)
+def test_scope_permissions_assert_space_raises(space: t.Dict[str, str], scope: str) -> None:
+    perms = ScopePermissions('atproto')
+    with pytest.raises(ScopeMissingError) as exc_info:
+        perms.assert_space(**space, action='read')
+
+    assert exc_info.value.scope == scope
 
 
 def test_scope_permissions_transition_transition_email_allows_account_email_read() -> None:
@@ -702,6 +995,21 @@ def test_scope_permissions_transition_transition_chat_bsky_rejects_non_chat_rpc(
     assert not perms.allows_rpc('app.bsky.feed.post', 'did:web:example.com')
     assert not perms.allows_rpc('com.example.foo', 'did:web:example.com')
     assert not perms.allows_rpc('*', 'did:web:example.com')
+
+
+def test_scope_permissions_transition_transition_generic_rejects_space() -> None:
+    perms = ScopePermissionsTransition('transition:generic')
+    assert not perms.allows_space('com.example.forum', 'did:plc:abc', 'default', action='read')
+    assert not perms.allows_space('com.example.forum', 'did:plc:abc', 'default', action='read_self')
+    assert not perms.allows_space(
+        'com.example.forum', 'did:plc:abc', 'default', action='create', collection='com.example.thread'
+    )
+    assert not perms.allows_space('com.example.forum', 'did:plc:abc', 'default', manage='update')
+
+
+def test_scope_permissions_transition_space_scope_allows_space() -> None:
+    perms = ScopePermissionsTransition('space:com.example.forum?authority=did:plc:abc&action=read')
+    assert perms.allows_space('com.example.forum', 'did:plc:abc', 'default', action='read')
 
 
 def test_mime_is_mime_valid() -> None:
@@ -775,12 +1083,18 @@ def test_scope_string_syntax_canonical_form(scope: str, canonical: str) -> None:
     assert str(ScopeStringSyntax.from_string(scope)) == canonical
 
 
+_WRITE_THREAD_SCOPE = (
+    'space:com.atmoboards.forum?authority=did:plc:abc123&skey=default&collection=com.atmoboards.thread'
+    '&action=create&action=update'
+)
+
 _PERMISSIONS = {
     'repo': RepoPermission,
     'blob': BlobPermission,
     'rpc': RpcPermission,
     'account': AccountPermission,
     'identity': IdentityPermission,
+    'space': SpacePermission,
     'include': IncludeScope,
 }
 
@@ -808,6 +1122,33 @@ _PERMISSIONS = {
         ('account:repo?action=read', 'account:repo'),
         ('identity:handle', 'identity:handle'),
         ('identity:*', 'identity:*'),
+        ('space:com.example.bookmarks', 'space:com.example.bookmarks'),
+        ('space:com.atmoboards.forum?authority=*', 'space:com.atmoboards.forum?authority=*'),
+        ('space:com.atmoboards.forum?authority=*&action=read', 'space:com.atmoboards.forum?authority=*&action=read'),
+        (
+            'space:com.atmoboards.forum?authority=*&action=read_self',
+            'space:com.atmoboards.forum?authority=*&action=read_self',
+        ),
+        ('space:com.atmoboards.forum?authority=*&collection=*', 'space:com.atmoboards.forum?authority=*&collection=*'),
+        (_WRITE_THREAD_SCOPE, _WRITE_THREAD_SCOPE),
+        (
+            'space:com.atmoboards.forum?authority=*&action=read_self&manage=update&manage=delete',
+            'space:com.atmoboards.forum?authority=*&action=read_self&manage=update&manage=delete',
+        ),
+        (
+            'space:com.atmoboards.forum?authority=*&manage=update&manage=delete',
+            'space:com.atmoboards.forum?authority=*&manage=update&manage=delete',
+        ),
+        ('space:*?authority=did:plc:abc123', 'space:*?authority=did:plc:abc123'),
+        ('space?spaceType=com.example.bookmarks', 'space:com.example.bookmarks'),
+        ('space:*', 'space:*'),
+        ('space:com.example.bookmarks?authority=self', 'space:com.example.bookmarks'),
+        ('space:com.example.bookmarks?skey=*', 'space:com.example.bookmarks'),
+        ('space:com.example.bookmarks?collection=*', 'space:com.example.bookmarks?collection=*'),
+        (
+            'space:com.example.forum?action=read_self&authority=%2A',
+            'space:com.example.forum?authority=*&action=read_self',
+        ),
         ('include:com.example.calendar.basePermissions', 'include:com.example.calendar.basePermissions'),
         ('include:com.example.set?aud=did:web:x.test%23svc', 'include:com.example.set?aud=did:web:x.test%23svc'),
     ],
@@ -841,6 +1182,19 @@ def test_permission_canonical_form(scope: str, canonical: str) -> None:
         'rpc:app.bsky.feed.post?aud=did:web:example.com%253A8443%23svc',
         'include:com.example.set?aud=*',
         'include:com.example.set?aud=did:web:x.test',
+        # a space is named by one type, one authority and one key
+        'space',
+        'space:123',
+        'space?spaceType=123',
+        'space?spaceType=com.example.bookmarks&spaceType=com.example.prefs',
+        'space:com.example.bookmarks?spaceType=com.example.bookmarks',
+        'space:com.example.forum?authority=123',
+        'space:com.example.forum?authority=did:web:example.com&authority=did:web:example.org',
+        'space:com.example.forum?skey=/',
+        'space:com.example.forum?skey=1&skey=2',
+        'space:com.example.forum?action=123',
+        'space:com.example.forum?manage=123',
+        'space:com.example.forum?collection=123',
     ],
 )
 def test_invalid_permission_is_rejected(scope: str) -> None:

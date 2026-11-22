@@ -327,8 +327,17 @@ if t.TYPE_CHECKING:
     from atproto_client.models.com.atproto.label import subscribe_labels as ComAtprotoLabelSubscribeLabels
     from atproto_client.models.com.atproto.lexicon import resolve_lexicon as ComAtprotoLexiconResolveLexicon
     from atproto_client.models.com.atproto.lexicon import schema as ComAtprotoLexiconSchema
+    from atproto_client.models.com.atproto.managedspace import check_access as ComAtprotoManagedspaceCheckAccess
+    from atproto_client.models.com.atproto.managedspace import policy as ComAtprotoManagedspacePolicy
+    from atproto_client.models.com.atproto.memberspace import defs as ComAtprotoMemberspaceDefs
+    from atproto_client.models.com.atproto.memberspace import list_members as ComAtprotoMemberspaceListMembers
+    from atproto_client.models.com.atproto.memberspace import member as ComAtprotoMemberspaceMember
+    from atproto_client.models.com.atproto.memberspace import policy as ComAtprotoMemberspacePolicy
+    from atproto_client.models.com.atproto.memberspace import put_members as ComAtprotoMemberspacePutMembers
+    from atproto_client.models.com.atproto.memberspace import remove_members as ComAtprotoMemberspaceRemoveMembers
     from atproto_client.models.com.atproto.moderation import create_report as ComAtprotoModerationCreateReport
     from atproto_client.models.com.atproto.moderation import defs as ComAtprotoModerationDefs
+    from atproto_client.models.com.atproto.personalspace import policy as ComAtprotoPersonalspacePolicy
     from atproto_client.models.com.atproto.repo import apply_writes as ComAtprotoRepoApplyWrites
     from atproto_client.models.com.atproto.repo import create_record as ComAtprotoRepoCreateRecord
     from atproto_client.models.com.atproto.repo import defs as ComAtprotoRepoDefs
@@ -371,6 +380,38 @@ if t.TYPE_CHECKING:
     from atproto_client.models.com.atproto.server import reset_password as ComAtprotoServerResetPassword
     from atproto_client.models.com.atproto.server import revoke_app_password as ComAtprotoServerRevokeAppPassword
     from atproto_client.models.com.atproto.server import update_email as ComAtprotoServerUpdateEmail
+    from atproto_client.models.com.atproto.space import apply_writes as ComAtprotoSpaceApplyWrites
+    from atproto_client.models.com.atproto.space import authorize_space_sync as ComAtprotoSpaceAuthorizeSpaceSync
+    from atproto_client.models.com.atproto.space import clear_records as ComAtprotoSpaceClearRecords
+    from atproto_client.models.com.atproto.space import confirm_registration as ComAtprotoSpaceConfirmRegistration
+    from atproto_client.models.com.atproto.space import create_record as ComAtprotoSpaceCreateRecord
+    from atproto_client.models.com.atproto.space import create_space as ComAtprotoSpaceCreateSpace
+    from atproto_client.models.com.atproto.space import defs as ComAtprotoSpaceDefs
+    from atproto_client.models.com.atproto.space import delete_record as ComAtprotoSpaceDeleteRecord
+    from atproto_client.models.com.atproto.space import delete_space as ComAtprotoSpaceDeleteSpace
+    from atproto_client.models.com.atproto.space import export_space_meta as ComAtprotoSpaceExportSpaceMeta
+    from atproto_client.models.com.atproto.space import get_blob as ComAtprotoSpaceGetBlob
+    from atproto_client.models.com.atproto.space import get_delegation_token as ComAtprotoSpaceGetDelegationToken
+    from atproto_client.models.com.atproto.space import get_latest_commit as ComAtprotoSpaceGetLatestCommit
+    from atproto_client.models.com.atproto.space import get_record as ComAtprotoSpaceGetRecord
+    from atproto_client.models.com.atproto.space import get_repo as ComAtprotoSpaceGetRepo
+    from atproto_client.models.com.atproto.space import get_space as ComAtprotoSpaceGetSpace
+    from atproto_client.models.com.atproto.space import import_repo as ComAtprotoSpaceImportRepo
+    from atproto_client.models.com.atproto.space import import_space_meta as ComAtprotoSpaceImportSpaceMeta
+    from atproto_client.models.com.atproto.space import list_blobs as ComAtprotoSpaceListBlobs
+    from atproto_client.models.com.atproto.space import list_records as ComAtprotoSpaceListRecords
+    from atproto_client.models.com.atproto.space import list_repo_ops as ComAtprotoSpaceListRepoOps
+    from atproto_client.models.com.atproto.space import list_spaces as ComAtprotoSpaceListSpaces
+    from atproto_client.models.com.atproto.space import list_writers as ComAtprotoSpaceListWriters
+    from atproto_client.models.com.atproto.space import (
+        notify_credentials_revoked as ComAtprotoSpaceNotifyCredentialsRevoked,
+    )
+    from atproto_client.models.com.atproto.space import notify_repo_update as ComAtprotoSpaceNotifyRepoUpdate
+    from atproto_client.models.com.atproto.space import notify_space_update as ComAtprotoSpaceNotifySpaceUpdate
+    from atproto_client.models.com.atproto.space import policy as ComAtprotoSpacePolicy
+    from atproto_client.models.com.atproto.space import put_record as ComAtprotoSpacePutRecord
+    from atproto_client.models.com.atproto.space import remove_writer as ComAtprotoSpaceRemoveWriter
+    from atproto_client.models.com.atproto.space import update_space as ComAtprotoSpaceUpdateSpace
     from atproto_client.models.com.atproto.sync import defs as ComAtprotoSyncDefs
     from atproto_client.models.com.atproto.sync import get_blob as ComAtprotoSyncGetBlob
     from atproto_client.models.com.atproto.sync import get_blocks as ComAtprotoSyncGetBlocks
@@ -805,8 +846,17 @@ __all__ = [
     'ComAtprotoLabelSubscribeLabels',
     'ComAtprotoLexiconResolveLexicon',
     'ComAtprotoLexiconSchema',
+    'ComAtprotoManagedspaceCheckAccess',
+    'ComAtprotoManagedspacePolicy',
+    'ComAtprotoMemberspaceDefs',
+    'ComAtprotoMemberspaceListMembers',
+    'ComAtprotoMemberspaceMember',
+    'ComAtprotoMemberspacePolicy',
+    'ComAtprotoMemberspacePutMembers',
+    'ComAtprotoMemberspaceRemoveMembers',
     'ComAtprotoModerationCreateReport',
     'ComAtprotoModerationDefs',
+    'ComAtprotoPersonalspacePolicy',
     'ComAtprotoRepoApplyWrites',
     'ComAtprotoRepoCreateRecord',
     'ComAtprotoRepoDefs',
@@ -845,6 +895,36 @@ __all__ = [
     'ComAtprotoServerResetPassword',
     'ComAtprotoServerRevokeAppPassword',
     'ComAtprotoServerUpdateEmail',
+    'ComAtprotoSpaceApplyWrites',
+    'ComAtprotoSpaceAuthorizeSpaceSync',
+    'ComAtprotoSpaceClearRecords',
+    'ComAtprotoSpaceConfirmRegistration',
+    'ComAtprotoSpaceCreateRecord',
+    'ComAtprotoSpaceCreateSpace',
+    'ComAtprotoSpaceDefs',
+    'ComAtprotoSpaceDeleteRecord',
+    'ComAtprotoSpaceDeleteSpace',
+    'ComAtprotoSpaceExportSpaceMeta',
+    'ComAtprotoSpaceGetBlob',
+    'ComAtprotoSpaceGetDelegationToken',
+    'ComAtprotoSpaceGetLatestCommit',
+    'ComAtprotoSpaceGetRecord',
+    'ComAtprotoSpaceGetRepo',
+    'ComAtprotoSpaceGetSpace',
+    'ComAtprotoSpaceImportRepo',
+    'ComAtprotoSpaceImportSpaceMeta',
+    'ComAtprotoSpaceListBlobs',
+    'ComAtprotoSpaceListRecords',
+    'ComAtprotoSpaceListRepoOps',
+    'ComAtprotoSpaceListSpaces',
+    'ComAtprotoSpaceListWriters',
+    'ComAtprotoSpaceNotifyCredentialsRevoked',
+    'ComAtprotoSpaceNotifyRepoUpdate',
+    'ComAtprotoSpaceNotifySpaceUpdate',
+    'ComAtprotoSpacePolicy',
+    'ComAtprotoSpacePutRecord',
+    'ComAtprotoSpaceRemoveWriter',
+    'ComAtprotoSpaceUpdateSpace',
     'ComAtprotoSyncDefs',
     'ComAtprotoSyncGetBlob',
     'ComAtprotoSyncGetBlocks',
@@ -1274,8 +1354,17 @@ class _Ids(_PermissionSetIds):
     ComAtprotoLabelSubscribeLabels: str = 'com.atproto.label.subscribeLabels'
     ComAtprotoLexiconResolveLexicon: str = 'com.atproto.lexicon.resolveLexicon'
     ComAtprotoLexiconSchema: str = 'com.atproto.lexicon.schema'
+    ComAtprotoManagedspaceCheckAccess: str = 'com.atproto.managedspace.checkAccess'
+    ComAtprotoManagedspacePolicy: str = 'com.atproto.managedspace.policy'
+    ComAtprotoMemberspaceDefs: str = 'com.atproto.memberspace.defs'
+    ComAtprotoMemberspaceListMembers: str = 'com.atproto.memberspace.listMembers'
+    ComAtprotoMemberspaceMember: str = 'com.atproto.memberspace.member'
+    ComAtprotoMemberspacePolicy: str = 'com.atproto.memberspace.policy'
+    ComAtprotoMemberspacePutMembers: str = 'com.atproto.memberspace.putMembers'
+    ComAtprotoMemberspaceRemoveMembers: str = 'com.atproto.memberspace.removeMembers'
     ComAtprotoModerationCreateReport: str = 'com.atproto.moderation.createReport'
     ComAtprotoModerationDefs: str = 'com.atproto.moderation.defs'
+    ComAtprotoPersonalspacePolicy: str = 'com.atproto.personalspace.policy'
     ComAtprotoRepoApplyWrites: str = 'com.atproto.repo.applyWrites'
     ComAtprotoRepoCreateRecord: str = 'com.atproto.repo.createRecord'
     ComAtprotoRepoDefs: str = 'com.atproto.repo.defs'
@@ -1314,6 +1403,36 @@ class _Ids(_PermissionSetIds):
     ComAtprotoServerResetPassword: str = 'com.atproto.server.resetPassword'
     ComAtprotoServerRevokeAppPassword: str = 'com.atproto.server.revokeAppPassword'
     ComAtprotoServerUpdateEmail: str = 'com.atproto.server.updateEmail'
+    ComAtprotoSpaceApplyWrites: str = 'com.atproto.space.applyWrites'
+    ComAtprotoSpaceAuthorizeSpaceSync: str = 'com.atproto.space.authorizeSpaceSync'
+    ComAtprotoSpaceClearRecords: str = 'com.atproto.space.clearRecords'
+    ComAtprotoSpaceConfirmRegistration: str = 'com.atproto.space.confirmRegistration'
+    ComAtprotoSpaceCreateRecord: str = 'com.atproto.space.createRecord'
+    ComAtprotoSpaceCreateSpace: str = 'com.atproto.space.createSpace'
+    ComAtprotoSpaceDefs: str = 'com.atproto.space.defs'
+    ComAtprotoSpaceDeleteRecord: str = 'com.atproto.space.deleteRecord'
+    ComAtprotoSpaceDeleteSpace: str = 'com.atproto.space.deleteSpace'
+    ComAtprotoSpaceExportSpaceMeta: str = 'com.atproto.space.exportSpaceMeta'
+    ComAtprotoSpaceGetBlob: str = 'com.atproto.space.getBlob'
+    ComAtprotoSpaceGetDelegationToken: str = 'com.atproto.space.getDelegationToken'
+    ComAtprotoSpaceGetLatestCommit: str = 'com.atproto.space.getLatestCommit'
+    ComAtprotoSpaceGetRecord: str = 'com.atproto.space.getRecord'
+    ComAtprotoSpaceGetRepo: str = 'com.atproto.space.getRepo'
+    ComAtprotoSpaceGetSpace: str = 'com.atproto.space.getSpace'
+    ComAtprotoSpaceImportRepo: str = 'com.atproto.space.importRepo'
+    ComAtprotoSpaceImportSpaceMeta: str = 'com.atproto.space.importSpaceMeta'
+    ComAtprotoSpaceListBlobs: str = 'com.atproto.space.listBlobs'
+    ComAtprotoSpaceListRecords: str = 'com.atproto.space.listRecords'
+    ComAtprotoSpaceListRepoOps: str = 'com.atproto.space.listRepoOps'
+    ComAtprotoSpaceListSpaces: str = 'com.atproto.space.listSpaces'
+    ComAtprotoSpaceListWriters: str = 'com.atproto.space.listWriters'
+    ComAtprotoSpaceNotifyCredentialsRevoked: str = 'com.atproto.space.notifyCredentialsRevoked'
+    ComAtprotoSpaceNotifyRepoUpdate: str = 'com.atproto.space.notifyRepoUpdate'
+    ComAtprotoSpaceNotifySpaceUpdate: str = 'com.atproto.space.notifySpaceUpdate'
+    ComAtprotoSpacePolicy: str = 'com.atproto.space.policy'
+    ComAtprotoSpacePutRecord: str = 'com.atproto.space.putRecord'
+    ComAtprotoSpaceRemoveWriter: str = 'com.atproto.space.removeWriter'
+    ComAtprotoSpaceUpdateSpace: str = 'com.atproto.space.updateSpace'
     ComAtprotoSyncDefs: str = 'com.atproto.sync.defs'
     ComAtprotoSyncGetBlob: str = 'com.atproto.sync.getBlob'
     ComAtprotoSyncGetBlocks: str = 'com.atproto.sync.getBlocks'

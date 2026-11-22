@@ -1,5 +1,7 @@
+import pytest
 from atproto_identity.cache.in_memory_cache import DidInMemoryCache
 from atproto_identity.did.resolver import DidResolver
+from atproto_identity.exceptions import DidNotFoundError
 
 
 def test_did_resolver_cache_with_web_feed() -> None:
@@ -40,6 +42,19 @@ def test_did_resolver_cache_with_did_plc() -> None:
     assert cached_result is not None
     cached_did_doc = cached_result.document
     assert cached_did_doc is did_doc
+
+
+def test_did_resolver_cache_with_unknown_did_plc() -> None:
+    did_plc = 'did:plc:kvwvcn5iqfooopmyzvb41234'
+
+    cache = DidInMemoryCache()
+    resolver = DidResolver(cache=cache)
+
+    assert resolver.resolve(did_plc) is None
+    with pytest.raises(DidNotFoundError):
+        resolver.ensure_resolve(did_plc)
+
+    assert cache.get(did_plc) is None
 
 
 def test_did_resolver_resolve_no_cache() -> None:

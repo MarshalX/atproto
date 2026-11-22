@@ -74,6 +74,25 @@ jwt = sign_jwt({'typ': 'JWT', 'kid': 'key-1'}, {'iss': 'did:web:example.com'}, l
 
 Signatures are produced in the low-S form, so they verify with [verify_signature](#atproto_crypto.verify.verify_signature). secp256k1 keys remain verify-only.
 
+## Set hash and key agreement
+
+Two more primitives serve [Spaces](../guides/spaces.md), which authenticate a repo with a MAC of its host instead of a signature:
+
+[LtHash](#atproto_crypto.lthash.LtHash)
+: A homomorphic hash of a set. Elements are added and removed in any order, and two sets with the same elements have the same [digest](#atproto_crypto.lthash.LtHash.digest). The commit of a repo in a space is the digest of its records.
+
+[encapsulate](#atproto_crypto.kem.encapsulate) and [decapsulate](#atproto_crypto.kem.decapsulate)
+: Key agreement over P-256, as HPKE ([RFC 9180](https://www.rfc-editor.org/rfc/rfc9180)) defines it. The sender derives a secret from the public key of the recipient, and the recipient derives the same secret from the key share that the sender passes along.
+
+```python
+from atproto_crypto.kem import decapsulate, encapsulate
+
+encapsulation = encapsulate(recipient_did_key, info=b'my-protocol')
+shared_secret = decapsulate(recipient_private_key, encapsulation.key_share, info=b'my-protocol')
+
+assert shared_secret == encapsulation.shared_secret
+```
+
 ```{eval-rst}
 .. automodule:: atproto_crypto
    :members:
@@ -89,6 +108,8 @@ Signatures are produced in the low-S form, so they verify with [verify_signature
 did
 jwk
 jws
+kem
+lthash
 multibase
 verify
 ```

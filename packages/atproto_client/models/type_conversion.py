@@ -25,6 +25,8 @@ RECORD_TYPES = {
     'chat.bsky.actor.declaration': 'ChatBskyActorDeclaration',
     'com.atproto.label.record': 'ComAtprotoLabelRecord',
     'com.atproto.lexicon.schema': 'ComAtprotoLexiconSchema',
+    'com.atproto.memberspace.member': 'ComAtprotoMemberspaceMember',
+    'com.atproto.space.policy': 'ComAtprotoSpacePolicy',
     'com.germnetwork.declaration': 'ComGermnetworkDeclaration',
     'place.stream.chat.pinnedRecord': 'PlaceStreamChatPinnedRecord',
     'place.stream.chat.profile': 'PlaceStreamChatProfile',

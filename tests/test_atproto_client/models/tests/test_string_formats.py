@@ -23,6 +23,7 @@ def read_test_data() -> t.Dict[str, t.Dict[str, t.List[str]]]:
             'datetime': get_test_cases('datetime_syntax_valid.txt'),
             'tid': get_test_cases('tid_syntax_valid.txt'),
             'record_key': get_test_cases('recordkey_syntax_valid.txt'),
+            'space_ref': get_test_cases('spaceref_syntax_valid.txt'),
         },
         'invalid': {
             'handle': get_test_cases('handle_syntax_invalid.txt'),
@@ -32,6 +33,7 @@ def read_test_data() -> t.Dict[str, t.Dict[str, t.List[str]]]:
             'datetime': get_test_cases('datetime_syntax_invalid.txt'),
             'tid': get_test_cases('tid_syntax_invalid.txt'),
             'record_key': get_test_cases('recordkey_syntax_invalid.txt'),
+            'space_ref': get_test_cases('spaceref_syntax_invalid.txt'),
         },
     }
 
@@ -45,6 +47,7 @@ def _get_type_adapter(field_name: str) -> TypeAdapter[str]:
         'nsid': TypeAdapter(string_formats.Nsid),
         'tid': TypeAdapter(string_formats.Tid),
         'record_key': TypeAdapter(string_formats.RecordKey),
+        'space_ref': TypeAdapter(string_formats.SpaceRef),
     }
     return field_name_to_adapter[field_name]
 
@@ -89,7 +92,7 @@ def invalid_data() -> t.Dict[str, str]:
     'field_name,invalid_value',
     [
         (field_name, invalid_value)
-        for field_name in ['at_uri', 'datetime', 'handle', 'did', 'nsid', 'tid', 'record_key']
+        for field_name in ['at_uri', 'datetime', 'handle', 'did', 'nsid', 'tid', 'record_key', 'space_ref']
         for invalid_value in read_test_data()['invalid'][field_name]
     ],
 )
@@ -109,7 +112,7 @@ def test_string_format_validation_with_invalid(field_name: str, invalid_value: s
     'field_name,valid_value',
     [
         (field_name, valid_value)
-        for field_name in ['at_uri', 'datetime', 'handle', 'did', 'nsid', 'tid', 'record_key']
+        for field_name in ['at_uri', 'datetime', 'handle', 'did', 'nsid', 'tid', 'record_key', 'space_ref']
         for valid_value in read_test_data()['valid'][field_name]
     ],
 )
@@ -144,12 +147,63 @@ def test_tid_invalid_first_letters(invalid_tid: str) -> None:
 
 
 @pytest.mark.parametrize(
+    'valid_space_uri',
+    [
+        'at://did:plc:asdf123/space/com.example.group/default',
+        'at://did:plc:asdf123/space/com.example.group/default/did:plc:user1/com.atproto.feed.post/abc123',
+        'at://did:web:example.com/space/com.example.group/self_/did:web:localhost%3A1234/com.atproto.feed.post/~',
+    ],
+)
+def test_at_uri_valid_space_uris(valid_space_uri: str) -> None:
+    """Test that AT-URIs of a space and of a record in a space are accepted.
+
+    The interop test files do not cover space URIs.
+    """
+    AtUriTypeAdapter = TypeAdapter(string_formats.AtUri)
+    assert AtUriTypeAdapter.validate_python(valid_space_uri, context={_OPT_IN_KEY: True}) == valid_space_uri
+
+
+@pytest.mark.parametrize(
+    'invalid_space_uri',
+    [
+        'at://did:plc:asdf123/space',
+        'at://did:plc:asdf123/space/com.example.group',
+        'at://did:plc:asdf123/space/short/default',
+        'at://did:plc:asdf123/space/com.example.group/..',
+        'at://user.bsky.social/space/com.example.group/default',
+        'at://did:plc:asdf123/space/com.example.group/default/',
+        'at://did:plc:asdf123/space/com.example.group/default?foo=bar',
+        'at://did:plc:asdf123/space/com.example.group/default#/frag',
+        'at://did:plc:asdf123/space/com.example.group/default/did:plc:user1',
+        'at://did:plc:asdf123/space/com.example.group/default/did:plc:user1/com.atproto.feed.post',
+        'at://did:plc:asdf123/space/com.example.group/default/did:plc:user1/short/abc123',
+        'at://did:plc:asdf123/space/com.example.group/default/user.bsky.social/com.atproto.feed.post/abc123',
+    ],
+)
+def test_at_uri_invalid_space_uris(invalid_space_uri: str) -> None:
+    """Test that AT-URIs with a malformed space path are rejected."""
+    AtUriTypeAdapter = TypeAdapter(string_formats.AtUri)
+    with pytest.raises(ValidationError, match='Invalid AT-URI'):
+        AtUriTypeAdapter.validate_python(invalid_space_uri, context={_OPT_IN_KEY: True})
+
+
+def test_space_ref_rejects_record_uri() -> None:
+    """Test that the AT-URI of a record in a space is not a space reference."""
+    record_uri = 'at://did:plc:asdf123/space/com.example.group/default/did:plc:user1/com.atproto.feed.post/abc123'
+
+    SpaceRefTypeAdapter = TypeAdapter(string_formats.SpaceRef)
+    with pytest.raises(ValidationError, match='Invalid space reference'):
+        SpaceRefTypeAdapter.validate_python(record_uri, context={_OPT_IN_KEY: True})
+
+
+@pytest.mark.parametrize(
     'valid_value',
     [
         'test.bsky.social',
         'did:plc:1234abcd',
         'app.bsky.feed.post',
         'at://user.bsky.social/posts/123',
+        'at://did:plc:1234abcd/space/com.example.group/default',
         'bafyreidfayvfuwqa2beehqn7axeeeaej5aqvaowxgwcdt2rw',
         '2023-01-01T12:00:00Z',
         '3jqvenncqkgbm',

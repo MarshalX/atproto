@@ -2,8 +2,8 @@ import typing as t
 
 import httpx
 import typing_extensions as te
+from atproto_core._effects import Call, call, perform, perform_async
 
-from atproto_oauth._effects import Call, call, perform, perform_async
 from atproto_oauth.dpop import (
     DpopKey,
     build_dpop_proof,

@@ -7,9 +7,12 @@ from atproto_oauth.scopes.permissions import (
     IdentityPermission,
     RepoPermission,
     RpcPermission,
+    SpacePermission,
 )
 
-_Permission = t.Union[RepoPermission, BlobPermission, RpcPermission, AccountPermission, IdentityPermission]
+_Permission = t.Union[
+    RepoPermission, BlobPermission, RpcPermission, AccountPermission, IdentityPermission, SpacePermission
+]
 
 _PERMISSIONS: t.Final[t.Dict[str, t.Type[_Permission]]] = {
     'repo': RepoPermission,
@@ -17,6 +20,7 @@ _PERMISSIONS: t.Final[t.Dict[str, t.Type[_Permission]]] = {
     'rpc': RpcPermission,
     'account': AccountPermission,
     'identity': IdentityPermission,
+    'space': SpacePermission,
 }
 
 
@@ -69,7 +73,7 @@ class ScopesSet:
         """Check if any scope in the set grants the requested permission.
 
         Args:
-            resource: The resource type (``repo``, ``blob``, ``rpc``, ``account``, ``identity``).
+            resource: The resource type (``repo``, ``blob``, ``rpc``, ``account``, ``identity``, ``space``).
             **kwargs: Permission-specific parameters passed to ``matches()``.
 
         Returns:

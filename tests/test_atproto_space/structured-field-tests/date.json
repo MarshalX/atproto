@@ -1,0 +1,107 @@
+[
+    {
+        "name": "date - 1970-01-01 00:00:00",
+        "raw": ["@0"],
+        "header_type": "item",
+        "expected": [{"__type": "date", "value": 0}, []]
+    },
+    {
+        "name": "date - 2022-08-04 01:57:13",
+        "raw": ["@1659578233"],
+        "header_type": "item",
+        "expected": [{"__type": "date", "value": 1659578233}, []]
+    },
+    {
+        "name": "date - 1917-05-30 22:02:47",
+        "raw": ["@-1659578233"],
+        "header_type": "item",
+        "expected": [{"__type": "date", "value": -1659578233}, []]
+    },
+    {
+        "name": "date - 2^31",
+        "raw": ["@2147483648"],
+        "header_type": "item",
+        "expected": [{"__type": "date", "value": 2147483648}, []]
+    },
+    {
+        "name": "date - 2^32",
+        "raw": ["@4294967296"],
+        "header_type": "item",
+        "expected": [{"__type": "date", "value": 4294967296}, []]
+    },
+    {
+        "name": "interoperability max date - 9999-12-31 00:00:00",
+        "raw": ["@253402214400"],
+        "header_type": "item",
+        "expected": [{"__type": "date", "value": 253402214400}, []]
+    },
+    {
+        "name": "interoperability min date - 0001-01-01 00:00:00",
+        "raw": ["@-62135596800"],
+        "header_type": "item",
+        "expected": [{"__type": "date", "value": -62135596800}, []]
+    },
+    {
+        "name": "date - decimal",
+        "raw": ["@1659578233.12"],
+        "header_type": "item",
+        "must_fail": true
+    },
+    {
+        "name": "syntactic max date - 999,999,999,999,999",
+        "raw": ["@999999999999999"],
+        "header_type": "item",
+        "can_fail": true,
+        "expected": [{"__type": "date", "value": 999999999999999}, []]
+    },
+    {
+        "name": "syntactic min date - -999,999,999,999,999",
+        "raw": ["@-999999999999999"],
+        "header_type": "item",
+        "can_fail": true,
+        "expected": [{"__type": "date", "value": -999999999999999}, []]
+    },
+    {
+        "name": "too large syntactic date - 1,000,000,000,000,000",
+        "raw": ["@1000000000000000"],
+        "header_type": "item",
+        "must_fail": true
+    },
+    {
+        "name": "too small syntactic date - -1,000,000,000,000,000",
+        "raw": ["@-1000000000000000"],
+        "header_type": "item",
+        "must_fail": true
+    },
+    {
+        "name": "date with negative zero",
+        "raw": ["@-0"],
+        "header_type": "item",
+        "expected": [{"__type": "date", "value": 0}, []],
+        "canonical": ["@0"]
+    },
+    {
+        "name": "date - empty",
+        "raw": ["@"],
+        "header_type": "item",
+        "must_fail": true
+    },
+    {
+        "name": "date - sign only",
+        "raw": ["@-"],
+        "header_type": "item",
+        "must_fail": true
+    },
+    {
+        "name": "date - space",
+        "raw": ["@ 12345678"],
+        "header_type": "item",
+        "must_fail": true
+    },
+    {
+        "name": "date - non-digit",
+        "raw": ["@abc"],
+        "header_type": "item",
+        "must_fail": true
+    }
+]

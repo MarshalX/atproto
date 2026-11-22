@@ -10,6 +10,8 @@ from pydantic import BaseModel, Field, ValidationError
 _AT_URI_PREFIX = 'at://'
 _AT_URI_PREFIX_LEN = len(_AT_URI_PREFIX)
 _ATPROTO_KEY_ID = '#atproto'
+_ATPROTO_KEM_KEY_ID = '#atproto_kem'
+_KEM_KEY_TYPES = frozenset({'EcdsaSecp256r1VerificationKey2019', 'Multikey'})
 
 
 @te.runtime_checkable
@@ -185,6 +187,28 @@ class DidDocument(BaseModel):
             return None
 
         return get_did_key(key.type, key.public_key_multibase)
+
+    def get_kem_key(self) -> t.Optional[str]:
+        """Return the DID key of the KEM key of the given DID document.
+
+        Returns:
+            :obj:`str`: The DID key of the KEM key of the given DID document, or ``None`` if not found.
+        """
+        did = self.get_did()
+
+        keys = self.verification_method
+        if not keys:
+            return None
+
+        for key in keys:
+            if (
+                (key.id == _ATPROTO_KEM_KEY_ID or key.id == f'{did}{_ATPROTO_KEM_KEY_ID}')
+                and key.type in _KEM_KEY_TYPES
+                and key.public_key_multibase
+            ):
+                return get_did_key(key.type, key.public_key_multibase)
+
+        return None
 
     def to_atproto_data(self) -> AtprotoData:
         """Return the AtprotoData of the given DID document.

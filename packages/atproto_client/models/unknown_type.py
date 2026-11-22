@@ -32,6 +32,8 @@ UnknownRecordType: te.TypeAlias = t.Union[
     'models.ChatBskyActorDeclaration.Record',
     'models.ComAtprotoLabelRecord.Record',
     'models.ComAtprotoLexiconSchema.Record',
+    'models.ComAtprotoMemberspaceMember.Record',
+    'models.ComAtprotoSpacePolicy.Record',
     'models.ComGermnetworkDeclaration.Record',
     'models.PlaceStreamChatPinnedRecord.Record',
     'models.PlaceStreamChatProfile.Record',

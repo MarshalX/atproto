@@ -16,7 +16,8 @@ if t.TYPE_CHECKING:
     from atproto_core.cid import CID, CIDType
     from atproto_core.did_doc import DidDocument
     from atproto_core.nsid import NSID
-    from atproto_core.uri import AtUri
+    from atproto_core.star import STAR
+    from atproto_core.uri import AtUri, SpaceRef
     from atproto_crypto.did import Multikey, get_did_key
     from atproto_crypto.multibase import bytes_to_multibase, multibase_to_bytes
     from atproto_crypto.verify import verify_signature
@@ -59,6 +60,18 @@ if t.TYPE_CHECKING:
         verify_jwt,
         verify_jwt_async,
     )
+    from atproto_space import (
+        AsyncSpaceClient,
+        AsyncSpaceManager,
+        AsyncSpaceReader,
+        RepoChanges,
+        RepoHead,
+        RepoSnapshot,
+        SpaceClient,
+        SpaceManager,
+        SpaceReader,
+        SpaceType,
+    )
     from atproto_subscription import frames as firehose_models
 
 __getattr__, __dir__ = lazy_exports(
@@ -70,7 +83,8 @@ __getattr__, __dir__ = lazy_exports(
         'atproto_core.cid': ('CID', 'CIDType'),
         'atproto_core.did_doc': ('DidDocument',),
         'atproto_core.nsid': ('NSID',),
-        'atproto_core.uri': ('AtUri',),
+        'atproto_core.star': ('STAR',),
+        'atproto_core.uri': ('AtUri', 'SpaceRef'),
         'atproto_crypto.did': ('Multikey', 'get_did_key'),
         'atproto_crypto.multibase': ('bytes_to_multibase', 'multibase_to_bytes'),
         'atproto_crypto.verify': ('verify_signature',),
@@ -107,6 +121,18 @@ __getattr__, __dir__ = lazy_exports(
             'verify_jwt',
             'verify_jwt_async',
         ),
+        'atproto_space': (
+            'AsyncSpaceClient',
+            'AsyncSpaceManager',
+            'AsyncSpaceReader',
+            'RepoChanges',
+            'RepoHead',
+            'RepoSnapshot',
+            'SpaceClient',
+            'SpaceManager',
+            'SpaceReader',
+            'SpaceType',
+        ),
     },
     modules={
         'models': 'atproto_client.models',
@@ -133,7 +159,9 @@ __all__ = [  # noqa: RUF022
     'CIDType',
     'DidDocument',
     'NSID',
+    'STAR',
     'AtUri',
+    'SpaceRef',
     # crypto
     'bytes_to_multibase',
     'get_did_key',
@@ -171,6 +199,17 @@ __all__ = [  # noqa: RUF022
     'OAuthSession',
     'OAuthSessionData',
     'OAuthStateData',
+    # space
+    'AsyncSpaceClient',
+    'AsyncSpaceManager',
+    'AsyncSpaceReader',
+    'RepoChanges',
+    'RepoHead',
+    'RepoSnapshot',
+    'SpaceClient',
+    'SpaceManager',
+    'SpaceReader',
+    'SpaceType',
     # server jwt
     'JwtPayload',
     'decode_jwt_payload',

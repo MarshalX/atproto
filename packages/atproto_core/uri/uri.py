@@ -6,6 +6,7 @@ from urllib.parse import urlencode
 import typing_extensions as te
 
 from atproto_core.exceptions import InvalidAtUriError
+from atproto_core.uri.space import _SPACE_MARKER, _is_nsid, is_did, is_record_key
 
 # ref: https://github.com/bluesky-social/atproto/blob/a4af3494bd8263187bb3450193bcd2467ae6b788/packages/syntax/src/aturi.ts#L5C5-L5C98
 _ATP_URI_REGEX = r'^(at:\/\/)?((?:did:[a-z0-9:%-]+)|(?:[a-z0-9][a-z0-9.:-]*))(\/[^?#\s]*)?(\?[^#\s]+)?(#[^\s]+)?$'
@@ -25,6 +26,10 @@ class AtUri:
         Record: at://alice.host.com/io.example.song/3yI5-c1z-cc2p-1a
 
         Record Field: at://alice.host.com/io.example.song/3yI5-c1z-cc2p-1a#/title
+
+        Space: at://did:web:band.com/space/io.example.band/tour
+
+        Space Record: at://did:web:band.com/space/io.example.band/tour/did:web:bob.com/io.example.song/3yI5-c1z-cc2p-1a
     """
 
     def __init__(
@@ -63,8 +68,45 @@ class AtUri:
         return self.host
 
     @property
+    def is_space(self) -> bool:
+        """Tell whether the URI addresses a space or a record in a space."""
+        return self._path_parts[:1] == [_SPACE_MARKER]
+
+    @property
+    def space_did(self) -> str:
+        """Get DID of the space."""
+        if self.is_space and is_did(self.host):
+            return self.host
+
+        return ''
+
+    @property
+    def space_type(self) -> str:
+        """Get space type."""
+        return self._get_space_part(1, _is_nsid)
+
+    @property
+    def skey(self) -> str:
+        """Get space key (skey)."""
+        return self._get_space_part(2, is_record_key)
+
+    @property
+    def author_did(self) -> str:
+        """Get DID of the account that the record belongs to."""
+        if self.is_space:
+            return self._get_space_part(3, is_did)
+
+        if is_did(self.host):
+            return self.host
+
+        return ''
+
+    @property
     def collection(self) -> str:
         """Get collection name."""
+        if self.is_space:
+            return self._get_space_part(4, _is_nsid)
+
         for part in self.pathname.split('/'):
             if part:
                 return part
@@ -74,6 +116,9 @@ class AtUri:
     @property
     def rkey(self) -> str:
         """Get record key (rkey)."""
+        if self.is_space:
+            return self._get_space_part(5, is_record_key)
+
         parts = [p for p in self.pathname.split('/') if p]
         if len(parts) > 1:
             return parts[1]
@@ -133,6 +178,17 @@ class AtUri:
         group = groups[0]
         search_params = urlparse.parse_qsl(group[1] or '')
         return cls(host=base, pathname=group[0] or '', hash_=group[2] or '', search_params=search_params)
+
+    @property
+    def _path_parts(self) -> t.List[str]:
+        return [p for p in self.pathname.split('/') if p]
+
+    def _get_space_part(self, index: int, is_valid: t.Callable[[str], bool]) -> str:
+        parts = self._path_parts
+        if parts[:1] == [_SPACE_MARKER] and index < len(parts) and is_valid(parts[index]):
+            return parts[index]
+
+        return ''
 
     def __str__(self) -> str:
         path = self.pathname or '/'

@@ -1,6 +1,7 @@
 import pytest
 from atproto_identity.cache.in_memory_cache import AsyncDidInMemoryCache
 from atproto_identity.did.resolver import AsyncDidResolver
+from atproto_identity.exceptions import DidNotFoundError
 
 
 @pytest.mark.asyncio
@@ -43,6 +44,20 @@ async def test_did_resolver_cache_with_did_plc() -> None:
     assert cached_result is not None
     cached_did_doc = cached_result.document
     assert cached_did_doc is did_doc
+
+
+@pytest.mark.asyncio
+async def test_did_resolver_cache_with_unknown_did_plc() -> None:
+    did_plc = 'did:plc:kvwvcn5iqfooopmyzvb41234'
+
+    cache = AsyncDidInMemoryCache()
+    resolver = AsyncDidResolver(cache=cache)
+
+    assert await resolver.resolve(did_plc) is None
+    with pytest.raises(DidNotFoundError):
+        await resolver.ensure_resolve(did_plc)
+
+    assert await cache.get(did_plc) is None
 
 
 @pytest.mark.asyncio

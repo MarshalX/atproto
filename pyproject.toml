@@ -40,6 +40,9 @@ dependencies = [
     # Python 3.14+ falls back to the standard library compression.zstd; the zstd extra is faster.
     "zstandard (>=0.24.0,<0.26.0) ; python_version < '3.14'",
     "tlds>=2026093003",
+    # blake3 1.0.11 is the first with wheels for 3.15 and requires Python 3.11+.
+    "blake3 (>=1.0.10,<2) ; python_version < '3.15'",
+    "blake3 (>=1.0.11,<2) ; python_version >= '3.15'",
 ]
 
 [project.optional-dependencies]
@@ -106,6 +109,7 @@ packages = [
     { include = "atproto_lexicon", from = "packages" },
     { include = "atproto_oauth", from = "packages" },
     { include = "atproto_server", from = "packages" },
+    { include = "atproto_space", from = "packages" },
     { include = "atproto_subscription", from = "packages" },
 ]
 version = "0.0.0" # This is a placeholder. Dynamic version from Git Tag will be used.
@@ -200,6 +204,7 @@ ignore = [
 ]
 "tests/*.py" = ["D"]
 "tests/test_atproto_oauth/*.py" = ["D", "S105", "S106"]
+"tests/test_atproto_space/*.py" = ["D", "S105", "S106"]
 "docs/*.py" = ["T201", "INP001", "ERA001", "E501", "D"]
 "examples/*.py" = ["T201", "INP001", "ERA001", "D"]
 "packages/atproto/exceptions.py" = ["F403"]

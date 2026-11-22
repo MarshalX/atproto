@@ -7823,9 +7823,12 @@ class ComAtprotoNamespace(AsyncNamespaceBase):
         self.identity = ComAtprotoIdentityNamespace(self._client)
         self.label = ComAtprotoLabelNamespace(self._client)
         self.lexicon = ComAtprotoLexiconNamespace(self._client)
+        self.managedspace = ComAtprotoManagedspaceNamespace(self._client)
+        self.memberspace = ComAtprotoMemberspaceNamespace(self._client)
         self.moderation = ComAtprotoModerationNamespace(self._client)
         self.repo = ComAtprotoRepoNamespace(self._client)
         self.server = ComAtprotoServerNamespace(self._client)
+        self.space = ComAtprotoSpaceNamespace(self._client)
         self.sync = ComAtprotoSyncNamespace(self._client)
         self.temp = ComAtprotoTempNamespace(self._client)
 
@@ -8782,6 +8785,264 @@ class ComAtprotoLexiconNamespace(AsyncNamespaceBase):
         return get_response_model(response, models.ComAtprotoLexiconResolveLexicon.Response)
 
 
+class ComAtprotoManagedspaceNamespace(AsyncNamespaceBase):
+    async def check_access(
+        self,
+        params: t.Union[
+            models.ComAtprotoManagedspaceCheckAccess.Params, models.ComAtprotoManagedspaceCheckAccess.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoManagedspaceCheckAccess.Response':
+        """Check an account's read and write access to a managed space. Called by the space host, implemented by the space's managing app. Requires service auth.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoManagedspaceCheckAccess.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoManagedspaceCheckAccess.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.managedspace.checkAccess', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoManagedspaceCheckAccess.Response)
+
+
+class ComAtprotoMemberspaceMemberRecord(AsyncRecordBase):
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.ComAtprotoMemberspaceMember.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoMemberspaceMember.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='com.atproto.memberspace.member', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.ComAtprotoMemberspaceMember.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.ComAtprotoMemberspaceMember.Record', response_model.value),
+        )
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoMemberspaceMember.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoMemberspaceMember.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='com.atproto.memberspace.member',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.ComAtprotoMemberspaceMember.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.ComAtprotoMemberspaceMember.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.ComAtprotoMemberspaceMember.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoMemberspaceMember.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoMemberspaceMember.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='com.atproto.memberspace.member',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.ComAtprotoMemberspaceMember.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='com.atproto.memberspace.member',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class ComAtprotoMemberspaceNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
+        super().__init__(client)
+        self.member = ComAtprotoMemberspaceMemberRecord(self._client)
+
+    async def list_members(
+        self,
+        params: t.Union[
+            models.ComAtprotoMemberspaceListMembers.Params, models.ComAtprotoMemberspaceListMembers.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoMemberspaceListMembers.Response':
+        """List the members of a space with a memberspace policy. Requires auth as the space authority, implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoMemberspaceListMembers.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoMemberspaceListMembers.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.memberspace.listMembers', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoMemberspaceListMembers.Response)
+
+    async def put_members(
+        self,
+        data: t.Union[models.ComAtprotoMemberspacePutMembers.Data, models.ComAtprotoMemberspacePutMembers.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Add members to a space, or update existing members' access, in a single commit. Requires auth as the space authority, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoMemberspacePutMembers.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.memberspace.putMembers', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def remove_members(
+        self,
+        data: t.Union[
+            models.ComAtprotoMemberspaceRemoveMembers.Data, models.ComAtprotoMemberspaceRemoveMembers.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Remove members from a space in a single commit. DIDs that are not members are ignored. Requires auth as the space authority, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoMemberspaceRemoveMembers.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.memberspace.removeMembers', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
 class ComAtprotoModerationNamespace(AsyncNamespaceBase):
     async def create_report(
         self,
@@ -9596,6 +9857,841 @@ class ComAtprotoServerNamespace(AsyncNamespaceBase):
         data_model = get_or_create(data, models.ComAtprotoServerUpdateEmail.Data)
         response = await self._client.invoke_procedure(
             'com.atproto.server.updateEmail', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class ComAtprotoSpacePolicyRecord(AsyncRecordBase):
+    async def get(
+        self, repo: str, rkey: str, cid: t.Optional[str] = None, **kwargs: t.Any
+    ) -> 'models.ComAtprotoSpacePolicy.GetRecordResponse':
+        """Get a record.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            cid: The CID of the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpacePolicy.GetRecordResponse`: Get record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoGetRecord.Params(
+            collection='com.atproto.space.policy', repo=repo, rkey=rkey, cid=cid
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoGetRecord.Response)
+        return models.ComAtprotoSpacePolicy.GetRecordResponse(
+            uri=response_model.uri,
+            cid=response_model.cid,
+            value=t.cast('models.ComAtprotoSpacePolicy.Record', response_model.value),
+        )
+
+    async def list(
+        self,
+        repo: str,
+        cursor: t.Optional[str] = None,
+        limit: t.Optional[int] = None,
+        reverse: t.Optional[bool] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpacePolicy.ListRecordsResponse':
+        """List a range of records in a collection.
+
+        Args:
+            repo: The repository (DID).
+            cursor: The cursor.
+            limit: The limit.
+            reverse: Whether to reverse the order.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpacePolicy.ListRecordsResponse`: List records response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = models.ComAtprotoRepoListRecords.Params(
+            collection='com.atproto.space.policy',
+            repo=repo,
+            cursor=cursor,
+            limit=limit,
+            reverse=reverse,
+        )
+        response = await self._client.invoke_query(
+            'com.atproto.repo.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoListRecords.Response)
+        return models.ComAtprotoSpacePolicy.ListRecordsResponse(
+            records={
+                record.uri: t.cast('models.ComAtprotoSpacePolicy.Record', record.value)
+                for record in response_model.records
+            },
+            cursor=response_model.cursor,
+        )
+
+    async def create(
+        self,
+        repo: str,
+        record: 'models.ComAtprotoSpacePolicy.Record',
+        rkey: t.Optional[str] = None,
+        swap_commit: t.Optional[str] = None,
+        validate: t.Optional[bool] = True,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpacePolicy.CreateRecordResponse':
+        """Create a new record.
+
+        Args:
+            repo: The repository (DID).
+            record: The record.
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            validate: Whether to validate the record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpacePolicy.CreateRecordResponse`: Create record response.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoCreateRecord.Data(
+            collection='com.atproto.space.policy',
+            repo=repo,
+            record=record,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            validate_=validate,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        response_model = get_response_model(response, models.ComAtprotoRepoCreateRecord.Response)
+        return models.ComAtprotoSpacePolicy.CreateRecordResponse(uri=response_model.uri, cid=response_model.cid)
+
+    async def delete(
+        self,
+        repo: str,
+        rkey: str,
+        swap_commit: t.Optional[str] = None,
+        swap_record: t.Optional[str] = None,
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a record, or ensure it doesn't exist.
+
+        Args:
+            repo: The repository (DID).
+            rkey: The record key (TID).
+            swap_commit: The swap commit.
+            swap_record: The swap record.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = models.ComAtprotoRepoDeleteRecord.Data(
+            collection='com.atproto.space.policy',
+            repo=repo,
+            rkey=rkey,
+            swap_commit=swap_commit,
+            swap_record=swap_record,
+        )
+        response = await self._client.invoke_procedure(
+            'com.atproto.repo.deleteRecord', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+
+class ComAtprotoSpaceNamespace(AsyncNamespaceBase):
+    def __init__(self, client: 'AsyncXrpcClient') -> None:
+        super().__init__(client)
+        self.policy = ComAtprotoSpacePolicyRecord(self._client)
+
+    async def apply_writes(
+        self,
+        data: t.Union[models.ComAtprotoSpaceApplyWrites.Data, models.ComAtprotoSpaceApplyWrites.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceApplyWrites.Response':
+        """Apply a batch transaction of creates, updates, and deletes to a space repo. Requires auth, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceApplyWrites.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceApplyWrites.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.applyWrites',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoSpaceApplyWrites.Response)
+
+    async def authorize_space_sync(
+        self,
+        data: t.Union[models.ComAtprotoSpaceAuthorizeSpaceSync.Data, models.ComAtprotoSpaceAuthorizeSpaceSync.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceAuthorizeSpaceSync.Response':
+        """Authorize syncing a space, returning a new credential for reading data across it and the space's current revision, and optionally registering for notifications of updates to it. Depending on the space's policy, a delegation token and/or client attestation may be required. Implemented by the space host.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceAuthorizeSpaceSync.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceAuthorizeSpaceSync.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.authorizeSpaceSync',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoSpaceAuthorizeSpaceSync.Response)
+
+    async def clear_records(
+        self,
+        data: t.Union[models.ComAtprotoSpaceClearRecords.Data, models.ComAtprotoSpaceClearRecords.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceClearRecords.Response':
+        """Delete all records in the authenticated account's space repo. In the space authority's repo, records published from the space's configuration (such as its policy) are kept. Requires auth, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceClearRecords.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceClearRecords.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.clearRecords',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoSpaceClearRecords.Response)
+
+    async def confirm_registration(
+        self,
+        data: t.Union[
+            models.ComAtprotoSpaceConfirmRegistration.Data, models.ComAtprotoSpaceConfirmRegistration.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceConfirmRegistration.Response':
+        """Confirm a new notification registration. Called by the space host on an endpoint passed to authorizeSpaceSync, before registering it. The syncing service checks that it issued the token for the space, and echoes back the challenge.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceConfirmRegistration.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceConfirmRegistration.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.confirmRegistration',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoSpaceConfirmRegistration.Response)
+
+    async def create_record(
+        self,
+        data: t.Union[models.ComAtprotoSpaceCreateRecord.Data, models.ComAtprotoSpaceCreateRecord.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceCreateRecord.Response':
+        """Create a single new record in a space repo. Requires auth, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceCreateRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceCreateRecord.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.createRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoSpaceCreateRecord.Response)
+
+    async def create_space(
+        self,
+        data: t.Union[models.ComAtprotoSpaceCreateSpace.Data, models.ComAtprotoSpaceCreateSpace.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceCreateSpace.Response':
+        """Create a new space, with the authenticated account as its authority. Requires auth, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceCreateSpace.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceCreateSpace.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.createSpace',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoSpaceCreateSpace.Response)
+
+    async def delete_record(
+        self,
+        data: t.Union[models.ComAtprotoSpaceDeleteRecord.Data, models.ComAtprotoSpaceDeleteRecord.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceDeleteRecord.Response':
+        """Delete a record from a space repo, or ensure it doesn't exist. Requires auth, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceDeleteRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceDeleteRecord.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.deleteRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoSpaceDeleteRecord.Response)
+
+    async def delete_space(
+        self,
+        data: t.Union[models.ComAtprotoSpaceDeleteSpace.Data, models.ComAtprotoSpaceDeleteSpace.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Delete a space, along with the authority's space repo. Requires auth as the space authority, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceDeleteSpace.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.deleteSpace', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def export_space_meta(
+        self,
+        params: t.Union[models.ComAtprotoSpaceExportSpaceMeta.Params, models.ComAtprotoSpaceExportSpaceMeta.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceExportSpaceMeta.Response':
+        """Export a space's state, such as its policy and member list, as a STAR file for account migration. Requires auth as the space authority, implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceExportSpaceMeta.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceExportSpaceMeta.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.exportSpaceMeta',
+            params=params_model,
+            output_encoding='application/vnd.dasl.star',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoSpaceExportSpaceMeta.Response)
+
+    async def get_blob(
+        self,
+        params: t.Union[models.ComAtprotoSpaceGetBlob.Params, models.ComAtprotoSpaceGetBlob.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceGetBlob.Response':
+        """Get a blob referenced by a record in a space repo. Returns the full blob as originally uploaded. Requires auth as the repo's account or with a space credential; implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceGetBlob.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceGetBlob.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.getBlob', params=params_model, output_encoding='*/*', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceGetBlob.Response)
+
+    async def get_delegation_token(
+        self,
+        params: t.Union[
+            models.ComAtprotoSpaceGetDelegationToken.Params, models.ComAtprotoSpaceGetDelegationToken.ParamsDict
+        ],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceGetDelegationToken.Response':
+        """Get a delegation token for a space, to exchange with the space host for a space credential. Requires auth, implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceGetDelegationToken.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceGetDelegationToken.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.getDelegationToken', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceGetDelegationToken.Response)
+
+    async def get_latest_commit(
+        self,
+        params: t.Union[models.ComAtprotoSpaceGetLatestCommit.Params, models.ComAtprotoSpaceGetLatestCommit.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceGetLatestCommit.Response':
+        """Get the current commit of a space repo. Responses are authenticated with a MAC. Requires auth as the repo's account or with a space credential; implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceGetLatestCommit.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceGetLatestCommit.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.getLatestCommit', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceGetLatestCommit.Response)
+
+    async def get_record(
+        self,
+        params: t.Union[models.ComAtprotoSpaceGetRecord.Params, models.ComAtprotoSpaceGetRecord.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceGetRecord.Response':
+        """Get a single record from a space repo. Responses are authenticated with a MAC. Requires auth as the repo's account or with a space credential; implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceGetRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceGetRecord.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.getRecord', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceGetRecord.Response)
+
+    async def get_repo(
+        self,
+        params: t.Union[models.ComAtprotoSpaceGetRepo.Params, models.ComAtprotoSpaceGetRepo.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceGetRepo.Response':
+        """Download a space repo as a STAR file. Responses are authenticated with a MAC. Requires auth as the repo's account or with a space credential; implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceGetRepo.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceGetRepo.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.getRepo', params=params_model, output_encoding='application/vnd.dasl.star', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceGetRepo.Response)
+
+    async def get_space(
+        self,
+        params: t.Union[models.ComAtprotoSpaceGetSpace.Params, models.ComAtprotoSpaceGetSpace.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceGetSpace.Response':
+        """Get a space and its policy. Requires auth as the space authority, implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceGetSpace.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceGetSpace.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.getSpace', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceGetSpace.Response)
+
+    async def import_repo(self, data: 'models.ComAtprotoSpaceImportRepo.Data', **kwargs: t.Any) -> bool:
+        """Import the authenticated account's space repo from a STAR file, for account migration. If the account is the space's authority, the space must first be imported with importSpaceMeta. Requires auth, implemented by PDS.
+
+        Args:
+            data: Input data alias.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.importRepo', data=data, input_encoding='application/vnd.dasl.star', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def import_space_meta(self, data: 'models.ComAtprotoSpaceImportSpaceMeta.Data', **kwargs: t.Any) -> bool:
+        """Import a space's state from an archive produced by exportSpaceMeta, for account migration. Must be called before importing the authority's space repo with importRepo. Requires auth as the space authority, implemented by PDS.
+
+        Args:
+            data: Input data alias.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.importSpaceMeta', data=data, input_encoding='application/vnd.dasl.star', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def list_blobs(
+        self,
+        params: t.Union[models.ComAtprotoSpaceListBlobs.Params, models.ComAtprotoSpaceListBlobs.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceListBlobs.Response':
+        """List blob CIDs referenced by records in a space repo. Requires auth as the repo's account or with a space credential; implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceListBlobs.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceListBlobs.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.listBlobs', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceListBlobs.Response)
+
+    async def list_records(
+        self,
+        params: t.Union[models.ComAtprotoSpaceListRecords.Params, models.ComAtprotoSpaceListRecords.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceListRecords.Response':
+        """List records in a space repo, optionally filtered by collection. Requires auth as the repo's account or with a space credential; implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceListRecords.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceListRecords.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.listRecords', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceListRecords.Response)
+
+    async def list_repo_ops(
+        self,
+        params: t.Union[models.ComAtprotoSpaceListRepoOps.Params, models.ComAtprotoSpaceListRepoOps.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceListRepoOps.Response':
+        """List operations on a space repo after a given revision. Used for incremental sync. Hosts may truncate the log, so use getRepo for a full sync. Responses are authenticated with a MAC. Requires auth as the repo's account or with a space credential; implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceListRepoOps.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceListRepoOps.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.listRepoOps', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceListRepoOps.Response)
+
+    async def list_spaces(
+        self,
+        params: t.Optional[
+            t.Union[models.ComAtprotoSpaceListSpaces.Params, models.ComAtprotoSpaceListSpaces.ParamsDict]
+        ] = None,
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceListSpaces.Response':
+        """List spaces that the authenticated account has written to or is the authority for. Requires auth, implemented by PDS.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceListSpaces.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceListSpaces.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.listSpaces', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceListSpaces.Response)
+
+    async def list_writers(
+        self,
+        params: t.Union[models.ComAtprotoSpaceListWriters.Params, models.ComAtprotoSpaceListWriters.ParamsDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpaceListWriters.Response':
+        """List the repos in a space's writer set, with the latest known state of each: its current revision, or its removal from the writer set. Requires a space credential, implemented by the space host.
+
+        Args:
+            params: Parameters.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpaceListWriters.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        params_model = get_or_create(params, models.ComAtprotoSpaceListWriters.Params)
+        response = await self._client.invoke_query(
+            'com.atproto.space.listWriters', params=params_model, output_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, models.ComAtprotoSpaceListWriters.Response)
+
+    async def notify_credentials_revoked(
+        self,
+        data: t.Union[
+            models.ComAtprotoSpaceNotifyCredentialsRevoked.Data, models.ComAtprotoSpaceNotifyCredentialsRevoked.DataDict
+        ],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Notify a repo host that space credentials have been revoked. Sent by the space host. Requires service auth, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceNotifyCredentialsRevoked.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.notifyCredentialsRevoked', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def notify_repo_update(
+        self,
+        data: t.Union[models.ComAtprotoSpaceNotifyRepoUpdate.Data, models.ComAtprotoSpaceNotifyRepoUpdate.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Notify the space host that a space repo has been updated. Sent by repo hosts, with service auth.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceNotifyRepoUpdate.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.notifyRepoUpdate', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def notify_space_update(
+        self,
+        data: t.Union[models.ComAtprotoSpaceNotifySpaceUpdate.Data, models.ComAtprotoSpaceNotifySpaceUpdate.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Notify a syncing service of an update to a space. Sent by the space host to the notification endpoint registered through authorizeSpaceSync.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceNotifySpaceUpdate.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.notifySpaceUpdate', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def put_record(
+        self,
+        data: t.Union[models.ComAtprotoSpacePutRecord.Data, models.ComAtprotoSpacePutRecord.DataDict],
+        **kwargs: t.Any,
+    ) -> 'models.ComAtprotoSpacePutRecord.Response':
+        """Write a record in a space repo, creating or updating it as needed. Requires auth, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`models.ComAtprotoSpacePutRecord.Response`: Output model.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpacePutRecord.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.putRecord',
+            data=data_model,
+            input_encoding='application/json',
+            output_encoding='application/json',
+            **kwargs,
+        )
+        return get_response_model(response, models.ComAtprotoSpacePutRecord.Response)
+
+    async def remove_writer(
+        self,
+        data: t.Union[models.ComAtprotoSpaceRemoveWriter.Data, models.ComAtprotoSpaceRemoveWriter.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Remove an account from a space's writer set, as returned by listWriters. The removal is sent to registered syncers. The account is added back if it makes another authorized write to the space. Does nothing if the account is not in the writer set. Requires auth as the space authority, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceRemoveWriter.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.removeWriter', data=data_model, input_encoding='application/json', **kwargs
+        )
+        return get_response_model(response, bool)
+
+    async def update_space(
+        self,
+        data: t.Union[models.ComAtprotoSpaceUpdateSpace.Data, models.ComAtprotoSpaceUpdateSpace.DataDict],
+        **kwargs: t.Any,
+    ) -> bool:
+        """Replace the policy of a space. Changing to a different policy type discards state held by the previous policy, such as a member list. Requires auth as the space authority, implemented by PDS.
+
+        Args:
+            data: Input data.
+            **kwargs: Arbitrary arguments to HTTP request.
+
+        Returns:
+            :obj:`bool`: Success status.
+
+        Raises:
+            :class:`atproto.exceptions.AtProtocolError`: Base exception.
+        """
+        data_model = get_or_create(data, models.ComAtprotoSpaceUpdateSpace.Data)
+        response = await self._client.invoke_procedure(
+            'com.atproto.space.updateSpace', data=data_model, input_encoding='application/json', **kwargs
         )
         return get_response_model(response, bool)
 

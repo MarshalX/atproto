@@ -89,7 +89,9 @@ Note what this means in practice:
 - **409, 413, and 502 are `NetworkError`**, which is otherwise the transport-failure class. A swap-commit conflict (409) and a payload that is too large (413) land there because they are worth retrying the same way a 502 is.
 - `UnauthorizedError` covers both "your token is wrong" (401) and "your token is fine but does not grant this" (403). The `error` name in the body separates them. A `Bad token scope` from a chat call means the app password lacks the direct-message grant.
 
-Failures that never reach a status code are mapped from the underlying `httpx` exception instead: a timeout becomes [InvokeTimeoutError](#atproto_client.exceptions.InvokeTimeoutError), and any other network error becomes [NetworkError](#atproto_client.exceptions.NetworkError). Both are raised without a response, so `.response` is `None`.
+Failures that never reach a status code are mapped from the underlying `httpx` exception instead: a timeout becomes [InvokeTimeoutError](#atproto_client.exceptions.InvokeTimeoutError), and any other transport failure, such as a refused connection, a redirect loop, a body that cannot be decoded or a URL that cannot be parsed, becomes [NetworkError](#atproto_client.exceptions.NetworkError). Both are raised without a response, so `.response` is `None`.
+
+A 2xx response that is declared as JSON and does not parse as JSON becomes a [RequestException](#atproto_client.exceptions.RequestException), with the response as it arrived in `.response`.
 
 ## Timeouts
 
@@ -156,7 +158,7 @@ Current limits are published at [bsky.network/docs/rate-limits](https://bsky.net
 Every package defines its own module, and `atproto.exceptions` re-exports all of them. Importing from `atproto.exceptions` always works; the per-package modules are listed here so you know where each name comes from.
 
 `atproto_core.exceptions`
-: `AtProtocolError` and the parsing failures of the core primitives: `InvalidNsidError`, `InvalidAtUriError`, `InvalidCARFile`, `DAGCBORDecodingError`.
+: `AtProtocolError` and the parsing and encoding failures of the core primitives: `InvalidNsidError`, `InvalidAtUriError`, `InvalidCARFile`, `InvalidStarError`, `DAGCBORDecodingError`, `DAGCBOREncodingError`.
 
 `atproto_client.exceptions`
 : Everything on this page: the model and request errors.
@@ -169,6 +171,9 @@ Every package defines its own module, and `atproto.exceptions` re-exports all of
 
 `atproto_server.exceptions`
 : JWT verification failures: `InvalidTokenError` and its subclasses, including `TokenExpiredSignatureError` and `TokenInvalidSignatureError`. See [Building a feed generator](feed-generator.md).
+
+`atproto_space.exceptions`
+: Spaces failures: `SpaceError` and its subclasses. See [Spaces](spaces.md#errors).
 
 `atproto_lexicon.exceptions`
 : `LexiconParsingError`.

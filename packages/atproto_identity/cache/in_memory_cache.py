@@ -29,7 +29,7 @@ class DidInMemoryCache(DidBaseCache):
             self.set(did, doc)
 
     def delete(self, did: str) -> None:
-        del self._cache[did]
+        self._cache.pop(did, None)
 
     def clear(self) -> None:
         self._cache.clear()

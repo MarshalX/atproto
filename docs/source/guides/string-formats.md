@@ -54,8 +54,17 @@ An AT-URI must follow the pattern `at://authority/collection/record-key`:
 - Starts with `at://`
 - Contains handle or DID
 - Optional /collection/record-key path
+- Or a space reference, with an optional /did/collection/record-key path of a record in the space
 - Max 8KB length
 - No query parameters or fragments
+
+### Space reference
+A space reference must follow the pattern `at://did/space/space-type/space-key`:
+- Starts with `at://`
+- Contains a DID, never a handle
+- Space type is an NSID
+- Space key follows the record key rules
+- No trailing slash, query parameters or fragments
 
 ### CID (Content Identifier)
 Must be:

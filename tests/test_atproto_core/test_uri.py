@@ -4,6 +4,9 @@ from atproto_core.uri import AtUri
 
 from tests.interop_test_files import get_test_cases
 
+_SPACE = 'at://did:plc:asdf123/space/com.example.group/default'
+_SPACE_RECORD = f'{_SPACE}/did:plc:user1/com.atproto.feed.post/abc123'
+
 
 def test_at_uri_from_str() -> None:
     test_uri = 'at://did:plc:poqvcn9iqfkgukdvqvb2qzba/app.bsky.feed.post/1jlmwihiomm9m'
@@ -101,3 +104,61 @@ def test_at_uri_http_is_deprecated() -> None:
 
     with pytest.deprecated_call():
         assert at_uri.http == at_uri.href
+
+
+def test_at_uri_space() -> None:
+    at_uri = AtUri.from_str(_SPACE)
+
+    assert str(at_uri) == _SPACE
+    assert at_uri.is_space
+    assert at_uri.space_did == 'did:plc:asdf123'
+    assert at_uri.space_type == 'com.example.group'
+    assert at_uri.skey == 'default'
+    assert at_uri.author_did == ''
+    assert at_uri.collection == ''
+    assert at_uri.rkey == ''
+
+
+def test_at_uri_space_record() -> None:
+    at_uri = AtUri.from_str(_SPACE_RECORD)
+
+    assert str(at_uri) == _SPACE_RECORD
+    assert at_uri.is_space
+    assert at_uri.space_did == 'did:plc:asdf123'
+    assert at_uri.space_type == 'com.example.group'
+    assert at_uri.skey == 'default'
+    assert at_uri.author_did == 'did:plc:user1'
+    assert at_uri.collection == 'com.atproto.feed.post'
+    assert at_uri.rkey == 'abc123'
+
+
+def test_at_uri_without_space() -> None:
+    at_uri = AtUri.from_str('at://did:plc:asdf123/com.atproto.feed.post/abc')
+
+    assert not at_uri.is_space
+    assert at_uri.space_did == ''
+    assert at_uri.space_type == ''
+    assert at_uri.skey == ''
+    assert at_uri.author_did == 'did:plc:asdf123'
+    assert at_uri.collection == 'com.atproto.feed.post'
+    assert at_uri.rkey == 'abc'
+
+    assert not AtUri.from_str('at://did:plc:asdf123').is_space
+    assert not AtUri.from_str('at://did:plc:asdf123/space.example.group/space').is_space
+
+
+def test_at_uri_author_did_with_handle() -> None:
+    assert AtUri.from_str('at://user.bsky.social/com.atproto.feed.post/abc').author_did == ''
+    assert AtUri.from_str('at://user.bsky.social').author_did == ''
+
+
+def test_at_uri_space_with_invalid_parts() -> None:
+    assert AtUri.from_str('at://user.bsky.social/space/com.example.group/default').space_did == ''
+    assert AtUri.from_str('at://did:plc:asdf123/space/short/default').space_type == ''
+    assert AtUri.from_str('at://did:plc:asdf123/space/com.example.group/..').skey == ''
+
+    at_uri = AtUri.from_str(f'{_SPACE}/user.bsky.social/short/..')
+    assert at_uri.is_space
+    assert at_uri.author_did == ''
+    assert at_uri.collection == ''
+    assert at_uri.rkey == ''

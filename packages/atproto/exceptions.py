@@ -14,9 +14,11 @@ from atproto_client.models.common import XrpcError
 from atproto_core.exceptions import (
     AtProtocolError,
     DAGCBORDecodingError,
+    DAGCBOREncodingError,
     InvalidAtUriError,
     InvalidCARFile,
     InvalidNsidError,
+    InvalidStarError,
 )
 from atproto_crypto.exceptions import (
     DidKeyError,
@@ -74,6 +76,14 @@ from atproto_server.exceptions import (
     TokenInvalidIssuedAtError,
     TokenInvalidSignatureError,
 )
+from atproto_space.exceptions import (
+    RepoGapError,
+    SpaceError,
+    SpaceIdentityError,
+    SpaceMacError,
+    SpaceRepoVerificationError,
+    SpaceTokenError,
+)
 from atproto_subscription.exceptions import (
     FrameDecodingError,
     SubscriptionError,
@@ -85,6 +95,7 @@ __all__ = [
     'AuthMethodUnsatisfiableError',
     'BadRequestError',
     'DAGCBORDecodingError',
+    'DAGCBOREncodingError',
     'DidKeyError',
     'DidNotFoundError',
     'DidPlcResolverError',
@@ -99,6 +110,7 @@ __all__ = [
     'InvalidCompressedPubkeyError',
     'InvalidJwkError',
     'InvalidNsidError',
+    'InvalidStarError',
     'InvalidTokenError',
     'InvokeTimeoutError',
     'JetstreamConsumerTooSlowError',
@@ -119,9 +131,15 @@ __all__ = [
     'PoorlyFormattedDidDocumentError',
     'PoorlyFormattedDidError',
     'RateLimitExceededError',
+    'RepoGapError',
     'RequestErrorBase',
     'RequestException',
     'ScopeMissingError',
+    'SpaceError',
+    'SpaceIdentityError',
+    'SpaceMacError',
+    'SpaceRepoVerificationError',
+    'SpaceTokenError',
     'SubscriptionError',
     'TokenDecodeError',
     'TokenExpiredSignatureError',

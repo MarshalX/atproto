@@ -7,8 +7,8 @@ import typing as t
 from pathlib import Path
 
 import pytest
+from atproto_core._effects import call
 from atproto_crypto.jwk import generate_p256_jwk
-from atproto_oauth._effects import call
 from atproto_oauth.exceptions import UnsupportedAuthServerError
 from atproto_oauth.keys import Keyset
 from atproto_oauth.metadata import (
