@@ -14,7 +14,7 @@ _DECIMAL_QUANTUM: t.Final = Decimal(1).scaleb(-_MAX_DECIMAL_FRACTION_DIGITS)
 
 _KEY: t.Final = re.compile(r'[a-z*][a-z0-9_.*-]*')
 _NUMBER: t.Final = re.compile(r'(-?[0-9]+)(?:\.([0-9]*))?')
-_STRING: t.Final = re.compile(r'"((?:[ !#-\[\]-~]|\\["\\])*)"')
+_STRING: t.Final = re.compile(r'"((?:[\x20\x21\x23-\x5b\x5d-\x7e]|\\["\\])*)"')
 _TOKEN: t.Final = re.compile(r"[A-Za-z*][A-Za-z0-9!#$%&'*+.^_`|~:/-]*")
 _BYTE_SEQUENCE: t.Final = re.compile(r':([A-Za-z0-9+/]*)=*:')
 _BOOLEAN: t.Final = re.compile(r'\?([01])')
