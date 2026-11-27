@@ -7,9 +7,7 @@
       "description": "Get the authenticated viewer's Atmosphere activity timeline. Groups contain visible activities from the returned page.",
       "parameters": {
         "type": "params",
-        "properties": {
-          "cursor": { "type": "string" }
-        }
+        "properties": { "cursor": { "type": "string" } }
       },
       "output": {
         "encoding": "application/json",
@@ -45,9 +43,7 @@
     "viewerState": {
       "type": "object",
       "required": ["subscribed"],
-      "properties": {
-        "subscribed": { "type": "boolean" }
-      }
+      "properties": { "subscribed": { "type": "boolean" } }
     },
     "activityItem": {
       "type": "object",

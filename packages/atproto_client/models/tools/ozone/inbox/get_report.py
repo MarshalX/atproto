@@ -60,13 +60,45 @@ class ReportView(base.ModelBase):
         ]
     ]  #: Subject.
     updated_at: string_formats.DateTime  #: Updated at.
+    account_status: t.Optional['models.ToolsOzoneInboxGetReport.AccountStatus'] = (
+        None  #: Current status of the reported account or record owner, independent of the report's resolution.
+    )
     reason: te.Annotated[t.Optional[str], Field(max_length=20000)] = None  #: Reason.
     record: t.Optional['UnknownType'] = (
         None  #: Raw record JSON for the subject, when the subject is a record and the record is available.
     )
+    subject_status: t.Optional['models.ToolsOzoneInboxGetReport.RecordStatus'] = (
+        None  #: Current status of a reported record, when known.
+    )
 
     py_type: t.Literal['tools.ozone.inbox.getReport#reportView'] = Field(
         default='tools.ozone.inbox.getReport#reportView', alias='$type', frozen=True
+    )
+
+
+class AccountStatus(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.inbox.getReport`."""
+
+    enforcement: t.Union[
+        t.Literal['none', 'suspended', 'takendown'], str
+    ]  #: Current enforcement by this moderation service.
+    hosting: t.Optional[t.Union[t.Literal['active', 'deleted', 'deactivated', 'suspended', 'takendown'], str]] = (
+        None  #: Last known account hosting state, omitted when unknown.
+    )
+
+    py_type: t.Literal['tools.ozone.inbox.getReport#accountStatus'] = Field(
+        default='tools.ozone.inbox.getReport#accountStatus', alias='$type', frozen=True
+    )
+
+
+class RecordStatus(base.ModelBase):
+    """Definition model for :obj:`tools.ozone.inbox.getReport`."""
+
+    takendown: bool  #: Whether this moderation service has taken down the record.
+    deleted: t.Optional[bool] = None  #: Whether the record has been deleted by its repository, omitted when unknown.
+
+    py_type: t.Literal['tools.ozone.inbox.getReport#recordStatus'] = Field(
+        default='tools.ozone.inbox.getReport#recordStatus', alias='$type', frozen=True
     )
 
 

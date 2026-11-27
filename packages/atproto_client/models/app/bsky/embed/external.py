@@ -46,6 +46,16 @@ class View(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.external`."""
 
     external: 'models.AppBskyEmbedExternal.ViewExternal'  #: External.
+    data: t.Optional[
+        unknown_union.OpenUnion[
+            t.Union[
+                'models.AppBskyEmbedExternal.ViewArticle',
+                'models.AppBskyEmbedExternal.ViewArticlePublication',
+                'models.AppBskyEmbedExternal.ViewGallery',
+                'models.AppBskyEmbedExternal.ViewLivestream',
+            ]
+        ]
+    ] = None  #: Hydrated modality-specific data for the external embed, when available.
 
     py_type: t.Literal['app.bsky.embed.external#view'] = Field(
         default='app.bsky.embed.external#view', alias='$type', frozen=True
@@ -97,7 +107,7 @@ class ViewExternalSource(base.ModelBase):
 
 
 class ViewExternalSourceTheme(base.ModelBase):
-    """Definition model for :obj:`app.bsky.embed.external`. The theme colors of an external source, such as a standard.site publication. These colors may be used when rendering an embed from that source."""
+    """Definition model for :obj:`app.bsky.embed.external`. The theme colors of an external source, such as a site.standard.publication. These colors may be used when rendering an embed from that source."""
 
     accent_foreground_rgb: te.Annotated[
         t.Optional['models.AppBskyEmbedExternal.ColorRGB'],
@@ -146,14 +156,36 @@ class ViewArticle(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Like count.
     likers: te.Annotated[t.Optional[t.List['models.AppBskyActorDefs.ProfileViewBasic']], Field(max_length=3)] = (
-        None  #: Available profile previews. Selected deterministically by DID; not a ranking.
+        None  #: Available profile previews. Selected deterministically by DID; not a ranking. Deprecated: use viewer.knownLikers instead.
+    )
+    provider_id: te.Annotated[t.Optional[str], Field(max_length=128)] = (
+        None  #: Best-effort provider domain for cosmetic attribution, such as pckt.blog. Not verified provenance.
     )
     publisher: t.Optional['models.AppBskyEmbedExternal.ViewArticlePublication'] = None  #: Publisher.
     reading_time: te.Annotated[t.Optional[int], Field(ge=1)] = None  #: Reading time.
     updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
+    viewer: t.Optional['models.AppBskyEmbedExternal.ViewArticleViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.embed.external#viewArticle'] = Field(
         default='app.bsky.embed.external#viewArticle', alias='$type', frozen=True
+    )
+
+
+class ViewArticleViewerState(base.ModelBase):
+    """Definition model for :obj:`app.bsky.embed.external`. Metadata about the requesting account's relationship with the subject article. Only has meaningful content for authed requests."""
+
+    known_liker_count: te.Annotated[t.Optional[int], Field(ge=0)] = (
+        None  #: Total number of accounts the requesting account follows that recommended the subject, including those in knownLikers.
+    )
+    known_likers: te.Annotated[t.Optional[t.List['models.AppBskyActorDefs.ProfileViewBasic']], Field(max_length=3)] = (
+        None  #: Up to 3 accounts the requesting account follows that recommended the subject, newest first. Never includes the requesting account.
+    )
+    like: t.Optional[string_formats.AtUri] = (
+        None  #: The requesting account's site.standard.graph.recommend record for this article, if recommended.
+    )
+
+    py_type: t.Literal['app.bsky.embed.external#viewArticleViewerState'] = Field(
+        default='app.bsky.embed.external#viewArticleViewerState', alias='$type', frozen=True
     )
 
 
@@ -169,6 +201,9 @@ class ViewArticlePublication(base.ModelBase):
     image: t.Optional[string_formats.Uri] = None  #: Image.
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     logo: t.Optional[string_formats.Uri] = None  #: Logo.
+    provider_id: te.Annotated[t.Optional[str], Field(max_length=128)] = (
+        None  #: Best-effort provider domain for cosmetic attribution, such as pckt.blog. Not verified provenance.
+    )
     subscribers: te.Annotated[t.Optional[t.List['models.AppBskyActorDefs.ProfileViewBasic']], Field(max_length=3)] = (
         None  #: Available profile previews. Selected deterministically by DID; not a ranking.
     )
@@ -185,6 +220,12 @@ class ViewArticlePublication(base.ModelBase):
 class ViewArticlePublicationViewerState(base.ModelBase):
     """Definition model for :obj:`app.bsky.embed.external`. Metadata about the requesting account's relationship with the subject publication. Only has meaningful content for authed requests."""
 
+    known_subscriber_count: te.Annotated[t.Optional[int], Field(ge=0)] = (
+        None  #: Total number of accounts the requesting account follows that subscribed to the subject, including those in knownSubscribers.
+    )
+    known_subscribers: te.Annotated[
+        t.Optional[t.List['models.AppBskyActorDefs.ProfileViewBasic']], Field(max_length=3)
+    ] = None  #: Up to 3 accounts the requesting account follows that subscribed to the subject, newest first. Never includes the requesting account.
     subscription: t.Optional[string_formats.AtUri] = (
         None  #: The requesting account's site.standard.graph.subscription record for this publication, if subscribed.
     )
@@ -222,15 +263,37 @@ class ViewGallery(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     like_count: te.Annotated[t.Optional[int], Field(ge=0)] = None  #: Like count.
     likers: te.Annotated[t.Optional[t.List['models.AppBskyActorDefs.ProfileViewBasic']], Field(max_length=3)] = (
-        None  #: Available profile previews. Selected deterministically by DID; not a ranking.
+        None  #: Available profile previews. Selected deterministically by DID; not a ranking. Deprecated: use viewer.knownLikers instead.
     )
     photo_count: te.Annotated[t.Optional[int], Field(ge=0)] = (
         None  #: Total number of gallery item backlinks, independent of the items included in this view.
     )
+    provider_id: te.Annotated[t.Optional[str], Field(max_length=128)] = (
+        None  #: Best-effort provider domain for cosmetic attribution, such as grain.social. Not verified provenance.
+    )
     updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
+    viewer: t.Optional['models.AppBskyEmbedExternal.ViewGalleryViewerState'] = None  #: Viewer.
 
     py_type: t.Literal['app.bsky.embed.external#viewGallery'] = Field(
         default='app.bsky.embed.external#viewGallery', alias='$type', frozen=True
+    )
+
+
+class ViewGalleryViewerState(base.ModelBase):
+    """Definition model for :obj:`app.bsky.embed.external`. Metadata about the requesting account's relationship with the subject gallery. Only has meaningful content for authed requests."""
+
+    known_liker_count: te.Annotated[t.Optional[int], Field(ge=0)] = (
+        None  #: Total number of accounts the requesting account follows that favorited the subject, including those in knownLikers.
+    )
+    known_likers: te.Annotated[t.Optional[t.List['models.AppBskyActorDefs.ProfileViewBasic']], Field(max_length=3)] = (
+        None  #: Up to 3 accounts the requesting account follows that favorited the subject, newest first. Never includes the requesting account.
+    )
+    like: t.Optional[string_formats.AtUri] = (
+        None  #: The requesting account's social.grain.favorite record for this gallery, if favorited.
+    )
+
+    py_type: t.Literal['app.bsky.embed.external#viewGalleryViewerState'] = Field(
+        default='app.bsky.embed.external#viewGalleryViewerState', alias='$type', frozen=True
     )
 
 
@@ -262,6 +325,9 @@ class ViewLivestream(base.ModelBase):
     labels: t.Optional[t.List['models.ComAtprotoLabelDefs.Label']] = None  #: Labels.
     last_seen_at: t.Optional[string_formats.DateTime] = (
         None  #: When the livestream last reported that it was live. A livestream without endedAt is considered active until two minutes after its last heartbeat; clients can apply the same window to tell whether a cached view is still live.
+    )
+    provider_id: te.Annotated[t.Optional[str], Field(max_length=128)] = (
+        None  #: Best-effort provider domain for cosmetic attribution, such as stream.place. Not verified provenance.
     )
     started_at: t.Optional[string_formats.DateTime] = None  #: Started at.
     updated_at: t.Optional[string_formats.DateTime] = None  #: Updated at.
