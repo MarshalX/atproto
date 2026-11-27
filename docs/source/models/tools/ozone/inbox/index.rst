@@ -11,11 +11,23 @@ Inbox.
 .. grid:: 1 2 2 3
    :gutter: 3
 
+   .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` ackPushNotifications
+      :link: /models/tools/ozone/inbox/ackPushNotifications
+      :link-type: doc
+
+      Ack push notifications.
+
    .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` appealActionedSubject
       :link: /models/tools/ozone/inbox/appealActionedSubject
       :link-type: doc
 
       Appeal a moderation action affecting the user's account or content.
+
+   .. grid-item-card:: :octicon:`zap;1em;sd-mr-1` claimPushNotifications
+      :link: /models/tools/ozone/inbox/claimPushNotifications
+      :link-type: doc
+
+      Claim push notifications.
 
    .. grid-item-card:: :octicon:`code;1em;sd-mr-1` defs
       :link: /models/tools/ozone/inbox/defs
@@ -40,6 +52,12 @@ Inbox.
       :link-type: doc
 
       Get moderation push notification preferences for report outcomes, account actions, and labeling.
+
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getPushPreference
+      :link: /models/tools/ozone/inbox/getPushPreference
+      :link-type: doc
+
+      Get push preference.
 
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getReport
       :link: /models/tools/ozone/inbox/getReport
@@ -87,11 +105,14 @@ Inbox.
    :hidden:
    :maxdepth: 1
 
+   ackPushNotifications </models/tools/ozone/inbox/ackPushNotifications>
    appealActionedSubject </models/tools/ozone/inbox/appealActionedSubject>
+   claimPushNotifications </models/tools/ozone/inbox/claimPushNotifications>
    defs </models/tools/ozone/inbox/defs>
    getAccountStatus </models/tools/ozone/inbox/getAccountStatus>
    getActionedSubject </models/tools/ozone/inbox/getActionedSubject>
    getNotificationPreferences </models/tools/ozone/inbox/getNotificationPreferences>
+   getPushPreference </models/tools/ozone/inbox/getPushPreference>
    getReport </models/tools/ozone/inbox/getReport>
    getUnreadCount </models/tools/ozone/inbox/getUnreadCount>
    listActionedSubjects </models/tools/ozone/inbox/listActionedSubjects>

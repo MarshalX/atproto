@@ -27,9 +27,6 @@ class Params(base.ParamsModelBase):
     social_proof: te.Annotated[t.Optional[t.List[string_formats.Did]], Field(max_length=200)] = (
         None  #: DIDs to hydrate social proof (known followers) for. DIDs not also present in `dids` are ignored.
     )
-    viewer: t.Optional[string_formats.Did] = (
-        None  #: DID of the account on whose behalf the request is made (not included for public/unauthenticated requests). Used for viewer-relative state, including social proof.
-    )
 
 
 class ParamsDict(t.TypedDict):
@@ -40,9 +37,6 @@ class ParamsDict(t.TypedDict):
     social_proof: te.NotRequired[
         t.Optional[t.List[string_formats.Did]]
     ]  #: DIDs to hydrate social proof (known followers) for. DIDs not also present in `dids` are ignored.
-    viewer: te.NotRequired[
-        t.Optional[string_formats.Did]
-    ]  #: DID of the account on whose behalf the request is made (not included for public/unauthenticated requests). Used for viewer-relative state, including social proof.
 
 
 class Response(base.ResponseModelBase):

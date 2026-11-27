@@ -23,6 +23,12 @@ Unstable endpoints that may change or disappear without notice.
 
       Returns the current state of the age assurance process for an account.
 
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereActivityRecommendations
+      :link: /models/app/bsky/unspecced/getAtmosphereActivityRecommendations
+      :link-type: doc
+
+      Get an ordered skeleton of recommended Standard.site articles and Grain galleries.
+
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereApps
       :link: /models/app/bsky/unspecced/getAtmosphereApps
       :link-type: doc
@@ -46,6 +52,12 @@ Unstable endpoints that may change or disappear without notice.
       :link-type: doc
 
       Get Atmosphere Explore content.
+
+   .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereRecommendedActivity
+      :link: /models/app/bsky/unspecced/getAtmosphereRecommendedActivity
+      :link-type: doc
+
+      Get recommended Standard.site articles and Grain galleries for Atmosphere Activity in recommendation order.
 
    .. grid-item-card:: :octicon:`search;1em;sd-mr-1` getAtmosphereRecordView
       :link: /models/app/bsky/unspecced/getAtmosphereRecordView
@@ -251,10 +263,12 @@ Unstable endpoints that may change or disappear without notice.
 
    defs </models/app/bsky/unspecced/defs>
    getAgeAssuranceState </models/app/bsky/unspecced/getAgeAssuranceState>
+   getAtmosphereActivityRecommendations </models/app/bsky/unspecced/getAtmosphereActivityRecommendations>
    getAtmosphereApps </models/app/bsky/unspecced/getAtmosphereApps>
    getAtmosphereExploreArticleRecommendations </models/app/bsky/unspecced/getAtmosphereExploreArticleRecommendations>
    getAtmosphereExploreGalleryRecommendations </models/app/bsky/unspecced/getAtmosphereExploreGalleryRecommendations>
    getAtmosphereExploreTab </models/app/bsky/unspecced/getAtmosphereExploreTab>
+   getAtmosphereRecommendedActivity </models/app/bsky/unspecced/getAtmosphereRecommendedActivity>
    getAtmosphereRecordView </models/app/bsky/unspecced/getAtmosphereRecordView>
    getAtmosphereRecordViews </models/app/bsky/unspecced/getAtmosphereRecordViews>
    getAtmosphereTimeline </models/app/bsky/unspecced/getAtmosphereTimeline>

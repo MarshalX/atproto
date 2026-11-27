@@ -136,6 +136,9 @@ if t.TYPE_CHECKING:
     from atproto_client.models.app.bsky.richtext import facet as AppBskyRichtextFacet
     from atproto_client.models.app.bsky.unspecced import defs as AppBskyUnspeccedDefs
     from atproto_client.models.app.bsky.unspecced import get_age_assurance_state as AppBskyUnspeccedGetAgeAssuranceState
+    from atproto_client.models.app.bsky.unspecced import (
+        get_atmosphere_activity_recommendations as AppBskyUnspeccedGetAtmosphereActivityRecommendations,
+    )
     from atproto_client.models.app.bsky.unspecced import get_atmosphere_apps as AppBskyUnspeccedGetAtmosphereApps
     from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_explore_article_recommendations as AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations,
@@ -145,6 +148,9 @@ if t.TYPE_CHECKING:
     )
     from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_explore_tab as AppBskyUnspeccedGetAtmosphereExploreTab,
+    )
+    from atproto_client.models.app.bsky.unspecced import (
+        get_atmosphere_recommended_activity as AppBskyUnspeccedGetAtmosphereRecommendedActivity,
     )
     from atproto_client.models.app.bsky.unspecced import (
         get_atmosphere_record_view as AppBskyUnspeccedGetAtmosphereRecordView,
@@ -403,6 +409,7 @@ if t.TYPE_CHECKING:
     )
     from atproto_client.models.com.germnetwork import declaration as ComGermnetworkDeclaration
     from atproto_client.models.internal.bsky.actor import get_profiles as InternalBskyActorGetProfiles
+    from atproto_client.models.internal.bsky.feed import get_posts as InternalBskyFeedGetPosts
     from atproto_client.models.network.bsky.jetstream import get_block as NetworkBskyJetstreamGetBlock
     from atproto_client.models.network.bsky.jetstream import get_segment as NetworkBskyJetstreamGetSegment
     from atproto_client.models.network.bsky.jetstream import (
@@ -434,13 +441,18 @@ if t.TYPE_CHECKING:
     from atproto_client.models.tools.ozone.communication import list_templates as ToolsOzoneCommunicationListTemplates
     from atproto_client.models.tools.ozone.communication import update_template as ToolsOzoneCommunicationUpdateTemplate
     from atproto_client.models.tools.ozone.hosting import get_account_history as ToolsOzoneHostingGetAccountHistory
+    from atproto_client.models.tools.ozone.inbox import ack_push_notifications as ToolsOzoneInboxAckPushNotifications
     from atproto_client.models.tools.ozone.inbox import appeal_actioned_subject as ToolsOzoneInboxAppealActionedSubject
+    from atproto_client.models.tools.ozone.inbox import (
+        claim_push_notifications as ToolsOzoneInboxClaimPushNotifications,
+    )
     from atproto_client.models.tools.ozone.inbox import defs as ToolsOzoneInboxDefs
     from atproto_client.models.tools.ozone.inbox import get_account_status as ToolsOzoneInboxGetAccountStatus
     from atproto_client.models.tools.ozone.inbox import get_actioned_subject as ToolsOzoneInboxGetActionedSubject
     from atproto_client.models.tools.ozone.inbox import (
         get_notification_preferences as ToolsOzoneInboxGetNotificationPreferences,
     )
+    from atproto_client.models.tools.ozone.inbox import get_push_preference as ToolsOzoneInboxGetPushPreference
     from atproto_client.models.tools.ozone.inbox import get_report as ToolsOzoneInboxGetReport
     from atproto_client.models.tools.ozone.inbox import get_unread_count as ToolsOzoneInboxGetUnreadCount
     from atproto_client.models.tools.ozone.inbox import list_actioned_subjects as ToolsOzoneInboxListActionedSubjects
@@ -455,6 +467,7 @@ if t.TYPE_CHECKING:
     )
     from atproto_client.models.tools.ozone.moderation import defs as ToolsOzoneModerationDefs
     from atproto_client.models.tools.ozone.moderation import emit_event as ToolsOzoneModerationEmitEvent
+    from atproto_client.models.tools.ozone.moderation import emit_events as ToolsOzoneModerationEmitEvents
     from atproto_client.models.tools.ozone.moderation import (
         get_account_preferences as ToolsOzoneModerationGetAccountPreferences,
     )
@@ -493,8 +506,12 @@ if t.TYPE_CHECKING:
     from atproto_client.models.tools.ozone.report import get_latest_report as ToolsOzoneReportGetLatestReport
     from atproto_client.models.tools.ozone.report import get_live_stats as ToolsOzoneReportGetLiveStats
     from atproto_client.models.tools.ozone.report import get_report as ToolsOzoneReportGetReport
+    from atproto_client.models.tools.ozone.report import get_stat_group_details as ToolsOzoneReportGetStatGroupDetails
     from atproto_client.models.tools.ozone.report import list_activities as ToolsOzoneReportListActivities
     from atproto_client.models.tools.ozone.report import query_activities as ToolsOzoneReportQueryActivities
+    from atproto_client.models.tools.ozone.report import (
+        query_moderator_activity as ToolsOzoneReportQueryModeratorActivity,
+    )
     from atproto_client.models.tools.ozone.report import query_reports as ToolsOzoneReportQueryReports
     from atproto_client.models.tools.ozone.report import reassign_queue as ToolsOzoneReportReassignQueue
     from atproto_client.models.tools.ozone.report import refresh_stats as ToolsOzoneReportRefreshStats
@@ -670,10 +687,12 @@ __all__ = [
     'AppBskyRichtextFacet',
     'AppBskyUnspeccedDefs',
     'AppBskyUnspeccedGetAgeAssuranceState',
+    'AppBskyUnspeccedGetAtmosphereActivityRecommendations',
     'AppBskyUnspeccedGetAtmosphereApps',
     'AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations',
     'AppBskyUnspeccedGetAtmosphereExploreGalleryRecommendations',
     'AppBskyUnspeccedGetAtmosphereExploreTab',
+    'AppBskyUnspeccedGetAtmosphereRecommendedActivity',
     'AppBskyUnspeccedGetAtmosphereRecordView',
     'AppBskyUnspeccedGetAtmosphereRecordViews',
     'AppBskyUnspeccedGetAtmosphereTimeline',
@@ -871,6 +890,7 @@ __all__ = [
     'ComAtprotoTempRevokeAccountCredentials',
     'ComGermnetworkDeclaration',
     'InternalBskyActorGetProfiles',
+    'InternalBskyFeedGetPosts',
     'NetworkBskyJetstreamGetBlock',
     'NetworkBskyJetstreamGetSegment',
     'NetworkBskyJetstreamGetZstdDictionary',
@@ -900,11 +920,14 @@ __all__ = [
     'ToolsOzoneCommunicationListTemplates',
     'ToolsOzoneCommunicationUpdateTemplate',
     'ToolsOzoneHostingGetAccountHistory',
+    'ToolsOzoneInboxAckPushNotifications',
     'ToolsOzoneInboxAppealActionedSubject',
+    'ToolsOzoneInboxClaimPushNotifications',
     'ToolsOzoneInboxDefs',
     'ToolsOzoneInboxGetAccountStatus',
     'ToolsOzoneInboxGetActionedSubject',
     'ToolsOzoneInboxGetNotificationPreferences',
+    'ToolsOzoneInboxGetPushPreference',
     'ToolsOzoneInboxGetReport',
     'ToolsOzoneInboxGetUnreadCount',
     'ToolsOzoneInboxListActionedSubjects',
@@ -915,6 +938,7 @@ __all__ = [
     'ToolsOzoneModerationCancelScheduledActions',
     'ToolsOzoneModerationDefs',
     'ToolsOzoneModerationEmitEvent',
+    'ToolsOzoneModerationEmitEvents',
     'ToolsOzoneModerationGetAccountPreferences',
     'ToolsOzoneModerationGetAccountTimeline',
     'ToolsOzoneModerationGetEvent',
@@ -947,8 +971,10 @@ __all__ = [
     'ToolsOzoneReportGetLatestReport',
     'ToolsOzoneReportGetLiveStats',
     'ToolsOzoneReportGetReport',
+    'ToolsOzoneReportGetStatGroupDetails',
     'ToolsOzoneReportListActivities',
     'ToolsOzoneReportQueryActivities',
+    'ToolsOzoneReportQueryModeratorActivity',
     'ToolsOzoneReportQueryReports',
     'ToolsOzoneReportReassignQueue',
     'ToolsOzoneReportRefreshStats',
@@ -1131,6 +1157,9 @@ class _Ids(_PermissionSetIds):
     AppBskyRichtextFacet: str = 'app.bsky.richtext.facet'
     AppBskyUnspeccedDefs: str = 'app.bsky.unspecced.defs'
     AppBskyUnspeccedGetAgeAssuranceState: str = 'app.bsky.unspecced.getAgeAssuranceState'
+    AppBskyUnspeccedGetAtmosphereActivityRecommendations: str = (
+        'app.bsky.unspecced.getAtmosphereActivityRecommendations'
+    )
     AppBskyUnspeccedGetAtmosphereApps: str = 'app.bsky.unspecced.getAtmosphereApps'
     AppBskyUnspeccedGetAtmosphereExploreArticleRecommendations: str = (
         'app.bsky.unspecced.getAtmosphereExploreArticleRecommendations'
@@ -1139,6 +1168,7 @@ class _Ids(_PermissionSetIds):
         'app.bsky.unspecced.getAtmosphereExploreGalleryRecommendations'
     )
     AppBskyUnspeccedGetAtmosphereExploreTab: str = 'app.bsky.unspecced.getAtmosphereExploreTab'
+    AppBskyUnspeccedGetAtmosphereRecommendedActivity: str = 'app.bsky.unspecced.getAtmosphereRecommendedActivity'
     AppBskyUnspeccedGetAtmosphereRecordView: str = 'app.bsky.unspecced.getAtmosphereRecordView'
     AppBskyUnspeccedGetAtmosphereRecordViews: str = 'app.bsky.unspecced.getAtmosphereRecordViews'
     AppBskyUnspeccedGetAtmosphereTimeline: str = 'app.bsky.unspecced.getAtmosphereTimeline'
@@ -1340,6 +1370,7 @@ class _Ids(_PermissionSetIds):
     ComAtprotoTempRevokeAccountCredentials: str = 'com.atproto.temp.revokeAccountCredentials'
     ComGermnetworkDeclaration: str = 'com.germnetwork.declaration'
     InternalBskyActorGetProfiles: str = 'internal.bsky.actor.getProfiles'
+    InternalBskyFeedGetPosts: str = 'internal.bsky.feed.getPosts'
     NetworkBskyJetstreamGetBlock: str = 'network.bsky.jetstream.getBlock'
     NetworkBskyJetstreamGetSegment: str = 'network.bsky.jetstream.getSegment'
     NetworkBskyJetstreamGetZstdDictionary: str = 'network.bsky.jetstream.getZstdDictionary'
@@ -1369,11 +1400,14 @@ class _Ids(_PermissionSetIds):
     ToolsOzoneCommunicationListTemplates: str = 'tools.ozone.communication.listTemplates'
     ToolsOzoneCommunicationUpdateTemplate: str = 'tools.ozone.communication.updateTemplate'
     ToolsOzoneHostingGetAccountHistory: str = 'tools.ozone.hosting.getAccountHistory'
+    ToolsOzoneInboxAckPushNotifications: str = 'tools.ozone.inbox.ackPushNotifications'
     ToolsOzoneInboxAppealActionedSubject: str = 'tools.ozone.inbox.appealActionedSubject'
+    ToolsOzoneInboxClaimPushNotifications: str = 'tools.ozone.inbox.claimPushNotifications'
     ToolsOzoneInboxDefs: str = 'tools.ozone.inbox.defs'
     ToolsOzoneInboxGetAccountStatus: str = 'tools.ozone.inbox.getAccountStatus'
     ToolsOzoneInboxGetActionedSubject: str = 'tools.ozone.inbox.getActionedSubject'
     ToolsOzoneInboxGetNotificationPreferences: str = 'tools.ozone.inbox.getNotificationPreferences'
+    ToolsOzoneInboxGetPushPreference: str = 'tools.ozone.inbox.getPushPreference'
     ToolsOzoneInboxGetReport: str = 'tools.ozone.inbox.getReport'
     ToolsOzoneInboxGetUnreadCount: str = 'tools.ozone.inbox.getUnreadCount'
     ToolsOzoneInboxListActionedSubjects: str = 'tools.ozone.inbox.listActionedSubjects'
@@ -1384,6 +1418,7 @@ class _Ids(_PermissionSetIds):
     ToolsOzoneModerationCancelScheduledActions: str = 'tools.ozone.moderation.cancelScheduledActions'
     ToolsOzoneModerationDefs: str = 'tools.ozone.moderation.defs'
     ToolsOzoneModerationEmitEvent: str = 'tools.ozone.moderation.emitEvent'
+    ToolsOzoneModerationEmitEvents: str = 'tools.ozone.moderation.emitEvents'
     ToolsOzoneModerationGetAccountPreferences: str = 'tools.ozone.moderation.getAccountPreferences'
     ToolsOzoneModerationGetAccountTimeline: str = 'tools.ozone.moderation.getAccountTimeline'
     ToolsOzoneModerationGetEvent: str = 'tools.ozone.moderation.getEvent'
@@ -1416,8 +1451,10 @@ class _Ids(_PermissionSetIds):
     ToolsOzoneReportGetLatestReport: str = 'tools.ozone.report.getLatestReport'
     ToolsOzoneReportGetLiveStats: str = 'tools.ozone.report.getLiveStats'
     ToolsOzoneReportGetReport: str = 'tools.ozone.report.getReport'
+    ToolsOzoneReportGetStatGroupDetails: str = 'tools.ozone.report.getStatGroupDetails'
     ToolsOzoneReportListActivities: str = 'tools.ozone.report.listActivities'
     ToolsOzoneReportQueryActivities: str = 'tools.ozone.report.queryActivities'
+    ToolsOzoneReportQueryModeratorActivity: str = 'tools.ozone.report.queryModeratorActivity'
     ToolsOzoneReportQueryReports: str = 'tools.ozone.report.queryReports'
     ToolsOzoneReportReassignQueue: str = 'tools.ozone.report.reassignQueue'
     ToolsOzoneReportRefreshStats: str = 'tools.ozone.report.refreshStats'
